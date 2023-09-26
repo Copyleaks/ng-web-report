@@ -1,0 +1,77 @@
+<div class="cls-report-container-lvl-1 left-section">
+  <div class="cls-report-container-lvl-2 tabs-container">
+    <div
+      *ngIf="!hidePlagarismTap"
+      class="cls-report-container-lvl-3 tab-plagiarism"
+      [style.flex-grow]="2"
+    >
+      <span class="container-text"> Plagiarism Tab </span>
+      <div class="close-btn" (click)="hidePlagarismTap = !hidePlagarismTap">
+        X
+      </div>
+    </div>
+    <div
+      *ngIf="!hideAiTap"
+      class="cls-report-container-lvl-3 tab-ai"
+      [style.flex-grow]="1"
+    >
+      <span class="container-text"> AI Tab </span>
+      <div class="close-btn" (click)="hideAiTap = !hideAiTap">X</div>
+    </div>
+  </div>
+  <div class="cls-report-container-lvl-2 scan-content-container">
+    <div
+      *ngIf="!hideTitleContainer"
+      class="cls-report-container-lvl-3 title-and-actions-container"
+    >
+      <span class="container-text"> Title & Actions </span>
+      <div class="close-btn" (click)="hideTitleContainer = !hideTitleContainer">
+        X
+      </div>
+    </div>
+    <div class="cls-report-container-lvl-3 iframe-container">
+      <span class="container-text"> Text/HTML Iframe viewer</span>
+    </div>
+    <div
+      *ngIf="!hidePaginatorContainer"
+      class="cls-report-container-lvl-3 paginator-container"
+    >
+      <span class="container-text"> Powered by Copyleaks & Paginator </span>
+      <div
+        class="close-btn"
+        (click)="hidePaginatorContainer = !hidePaginatorContainer"
+      >
+        X
+      </div>
+    </div>
+  </div>
+</div>
+<div *ngIf="!hideRightSection" class="cls-report-container-lvl-1 right-section">
+  <div class="close-btn" (click)="hideRightSection = !hideRightSection">X</div>
+  <div
+    *ngIf="!hideReportActions"
+    class="cls-report-container-lvl-2 report-actions-container"
+  >
+    <span class="container-text"> Report Actions </span>
+    <div class="close-btn" (click)="hideReportActions = !hideReportActions">
+      X
+    </div>
+  </div>
+  <div class="cls-report-container-lvl-2 results-alerts-container">
+    <div
+      *ngIf="!hideAlertsContainer"
+      class="cls-report-container-lvl-3 alerts-container"
+    >
+      <span class="container-text"> Alerts Container </span>
+      <div
+        class="close-btn"
+        (click)="hideAlertsContainer = !hideAlertsContainer"
+      >
+        X
+      </div>
+    </div>
+    <div class="cls-report-container-lvl-3 results-container">
+      <span class="container-text"> Results Container </span>
+    </div>
+  </div>
+</div>

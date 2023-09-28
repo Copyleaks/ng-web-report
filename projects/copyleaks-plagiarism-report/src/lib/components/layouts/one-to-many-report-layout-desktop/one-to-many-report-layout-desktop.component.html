@@ -10,27 +10,15 @@
 </div>
 
 <!-- The right sction in the one-to-many view -->
-<div *ngIf="!hideRightSection" class="right-section">
+<div *ngIf="!hideRightSection" class="right-section" id="one-to-many-report-right-section">
 	<div class="close-btn" (click)="hideRightSection = !hideRightSection">X</div>
 
 	<!-- The report actions container - start -->
-	<copyleaks-report-actions-container>
-		<!-- ! DEMO PURPOSES -->
-		<div style="display: flex; flex-direction: row; justify-content: space-around">
-			<div style="display: flex; flex-direction: row; gap: 8px">
-				<span>Item1</span>
-				<span>Item2</span>
-			</div>
-			<div style="display: flex; flex-direction: row; gap: 8px">
-				<span>Item3</span>
-				<span>Item4</span>
-			</div>
-		</div>
-	</copyleaks-report-actions-container>
+	<copyleaks-report-actions-container></copyleaks-report-actions-container>
 	<!-- The report actions container - end -->
 
 	<!-- The report results & alerts container - start -->
-	<div class="results-alerts-container">
+	<div class="results-alerts-container" id="results-alerts-container">
 		<!-- The report alerts container - start -->
 		<copyleaks-report-alerts-container [flexGrow]="35"></copyleaks-report-alerts-container>
 		<!-- The report alerts container - end -->

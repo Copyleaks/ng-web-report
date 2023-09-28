@@ -1,3 +1,11 @@
+<ng-template #customActionsTemplate>
+	<ng-content select="copyleaks-web-report-actions"></ng-content>
+</ng-template>
+
+<ng-template #customResultsTemplate>
+	<ng-content select="copyleaks-web-results-actions"></ng-content>
+</ng-template>
+
 <ng-container [ngSwitch]="reportLayoutType">
 	<ng-container *ngSwitchCase="ReportLayoutType.OneToMany">
 		<ng-container [ngSwitch]="responsiveLayoutType">
@@ -7,13 +15,17 @@
 			</ng-container>
 			<!-- Tablet View -->
 			<ng-container *ngSwitchCase="ResponsiveLayoutType.Tablet">
-				<copyleaks-one-to-many-report-layout-desktop></copyleaks-one-to-many-report-layout-desktop>
+				<copyleaks-one-to-many-report-layout-desktop>
+					<!-- <ng-content select="copyleaks-web-report-actions"></ng-content> -->
+				</copyleaks-one-to-many-report-layout-desktop>
 			</ng-container>
 			<!-- Mobile View -->
 			<ng-container *ngSwitchCase="ResponsiveLayoutType.Mobile">
-				<copyleaks-one-to-many-report-layout-mobile></copyleaks-one-to-many-report-layout-mobile>
+				<copyleaks-one-to-many-report-layout-mobile>
+					<!-- <ng-content select="copyleaks-web-report-actions"></ng-content> -->
+				</copyleaks-one-to-many-report-layout-mobile>
 			</ng-container>
-			<ng-container *ngSwitchDefault></ng-container>
+			<ng-container *ngSwitchDefault>Unsupported Layout</ng-container>
 		</ng-container>
 	</ng-container>
 
@@ -29,10 +41,12 @@
 			</ng-container>
 			<!-- Mobile View -->
 			<ng-container *ngSwitchCase="ResponsiveLayoutType.Mobile">
-				<copyleaks-one-to-one-report-layout-mobile></copyleaks-one-to-one-report-layout-mobile>
+				<copyleaks-one-to-one-report-layout-mobile>
+					<!-- <ng-content select="copyleaks-web-report-actions"></ng-content> -->
+				</copyleaks-one-to-one-report-layout-mobile>
 			</ng-container>
-			<ng-container *ngSwitchDefault></ng-container>
+			<ng-container *ngSwitchDefault>Unsupported Layout</ng-container>
 		</ng-container>
-		<ng-container *ngSwitchDefault></ng-container>
+		<ng-container *ngSwitchDefault>Unsupported Layout</ng-container>
 	</ng-container>
 </ng-container>

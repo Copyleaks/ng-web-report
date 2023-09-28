@@ -1,14 +1,19 @@
-import { Component, Input, OnDestroy, OnInit } from '@angular/core';
+import { Component, Input, OnDestroy, OnInit, TemplateRef, ViewChild } from '@angular/core';
 import { ReportLayoutType, ResponsiveLayoutType } from './models/copyleaks-plagiarism-report.enums';
 import { BreakpointObserver, Breakpoints } from '@angular/cdk/layout';
 import { map } from 'rxjs/operators';
+import { ReportNgTemplatesService } from './services/report-ng-templates.service';
 
 @Component({
-	selector: 'copyleaks-plagiarism-report',
-	templateUrl: './copyleaks-plagiarism-report.component.html',
-	styleUrls: ['./copyleaks-plagiarism-report.component.scss'],
+	selector: 'copyleaks-web-report',
+	templateUrl: './copyleaks-web-report.component.html',
+	styleUrls: ['./copyleaks-web-report.component.scss'],
+	providers: [ReportNgTemplatesService],
 })
-export class CopyleaksPlagiarismReportComponent implements OnInit, OnDestroy {
+export class CopyleaksWebReportComponent implements OnInit, OnDestroy {
+	@ViewChild('customActionsTemplate', { static: true }) customActionsTemplate: TemplateRef<any>;
+	@ViewChild('customResultsTemplate', { static: true }) customResultsTemplate: TemplateRef<any>;
+
 	@Input() reportLayoutType: ReportLayoutType = ReportLayoutType.OneToMany;
 	@Input() responsiveLayoutType: ResponsiveLayoutType | null = null;
 
@@ -17,14 +22,33 @@ export class CopyleaksPlagiarismReportComponent implements OnInit, OnDestroy {
 	ResponsiveLayoutType = ResponsiveLayoutType;
 	layoutSub: any;
 
-	constructor(private breakpointObserver: BreakpointObserver) {}
+	// Template references related properties
+	customActionsTemplateRef: TemplateRef<any>;
+	customResultsTemplateRef: TemplateRef<any>;
+
+	constructor(
+		private _breakpointObserver: BreakpointObserver,
+		private _reportNgTemplatesSvc: ReportNgTemplatesService
+	) {}
 
 	ngOnInit(): void {
 		if (this.responsiveLayoutType == null) this._initResponsiveLayoutType();
 	}
 
+	ngAfterViewInit() {
+		this._initCustomTemplatesRefs();
+	}
+
+	private _initCustomTemplatesRefs() {
+		if (this.customActionsTemplate)
+			this._reportNgTemplatesSvc.setReportCustomActionsTemplateRef(this.customActionsTemplate);
+
+		if (this.customResultsTemplate)
+			this._reportNgTemplatesSvc.setReportCustomResultsTemplateRef(this.customResultsTemplate);
+	}
+
 	private _initResponsiveLayoutType() {
-		const layoutChanges = this.breakpointObserver.observe([
+		const layoutChanges = this._breakpointObserver.observe([
 			Breakpoints.Handset,
 			Breakpoints.Tablet,
 			Breakpoints.Web,

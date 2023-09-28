@@ -1,5 +1,12 @@
 @import '../../../styles/containers.styles.scss';
 
+:host {
+	display: flex;
+	flex-grow: 1;
+	gap: 8px;
+	flex-direction: column;
+}
+
 .middle-section,
 .content-section {
 	display: flex;
@@ -24,4 +31,12 @@
 .report-actions-container,
 .middle-section {
 	@include cls-report-container-lvl-1;
+}
+
+.powered-by-copyleaks-container {
+	@include cls-report-container-lvl-1;
+	display: flex;
+	padding: 16px;
+	justify-content: center;
+	align-items: center;
 }

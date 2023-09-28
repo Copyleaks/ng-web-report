@@ -1,31 +1,55 @@
 <section class="layout-section">
 	<h1>One-to-many Layout - Desktop</h1>
-	<copyleaks-plagiarism-report [reportLayoutType]="ReportLayoutType.OneToMany"></copyleaks-plagiarism-report>
+	<copyleaks-web-report class="desktop-view" [reportLayoutType]="ReportLayoutType.OneToMany">
+		<copyleaks-web-report-actions>
+			<div>btn1</div>
+			<div>btn2</div>
+			<div>btn3</div>
+		</copyleaks-web-report-actions>
+	</copyleaks-web-report>
 </section>
 
 <div class="divider"></div>
 
 <section class="layout-section">
 	<h1>One-to-one Layout - Desktop</h1>
-	<copyleaks-plagiarism-report [reportLayoutType]="ReportLayoutType.OneToOne"></copyleaks-plagiarism-report>
+	<copyleaks-web-report class="desktop-view" [reportLayoutType]="ReportLayoutType.OneToOne">
+		<copyleaks-web-report-actions>
+			<div>btn1</div>
+			<div>btn2</div>
+			<div>btn3</div>
+		</copyleaks-web-report-actions>
+	</copyleaks-web-report>
 </section>
 
 <div class="divider"></div>
 
 <section class="layout-section">
 	<h1>One-to-many Layout - Mobile</h1>
-	<copyleaks-plagiarism-report
+	<copyleaks-web-report
 		class="mobile-view"
 		[reportLayoutType]="ReportLayoutType.OneToMany"
-		[responsiveLayoutType]="ResponsiveLayoutType.Mobile"></copyleaks-plagiarism-report>
+		[responsiveLayoutType]="ResponsiveLayoutType.Mobile">
+		<copyleaks-web-report-actions>
+			<div>btn1</div>
+			<div>btn2</div>
+			<div>btn3</div>
+		</copyleaks-web-report-actions>
+	</copyleaks-web-report>
 </section>
 
 <div class="divider"></div>
 
 <section class="layout-section">
 	<h1>One-to-one Layout - Mobile</h1>
-	<copyleaks-plagiarism-report
+	<copyleaks-web-report
 		class="mobile-view"
 		[reportLayoutType]="ReportLayoutType.OneToOne"
-		[responsiveLayoutType]="ResponsiveLayoutType.Mobile"></copyleaks-plagiarism-report>
+		[responsiveLayoutType]="ResponsiveLayoutType.Mobile">
+		<copyleaks-web-report-actions>
+			<div>btn1</div>
+			<div>btn2</div>
+			<div>btn3</div>
+		</copyleaks-web-report-actions>
+	</copyleaks-web-report>
 </section>

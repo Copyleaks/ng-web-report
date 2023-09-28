@@ -1,25 +1,29 @@
 @import '../../../styles/containers.styles.scss';
 
+:host {
+	display: flex;
+	flex-grow: 1;
+	gap: 8px;
+}
+
 .left-section {
 	@include cls-report-container-lvl-1;
-	flex: 70%;
 	display: flex;
 	flex-direction: column;
 	gap: 16px;
 	padding: 10px;
-
-	&.one-to-one {
-		flex: 50%;
-	}
+	flex: 50%;
+	width: 50%;
 }
 
 .right-section {
 	@include cls-report-container-lvl-1;
-	flex: 30%;
 	padding: 10px;
 	display: flex;
 	flex-direction: column;
 	gap: 16px;
+	flex: 50%;
+	width: 50%;
 
 	@include cls-report-container-close-btn;
 
@@ -29,9 +33,5 @@
 		flex-direction: column;
 		gap: 16px;
 		flex-grow: 1;
-	}
-
-	&.one-to-one {
-		flex: 50%;
 	}
 }

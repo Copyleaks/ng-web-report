@@ -13,6 +13,11 @@ const routes: Routes = [
 			import('./pages/demo-layouts-page/demo-layouts-page.module').then(mod => mod.DemoLayoutsPageModule),
 	},
 	{
+		path: 'v2/web-report/bundle/:scanId',
+		loadChildren: () =>
+			import('./pages/bundle-report-demo/bundle-report-demo.module').then(mod => mod.BundleReportDemoModule),
+	},
+	{
 		path: '**',
 		redirectTo: 'components',
 	},

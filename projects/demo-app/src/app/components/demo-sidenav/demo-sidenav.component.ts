@@ -20,4 +20,8 @@ export class DemoSidenavComponent {
 	navigateToLayouts() {
 		this._router.navigate(['/layouts']);
 	}
+
+	navigateToBundleReport() {
+		this._router.navigate(['/v2/web-report/bundle/default']);
+	}
 }

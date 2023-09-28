@@ -15,6 +15,10 @@
 			<mat-icon class="item-icon">dashboard</mat-icon>
 			<span class="item-text">Layouts</span>
 		</button>
+		<button (click)="navigateToBundleReport()" mat-menu-item>
+			<mat-icon class="item-icon">dashboard</mat-icon>
+			<span class="item-text">Bundle Report</span>
+		</button>
 	</mat-menu>
 </mat-toolbar>
 <mat-sidenav-container class="sidenav-container">
@@ -29,6 +33,14 @@
 			<mat-list-item [routerLink]="['/components']" routerLinkActive="side-nav-actions-active" [disableRipple]="true">
 				<mat-icon class="item-icon" fontSet="material-icons-round">widgets</mat-icon>
 				<span class="item-text">Components</span>
+			</mat-list-item>
+
+			<mat-list-item
+				[routerLink]="['/v2/web-report/bundle/default']"
+				routerLinkActive="side-nav-actions-active"
+				[disableRipple]="true">
+				<mat-icon class="item-icon" fontSet="material-icons-round">widgets</mat-icon>
+				<span class="item-text">Bundle Report</span>
 			</mat-list-item>
 		</mat-nav-list>
 	</mat-sidenav>

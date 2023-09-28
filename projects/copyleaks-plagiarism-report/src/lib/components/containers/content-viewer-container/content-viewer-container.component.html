@@ -1,0 +1,18 @@
+<div *ngIf="!hideTitleContainer" class="title-and-actions-container">
+  <span class="container-text"> Title & Actions </span>
+  <div class="close-btn" (click)="hideTitleContainer = !hideTitleContainer">
+    X
+  </div>
+</div>
+<div class="iframe-container">
+  <span class="container-text"> Text/HTML Iframe viewer</span>
+</div>
+<div *ngIf="!hidePaginatorContainer" class="paginator-container">
+  <span class="container-text"> Powered by Copyleaks & Paginator </span>
+  <div
+    class="close-btn"
+    (click)="hidePaginatorContainer = !hidePaginatorContainer"
+  >
+    X
+  </div>
+</div>

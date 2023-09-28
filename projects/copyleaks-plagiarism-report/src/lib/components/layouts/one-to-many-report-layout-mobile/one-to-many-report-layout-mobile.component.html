@@ -1,0 +1,38 @@
+<!-- The left sction in the one-to-many view - start -->
+<copyleaks-report-actions-container class="report-actions-container">
+  <!-- ! DEMO PURPOSES -->
+  <div
+    style="display: flex; flex-direction: row; justify-content: space-around"
+  >
+    <div style="display: flex; flex-direction: row; gap: 8px">
+      <span>Item1</span>
+      <span>Item2</span>
+    </div>
+    <div style="display: flex; flex-direction: row; gap: 8px">
+      <span>Item3</span>
+      <span>Item4</span>
+    </div>
+  </div>
+</copyleaks-report-actions-container>
+
+<div class="middle-section">
+  <copyleaks-report-alerts-container
+    class="alerts-container"
+    [flexGrow]="30"
+  ></copyleaks-report-alerts-container>
+
+  <div class="content-section">
+    <!-- The report tabs container - start -->
+    <copyleaks-report-tabs-container></copyleaks-report-tabs-container>
+    <!-- The report tabs container - end -->
+
+    <!-- The report content (iframe) container - start -->
+    <copyleaks-content-viewer-container></copyleaks-content-viewer-container>
+    <!-- The report content (iframe) container - end -->
+  </div>
+</div>
+
+<copyleaks-report-results-container
+  class="results-container"
+  [flexGrow]="20"
+></copyleaks-report-results-container>

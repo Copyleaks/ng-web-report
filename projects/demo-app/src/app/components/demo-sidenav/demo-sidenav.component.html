@@ -1,0 +1,59 @@
+<mat-toolbar>
+  <img
+    class="cls-icon"
+    src="https://copyleaks.com/wp-content/uploads/2023/03/Screen-Shot-2023-03-13-at-12.53.05-PM-1024x326.png"
+    alt=""
+  />
+  <span class="item-text"> Web report 2.0 </span>
+  <span class="example-spacer"></span>
+  <mat-icon
+    class="options-btn"
+    fontSet="material-icons-round"
+    [matMenuTriggerFor]="menu"
+    >expand_more</mat-icon
+  >
+  <mat-menu #menu="matMenu">
+    <button (click)="navigateToComponents()" mat-menu-item>
+      <mat-icon class="item-icon">widgets</mat-icon>
+      <span class="item-text">Components</span>
+    </button>
+    <button (click)="navigateToLayouts()" mat-menu-item>
+      <mat-icon class="item-icon">dashboard</mat-icon>
+      <span class="item-text">Layouts</span>
+    </button>
+  </mat-menu>
+</mat-toolbar>
+<mat-sidenav-container class="sidenav-container">
+  <mat-sidenav #sidenav class="custom-sidenav" mode="side" opened="true">
+    <!-- Sidenav content -->
+    <mat-nav-list [disableRipple]="true">
+      <mat-list-item
+        [routerLink]="['/layouts']"
+        routerLinkActive="side-nav-actions-active"
+        [disableRipple]="true"
+      >
+        <mat-icon class="item-icon" fontSet="material-icons-round"
+          >dashboard</mat-icon
+        >
+        <span class="item-text">Layouts</span>
+      </mat-list-item>
+
+      <mat-list-item
+        [routerLink]="['/components']"
+        routerLinkActive="side-nav-actions-active"
+        [disableRipple]="true"
+      >
+        <mat-icon class="item-icon" fontSet="material-icons-round"
+          >widgets</mat-icon
+        >
+        <span class="item-text">Components</span>
+      </mat-list-item>
+    </mat-nav-list>
+  </mat-sidenav>
+
+  <mat-sidenav-content>
+    <div class="sidenav-content">
+      <ng-content></ng-content>
+    </div>
+  </mat-sidenav-content>
+</mat-sidenav-container>

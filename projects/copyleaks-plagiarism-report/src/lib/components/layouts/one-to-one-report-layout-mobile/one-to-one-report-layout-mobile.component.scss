@@ -1,0 +1,27 @@
+@import "../../../styles/containers.styles.scss";
+
+.middle-section,
+.content-section {
+  display: flex;
+  flex-direction: column;
+  flex-grow: 1;
+  gap: 8px;
+}
+
+.middle-section {
+  @include cls-report-container-lvl-1;
+  flex-grow: 80;
+  padding: 16px;
+}
+.content-section {
+  flex-grow: 70;
+}
+
+.alerts-container {
+  @include cls-report-container-lvl-2;
+}
+
+.report-actions-container,
+.middle-section {
+  @include cls-report-container-lvl-1;
+}

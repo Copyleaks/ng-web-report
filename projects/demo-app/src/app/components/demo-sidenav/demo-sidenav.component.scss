@@ -1,0 +1,99 @@
+:host {
+  ::ng-deep {
+    .mat-mdc-list-item-unscoped-content {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      width: 100%;
+      gap: 8px;
+    }
+  }
+
+  mat-sidenav {
+    display: block;
+  }
+  .options-btn {
+    display: none;
+    padding: 10px;
+  }
+
+  .options-btn:hover {
+    color: #3f9af5;
+  }
+
+  @media (max-width: 1024px) {
+    mat-sidenav {
+      display: none;
+    }
+
+    .options-btn {
+      display: block;
+    }
+  }
+}
+
+.sidenav-container {
+  height: calc(100vh - 70px);
+  background-color: #ecf3f5;
+}
+
+mat-toolbar {
+  border-radius: 0px 32px 0px 0px;
+  background: #fbffff;
+  box-shadow: 0px 1px 2px 0px rgba(0, 0, 0, 0.27);
+  padding: 8px;
+}
+
+.example-spacer {
+  flex: 1 1 auto;
+}
+
+.custom-sidenav {
+  border-radius: 0px 32px 0px 0px;
+  background: #fbffff;
+  /* mini_shadow */
+  box-shadow: 0px 1px 2px 0px rgba(0, 0, 0, 0.27);
+  min-width: 120px;
+  padding: 10px;
+}
+
+.menu-button {
+  color: #fff;
+}
+
+.item-icon {
+  color: #a0a9bf;
+}
+
+.item-text {
+  color: #0b163e;
+}
+
+mat-nav-list {
+  display: flex;
+  flex-direction: column;
+  gap: 30px;
+}
+
+mat-list-item:hover,
+.side-nav-actions-active {
+  ::ng-deep {
+    .item-icon,
+    .item-text {
+      color: #3f9af5;
+    }
+  }
+}
+
+.cls-icon {
+  width: 160px;
+  margin-right: 11px;
+}
+
+.sidenav-content {
+  display: flex;
+  height: 100%;
+  width: 98%;
+  padding: 20px;
+  box-sizing: border-box;
+}

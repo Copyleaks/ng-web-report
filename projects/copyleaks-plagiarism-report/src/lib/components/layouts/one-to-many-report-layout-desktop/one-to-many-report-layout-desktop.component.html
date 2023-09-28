@@ -1,0 +1,50 @@
+<!-- The left sction in the one-to-many view - start -->
+<div class="left-section">
+  <!-- The report tabs container - start -->
+  <copyleaks-report-tabs-container></copyleaks-report-tabs-container>
+  <!-- The report tabs container - end -->
+
+  <!-- The report content (iframe) container - start -->
+  <copyleaks-content-viewer-container></copyleaks-content-viewer-container>
+  <!-- The report content (iframe) container - end -->
+</div>
+
+<!-- The right sction in the one-to-many view -->
+<div *ngIf="!hideRightSection" class="right-section">
+  <div class="close-btn" (click)="hideRightSection = !hideRightSection">X</div>
+
+  <!-- The report actions container - start -->
+  <copyleaks-report-actions-container>
+    <!-- ! DEMO PURPOSES -->
+    <div
+      style="display: flex; flex-direction: row; justify-content: space-around"
+    >
+      <div style="display: flex; flex-direction: row; gap: 8px">
+        <span>Item1</span>
+        <span>Item2</span>
+      </div>
+      <div style="display: flex; flex-direction: row; gap: 8px">
+        <span>Item3</span>
+        <span>Item4</span>
+      </div>
+    </div>
+  </copyleaks-report-actions-container>
+  <!-- The report actions container - end -->
+
+  <!-- The report results & alerts container - start -->
+  <div class="results-alerts-container">
+    <!-- The report alerts container - start -->
+    <copyleaks-report-alerts-container
+      [flexGrow]="35"
+    ></copyleaks-report-alerts-container>
+    <!-- The report alerts container - end -->
+
+    <!-- The report results container - start -->
+    <copyleaks-report-results-container
+      [flexGrow]="65"
+    ></copyleaks-report-results-container>
+    <!-- The report results container - end -->
+  </div>
+  <!-- The report results & alerts container - end -->
+</div>
+<!-- The left sction in the one-to-many view - end -->

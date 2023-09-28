@@ -1,0 +1,11 @@
+@import "../../../styles/containers.styles.scss";
+
+:host {
+  @include cls-report-container-lvl-3;
+  @include cls-report-container-close-btn;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-grow: 65;
+}

@@ -1,4 +1,8 @@
 /* You can add global styles to this file, and also import other style files */
+@use "@angular/material" as mat;
+
+@include mat.core();
+
 html {
   height: 100%;
   width: 100%;
@@ -8,4 +12,8 @@ body {
   margin: 0px;
   height: 100%;
   font-family: "Open Sans", sans-serif;
+}
+
+.mat-mdc-menu-panel.mat-mdc-menu-panel {
+  background: white;
 }

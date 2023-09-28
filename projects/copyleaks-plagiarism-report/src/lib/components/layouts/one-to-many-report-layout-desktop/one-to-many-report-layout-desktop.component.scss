@@ -1,0 +1,38 @@
+@import "../../../styles/containers.styles.scss";
+
+.left-section {
+  @include cls-report-container-lvl-1;
+  flex: 70%;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  padding: 10px;
+
+  &.one-to-one {
+    flex: 50%;
+  }
+}
+
+.right-section {
+  @include cls-report-container-lvl-1;
+  flex: 30%;
+  padding: 10px;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+
+  @include cls-report-container-close-btn;
+
+  .results-alerts-container {
+    @include cls-report-container-lvl-2;
+    padding: 10px;
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+    flex-grow: 1;
+  }
+
+  &.one-to-one {
+    flex: 50%;
+  }
+}

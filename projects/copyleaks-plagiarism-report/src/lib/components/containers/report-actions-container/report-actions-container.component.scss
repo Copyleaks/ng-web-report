@@ -1,15 +1,15 @@
-@import "../../../styles/containers.styles.scss";
+@import '../../../styles/containers.styles.scss';
 
 :host {
-  @include cls-report-container-lvl-2;
-  @include cls-report-container-close-btn;
+	@include cls-report-container-lvl-2;
+	@include cls-report-container-close-btn;
 
-  padding: 10px;
-  display: flex;
-  flex-direction: row;
-  align-items: center;
+	padding: 10px;
+	display: flex;
+	flex-direction: row;
+	align-items: center;
 
-  .actions-container {
-    width: 100%;
-  }
+	.actions-container {
+		width: 100%;
+	}
 }

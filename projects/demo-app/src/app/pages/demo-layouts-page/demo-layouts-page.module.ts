@@ -7,11 +7,7 @@ import { DemoLayoutsPageComponent } from './demo-layouts-page.component';
 import { CopyleaksPlagiarismReportModule } from 'projects/copyleaks-plagiarism-report/src/lib/copyleaks-plagiarism-report.module';
 
 @NgModule({
-  declarations: [DemoLayoutsPageComponent],
-  imports: [
-    CommonModule,
-    DemoLayoutsPageRoutingModule,
-    CopyleaksPlagiarismReportModule,
-  ],
+	declarations: [DemoLayoutsPageComponent],
+	imports: [CommonModule, DemoLayoutsPageRoutingModule, CopyleaksPlagiarismReportModule],
 })
 export class DemoLayoutsPageModule {}

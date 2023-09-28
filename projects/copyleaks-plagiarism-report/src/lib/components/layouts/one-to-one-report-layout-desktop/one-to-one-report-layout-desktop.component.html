@@ -1,19 +1,15 @@
 <!-- The left sction in the one-to-one view - start -->
 <div class="left-section one-to-one">
-  <copyleaks-content-viewer-container></copyleaks-content-viewer-container>
+	<copyleaks-content-viewer-container></copyleaks-content-viewer-container>
 </div>
 
 <!-- The right sction in the one-to-one view -->
 <div *ngIf="!hideRightSection" class="right-section one-to-one">
-  <div class="close-btn" (click)="hideRightSection = !hideRightSection">X</div>
+	<div class="close-btn" (click)="hideRightSection = !hideRightSection">X</div>
 
-  <copyleaks-report-results-item-container
-    [flexGrow]="20"
-  ></copyleaks-report-results-item-container>
+	<copyleaks-report-results-item-container [flexGrow]="20"></copyleaks-report-results-item-container>
 
-  <copyleaks-content-viewer-container
-    [flexGrow]="80"
-  ></copyleaks-content-viewer-container>
-  <!-- The report results & alerts container - end -->
+	<copyleaks-content-viewer-container [flexGrow]="80"></copyleaks-content-viewer-container>
+	<!-- The report results & alerts container - end -->
 </div>
 <!-- The left sction in the one-to-one view - end -->

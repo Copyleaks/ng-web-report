@@ -1,25 +1,25 @@
 :host {
-  display: flex;
-  flex-direction: column;
-  width: 100%;
+	display: flex;
+	flex-direction: column;
+	width: 100%;
 
-  .layout-section {
-    width: 100%;
-    display: flex;
-    flex-direction: column;
-  }
+	.layout-section {
+		width: 100%;
+		display: flex;
+		flex-direction: column;
+	}
 
-  .mobile-view {
-    width: 400px;
-    height: 800px;
-    align-self: center;
-  }
+	.mobile-view {
+		width: 400px;
+		height: 800px;
+		align-self: center;
+	}
 
-  .divider {
-    margin: 40px 0px 15px 0px;
-    display: block;
-    border-top-width: 2px;
-    border-top-style: solid;
-    border-top-color: #0000001f;
-  }
+	.divider {
+		margin: 40px 0px 15px 0px;
+		display: block;
+		border-top-width: 2px;
+		border-top-style: solid;
+		border-top-color: #0000001f;
+	}
 }

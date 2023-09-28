@@ -1,27 +1,27 @@
-@import "../../../styles/containers.styles.scss";
+@import '../../../styles/containers.styles.scss';
 
 .middle-section,
 .content-section {
-  display: flex;
-  flex-direction: column;
-  flex-grow: 1;
-  gap: 8px;
+	display: flex;
+	flex-direction: column;
+	flex-grow: 1;
+	gap: 8px;
 }
 
 .middle-section {
-  @include cls-report-container-lvl-1;
-  flex-grow: 80;
-  padding: 16px;
+	@include cls-report-container-lvl-1;
+	flex-grow: 80;
+	padding: 16px;
 }
 .content-section {
-  flex-grow: 70;
+	flex-grow: 70;
 }
 
 .alerts-container {
-  @include cls-report-container-lvl-2;
+	@include cls-report-container-lvl-2;
 }
 
 .results-container,
 .report-actions-container {
-  @include cls-report-container-lvl-1;
+	@include cls-report-container-lvl-1;
 }

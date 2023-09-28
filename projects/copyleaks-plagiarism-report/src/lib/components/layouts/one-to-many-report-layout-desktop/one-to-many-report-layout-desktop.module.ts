@@ -8,15 +8,15 @@ import { ReportResultsContainerModule } from '../../containers/report-results-co
 import { ReportTabsContainerModule } from '../../containers/report-tabs-container/report-tabs-container.module';
 
 @NgModule({
-  declarations: [OneToManyReportLayoutDesktopComponent],
-  imports: [
-    CommonModule,
-    ReportTabsContainerModule,
-    ContentViewerContainerModule,
-    ReportActionsContainerModule,
-    ReportAlertsContainerModule,
-    ReportResultsContainerModule,
-  ],
-  exports: [OneToManyReportLayoutDesktopComponent],
+	declarations: [OneToManyReportLayoutDesktopComponent],
+	imports: [
+		CommonModule,
+		ReportTabsContainerModule,
+		ContentViewerContainerModule,
+		ReportActionsContainerModule,
+		ReportAlertsContainerModule,
+		ReportResultsContainerModule,
+	],
+	exports: [OneToManyReportLayoutDesktopComponent],
 })
 export class OneToManyReportLayoutDesktopModule {}

@@ -10,17 +10,17 @@ import { RouterModule } from '@angular/router';
 import { MatMenuModule } from '@angular/material/menu';
 
 @NgModule({
-  declarations: [DemoSidenavComponent],
-  imports: [
-    CommonModule,
-    MatSidenavModule,
-    MatToolbarModule,
-    MatButtonModule,
-    MatIconModule,
-    RouterModule,
-    MatListModule,
-    MatMenuModule,
-  ],
-  exports: [DemoSidenavComponent],
+	declarations: [DemoSidenavComponent],
+	imports: [
+		CommonModule,
+		MatSidenavModule,
+		MatToolbarModule,
+		MatButtonModule,
+		MatIconModule,
+		RouterModule,
+		MatListModule,
+		MatMenuModule,
+	],
+	exports: [DemoSidenavComponent],
 })
 export class DemoSidenavModule {}

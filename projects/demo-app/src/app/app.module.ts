@@ -8,14 +8,9 @@ import { DemoSidenavModule } from './components/demo-sidenav/demo-sidenav.module
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 
 @NgModule({
-  declarations: [AppComponent],
-  imports: [
-    BrowserModule,
-    BrowserAnimationsModule,
-    AppRoutingModule,
-    DemoSidenavModule,
-  ],
-  providers: [],
-  bootstrap: [AppComponent],
+	declarations: [AppComponent],
+	imports: [BrowserModule, BrowserAnimationsModule, AppRoutingModule, DemoSidenavModule],
+	providers: [],
+	bootstrap: [AppComponent],
 })
 export class AppModule {}

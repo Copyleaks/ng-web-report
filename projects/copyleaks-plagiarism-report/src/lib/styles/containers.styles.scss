@@ -1,30 +1,30 @@
 @mixin cls-report-container-lvl-1 {
-  position: relative;
-  background-color: #dce8fc;
-  border: 1px solid #8ca4cd;
+	position: relative;
+	background-color: #dce8fc;
+	border: 1px solid #8ca4cd;
 }
 
 @mixin cls-report-container-lvl-2 {
-  position: relative;
-  background-color: #d6e8d4;
-  border: 1px solid #9ac083;
+	position: relative;
+	background-color: #d6e8d4;
+	border: 1px solid #9ac083;
 }
 
 @mixin cls-report-container-lvl-3 {
-  position: relative;
-  background-color: #fce7cd;
-  border: 1px solid #d3b048;
+	position: relative;
+	background-color: #fce7cd;
+	border: 1px solid #d3b048;
 }
 
 @mixin cls-report-container-close-btn {
-  .close-btn {
-    position: absolute;
-    top: 4px;
-    right: 4px;
-    cursor: pointer;
-  }
+	.close-btn {
+		position: absolute;
+		top: 4px;
+		right: 4px;
+		cursor: pointer;
+	}
 
-  .close-btn:hover {
-    color: red;
-  }
+	.close-btn:hover {
+		color: red;
+	}
 }

@@ -1,33 +1,33 @@
-@import "../../../styles/containers.styles.scss";
+@import '../../../styles/containers.styles.scss';
 
 :host {
-  @include cls-report-container-lvl-2;
-  @include cls-report-container-close-btn;
+	@include cls-report-container-lvl-2;
+	@include cls-report-container-close-btn;
 
-  flex-grow: 1;
-  display: flex;
-  flex-direction: column;
-  gap: 8px;
-  padding: 10px; //! NOTE: this is only for demo purposes
+	flex-grow: 1;
+	display: flex;
+	flex-direction: column;
+	gap: 8px;
+	padding: 10px; //! NOTE: this is only for demo purposes
 
-  .iframe-container {
-    flex-grow: 1;
-    transition: height 1s ease-in-out;
-    transition: flex-grow 1s ease-in-out;
-  }
+	.iframe-container {
+		flex-grow: 1;
+		transition: height 1s ease-in-out;
+		transition: flex-grow 1s ease-in-out;
+	}
 
-  .paginator-container,
-  .title-and-actions-container {
-    //! NOTE: this is only for demo purposes
-    padding: 10px;
-  }
+	.paginator-container,
+	.title-and-actions-container {
+		//! NOTE: this is only for demo purposes
+		padding: 10px;
+	}
 
-  .paginator-container,
-  .iframe-container,
-  .title-and-actions-container {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    @include cls-report-container-lvl-3;
-  }
+	.paginator-container,
+	.iframe-container,
+	.title-and-actions-container {
+		display: flex;
+		align-items: center;
+		justify-content: center;
+		@include cls-report-container-lvl-3;
+	}
 }

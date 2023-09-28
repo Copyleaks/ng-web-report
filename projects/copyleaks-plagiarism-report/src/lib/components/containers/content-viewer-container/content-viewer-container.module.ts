@@ -3,8 +3,8 @@ import { CommonModule } from '@angular/common';
 import { ContentViewerContainerComponent } from './content-viewer-container.component';
 
 @NgModule({
-  declarations: [ContentViewerContainerComponent],
-  imports: [CommonModule],
-  exports: [ContentViewerContainerComponent],
+	declarations: [ContentViewerContainerComponent],
+	imports: [CommonModule],
+	exports: [ContentViewerContainerComponent],
 })
 export class ContentViewerContainerModule {}

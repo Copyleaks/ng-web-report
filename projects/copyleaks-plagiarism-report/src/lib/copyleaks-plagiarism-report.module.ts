@@ -7,14 +7,14 @@ import { OneToManyReportLayoutMobileModule } from './components/layouts/one-to-m
 import { OneToOneReportLayoutModule } from './components/layouts/one-to-one-report-layout-desktop/one-to-one-report-layout-desktop.module';
 
 @NgModule({
-  declarations: [CopyleaksPlagiarismReportComponent],
-  imports: [
-    CommonModule,
-    OneToOneReportLayoutMobileModule,
-    OneToOneReportLayoutModule,
-    OneToManyReportLayoutMobileModule,
-    OneToManyReportLayoutDesktopModule,
-  ],
-  exports: [CopyleaksPlagiarismReportComponent],
+	declarations: [CopyleaksPlagiarismReportComponent],
+	imports: [
+		CommonModule,
+		OneToOneReportLayoutMobileModule,
+		OneToOneReportLayoutModule,
+		OneToManyReportLayoutMobileModule,
+		OneToManyReportLayoutDesktopModule,
+	],
+	exports: [CopyleaksPlagiarismReportComponent],
 })
 export class CopyleaksPlagiarismReportModule {}

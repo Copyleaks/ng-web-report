@@ -1,32 +1,25 @@
-<!-- The left sction in the one-to-many view - start -->
+<!-- Left side section -->
 <div class="left-section">
-	<!-- The report tabs container - start -->
+	<!-- Report tabs container --->
 	<copyleaks-report-tabs-container></copyleaks-report-tabs-container>
-	<!-- The report tabs container - end -->
 
-	<!-- The report content (iframe) container - start -->
+	<!-- Report content container  -->
 	<copyleaks-content-viewer-container></copyleaks-content-viewer-container>
-	<!-- The report content (iframe) container - end -->
 </div>
 
-<!-- The right sction in the one-to-many view -->
+<!-- Right side section -->
 <div *ngIf="!hideRightSection" class="right-section" id="one-to-many-report-right-section">
 	<div class="close-btn" (click)="hideRightSection = !hideRightSection">X</div>
 
-	<!-- The report actions container - start -->
+	<!-- Report actions container -->
 	<copyleaks-report-actions-container></copyleaks-report-actions-container>
-	<!-- The report actions container - end -->
 
-	<!-- The report results & alerts container - start -->
-	<div class="results-alerts-container" id="results-alerts-container">
-		<!-- The report alerts container - start -->
+	<!-- Report results & alerts container -->
+	<div class="results-alerts-container">
+		<!-- Report alerts container -->
 		<copyleaks-report-alerts-container [flexGrow]="35"></copyleaks-report-alerts-container>
-		<!-- The report alerts container - end -->
 
-		<!-- The report results container - start -->
+		<!-- Report results container -->
 		<copyleaks-report-results-container [flexGrow]="65"></copyleaks-report-results-container>
-		<!-- The report results container - end -->
 	</div>
-	<!-- The report results & alerts container - end -->
 </div>
-<!-- The left sction in the one-to-many view - end -->

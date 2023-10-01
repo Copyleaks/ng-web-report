@@ -5,13 +5,22 @@ import { ICustomClsReportTemplatesRefs } from '../models/copyleaks-plagiarism-re
 @Injectable()
 export class ReportNgTemplatesService {
 	private _reportTemplatesRefs$ = new BehaviorSubject<ICustomClsReportTemplatesRefs | undefined>(undefined);
+	/**
+	 * Subject for sharing the report custom components references in the report library.
+	 */
 	public get reportTemplatesSubject$() {
 		return this._reportTemplatesRefs$;
 	}
+	/**
+	 * Getter for the report custom components references in the report library.
+	 */
 	public get reportTemplatesRefs() {
 		return this._reportTemplatesRefs$.value;
 	}
 
+	/**
+	 * Setter for the custom report actions section template reference.
+	 */
 	public setReportCustomActionsTemplateRef(template: TemplateRef<any>) {
 		this._reportTemplatesRefs$.next({
 			customActionsTemplate: template,
@@ -19,9 +28,12 @@ export class ReportNgTemplatesService {
 		} as ICustomClsReportTemplatesRefs);
 	}
 
+	/**
+	 * Setter for the custom report results section template reference.
+	 */
 	public setReportCustomResultsTemplateRef(template: TemplateRef<any>) {
 		this._reportTemplatesRefs$.next({
-			customActionsTemplate: this.reportTemplatesRefs?.customResultsTemplate,
+			customActionsTemplate: this.reportTemplatesRefs?.customActionsTemplate,
 			customResultsTemplate: template,
 		} as ICustomClsReportTemplatesRefs);
 	}

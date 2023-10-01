@@ -8,4 +8,11 @@
 	align-items: center;
 	justify-content: center;
 	flex-grow: 65;
+
+	.container-text {
+		height: 100%;
+		text-align: center;
+		display: flex;
+		align-items: center;
+	}
 }

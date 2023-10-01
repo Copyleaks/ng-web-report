@@ -1,12 +1,16 @@
+<!-- Custom report actions reference -->
 <ng-template #customActionsTemplate>
 	<ng-content select="copyleaks-web-report-actions"></ng-content>
 </ng-template>
 
+<!-- Custom report results reference -->
 <ng-template #customResultsTemplate>
 	<ng-content select="copyleaks-web-results-actions"></ng-content>
 </ng-template>
 
+<!-- Report layout type switch case -->
 <ng-container [ngSwitch]="reportLayoutType">
+	<!-- One to many layout - start -->
 	<ng-container *ngSwitchCase="ReportLayoutType.OneToMany">
 		<ng-container [ngSwitch]="responsiveLayoutType">
 			<!-- Desktop View -->
@@ -15,20 +19,18 @@
 			</ng-container>
 			<!-- Tablet View -->
 			<ng-container *ngSwitchCase="ResponsiveLayoutType.Tablet">
-				<copyleaks-one-to-many-report-layout-desktop>
-					<!-- <ng-content select="copyleaks-web-report-actions"></ng-content> -->
-				</copyleaks-one-to-many-report-layout-desktop>
+				<copyleaks-one-to-many-report-layout-desktop></copyleaks-one-to-many-report-layout-desktop>
 			</ng-container>
 			<!-- Mobile View -->
 			<ng-container *ngSwitchCase="ResponsiveLayoutType.Mobile">
-				<copyleaks-one-to-many-report-layout-mobile>
-					<!-- <ng-content select="copyleaks-web-report-actions"></ng-content> -->
-				</copyleaks-one-to-many-report-layout-mobile>
+				<copyleaks-one-to-many-report-layout-mobile></copyleaks-one-to-many-report-layout-mobile>
 			</ng-container>
 			<ng-container *ngSwitchDefault>Unsupported Layout</ng-container>
 		</ng-container>
 	</ng-container>
+	<!-- One to many layout - end -->
 
+	<!-- One to one layout - start -->
 	<ng-container *ngSwitchCase="ReportLayoutType.OneToOne">
 		<ng-container [ngSwitch]="responsiveLayoutType">
 			<!-- Desktop View -->
@@ -41,12 +43,11 @@
 			</ng-container>
 			<!-- Mobile View -->
 			<ng-container *ngSwitchCase="ResponsiveLayoutType.Mobile">
-				<copyleaks-one-to-one-report-layout-mobile>
-					<!-- <ng-content select="copyleaks-web-report-actions"></ng-content> -->
-				</copyleaks-one-to-one-report-layout-mobile>
+				<copyleaks-one-to-one-report-layout-mobile></copyleaks-one-to-one-report-layout-mobile>
 			</ng-container>
 			<ng-container *ngSwitchDefault>Unsupported Layout</ng-container>
 		</ng-container>
 		<ng-container *ngSwitchDefault>Unsupported Layout</ng-container>
 	</ng-container>
+	<!-- One to many layout - end -->
 </ng-container>

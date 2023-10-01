@@ -15,8 +15,15 @@
 	gap: 16px;
 	padding: 10px;
 
-	&.one-to-one {
-		flex: 50%;
+	copyleaks-report-tabs-container {
+		height: 10%;
+		flex-grow: 10;
+	}
+
+	copyleaks-content-viewer-container {
+		height: 90%;
+		flex-grow: 90;
+		overflow-y: auto;
 	}
 }
 
@@ -28,8 +35,14 @@
 	display: flex;
 	flex-direction: column;
 	gap: 16px;
-
+	height: 100%;
+	box-sizing: border-box;
 	@include cls-report-container-close-btn;
+
+	copyleaks-report-actions-container {
+		flex-grow: 10;
+		height: 10%;
+	}
 
 	.results-alerts-container {
 		@include cls-report-container-lvl-2;
@@ -37,7 +50,9 @@
 		display: flex;
 		flex-direction: column;
 		gap: 16px;
-		flex-grow: 1;
+		flex-grow: 90;
+		height: 90%;
+		overflow-y: auto;
 
 		copyleaks-report-alerts-container {
 			height: 35%;
@@ -47,9 +62,5 @@
 			height: 65%;
 			overflow-y: auto;
 		}
-	}
-
-	&.one-to-one {
-		flex: 50%;
 	}
 }

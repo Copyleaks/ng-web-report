@@ -2,7 +2,6 @@ import {
 	AfterViewInit,
 	ChangeDetectorRef,
 	Component,
-	ContentChild,
 	HostBinding,
 	Input,
 	OnDestroy,
@@ -23,10 +22,13 @@ export class ReportActionsContainerComponent implements OnInit, AfterViewInit, O
 	@HostBinding('style.flex-grow')
 	flexGrowProp: number;
 
+	/**
+	 * @Input {number} Flex grow property - flex-grow
+	 */
 	@Input() flexGrow: number;
 
 	customActionsTemplateRef: TemplateRef<any>;
-	sub: any;
+	customTemplateRefSub: any;
 
 	constructor(private _reportNgTemplatesSvc: ReportNgTemplatesService, private cdr: ChangeDetectorRef) {}
 
@@ -38,8 +40,18 @@ export class ReportActionsContainerComponent implements OnInit, AfterViewInit, O
 		this._initCustomActionsTemplatesRefs();
 	}
 
+	/**
+	 * Initializes the report custom actions with the reference which could be provided in the templates service.
+	 * Also starts a subscription for the custom actions reference changes
+	 */
 	private _initCustomActionsTemplatesRefs() {
-		this.sub = this._reportNgTemplatesSvc.reportTemplatesSubject$.subscribe(refs => {
+		// Read the report custom actions template reference if it is alredy provided.
+		if (this._reportNgTemplatesSvc.reportTemplatesRefs?.customActionsTemplate)
+			this.customActionsTemplateRef = this._reportNgTemplatesSvc.reportTemplatesRefs
+				?.customActionsTemplate as TemplateRef<any>;
+
+		// Starts a subscription for the custom actions reference changes
+		this.customTemplateRefSub = this._reportNgTemplatesSvc.reportTemplatesSubject$.subscribe(refs => {
 			if (refs?.customActionsTemplate !== undefined && this.customActionsTemplateRef == undefined) {
 				this.customActionsTemplateRef = refs?.customActionsTemplate as TemplateRef<any>;
 				this.cdr.detectChanges();
@@ -52,6 +64,6 @@ export class ReportActionsContainerComponent implements OnInit, AfterViewInit, O
 	}
 
 	ngOnDestroy(): void {
-		this.sub?.unsubscribe();
+		if (this.customTemplateRefSub) this.customTemplateRefSub.unsubscribe();
 	}
 }

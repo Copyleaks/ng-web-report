@@ -18,10 +18,19 @@
 .middle-section {
 	@include cls-report-container-lvl-1;
 	flex-grow: 80;
+	height: 80%;
 	padding: 16px;
+	copyleaks-content-viewer-container {
+		height: 43%;
+	}
+	copyleaks-report-results-item-container {
+		height: 15%;
+	}
 }
+
 .content-section {
 	flex-grow: 70;
+	height: 70%;
 }
 
 .alerts-container {
@@ -36,7 +45,7 @@
 .powered-by-copyleaks-container {
 	@include cls-report-container-lvl-1;
 	display: flex;
-	padding: 16px;
+	padding: 8px;
 	justify-content: center;
 	align-items: center;
 }

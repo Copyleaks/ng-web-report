@@ -4,6 +4,9 @@
 	@include cls-report-container-lvl-2;
 	@include cls-report-container-close-btn;
 
+	height: 100%;
+	box-sizing: border-box;
+
 	flex-grow: 1;
 	display: flex;
 	flex-direction: column;
@@ -27,5 +30,17 @@
 		align-items: center;
 		justify-content: center;
 		@include cls-report-container-lvl-3;
+	}
+
+	.title-and-actions-container,
+	.paginator-container {
+		flex-grow: 10;
+		height: 10%;
+	}
+
+	.iframe-container {
+		flex-grow: 80;
+		height: 80%;
+		overflow-y: auto;
 	}
 }

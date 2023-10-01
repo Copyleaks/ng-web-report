@@ -14,13 +14,21 @@ export class CopyleaksWebReportComponent implements OnInit, OnDestroy {
 	@ViewChild('customActionsTemplate', { static: true }) customActionsTemplate: TemplateRef<any>;
 	@ViewChild('customResultsTemplate', { static: true }) customResultsTemplate: TemplateRef<any>;
 
+	/**
+	 * @Input {ReportLayoutType} - The copyleaks report layout type.
+	 * @Default value: ReportLayoutType.OneToMany
+	 */
 	@Input() reportLayoutType: ReportLayoutType = ReportLayoutType.OneToMany;
+
+	/**
+	 * @Input {ReportLayoutType} - The copyleaks report reposive type.
+	 */
 	@Input() responsiveLayoutType: ResponsiveLayoutType | null = null;
 
 	// Layout realated properties
 	ReportLayoutType = ReportLayoutType;
 	ResponsiveLayoutType = ResponsiveLayoutType;
-	layoutSub: any;
+	layoutChangesSub: any;
 
 	// Template references related properties
 	customActionsTemplateRef: TemplateRef<any>;
@@ -39,14 +47,22 @@ export class CopyleaksWebReportComponent implements OnInit, OnDestroy {
 		this._initCustomTemplatesRefs();
 	}
 
+	/**
+	 * Reads the report custom components templates references & saves them in the templates service.
+	 */
 	private _initCustomTemplatesRefs() {
+		// Read the report custom actions template reference.
 		if (this.customActionsTemplate)
 			this._reportNgTemplatesSvc.setReportCustomActionsTemplateRef(this.customActionsTemplate);
 
+		// Read the report custom results template reference.
 		if (this.customResultsTemplate)
 			this._reportNgTemplatesSvc.setReportCustomResultsTemplateRef(this.customResultsTemplate);
 	}
 
+	/**
+	 * Starts a subscription for the screen size changes & updates the layout & responsive view accordingly.
+	 */
 	private _initResponsiveLayoutType() {
 		const layoutChanges = this._breakpointObserver.observe([
 			Breakpoints.Handset,
@@ -63,10 +79,11 @@ export class CopyleaksWebReportComponent implements OnInit, OnDestroy {
 			Breakpoints.TabletPortrait,
 		]);
 
-		this.layoutSub = layoutChanges
+		this.layoutChangesSub = layoutChanges
 			.pipe(
 				map(result => {
 					if (result.matches) {
+						// Desktop view
 						if (
 							result.breakpoints[Breakpoints.Web] ||
 							result.breakpoints[Breakpoints.Large] ||
@@ -74,13 +91,16 @@ export class CopyleaksWebReportComponent implements OnInit, OnDestroy {
 						) {
 							return ResponsiveLayoutType.Desktop;
 						}
+						// Tablet view
 						if (
 							result.breakpoints[Breakpoints.Tablet] ||
 							result.breakpoints[Breakpoints.TabletLandscape] ||
 							result.breakpoints[Breakpoints.Medium]
 						) {
 							return ResponsiveLayoutType.Tablet;
-						} else return ResponsiveLayoutType.Mobile;
+						}
+						// Mobile view
+						else return ResponsiveLayoutType.Mobile;
 					}
 					return null;
 				})
@@ -91,6 +111,6 @@ export class CopyleaksWebReportComponent implements OnInit, OnDestroy {
 	}
 
 	ngOnDestroy() {
-		if (this.layoutSub) this.layoutSub.unsubscribe();
+		if (this.layoutChangesSub) this.layoutChangesSub.unsubscribe();
 	}
 }

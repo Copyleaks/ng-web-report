@@ -12,6 +12,9 @@ export class ReportResultsItemContainerComponent implements OnInit {
 	@HostBinding('style.flex-grow')
 	flexGrowProp: number;
 
+	/**
+	 * @Input {number} Flex grow property - flex-grow
+	 */
 	@Input() flexGrow: number;
 
 	ngOnInit(): void {

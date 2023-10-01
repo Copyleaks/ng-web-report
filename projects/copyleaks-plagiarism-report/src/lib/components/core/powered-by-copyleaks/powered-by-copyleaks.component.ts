@@ -1,10 +1,8 @@
 import { Component } from '@angular/core';
 
 @Component({
-  selector: 'lib-powered-by-copyleaks',
-  templateUrl: './powered-by-copyleaks.component.html',
-  styleUrls: ['./powered-by-copyleaks.component.css']
+	selector: 'lib-powered-by-copyleaks',
+	templateUrl: './powered-by-copyleaks.component.html',
+	styleUrls: ['./powered-by-copyleaks.component.scss'],
 })
-export class PoweredByCopyleaksComponent {
-
-}
+export class PoweredByCopyleaksComponent {}

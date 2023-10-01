@@ -1,4 +1,4 @@
-import { Component, ContentChild, TemplateRef } from '@angular/core';
+import { Component } from '@angular/core';
 
 @Component({
 	selector: 'copyleaks-web-report-actions',

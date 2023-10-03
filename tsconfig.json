@@ -4,7 +4,10 @@
   "compilerOptions": {
     "baseUrl": "./",
     "paths": {
-      "copyleaks-plagiarism-report": ["dist/copyleaks-plagiarism-report"]
+      "copyleaks-web-report": [
+        "dist/copyleaks-web-report/copyleaks-web-report",
+        "dist/copyleaks-web-report"
+      ]
     },
     "outDir": "./dist/out-tsc",
     "forceConsistentCasingInFileNames": true,
@@ -19,10 +22,9 @@
     "experimentalDecorators": true,
     "moduleResolution": "node",
     "importHelpers": true,
-    "target": "ES2022",
-    "module": "ES2022",
-    "useDefineForClassFields": false,
-    "lib": ["ES2022", "dom"],
+    "target": "es2017",
+    "module": "es2020",
+    "lib": ["es2020", "dom"],
     "strictPropertyInitialization": false
   },
   "angularCompilerOptions": {

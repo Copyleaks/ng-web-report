@@ -3,23 +3,23 @@
   "version": 1,
   "newProjectRoot": "projects",
   "projects": {
-    "copyleaks-plagiarism-report": {
+    "copyleaks-web-report": {
       "projectType": "library",
-      "root": "projects/copyleaks-plagiarism-report",
-      "sourceRoot": "projects/copyleaks-plagiarism-report/src",
+      "root": "projects/copyleaks-web-report",
+      "sourceRoot": "projects/copyleaks-web-report/src",
       "prefix": "lib",
       "architect": {
         "build": {
           "builder": "@angular-devkit/build-angular:ng-packagr",
           "options": {
-            "project": "projects/copyleaks-plagiarism-report/ng-package.json"
+            "project": "projects/copyleaks-web-report/ng-package.json"
           },
           "configurations": {
             "production": {
-              "tsConfig": "projects/copyleaks-plagiarism-report/tsconfig.lib.prod.json"
+              "tsConfig": "projects/copyleaks-web-report/tsconfig.lib.prod.json"
             },
             "development": {
-              "tsConfig": "projects/copyleaks-plagiarism-report/tsconfig.lib.json"
+              "tsConfig": "projects/copyleaks-web-report/tsconfig.lib.json"
             }
           },
           "defaultConfiguration": "production"
@@ -27,8 +27,7 @@
         "test": {
           "builder": "@angular-devkit/build-angular:karma",
           "options": {
-            "tsConfig": "projects/copyleaks-plagiarism-report/tsconfig.spec.json",
-            "polyfills": ["zone.js", "zone.js/testing"]
+            "tsConfig": "projects/copyleaks-web-report/tsconfig.spec.json"
           }
         }
       }
@@ -50,8 +49,8 @@
             "outputPath": "dist/demo-app",
             "index": "projects/demo-app/src/index.html",
             "main": "projects/demo-app/src/main.ts",
-            "polyfills": ["zone.js"],
             "tsConfig": "projects/demo-app/tsconfig.app.json",
+            "polyfills": "projects/demo-app/src/polyfills.ts",
             "inlineStyleLanguage": "scss",
             "assets": [
               "projects/demo-app/src/favicon.ico",
@@ -108,7 +107,6 @@
         "test": {
           "builder": "@angular-devkit/build-angular:karma",
           "options": {
-            "polyfills": ["zone.js", "zone.js/testing"],
             "tsConfig": "projects/demo-app/tsconfig.spec.json",
             "inlineStyleLanguage": "scss",
             "assets": [

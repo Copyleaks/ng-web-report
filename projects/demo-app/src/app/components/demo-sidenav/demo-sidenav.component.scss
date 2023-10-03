@@ -1,11 +1,12 @@
 :host {
 	::ng-deep {
-		.mat-mdc-list-item-unscoped-content {
-			display: flex;
-			flex-direction: column;
-			align-items: center;
-			width: 100%;
-			gap: 8px;
+		.mat-list-item-content {
+			display: flex !important;
+			flex-direction: column !important;
+			align-items: center !important;
+			width: 100% !important;
+			gap: 8px !important;
+			height: fit-content !important;
 		}
 	}
 

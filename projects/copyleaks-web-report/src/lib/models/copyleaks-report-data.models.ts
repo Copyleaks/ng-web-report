@@ -3,7 +3,7 @@ import {
 	EExcludeReason,
 	EResultPreviewType,
 	EScanStatus,
-} from '../enums/copyleaks-plagiarism-report.enums';
+} from '../enums/copyleaks-web-report.enums';
 
 /**
  * Defines the structure for API endpoints related to Copyleaks reports data.

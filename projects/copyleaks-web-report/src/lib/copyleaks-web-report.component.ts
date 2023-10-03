@@ -1,5 +1,5 @@
 import { Component, Input, OnDestroy, OnInit, TemplateRef, ViewChild } from '@angular/core';
-import { EReportLayoutType, EResponsiveLayoutType } from './enums/copyleaks-plagiarism-report.enums';
+import { EReportLayoutType, EResponsiveLayoutType } from './enums/copyleaks-web-report.enums';
 import { BreakpointObserver, Breakpoints } from '@angular/cdk/layout';
 import { map } from 'rxjs/operators';
 import { CopyleaksReportNgTemplatesService } from './services/copyleaks-report-ng-templates.service';

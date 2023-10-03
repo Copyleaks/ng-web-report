@@ -5,11 +5,11 @@ import { TemplateRef } from '@angular/core';
  */
 export interface ICustomClsReportTemplatesRefs {
 	/**
-	 * Custom report actions section reference.
+	 * @property {TemplateRef<any> | undefined} customActionsTemplate - Custom report actions section reference.
 	 */
 	customActionsTemplate: TemplateRef<any> | undefined;
 	/**
-	 * Custom report resultws section reference.
+	 * @property {TemplateRef<any> | undefined} customResultsTemplate - Custom report resultws section reference.
 	 */
 	customResultsTemplate: TemplateRef<any> | undefined;
 }

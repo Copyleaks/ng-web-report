@@ -24,4 +24,8 @@ export class DemoSidenavComponent {
 	navigateToBundleReport() {
 		this._router.navigate(['/v2/web-report/bundle/default']);
 	}
+
+	navigateToReportPreview() {
+		this._router.navigate(['/previews']);
+	}
 }

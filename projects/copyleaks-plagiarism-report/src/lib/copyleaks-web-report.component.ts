@@ -1,14 +1,16 @@
 import { Component, Input, OnDestroy, OnInit, TemplateRef, ViewChild } from '@angular/core';
-import { ReportLayoutType, ResponsiveLayoutType } from './models/copyleaks-plagiarism-report.enums';
+import { EReportLayoutType, EResponsiveLayoutType } from './enums/copyleaks-plagiarism-report.enums';
 import { BreakpointObserver, Breakpoints } from '@angular/cdk/layout';
 import { map } from 'rxjs/operators';
-import { ReportNgTemplatesService } from './services/report-ng-templates.service';
+import { CopyleaksReportNgTemplatesService } from './services/copyleaks-report-ng-templates.service';
+import { CopyleaksReportDataService } from './services/copyleaks-report-data.service';
+import { IClsReportEndpointConfigModel } from './models/copyleaks-report-data.models';
 
 @Component({
 	selector: 'copyleaks-web-report',
 	templateUrl: './copyleaks-web-report.component.html',
 	styleUrls: ['./copyleaks-web-report.component.scss'],
-	providers: [ReportNgTemplatesService],
+	providers: [CopyleaksReportNgTemplatesService, CopyleaksReportDataService],
 })
 export class CopyleaksWebReportComponent implements OnInit, OnDestroy {
 	@ViewChild('customActionsTemplate', { static: true }) customActionsTemplate: TemplateRef<any>;
@@ -18,16 +20,21 @@ export class CopyleaksWebReportComponent implements OnInit, OnDestroy {
 	 * @Input {ReportLayoutType} - The copyleaks report layout type.
 	 * @Default value: ReportLayoutType.OneToMany
 	 */
-	@Input() reportLayoutType: ReportLayoutType = ReportLayoutType.OneToMany;
+	@Input() reportLayoutType: EReportLayoutType = EReportLayoutType.OneToMany;
 
 	/**
 	 * @Input {ReportLayoutType} - The copyleaks report reposive type.
 	 */
-	@Input() responsiveLayoutType: ResponsiveLayoutType | null = null;
+	@Input() responsiveLayoutType: EResponsiveLayoutType | null = null;
+
+	/**
+	 * @Input {IClsReportEndpointConfigModel} - The copyleaks report data endpoints configuration model.
+	 */
+	@Input() reportEndpointConfig: IClsReportEndpointConfigModel;
 
 	// Layout realated properties
-	ReportLayoutType = ReportLayoutType;
-	ResponsiveLayoutType = ResponsiveLayoutType;
+	ReportLayoutType = EReportLayoutType;
+	ResponsiveLayoutType = EResponsiveLayoutType;
 	layoutChangesSub: any;
 
 	// Template references related properties
@@ -36,11 +43,14 @@ export class CopyleaksWebReportComponent implements OnInit, OnDestroy {
 
 	constructor(
 		private _breakpointObserver: BreakpointObserver,
-		private _reportNgTemplatesSvc: ReportNgTemplatesService
+		private _reportNgTemplatesSvc: CopyleaksReportNgTemplatesService,
+		private _reportDataSvc: CopyleaksReportDataService
 	) {}
 
 	ngOnInit(): void {
 		if (this.responsiveLayoutType == null) this._initResponsiveLayoutType();
+
+		if (this.reportEndpointConfig) this._reportDataSvc.initReportData(this.reportEndpointConfig);
 	}
 
 	ngAfterViewInit() {
@@ -89,7 +99,7 @@ export class CopyleaksWebReportComponent implements OnInit, OnDestroy {
 							result.breakpoints[Breakpoints.Large] ||
 							result.breakpoints[Breakpoints.XLarge]
 						) {
-							return ResponsiveLayoutType.Desktop;
+							return EResponsiveLayoutType.Desktop;
 						}
 						// Tablet view
 						if (
@@ -97,15 +107,15 @@ export class CopyleaksWebReportComponent implements OnInit, OnDestroy {
 							result.breakpoints[Breakpoints.TabletLandscape] ||
 							result.breakpoints[Breakpoints.Medium]
 						) {
-							return ResponsiveLayoutType.Tablet;
+							return EResponsiveLayoutType.Tablet;
 						}
 						// Mobile view
-						else return ResponsiveLayoutType.Mobile;
+						else return EResponsiveLayoutType.Mobile;
 					}
 					return null;
 				})
 			)
-			.subscribe((layout: ResponsiveLayoutType | null) => {
+			.subscribe((layout: EResponsiveLayoutType | null) => {
 				this.responsiveLayoutType = layout;
 			});
 	}

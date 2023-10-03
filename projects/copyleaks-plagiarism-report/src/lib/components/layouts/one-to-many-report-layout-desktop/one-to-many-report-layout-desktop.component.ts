@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { CopyleaksReportDataService } from '../../../services/copyleaks-report-data.service';
 
 @Component({
 	selector: 'copyleaks-one-to-many-report-layout-desktop',
@@ -8,7 +9,13 @@ import { Component, OnInit } from '@angular/core';
 export class OneToManyReportLayoutDesktopComponent implements OnInit {
 	hideRightSection = false;
 
-	constructor() {}
+	scanContentHtml: string;
 
-	ngOnInit(): void {}
+	constructor(private _reportDataSvc: CopyleaksReportDataService) {}
+
+	ngOnInit(): void {
+		this._reportDataSvc.crawledVersionSubject$.subscribe(data => {
+			if (data) this.scanContentHtml = data?.html.value;
+		});
+	}
 }

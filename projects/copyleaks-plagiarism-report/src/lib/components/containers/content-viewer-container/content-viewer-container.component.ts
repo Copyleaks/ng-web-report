@@ -1,4 +1,5 @@
-import { Component, HostBinding, Input, OnInit } from '@angular/core';
+import { AfterViewInit, Component, ElementRef, HostBinding, Input, OnInit, ViewChild } from '@angular/core';
+import { DomSanitizer } from '@angular/platform-browser';
 
 @Component({
 	selector: 'copyleaks-content-viewer-container',
@@ -8,6 +9,11 @@ import { Component, HostBinding, Input, OnInit } from '@angular/core';
 export class ContentViewerContainerComponent implements OnInit {
 	@HostBinding('style.flex-grow')
 	flexGrowProp: number;
+
+	/**
+	 * @Input {string} The content viewer HTML value
+	 */
+	@Input() contentHtml: string;
 
 	/**
 	 * @Input {boolean} Flag indicating whether to show the content title or not.
@@ -23,6 +29,8 @@ export class ContentViewerContainerComponent implements OnInit {
 	 * @Input {number} Flex grow property - flex-grow
 	 */
 	@Input() flexGrow: number;
+
+	constructor() {}
 
 	ngOnInit(): void {
 		if (this.flexGrow !== undefined && this.flexGrow !== null) this.flexGrowProp = this.flexGrow;

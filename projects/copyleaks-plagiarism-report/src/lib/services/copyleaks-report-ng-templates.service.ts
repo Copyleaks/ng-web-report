@@ -1,9 +1,9 @@
 import { Injectable, TemplateRef } from '@angular/core';
 import { BehaviorSubject } from 'rxjs';
-import { ICustomClsReportTemplatesRefs } from '../models/copyleaks-plagiarism-report.models';
+import { ICustomClsReportTemplatesRefs } from '../models/copyleaks-report-ng-templates.models';
 
 @Injectable()
-export class ReportNgTemplatesService {
+export class CopyleaksReportNgTemplatesService {
 	private _reportTemplatesRefs$ = new BehaviorSubject<ICustomClsReportTemplatesRefs | undefined>(undefined);
 	/**
 	 * Subject for sharing the report custom components references in the report library.

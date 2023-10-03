@@ -1,11 +1,23 @@
 <div *ngIf="!hideTitleContainer" class="title-and-actions-container">
-	<span class="container-text">Title & Actions</span>
-	<div class="close-btn" (click)="hideTitleContainer = !hideTitleContainer">X</div>
+	<div class="title-container">
+		<span class="title">Submitted text</span>
+		<span class="number-of-words">(2402 words)</span>
+	</div>
+	<div class="actions-container">
+		<mat-icon>arrow_upward</mat-icon>
+		<mat-icon>arrow_downward</mat-icon>
+		<mat-icon>format_align_left</mat-icon>
+		<mat-icon>format_align_right</mat-icon>
+		<mat-icon>zoom_in</mat-icon>
+		<mat-icon>zoom_out</mat-icon>
+		<mat-icon>title</mat-icon>
+	</div>
+	<!-- <div class="close-btn" (click)="hideTitleContainer = !hideTitleContainer">X</div> -->
 </div>
 <div class="iframe-container">
-	<span class="container-text">Text/HTML Iframe viewer</span>
+	<iframe #iframe [srcdoc]="contentHtml"></iframe>
 </div>
 <div *ngIf="!hidePaginatorContainer" class="paginator-container">
 	<span class="container-text">Powered by Copyleaks & Paginator</span>
-	<div class="close-btn" (click)="hidePaginatorContainer = !hidePaginatorContainer">X</div>
+	<!-- <div class="close-btn" (click)="hidePaginatorContainer = !hidePaginatorContainer">X</div> -->
 </div>

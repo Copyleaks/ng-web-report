@@ -1,8 +1,8 @@
 import { Component } from '@angular/core';
 import {
-	ReportLayoutType,
-	ResponsiveLayoutType,
-} from 'projects/copyleaks-plagiarism-report/src/lib/models/copyleaks-plagiarism-report.enums';
+	EReportLayoutType,
+	EResponsiveLayoutType,
+} from 'projects/copyleaks-plagiarism-report/src/lib/enums/copyleaks-plagiarism-report.enums';
 
 @Component({
 	selector: 'app-demo-layouts-page',
@@ -10,6 +10,6 @@ import {
 	styleUrls: ['./demo-layouts-page.component.scss'],
 })
 export class DemoLayoutsPageComponent {
-	ReportLayoutType = ReportLayoutType;
-	ResponsiveLayoutType = ResponsiveLayoutType;
+	ReportLayoutType = EReportLayoutType;
+	ResponsiveLayoutType = EResponsiveLayoutType;
 }

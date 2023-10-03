@@ -7,17 +7,21 @@
 	<span class="example-spacer"></span>
 	<mat-icon class="options-btn" fontSet="material-icons-round" [matMenuTriggerFor]="menu">expand_more</mat-icon>
 	<mat-menu #menu="matMenu">
+		<button (click)="navigateToBundleReport()" mat-menu-item>
+			<mat-icon class="item-icon" fontSet="material-icons-round">preview</mat-icon>
+			<span class="item-text">Report Previews</span>
+		</button>
 		<button (click)="navigateToComponents()" mat-menu-item>
-			<mat-icon class="item-icon">widgets</mat-icon>
+			<mat-icon class="item-icon" fontSet="material-icons-round">widgets</mat-icon>
 			<span class="item-text">Components</span>
 		</button>
 		<button (click)="navigateToLayouts()" mat-menu-item>
-			<mat-icon class="item-icon">dashboard</mat-icon>
+			<mat-icon class="item-icon" fontSet="material-icons-round">dashboard</mat-icon>
 			<span class="item-text">Layouts</span>
 		</button>
 		<button (click)="navigateToBundleReport()" mat-menu-item>
-			<mat-icon class="item-icon">dashboard</mat-icon>
-			<span class="item-text">Bundle Report</span>
+			<mat-icon class="item-icon" fontSet="material-icons-round">dns</mat-icon>
+			<span class="item-text">Report Bundle</span>
 		</button>
 	</mat-menu>
 </mat-toolbar>
@@ -25,6 +29,11 @@
 	<mat-sidenav #sidenav class="custom-sidenav" mode="side" opened="true">
 		<!-- Sidenav content -->
 		<mat-nav-list [disableRipple]="true">
+			<mat-list-item [routerLink]="['/previews']" routerLinkActive="side-nav-actions-active" [disableRipple]="true">
+				<mat-icon class="item-icon" fontSet="material-icons-round">preview</mat-icon>
+				<span class="item-text">Report Previews</span>
+			</mat-list-item>
+
 			<mat-list-item [routerLink]="['/layouts']" routerLinkActive="side-nav-actions-active" [disableRipple]="true">
 				<mat-icon class="item-icon" fontSet="material-icons-round">dashboard</mat-icon>
 				<span class="item-text">Layouts</span>
@@ -39,8 +48,8 @@
 				[routerLink]="['/v2/web-report/bundle/default']"
 				routerLinkActive="side-nav-actions-active"
 				[disableRipple]="true">
-				<mat-icon class="item-icon" fontSet="material-icons-round">widgets</mat-icon>
-				<span class="item-text">Bundle Report</span>
+				<mat-icon class="item-icon" fontSet="material-icons-round">dns</mat-icon>
+				<span class="item-text">Report Bundle</span>
 			</mat-list-item>
 		</mat-nav-list>
 	</mat-sidenav>

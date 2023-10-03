@@ -1,8 +1,9 @@
 @import '../../../styles/containers.styles.scss';
+@import '../../../styles/website-colors.styles.scss';
 
 :host {
-	@include cls-report-container-lvl-2;
-	@include cls-report-container-close-btn;
+	// @include cls-report-container-lvl-2;
+	// @include cls-report-container-close-btn;
 
 	height: 100%;
 	box-sizing: border-box;
@@ -11,36 +12,85 @@
 	display: flex;
 	flex-direction: column;
 	gap: 8px;
-	padding: 10px; //! NOTE: this is only for demo purposes
+	padding: 8px 8px 0px 8px;
+	background-color: $color-white;
+	border-radius: 10px;
 
-	.iframe-container {
-		flex-grow: 1;
-	}
-
-	.paginator-container,
 	.title-and-actions-container {
-		//! NOTE: this is only for demo purposes
-		padding: 10px;
-	}
-
-	.paginator-container,
-	.iframe-container,
-	.title-and-actions-container {
+		width: 100%;
 		display: flex;
+		flex-direction: row;
 		align-items: center;
-		justify-content: center;
-		@include cls-report-container-lvl-3;
-	}
+		justify-content: space-between;
+		box-sizing: border-box;
+		flex-wrap: wrap;
+		gap: 8px;
 
-	.title-and-actions-container,
-	.paginator-container {
-		flex-grow: 10;
-		height: 10%;
+		.title-container {
+			display: flex;
+			flex-direction: row;
+			gap: 8px;
+			font-size: 14px;
+			font-style: normal;
+			color: $color-black;
+			.title {
+				font-weight: 700;
+			}
+			.number-of-words {
+				font-weight: 500;
+			}
+		}
+
+		.actions-container {
+			display: flex;
+			flex-direction: row;
+			gap: 16px;
+			justify-content: center;
+			align-items: center;
+			$icon-size: 16px;
+
+			mat-icon {
+				color: $color-dialog-background;
+				font-size: $icon-size;
+				width: $icon-size;
+				height: $icon-size;
+				cursor: pointer;
+				line-height: normal;
+			}
+
+			mat-icon:hover {
+				color: $color-primary;
+				transition: 0.4s;
+			}
+		}
 	}
 
 	.iframe-container {
 		flex-grow: 80;
 		height: 80%;
 		overflow-y: auto;
+		display: flex;
+
+		iframe {
+			width: 100%;
+			border: none;
+		}
+	}
+
+	.paginator-container {
+		//! NOTE: this is only for demo purposes
+		padding: 10px;
+	}
+
+	.paginator-container {
+		display: flex;
+		align-items: center;
+		justify-content: center;
+		@include cls-report-container-lvl-3;
+	}
+
+	.paginator-container {
+		flex-grow: 10;
+		height: 10%;
 	}
 }

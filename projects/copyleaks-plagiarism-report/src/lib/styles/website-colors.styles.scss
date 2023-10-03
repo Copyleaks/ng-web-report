@@ -1,0 +1,92 @@
+// Copyleaks Theme Colors
+$color-black: #0b163e;
+$color-black-opacity-40: rgb(17 41 96 / 40%);
+$color-white: #fbffff;
+$color-primary: #3f9af5;
+$color-light-primary: #3f9af533;
+$color-error: #d04340;
+$color-error-opacity-20: #d0434033;
+$color-container-background: #ebf3f5;
+$color-dark-blue: #052d8b;
+$color-medium-dark: #112960;
+$color-disabled: rgba(0, 0, 0, 0.4);
+$color-dialog-background: #11296066;
+$color-plagiarism-identical: #fd7366;
+$color-ai-detected-text: #c1addc;
+$color-match-similarity-green: #008001;
+$color-light-green: #00e2a2;
+
+// plagisirsm scors colors
+$plag-score-top-level: #f44336;
+$plag-score-mid-level: #ffa503;
+$plag-score-mid-level-opacity-20: #ffa50333;
+$plag-score-low-level: #008001;
+$plag-score-low-level-opacity-20: #00a82d33;
+
+// primary color palettes
+$copyleaks-primary-palette: (
+	50: #e8f3fe,
+	100: #c5e1fc,
+	200: #9fcdfa,
+	300: #79b8f8,
+	400: #5ca9f7,
+	500: #3f9af5,
+	600: #3992f4,
+	700: #3188f2,
+	800: #297ef0,
+	900: #1b6cee,
+	A100: #ffffff,
+	A200: #eef4ff,
+	A400: #bbd3ff,
+	A700: #a1c3ff,
+	contrast: (
+		50: $color-black,
+		100: $color-black,
+		200: $color-black,
+		300: $color-black,
+		400: $color-black,
+		500: $color-white,
+		600: $color-white,
+		700: $color-white,
+		800: $color-white,
+		900: $color-white,
+		A100: $color-black,
+		A200: $color-black,
+		A400: $color-black,
+		A700: $color-black,
+	),
+);
+
+// warn color palettes
+$copyleaks-warn-palette: (
+	50: #f9e8e8,
+	100: #f1c7c6,
+	200: #e8a1a0,
+	300: #de7b79,
+	400: #d75f5d,
+	500: #d04340,
+	600: #cb3d3a,
+	700: #c43432,
+	800: #be2c2a,
+	900: #b31e1c,
+	A100: #ffeaea,
+	A200: #ffb7b7,
+	A400: #ff8584,
+	A700: #ff6b6a,
+	contrast: (
+		50: $color-black,
+		100: $color-black,
+		200: $color-black,
+		300: $color-black,
+		400: $color-black,
+		500: $color-white,
+		600: $color-white,
+		700: $color-white,
+		800: $color-white,
+		900: $color-white,
+		A100: $color-black,
+		A200: $color-black,
+		A400: $color-black,
+		A700: $color-black,
+	),
+);

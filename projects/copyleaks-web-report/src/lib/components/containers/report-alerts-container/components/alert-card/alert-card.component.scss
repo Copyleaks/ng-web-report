@@ -1,0 +1,43 @@
+@import '../../../../../styles/website-colors.styles.scss';
+
+.alert-card-container {
+	.alert-card-title {
+		color: $color-black;
+		font-size: 18px;
+		font-weight: 700;
+	}
+
+	.alert-card-severity {
+		margin: 0;
+		color: $color-black;
+		font-size: 14px;
+		font-weight: 500;
+	}
+	.alert-card-preview {
+		border: 0;
+		background-color: $color-white;
+		padding: 0px;
+		cursor: pointer;
+		mat-icon {
+			width: 18px;
+			height: 18px;
+			font-size: 18px;
+			color: #a0a9bf;
+		}
+		span {
+			font-size: 14px;
+			font-weight: 500;
+			color: $color-primary;
+		}
+	}
+	.disclamer {
+		color: $color-primary;
+		font-size: 14px;
+		font-weight: 500;
+	}
+
+	.alert-card-message {
+		font-weight: 500;
+		font-size: 14px;
+	}
+}

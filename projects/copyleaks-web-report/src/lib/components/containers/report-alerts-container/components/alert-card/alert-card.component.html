@@ -1,0 +1,37 @@
+<div class="alert-card-container" fxLayout="column" fxLayoutAlign="start " fxLayoutGap="8px">
+	<div fxLayout="row" fxLayoutAlign="space-between start" fxLayoutGap="4px" class="alert-card-header">
+		<div fxLayout="column" fxLayoutAlign="center start" fxLayoutGap="4px">
+			<span class="alert-card-title">{{ alert.title }}</span>
+			<ng-container [ngSwitch]="alert.severity">
+				<p class="alert-card-severity" *ngSwitchCase="severity.VeryLow">Very Low</p>
+				<p class="alert-card-severity" *ngSwitchCase="severity.Low">Low</p>
+				<p class="alert-card-severity" *ngSwitchCase="severity.Medium">Medium</p>
+				<p class="alert-card-severity" *ngSwitchCase="severity.High">High</p>
+				<p class="alert-card-severity" *ngSwitchCase="severity.VeryHigh">Very High</p>
+			</ng-container>
+		</div>
+
+		<div fxLayout="column" fxLayoutAlign="center start" fxLayoutGap="10px">
+			<button
+				*ngIf="true"
+				fxLayout="row"
+				fxLayoutAlign="center center"
+				fxLayoutGap="4px"
+				class="alert-card-preview"
+				(click)="showAlertPreview()">
+				<ng-container *ngIf="selecteAlert; else notSelected">
+					<mat-icon>visibility</mat-icon>
+					<span>show</span>
+				</ng-container>
+				<ng-template #notSelected>
+					<mat-icon>visibility_off</mat-icon>
+					<span>hide</span>
+				</ng-template>
+			</button>
+			<span class="disclamer">Disclamer</span>
+		</div>
+	</div>
+	<span class="alert-card-message">
+		{{ alert.message }}
+	</span>
+</div>

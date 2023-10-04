@@ -1,0 +1,36 @@
+@import '../../../../../styles/website-colors.styles.scss';
+
+.author-alert-card-container {
+	.author-alert-card-person-icon {
+		height: 100%;
+		width: 100%;
+		font-size: 30px;
+		border: 2px solid;
+		border-radius: 50%;
+		color: $color-error;
+		padding: 8px;
+	}
+
+	.author-alert-card-title {
+		mat-chip {
+			background-color: $color-error;
+			color: $color-white;
+			font-weight: 500;
+			font-size: 16px;
+			min-height: 25px;
+		}
+		mat-icon {
+			color: $color-medium-dark;
+			opacity: 0.4;
+			height: 20px;
+			width: 20px;
+			font-size: 20px;
+		}
+	}
+
+	.author-alert-card-message {
+		color: $color-black;
+		font-size: 16px;
+		font-weight: 500;
+	}
+}

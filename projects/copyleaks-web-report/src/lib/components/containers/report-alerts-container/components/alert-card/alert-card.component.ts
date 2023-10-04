@@ -2,6 +2,7 @@ import { Component, Input, OnInit } from '@angular/core';
 import { ALERTS } from 'projects/copyleaks-web-report/src/lib/enums/copyleaks-web-report.consts';
 import { ECompleteResultNotificationAlertSeverity } from 'projects/copyleaks-web-report/src/lib/enums/copyleaks-web-report.enums';
 import { ICompleteResultNotificationAlert } from 'projects/copyleaks-web-report/src/lib/models/copyleaks-report-data.models';
+import { ReportAlertsService } from '../../service/report-alerts.service';
 
 @Component({
 	selector: 'cr-alert-card',
@@ -10,11 +11,12 @@ import { ICompleteResultNotificationAlert } from 'projects/copyleaks-web-report/
 })
 export class AlertCardComponent implements OnInit {
 	@Input() alert: ICompleteResultNotificationAlert;
-
 	severity = ECompleteResultNotificationAlertSeverity;
-	selecteAlert: boolean = false;
 
-	get showPreviewButton() {
+	matChipList: string[] = ['Late', 'Late'];
+	showMatChipList: boolean = true;
+
+	get displayPreviewButton() {
 		return (
 			this.alert?.helpLink &&
 			(this.alert?.code == ALERTS.SUSPECTED_CHARACTER_REPLACEMENT_CODE ||
@@ -22,7 +24,10 @@ export class AlertCardComponent implements OnInit {
 		);
 	}
 
-	constructor() {}
+	get selecteAlert() {
+		return this._reportAlertsService?.showAlertPreview$.value;
+	}
+	constructor(private _reportAlertsService: ReportAlertsService) {}
 
 	ngOnInit(): void {
 		this.alert = {
@@ -37,6 +42,6 @@ export class AlertCardComponent implements OnInit {
 	}
 
 	showAlertPreview() {
-		this.selecteAlert = !this.selecteAlert;
+		this._reportAlertsService.setShowAlertPreview$(!this.selecteAlert);
 	}
 }

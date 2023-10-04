@@ -1,17 +1,35 @@
 @import '../../../../../styles/website-colors.styles.scss';
 
 .alert-card-container {
-	.alert-card-title {
-		color: $color-black;
-		font-size: 18px;
-		font-weight: 700;
+	.alert-card-header {
+		.alert-card-title {
+			color: $color-black;
+			font-size: 18px;
+			font-weight: 700;
+		}
+		.my-chip-list {
+			display: flex;
+			box-sizing: border-box;
+			padding: 4px;
+			width: fit-content;
+			.mat-chip-severity {
+				background-color: $color-error;
+				color: $color-white;
+				border-radius: 16px;
+				font-weight: 500;
+				font-size: 12px;
+				min-height: 22px;
+				padding: 0 8px;
+				margin: 0px;
+			}
+		}
 	}
-
 	.alert-card-severity {
 		margin: 0;
 		color: $color-black;
 		font-size: 14px;
 		font-weight: 500;
+		white-space: nowrap;
 	}
 	.alert-card-preview {
 		border: 0;
@@ -35,7 +53,6 @@
 		font-size: 14px;
 		font-weight: 500;
 	}
-
 	.alert-card-message {
 		font-weight: 500;
 		font-size: 14px;

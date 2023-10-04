@@ -1,8 +1,9 @@
+@import '../../styles/website-colors.styles.scss';
 .powered-by-container {
 	span {
 		font-size: 13px;
 		font-weight: 700;
-		color: #11296066;
+		color: $color-dialog-background;
 		opacity: 0.4;
 	}
 }

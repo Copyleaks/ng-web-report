@@ -3,9 +3,10 @@ import { CommonModule } from '@angular/common';
 
 import { DemoComponentsPageRoutingModule } from './demo-components-page-routing.module';
 import { DemoComponentsPageComponent } from './demo-components-page.component';
+import { ReportResultsItemContainerModule } from 'projects/copyleaks-web-report/src/lib/components/containers/report-results-item-container/report-results-item-container.module';
 
 @NgModule({
 	declarations: [DemoComponentsPageComponent],
-	imports: [CommonModule, DemoComponentsPageRoutingModule],
+	imports: [CommonModule, DemoComponentsPageRoutingModule, ReportResultsItemContainerModule],
 })
 export class DemoComponentsPageModule {}

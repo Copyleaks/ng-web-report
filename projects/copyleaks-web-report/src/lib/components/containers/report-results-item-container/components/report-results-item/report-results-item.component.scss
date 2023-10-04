@@ -1,0 +1,37 @@
+@import '../../../../../styles/website-colors.styles.scss';
+
+.item-container {
+	background-color: $color-white;
+	border-radius: 10px;
+	.item-header {
+		padding: 2px;
+		.item-logo {
+			mat-icon {
+				color: $color-primary;
+			}
+		}
+		.item-title {
+			font-size: 16px;
+			font-weight: 500;
+			color: $color-black;
+		}
+		.autor-name {
+			font-size: 14px;
+			font-weight: 500;
+			color: $color-medium-dark;
+		}
+	}
+	.item-body {
+		padding: 2px 16px;
+		.item-url {
+			font-weight: 400;
+			font-size: 14px;
+			color: $color-primary;
+		}
+		.item-introduction {
+			font-weight: 500;
+			font-size: 14px;
+			color: $color-black;
+		}
+	}
+}

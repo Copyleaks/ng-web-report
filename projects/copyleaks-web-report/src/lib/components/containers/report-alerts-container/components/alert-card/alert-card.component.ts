@@ -29,17 +29,7 @@ export class AlertCardComponent implements OnInit {
 	}
 	constructor(private _reportAlertsService: ReportAlertsService) {}
 
-	ngOnInit(): void {
-		this.alert = {
-			additionalData:
-				'\'{"results":[{"classification":2,"probability":0.91045016,"matches":[{"text":{"chars":{"starts":[0],"lengths":[4005]},"words":{"starts":[0],"lengths":[661]}}}]}],"summary":{"human":0.0,"ai":1.0},"modelVersion":"v3","translationProvider":0,"scannedDocument":{}}',
-			code: 'suspected-ai-text',
-			helpLink: '',
-			message: 'We are unable to verify that the text was written by a human.',
-			severity: ECompleteResultNotificationAlertSeverity.VeryHigh,
-			title: 'Suspected Cheating: AI Text detected',
-		};
-	}
+	ngOnInit(): void {}
 
 	showAlertPreview() {
 		this._reportAlertsService.setShowAlertPreview$(!this.selecteAlert);

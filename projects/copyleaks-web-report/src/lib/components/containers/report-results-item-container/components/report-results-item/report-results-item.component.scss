@@ -4,8 +4,13 @@
 	background-color: $color-white;
 	border-radius: 10px;
 	.item-header {
-		padding: 2px;
+		padding: 4px;
 		.item-logo {
+			border: 2px solid;
+			border-radius: 50%;
+			border-color: $color-primary;
+			width: 34px;
+			height: 34px;
 			mat-icon {
 				color: $color-primary;
 			}
@@ -20,9 +25,15 @@
 			font-weight: 500;
 			color: $color-medium-dark;
 		}
+
+		.item-menu {
+			cursor: pointer;
+
+			color: $color-dark-blue;
+		}
 	}
 	.item-body {
-		padding: 2px 16px;
+		padding: 4px 16px;
 		.item-url {
 			font-weight: 400;
 			font-size: 14px;

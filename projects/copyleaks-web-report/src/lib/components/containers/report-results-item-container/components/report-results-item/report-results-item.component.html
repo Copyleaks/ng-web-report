@@ -1,12 +1,25 @@
-<div fxLayout="column" fxLayoutAlign="start" fxLayoutGap="4px" class="item-container">
-	<div fxLayout="row" fxLayoutAlign="start center" fxLayoutGap="8px" class="item-header">
-		<div class="item-logo">
-			<mat-icon>language</mat-icon>
+<div fxLayout="column" fxLayoutAlign="start" class="item-container">
+	<div fxLayout="row" fxLayoutAlign="space-between center" class="item-header">
+		<div fxLayout="row" fxLayoutAlign="start center" fxLayoutGap="8px">
+			<div fxLayout="column" fxLayoutAlign="center center" class="item-logo">
+				<mat-icon>
+					<ng-container [ngSwitch]="previewResult.type">
+						<ng-container *ngSwitchCase="eResultPreviewType.Batch">dns</ng-container>
+						<ng-container *ngSwitchCase="eResultPreviewType.Database">dns</ng-container>
+						<ng-container *ngSwitchDefault>storage</ng-container>
+					</ng-container>
+				</mat-icon>
+			</div>
+			<div fxLayout="column" fxLayoutAlign="start" fxLayoutGap="2px">
+				<span class="item-title">title goes here</span>
+				<span class="autor-name">Author name</span>
+			</div>
 		</div>
-		<div fxLayout="column" fxLayoutAlign="start" fxLayoutGap="2px">
-			<span class="item-title">title goes here</span>
-			<span class="autor-name">Author name</span>
-		</div>
+		<mat-icon class="item-menu" mat-icon [matMenuTriggerFor]="menu">more_vert</mat-icon>
+		<mat-menu #menu="matMenu" yPosition="below">
+			<button mat-menu-item>Item 1</button>
+			<button mat-menu-item>Item 2</button>
+		</mat-menu>
 	</div>
 	<div fxLayout="column" fxLayoutAlign="start" fxLayoutGap="8px" class="item-body">
 		<a class="item-url">url.com/slug/slug/123xyz...</a>

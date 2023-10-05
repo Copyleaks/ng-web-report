@@ -1,6 +1,6 @@
 import { Component } from '@angular/core';
 import { EReportLayoutType } from 'projects/copyleaks-web-report/src/lib/enums/copyleaks-web-report.enums';
-import { IClsReportEndpointConfigModel } from 'projects/copyleaks-web-report/src/lib/models/copyleaks-report-data.models';
+import { IClsReportEndpointConfigModel } from 'projects/copyleaks-web-report/src/lib/models/report-data.models';
 
 @Component({
 	selector: 'app-demo-report-previews',

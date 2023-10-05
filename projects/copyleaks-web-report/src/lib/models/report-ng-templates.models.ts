@@ -9,7 +9,7 @@ export interface ICustomClsReportTemplatesRefs {
 	 */
 	customActionsTemplate: TemplateRef<any> | undefined;
 	/**
-	 * @property {TemplateRef<any> | undefined} customResultsTemplate - Custom report resultws section reference.
+	 * @property {TemplateRef<any> | undefined} customResultsTemplate - Custom report results section reference.
 	 */
 	customResultsTemplate: TemplateRef<any> | undefined;
 }

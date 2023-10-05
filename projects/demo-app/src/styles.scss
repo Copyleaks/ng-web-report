@@ -1,7 +1,15 @@
-/* You can add global styles to this file, and also import other style files */
-// @use '@angular/material' as mat;
+@use '@angular/material' as mat;
 
-// @include mat.core();
+// Include the common styles for Angular Material
+@include mat.core();
+
+// Define the typography config function.
+$custom-typography: mat.define-typography-config(
+	$font-family: 'Open Sans, sans-serif',
+);
+
+// Add typography definitions.
+@include mat.all-component-typographies($custom-typography);
 
 html {
 	height: 100%;

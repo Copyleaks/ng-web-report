@@ -11,7 +11,10 @@
 		<copyleaks-report-tabs-container></copyleaks-report-tabs-container>
 
 		<!-- Report scan content viewer -->
-		<copyleaks-content-viewer-container></copyleaks-content-viewer-container>
+		<copyleaks-content-viewer-container
+			[contentHtml]="scanContentHtml"
+			[contentStyle]="iframeStyle"
+			[contentJsScript]="iframeScript"></copyleaks-content-viewer-container>
 	</div>
 </div>
 

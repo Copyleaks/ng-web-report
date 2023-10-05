@@ -2,15 +2,16 @@ import { Component, Input, OnDestroy, OnInit, TemplateRef, ViewChild } from '@an
 import { EReportLayoutType, EResponsiveLayoutType } from './enums/copyleaks-web-report.enums';
 import { BreakpointObserver, Breakpoints } from '@angular/cdk/layout';
 import { map } from 'rxjs/operators';
-import { CopyleaksReportNgTemplatesService } from './services/copyleaks-report-ng-templates.service';
-import { CopyleaksReportDataService } from './services/copyleaks-report-data.service';
-import { IClsReportEndpointConfigModel } from './models/copyleaks-report-data.models';
+import { ReportNgTemplatesService } from './services/report-ng-templates.service';
+import { ReportDataService } from './services/report-data.service';
+import { IClsReportEndpointConfigModel } from './models/report-data.models';
+import { ReportMatchesService } from './services/report-matches.service';
 
 @Component({
 	selector: 'copyleaks-web-report',
 	templateUrl: './copyleaks-web-report.component.html',
 	styleUrls: ['./copyleaks-web-report.component.scss'],
-	providers: [CopyleaksReportNgTemplatesService, CopyleaksReportDataService],
+	providers: [ReportNgTemplatesService, ReportDataService, ReportMatchesService],
 })
 export class CopyleaksWebReportComponent implements OnInit, OnDestroy {
 	@ViewChild('customActionsTemplate', { static: true }) customActionsTemplate: TemplateRef<any>;
@@ -43,8 +44,8 @@ export class CopyleaksWebReportComponent implements OnInit, OnDestroy {
 
 	constructor(
 		private _breakpointObserver: BreakpointObserver,
-		private _reportNgTemplatesSvc: CopyleaksReportNgTemplatesService,
-		private _reportDataSvc: CopyleaksReportDataService
+		private _reportNgTemplatesSvc: ReportNgTemplatesService,
+		private _reportDataSvc: ReportDataService
 	) {}
 
 	ngOnInit(): void {

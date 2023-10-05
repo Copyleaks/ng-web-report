@@ -2,32 +2,61 @@
 	<div fxLayout="row" fxLayoutAlign="space-between center" class="item-header">
 		<div fxLayout="row" fxLayoutAlign="start center" fxLayoutGap="8px">
 			<div fxLayout="column" fxLayoutAlign="center center" class="item-logo">
-				<mat-icon>
-					<ng-container [ngSwitch]="previewResult.type">
-						<ng-container *ngSwitchCase="eResultPreviewType.Batch">dns</ng-container>
-						<ng-container *ngSwitchCase="eResultPreviewType.Database">dns</ng-container>
-						<ng-container *ngSwitchDefault>storage</ng-container>
+				<ng-container [ngSwitch]="previewResult.type">
+					<ng-container *ngSwitchCase="eResultPreviewType.Batch">
+						<mat-icon>compare_arrows</mat-icon>
 					</ng-container>
-				</mat-icon>
+					<ng-container *ngSwitchCase="eResultPreviewType.Repositroy">
+						<img class="title-img" src="assets/images/icons/repositories-icon.svg" />
+					</ng-container>
+					<ng-container *ngSwitchCase="eResultPreviewType.Internet">
+						<mat-icon>language</mat-icon>
+					</ng-container>
+					<ng-container *ngSwitchCase="eResultPreviewType.Database">
+						<mat-icon>language</mat-icon>
+					</ng-container>
+					<ng-container *ngSwitchDefault>
+						<mat-icon>language</mat-icon>
+					</ng-container>
+				</ng-container>
 			</div>
 			<div fxLayout="column" fxLayoutAlign="start" fxLayoutGap="2px">
-				<span class="item-title">title goes here</span>
-				<span class="autor-name">Author name</span>
+				<span class="item-title">{{ previewResult.title }}</span>
+				<span class="autor-name">{{ authorName }}</span>
 			</div>
 		</div>
 		<mat-icon class="item-menu" mat-icon [matMenuTriggerFor]="menu">more_vert</mat-icon>
-		<mat-menu #menu="matMenu" yPosition="below">
-			<button mat-menu-item>Item 1</button>
-			<button mat-menu-item>Item 2</button>
-		</mat-menu>
 	</div>
 	<div fxLayout="column" fxLayoutAlign="start" fxLayoutGap="8px" class="item-body">
-		<a class="item-url">url.com/slug/slug/123xyz...</a>
-
-		<div class="item-introduction">
-			Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod Lorem ipsum dolor sit amet,
-			consetetur sadipscing elitr, sed diam nonumy eirmod Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed
-			diam nonumy eirmod
+		<a class="item-url" *ngIf="previewResult?.url" [href]="previewResult.url">
+			{{ previewResult.url }}
+		</a>
+		<div class="item-introduction" *ngIf="previewResult.introduction">
+			{{ previewResult.introduction }}
 		</div>
 	</div>
 </div>
+<div class="percentage-container" fxLayout="row" fxLayoutAlign="start center">
+	<div class="percentage-similar-words" fxLayout="row" fxLayoutAlign="start center">
+		<div class="identical" style="width: 10%; border-radius: 4px 0px 0px 4px"></div>
+		<div class="minorChanges" style="height: 4px; width: 30%"></div>
+		<div class="paraphrased" style="width: 30%; border-radius: 0px 4px 4px 0px"></div>
+		<div class="omittedWords" style="width: 0%"></div>
+	</div>
+	<span>{{ previewResult.matchedWords / (source?.metadata.words - source?.metadata.excluded) }}</span>
+</div>
+
+<mat-menu class="item-menu-list" #menu="matMenu" yPosition="below">
+	<button mat-menu-item>
+		<mat-icon class="mat-menu-item-icon">visibility_off</mat-icon>
+		<span class="mat-menu-item-text">Exclude result</span>
+	</button>
+	<button mat-menu-item>
+		<mat-icon class="mat-menu-item-icon">open_in_new</mat-icon>
+		<span class="mat-menu-item-text">Visit result source</span>
+	</button>
+	<button mat-menu-item>
+		<mat-icon class="mat-menu-item-icon">compare_arrows</mat-icon>
+		<span class="mat-menu-item-text">Compare with submitted file</span>
+	</button>
+</mat-menu>

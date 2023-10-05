@@ -2,7 +2,7 @@
 
 .item-container {
 	background-color: $color-white;
-	border-radius: 10px;
+	border-radius: 10px 10px 0px 0px;
 	.item-header {
 		padding: 4px;
 		.item-logo {
@@ -28,7 +28,6 @@
 
 		.item-menu {
 			cursor: pointer;
-
 			color: $color-dark-blue;
 		}
 	}
@@ -38,11 +37,66 @@
 			font-weight: 400;
 			font-size: 14px;
 			color: $color-primary;
+			overflow: hidden;
+			text-overflow: ellipsis;
+			white-space: nowrap;
 		}
 		.item-introduction {
 			font-weight: 500;
 			font-size: 14px;
 			color: $color-black;
+			overflow: hidden;
+			display: -webkit-box;
+			-webkit-line-clamp: 2; /* number of lines to show */
+			line-clamp: 2;
+			-webkit-box-orient: vertical;
+		}
+	}
+}
+.percentage-container {
+	height: 24px;
+	padding: 4px 8px;
+	background-color: rgba(63, 154, 245, 0.2);
+	border-radius: 0px 0px 10px 10px;
+	.percentage-similar-words {
+		width: 100%;
+		border: 1px solid var(--effect-dialog-background, rgba(17, 41, 96, 0.4));
+		border-radius: 4px;
+		height: 4px;
+		background-color: $color-white;
+		.identical {
+			height: 4px;
+			background-color: #fd7366;
+		}
+		.minorChanges {
+			height: 4px;
+			background-color: #fe9391;
+		}
+		.paraphrased {
+			height: 4px;
+			background-color: #fed5a9;
+		}
+		.omittedWords {
+			height: 4px;
+			background-color: #fed5a9;
+		}
+	}
+}
+
+::ng-deep .item-menu-list {
+	.mat-menu-content {
+		background-color: $color-white !important;
+		border-radius: 10px;
+	}
+	.mat-menu-item {
+		background-color: $color-white !important;
+		.mat-menu-item-icon {
+			opacity: 0.4;
+			color: $color-medium-dark;
+		}
+		.mat-menu-item-text {
+			font-weight: 500;
+			font-size: 14px;
 		}
 	}
 }

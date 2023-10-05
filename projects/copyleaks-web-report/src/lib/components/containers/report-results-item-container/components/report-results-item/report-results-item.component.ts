@@ -1,6 +1,6 @@
 import { Component, Input, OnInit } from '@angular/core';
 import { EResultPreviewType } from 'projects/copyleaks-web-report/src/lib/enums/copyleaks-web-report.enums';
-import { IResultPreviewBase } from 'projects/copyleaks-web-report/src/lib/models/copyleaks-report-data.models';
+import { IResultPreviewBase, IScanSource } from 'projects/copyleaks-web-report/src/lib/models/report-data.models';
 
 @Component({
 	selector: 'cr-report-results-item',
@@ -17,6 +17,25 @@ export class ReportResultsItemComponent implements OnInit {
 		title: 'Copyleaks Internal Database',
 		type: 3,
 	};
+	@Input() source: IScanSource;
+
+	get authorName() {
+		if (this.previewResult) {
+			switch (this.previewResult.type) {
+				case EResultPreviewType.Internet:
+					return 'Internet Result';
+				case EResultPreviewType.Database:
+					return 'Internal Database Result';
+				case EResultPreviewType.Batch:
+					return 'Batch Result';
+				case EResultPreviewType.Repositroy:
+					return 'Repository Result';
+				default:
+					return '';
+			}
+		}
+		return '';
+	}
 	constructor() {}
 
 	ngOnInit(): void {}

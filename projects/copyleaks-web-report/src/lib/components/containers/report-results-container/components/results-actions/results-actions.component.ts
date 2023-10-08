@@ -6,9 +6,9 @@ import { Component, Input, OnInit } from '@angular/core';
 	styleUrls: ['./results-actions.component.scss'],
 })
 export class ResultsActionsComponent implements OnInit {
-	@Input() tootalResults: string;
-	@Input() tootalExcluded: string;
-	@Input() tootalFiltered: string;
+	@Input() totalResults: string;
+	@Input() totalExcluded: string;
+	@Input() totalFiltered: string;
 
 	showSearchFiled: boolean;
 	constructor() {}

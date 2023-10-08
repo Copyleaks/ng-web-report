@@ -6,10 +6,11 @@ import { MatIconModule } from '@angular/material/icon';
 import { FlexLayoutModule } from '@angular/flex-layout';
 import { MatMenuModule } from '@angular/material/menu';
 import { MatButtonModule } from '@angular/material/button';
+import { NgxSkeletonLoaderModule } from 'ngx-skeleton-loader';
 
 @NgModule({
 	declarations: [ReportResultsItemContainerComponent, ReportResultsItemComponent],
-	imports: [CommonModule, MatIconModule, FlexLayoutModule, MatMenuModule, MatButtonModule],
+	imports: [CommonModule, MatIconModule, FlexLayoutModule, MatMenuModule, MatButtonModule, NgxSkeletonLoaderModule],
 	exports: [ReportResultsItemContainerComponent, ReportResultsItemComponent],
 })
 export class ReportResultsItemContainerModule {}

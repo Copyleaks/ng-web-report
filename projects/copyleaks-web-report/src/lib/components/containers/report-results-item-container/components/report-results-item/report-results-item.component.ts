@@ -8,7 +8,6 @@ import { IResultPreviewBase, IScanSource } from 'projects/copyleaks-web-report/s
 	styleUrls: ['./report-results-item.component.scss'],
 })
 export class ReportResultsItemComponent implements OnInit {
-	eResultPreviewType = EResultPreviewType;
 	@Input() previewResult: IResultPreviewBase = {
 		id: '00fe0c8338',
 		introduction: 'No introduction available.',
@@ -16,8 +15,11 @@ export class ReportResultsItemComponent implements OnInit {
 		tags: [],
 		title: 'Copyleaks Internal Database',
 		type: 3,
+		url: 'url.com/slug/slug/123xyz..',
 	};
 	@Input() source: IScanSource;
+	@Input() showLoader: boolean = true;
+	eResultPreviewType = EResultPreviewType;
 
 	get authorName() {
 		if (this.previewResult) {

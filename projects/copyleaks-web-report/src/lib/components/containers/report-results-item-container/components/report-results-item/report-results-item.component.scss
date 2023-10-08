@@ -1,95 +1,160 @@
 @import '../../../../../styles/website-colors.styles.scss';
 
-.item-container {
-	background-color: $color-white;
-	border-radius: 10px 10px 0px 0px;
-	.item-header {
-		padding: 4px;
-		.item-logo {
-			border: 2px solid;
-			border-radius: 50%;
-			border-color: $color-primary;
-			width: 34px;
-			height: 34px;
-			mat-icon {
-				color: $color-primary;
+.result-item-container {
+	border: 2px solid;
+	border-color: $color-container-background;
+	border-radius: 10px;
+	&:hover {
+		border-color: $color-primary;
+		.percentage-container {
+			background-color: $color-light-primary;
+		}
+	}
+
+	.item-container {
+		background-color: $color-white;
+		border-radius: 10px 10px 0px 0px;
+		width: 100%;
+		.item-header-container {
+			width: 100%;
+			padding: 2px;
+			.item-header {
+				width: 100%;
+				.item-logo {
+					border: 2px solid;
+					border-radius: 50%;
+					border-color: $color-primary;
+					min-width: 34px;
+					min-height: 34px;
+					mat-icon {
+						color: $color-primary;
+					}
+				}
+				.logo-skeleton {
+					::ng-deep .loader {
+						background-color: $color-medium-dark;
+						opacity: 0.2;
+					}
+				}
+				.title-author-container {
+					width: 100%;
+					.item-title {
+						font-size: 16px;
+						font-weight: 500;
+						color: $color-black;
+					}
+					.title-skeleton {
+						width: 50%;
+					}
+					.author-name {
+						font-size: 14px;
+						font-weight: 500;
+						color: $color-medium-dark;
+					}
+					.author-name-skeleton {
+						width: 40%;
+						::ng-deep .loader {
+							height: 15px;
+						}
+					}
+				}
+			}
+
+			.item-menu {
+				cursor: pointer;
+				color: $color-dark-blue;
 			}
 		}
-		.item-title {
-			font-size: 16px;
-			font-weight: 500;
-			color: $color-black;
-		}
-		.autor-name {
-			font-size: 14px;
-			font-weight: 500;
-			color: $color-medium-dark;
-		}
-
-		.item-menu {
-			cursor: pointer;
-			color: $color-dark-blue;
-		}
-	}
-	.item-body {
-		padding: 4px 16px;
-		.item-url {
-			font-weight: 400;
-			font-size: 14px;
-			color: $color-primary;
-			overflow: hidden;
-			text-overflow: ellipsis;
-			white-space: nowrap;
-		}
-		.item-introduction {
-			font-weight: 500;
-			font-size: 14px;
-			color: $color-black;
-			overflow: hidden;
-			display: -webkit-box;
-			-webkit-line-clamp: 2; /* number of lines to show */
-			line-clamp: 2;
-			-webkit-box-orient: vertical;
+		.item-body {
+			padding: 4px 16px;
+			.item-url {
+				font-weight: 400;
+				font-size: 14px;
+				color: $color-primary;
+				overflow: hidden;
+				text-overflow: ellipsis;
+				white-space: nowrap;
+			}
+			.item-introduction {
+				font-weight: 500;
+				font-size: 14px;
+				color: $color-black;
+				overflow: hidden;
+				display: -webkit-box;
+				-webkit-line-clamp: 2; /* number of lines to show */
+				line-clamp: 2;
+				-webkit-box-orient: vertical;
+			}
+			.url-skeleton {
+				width: 90%;
+			}
+			.introduction-skeleton {
+				width: 50%;
+			}
 		}
 	}
-}
-.percentage-container {
-	height: 24px;
-	padding: 4px 8px;
-	background-color: rgba(63, 154, 245, 0.2);
-	border-radius: 0px 0px 10px 10px;
-	.percentage-similar-words {
+	.percentage-container {
+		height: 24px;
+		padding: 4px 8px;
+		background-color: $color-container-background;
+		border-radius: 0px 0px 10px 10px;
 		width: 100%;
-		border: 1px solid var(--effect-dialog-background, rgba(17, 41, 96, 0.4));
-		border-radius: 4px;
-		height: 4px;
-		background-color: $color-white;
-		.identical {
+		.all-percentage-result {
+			width: 100%;
+			border: 1px solid var(--effect-dialog-background, rgba(17, 41, 96, 0.4));
+			border-radius: 4px;
 			height: 4px;
-			background-color: #fd7366;
+			background-color: $color-white;
+			.identical {
+				height: 4px;
+				background-color: #fd7366;
+			}
+			.minorChanges {
+				height: 4px;
+				background-color: #fe9391;
+			}
+			.paraphrased {
+				height: 4px;
+				background-color: #fed5a9;
+			}
+			.omittedWords {
+				height: 4px;
+				background-color: #fed5a9;
+			}
 		}
-		.minorChanges {
-			height: 4px;
-			background-color: #fe9391;
+		.similar-words-percentage {
+			color: $color-black;
+			font-size: 14px;
+			font-weight: 700;
 		}
-		.paraphrased {
-			height: 4px;
-			background-color: #fed5a9;
+		.percentage-skeleton {
+			width: 40%;
+			::ng-deep .loader {
+				height: 14px;
+			}
 		}
-		.omittedWords {
-			height: 4px;
-			background-color: #fed5a9;
+	}
+	.skeleton {
+		height: 19px;
+		::ng-deep .loader {
+			height: 19px;
+			border-radius: 10px !important;
+			background-color: $color-medium-dark;
+			opacity: 0.2;
+			margin: 0px;
 		}
 	}
 }
-
-::ng-deep .item-menu-list {
+::ng-deep .result-item-menu-list {
 	.mat-menu-content {
 		background-color: $color-white !important;
 		border-radius: 10px;
 	}
 	.mat-menu-item {
 		background-color: $color-white !important;
+		&:hover {
+			background-color: $color-container-background !important;
+		}
 		.mat-menu-item-icon {
 			opacity: 0.4;
 			color: $color-medium-dark;
@@ -97,6 +162,7 @@
 		.mat-menu-item-text {
 			font-weight: 500;
 			font-size: 14px;
+			color: $color-medium-dark;
 		}
 	}
 }

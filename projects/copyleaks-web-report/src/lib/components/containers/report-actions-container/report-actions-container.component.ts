@@ -8,7 +8,7 @@ import {
 	OnInit,
 	TemplateRef,
 } from '@angular/core';
-import { CopyleaksReportNgTemplatesService } from '../../../services/copyleaks-report-ng-templates.service';
+import { ReportNgTemplatesService } from '../../../services/report-ng-templates.service';
 
 @Component({
 	selector: 'copyleaks-report-actions-container',
@@ -30,7 +30,7 @@ export class ReportActionsContainerComponent implements OnInit, AfterViewInit, O
 	customActionsTemplateRef: TemplateRef<any>;
 	customTemplateRefSub: any;
 
-	constructor(private _reportNgTemplatesSvc: CopyleaksReportNgTemplatesService, private cdr: ChangeDetectorRef) {}
+	constructor(private _reportNgTemplatesSvc: ReportNgTemplatesService, private cdr: ChangeDetectorRef) {}
 
 	ngOnInit(): void {
 		if (this.flexGrow !== undefined && this.flexGrow !== null) this.flexGrowProp = this.flexGrow;

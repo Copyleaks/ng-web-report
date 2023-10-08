@@ -73,3 +73,11 @@ export enum ResultAccess {
 	full,
 	locked,
 }
+
+export enum EMatchClassification {
+	Unknown = 0,
+	Human = 1,
+	AI = 2,
+	SameWriter = 3,
+	AnotherWriter = 4,
+}

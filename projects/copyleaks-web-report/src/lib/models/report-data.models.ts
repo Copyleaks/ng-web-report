@@ -251,7 +251,7 @@ export type ResultPreview =
 
 //#region Scan result related models
 /** Type representing a scan result from copyleaks api */
-export interface IScanResult {
+export interface IResultDetailResponse {
 	statistics: IStatistics;
 	text: IResultTextSection;
 	html: IResultHtmlSection;

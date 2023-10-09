@@ -4,20 +4,93 @@
 		<span class="number-of-words">(2402 words)</span>
 	</div>
 	<div class="actions-container">
-		<mat-icon>arrow_upward</mat-icon>
-		<mat-icon>arrow_downward</mat-icon>
-		<mat-icon>format_align_left</mat-icon>
-		<mat-icon>format_align_right</mat-icon>
-		<mat-icon>zoom_in</mat-icon>
-		<mat-icon>zoom_out</mat-icon>
-		<mat-icon>title</mat-icon>
+		<mat-icon fontSet="material-icons-round" matTooltip="Go to previous match" (click)="onJumpToNextMatchClick(false)">
+			arrow_upward
+		</mat-icon>
+		<mat-icon fontSet="material-icons-round" matTooltip="Go to next match" (click)="onJumpToNextMatchClick()">
+			arrow_downward
+		</mat-icon>
+		<mat-icon
+			*ngIf="!isHtmlView"
+			fontSet="material-icons-round"
+			(click)="changeContentDirection('ltr')"
+			matTooltip="Align Left">
+			format_align_left
+		</mat-icon>
+		<mat-icon
+			*ngIf="!isHtmlView"
+			fontSet="material-icons-round"
+			(click)="changeContentDirection('rtl')"
+			matTooltip="Align right">
+			format_align_right
+		</mat-icon>
+		<mat-icon *ngIf="!isHtmlView" fontSet="material-icons-round" (click)="increaseFontSize()" matTooltip="Zoom in">
+			zoom_in
+		</mat-icon>
+		<mat-icon *ngIf="!isHtmlView" fontSet="material-icons-round" (click)="decreaseFontSize()" matTooltip="Zoom out">
+			zoom_out
+		</mat-icon>
+		<mat-icon
+			*ngIf="isHtmlView"
+			fontSet="material-icons-round"
+			(click)="onViewChange()"
+			matTooltip="Switch to textual mode">
+			title
+		</mat-icon>
+		<mat-icon
+			*ngIf="!isHtmlView"
+			fontSet="material-icons-round"
+			(click)="onViewChange()"
+			matTooltip="Switch to rich text mode">
+			image
+		</mat-icon>
 	</div>
 	<!-- <div class="close-btn" (click)="hideTitleContainer = !hideTitleContainer">X</div> -->
 </div>
-<div class="iframe-container">
-	<iframe #contentIFrame></iframe>
+<div class="content-container">
+	<iframe
+		[ngStyle]="{ display: !isHtmlView ? 'none' : '' }"
+		#contentIFrame
+		sandbox="allow-scripts"
+		crOriginalHtmlHelper></iframe>
+
+	<ng-container *ngIf="contentTextMatches; else clean">
+		<div
+			[ngStyle]="{ display: isHtmlView ? 'none' : '', 'font-size': contentZoom + 'em' }"
+			[dir]="contentDirection"
+			crOriginalTextHelper
+			[host]="this"
+			text-container>
+			<ng-container *ngIf="contentTextMatches; else clean">
+				<ng-container *ngFor="let partial of contentTextMatches[currentPage - 1]">
+					<span *ngIf="partial.match.type === MatchType.none">{{ partial.content }}</span>
+					<!--  -->
+					<span
+						*ngIf="partial.match.type !== MatchType.none && partial.match.type !== MatchType.excluded"
+						[cr-match]="partial.match"
+						(matchSelected)="matchSelected($event)"
+						origin="original">
+						{{ partial.content }}
+					</span>
+					<!--  -->
+					<i *ngIf="partial.match.type === MatchType.excluded && partial.match.reason != 8">
+						{{ partial.content }}
+					</i>
+					<!--  -->
+					<span *ngIf="partial.match.type === MatchType.excluded && partial.match.reason == 8">
+						{{ partial.content }}
+					</span>
+				</ng-container>
+			</ng-container>
+		</div>
+	</ng-container>
+	<ng-template #clean></ng-template>
 </div>
-<div *ngIf="!hidePaginatorContainer" class="paginator-container">
-	<span class="container-text">Powered by Copyleaks & Paginator</span>
-	<!-- <div class="close-btn" (click)="hidePaginatorContainer = !hidePaginatorContainer">X</div> -->
+<div *ngIf="!hidePaginatorContainer && !isHtmlView" class="paginator-container">
+	<cls-powered-by-copyleaks></cls-powered-by-copyleaks>
+	<cls-paginator
+		[pageIndex]="currentPage"
+		[canLoadMoreData]="canViewMorePages"
+		[numberOfPages]="numberOfPages"
+		(page)="onPaginationEvent($event)"></cls-paginator>
 </div>

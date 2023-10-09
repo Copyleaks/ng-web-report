@@ -12,9 +12,12 @@
 
 		<!-- Report scan content viewer -->
 		<copyleaks-content-viewer-container
-			[contentHtml]="scanContentHtml"
-			[contentStyle]="iframeStyle"
-			[contentJsScript]="iframeScript"></copyleaks-content-viewer-container>
+			[isHtmlView]="isHtmlView"
+			[contentHtml]="iframeHtml"
+			[numberOfPages]="numberOfPages"
+			viewMode="one-to-many"
+			(iFrameMessageEvent)="onIFrameMessage($event)"
+			(viewChangeEvent)="onReportViewChange($event)"></copyleaks-content-viewer-container>
 	</div>
 </div>
 

@@ -1,0 +1,48 @@
+@import '../../styles/website-colors.styles.scss';
+
+:host {
+	cursor: pointer;
+	background-color: red;
+
+	&.cr-m-0 {
+		background-color: $color-plagiarism-identical;
+
+		&:hover {
+			background-color: lighten($color-plagiarism-identical, 5%);
+		}
+	}
+}
+
+span[class*='cr-m-'] {
+	cursor: pointer;
+
+	&.cr-m-1 {
+		background-color: $color-plagiarism-minor-changes;
+
+		&:hover {
+			background-color: lighten($color-plagiarism-minor-changes, 5%);
+		}
+	}
+
+	&.cr-m-2 {
+		background-color: $color-plagiarism-paraphrased;
+
+		&:hover {
+			background-color: lighten($color-plagiarism-paraphrased, 5%);
+		}
+	}
+
+	&.cr-m-100 {
+		color: $color-plagiarism-paraphrased;
+		text-decoration: underline;
+		font-weight: bolder;
+	}
+
+	&.cr-highlight {
+		background-color: gold;
+
+		&:hover {
+			background-color: lighten(gold, 10%);
+		}
+	}
+}

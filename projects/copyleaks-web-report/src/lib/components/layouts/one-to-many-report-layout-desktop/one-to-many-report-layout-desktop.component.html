@@ -5,9 +5,13 @@
 
 	<!-- Report content container  -->
 	<copyleaks-content-viewer-container
-		[contentHtml]="scanContentHtml"
-		[contentStyle]="iframeStyle"
-		[contentJsScript]="iframeScript"></copyleaks-content-viewer-container>
+		[isHtmlView]="isHtmlView"
+		[contentHtml]="iframeHtml"
+		[contentTextMatches]="contentTextMatches"
+		[numberOfPages]="numberOfPages"
+		viewMode="one-to-many"
+		(iFrameMessageEvent)="onIFrameMessage($event)"
+		(viewChangeEvent)="onReportViewChange($event)"></copyleaks-content-viewer-container>
 </div>
 
 <!-- Right side section -->

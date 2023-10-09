@@ -65,7 +65,7 @@
 		}
 	}
 
-	.iframe-container {
+	.content-container {
 		flex-grow: 80;
 		height: 80%;
 		overflow-y: auto;
@@ -78,19 +78,68 @@
 	}
 
 	.paginator-container {
-		//! NOTE: this is only for demo purposes
-		padding: 10px;
-	}
-
-	.paginator-container {
 		display: flex;
 		align-items: center;
-		justify-content: center;
-		@include cls-report-container-lvl-3;
+		justify-content: space-between;
+	}
+}
+
+[text-container] {
+	white-space: pre-line;
+	word-break: break-word;
+	padding: 1em;
+	line-height: normal;
+	i {
+		opacity: 0.7;
 	}
 
-	.paginator-container {
-		flex-grow: 10;
-		height: 10%;
+	span[class*='cr-m-'] {
+		cursor: pointer;
+
+		&.cr-m-0 {
+			background-color: $color-plagiarism-identical;
+
+			&:hover {
+				background-color: lighten($color-plagiarism-identical, 5%);
+			}
+		}
+
+		&.cr-m-1 {
+			background-color: $color-plagiarism-minor-changes;
+
+			&:hover {
+				background-color: lighten($color-plagiarism-minor-changes, 5%);
+			}
+		}
+
+		&.cr-m-2 {
+			background-color: $color-plagiarism-paraphrased;
+
+			&:hover {
+				background-color: lighten($color-plagiarism-paraphrased, 5%);
+			}
+		}
+
+		&.cr-m-100 {
+			background: #f0f0f0;
+			color: red;
+			text-decoration: underline;
+			font-weight: bolder;
+		}
+
+		&.cr-m-101 {
+			background: #f0f0f0;
+			color: red;
+			text-decoration: underline;
+			font-weight: bolder;
+		}
+
+		&.cr-highlight {
+			background-color: gold;
+
+			&:hover {
+				background-color: lighten(gold, 10%);
+			}
+		}
 	}
 }

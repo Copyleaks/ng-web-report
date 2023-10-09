@@ -1,0 +1,48 @@
+@import '../../../styles/website-colors.styles.scss';
+
+@import '../../../styles/cls-mat-components-overrides/cls-mat-select-overrides.scss';
+@import '../../../styles/cls-mat-components-overrides/cls-mat-menu-overrides.scss';
+
+:host {
+	background-color: $color-white;
+}
+
+.paginator-top-container {
+	background: $color-white;
+	border-bottom-left-radius: 10px;
+	border-bottom-right-radius: 10px;
+}
+
+.paginator-container {
+	background-color: $color-white;
+	border-bottom-left-radius: 10px;
+	border-bottom-right-radius: 10px;
+	display: flex;
+	flex-direction: row;
+	gap: 8px;
+}
+
+.items-per-page {
+	font-size: 14px;
+	color: $color-medium-dark;
+}
+
+.prev-page-button,
+.next-page-button {
+	width: 20px !important;
+	height: 20px !important;
+	line-height: normal !important;
+	mat-icon {
+		font-size: 20px;
+		width: 20px;
+		height: 20px;
+		line-height: normal;
+	}
+}
+
+.buttons-container {
+	display: flex;
+	flex-direction: row;
+	margin-right: 20px;
+	padding-bottom: 1px;
+}

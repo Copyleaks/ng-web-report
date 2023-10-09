@@ -6,7 +6,18 @@
 			fxLayout="row"
 			fxLayoutAlign="space-between center">
 			<div fxLayout="row" fxLayoutGap="8px" fxLayoutAlign="start center">
-				<span class="dot identical"></span>
+				<ng-container [ngSwitch]="type.name">
+					<ng-container *ngSwitchCase="'identical'">
+						<span class="dot identical"></span>
+					</ng-container>
+					<ng-container *ngSwitchCase="'paraphrased'">
+						<span class="dot paraphrased"></span>
+					</ng-container>
+					<ng-container *ngSwitchCase="'minorChanges'">
+						<span class="dot minorChanges"></span>
+					</ng-container>
+				</ng-container>
+
 				<span class="type-name">{{ type.name }}</span>
 			</div>
 			<span class="percentage-match">{{ type.percentageMatch }}%</span>
@@ -14,7 +25,7 @@
 	</div>
 	<div class="percentage-container" fxLayout="row" fxLayoutGap="8px" fxLayoutAlign="start center">
 		<div class="all-percentage-result" fxLayout="row" fxLayoutAlign="start center">
-			<div class="identical" [style.width]="identicalResult + '%'" style="border-radius: 4px 0px 0px 4px"></div>
+			<div class="identical" [style.width]="identicalResult + '%'" style="border-radius: 4px 4px 4px 4px"></div>
 			<div class="minorChanges" [style.width]="minorChangesResult + '%'" style="height: 4px"></div>
 			<div class="paraphrased" [style.width]="paraphrasedResult + '%'" style="border-radius: 0px 4px 4px 0px"></div>
 			<div class="omittedWords" style="width: 0%"></div>

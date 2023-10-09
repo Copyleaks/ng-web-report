@@ -28,15 +28,24 @@
 				height: 10px;
 				border-radius: 50%;
 			}
+
 			.type-name,
 			.percentage-match {
 				font-weight: 600;
 				font-size: 14px;
 				color: $color-black;
 			}
-		}
-		.identical {
-			background-color: #fd7366;
+
+			.identical {
+				background-color: #fd7366;
+			}
+			.paraphrased {
+				background-color: #fed5a9;
+			}
+
+			.minorChanges {
+				background-color: #fe9391;
+			}
 		}
 	}
 
@@ -55,7 +64,7 @@
 		width: 100%;
 		.all-percentage-result {
 			width: 100%;
-			border: 1px solid var(--effect-dialog-background, rgba(17, 41, 96, 0.4));
+
 			border-radius: 4px;
 			height: 4px;
 			background-color: $color-white;

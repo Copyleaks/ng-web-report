@@ -1,6 +1,10 @@
 import { Component, Input, OnInit } from '@angular/core';
 import { EResultPreviewType } from 'projects/copyleaks-web-report/src/lib/enums/copyleaks-web-report.enums';
-import { IResultPreviewBase, IScanSource } from 'projects/copyleaks-web-report/src/lib/models/report-data.models';
+import {
+	IResultDetailResponse,
+	IResultPreviewBase,
+	IScanSource,
+} from 'projects/copyleaks-web-report/src/lib/models/report-data.models';
 
 @Component({
 	selector: 'cr-report-results-item',
@@ -19,6 +23,10 @@ export class ReportResultsItemComponent implements OnInit {
 	};
 	@Input() source: IScanSource;
 	@Input() showLoader: boolean = false;
+
+	identicalResult: number = 88;
+	minorChangesResult: number = 2;
+	paraphrasedResult: number = 2;
 	eResultPreviewType = EResultPreviewType;
 
 	get authorName() {

@@ -7,10 +7,20 @@ import { FlexLayoutModule } from '@angular/flex-layout';
 import { MatMenuModule } from '@angular/material/menu';
 import { MatButtonModule } from '@angular/material/button';
 import { NgxSkeletonLoaderModule } from 'ngx-skeleton-loader';
+import { SimilarityPipeModule } from '../../../pipes/similarity-pipe.module';
+import { PercentageResultItemComponent } from './components/percentage-result-item/percentage-result-item.component';
 
 @NgModule({
-	declarations: [ReportResultsItemContainerComponent, ReportResultsItemComponent],
-	imports: [CommonModule, MatIconModule, FlexLayoutModule, MatMenuModule, MatButtonModule, NgxSkeletonLoaderModule],
+	declarations: [ReportResultsItemContainerComponent, ReportResultsItemComponent, PercentageResultItemComponent],
 	exports: [ReportResultsItemContainerComponent, ReportResultsItemComponent],
+	imports: [
+		CommonModule,
+		MatIconModule,
+		FlexLayoutModule,
+		MatMenuModule,
+		MatButtonModule,
+		NgxSkeletonLoaderModule,
+		SimilarityPipeModule,
+	],
 })
 export class ReportResultsItemContainerModule {}

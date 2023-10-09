@@ -1,0 +1,85 @@
+@import '../../../../../styles/website-colors.styles.scss';
+
+:host {
+	width: 100%;
+}
+.percentage-top-container {
+	width: 100%;
+	position: relative;
+
+	&:hover {
+		.tooltip-result {
+			visibility: visible;
+		}
+	}
+	.tooltip-result {
+		visibility: hidden;
+		top: -85px;
+		background-color: $color-white;
+		box-shadow: 2px 2px 4px 0px rgba(0, 0, 0, 0.25);
+		border-radius: 10px;
+		padding: 5px;
+		position: absolute;
+		width: 170px;
+		.match-type-cotainer {
+			width: 100%;
+			.dot {
+				width: 10px;
+				height: 10px;
+				border-radius: 50%;
+			}
+			.type-name,
+			.percentage-match {
+				font-weight: 600;
+				font-size: 14px;
+				color: $color-black;
+			}
+		}
+		.identical {
+			background-color: #fd7366;
+		}
+	}
+
+	.tooltip-result::after {
+		content: '';
+		position: absolute;
+		border-style: solid;
+		top: 100%;
+		left: 45%;
+		font-size: larger;
+		border-width: 10px;
+		border-color: $color-white transparent transparent transparent;
+	}
+
+	.percentage-container {
+		width: 100%;
+		.all-percentage-result {
+			width: 100%;
+			border: 1px solid var(--effect-dialog-background, rgba(17, 41, 96, 0.4));
+			border-radius: 4px;
+			height: 4px;
+			background-color: $color-white;
+			.identical {
+				height: 4px;
+				background-color: #fd7366;
+			}
+			.minorChanges {
+				height: 4px;
+				background-color: #fe9391;
+			}
+			.paraphrased {
+				height: 4px;
+				background-color: #fed5a9;
+			}
+			.omittedWords {
+				height: 4px;
+				background-color: #fed5a9;
+			}
+		}
+		.similar-words-percentage {
+			color: $color-black;
+			font-size: 14px;
+			font-weight: 700;
+		}
+	}
+}

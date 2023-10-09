@@ -6,7 +6,7 @@
 	border-radius: 10px;
 	&:hover {
 		border-color: $color-primary;
-		.percentage-container {
+		.percentage-result-item-container {
 			background-color: $color-light-primary;
 		}
 	}
@@ -93,40 +93,13 @@
 			}
 		}
 	}
-	.percentage-container {
+	.percentage-result-item-container {
 		height: 24px;
 		padding: 4px 8px;
 		background-color: $color-container-background;
 		border-radius: 0px 0px 10px 10px;
 		width: 100%;
-		.all-percentage-result {
-			width: 100%;
-			border: 1px solid var(--effect-dialog-background, rgba(17, 41, 96, 0.4));
-			border-radius: 4px;
-			height: 4px;
-			background-color: $color-white;
-			.identical {
-				height: 4px;
-				background-color: #fd7366;
-			}
-			.minorChanges {
-				height: 4px;
-				background-color: #fe9391;
-			}
-			.paraphrased {
-				height: 4px;
-				background-color: #fed5a9;
-			}
-			.omittedWords {
-				height: 4px;
-				background-color: #fed5a9;
-			}
-		}
-		.similar-words-percentage {
-			color: $color-black;
-			font-size: 14px;
-			font-weight: 700;
-		}
+
 		.percentage-skeleton {
 			width: 40%;
 			::ng-deep .loader {

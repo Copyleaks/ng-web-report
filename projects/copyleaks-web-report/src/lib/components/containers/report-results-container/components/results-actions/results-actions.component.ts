@@ -10,7 +10,7 @@ export class ResultsActionsComponent implements OnInit {
 	@Input() totalExcluded: string;
 	@Input() totalFiltered: string;
 
-	showSearchFiled: boolean;
+	showSearchFiled: boolean = false;
 	constructor() {}
 
 	ngOnInit(): void {}

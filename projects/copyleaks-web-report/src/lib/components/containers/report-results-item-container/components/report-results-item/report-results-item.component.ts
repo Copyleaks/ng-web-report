@@ -18,7 +18,7 @@ export class ReportResultsItemComponent implements OnInit {
 		url: 'url.com/slug/slug/123xyz..',
 	};
 	@Input() source: IScanSource;
-	@Input() showLoader: boolean = true;
+	@Input() showLoader: boolean = false;
 	eResultPreviewType = EResultPreviewType;
 
 	get authorName() {

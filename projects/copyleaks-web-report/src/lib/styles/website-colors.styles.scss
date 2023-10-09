@@ -11,17 +11,19 @@ $color-dark-blue: #052d8b;
 $color-medium-dark: #112960;
 $color-disabled: rgba(0, 0, 0, 0.4);
 $color-dialog-background: #11296066;
-$color-plagiarism-identical: #fd7366;
-$color-ai-detected-text: #c1addc;
 $color-match-similarity-green: #008001;
 $color-light-green: #00e2a2;
 
-// plagisirsm scors colors
+// plagisirsm scores colors
 $plag-score-top-level: #f44336;
 $plag-score-mid-level: #ffa503;
 $plag-score-mid-level-opacity-20: #ffa50333;
 $plag-score-low-level: #008001;
 $plag-score-low-level-opacity-20: #00a82d33;
+$color-plagiarism-identical: #fd7366;
+$color-plagiarism-minor-changes: #fe9391;
+$color-plagiarism-paraphrased: #fed5a9;
+$color-ai-detected-text: #c1addc;
 
 // primary color palettes
 $copyleaks-primary-palette: (

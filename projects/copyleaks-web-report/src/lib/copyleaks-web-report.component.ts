@@ -4,14 +4,22 @@ import { BreakpointObserver, Breakpoints } from '@angular/cdk/layout';
 import { map } from 'rxjs/operators';
 import { ReportNgTemplatesService } from './services/report-ng-templates.service';
 import { ReportDataService } from './services/report-data.service';
-import { IClsReportEndpointConfigModel } from './models/report-data.models';
 import { ReportMatchesService } from './services/report-matches.service';
+import { ReportViewService } from './services/report-view.service';
+import { IClsReportEndpointConfigModel } from './models/report-config.models';
+import { ReportMatchHighlightService } from './services/report-match-highlight.service';
 
 @Component({
 	selector: 'copyleaks-web-report',
 	templateUrl: './copyleaks-web-report.component.html',
 	styleUrls: ['./copyleaks-web-report.component.scss'],
-	providers: [ReportNgTemplatesService, ReportDataService, ReportMatchesService],
+	providers: [
+		ReportNgTemplatesService,
+		ReportDataService,
+		ReportMatchesService,
+		ReportViewService,
+		ReportMatchHighlightService,
+	],
 })
 export class CopyleaksWebReportComponent implements OnInit, OnDestroy {
 	@ViewChild('customActionsTemplate', { static: true }) customActionsTemplate: TemplateRef<any>;

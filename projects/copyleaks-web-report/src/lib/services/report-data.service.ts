@@ -1,7 +1,6 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import {
-	IClsReportEndpointConfigModel,
 	ICompleteResults,
 	IResultDetailResponse as IResultDetailResponse,
 	IResultPreviews,
@@ -10,6 +9,7 @@ import {
 import { BehaviorSubject, Subscription, forkJoin, from } from 'rxjs';
 import { concatMap } from 'rxjs/operators';
 import { ResultDetailItem } from '../models/report-matches.models';
+import { IClsReportEndpointConfigModel } from '../models/report-config.models';
 
 @Injectable()
 export class ReportDataService {

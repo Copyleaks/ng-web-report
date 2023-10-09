@@ -30,7 +30,7 @@
 				class="alert-card-preview"
 				(click)="showAlertPreview()">
 				<ng-container *ngIf="selecteAlert; else notSelected">
-					<mat-icon>visibility</mat-icon>
+					<mat-icon>visibility {{ selecteAlert }}</mat-icon>
 					<span>show</span>
 				</ng-container>
 				<ng-template #notSelected>

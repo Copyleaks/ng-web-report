@@ -1,8 +1,8 @@
 import { Component, Input, OnInit } from '@angular/core';
 import { ALERTS } from 'projects/copyleaks-web-report/src/lib/enums/copyleaks-web-report.consts';
 import { ECompleteResultNotificationAlertSeverity } from 'projects/copyleaks-web-report/src/lib/enums/copyleaks-web-report.enums';
-import { ICompleteResultNotificationAlert } from 'projects/copyleaks-web-report/src/lib/models/copyleaks-report-data.models';
 import { ReportAlertsService } from '../../service/report-alerts.service';
+import { ICompleteResultNotificationAlert } from 'projects/copyleaks-web-report/src/lib/models/report-data.models';
 
 @Component({
 	selector: 'cr-alert-card',
@@ -25,7 +25,8 @@ export class AlertCardComponent implements OnInit {
 	}
 
 	get selecteAlert() {
-		return this._reportAlertsService?.showAlertPreview$.value;
+		// return this._reportAlertsService?.showAlertPreview$.value;
+		return true;
 	}
 	constructor(private _reportAlertsService: ReportAlertsService) {}
 

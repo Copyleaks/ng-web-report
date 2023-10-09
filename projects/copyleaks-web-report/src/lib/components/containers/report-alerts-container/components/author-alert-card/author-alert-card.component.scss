@@ -1,6 +1,12 @@
 @import '../../../../../styles/website-colors.styles.scss';
 
 .author-alert-card-container {
+	width: 100%;
+	background-color: $color-white;
+	padding: 8px;
+	border-radius: 10px;
+	border: 2px solid;
+	border-color: $color-container-background;
 	.author-alert-card-person-icon {
 		height: 100%;
 		width: 100%;

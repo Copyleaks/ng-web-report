@@ -135,6 +135,15 @@ export class ReportMatchesService implements OnDestroy {
 	}
 
 	/**
+	 * Process matches on the `one-to-one` view mode
+	 * will calculate the matches when showing `text` or `html` for the first time
+	 * @param item the result to calculate matches from
+	 * @param settings the report settings
+	 * @param source  the scan source
+	 */
+	private _processOneToOneMatches(item: ResultDetailItem, settings: CopyleaksReportOptions, source: IScanSource) {}
+
+	/**
 	 * dtor
 	 */
 	ngOnDestroy() {

@@ -59,7 +59,10 @@
 
 	<div class="percentage-result-item-container" fxLayout="row" fxLayoutGap="8px" fxLayoutAlign="start center">
 		<ng-container *ngIf="!showLoader; else showPercentageSkeleton">
-			<cr-percentage-result-item></cr-percentage-result-item>
+			<cr-percentage-result-item
+				[metadataSource]="metadataSource"
+				[iStatisticsResult]="iStatisticsResult"
+				[similarWords]="previewResult.matchedWords"></cr-percentage-result-item>
 		</ng-container>
 		<ng-template #showPercentageSkeleton>
 			<ngx-skeleton-loader class="percentage-skeleton skeleton" [count]="1" [appearance]="'line'"></ngx-skeleton-loader>

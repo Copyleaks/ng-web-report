@@ -8,34 +8,38 @@ import { ISourceMetadataSection, IStatistics } from 'projects/copyleaks-web-repo
 	styleUrls: ['./percentage-result-item.component.scss'],
 })
 export class PercentageResultItemComponent implements OnInit {
-	@Input() metadataSource: ISourceMetadataSection = {
-		words: 250,
-		excluded: 25,
-	};
+	@Input() metadataSource: ISourceMetadataSection;
+	@Input() iStatisticsResult: IStatistics;
+	@Input() similarWords: number;
 
-	@Input() iStatisticsResult: IStatistics = {
-		identical: 88,
-		minorChanges: 2,
-		relatedMeaning: 2,
-	};
+	get identicalPercentage() {
+		if (this.iStatisticsResult && this.metadataSource) {
+			return this.iStatisticsResult.identical / (this.metadataSource.words - this.metadataSource.excluded);
+		}
+		return 0;
+	}
 
-	@Input() similarWords: number = 80;
+	get minorChangesPercentage() {
+		if (this.iStatisticsResult && this.metadataSource) {
+			return this.iStatisticsResult.minorChanges / (this.metadataSource.words - this.metadataSource.excluded);
+		}
+		return 0;
+	}
+	get paraphrasedPercentage() {
+		if (this.iStatisticsResult && this.metadataSource) {
+			return this.iStatisticsResult.relatedMeaning / (this.metadataSource.words - this.metadataSource.excluded);
+		}
+		return 0;
+	}
 
-	identicalPercentage: number = 0;
-	minorChangesPercentage: number = 0;
-	paraphrasedPercentage: number = 0;
-	similarWordsPercentage: number = 0;
+	get similarWordsPercentage() {
+		if (this.iStatisticsResult && this.metadataSource) {
+			return this.similarWords / (this.metadataSource.words - this.metadataSource.excluded);
+		}
+		return 0;
+	}
+
 	constructor() {}
 
-	ngOnInit(): void {
-		if (this.iStatisticsResult && this.metadataSource) {
-			this.identicalPercentage =
-				this.iStatisticsResult.identical / (this.metadataSource.words - this.metadataSource.excluded);
-			this.minorChangesPercentage =
-				this.iStatisticsResult.minorChanges / (this.metadataSource.words - this.metadataSource.excluded);
-			this.paraphrasedPercentage =
-				this.iStatisticsResult.relatedMeaning / (this.metadataSource.words - this.metadataSource.excluded);
-			this.similarWordsPercentage = this.similarWords / (this.metadataSource.words - this.metadataSource.excluded);
-		}
-	}
+	ngOnInit(): void {}
 }

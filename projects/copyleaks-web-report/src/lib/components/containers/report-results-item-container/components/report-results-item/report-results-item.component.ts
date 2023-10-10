@@ -1,9 +1,9 @@
 import { Component, Input, OnInit } from '@angular/core';
 import { EResultPreviewType } from 'projects/copyleaks-web-report/src/lib/enums/copyleaks-web-report.enums';
 import {
-	IResultDetailResponse,
 	IResultPreviewBase,
-	IScanSource,
+	ISourceMetadataSection,
+	IStatistics,
 } from 'projects/copyleaks-web-report/src/lib/models/report-data.models';
 
 @Component({
@@ -21,12 +21,19 @@ export class ReportResultsItemComponent implements OnInit {
 		type: 3,
 		url: 'url.com/slug/slug/123xyz..',
 	};
-	@Input() source: IScanSource;
+
+	@Input() iStatisticsResult: IStatistics = {
+		identical: 88,
+		minorChanges: 2,
+		relatedMeaning: 2,
+	};
+	@Input() metadataSource: ISourceMetadataSection = {
+		words: 100,
+		excluded: 0,
+	};
+
 	@Input() showLoader: boolean = false;
 
-	identicalResult: number = 88;
-	minorChangesResult: number = 2;
-	paraphrasedResult: number = 2;
 	eResultPreviewType = EResultPreviewType;
 
 	get authorName() {

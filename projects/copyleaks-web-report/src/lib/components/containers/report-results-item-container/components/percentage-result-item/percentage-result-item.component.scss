@@ -28,23 +28,11 @@
 				height: 10px;
 				border-radius: 50%;
 			}
-
 			.type-name,
 			.percentage-match {
 				font-weight: 600;
 				font-size: 14px;
 				color: $color-black;
-			}
-
-			.identical {
-				background-color: #fd7366;
-			}
-			.paraphrased {
-				background-color: #fed5a9;
-			}
-
-			.minorChanges {
-				background-color: #fe9391;
 			}
 		}
 	}
@@ -68,21 +56,8 @@
 			border-radius: 4px;
 			height: 4px;
 			background-color: $color-white;
-			.identical {
+			.rectangle {
 				height: 4px;
-				background-color: #fd7366;
-			}
-			.minorChanges {
-				height: 4px;
-				background-color: #fe9391;
-			}
-			.paraphrased {
-				height: 4px;
-				background-color: #fed5a9;
-			}
-			.omittedWords {
-				height: 4px;
-				background-color: #fed5a9;
 			}
 		}
 		.similar-words-percentage {
@@ -90,5 +65,15 @@
 			font-size: 14px;
 			font-weight: 700;
 		}
+	}
+	.identical {
+		background-color: #fd7366;
+	}
+	.paraphrased {
+		background-color: #fed5a9;
+	}
+
+	.minorChanges {
+		background-color: #fe9391;
 	}
 }

@@ -1,35 +1,37 @@
 <div class="percentage-top-container" fxLayout="row" fxLayoutAlign="center center">
 	<div class="tooltip-result" fxLayout="column" fxLayoutAlign="start start">
-		<div
-			class="match-type-cotainer"
-			*ngFor="let type of matchTypeList"
-			fxLayout="row"
-			fxLayoutAlign="space-between center">
+		<!--identical-->
+		<div class="match-type-cotainer" fxLayout="row" fxLayoutAlign="space-between center">
 			<div fxLayout="row" fxLayoutGap="8px" fxLayoutAlign="start center">
-				<ng-container [ngSwitch]="type.name">
-					<ng-container *ngSwitchCase="'identical'">
-						<span class="dot identical"></span>
-					</ng-container>
-					<ng-container *ngSwitchCase="'paraphrased'">
-						<span class="dot paraphrased"></span>
-					</ng-container>
-					<ng-container *ngSwitchCase="'minorChanges'">
-						<span class="dot minorChanges"></span>
-					</ng-container>
-				</ng-container>
-
-				<span class="type-name">{{ type.name }}</span>
+				<span class="dot identical"></span>
+				<span class="type-name">identical</span>
 			</div>
-			<span class="percentage-match">{{ type.percentageMatch }}%</span>
+			<span class="percentage-match">{{ identicalPercentage }}%</span>
+		</div>
+		<!--minorChanges-->
+		<div class="match-type-cotainer" fxLayout="row" fxLayoutAlign="space-between center">
+			<div fxLayout="row" fxLayoutGap="8px" fxLayoutAlign="start center">
+				<span class="dot minorChanges"></span>
+				<span class="type-name">minorChanges</span>
+			</div>
+			<span class="percentage-match">{{ minorChangesPercentage }}%</span>
+		</div>
+		<!-- paraphrased -->
+		<div class="match-type-cotainer" fxLayout="row" fxLayoutAlign="space-between center">
+			<div fxLayout="row" fxLayoutGap="8px" fxLayoutAlign="start center">
+				<span class="dot paraphrased"></span>
+				<span class="type-name">paraphrased</span>
+			</div>
+			<span class="percentage-match">{{ paraphrasedPercentage }}%</span>
 		</div>
 	</div>
+
 	<div class="percentage-container" fxLayout="row" fxLayoutGap="8px" fxLayoutAlign="start center">
 		<div class="all-percentage-result" fxLayout="row" fxLayoutAlign="start center">
-			<div class="identical" [style.width]="identicalResult + '%'" style="border-radius: 4px 4px 4px 4px"></div>
-			<div class="minorChanges" [style.width]="minorChangesResult + '%'" style="height: 4px"></div>
-			<div class="paraphrased" [style.width]="paraphrasedResult + '%'" style="border-radius: 0px 4px 4px 0px"></div>
-			<div class="omittedWords" style="width: 0%"></div>
+			<div class="rectangle identical" [style.width]="identicalPercentage + '%'"></div>
+			<div class="rectangle minorChanges" [style.width]="minorChangesPercentage + '%'"></div>
+			<div class="rectangle paraphrased" [style.width]="paraphrasedPercentage + '%'"></div>
 		</div>
-		<span class="similar-words-percentage">{{ matchedWords }}%</span>
+		<span class="similar-words-percentage">{{ similarWordsPercentage }}%</span>
 	</div>
 </div>

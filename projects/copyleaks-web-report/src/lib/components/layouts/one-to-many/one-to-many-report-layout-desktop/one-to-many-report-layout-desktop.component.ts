@@ -1,34 +1,41 @@
 import { Component, OnInit, Renderer2 } from '@angular/core';
-import { ReportDataService } from '../../../services/report-data.service';
-import iframeJsScript from '../../../utils/one-to-many-iframe-logic';
-import { COPYLEAKS_REPORT_IFRAME_STYLES } from '../../../constants/iframe-styles.constants';
-import { ReportMatchesService } from '../../../services/report-matches.service';
-import { Match, MatchType } from '../../../models/report-matches.models';
-import { EExcludeReason } from '../../../enums/copyleaks-web-report.enums';
-import { ResultPreview } from '../../../models/report-data.models';
-import { PostMessageEvent } from '../../../models/report-iframe-events.models';
-import { IReportViewEvent } from '../../../models/report-view.models';
+import { ReportDataService } from '../../../../services/report-data.service';
+import iframeJsScript from '../../../../utils/one-to-many-iframe-logic';
+import { COPYLEAKS_REPORT_IFRAME_STYLES } from '../../../../constants/iframe-styles.constants';
+import { Match, MatchType, SlicedMatch } from '../../../../models/report-matches.models';
+import { EExcludeReason } from '../../../../enums/copyleaks-web-report.enums';
+import { ReportMatchesService } from '../../../../services/report-matches.service';
+import { PostMessageEvent } from '../../../../models/report-iframe-events.models';
+import { IScanSource, ResultPreview } from '../../../../models/report-data.models';
+import { IReportViewEvent } from '../../../../models/report-view.models';
+import { ReportViewService } from '../../../../services/report-view.service';
 
 @Component({
-	selector: 'copyleaks-one-to-many-report-layout-mobile',
-	templateUrl: './one-to-many-report-layout-mobile.component.html',
-	styleUrls: ['./one-to-many-report-layout-mobile.component.scss'],
+	selector: 'copyleaks-one-to-many-report-layout-desktop',
+	templateUrl: './one-to-many-report-layout-desktop.component.html',
+	styleUrls: ['./one-to-many-report-layout-desktop.component.scss'],
 })
-export class OneToManyReportLayoutMobileComponent implements OnInit {
-	hideRightSection: boolean = false;
+export class OneToManyReportLayoutDesktopComponent implements OnInit {
+	hideRightSection = false;
 
 	isHtmlView: boolean = true;
-	reportCrawledVersion: string;
+	reportCrawledVersion: IScanSource;
 	iframeHtml: string;
 	iframeStyle = COPYLEAKS_REPORT_IFRAME_STYLES;
 	iframeJsScript = iframeJsScript;
 	reportMatches: Match[];
 
 	rerendered: any;
+	contentTextMatches: SlicedMatch[][];
 	numberOfPages: number;
+
+	get numberOfWords(): number | undefined {
+		return this._reportDataSvc.scanResultsPreviews?.scannedDocument?.totalWords;
+	}
 
 	constructor(
 		private _reportDataSvc: ReportDataService,
+		private _reportViewSvc: ReportViewService,
 		private _matchSvc: ReportMatchesService,
 		private _renderer: Renderer2
 	) {}
@@ -36,7 +43,7 @@ export class OneToManyReportLayoutMobileComponent implements OnInit {
 	ngOnInit(): void {
 		this._reportDataSvc.crawledVersion$.subscribe(data => {
 			if (data) {
-				this.reportCrawledVersion = data?.html.value;
+				this.reportCrawledVersion = data;
 				this.numberOfPages = data.text?.pages?.startPosition?.length ?? 1;
 			}
 		});
@@ -49,7 +56,7 @@ export class OneToManyReportLayoutMobileComponent implements OnInit {
 
 		this._matchSvc.originalTextMatches$.subscribe(data => {
 			if (data) {
-				console.log(data);
+				this.contentTextMatches = data;
 			}
 		});
 	}
@@ -60,15 +67,16 @@ export class OneToManyReportLayoutMobileComponent implements OnInit {
 				const selectedMatch = message.index !== -1 ? this.reportMatches[message.index] : null;
 				let viewedResults: ResultPreview[] = [];
 				viewedResults = [
-					...(this._reportDataSvc.scanResultsPreviews?.internet?.filter(item =>
+					...(this._reportDataSvc.scanResultsPreviews?.results?.internet?.filter(item =>
 						selectedMatch?.ids?.includes(item.id)
 					) ?? []),
-					...(this._reportDataSvc.scanResultsPreviews?.batch?.filter(item => selectedMatch?.ids?.includes(item.id)) ??
-						[]),
-					...(this._reportDataSvc.scanResultsPreviews?.database?.filter(item =>
+					...(this._reportDataSvc.scanResultsPreviews?.results?.batch?.filter(item =>
 						selectedMatch?.ids?.includes(item.id)
 					) ?? []),
-					...(this._reportDataSvc.scanResultsPreviews?.repositories?.filter(item =>
+					...(this._reportDataSvc.scanResultsPreviews?.results?.database?.filter(item =>
+						selectedMatch?.ids?.includes(item.id)
+					) ?? []),
+					...(this._reportDataSvc.scanResultsPreviews?.results?.repositories?.filter(item =>
 						selectedMatch?.ids?.includes(item.id)
 					) ?? []),
 				];
@@ -87,6 +95,7 @@ export class OneToManyReportLayoutMobileComponent implements OnInit {
 
 	onReportViewChange(event: IReportViewEvent) {
 		this.isHtmlView = event.isHtmlView;
+		this._reportViewSvc.reportViewMode$.next(event);
 	}
 
 	/**
@@ -99,7 +108,7 @@ export class OneToManyReportLayoutMobileComponent implements OnInit {
 		this.reportMatches = matches;
 
 		const html = matches.reduceRight((prev: string, curr: Match, i: number) => {
-			let slice = this.reportCrawledVersion?.substring(curr.start, curr.end);
+			let slice = this.reportCrawledVersion?.html?.value?.substring(curr.start, curr.end);
 			switch (curr.type) {
 				case MatchType.excluded:
 					if (curr.reason === EExcludeReason.PartialScan) {

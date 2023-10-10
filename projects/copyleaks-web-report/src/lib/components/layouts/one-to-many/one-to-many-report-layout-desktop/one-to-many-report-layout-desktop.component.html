@@ -7,8 +7,10 @@
 	<copyleaks-content-viewer-container
 		[isHtmlView]="isHtmlView"
 		[contentHtml]="iframeHtml"
+		[scanSource]="reportCrawledVersion"
 		[contentTextMatches]="contentTextMatches"
 		[numberOfPages]="numberOfPages"
+		[numberOfWords]="numberOfWords"
 		viewMode="one-to-many"
 		(iFrameMessageEvent)="onIFrameMessage($event)"
 		(viewChangeEvent)="onReportViewChange($event)"></copyleaks-content-viewer-container>

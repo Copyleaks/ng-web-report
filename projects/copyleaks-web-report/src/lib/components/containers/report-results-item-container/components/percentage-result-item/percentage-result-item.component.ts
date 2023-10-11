@@ -25,6 +25,7 @@ export class PercentageResultItemComponent implements OnInit {
 		}
 		return 0;
 	}
+
 	get paraphrasedPercentage() {
 		if (this.iStatisticsResult && this.metadataSource) {
 			return this.iStatisticsResult.relatedMeaning / (this.metadataSource.words - this.metadataSource.excluded);

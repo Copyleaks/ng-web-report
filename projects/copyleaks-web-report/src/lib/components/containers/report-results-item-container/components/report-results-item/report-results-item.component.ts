@@ -1,10 +1,11 @@
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { EResultPreviewType } from 'projects/copyleaks-web-report/src/lib/enums/copyleaks-web-report.enums';
 import {
 	IResultPreviewBase,
 	ISourceMetadataSection,
 	IStatistics,
 } from 'projects/copyleaks-web-report/src/lib/models/report-data.models';
+import { ReportViewService } from 'projects/copyleaks-web-report/src/lib/services/report-view.service';
 
 @Component({
 	selector: 'cr-report-results-item',
@@ -34,6 +35,8 @@ export class ReportResultsItemComponent implements OnInit {
 
 	@Input() showLoader: boolean = false;
 
+	@Output() hiddenResultEvent = new EventEmitter<string>();
+
 	eResultPreviewType = EResultPreviewType;
 
 	get authorName() {
@@ -53,7 +56,20 @@ export class ReportResultsItemComponent implements OnInit {
 		}
 		return '';
 	}
-	constructor() {}
+	constructor(private _reportViewSvc: ReportViewService) {}
 
 	ngOnInit(): void {}
+
+	hiddenResultById() {
+		this.hiddenResultEvent.emit(this.previewResult.id);
+	}
+
+	comapreResult() {
+		this._reportViewSvc.reportViewMode$.next({
+			isHtmlView: true,
+			viewMode: 'one-to-one',
+			sourcePageIndex: 1,
+			suspectId: this.previewResult.id,
+		});
+	}
 }

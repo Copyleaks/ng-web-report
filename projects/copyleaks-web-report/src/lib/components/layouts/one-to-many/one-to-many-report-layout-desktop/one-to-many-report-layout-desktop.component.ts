@@ -60,6 +60,7 @@ export class OneToManyReportLayoutDesktopComponent extends ReportLayoutBaseCompo
 			if (updatedHtml && data) {
 				this.iframeHtml = updatedHtml;
 				this.oneToOneRerendered = true;
+				this.reportMatches = data;
 			}
 		});
 

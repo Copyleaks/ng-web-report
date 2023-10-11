@@ -29,8 +29,8 @@
 				fxLayoutGap="4px"
 				class="alert-card-preview"
 				(click)="showAlertPreview()">
-				<ng-container *ngIf="selecteAlert; else notSelected">
-					<mat-icon>visibility {{ selecteAlert }}</mat-icon>
+				<ng-container *ngIf="selectedAlert; else notSelected">
+					<mat-icon>visibility {{ selectedAlert }}</mat-icon>
 					<span>show</span>
 				</ng-container>
 				<ng-template #notSelected>

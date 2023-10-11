@@ -24,15 +24,14 @@ export class AlertCardComponent implements OnInit {
 		);
 	}
 
-	get selecteAlert() {
-		// return this._reportAlertsService?.showAlertPreview$.value;
-		return true;
+	get selectedAlert() {
+		return this._reportAlertsService?.showAlertPreview$.value;
 	}
 	constructor(private _reportAlertsService: ReportAlertsService) {}
 
 	ngOnInit(): void {}
 
 	showAlertPreview() {
-		this._reportAlertsService.setShowAlertPreview$(!this.selecteAlert);
+		this._reportAlertsService.setShowAlertPreview$(!this.selectedAlert);
 	}
 }

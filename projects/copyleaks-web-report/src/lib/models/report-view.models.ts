@@ -7,3 +7,11 @@ export interface IReportViewEvent {
 	suspectPageIndex?: number;
 	suspectId?: string;
 }
+
+export interface IReportViewQueryParams {
+	viewMode: string;
+	contentMode: string;
+	sourcePage: string;
+	suspectPage?: string;
+	suspectId?: string;
+}

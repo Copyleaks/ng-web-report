@@ -82,7 +82,7 @@ export class ContentViewerContainerComponent implements OnInit, AfterViewInit, O
 	/**
 	 * @Input {number} The current page in text view report
 	 */
-	@Input() currentPage: number = 1;
+	@Input() currentPage: number;
 
 	/**
 	 * @Input {number} The current page in text view report
@@ -111,6 +111,13 @@ export class ContentViewerContainerComponent implements OnInit, AfterViewInit, O
 		return this.scanSource && this.scanSource.text.pages.startPosition;
 	}
 
+	/**
+	 * `true` if the source document has an `html` section
+	 */
+	get hasHtml(): boolean {
+		return this.scanSource && this.scanSource.html && !!this.scanSource.html.value;
+	}
+
 	constructor(
 		private _renderer: Renderer2,
 		private _cdr: ChangeDetectorRef,
@@ -132,6 +139,9 @@ export class ContentViewerContainerComponent implements OnInit, AfterViewInit, O
 	ngOnChanges(changes: SimpleChanges): void {
 		if (changes['contentHtml'] && changes['contentHtml'].currentValue && this.contentIFrame?.nativeElement)
 			this._renderer.setAttribute(this.contentIFrame.nativeElement, 'srcdoc', changes['contentHtml'].currentValue);
+
+		if (changes['currentPage']) {
+		}
 	}
 
 	/**

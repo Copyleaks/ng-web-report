@@ -8,9 +8,7 @@ import { ReportMatchesService } from 'projects/copyleaks-web-report/src/lib/serv
 import { ReportViewService } from 'projects/copyleaks-web-report/src/lib/services/report-view.service';
 import iframeJsScript from '../../../../utils/one-to-one-iframe-logic';
 import { PostMessageEvent } from 'projects/copyleaks-web-report/src/lib/models/report-iframe-events.models';
-import { IReportViewEvent } from 'projects/copyleaks-web-report/src/lib/models/report-view.models';
 import { ReportMatchHighlightService } from 'projects/copyleaks-web-report/src/lib/services/report-match-highlight.service';
-import * as helpers from '../../../../utils/report-match-helpers';
 import { ReportLayoutBaseComponent } from '../../base/report-layout-base.component';
 
 @Component({
@@ -23,8 +21,8 @@ export class OneToOneReportLayoutDesktopComponent extends ReportLayoutBaseCompon
 
 	numberOfPagesSuspect: number;
 	numberOfPagesSource: number;
-	rerenderedSource: boolean;
-	rerenderedSuspect: boolean;
+	rerenderedSource: boolean = false;
+	rerenderedSuspect: boolean = false;
 
 	suspectCrawledVersion: IScanSource;
 	sourceCrawledVersion: IScanSource;
@@ -57,6 +55,7 @@ export class OneToOneReportLayoutDesktopComponent extends ReportLayoutBaseCompon
 		highlightSvc: ReportMatchHighlightService
 	) {
 		super(reportDataSvc, reportViewSvc, matchSvc, renderer, highlightSvc);
+		this.iframeJsScript = iframeJsScript;
 	}
 
 	ngOnInit(): void {

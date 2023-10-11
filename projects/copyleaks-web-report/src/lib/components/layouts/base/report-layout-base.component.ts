@@ -34,7 +34,7 @@ export abstract class ReportLayoutBaseComponent {
 	 * @param matches the matches to render
 	 */
 	protected _getRenderedMatches(matches: Match[] | null, originalHtml: string) {
-		if (this.rerendered || !matches || !originalHtml) return null;
+		if (this.rerendered == true || !matches || !originalHtml) return null;
 
 		const html = helpers.getRenderedMatches(matches, originalHtml);
 		if (!html) return null;

@@ -40,6 +40,9 @@
 		</mat-icon>
 		<mat-icon
 			*ngIf="isHtmlView"
+			[ngClass]="{
+				'disabled-icon': !hasHtml
+			}"
 			fontSet="material-icons-round"
 			(click)="onViewChange()"
 			matTooltip="Switch to textual mode">

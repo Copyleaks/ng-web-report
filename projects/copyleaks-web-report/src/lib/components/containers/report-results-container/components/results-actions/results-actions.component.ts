@@ -1,4 +1,5 @@
 import { Component, Input, OnInit } from '@angular/core';
+import { IResultsActions } from './models/results-actions.models';
 
 @Component({
 	selector: 'cr-results-actions',
@@ -6,9 +7,7 @@ import { Component, Input, OnInit } from '@angular/core';
 	styleUrls: ['./results-actions.component.scss'],
 })
 export class ResultsActionsComponent implements OnInit {
-	@Input() totalResults: string;
-	@Input() totalExcluded: string;
-	@Input() totalFiltered: string;
+	@Input() resultsActions: IResultsActions;
 
 	showSearchFiled: boolean = false;
 	constructor() {}

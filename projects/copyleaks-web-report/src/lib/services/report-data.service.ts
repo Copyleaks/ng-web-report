@@ -1,7 +1,6 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import {
-	IClsReportEndpointConfigModel,
 	ICompleteResults,
 	IResultDetailResponse as IResultDetailResponse,
 	IResultPreviews,
@@ -10,6 +9,7 @@ import {
 import { BehaviorSubject, Subscription, forkJoin, from } from 'rxjs';
 import { concatMap } from 'rxjs/operators';
 import { ResultDetailItem } from '../models/report-matches.models';
+import { IClsReportEndpointConfigModel } from '../models/report-config.models';
 
 @Injectable()
 export class ReportDataService {
@@ -41,7 +41,7 @@ export class ReportDataService {
 		return this._scanResultsDetails$.value;
 	}
 
-	private _scanResultsPreviews$ = new BehaviorSubject<IResultPreviews | undefined>(undefined);
+	private _scanResultsPreviews$ = new BehaviorSubject<ICompleteResults | undefined>(undefined);
 	/**
 	 * Subject for sharing the report complete results.
 	 */
@@ -111,7 +111,7 @@ export class ReportDataService {
 				console.log('Complete Results', completeResultsRes);
 
 				this._crawledVersion$.next(crawledVersionRes);
-				this._scanResultsPreviews$.next(completeResultsRes.results);
+				this._scanResultsPreviews$.next(completeResultsRes);
 
 				// Load all the complete scan results
 				this.loadAllReportScanResults(completeResultsRes);

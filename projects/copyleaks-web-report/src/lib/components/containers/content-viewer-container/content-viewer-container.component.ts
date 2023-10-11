@@ -1,22 +1,27 @@
 import {
 	AfterViewInit,
+	ChangeDetectorRef,
 	Component,
 	ElementRef,
+	EventEmitter,
 	HostBinding,
 	HostListener,
 	Input,
 	OnChanges,
 	OnInit,
+	Output,
 	Renderer2,
 	SimpleChanges,
 	ViewChild,
 } from '@angular/core';
-import { EExcludeReason } from '../../../enums/copyleaks-web-report.enums';
-import { ReportMatchesService } from '../../../services/report-matches.service';
-import { Match, MatchType } from '../../../models/report-matches.models';
 import { PostMessageEvent } from '../../../models/report-iframe-events.models';
-import { ReportDataService } from '../../../services/report-data.service';
-import { ResultPreview } from '../../../models/report-data.models';
+import { IReportViewEvent } from '../../../models/report-view.models';
+import { Match, MatchType, SlicedMatch } from '../../../models/report-matches.models';
+import { DirectionMode as ReportContentDirectionMode, ViewMode } from '../../../models/report-config.models';
+import { TEXT_FONT_SIZE_UNIT, MIN_TEXT_ZOOM, MAX_TEXT_ZOOM } from '../../../constants/report-content.constants';
+import { PageEvent } from '../../core/cls-paginator/models/cls-paginator.models';
+import { ReportMatchHighlightService } from '../../../services/report-match-highlight.service';
+import { IScanSource } from '../../../models/report-data.models';
 
 @Component({
 	selector: 'copyleaks-content-viewer-container',
@@ -32,17 +37,22 @@ export class ContentViewerContainerComponent implements OnInit, AfterViewInit, O
 	/**
 	 * @Input {string} The content viewer HTML value
 	 */
+	@Input() isHtmlView: boolean;
+
+	/**
+	 * @Input {string} The content viewer HTML value
+	 */
+	@Input() scanSource: IScanSource;
+
+	/**
+	 * @Input {string} The content viewer HTML value
+	 */
 	@Input() contentHtml: string;
 
 	/**
 	 * @Input {string} The content viewer HTML value
 	 */
-	@Input() contentStyle: string;
-
-	/**
-	 * @Input {string} The content viewer HTML value
-	 */
-	@Input() contentJsScript: string;
+	@Input() contentTextMatches: SlicedMatch[][];
 
 	/**
 	 * @Input {boolean} Flag indicating whether to show the content title or not.
@@ -59,29 +69,61 @@ export class ContentViewerContainerComponent implements OnInit, AfterViewInit, O
 	 */
 	@Input() flexGrow: number;
 
-	rerendered: boolean;
+	/**
+	 * @Input {number} Flex grow property - flex-grow
+	 */
+	@Input() contentDirection: ReportContentDirectionMode = 'ltr';
+
+	/**
+	 * @Input {number} Flex grow property - flex-grow
+	 */
+	@Input() contentZoom: number = 1;
+
+	/**
+	 * @Input {number} The current page in text view report
+	 */
+	@Input() currentPage: number = 1;
+
+	/**
+	 * @Input {number} The current page in text view report
+	 */
+	@Input() numberOfPages: number = 1;
+
+	/**
+	 * @Input {number} The current page in text view report
+	 */
+	@Input() numberOfWords: number | undefined = undefined;
+
+	@Input() viewMode: ViewMode = 'one-to-many';
+
+	@Output() iFrameMessageEvent = new EventEmitter<PostMessageEvent>();
+
+	@Output() viewChangeEvent = new EventEmitter<IReportViewEvent>();
+
 	iFrameWindow: Window | null;
-	reportMatches: Match[];
+
+	MatchType = MatchType;
+	canViewMorePages: boolean = true;
+
+	public get pages(): number[] {
+		return this.scanSource && this.scanSource.text.pages.startPosition;
+	}
 
 	constructor(
 		private _renderer: Renderer2,
-		private _matchSvc: ReportMatchesService,
-		private _reportDataSvc: ReportDataService
+		private _cdr: ChangeDetectorRef,
+		private _highlightService: ReportMatchHighlightService
 	) {}
 
 	ngOnInit(): void {
 		if (this.flexGrow !== undefined && this.flexGrow !== null) this.flexGrowProp = this.flexGrow;
+		if (this.currentPage > this.numberOfPages) this.currentPage = 1;
 	}
 
 	ngAfterViewInit() {
 		if (this.contentHtml) this._renderer.setAttribute(this.contentIFrame.nativeElement, 'srcdoc', this.contentHtml);
-		this._matchSvc.originalHtmlMatches$.subscribe(data => {
-			if (data) {
-				this._renderMatches(data);
-			}
-		});
-
 		this.iFrameWindow = this.contentIFrame?.nativeElement?.contentWindow;
+		this._cdr.detectChanges();
 	}
 
 	ngOnChanges(changes: SimpleChanges): void {
@@ -99,81 +141,56 @@ export class ContentViewerContainerComponent implements OnInit, AfterViewInit, O
 		if (source !== this.iFrameWindow) {
 			return;
 		}
-		const pmevent = data as PostMessageEvent;
-		switch (pmevent.type) {
-			case 'match-select':
-				const selectedMatch = pmevent.index !== -1 ? this.reportMatches[pmevent.index] : null;
-				let viewedResults: ResultPreview[] = [];
 
-				viewedResults = [
-					...(this._reportDataSvc.scanResultsPreviews?.internet?.filter(item =>
-						selectedMatch?.ids?.includes(item.id)
-					) ?? []),
-					...(this._reportDataSvc.scanResultsPreviews?.batch?.filter(item => selectedMatch?.ids?.includes(item.id)) ??
-						[]),
-					...(this._reportDataSvc.scanResultsPreviews?.database?.filter(item =>
-						selectedMatch?.ids?.includes(item.id)
-					) ?? []),
-					...(this._reportDataSvc.scanResultsPreviews?.repositories?.filter(item =>
-						selectedMatch?.ids?.includes(item.id)
-					) ?? []),
-				];
-				console.log('Results for selected match: ', viewedResults);
+		const iframeEvent = data as PostMessageEvent;
+		this.iFrameMessageEvent.emit(iframeEvent);
+	}
 
-				break;
-			case 'upgrade-plan':
-				console.log(pmevent);
-				break;
-			case 'match-warn':
-				console.warn('match not found');
-				break;
-			default:
-				console.error('unknown event', pmevent);
-		}
+	onViewChange() {
+		this.viewChangeEvent.emit({
+			isHtmlView: !this.isHtmlView,
+			viewMode: this.viewMode,
+			sourcePageIndex: this.currentPage,
+		});
+		this._cdr.detectChanges();
+	}
+
+	matchSelected(event: Match) {
+		console.log(event);
+	}
+
+	changeContentDirection(direction: ReportContentDirectionMode) {
+		this.contentDirection = direction;
 	}
 
 	/**
-	 * Render list of matches in the iframe's HTML
-	 * @param matches the matches to render
+	 * updates the font size of the suspect text.
+	 * @param amount a decimal number between 0.5 and 4
 	 */
-	private _renderMatches(matches: Match[]) {
-		if (this.rerendered) return;
+	decreaseFontSize(amount: number = TEXT_FONT_SIZE_UNIT) {
+		this.contentZoom = Math.max(this.contentZoom - amount, MIN_TEXT_ZOOM);
+	}
 
-		this.reportMatches = matches;
+	/**
+	 * updates the font size of the suspect text.
+	 * @param amount a decimal number between 0.5 and 4
+	 */
+	increaseFontSize(amount: number = TEXT_FONT_SIZE_UNIT) {
+		this.contentZoom = Math.min(this.contentZoom + amount, MAX_TEXT_ZOOM);
+	}
 
-		const html = matches.reduceRight((prev: string, curr: Match, i: number) => {
-			let slice = this.contentHtml?.substring(curr.start, curr.end);
-			switch (curr.type) {
-				case MatchType.excluded:
-					if (curr.reason === EExcludeReason.PartialScan) {
-						slice = `<span exclude-partial-scan data-type="${curr.type}" data-index="${i}">${slice}</span>`;
-					} else {
-						slice = `<span exclude>${slice}</span>`;
-					}
-					break;
-				case MatchType.none:
-					break;
-				default:
-					slice = `<span match data-type="${curr.type}" data-index="${i}" data-gid="${curr.gid}">${slice}</span>`;
-					break;
-			}
-			return slice ? slice?.concat(prev) : '';
-		}, '');
+	onPaginationEvent(event: PageEvent) {
+		if (!event) return;
 
-		const css = this._renderer.createElement('style') as HTMLStyleElement;
-		css.textContent = this.contentStyle;
-		this.contentStyle = css.outerHTML;
+		this.currentPage = event.pageIndex;
+		this.canViewMorePages = this.currentPage < this.numberOfPages;
+	}
 
-		const js = this._renderer.createElement('script') as HTMLScriptElement;
-		js.textContent = this.contentJsScript;
-		this.contentJsScript = js.outerHTML;
-
-		this._renderer.setAttribute(
-			this.contentIFrame.nativeElement,
-			'srcdoc',
-			html + this.contentStyle + this.contentJsScript
-		);
-
-		this.rerendered = true;
+	/**
+	 * Jump to next match click handler.
+	 * @param next if `true` jump to next match, otherwise jumpt to previous match
+	 */
+	onJumpToNextMatchClick(next: boolean = true) {
+		this._highlightService.jump(next);
 	}
 }

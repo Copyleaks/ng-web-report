@@ -6,6 +6,7 @@ import { CopyleaksReportOptions } from '../models/report-options.models';
 import { ReportDataService } from './report-data.service';
 import { takeUntil } from 'rxjs/operators';
 import { SlicedMatch, Match, ResultDetailItem } from '../models/report-matches.models';
+import { ReportViewService } from './report-view.service';
 
 /**
  * Service that calculates the matches highlight positions with respect to the view and content mode.
@@ -51,28 +52,49 @@ export class ReportMatchesService implements OnDestroy {
 
 	private _unsubscribe$: Subject<void> = new Subject();
 
-	constructor(private _reportDataSvc: ReportDataService) {
+	constructor(private _reportDataSvc: ReportDataService, private _reportViewSvc: ReportViewService) {
 		this._initOneToManyMatchesHandler();
 	}
 
 	private _initOneToManyMatchesHandler() {
-		combineLatest([this._reportDataSvc.crawledVersion$, this._reportDataSvc.scanResultsDetails$])
+		combineLatest([
+			this._reportDataSvc.crawledVersion$,
+			this._reportDataSvc.scanResultsDetails$,
+			this._reportViewSvc.reportViewMode$,
+		])
 			.pipe(takeUntil(this._unsubscribe$))
-			.subscribe(([scanSource, scanResults]) => {
-				if (scanSource && scanResults)
-					this._processOneToManyMatches(
-						scanResults,
-						// !MOCK data for scan report options
-						{
-							showRelated: true,
-							showIdentical: true,
-							showMinorChanges: true,
-							showPageSources: true,
-							showOnlyTopResults: true,
-							setAsDefault: true,
-						} as CopyleaksReportOptions,
-						scanSource
-					);
+			.subscribe(([scanSource, scanResults, viewMode]) => {
+				if (scanSource && scanResults && viewMode) {
+					if (viewMode.isHtmlView) {
+						this._processOneToManyMatchesHtml(
+							scanResults,
+							// !MOCK data for scan report options
+							{
+								showRelated: true,
+								showIdentical: true,
+								showMinorChanges: true,
+								showPageSources: true,
+								showOnlyTopResults: true,
+								setAsDefault: true,
+							} as CopyleaksReportOptions,
+							scanSource
+						);
+					} else {
+						this._processOneToManyMatchesText(
+							scanResults,
+							// !MOCK data for scan report options
+							{
+								showRelated: true,
+								showIdentical: true,
+								showMinorChanges: true,
+								showPageSources: true,
+								showOnlyTopResults: true,
+								setAsDefault: true,
+							} as CopyleaksReportOptions,
+							scanSource
+						);
+					}
+				}
 			});
 	}
 
@@ -83,12 +105,43 @@ export class ReportMatchesService implements OnDestroy {
 	 * @param settings the report settings
 	 * @param source  the scan source
 	 */
-	private _processOneToManyMatches(results: ResultDetailItem[], settings: CopyleaksReportOptions, source: IScanSource) {
+	private _processOneToManyMatchesHtml(
+		results: ResultDetailItem[],
+		settings: CopyleaksReportOptions,
+		source: IScanSource
+	) {
 		const html = helpers.processSourceHtml(results, settings, source);
 		if (html) {
 			this._originalHtmlMatches.next(html);
 		}
 	}
+
+	/**
+	 * Process matches on the `one-to-many` view mode
+	 * will calculate the matches when showing `text` or `html` for the first time
+	 * @param results the results to calculate matches from
+	 * @param settings the report settings
+	 * @param source  the scan source
+	 */
+	private _processOneToManyMatchesText(
+		results: ResultDetailItem[],
+		settings: CopyleaksReportOptions,
+		source: IScanSource
+	) {
+		const text = helpers.processSourceText(results, settings, source);
+		if (text) {
+			this._originalTextMatches.next(text);
+		}
+	}
+
+	/**
+	 * Process matches on the `one-to-one` view mode
+	 * will calculate the matches when showing `text` or `html` for the first time
+	 * @param item the result to calculate matches from
+	 * @param settings the report settings
+	 * @param source  the scan source
+	 */
+	private _processOneToOneMatches(item: ResultDetailItem, settings: CopyleaksReportOptions, source: IScanSource) {}
 
 	/**
 	 * dtor

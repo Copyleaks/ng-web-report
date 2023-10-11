@@ -1,3 +1,4 @@
+import { ReportTextMatchComponent } from '../directives/report-text-match/report-text-match.component';
 import { EMatchClassification } from '../enums/copyleaks-web-report.enums';
 
 import { EExcludeReason } from '../enums/copyleaks-web-report.enums';
@@ -132,4 +133,17 @@ export interface AIMatch extends Match {
 	totalWords: number;
 	classification: EMatchClassification;
 	probability: number;
+}
+
+export type ReportOrigin = 'original' | 'source' | 'suspect';
+export interface TextMatchHighlightEvent {
+	elem: ReportTextMatchComponent | null;
+	origin: ReportOrigin;
+	broadcast: boolean;
+}
+
+export interface HtmlMatchClickEvent {
+	match: Match | null;
+	isSource: boolean;
+	broadcast: boolean;
 }

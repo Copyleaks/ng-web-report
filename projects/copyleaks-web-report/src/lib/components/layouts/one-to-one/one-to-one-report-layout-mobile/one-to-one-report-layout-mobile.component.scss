@@ -1,10 +1,10 @@
-@import '../../../styles/containers.styles.scss';
+@import '../../../../styles/containers.styles.scss';
 
 :host {
-	flex-direction: column;
 	display: flex;
 	flex-grow: 1;
 	gap: 8px;
+	flex-direction: column;
 }
 
 .middle-section,
@@ -17,41 +17,34 @@
 
 .middle-section {
 	@include cls-report-container-lvl-1;
-	flex-grow: 65;
-	height: 65%;
-	padding: 16px;
-
-	.alerts-container {
-		overflow-y: auto;
-	}
-}
-.content-section {
 	flex-grow: 80;
 	height: 80%;
+	padding: 16px;
 	copyleaks-content-viewer-container {
-		overflow-y: auto;
+		height: 43%;
 	}
+	copyleaks-report-results-item-container {
+		height: 15%;
+	}
+}
+
+.content-section {
+	flex-grow: 70;
+	height: 70%;
 }
 
 .alerts-container {
 	@include cls-report-container-lvl-2;
-	height: 20%;
 }
 
-.results-container {
-	height: 15%;
-	overflow-y: auto;
-}
-
-.results-container,
 .report-actions-container,
-.powered-by-copyleaks-container {
+.middle-section {
 	@include cls-report-container-lvl-1;
 }
 
 .powered-by-copyleaks-container {
-	display: flex;
 	@include cls-report-container-lvl-1;
+	display: flex;
 	padding: 8px;
 	justify-content: center;
 	align-items: center;

@@ -9,9 +9,9 @@ import {
 	Output,
 	Renderer2,
 } from '@angular/core';
-import { Match } from '../../models/report-matches.models';
+import { Match, ReportOrigin } from '../../models/report-matches.models';
 import scrollIntoView from 'scroll-into-view-if-needed';
-import { ReportMatchHighlightService, ReportOrigin } from '../../services/report-match-highlight.service';
+import { ReportMatchHighlightService } from '../../services/report-match-highlight.service';
 
 @Component({
 	selector: 'span[cr-match]',

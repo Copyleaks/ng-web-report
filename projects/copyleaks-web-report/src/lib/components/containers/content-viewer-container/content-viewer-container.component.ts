@@ -16,11 +16,12 @@ import {
 } from '@angular/core';
 import { PostMessageEvent } from '../../../models/report-iframe-events.models';
 import { IReportViewEvent } from '../../../models/report-view.models';
-import { Match, MatchType, SlicedMatch } from '../../../models/report-matches.models';
+import { Match, MatchType, ReportOrigin, SlicedMatch } from '../../../models/report-matches.models';
 import { DirectionMode as ReportContentDirectionMode, ViewMode } from '../../../models/report-config.models';
 import { TEXT_FONT_SIZE_UNIT, MIN_TEXT_ZOOM, MAX_TEXT_ZOOM } from '../../../constants/report-content.constants';
 import { PageEvent } from '../../core/cls-paginator/models/cls-paginator.models';
 import { ReportMatchHighlightService } from '../../../services/report-match-highlight.service';
+import { IScanSource } from '../../../models/report-data.models';
 
 @Component({
 	selector: 'copyleaks-content-viewer-container',
@@ -37,6 +38,11 @@ export class ContentViewerContainerComponent implements OnInit, AfterViewInit, O
 	 * @Input {string} The content viewer HTML value
 	 */
 	@Input() isHtmlView: boolean;
+
+	/**
+	 * @Input {string} The content viewer HTML value
+	 */
+	@Input() scanSource: IScanSource;
 
 	/**
 	 * @Input {string} The content viewer HTML value
@@ -83,7 +89,14 @@ export class ContentViewerContainerComponent implements OnInit, AfterViewInit, O
 	 */
 	@Input() numberOfPages: number = 1;
 
+	/**
+	 * @Input {number} The current page in text view report
+	 */
+	@Input() numberOfWords: number | undefined = undefined;
+
 	@Input() viewMode: ViewMode = 'one-to-many';
+
+	@Input() reportOrigin: ReportOrigin = 'original';
 
 	@Output() iFrameMessageEvent = new EventEmitter<PostMessageEvent>();
 
@@ -94,6 +107,10 @@ export class ContentViewerContainerComponent implements OnInit, AfterViewInit, O
 	MatchType = MatchType;
 	canViewMorePages: boolean = true;
 
+	public get pages(): number[] {
+		return this.scanSource && this.scanSource.text.pages.startPosition;
+	}
+
 	constructor(
 		private _renderer: Renderer2,
 		private _cdr: ChangeDetectorRef,
@@ -103,6 +120,7 @@ export class ContentViewerContainerComponent implements OnInit, AfterViewInit, O
 	ngOnInit(): void {
 		if (this.flexGrow !== undefined && this.flexGrow !== null) this.flexGrowProp = this.flexGrow;
 		if (this.currentPage > this.numberOfPages) this.currentPage = 1;
+		if (this.currentPage >= this.numberOfPages) this.canViewMorePages = false;
 	}
 
 	ngAfterViewInit() {
@@ -135,12 +153,9 @@ export class ContentViewerContainerComponent implements OnInit, AfterViewInit, O
 		this.viewChangeEvent.emit({
 			isHtmlView: !this.isHtmlView,
 			viewMode: this.viewMode,
+			sourcePageIndex: this.currentPage,
 		});
 		this._cdr.detectChanges();
-	}
-
-	matchSelected(event: Match) {
-		console.log(event);
 	}
 
 	changeContentDirection(direction: ReportContentDirectionMode) {

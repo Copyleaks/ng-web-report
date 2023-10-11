@@ -11,10 +11,16 @@ import { SimilarityPipeModule } from '../../../pipes/similarity-pipe.module';
 import { PercentageResultItemComponent } from './components/percentage-result-item/percentage-result-item.component';
 import { ReportViewService } from '../../../services/report-view.service';
 import { ReportExpandResultItemComponent } from './components/report-expand-result-item/report-expand-result-item.component';
+import { MatChipsModule } from '@angular/material/chips';
 
 @NgModule({
-	declarations: [ReportResultsItemContainerComponent, ReportResultsItemComponent, PercentageResultItemComponent, ReportExpandResultItemComponent],
-	exports: [ReportResultsItemContainerComponent, ReportResultsItemComponent],
+	declarations: [
+		ReportResultsItemContainerComponent,
+		ReportResultsItemComponent,
+		PercentageResultItemComponent,
+		ReportExpandResultItemComponent,
+	],
+	exports: [ReportResultsItemContainerComponent, ReportResultsItemComponent, ReportExpandResultItemComponent],
 	imports: [
 		CommonModule,
 		MatIconModule,
@@ -23,6 +29,7 @@ import { ReportExpandResultItemComponent } from './components/report-expand-resu
 		MatButtonModule,
 		NgxSkeletonLoaderModule,
 		SimilarityPipeModule,
+		MatChipsModule,
 	],
 	providers: [ReportViewService],
 })

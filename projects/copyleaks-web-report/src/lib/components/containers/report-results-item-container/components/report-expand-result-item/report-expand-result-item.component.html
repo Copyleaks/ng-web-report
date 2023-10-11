@@ -1,1 +1,48 @@
-<p>report-expand-result-item works!</p>
+<div fxLayout="column" fxLayoutAlign="start start">
+	<diV class="result-header" fxLayout="row" fxLayoutAlign="space-between start">
+		<div fxLayout="row" fxLayoutAlign="start start" fxLayoutGap="8px">
+			<div class="result-logo" fxLayout="column" fxLayoutAlign="center center">
+				<mat-icon>compare_arrows</mat-icon>
+			</div>
+			<div class="result-title-container" fxLayout="column" fxLayoutAlign="start start" fxLayoutGap="4px">
+				<span class="result-title">title goes here</span>
+				<ng-container *ngIf="false; else urlSource">
+					<span class="result-source">Source: Internal Database</span>
+				</ng-container>
+				<ng-template #urlSource>
+					<a
+						class="result-url-source"
+						href="https://www.google.co.uk/"
+						fxLayout="row"
+						fxLayoutAlign="center center"
+						fxLayoutGap="4px">
+						<mat-icon>open_in_new</mat-icon>
+						<span>Source: Internal Database</span>
+					</a>
+				</ng-template>
+			</div>
+		</div>
+		<button class="back-button" fxLayout="row" fxLayoutAlign="center center" fxLayoutGap="4px">
+			<span>Back</span>
+			<mat-icon>chevron_right</mat-icon>
+		</button>
+	</diV>
+	<div class="result-chips" fxLayout="row" fxLayoutAlign="start start">
+		<mat-chip-list>
+			<div fxLayout="row" fxLayoutAlign="start start" fxLayoutGap="4px">
+				<mat-chip>Chip</mat-chip>
+				<mat-chip>Chip</mat-chip>
+				<mat-chip>Chip</mat-chip>
+				<mat-chip>Chip</mat-chip>
+			</div>
+		</mat-chip-list>
+	</div>
+</div>
+<div fxLayout="column" fxLayoutAlign="start start">
+	<div fxLayout="row" fxLayoutAlign="space-between start">
+		<span>Plagiarism Detection</span>
+		<div fxLayout="row" fxLayoutAlign="start start">
+			<mat-icon>arrow_drop_down</mat-icon>
+		</div>
+	</div>
+</div>

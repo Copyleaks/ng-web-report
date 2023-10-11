@@ -1,0 +1,75 @@
+@import '../../../../../styles/website-colors.styles.scss';
+.result-header {
+	width: 100%;
+	.result-logo {
+		border: 2px solid;
+		border-radius: 50%;
+		border-color: $color-primary;
+		min-width: 34px;
+		min-height: 34px;
+		mat-icon {
+			color: $color-primary;
+		}
+	}
+	.result-title-container {
+		.result-title {
+			font-weight: 700;
+			font-size: 14px;
+			color: $color-black;
+		}
+		.result-source {
+			font-size: 14px;
+			font-weight: 500;
+			color: $color-medium-dark;
+		}
+		.result-url-source {
+			color: $color-primary;
+			text-decoration: none;
+			mat-icon {
+				font-size: 16px;
+				height: 16px;
+				width: 16px;
+			}
+			span {
+				font-size: 14px;
+				font-weight: 500;
+				text-decoration: underline;
+			}
+		}
+	}
+	.back-button {
+		background-color: $color-white;
+		color: $color-dark-blue;
+		border: 0px;
+		cursor: pointer;
+		span {
+			font-size: 14px;
+			font-weight: 500;
+		}
+		mat-icon {
+			font-size: 18px;
+			height: 18px;
+			width: 18px;
+		}
+	}
+}
+.result-chips {
+	padding: 8px 0px;
+	width: 100%;
+	height: 100%;
+	mat-chip-list {
+		box-sizing: border-box;
+		width: 100%;
+		padding: 4px;
+		mat-chip {
+			background-color: $color-dark-blue;
+			color: $color-container-background;
+			min-height: 22px;
+			font-weight: 500;
+			font-size: 14px;
+			padding: 2px 8px;
+			border-radius: 16px;
+			margin: 0px;
+		}
+	}
+}

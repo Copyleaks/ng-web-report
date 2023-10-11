@@ -16,7 +16,7 @@ import {
 } from '@angular/core';
 import { PostMessageEvent } from '../../../models/report-iframe-events.models';
 import { IReportViewEvent } from '../../../models/report-view.models';
-import { Match, MatchType, SlicedMatch } from '../../../models/report-matches.models';
+import { Match, MatchType, ReportOrigin, SlicedMatch } from '../../../models/report-matches.models';
 import { DirectionMode as ReportContentDirectionMode, ViewMode } from '../../../models/report-config.models';
 import { TEXT_FONT_SIZE_UNIT, MIN_TEXT_ZOOM, MAX_TEXT_ZOOM } from '../../../constants/report-content.constants';
 import { PageEvent } from '../../core/cls-paginator/models/cls-paginator.models';
@@ -96,6 +96,8 @@ export class ContentViewerContainerComponent implements OnInit, AfterViewInit, O
 
 	@Input() viewMode: ViewMode = 'one-to-many';
 
+	@Input() reportOrigin: ReportOrigin = 'original';
+
 	@Output() iFrameMessageEvent = new EventEmitter<PostMessageEvent>();
 
 	@Output() viewChangeEvent = new EventEmitter<IReportViewEvent>();
@@ -118,6 +120,7 @@ export class ContentViewerContainerComponent implements OnInit, AfterViewInit, O
 	ngOnInit(): void {
 		if (this.flexGrow !== undefined && this.flexGrow !== null) this.flexGrowProp = this.flexGrow;
 		if (this.currentPage > this.numberOfPages) this.currentPage = 1;
+		if (this.currentPage >= this.numberOfPages) this.canViewMorePages = false;
 	}
 
 	ngAfterViewInit() {
@@ -153,10 +156,6 @@ export class ContentViewerContainerComponent implements OnInit, AfterViewInit, O
 			sourcePageIndex: this.currentPage,
 		});
 		this._cdr.detectChanges();
-	}
-
-	matchSelected(event: Match) {
-		console.log(event);
 	}
 
 	changeContentDirection(direction: ReportContentDirectionMode) {

@@ -11,7 +11,9 @@
 		[contentTextMatches]="contentTextMatches"
 		[numberOfPages]="numberOfPages"
 		[numberOfWords]="numberOfWords"
+		[currentPage]="currentPageSource"
 		viewMode="one-to-many"
+		reportOrigin="original"
 		(iFrameMessageEvent)="onIFrameMessage($event)"
 		(viewChangeEvent)="onReportViewChange($event)"></copyleaks-content-viewer-container>
 </div>

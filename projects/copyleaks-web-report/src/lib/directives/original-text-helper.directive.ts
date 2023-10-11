@@ -1,9 +1,10 @@
 import { AfterContentInit, ContentChildren, Directive, Input, OnDestroy, QueryList } from '@angular/core';
 import { distinctUntilChanged, filter, take, withLatestFrom } from 'rxjs/operators';
-import { ReportMatchHighlightService, TextMatchHighlightEvent } from '../services/report-match-highlight.service';
+import { ReportMatchHighlightService } from '../services/report-match-highlight.service';
 import * as helpers from '../utils/highlight-helpers';
 import { ReportTextMatchComponent } from './report-text-match/report-text-match.component';
 import { ReportViewService } from '../services/report-view.service';
+import { TextMatchHighlightEvent } from '../models/report-matches.models';
 
 @Directive({
 	selector: '[crOriginalTextHelper]',

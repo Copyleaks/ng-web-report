@@ -7,6 +7,5 @@ import { Component, OnInit } from '@angular/core';
 })
 export class PoweredByComponent implements OnInit {
 	constructor() {}
-	//readonly logo = SVG.LOGO;
 	ngOnInit(): void {}
 }

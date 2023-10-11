@@ -1,4 +1,5 @@
 import { Component } from '@angular/core';
+import { IAuthorAlertCard } from 'projects/copyleaks-web-report/src/lib/components/containers/report-alerts-container/components/author-alert-card/models/author-alert-card.models';
 import { ECompleteResultNotificationAlertSeverity } from 'projects/copyleaks-web-report/src/lib/enums/copyleaks-web-report.enums';
 import { ICompleteResultNotificationAlert } from 'projects/copyleaks-web-report/src/lib/models/report-data.models';
 
@@ -16,5 +17,10 @@ export class DemoComponentsPageComponent {
 		message: 'We are unable to verify that the text was written by a human.',
 		severity: ECompleteResultNotificationAlertSeverity.VeryHigh,
 		title: 'Suspected Cheating: AI Text detected',
+	};
+
+	authorAlert: IAuthorAlertCard = {
+		title: '3/10 Submissions',
+		message: 'This author has been repeatedly using AI text',
 	};
 }

@@ -1,10 +1,7 @@
 <!-- Alerts -->
 <div class="component" fxLayout="column" fxLayoutAlign="center start" fxLayoutGap="8px">
 	<cr-alert-card style="width: 100%" [alert]="alert"></cr-alert-card>
-	<cr-author-alert-card
-		style="width: 100%"
-		[authorAlertTitle]="'3/10 Submissions'"
-		[authorAlertMessage]="'This author has been repeatedly using AI text'"></cr-author-alert-card>
+	<cr-author-alert-card style="width: 100%" [authorAlert]="authorAlert"></cr-author-alert-card>
 </div>
 <!-- Powered By -->
 <div class="component">

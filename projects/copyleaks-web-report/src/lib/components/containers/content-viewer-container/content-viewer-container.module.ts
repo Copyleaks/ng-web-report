@@ -8,6 +8,10 @@ import { ClsPaginatorModule } from '../../core/cls-paginator/cls-paginator.modul
 import { PoweredByCopyleaksModule } from '../../core/powered-by-copyleaks/powered-by-copyleaks.module';
 import { OriginalTextHelperDirective } from '../../../directives/original-text-helper.directive';
 import { OriginalHtmlHelperComponent } from '../../../directives/original-html-helper.directive';
+import { SourceHtmlHelperComponent } from '../../../directives/source-html-helper.directive';
+import { SuspectHtmlHelperComponent } from '../../../directives/suspect-html-helper.directive';
+import { SourceTextHelperDirective } from '../../../directives/source-text-helper.directive';
+import { SuspectTextHelperDirective } from '../../../directives/suspect-text-helper.directive';
 
 @NgModule({
 	declarations: [
@@ -15,6 +19,10 @@ import { OriginalHtmlHelperComponent } from '../../../directives/original-html-h
 		ReportTextMatchComponent,
 		OriginalTextHelperDirective,
 		OriginalHtmlHelperComponent,
+		SourceHtmlHelperComponent,
+		SuspectHtmlHelperComponent,
+		SourceTextHelperDirective,
+		SuspectTextHelperDirective,
 	],
 	imports: [CommonModule, MatIconModule, MatTooltipModule, ClsPaginatorModule, PoweredByCopyleaksModule],
 	exports: [ContentViewerContainerComponent],

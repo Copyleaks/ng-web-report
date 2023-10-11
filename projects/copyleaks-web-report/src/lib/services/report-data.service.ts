@@ -107,9 +107,6 @@ export class ReportDataService {
 
 		const sub = forkJoin([crawledVersionReq, completeResultsReq]).subscribe(
 			([crawledVersionRes, completeResultsRes]) => {
-				console.log('Crawled Version', crawledVersionRes);
-				console.log('Complete Results', completeResultsRes);
-
 				this._crawledVersion$.next(crawledVersionRes);
 				this._scanResultsPreviews$.next(completeResultsRes);
 

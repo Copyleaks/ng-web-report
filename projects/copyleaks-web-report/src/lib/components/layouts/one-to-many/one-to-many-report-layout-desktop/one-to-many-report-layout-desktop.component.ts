@@ -28,6 +28,7 @@ export class OneToManyReportLayoutDesktopComponent implements OnInit {
 	rerendered: any;
 	contentTextMatches: SlicedMatch[][];
 	numberOfPages: number;
+	currentPageSource: number;
 
 	get numberOfWords(): number | undefined {
 		return this._reportDataSvc.scanResultsPreviews?.scannedDocument?.totalWords;
@@ -58,6 +59,12 @@ export class OneToManyReportLayoutDesktopComponent implements OnInit {
 			if (data) {
 				this.contentTextMatches = data;
 			}
+		});
+
+		this._reportViewSvc.reportViewMode$.subscribe(data => {
+			if (!data) return;
+			this.isHtmlView = data.isHtmlView;
+			this.currentPageSource = data.sourcePageIndex;
 		});
 	}
 

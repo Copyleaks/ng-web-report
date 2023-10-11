@@ -1,13 +1,21 @@
 <div *ngIf="!hideTitleContainer" class="title-and-actions-container">
 	<div class="title-container">
-		<span class="title">Submitted text</span>
+		<span class="title">{{ reportOrigin != 'suspect' ? 'Submitted text' : 'Found text' }}</span>
 		<span *ngIf="numberOfWords" class="number-of-words">({{ numberOfWords }} words)</span>
 	</div>
 	<div class="actions-container">
-		<mat-icon fontSet="material-icons-round" matTooltip="Go to previous match" (click)="onJumpToNextMatchClick(false)">
+		<mat-icon
+			*ngIf="reportOrigin != 'suspect'"
+			fontSet="material-icons-round"
+			matTooltip="Go to previous match"
+			(click)="onJumpToNextMatchClick(false)">
 			arrow_upward
 		</mat-icon>
-		<mat-icon fontSet="material-icons-round" matTooltip="Go to next match" (click)="onJumpToNextMatchClick()">
+		<mat-icon
+			*ngIf="reportOrigin != 'suspect'"
+			fontSet="material-icons-round"
+			matTooltip="Go to next match"
+			(click)="onJumpToNextMatchClick()">
 			arrow_downward
 		</mat-icon>
 		<mat-icon
@@ -45,46 +53,119 @@
 			image
 		</mat-icon>
 	</div>
-	<!-- <div class="close-btn" (click)="hideTitleContainer = !hideTitleContainer">X</div> -->
 </div>
 <div class="content-container">
-	<iframe
-		[ngStyle]="{ display: !isHtmlView ? 'none' : '' }"
-		#contentIFrame
-		sandbox="allow-scripts"
-		crOriginalHtmlHelper></iframe>
-
-	<div
-		[ngStyle]="{ display: isHtmlView ? 'none' : '', 'font-size': contentZoom + 'em' }"
-		[dir]="contentDirection"
-		crOriginalTextHelper
-		[host]="this"
-		text-container>
-		<ng-container *ngIf="contentTextMatches; else clean">
-			<ng-container *ngFor="let partial of contentTextMatches[currentPage - 1]">
-				<span *ngIf="partial.match.type === MatchType.none">{{ partial.content }}</span>
-				<!--  -->
-				<span
-					*ngIf="partial.match.type !== MatchType.none && partial.match.type !== MatchType.excluded"
-					[cr-match]="partial.match"
-					(matchSelected)="matchSelected($event)"
-					origin="original">
-					{{ partial.content }}
-				</span>
-				<!--  -->
-				<i *ngIf="partial.match.type === MatchType.excluded && partial.match.reason != 8">
-					{{ partial.content }}
-				</i>
-				<!--  -->
-				<span *ngIf="partial.match.type === MatchType.excluded && partial.match.reason == 8">
-					{{ partial.content }}
-				</span>
-			</ng-container>
+	<ng-container [ngSwitch]="reportOrigin">
+		<ng-container *ngSwitchCase="'original'">
+			<iframe
+				[ngStyle]="{ display: !isHtmlView ? 'none' : '' }"
+				#contentIFrame
+				sandbox="allow-scripts"
+				crOriginalHtmlHelper></iframe>
+			<div
+				*ngIf="!isHtmlView"
+				class="text-container"
+				[ngStyle]="{ display: isHtmlView ? 'none' : '', 'font-size': contentZoom + 'em' }"
+				[dir]="contentDirection"
+				crOriginalTextHelper
+				[host]="this"
+				text-container>
+				<ng-container *ngIf="contentTextMatches; else clean">
+					<ng-container *ngFor="let partial of contentTextMatches[currentPage - 1]">
+						<span *ngIf="partial.match.type === MatchType.none">{{ partial.content }}</span>
+						<!--  -->
+						<span
+							*ngIf="partial.match.type !== MatchType.none && partial.match.type !== MatchType.excluded"
+							[cr-match]="partial.match"
+							origin="original">
+							{{ partial.content }}
+						</span>
+						<!--  -->
+						<i *ngIf="partial.match.type === MatchType.excluded && partial.match.reason != 8">
+							{{ partial.content }}
+						</i>
+						<!--  -->
+						<span *ngIf="partial.match.type === MatchType.excluded && partial.match.reason == 8">
+							{{ partial.content }}
+						</span>
+					</ng-container>
+				</ng-container>
+				<ng-template #clean>
+					{{ scanSource && (scanSource.text.value | slice : pages[currentPage - 1] : pages[currentPage]) }}
+				</ng-template>
+			</div>
 		</ng-container>
-		<ng-template #clean>
-			{{ scanSource && (scanSource.text.value | slice : pages[currentPage - 1] : pages[currentPage]) }}
-		</ng-template>
-	</div>
+
+		<ng-container *ngSwitchCase="'source'">
+			<iframe
+				[ngStyle]="{ display: !isHtmlView ? 'none' : '' }"
+				#contentIFrame
+				sandbox="allow-scripts"
+				crSourceHtmlHelper></iframe>
+			<div
+				*ngIf="!isHtmlView"
+				class="text-container"
+				[ngStyle]="{ display: isHtmlView ? 'none' : '', 'font-size': contentZoom + 'em' }"
+				[dir]="contentDirection"
+				crSourceTextHelper
+				[host]="this"
+				text-container>
+				<ng-container *ngIf="contentTextMatches; else clean">
+					<ng-container *ngFor="let partial of contentTextMatches[currentPage - 1]">
+						<span *ngIf="partial.match.type === MatchType.none">{{ partial.content }}</span>
+						<!--  -->
+						<span
+							*ngIf="partial.match.type !== MatchType.none && partial.match.type !== MatchType.excluded"
+							[cr-match]="partial.match"
+							origin="source">
+							{{ partial.content }}
+						</span>
+						<!--  -->
+						<i *ngIf="partial.match.type === MatchType.excluded && partial.match.reason != 8">
+							{{ partial.content }}
+						</i>
+						<!--  -->
+						<span *ngIf="partial.match.type === MatchType.excluded && partial.match.reason == 8">
+							{{ partial.content }}
+						</span>
+					</ng-container>
+				</ng-container>
+				<ng-template #clean>
+					{{ scanSource && (scanSource.text.value | slice : pages[currentPage - 1] : pages[currentPage]) }}
+				</ng-template>
+			</div>
+		</ng-container>
+
+		<ng-container *ngSwitchCase="'suspect'">
+			<iframe
+				[ngStyle]="{ display: !isHtmlView ? 'none' : '' }"
+				#contentIFrame
+				sandbox="allow-scripts"
+				crSuspectHtmlHelper></iframe>
+			<div
+				*ngIf="!isHtmlView"
+				class="text-container"
+				crSuspectTextHelper
+				[host]="this"
+				text-container
+				[ngStyle]="{ 'font-size': contentZoom + 'em' }"
+				[dir]="contentDirection">
+				<ng-container *ngIf="contentTextMatches; else clean">
+					<ng-container *ngFor="let partial of contentTextMatches[currentPage - 1]">
+						<span *ngIf="partial.match.type === MatchType.none">{{ partial.content }}</span>
+						<span *ngIf="partial.match.type !== MatchType.none" [cr-match]="partial.match" origin="suspect">
+							{{ partial.content }}
+						</span>
+					</ng-container>
+				</ng-container>
+			</div>
+			<!-- text without match highlighting -->
+			<ng-template #clean>
+				{{ scanSource && (scanSource.text.value | slice : pages[currentPage - 1] : pages[currentPage]) }}
+			</ng-template>
+		</ng-container>
+		<ng-container *ngSwitchDefault></ng-container>
+	</ng-container>
 </div>
 <div *ngIf="!hidePaginatorContainer && !isHtmlView" class="paginator-container">
 	<cls-powered-by-copyleaks></cls-powered-by-copyleaks>

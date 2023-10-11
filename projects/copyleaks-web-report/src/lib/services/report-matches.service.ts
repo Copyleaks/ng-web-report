@@ -4,9 +4,10 @@ import * as helpers from '../utils/report-match-helpers';
 import { IScanSource } from '../models/report-data.models';
 import { CopyleaksReportOptions } from '../models/report-options.models';
 import { ReportDataService } from './report-data.service';
-import { takeUntil } from 'rxjs/operators';
+import { filter, takeUntil } from 'rxjs/operators';
 import { SlicedMatch, Match, ResultDetailItem } from '../models/report-matches.models';
 import { ReportViewService } from './report-view.service';
+import { IReportViewEvent } from '../models/report-view.models';
 
 /**
  * Service that calculates the matches highlight positions with respect to the view and content mode.
@@ -54,6 +55,7 @@ export class ReportMatchesService implements OnDestroy {
 
 	constructor(private _reportDataSvc: ReportDataService, private _reportViewSvc: ReportViewService) {
 		this._initOneToManyMatchesHandler();
+		this._initOneToOneMatchesHandler();
 	}
 
 	private _initOneToManyMatchesHandler() {
@@ -62,39 +64,85 @@ export class ReportMatchesService implements OnDestroy {
 			this._reportDataSvc.scanResultsDetails$,
 			this._reportViewSvc.reportViewMode$,
 		])
-			.pipe(takeUntil(this._unsubscribe$))
+			.pipe(
+				takeUntil(this._unsubscribe$),
+				filter(
+					([scanSource, scanResults, viewMode]) =>
+						scanSource != undefined &&
+						scanResults != undefined &&
+						viewMode != null &&
+						viewMode.viewMode === 'one-to-many'
+				)
+			)
 			.subscribe(([scanSource, scanResults, viewMode]) => {
-				if (scanSource && scanResults && viewMode) {
-					if (viewMode.isHtmlView) {
-						this._processOneToManyMatchesHtml(
-							scanResults,
-							// !MOCK data for scan report options
-							{
-								showRelated: true,
-								showIdentical: true,
-								showMinorChanges: true,
-								showPageSources: true,
-								showOnlyTopResults: true,
-								setAsDefault: true,
-							} as CopyleaksReportOptions,
-							scanSource
-						);
-					} else {
-						this._processOneToManyMatchesText(
-							scanResults,
-							// !MOCK data for scan report options
-							{
-								showRelated: true,
-								showIdentical: true,
-								showMinorChanges: true,
-								showPageSources: true,
-								showOnlyTopResults: true,
-								setAsDefault: true,
-							} as CopyleaksReportOptions,
-							scanSource
-						);
-					}
+				if (!scanSource || !scanResults || !viewMode) return;
+
+				// process the mathces according to the report view
+				if (viewMode.isHtmlView) {
+					this._processOneToManyMatchesHtml(
+						scanResults,
+						// !MOCK data for scan report options
+						{
+							showRelated: true,
+							showIdentical: true,
+							showMinorChanges: true,
+							showPageSources: true,
+							showOnlyTopResults: true,
+							setAsDefault: true,
+						} as CopyleaksReportOptions,
+						scanSource
+					);
+				} else {
+					this._processOneToManyMatchesText(
+						scanResults,
+						// !MOCK data for scan report options
+						{
+							showRelated: true,
+							showIdentical: true,
+							showMinorChanges: true,
+							showPageSources: true,
+							showOnlyTopResults: true,
+							setAsDefault: true,
+						} as CopyleaksReportOptions,
+						scanSource
+					);
 				}
+			});
+	}
+
+	private _initOneToOneMatchesHandler() {
+		combineLatest([
+			this._reportDataSvc.crawledVersion$,
+			this._reportViewSvc.selectedResult$,
+			this._reportViewSvc.reportViewMode$,
+		])
+			.pipe(
+				takeUntil(this._unsubscribe$),
+				filter(
+					([scanSource, scanResults, viewMode]) =>
+						scanSource != undefined &&
+						scanResults != undefined &&
+						viewMode != null &&
+						viewMode.viewMode === 'one-to-one'
+				)
+			)
+			.subscribe(([scanSource, selectedResult, viewMode]) => {
+				if (!scanSource || !selectedResult || !viewMode) return;
+
+				this._processOneToOneMatches(
+					selectedResult,
+					// !MOCK data for scan report options
+					{
+						showRelated: true,
+						showIdentical: true,
+						showMinorChanges: true,
+						showPageSources: true,
+						showOnlyTopResults: true,
+						setAsDefault: true,
+					} as CopyleaksReportOptions,
+					scanSource,
+					viewMode
+				);
 			});
 	}
 
@@ -141,7 +189,45 @@ export class ReportMatchesService implements OnDestroy {
 	 * @param settings the report settings
 	 * @param source  the scan source
 	 */
-	private _processOneToOneMatches(item: ResultDetailItem, settings: CopyleaksReportOptions, source: IScanSource) {}
+	private _processOneToOneMatches(
+		item: ResultDetailItem,
+		settings: CopyleaksReportOptions,
+		source: IScanSource,
+		viewMode: IReportViewEvent
+	) {
+		// Case where source has html but suspect doesnt
+		if (source.html && source.html.value && !(item.result?.html && item.result.html.value)) {
+			// Create the report left side (the source document) text matches
+			this._sourceTextMatches.next(helpers.processSourceText(item, settings, source));
+
+			// Create the report left side (the source document) html matches
+			this._sourceHtmlMatches.next(helpers.processSourceHtml(item, settings, source));
+
+			// Create the report right side (the result/suspect document) text matches
+			this._suspectTextMatches.next(helpers.processSuspectText(item, settings, !viewMode.isHtmlView));
+		}
+		// Case where suspect has html but source doesnt
+		else if (!(source.html && source.html.value) && item.result?.html && item.result.html.value) {
+			// Create the report left side (the source document) text matches
+			this._sourceTextMatches.next(helpers.processSourceText(item, settings, source, !viewMode.isHtmlView));
+
+			// Create the report right side (the result/suspect document) text matches
+			this._suspectTextMatches.next(helpers.processSuspectText(item, settings));
+
+			// Create the report right side (the result/suspect document) html matches
+			this._suspectHtmlMatches.next(helpers.processSuspectHtml(item, settings));
+		}
+		// Case where both source and suspect have html & text views
+		else {
+			// Create the report left side (the source document) text and html matches
+			this._sourceTextMatches.next(helpers.processSourceText(item, settings, source));
+			this._sourceHtmlMatches.next(helpers.processSourceHtml(item, settings, source));
+
+			// Create the report right side (the result/suspect document) text and html matches
+			this._suspectTextMatches.next(helpers.processSuspectText(item, settings));
+			this._suspectHtmlMatches.next(helpers.processSuspectHtml(item, settings));
+		}
+	}
 
 	/**
 	 * dtor

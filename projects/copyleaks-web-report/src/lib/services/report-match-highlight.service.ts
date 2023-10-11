@@ -2,23 +2,10 @@ import { Injectable, OnDestroy } from '@angular/core';
 import { BehaviorSubject, Subject } from 'rxjs';
 import { filter, map, withLatestFrom } from 'rxjs/operators';
 import { ReportTextMatchComponent } from '../directives/report-text-match/report-text-match.component';
-import { Match } from '../models/report-matches.models';
+import { HtmlMatchClickEvent, Match, TextMatchHighlightEvent } from '../models/report-matches.models';
 import { ContentMode, ViewMode } from '../models/report-config.models';
 import * as helpers from '../utils/highlight-helpers';
 import { ReportViewService } from './report-view.service';
-
-export type ReportOrigin = 'original' | 'source' | 'suspect';
-export interface TextMatchHighlightEvent {
-	elem: ReportTextMatchComponent | null;
-	origin: ReportOrigin;
-	broadcast: boolean;
-}
-
-export interface HtmlMatchClickEvent {
-	match: Match | null;
-	isSource: boolean;
-	broadcast: boolean;
-}
 
 @Injectable()
 export class ReportMatchHighlightService implements OnDestroy {

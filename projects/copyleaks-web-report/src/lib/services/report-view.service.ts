@@ -22,7 +22,7 @@ export class ReportViewService {
 	private _selectedResult$ = new BehaviorSubject<ResultDetailItem | null>(null);
 	/** Emits matches that are relevant to source html one-to-many mode */
 	public get selectedResult$() {
-		return this._selectedResult$.asObservable().pipe();
+		return this._selectedResult$;
 	}
 	/** Getter for the report selected result. */
 	public get selectedResult() {

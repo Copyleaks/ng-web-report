@@ -2,26 +2,28 @@ import { ReportTextMatchComponent } from '../directives/report-text-match/report
 import { Comparison, IComparisonCollection } from '../models/report-data.models';
 import { Match, MatchType, SlicedMatch } from '../models/report-matches.models';
 
-// /**
-//  * Find the respective match for a given match directive element containing a match object
-//  * If the match is from the source, the return value will contain the source index first, and
-//  * then the suspect's index, and vice versa.
-//  * @param match the match directive element
-//  * @param result the suspect currently viewed
-//  * @param isSource whether the match comes from the source
-//  * @returns pair of indices.
-//  */
-// export const findRespectiveMatch = (
-// 	match: Match,
-// 	comparisons: IComparisonCollection,
-// 	isSource = true
-// ): [number, number] => {
-// 	const { type, start } = match;
-// 	const { source: original, suspected: suspect } : Comparison = comparisons[MatchType[type]] as Comparison;
-// 	const [source, target] = isSource ? [original, suspect] : [suspect, original];
-// 	const index = source.chars.starts.findIndex((s, i) => s <= start && start <= s + source.chars.lengths[i]);
-// 	return [source.chars.starts[index], target.chars.starts[index]];
-// };
+/**
+ * Find the respective match for a given match directive element containing a match object
+ * If the match is from the source, the return value will contain the source index first, and
+ * then the suspect's index, and vice versa.
+ * @param match the match directive element
+ * @param result the suspect currently viewed
+ * @param isSource whether the match comes from the source
+ * @returns pair of indices.
+ */
+export const findRespectiveMatch = (
+	match: Match,
+	comparisons: IComparisonCollection,
+	isSource = true
+): [number, number] => {
+	const { type, start } = match;
+	const { source: original, suspected: suspect }: Comparison = comparisons[
+		MatchType[type] as keyof IComparisonCollection
+	] as Comparison;
+	const [source, target] = isSource ? [original, suspect] : [suspect, original];
+	const index = source.chars.starts.findIndex((s, i) => s <= start && start <= s + source.chars.lengths[i]);
+	return [source.chars.starts[index], target.chars.starts[index]];
+};
 
 /**
  * Calculates the page number of where the start position should be

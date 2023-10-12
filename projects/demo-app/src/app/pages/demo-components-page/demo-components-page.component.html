@@ -1,15 +1,29 @@
-<!-- Results Actions -->
-<div class="component">
-	<cr-results-actions [resultsActions]="resultsActions"></cr-results-actions>
-</div>
+<div fxLayout="column" fxLayoutAlign="start start" fxLayoutGap="8px">
+	<!-- Results Actions -->
+	<div class="component-conatiner" fxLayout="column" fxLayoutAlign="start start" fxLayoutGap="2px">
+		<span>Results Actions :</span>
+		<div class="component">
+			<cr-results-actions [resultsActions]="resultsActions"></cr-results-actions>
+		</div>
+	</div>
+	<!--  ------------ -->
 
-<!-- Alerts -->
-<div class="component" fxLayout="column" fxLayoutAlign="center start" fxLayoutGap="8px">
-	<cr-alert-card style="width: 100%" [alert]="alert"></cr-alert-card>
-	<cr-author-alert-card style="width: 100%" [authorAlert]="authorAlert"></cr-author-alert-card>
+	<!-- Alerts -->
+	<div class="component-conatiner" fxLayout="column" fxLayoutAlign="start start" fxLayoutGap="2px">
+		<span>Power by Copyleaks :</span>
+		<div class="component" fxLayout="column" fxLayoutAlign="center start" fxLayoutGap="8px">
+			<cr-alert-card style="width: 100%" [alert]="alert"></cr-alert-card>
+			<cr-author-alert-card style="width: 100%" [authorAlert]="authorAlert"></cr-author-alert-card>
+		</div>
+	</div>
+	<!--  ------------ -->
+
+	<!-- Powered By -->
+	<div class="component-conatiner" fxLayout="column" fxLayoutAlign="start start" fxLayoutGap="2px">
+		<span>Power by Copyleaks :</span>
+		<div class="component">
+			<cr-powered-by></cr-powered-by>
+		</div>
+	</div>
+	<!--  ------------ -->
 </div>
-<!-- Powered By -->
-<div class="component">
-	<cr-powered-by></cr-powered-by>
-</div>
-<!--  ------------ -->

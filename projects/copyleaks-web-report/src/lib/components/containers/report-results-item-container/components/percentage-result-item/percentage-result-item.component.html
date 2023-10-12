@@ -1,58 +1,104 @@
-<div *ngIf="false" class="percentage-top-container" fxLayout="row" fxLayoutAlign="center center">
-	<div class="tooltip-result" fxLayout="column" fxLayoutAlign="start start">
+<div class="plagiarism-detection-percentage-container">
+	<div *ngIf="showTooltip" class="percentage-with-tooltip-container" fxLayout="row" fxLayoutAlign="center center">
+		<div class="tooltip-result" fxLayout="column" fxLayoutAlign="start start">
+			<ng-container *ngTemplateOutlet="matchTypeCotainer"></ng-container>
+		</div>
+
+		<div class="percentage-container" fxLayout="row" fxLayoutGap="8px" fxLayoutAlign="start center">
+			<ng-container *ngTemplateOutlet="percentageLessResult"></ng-container>
+			<span class="similar-words-percentage">{{ similarWordsPercentage }}%</span>
+		</div>
+	</div>
+
+	<div
+		*ngIf="!showTooltip"
+		class="percentage-without-tooltip-container"
+		fxLayout="row"
+		fxLayoutAlign="space-between start"
+		fxLayoutGap="4px">
+		<div class="percentage-header-container" fxLayout="column" fxLayoutAlign="start start" fxLayoutGap="4px">
+			<div class="percentage-title" fxLayout="row" fxLayoutAlign="space-between start">
+				<span>Plagiarism Detection</span>
+				<span>{{ similarWordsPercentage }}%</span>
+			</div>
+
+			<div
+				class="match-type-result-container"
+				fxLayout="column"
+				fxLayoutAlign="start start"
+				*ngIf="showMorePercentage; else showLessPerDetails">
+				<ng-container *ngTemplateOutlet="matchTypeCotainer"></ng-container>
+			</div>
+
+			<ng-template #showLessPerDetails>
+				<ng-container *ngTemplateOutlet="percentageLessResult"></ng-container>
+			</ng-template>
+		</div>
+
+		<button
+			class="more-percentage-details-button"
+			fxLayout="row"
+			fxLayoutAlign="start end"
+			(click)="showMorePercentage = !showMorePercentage">
+			<ng-container *ngIf="showMorePercentage; else showLessPerDetailsIcon">
+				<mat-icon>arrow_drop_up</mat-icon>
+			</ng-container>
+			<ng-template #showLessPerDetailsIcon>
+				<mat-icon>arrow_drop_down</mat-icon>
+			</ng-template>
+		</button>
+	</div>
+</div>
+
+<ng-template #percentageLessResult>
+	<div class="percentage-result" fxLayout="row" fxLayoutAlign="start center">
+		<div class="rectangle identical" [style.width]="identicalPercentage + '%'"></div>
+		<div class="rectangle minorChanges" [style.width]="minorChangesPercentage + '%'"></div>
+		<div class="rectangle paraphrased" [style.width]="paraphrasedPercentage + '%'"></div>
+	</div>
+</ng-template>
+
+<ng-template #matchTypeCotainer>
+	<div class="match-type-top-container" fxLayout="column" fxLayoutAlign="start start">
+		<div *ngIf="!showTooltip" class="match-type-title" fxLayout="row" fxLayoutAlign="space-between center">
+			<span>Match type</span>
+			<div fxLayout="row" fxLayoutAlign="start center" fxLayoutGap="12px">
+				<span class="percentage-match">Match</span>
+				<span class="number-words-match">Words</span>
+			</div>
+		</div>
 		<!--identical-->
 		<div class="match-type-cotainer" fxLayout="row" fxLayoutAlign="space-between center">
 			<div fxLayout="row" fxLayoutGap="8px" fxLayoutAlign="start center">
 				<span class="dot identical"></span>
-				<span class="type-name">identical</span>
+				<span class="type-name">IDENTICAL</span>
 			</div>
-			<span class="percentage-match">{{ identicalPercentage }}%</span>
+			<div fxLayout="row" fxLayoutAlign="start center" fxLayoutGap="12px">
+				<span class="percentage-match">{{ identicalPercentage }}%</span>
+				<span *ngIf="!showTooltip" class="number-words-match">1580</span>
+			</div>
 		</div>
 		<!--minorChanges-->
 		<div class="match-type-cotainer" fxLayout="row" fxLayoutAlign="space-between center">
 			<div fxLayout="row" fxLayoutGap="8px" fxLayoutAlign="start center">
 				<span class="dot minorChanges"></span>
-				<span class="type-name">minorChanges</span>
+				<span class="type-name">MINORCHANGES</span>
 			</div>
-			<span class="percentage-match">{{ minorChangesPercentage }}%</span>
+			<div fxLayout="row" fxLayoutAlign="start center" fxLayoutGap="12px">
+				<span class="percentage-match">{{ minorChangesPercentage }}%</span>
+				<span *ngIf="!showTooltip" class="number-words-match">6000</span>
+			</div>
 		</div>
 		<!-- paraphrased -->
 		<div class="match-type-cotainer" fxLayout="row" fxLayoutAlign="space-between center">
 			<div fxLayout="row" fxLayoutGap="8px" fxLayoutAlign="start center">
 				<span class="dot paraphrased"></span>
-				<span class="type-name">paraphrased</span>
+				<span class="type-name">PARAPHRASED</span>
 			</div>
-			<span class="percentage-match">{{ paraphrasedPercentage }}%</span>
+			<div fxLayout="row" fxLayoutAlign="start center" fxLayoutGap="12px">
+				<span class="percentage-match">{{ paraphrasedPercentage }}%</span>
+				<span *ngIf="!showTooltip" class="number-words-match">50</span>
+			</div>
 		</div>
 	</div>
-
-	<div class="percentage-container" fxLayout="row" fxLayoutGap="8px" fxLayoutAlign="start center">
-		<div class="all-percentage-result" fxLayout="row" fxLayoutAlign="start center">
-			<div class="rectangle identical" [style.width]="identicalPercentage + '%'"></div>
-			<div class="rectangle minorChanges" [style.width]="minorChangesPercentage + '%'"></div>
-			<div class="rectangle paraphrased" [style.width]="paraphrasedPercentage + '%'"></div>
-		</div>
-		<span class="similar-words-percentage">{{ similarWordsPercentage }}%</span>
-	</div>
-</div>
-
-<div class="percentage-plagiarism-detection-container" fxLayout="column" fxLayoutAlign="start start">
-	<div class="percentage-plagiarism-detection-header" fxLayout="row" fxLayoutAlign="space-between start">
-		<span class="percentage-plagiarism-detection-title">Plagiarism Detection</span>
-		<div fxLayout="row" fxLayoutAlign="end end" fxLayoutGap="20px">
-			<span class="matched-words-percentage">80%</span>
-			<button
-				class="more-percentage-details-button"
-				fxLayout="row"
-				fxLayoutAlign="start end"
-				(click)="showMorePercentage = !showMorePercentage">
-				<ng-container *ngIf="showMorePercentage; else showLessPerDetails">
-					<mat-icon>arrow_drop_up</mat-icon>
-				</ng-container>
-				<ng-template #showLessPerDetails>
-					<mat-icon>arrow_drop_down</mat-icon>
-				</ng-template>
-			</button>
-		</div>
-	</div>
-</div>
+</ng-template>

@@ -11,7 +11,7 @@ export class PercentageResultItemComponent implements OnInit {
 	@Input() metadataSource: ISourceMetadataSection;
 	@Input() iStatisticsResult: IStatistics;
 	@Input() similarWords: number;
-
+	@Input() showTooltip: boolean = false;
 	showMorePercentage: boolean = false;
 
 	get identicalPercentage() {

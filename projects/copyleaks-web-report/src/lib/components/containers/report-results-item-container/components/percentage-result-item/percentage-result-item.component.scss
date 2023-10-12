@@ -3,89 +3,83 @@
 :host {
 	width: 100%;
 }
-.percentage-top-container {
+.plagiarism-detection-percentage-container {
 	width: 100%;
-	position: relative;
+	.percentage-with-tooltip-container {
+		width: 100%;
+		position: relative;
 
-	&:hover {
+		&:hover {
+			.tooltip-result {
+				visibility: visible;
+			}
+		}
 		.tooltip-result {
-			visibility: visible;
-		}
-	}
-	.tooltip-result {
-		visibility: hidden;
-		top: -85px;
-		background-color: $color-white;
-		box-shadow: 2px 2px 4px 0px rgba(0, 0, 0, 0.25);
-		border-radius: 10px;
-		padding: 5px;
-		position: absolute;
-		width: 170px;
-		.match-type-cotainer {
-			width: 100%;
-			.dot {
-				width: 10px;
-				height: 10px;
-				border-radius: 50%;
-			}
-			.type-name,
-			.percentage-match {
-				font-weight: 600;
-				font-size: 14px;
-				color: $color-black;
-			}
-		}
-	}
-
-	.tooltip-result::after {
-		content: '';
-		position: absolute;
-		border-style: solid;
-		top: 100%;
-		left: 45%;
-		font-size: larger;
-		border-width: 10px;
-		border-color: $color-white transparent transparent transparent;
-	}
-
-	.percentage-container {
-		width: 100%;
-		.all-percentage-result {
-			width: 100%;
-
-			border-radius: 4px;
-			height: 4px;
+			visibility: hidden;
+			top: -85px;
 			background-color: $color-white;
-			.rectangle {
+			box-shadow: 2px 2px 4px 0px rgba(0, 0, 0, 0.25);
+			border-radius: 10px;
+			padding: 5px;
+			position: absolute;
+			width: 170px;
+		}
+
+		.tooltip-result::after {
+			content: '';
+			position: absolute;
+			border-style: solid;
+			top: 100%;
+			left: 45%;
+			font-size: larger;
+			border-width: 10px;
+			border-color: $color-white transparent transparent transparent;
+		}
+
+		.percentage-container {
+			width: 100%;
+			.percentage-result {
+				width: 100%;
+				border-radius: 4px;
 				height: 4px;
+				background-color: $color-white;
+				.rectangle {
+					height: 4px;
+				}
+			}
+			.similar-words-percentage {
+				color: $color-black;
+				font-size: 14px;
+				font-weight: 700;
 			}
 		}
-		.similar-words-percentage {
-			color: $color-black;
-			font-size: 14px;
-			font-weight: 700;
-		}
-	}
-	.identical {
-		background-color: #fd7366;
-	}
-	.paraphrased {
-		background-color: #fed5a9;
 	}
 
-	.minorChanges {
-		background-color: #fe9391;
-	}
-}
-
-.percentage-plagiarism-detection-container {
-	.percentage-plagiarism-detection-header {
-		width: 100%;
-		.percentage-plagiarism-detection-title,
-		.matched-words-percentage {
-			font-weight: 500;
-			font-size: 14px;
-			color: $color-black;
+	.percentage-without-tooltip-container {
+		padding: 2px 4px 4px 4px;
+		.percentage-header-container {
+			width: 100%;
+			.percentage-title {
+				width: 100%;
+				span {
+					font-weight: 500;
+					font-size: 14px;
+					color: $color-black;
+				}
+			}
+			.match-type-result-container {
+				width: 100%;
+				padding: 0px 32px;
+			}
+			.percentage-result {
+				width: 100%;
+				height: 8px;
+				border-radius: 4px;
+				background-color: $color-container-background;
+				.rectangle {
+					height: 7px;
+				}
+			}
 		}
 		.more-percentage-details-button {
 			border: 0px;
@@ -99,5 +93,63 @@
 				color: $color-black;
 			}
 		}
+	}
+
+	.match-type-top-container {
+		width: 100%;
+		.match-type-title {
+			width: 100%;
+			span {
+				color: $color-black;
+				font-size: 10px;
+				font-weight: 500;
+			}
+			.number-words-match {
+				white-space: nowrap;
+				width: 50px;
+				overflow: hidden;
+				text-overflow: ellipsis;
+			}
+		}
+
+		.match-type-cotainer {
+			width: 100%;
+			.dot {
+				width: 10px;
+				height: 10px;
+				border-radius: 50%;
+			}
+			.type-name,
+			.percentage-match {
+				font-weight: 500;
+				font-size: 12px;
+				color: $color-black;
+			}
+			.number-words-match {
+				font-weight: 500;
+				font-size: 12px;
+				color: $color-black;
+				white-space: nowrap;
+				width: 50px;
+				overflow: hidden;
+				text-overflow: ellipsis;
+			}
+		}
+		.match-type-word {
+			white-space: nowrap;
+			width: 50px;
+			overflow: hidden;
+			text-overflow: ellipsis;
+		}
+	}
+
+	.identical {
+		background-color: #fd7366;
+	}
+	.paraphrased {
+		background-color: #fed5a9;
+	}
+	.minorChanges {
+		background-color: #fe9391;
 	}
 }

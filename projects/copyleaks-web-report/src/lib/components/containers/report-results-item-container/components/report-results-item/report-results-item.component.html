@@ -60,6 +60,7 @@
 	<div class="percentage-result-item-container" fxLayout="row" fxLayoutGap="8px" fxLayoutAlign="start center">
 		<ng-container *ngIf="!showLoader; else showPercentageSkeleton">
 			<cr-percentage-result-item
+				[showTooltip]="true"
 				[metadataSource]="metadataSource"
 				[iStatisticsResult]="iStatisticsResult"
 				[similarWords]="previewResult.matchedWords"></cr-percentage-result-item>

@@ -1,14 +1,10 @@
 import { Component, OnInit, Renderer2 } from '@angular/core';
 import { ReportDataService } from '../../../../services/report-data.service';
-import iframeJsScript from '../../../../utils/one-to-many-iframe-logic';
-import { COPYLEAKS_REPORT_IFRAME_STYLES } from '../../../../constants/iframe-styles.constants';
 import { Match, SlicedMatch } from '../../../../models/report-matches.models';
 import { ReportMatchesService } from '../../../../services/report-matches.service';
 import { PostMessageEvent } from '../../../../models/report-iframe-events.models';
 import { IScanSource, ResultPreview } from '../../../../models/report-data.models';
-import { IReportViewEvent } from '../../../../models/report-view.models';
 import { ReportViewService } from '../../../../services/report-view.service';
-import * as helpers from '../../../../utils/report-match-helpers';
 import { ReportLayoutBaseComponent } from '../../base/report-layout-base.component';
 import { ReportMatchHighlightService } from 'projects/copyleaks-web-report/src/lib/services/report-match-highlight.service';
 import { EResponsiveLayoutType } from 'projects/copyleaks-web-report/src/lib/enums/copyleaks-web-report.enums';
@@ -19,7 +15,7 @@ import { EResponsiveLayoutType } from 'projects/copyleaks-web-report/src/lib/enu
 	styleUrls: ['./one-to-many-report-layout-desktop.component.scss'],
 })
 export class OneToManyReportLayoutDesktopComponent extends ReportLayoutBaseComponent implements OnInit {
-	hideRightSection = false;
+	hideRightSection: boolean = false;
 
 	reportCrawledVersion: IScanSource;
 	iframeHtml: string;
@@ -28,16 +24,16 @@ export class OneToManyReportLayoutDesktopComponent extends ReportLayoutBaseCompo
 	contentTextMatches: SlicedMatch[][];
 	numberOfPages: number;
 	currentPageSource: number;
-	oneToOneRerendered: boolean;
 
+	oneToOneRerendered: boolean = false;
 	EResponsiveLayoutType = EResponsiveLayoutType;
-
-	get numberOfWords(): number | undefined {
-		return this.reportDataSvc.scanResultsPreviews?.scannedDocument?.totalWords;
-	}
 
 	override get rerendered(): boolean {
 		return this.oneToOneRerendered;
+	}
+
+	get numberOfWords(): number | undefined {
+		return this.reportDataSvc.scanResultsPreviews?.scannedDocument?.totalWords;
 	}
 
 	constructor(
@@ -76,7 +72,7 @@ export class OneToManyReportLayoutDesktopComponent extends ReportLayoutBaseCompo
 		this.reportViewSvc.reportViewMode$.subscribe(data => {
 			if (!data) return;
 			this.isHtmlView = data.isHtmlView;
-			this.currentPageSource = data.sourcePageIndex > this.numberOfPages ? 1 : data.sourcePageIndex;
+			this.currentPageSource = data.sourcePageIndex;
 		});
 	}
 

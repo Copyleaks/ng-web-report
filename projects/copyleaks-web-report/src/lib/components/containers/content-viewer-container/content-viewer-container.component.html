@@ -183,11 +183,13 @@
 		<ng-container *ngSwitchDefault></ng-container>
 	</ng-container>
 </div>
-<div *ngIf="!hidePaginatorContainer && (!isHtmlView || !hasHtml)" class="paginator-container">
-	<cls-powered-by-copyleaks></cls-powered-by-copyleaks>
+<div
+	*ngIf="!hidePaginatorContainer && (!isHtmlView || !hasHtml)"
+	class="paginator-container"
+	[ngStyle]="{ 'justify-content': reportResponsive === EResponsiveLayoutType.Mobile ? 'end' : 'space-between' }">
+	<cls-powered-by-copyleaks *ngIf="reportResponsive !== EResponsiveLayoutType.Mobile"></cls-powered-by-copyleaks>
 	<cls-paginator
 		[pageIndex]="currentPage"
-		[canLoadMoreData]="canViewMorePages"
 		[numberOfPages]="numberOfPages"
 		(page)="onPaginationEvent($event)"></cls-paginator>
 </div>

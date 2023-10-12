@@ -2,7 +2,11 @@ import { Component, OnInit, Renderer2 } from '@angular/core';
 import { COPYLEAKS_REPORT_IFRAME_STYLES } from 'projects/copyleaks-web-report/src/lib/constants/iframe-styles.constants';
 import { IScanSource } from 'projects/copyleaks-web-report/src/lib/models/report-data.models';
 import { PostMessageEvent } from 'projects/copyleaks-web-report/src/lib/models/report-iframe-events.models';
-import { SlicedMatch, Match } from 'projects/copyleaks-web-report/src/lib/models/report-matches.models';
+import {
+	SlicedMatch,
+	Match,
+	ResultDetailItem,
+} from 'projects/copyleaks-web-report/src/lib/models/report-matches.models';
 import { IReportViewEvent } from 'projects/copyleaks-web-report/src/lib/models/report-view.models';
 import { ReportDataService } from 'projects/copyleaks-web-report/src/lib/services/report-data.service';
 import { ReportMatchHighlightService } from 'projects/copyleaks-web-report/src/lib/services/report-match-highlight.service';
@@ -11,6 +15,7 @@ import { ReportViewService } from 'projects/copyleaks-web-report/src/lib/service
 import iframeJsScript from '../../../../utils/one-to-one-iframe-logic';
 import * as helpers from '../../../../utils/report-match-helpers';
 import { ReportLayoutBaseComponent } from '../../base/report-layout-base.component';
+import { EResponsiveLayoutType } from 'projects/copyleaks-web-report/src/lib/enums/copyleaks-web-report.enums';
 
 @Component({
 	selector: 'copyleaks-one-to-one-report-layout-mobile',
@@ -18,12 +23,10 @@ import { ReportLayoutBaseComponent } from '../../base/report-layout-base.compone
 	styleUrls: ['./one-to-one-report-layout-mobile.component.scss'],
 })
 export class OneToOneReportLayoutMobileComponent extends ReportLayoutBaseComponent implements OnInit {
-	hideRightSection = false;
-
 	numberOfPagesSuspect: number;
 	numberOfPagesSource: number;
-	rerenderedSource: boolean;
-	rerenderedSuspect: boolean;
+	rerenderedSource: boolean = false;
+	rerenderedSuspect: boolean = false;
 
 	suspectCrawledVersion: IScanSource;
 	sourceCrawledVersion: IScanSource;
@@ -39,6 +42,9 @@ export class OneToOneReportLayoutMobileComponent extends ReportLayoutBaseCompone
 
 	currentPageSuspect: number;
 	currentPageSource: number;
+	resultData: ResultDetailItem;
+
+	EResponsiveLayoutType = EResponsiveLayoutType;
 
 	get numberOfWords(): number | undefined {
 		return this.reportDataSvc.scanResultsPreviews?.scannedDocument?.totalWords;
@@ -56,12 +62,16 @@ export class OneToOneReportLayoutMobileComponent extends ReportLayoutBaseCompone
 		highlightSvc: ReportMatchHighlightService
 	) {
 		super(reportDataSvc, reportViewSvc, matchSvc, renderer, highlightSvc);
+		this.iframeJsScript = iframeJsScript;
 	}
 
 	ngOnInit(): void {
 		//! TODO REMOVE
 		this.reportDataSvc.scanResultsDetails$.subscribe(data => {
-			if (data) this.reportViewSvc.selectedResult$.next(data[1]);
+			const resultWithoutHtml = data?.filter(result => !result.result?.html.value);
+			console.log(resultWithoutHtml);
+
+			if (resultWithoutHtml && data) this.reportViewSvc.selectedResult$.next(resultWithoutHtml[0]);
 		});
 
 		this.reportDataSvc.crawledVersion$.subscribe(data => {
@@ -89,6 +99,10 @@ export class OneToOneReportLayoutMobileComponent extends ReportLayoutBaseCompone
 		});
 
 		this.reportViewSvc.selectedResult$.subscribe(resultData => {
+			if (resultData) {
+				this.numberOfPagesSuspect = resultData.result?.text?.pages?.startPosition?.length ?? 1;
+				this.resultData = resultData;
+			}
 			this.matchSvc.suspectHtmlMatches$.subscribe(data => {
 				if (!resultData?.result?.html.value) return;
 				const rerenderedMatches = this._getRenderedMatches(data, resultData?.result?.html?.value);
@@ -96,7 +110,6 @@ export class OneToOneReportLayoutMobileComponent extends ReportLayoutBaseCompone
 					this.suspectIframeHtml = rerenderedMatches;
 					this.rerenderedSuspect = true;
 					this.suspectHtmlMatches = data;
-					this.numberOfPagesSuspect = resultData.result?.text?.pages?.startPosition?.length ?? 1;
 				}
 			});
 		});

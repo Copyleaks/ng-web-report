@@ -3,17 +3,13 @@
 @import '../../../styles/website-colors.styles.scss';
 
 :host {
-	// @include cls-report-container-lvl-2;
-	// @include cls-report-container-close-btn;
-
 	height: 100%;
 	box-sizing: border-box;
 
 	flex-grow: 1;
 	display: flex;
 	flex-direction: column;
-	gap: 8px;
-	padding: 8px 8px 0px 8px;
+	padding: 8px 8px 8px 8px;
 	background-color: $color-white;
 	border-radius: 10px;
 

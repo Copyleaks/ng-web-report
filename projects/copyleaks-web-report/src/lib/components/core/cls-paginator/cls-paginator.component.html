@@ -17,7 +17,7 @@
 				class="next-page-button"
 				mat-icon-button
 				(click)="next()"
-				[disabled]="!canLoadMoreData || pageIndex >= numberOfPages"
+				[disabled]="pageIndex >= numberOfPages"
 				aria-label="right">
 				<mat-icon fontSet="material-icons-round" matTooltip="Next page">chevron_right</mat-icon>
 			</button>

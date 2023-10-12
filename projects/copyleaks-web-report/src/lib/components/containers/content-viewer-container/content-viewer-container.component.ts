@@ -16,12 +16,13 @@ import {
 } from '@angular/core';
 import { PostMessageEvent } from '../../../models/report-iframe-events.models';
 import { IReportViewEvent } from '../../../models/report-view.models';
-import { Match, MatchType, ReportOrigin, SlicedMatch } from '../../../models/report-matches.models';
+import { MatchType, ReportOrigin, ResultDetailItem, SlicedMatch } from '../../../models/report-matches.models';
 import { DirectionMode as ReportContentDirectionMode, ViewMode } from '../../../models/report-config.models';
 import { TEXT_FONT_SIZE_UNIT, MIN_TEXT_ZOOM, MAX_TEXT_ZOOM } from '../../../constants/report-content.constants';
 import { PageEvent } from '../../core/cls-paginator/models/cls-paginator.models';
 import { ReportMatchHighlightService } from '../../../services/report-match-highlight.service';
 import { IScanSource } from '../../../models/report-data.models';
+import { EResponsiveLayoutType } from '../../../enums/copyleaks-web-report.enums';
 
 @Component({
 	selector: 'copyleaks-content-viewer-container',
@@ -35,88 +36,188 @@ export class ContentViewerContainerComponent implements OnInit, AfterViewInit, O
 	@ViewChild('contentIFrame', { static: false }) contentIFrame: ElementRef<HTMLIFrameElement>;
 
 	/**
-	 * @Input {string} The content viewer HTML value
+	 * @Input Determines if the view should be rendered as HTML.
+	 *
+	 * @description
+	 * When set to `true`, the component will view the source/result conent as HTML `only` if the source/result has such content.
+	 * When set to `false`, the text view will be showed.
+	 *
+	 * @default `false`
 	 */
 	@Input() isHtmlView: boolean;
 
 	/**
-	 * @Input {string} The content viewer HTML value
+	 * @Input The scan source (the original scanned document) data
+	 *
+	 * @description
+	 * Includes data about the text & Html views.
 	 */
 	@Input() scanSource: IScanSource;
 
 	/**
-	 * @Input {string} The content viewer HTML value
+	 * @Input The scan result data
+	 *
+	 * @description
+	 * Includes data about the text & Html views of the result.
+	 */
+	@Input() resultData: ResultDetailItem;
+
+	/**
+	 * @Input The rerendered content HTML which includes the scan matches
 	 */
 	@Input() contentHtml: string;
 
 	/**
-	 * @Input {string} The content viewer HTML value
+	 * @Input The source/result text view matches.
 	 */
 	@Input() contentTextMatches: SlicedMatch[][];
 
 	/**
-	 * @Input {boolean} Flag indicating whether to show the content title or not.
+	 * @Input Flag indicating whether to show the content title or not.
 	 */
 	@Input() hideTitleContainer = false;
 
 	/**
-	 * @Input {boolean} Flag indicating whether to show the content paginator or not.
+	 * @Input Flag indicating whether to show the content paginator or not.
 	 */
 	@Input() hidePaginatorContainer = false;
 
 	/**
-	 * @Input {number} Flex grow property - flex-grow
+	 * @Input Flex grow property - flex-grow
 	 */
 	@Input() flexGrow: number;
 
 	/**
-	 * @Input {number} Flex grow property - flex-grow
+	 * @Input The content direction of the source/result text conent.
 	 */
 	@Input() contentDirection: ReportContentDirectionMode = 'ltr';
 
 	/**
-	 * @Input {number} Flex grow property - flex-grow
+	 * @Input Sets the zoom level for the content of the source/result text document.
+	 *
+	 * @description
+	 * Controls the zoom level of the text in the document.
+	 * The value represents a multiplier where `1` is 100% (normal size),
+	 * `2` would be 100% (zoomed in), and so on.
+	 *
+	 * @default `1`
+	 *
+	 * @constraints
+	 * - Minimum value: 0.5 (50% zoom out)
+	 * - Maximum value: 4 (400% zoom in)
 	 */
 	@Input() contentZoom: number = 1;
 
 	/**
-	 * @Input {number} The current page in text view report
+	 * @Input The current page index in text view document.
 	 */
 	@Input() currentPage: number;
 
 	/**
-	 * @Input {number} The current page in text view report
+	 * @Input The total number of pages in the text view document.
 	 */
 	@Input() numberOfPages: number = 1;
 
 	/**
-	 * @Input {number} The current page in text view report
+	 * @Input The total number of words in the source/result document content.
 	 */
 	@Input() numberOfWords: number | undefined = undefined;
 
+	/**
+	 * Sets the report view mode.
+	 *
+	 * @description
+	 * Determines how the report should be displayed in relation to the source document.
+	 *
+	 * - 'one-to-many': Displays the source document side-by-side with multiple result documents.
+	 * - 'one-to-one': Displays the source document compared to a single result document.
+	 *
+	 * @default 'one-to-many'
+	 *
+	 * @see ViewMode
+	 */
 	@Input() viewMode: ViewMode = 'one-to-many';
 
+	/**
+	 * Specifies the origin of the report content.
+	 *
+	 * @description
+	 * Defines the source context for the content displayed in the report.
+	 *
+	 * - 'original': The scan source in the "one-to-many" view.
+	 * - 'source': The scan source in the "one-to-one" view.
+	 * - 'suspect': The result view in the scan report.
+	 *
+	 * @default 'original'
+	 *
+	 * @see ReportOrigin
+	 */
 	@Input() reportOrigin: ReportOrigin = 'original';
 
+	/**
+	 * Specifies the responsive layout type for the report.
+	 *
+	 * @description
+	 * This input controls the layout view of the report based on the device type.
+	 *
+	 * Acceptable values are from the `EResponsiveLayoutType` enum:
+	 * - 'Desktop': Layout optimized for desktop view.
+	 * - 'Tablet': Layout optimized for tablet view.
+	 * - 'Mobile': Layout optimized for mobile view.
+	 *
+	 * @see EResponsiveLayoutType
+	 */
+	@Input() reportResponsive: EResponsiveLayoutType;
+
+	/**
+	 * Emits iFrame messages to the parent layout component.
+	 *
+	 * @example
+	 * <app-child-component (iFrameMessageEvent)="handleIFrameMessageEvent($event)"></app-child-component>
+	 *
+	 * @description
+	 * This output emits messages that originate from an iFrame embedded within this component.
+	 * The emitted event is of type `PostMessageEvent`, which contains the message data.
+	 * Parent components can subscribe to this output event to handle iFrame messages accordingly.
+	 *
+	 * @see PostMessageEvent
+	 */
 	@Output() iFrameMessageEvent = new EventEmitter<PostMessageEvent>();
 
+	/**
+	 * Emits events when there are changes to the component's view.
+	 *
+	 * @example
+	 * <app-report-component (viewChangeEvent)="handleViewChange($event)"></app-report-component>
+	 *
+	 * @description
+	 * This output emitter is triggered whenever there's a change in the view within this component.
+	 * The emitted event is of type `IReportViewEvent`, which encapsulates the details of the view change.
+	 * Parent components can subscribe to this output event to respond to view changes appropriately.
+	 *
+	 * @see IReportViewEvent
+	 */
 	@Output() viewChangeEvent = new EventEmitter<IReportViewEvent>();
 
-	iFrameWindow: Window | null;
-
-	MatchType = MatchType;
-	canViewMorePages: boolean = true;
-
 	public get pages(): number[] {
-		return this.scanSource && this.scanSource.text.pages.startPosition;
+		if (this.scanSource) return this.scanSource && this.scanSource.text.pages.startPosition;
+		if (this.resultData.result) return this.resultData.result?.text.pages.startPosition;
+
+		return [];
 	}
 
 	/**
 	 * `true` if the source document has an `html` section
 	 */
 	get hasHtml(): boolean {
+		if (this.reportOrigin === 'original' || this.reportOrigin === 'source') return !!this.scanSource?.html?.value;
 		return !!this.contentHtml;
 	}
+
+	iFrameWindow: Window | null; // IFrame nativeElement reference
+
+	MatchType = MatchType; // Match type enum
+	EResponsiveLayoutType = EResponsiveLayoutType;
 
 	constructor(
 		private _renderer: Renderer2,
@@ -127,7 +228,6 @@ export class ContentViewerContainerComponent implements OnInit, AfterViewInit, O
 	ngOnInit(): void {
 		if (this.flexGrow !== undefined && this.flexGrow !== null) this.flexGrowProp = this.flexGrow;
 		if (this.currentPage > this.numberOfPages) this.currentPage = 1;
-		if (this.currentPage >= this.numberOfPages) this.canViewMorePages = false;
 	}
 
 	ngAfterViewInit() {
@@ -142,7 +242,6 @@ export class ContentViewerContainerComponent implements OnInit, AfterViewInit, O
 
 		if (changes['currentPage']) {
 			if (changes['currentPage'].currentValue > this.numberOfPages) this.currentPage = 1;
-			if (changes['currentPage'].currentValue >= this.numberOfPages) this.canViewMorePages = false;
 		}
 	}
 
@@ -194,7 +293,6 @@ export class ContentViewerContainerComponent implements OnInit, AfterViewInit, O
 		if (!event) return;
 
 		this.currentPage = event.pageIndex;
-		this.canViewMorePages = this.currentPage < this.numberOfPages;
 	}
 
 	/**

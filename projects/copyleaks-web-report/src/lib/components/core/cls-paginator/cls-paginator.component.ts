@@ -23,12 +23,6 @@ export class ClsPaginatorComponent implements OnInit {
 	@Input() pageIndex: number = 1;
 
 	/***
-	 * Flag that indicates whether more data can be loaded
-	 * @Input
-	 */
-	@Input() canLoadMoreData: boolean = false;
-
-	/***
 	 * Flag that indicates whether to hide the paginator, this can be used when we want to keep the paginator ViewChild reference
 	 * and hide the paginator at the same time
 	 * @Input

@@ -1,3 +1,4 @@
+import { EResponsiveLayoutType } from '../enums/copyleaks-web-report.enums';
 import { ViewMode } from './report-config.models';
 
 export interface IReportViewEvent {
@@ -14,4 +15,8 @@ export interface IReportViewQueryParams {
 	sourcePage: string;
 	suspectPage?: string;
 	suspectId?: string;
+}
+
+export interface IReportResponsiveMode {
+	mode: EResponsiveLayoutType;
 }

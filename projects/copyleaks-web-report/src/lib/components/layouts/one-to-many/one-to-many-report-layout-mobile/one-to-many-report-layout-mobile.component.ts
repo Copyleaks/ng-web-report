@@ -11,6 +11,7 @@ import * as helpers from '../../../../utils/report-match-helpers';
 import { ReportViewService } from 'projects/copyleaks-web-report/src/lib/services/report-view.service';
 import { ReportLayoutBaseComponent } from '../../base/report-layout-base.component';
 import { ReportMatchHighlightService } from 'projects/copyleaks-web-report/src/lib/services/report-match-highlight.service';
+import { EResponsiveLayoutType } from 'projects/copyleaks-web-report/src/lib/enums/copyleaks-web-report.enums';
 
 @Component({
 	selector: 'copyleaks-one-to-many-report-layout-mobile',
@@ -29,6 +30,7 @@ export class OneToManyReportLayoutMobileComponent extends ReportLayoutBaseCompon
 	currentPageSource: number;
 
 	oneToOneRerendered: boolean = false;
+	EResponsiveLayoutType = EResponsiveLayoutType;
 
 	override get rerendered(): boolean {
 		return this.oneToOneRerendered;

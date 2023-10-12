@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
-import { BehaviorSubject } from 'rxjs';
-import { IReportViewEvent } from '../models/report-view.models';
+import { BehaviorSubject, Subject } from 'rxjs';
+import { IReportResponsiveMode, IReportViewEvent } from '../models/report-view.models';
 import { ResultDetailItem } from '../models/report-matches.models';
 
 @Injectable()
@@ -17,6 +17,12 @@ export class ReportViewService {
 	/** Getter for the report data endpoints. */
 	public get reportViewMode() {
 		return this._reportViewMode$.value;
+	}
+
+	private _reportResponsiveMode$ = new Subject<IReportResponsiveMode>();
+	/** Subject for sharing the report reposive view mode. */
+	public get reportResponsiveMode$() {
+		return this._reportResponsiveMode$;
 	}
 
 	private _selectedResult$ = new BehaviorSubject<ResultDetailItem | null>(null);

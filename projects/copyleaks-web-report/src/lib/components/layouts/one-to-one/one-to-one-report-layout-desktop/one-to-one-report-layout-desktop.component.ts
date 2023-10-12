@@ -1,8 +1,16 @@
 import { Component, OnDestroy, OnInit, Renderer2 } from '@angular/core';
 import { COPYLEAKS_REPORT_IFRAME_STYLES } from 'projects/copyleaks-web-report/src/lib/constants/iframe-styles.constants';
-import { EExcludeReason } from 'projects/copyleaks-web-report/src/lib/enums/copyleaks-web-report.enums';
+import {
+	EExcludeReason,
+	EResponsiveLayoutType,
+} from 'projects/copyleaks-web-report/src/lib/enums/copyleaks-web-report.enums';
 import { IScanSource } from 'projects/copyleaks-web-report/src/lib/models/report-data.models';
-import { Match, MatchType, SlicedMatch } from 'projects/copyleaks-web-report/src/lib/models/report-matches.models';
+import {
+	Match,
+	MatchType,
+	ResultDetailItem,
+	SlicedMatch,
+} from 'projects/copyleaks-web-report/src/lib/models/report-matches.models';
 import { ReportDataService } from 'projects/copyleaks-web-report/src/lib/services/report-data.service';
 import { ReportMatchesService } from 'projects/copyleaks-web-report/src/lib/services/report-matches.service';
 import { ReportViewService } from 'projects/copyleaks-web-report/src/lib/services/report-view.service';
@@ -38,6 +46,9 @@ export class OneToOneReportLayoutDesktopComponent extends ReportLayoutBaseCompon
 
 	currentPageSuspect: number;
 	currentPageSource: number;
+	resultData: ResultDetailItem;
+
+	EResponsiveLayoutType = EResponsiveLayoutType;
 
 	get numberOfWords(): number | undefined {
 		return this.reportDataSvc.scanResultsPreviews?.scannedDocument?.totalWords;
@@ -64,7 +75,7 @@ export class OneToOneReportLayoutDesktopComponent extends ReportLayoutBaseCompon
 			const resultWithoutHtml = data?.filter(result => !result.result?.html.value);
 			console.log(resultWithoutHtml);
 
-			if (resultWithoutHtml && data) this.reportViewSvc.selectedResult$.next(resultWithoutHtml[0]);
+			if (resultWithoutHtml && data) this.reportViewSvc.selectedResult$.next(data[2]);
 		});
 
 		this.reportDataSvc.crawledVersion$.subscribe(data => {
@@ -94,6 +105,7 @@ export class OneToOneReportLayoutDesktopComponent extends ReportLayoutBaseCompon
 		this.reportViewSvc.selectedResult$.subscribe(resultData => {
 			if (resultData) {
 				this.numberOfPagesSuspect = resultData.result?.text?.pages?.startPosition?.length ?? 1;
+				this.resultData = resultData;
 			}
 			this.matchSvc.suspectHtmlMatches$.subscribe(data => {
 				if (!resultData?.result?.html.value) return;

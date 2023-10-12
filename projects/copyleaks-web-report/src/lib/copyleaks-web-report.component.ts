@@ -135,6 +135,10 @@ export class CopyleaksWebReportComponent implements OnInit, OnDestroy {
 			)
 			.subscribe((layout: EResponsiveLayoutType | null) => {
 				this.responsiveLayoutType = layout;
+				if (layout)
+					this._reportViewSvc.reportResponsiveMode$.next({
+						mode: layout,
+					});
 			});
 	}
 

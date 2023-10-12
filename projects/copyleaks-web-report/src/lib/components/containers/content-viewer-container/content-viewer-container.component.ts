@@ -115,7 +115,7 @@ export class ContentViewerContainerComponent implements OnInit, AfterViewInit, O
 	 * `true` if the source document has an `html` section
 	 */
 	get hasHtml(): boolean {
-		return this.scanSource && this.scanSource.html && !!this.scanSource.html.value;
+		return !!this.contentHtml;
 	}
 
 	constructor(
@@ -141,6 +141,8 @@ export class ContentViewerContainerComponent implements OnInit, AfterViewInit, O
 			this._renderer.setAttribute(this.contentIFrame.nativeElement, 'srcdoc', changes['contentHtml'].currentValue);
 
 		if (changes['currentPage']) {
+			if (changes['currentPage'].currentValue > this.numberOfPages) this.currentPage = 1;
+			if (changes['currentPage'].currentValue >= this.numberOfPages) this.canViewMorePages = false;
 		}
 	}
 

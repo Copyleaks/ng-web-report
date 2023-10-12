@@ -61,7 +61,10 @@ export class OneToOneReportLayoutDesktopComponent extends ReportLayoutBaseCompon
 	ngOnInit(): void {
 		//! TODO REMOVE
 		this.reportDataSvc.scanResultsDetails$.subscribe(data => {
-			if (data) this.reportViewSvc.selectedResult$.next(data[1]);
+			const resultWithoutHtml = data?.filter(result => !result.result?.html.value);
+			console.log(resultWithoutHtml);
+
+			if (resultWithoutHtml && data) this.reportViewSvc.selectedResult$.next(resultWithoutHtml[0]);
 		});
 
 		this.reportDataSvc.crawledVersion$.subscribe(data => {
@@ -89,6 +92,9 @@ export class OneToOneReportLayoutDesktopComponent extends ReportLayoutBaseCompon
 		});
 
 		this.reportViewSvc.selectedResult$.subscribe(resultData => {
+			if (resultData) {
+				this.numberOfPagesSuspect = resultData.result?.text?.pages?.startPosition?.length ?? 1;
+			}
 			this.matchSvc.suspectHtmlMatches$.subscribe(data => {
 				if (!resultData?.result?.html.value) return;
 				const rerenderedMatches = this._getRenderedMatches(data, resultData?.result?.html?.value);
@@ -96,7 +102,6 @@ export class OneToOneReportLayoutDesktopComponent extends ReportLayoutBaseCompon
 					this.suspectIframeHtml = rerenderedMatches;
 					this.rerenderedSuspect = true;
 					this.suspectHtmlMatches = data;
-					this.numberOfPagesSuspect = resultData.result?.text?.pages?.startPosition?.length ?? 1;
 				}
 			});
 		});

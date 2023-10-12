@@ -19,51 +19,67 @@
 			arrow_downward
 		</mat-icon>
 		<mat-icon
-			*ngIf="!isHtmlView"
+			*ngIf="!isHtmlView || !hasHtml"
 			fontSet="material-icons-round"
 			(click)="changeContentDirection('ltr')"
 			matTooltip="Align Left">
 			format_align_left
 		</mat-icon>
 		<mat-icon
-			*ngIf="!isHtmlView"
+			*ngIf="!isHtmlView || !hasHtml"
 			fontSet="material-icons-round"
 			(click)="changeContentDirection('rtl')"
 			matTooltip="Align right">
 			format_align_right
 		</mat-icon>
-		<mat-icon *ngIf="!isHtmlView" fontSet="material-icons-round" (click)="increaseFontSize()" matTooltip="Zoom in">
+		<mat-icon
+			*ngIf="!isHtmlView || !hasHtml"
+			fontSet="material-icons-round"
+			(click)="increaseFontSize()"
+			matTooltip="Zoom in">
 			zoom_in
 		</mat-icon>
-		<mat-icon *ngIf="!isHtmlView" fontSet="material-icons-round" (click)="decreaseFontSize()" matTooltip="Zoom out">
+		<mat-icon
+			*ngIf="!isHtmlView || !hasHtml"
+			fontSet="material-icons-round"
+			(click)="decreaseFontSize()"
+			matTooltip="Zoom out">
 			zoom_out
 		</mat-icon>
-		<mat-icon
-			*ngIf="isHtmlView"
-			fontSet="material-icons-round"
-			(click)="onViewChange()"
-			matTooltip="Switch to textual mode">
-			title
-		</mat-icon>
-		<mat-icon
-			*ngIf="!isHtmlView"
-			fontSet="material-icons-round"
-			(click)="onViewChange()"
-			matTooltip="Switch to rich text mode">
-			image
-		</mat-icon>
+		<span class="icon-tooltip-wrapper" [matTooltip]="!hasHtml ? 'Only text view is available' : ''">
+			<mat-icon
+				*ngIf="isHtmlView && hasHtml"
+				[ngClass]="{
+					'disabled-icon': !hasHtml
+				}"
+				fontSet="material-icons-round"
+				(click)="onViewChange()"
+				matTooltip="Switch to textual mode">
+				title
+			</mat-icon>
+			<mat-icon
+				*ngIf="!isHtmlView || (isHtmlView && !hasHtml)"
+				[ngClass]="{
+					'disabled-icon': !hasHtml
+				}"
+				fontSet="material-icons-round"
+				(click)="onViewChange()"
+				matTooltip="Switch to rich text mode">
+				image
+			</mat-icon>
+		</span>
 	</div>
 </div>
 <div class="content-container">
 	<ng-container [ngSwitch]="reportOrigin">
 		<ng-container *ngSwitchCase="'original'">
 			<iframe
-				[ngStyle]="{ display: !isHtmlView ? 'none' : '' }"
+				[ngStyle]="{ display: !isHtmlView || !hasHtml ? 'none' : '' }"
 				#contentIFrame
 				sandbox="allow-scripts"
 				crOriginalHtmlHelper></iframe>
 			<div
-				*ngIf="!isHtmlView"
+				*ngIf="!isHtmlView || !hasHtml"
 				class="text-container"
 				[ngStyle]="{ display: isHtmlView ? 'none' : '', 'font-size': contentZoom + 'em' }"
 				[dir]="contentDirection"
@@ -98,12 +114,12 @@
 
 		<ng-container *ngSwitchCase="'source'">
 			<iframe
-				[ngStyle]="{ display: !isHtmlView ? 'none' : '' }"
+				[ngStyle]="{ display: !isHtmlView || !hasHtml ? 'none' : '' }"
 				#contentIFrame
 				sandbox="allow-scripts"
 				crSourceHtmlHelper></iframe>
 			<div
-				*ngIf="!isHtmlView"
+				*ngIf="!isHtmlView || !hasHtml"
 				class="text-container"
 				[ngStyle]="{ display: isHtmlView ? 'none' : '', 'font-size': contentZoom + 'em' }"
 				[dir]="contentDirection"
@@ -138,12 +154,12 @@
 
 		<ng-container *ngSwitchCase="'suspect'">
 			<iframe
-				[ngStyle]="{ display: !isHtmlView ? 'none' : '' }"
+				[ngStyle]="{ display: !isHtmlView || !hasHtml ? 'none' : '' }"
 				#contentIFrame
 				sandbox="allow-scripts"
 				crSuspectHtmlHelper></iframe>
 			<div
-				*ngIf="!isHtmlView"
+				*ngIf="!isHtmlView || !hasHtml"
 				class="text-container"
 				crSuspectTextHelper
 				[host]="this"
@@ -167,7 +183,7 @@
 		<ng-container *ngSwitchDefault></ng-container>
 	</ng-container>
 </div>
-<div *ngIf="!hidePaginatorContainer && !isHtmlView" class="paginator-container">
+<div *ngIf="!hidePaginatorContainer && (!isHtmlView || !hasHtml)" class="paginator-container">
 	<cr-powered-by></cr-powered-by>
 	<cls-paginator
 		[pageIndex]="currentPage"

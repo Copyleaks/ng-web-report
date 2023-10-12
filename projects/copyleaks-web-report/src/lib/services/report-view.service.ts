@@ -7,7 +7,7 @@ import { ResultDetailItem } from '../models/report-matches.models';
 export class ReportViewService {
 	private _reportViewMode$ = new BehaviorSubject<IReportViewEvent>({
 		isHtmlView: true,
-		viewMode: 'one-to-many',
+		viewMode: 'one-to-one',
 		sourcePageIndex: 1,
 	});
 	/** Subject for sharing the report data endpoints. */

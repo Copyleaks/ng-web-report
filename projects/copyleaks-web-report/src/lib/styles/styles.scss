@@ -16,6 +16,11 @@
 	position: relative;
 }
 
+.disabled-icon {
+	opacity: 0.5;
+	pointer-events: none;
+}
+
 ::-webkit-scrollbar {
 	width: 8px;
 	height: 8px !important;

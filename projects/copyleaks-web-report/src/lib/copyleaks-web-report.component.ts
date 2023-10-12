@@ -8,8 +8,8 @@ import { ReportMatchesService } from './services/report-matches.service';
 import { ReportViewService } from './services/report-view.service';
 import { IClsReportEndpointConfigModel, ViewMode } from './models/report-config.models';
 import { ReportMatchHighlightService } from './services/report-match-highlight.service';
-import { ActivatedRoute } from '@angular/router';
-import { IReportViewEvent } from './models/report-view.models';
+import { ActivatedRoute, Router } from '@angular/router';
+import { IReportViewEvent, IReportViewQueryParams } from './models/report-view.models';
 
 @Component({
 	selector: 'copyleaks-web-report',
@@ -52,18 +52,21 @@ export class CopyleaksWebReportComponent implements OnInit, OnDestroy {
 	// Template references related properties
 	customActionsTemplateRef: TemplateRef<any>;
 	customResultsTemplateRef: TemplateRef<any>;
+	viewChangesSub: any;
 
 	constructor(
 		private _breakpointObserver: BreakpointObserver,
 		private _reportNgTemplatesSvc: ReportNgTemplatesService,
 		private _reportDataSvc: ReportDataService,
-		private _route: ActivatedRoute,
-		private _reportViewSvc: ReportViewService
+		private _activatedRoute: ActivatedRoute,
+		private _reportViewSvc: ReportViewService,
+		private _router: Router
 	) {}
 
 	ngOnInit(): void {
 		if (this.responsiveLayoutType == null) this._initResponsiveLayoutType();
 		this._initReportLayoutType();
+		// this._initReportView();
 
 		if (this.reportEndpointConfig) this._reportDataSvc.initReportData(this.reportEndpointConfig);
 	}
@@ -139,27 +142,61 @@ export class CopyleaksWebReportComponent implements OnInit, OnDestroy {
 	 * Starts a subscription for the report layout query params
 	 */
 	private _initReportLayoutType() {
-		this.queryParamsSub = this._route.queryParams.subscribe(params => {
-			const viewMode = params['viewMode'];
-			const contentMode = params['contentMode'];
-			const sourcePage = params['sourcePage'];
-			const suspectPage = params['suspectPage'];
-			const suspectId = params['suspectId'];
+		const params = this._activatedRoute.snapshot.queryParams;
+		if (!params) return;
 
-			this.reportLayoutType = viewMode ?? 'one-to-many';
+		const viewMode = params['viewMode'];
+		const contentMode = params['contentMode'];
+		const sourcePage = params['sourcePage'];
+		const suspectPage = params['suspectPage'];
+		const suspectId = params['suspectId'];
 
-			this._reportViewSvc.reportViewMode$.next({
-				viewMode: viewMode ?? 'one-to-many',
-				isHtmlView: !contentMode || contentMode == 'html',
-				sourcePageIndex: sourcePage ?? 1,
-				suspectId: suspectId,
-				suspectPageIndex: suspectPage ?? 1,
-			} as IReportViewEvent);
+		this.reportLayoutType = viewMode ?? 'one-to-many';
+
+		this._reportViewSvc.reportViewMode$.next({
+			viewMode: viewMode ?? 'one-to-many',
+			isHtmlView: !contentMode || contentMode == 'html',
+			sourcePageIndex: Number(sourcePage) ?? 1,
+			suspectId: suspectId,
+			suspectPageIndex: Number(suspectPage) ?? 1,
+		} as IReportViewEvent);
+
+		this.viewChangesSub = this._reportViewSvc.reportViewMode$.subscribe(data => {
+			if (!data) return;
+			let updatedParams: IReportViewQueryParams = {
+				viewMode: data.viewMode,
+				contentMode: data.isHtmlView ? 'html' : 'text',
+				sourcePage: String(data.sourcePageIndex),
+			};
+			// Add the suspect Id if available
+			if (data.suspectId)
+				updatedParams = {
+					...updatedParams,
+					suspectId: data.suspectId,
+				};
+			// Add the suspect pagination page index if available
+			if (data.suspectPageIndex)
+				updatedParams = {
+					...updatedParams,
+					suspectPage: String(data.suspectPageIndex),
+				};
+			// Navigate without page reload
+			this._router.navigate([], {
+				relativeTo: this._activatedRoute,
+				queryParams: updatedParams,
+				queryParamsHandling: 'merge', // remove to replace all query params by provided
+			});
 		});
 	}
+
+	/**
+	 * Starts a subscription for the report layout query params
+	 */
+	private _initReportView() {}
 
 	ngOnDestroy() {
 		if (this.layoutChangesSub) this.layoutChangesSub.unsubscribe();
 		if (this.queryParamsSub) this.queryParamsSub.unsubscribe();
+		if (this.viewChangesSub) this.viewChangesSub.unsubscribe();
 	}
 }

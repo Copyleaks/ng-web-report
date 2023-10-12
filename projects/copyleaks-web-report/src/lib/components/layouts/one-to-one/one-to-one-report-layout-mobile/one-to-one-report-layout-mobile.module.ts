@@ -4,10 +4,17 @@ import { OneToOneReportLayoutMobileComponent } from './one-to-one-report-layout-
 import { ContentViewerContainerModule } from '../../../containers/content-viewer-container/content-viewer-container.module';
 import { ReportActionsContainerModule } from '../../../containers/report-actions-container/report-actions-container.module';
 import { ReportResultsItemContainerModule } from '../../../containers/report-results-item-container/report-results-item-container.module';
+import { PoweredByModule } from '../../../powered-by/powered-by.module';
 
 @NgModule({
 	declarations: [OneToOneReportLayoutMobileComponent],
-	imports: [CommonModule, ContentViewerContainerModule, ReportActionsContainerModule, ReportResultsItemContainerModule],
+	imports: [
+		CommonModule,
+		ContentViewerContainerModule,
+		ReportActionsContainerModule,
+		ReportResultsItemContainerModule,
+		PoweredByModule,
+	],
 	exports: [OneToOneReportLayoutMobileComponent],
 })
 export class OneToOneReportLayoutMobileModule {}

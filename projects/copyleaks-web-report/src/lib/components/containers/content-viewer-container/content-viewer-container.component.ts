@@ -80,7 +80,7 @@ export class ContentViewerContainerComponent implements OnInit, AfterViewInit, O
 	/**
 	 * @Input Flag indicating whether to show the content paginator or not.
 	 */
-	@Input() hidePaginatorContainer = false;
+	@Input() hidePoweredBy = false;
 
 	/**
 	 * @Input Flex grow property - flex-grow

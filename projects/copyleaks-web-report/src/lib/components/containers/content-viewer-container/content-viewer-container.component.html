@@ -183,11 +183,14 @@
 		<ng-container *ngSwitchDefault></ng-container>
 	</ng-container>
 </div>
-<div *ngIf="!hidePaginatorContainer && (!isHtmlView || !hasHtml)" class="paginator-container">
-	<cr-powered-by></cr-powered-by>
+<div class="paginator-container">
+	<ng-container *ngIf="!hidePoweredBy">
+		<cr-powered-by></cr-powered-by>
+	</ng-container>
+
 	<cls-paginator
+		*ngIf="!isHtmlView || !hasHtml"
 		[pageIndex]="currentPage"
-		[canLoadMoreData]="canViewMorePages"
 		[numberOfPages]="numberOfPages"
 		(page)="onPaginationEvent($event)"></cls-paginator>
 </div>

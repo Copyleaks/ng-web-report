@@ -75,7 +75,7 @@ export class OneToOneReportLayoutDesktopComponent extends ReportLayoutBaseCompon
 			const resultWithoutHtml = data?.filter(result => !result.result?.html.value);
 			console.log(resultWithoutHtml);
 
-			if (resultWithoutHtml && data) this.reportViewSvc.selectedResult$.next(data[2]);
+			if (resultWithoutHtml && data) this.reportViewSvc.selectedResult$.next(data[0]);
 		});
 
 		this.reportDataSvc.crawledVersion$.subscribe(data => {

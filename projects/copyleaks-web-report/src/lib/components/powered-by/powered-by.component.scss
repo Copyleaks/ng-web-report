@@ -21,10 +21,12 @@
 		}
 	}
 	.powered-by {
-		flex: 1;
+		display: flex;
+		align-items: center;
+		justify-content: center;
+		width: fit-content;
 		svg {
-			min-width: 88px;
-			min-height: 25px;
+			width: 88px;
 		}
 	}
 }

@@ -6,6 +6,7 @@ import { ReportAlertsContainerModule } from 'projects/copyleaks-web-report/src/l
 import { PoweredByModule } from 'projects/copyleaks-web-report/src/lib/components/powered-by/powered-by.module';
 import { DemoComponentsPageRoutingModule } from './demo-components-page-routing.module';
 import { DemoComponentsPageComponent } from './demo-components-page.component';
+import { ReportResultsContainerModule } from 'projects/copyleaks-web-report/src/lib/components/containers/report-results-container/report-results-container.module';
 
 @NgModule({
 	declarations: [DemoComponentsPageComponent],
@@ -14,6 +15,7 @@ import { DemoComponentsPageComponent } from './demo-components-page.component';
 		DemoComponentsPageRoutingModule,
 		PoweredByModule,
 		ReportAlertsContainerModule,
+		ReportResultsContainerModule,
 		FlexLayoutModule,
 	],
 })

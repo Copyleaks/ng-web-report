@@ -7,6 +7,7 @@ import { Component, OnInit } from '@angular/core';
 })
 export class ReportExpandResultItemComponent implements OnInit {
 	constructor() {}
+	showMorePercentage: boolean = false;
 
 	ngOnInit(): void {}
 }

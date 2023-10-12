@@ -12,6 +12,8 @@ export class PercentageResultItemComponent implements OnInit {
 	@Input() iStatisticsResult: IStatistics;
 	@Input() similarWords: number;
 
+	showMorePercentage: boolean = false;
+
 	get identicalPercentage() {
 		if (this.iStatisticsResult && this.metadataSource) {
 			return this.iStatisticsResult.identical / (this.metadataSource.words - this.metadataSource.excluded);

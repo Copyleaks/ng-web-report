@@ -73,3 +73,26 @@
 		}
 	}
 }
+.percentage-plagiarism-detection-container {
+	.percentage-plagiarism-detection-header {
+		width: 100%;
+		.percentage-plagiarism-detection-title,
+		.matched-words-percentage {
+			font-weight: 500;
+			font-size: 14px;
+			color: $color-black;
+		}
+		.more-percentage-details-button {
+			border: 0px;
+			padding: 0px;
+			background-color: $color-white;
+			cursor: pointer;
+			mat-icon {
+				width: 18px;
+				height: 18px;
+				font-size: 18px;
+				color: $color-black;
+			}
+		}
+	}
+}

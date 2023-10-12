@@ -23,6 +23,8 @@ import { PageEvent } from '../../core/cls-paginator/models/cls-paginator.models'
 import { ReportMatchHighlightService } from '../../../services/report-match-highlight.service';
 import { IScanSource } from '../../../models/report-data.models';
 import { EResponsiveLayoutType } from '../../../enums/copyleaks-web-report.enums';
+import { ClsPaginatorComponent } from '../../core/cls-paginator/cls-paginator.component';
+import { ReportViewService } from '../../../services/report-view.service';
 
 @Component({
 	selector: 'copyleaks-content-viewer-container',
@@ -111,7 +113,7 @@ export class ContentViewerContainerComponent implements OnInit, AfterViewInit, O
 	/**
 	 * @Input The current page index in text view document.
 	 */
-	@Input() currentPage: number;
+	@Input() currentPage: number = 1;
 
 	/**
 	 * @Input The total number of pages in the text view document.
@@ -222,7 +224,8 @@ export class ContentViewerContainerComponent implements OnInit, AfterViewInit, O
 	constructor(
 		private _renderer: Renderer2,
 		private _cdr: ChangeDetectorRef,
-		private _highlightService: ReportMatchHighlightService
+		private _highlightService: ReportMatchHighlightService,
+		private _viewSvc: ReportViewService
 	) {}
 
 	ngOnInit(): void {
@@ -233,15 +236,12 @@ export class ContentViewerContainerComponent implements OnInit, AfterViewInit, O
 	ngAfterViewInit() {
 		if (this.contentHtml) this._renderer.setAttribute(this.contentIFrame.nativeElement, 'srcdoc', this.contentHtml);
 		this.iFrameWindow = this.contentIFrame?.nativeElement?.contentWindow;
-		this._cdr.detectChanges();
 	}
 
 	ngOnChanges(changes: SimpleChanges): void {
-		if (changes['contentHtml'] && changes['contentHtml'].currentValue && this.contentIFrame?.nativeElement)
+		if (changes['contentHtml'] && changes['contentHtml'].currentValue && this.contentIFrame?.nativeElement) {
 			this._renderer.setAttribute(this.contentIFrame.nativeElement, 'srcdoc', changes['contentHtml'].currentValue);
-
-		if (changes['currentPage']) {
-			if (changes['currentPage'].currentValue > this.numberOfPages) this.currentPage = 1;
+			this._cdr.detectChanges();
 		}
 	}
 
@@ -262,6 +262,7 @@ export class ContentViewerContainerComponent implements OnInit, AfterViewInit, O
 
 	onViewChange() {
 		this.viewChangeEvent.emit({
+			...this._viewSvc.reportViewMode,
 			isHtmlView: !this.isHtmlView,
 			viewMode: this.viewMode,
 			sourcePageIndex: this.currentPage,
@@ -293,6 +294,17 @@ export class ContentViewerContainerComponent implements OnInit, AfterViewInit, O
 		if (!event) return;
 
 		this.currentPage = event.pageIndex;
+
+		if (this.reportOrigin === 'original' || this.reportOrigin === 'source')
+			this.viewChangeEvent.emit({
+				...this._viewSvc.reportViewMode,
+				sourcePageIndex: this.currentPage,
+			});
+		else
+			this.viewChangeEvent.emit({
+				...this._viewSvc.reportViewMode,
+				suspectPageIndex: this.currentPage,
+			});
 	}
 
 	/**

@@ -18,6 +18,7 @@ import iframeJsScript from '../../../../utils/one-to-one-iframe-logic';
 import { PostMessageEvent } from 'projects/copyleaks-web-report/src/lib/models/report-iframe-events.models';
 import { ReportMatchHighlightService } from 'projects/copyleaks-web-report/src/lib/services/report-match-highlight.service';
 import { ReportLayoutBaseComponent } from '../../base/report-layout-base.component';
+import { filter } from 'rxjs/operators';
 
 @Component({
 	selector: 'copyleaks-one-to-one-report-layout-desktop',
@@ -70,14 +71,6 @@ export class OneToOneReportLayoutDesktopComponent extends ReportLayoutBaseCompon
 	}
 
 	ngOnInit(): void {
-		//! TODO REMOVE
-		this.reportDataSvc.scanResultsDetails$.subscribe(data => {
-			const resultWithoutHtml = data?.filter(result => !result.result?.html.value);
-			console.log(resultWithoutHtml);
-
-			if (resultWithoutHtml && data) this.reportViewSvc.selectedResult$.next(data[0]);
-		});
-
 		this.reportDataSvc.crawledVersion$.subscribe(data => {
 			if (data) {
 				this.sourceCrawledVersion = data;
@@ -118,11 +111,26 @@ export class OneToOneReportLayoutDesktopComponent extends ReportLayoutBaseCompon
 			});
 		});
 
-		this.reportViewSvc.reportViewMode$.subscribe(data => {
+		this.reportViewSvc.reportViewMode$.pipe(filter(data => data.viewMode === 'one-to-one')).subscribe(data => {
 			if (!data) return;
 			this.isHtmlView = data.isHtmlView;
 			this.currentPageSource = data.sourcePageIndex;
 			if (data.suspectPageIndex) this.currentPageSuspect = data.suspectPageIndex;
+			this.reportDataSvc.scanResultsDetails$.subscribe(results => {
+				if (!results) return;
+				const foundSuspect = results?.find(result => result.id === data.suspectId);
+				if (foundSuspect) this.reportViewSvc.selectedResult$.next(foundSuspect);
+				else {
+					// if the result is not found, then change the view to one-to-many
+					this.reportViewSvc.reportViewMode$.next({
+						isHtmlView: data.isHtmlView,
+						viewMode: 'one-to-many',
+						sourcePageIndex: data.sourcePageIndex,
+						suspectPageIndex: data.suspectPageIndex,
+						suspectId: undefined,
+					});
+				}
+			});
 		});
 	}
 

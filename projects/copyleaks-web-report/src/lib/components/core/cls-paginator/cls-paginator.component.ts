@@ -1,4 +1,13 @@
-import { Component, EventEmitter, Input, OnInit, Output, SimpleChanges } from '@angular/core';
+import {
+	ChangeDetectionStrategy,
+	ChangeDetectorRef,
+	Component,
+	EventEmitter,
+	Input,
+	OnInit,
+	Output,
+	SimpleChanges,
+} from '@angular/core';
 import { IPaginateData, PageEvent } from './models/cls-paginator.models';
 
 /**
@@ -22,19 +31,6 @@ export class ClsPaginatorComponent implements OnInit {
 	 */
 	@Input() pageIndex: number = 1;
 
-	/***
-	 * Flag that indicates whether to hide the paginator, this can be used when we want to keep the paginator ViewChild reference
-	 * and hide the paginator at the same time
-	 * @Input
-	 */
-	@Input() hidePaginatorContainer: boolean = false;
-
-	/**
-	 * The key for the paginator page size which is saved in the browser local storage
-	 * @Input
-	 */
-	@Input() localStorageKey: string;
-
 	/**
 	 * Event that fires when:
 	 * 1) A new page size is selected
@@ -46,10 +42,14 @@ export class ClsPaginatorComponent implements OnInit {
 	offSet: number = 0; // how many entities have been loaded
 	showPageSizeOptions = true; // flag for showing the page size options
 
-	constructor() {}
+	constructor(private _cdr: ChangeDetectorRef) {}
 
-	ngOnInit() {
-		this.pageIndex = 1;
+	ngOnInit() {}
+
+	ngOnChanges(changes: SimpleChanges): void {
+		if ('pageIndex' in changes || 'numberOfPages' in changes) {
+			this.pageIndex = this.pageIndex > this.numberOfPages ? 1 : this.pageIndex;
+		}
 	}
 
 	/**
@@ -57,7 +57,7 @@ export class ClsPaginatorComponent implements OnInit {
 	 * sends an event to the upper component that the previous page called
 	 * @param dataOffset the total number of data has been loaded
 	 */
-	previous(dataOffset = null) {
+	previous() {
 		const preIndex = this.pageIndex;
 		this.pageIndex--;
 		this._emitPageEvent(preIndex);

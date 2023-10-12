@@ -1,6 +1,6 @@
 <div class="paginator-top-container">
 	<div class="paginator-container">
-		<div class="items-per-page">
+		<div *ngIf="numberOfPages && pageIndex" class="items-per-page">
 			<div>{{ pageIndex }} of {{ numberOfPages }}</div>
 		</div>
 
@@ -17,7 +17,7 @@
 				class="next-page-button"
 				mat-icon-button
 				(click)="next()"
-				[disabled]="pageIndex >= numberOfPages"
+				[disabled]="pageIndex >= numberOfPages || !numberOfPages"
 				aria-label="right">
 				<mat-icon fontSet="material-icons-round" matTooltip="Next page">chevron_right</mat-icon>
 			</button>

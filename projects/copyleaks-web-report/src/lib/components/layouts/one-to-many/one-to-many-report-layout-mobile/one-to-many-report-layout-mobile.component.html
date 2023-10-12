@@ -20,6 +20,7 @@
 			[numberOfWords]="numberOfWords"
 			[currentPage]="currentPageSource"
 			[reportResponsive]="EResponsiveLayoutType.Mobile"
+			[hidePoweredBy]="true"
 			viewMode="one-to-many"
 			reportOrigin="original"
 			(iFrameMessageEvent)="onIFrameMessage($event)"
@@ -31,4 +32,4 @@
 <copyleaks-report-results-container class="results-container" [flexGrow]="15"></copyleaks-report-results-container>
 
 <!-- Powered by Copyleaks image section -->
-<div class="powered-by-copyleaks-container">Powered By Copyleaks</div>
+<div class="powered-by-copyleaks-container"><cr-powered-by></cr-powered-by></div>

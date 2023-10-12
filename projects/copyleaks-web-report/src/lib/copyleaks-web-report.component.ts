@@ -66,7 +66,6 @@ export class CopyleaksWebReportComponent implements OnInit, OnDestroy {
 	ngOnInit(): void {
 		if (this.responsiveLayoutType == null) this._initResponsiveLayoutType();
 		this._initReportLayoutType();
-		// this._initReportView();
 
 		if (this.reportEndpointConfig) this._reportDataSvc.initReportData(this.reportEndpointConfig);
 	}
@@ -157,12 +156,16 @@ export class CopyleaksWebReportComponent implements OnInit, OnDestroy {
 
 		this.reportLayoutType = viewMode ?? 'one-to-many';
 
+		// Add the suspect Id if available
+		if (suspectId) this.reportLayoutType = EReportLayoutType.OneToOne;
+		else this.reportLayoutType = EReportLayoutType.OneToMany;
+
 		this._reportViewSvc.reportViewMode$.next({
-			viewMode: viewMode ?? 'one-to-many',
+			viewMode: this.reportLayoutType === EReportLayoutType.OneToOne ? 'one-to-one' : 'one-to-many',
 			isHtmlView: !contentMode || contentMode == 'html',
-			sourcePageIndex: Number(sourcePage) ?? 1,
+			sourcePageIndex: sourcePage ? Number(sourcePage) ?? 1 : 1,
 			suspectId: suspectId,
-			suspectPageIndex: Number(suspectPage) ?? 1,
+			suspectPageIndex: suspectPage ? Number(suspectPage) ?? 1 : 1,
 		} as IReportViewEvent);
 
 		this.viewChangesSub = this._reportViewSvc.reportViewMode$.subscribe(data => {
@@ -172,6 +175,10 @@ export class CopyleaksWebReportComponent implements OnInit, OnDestroy {
 				contentMode: data.isHtmlView ? 'html' : 'text',
 				sourcePage: String(data.sourcePageIndex),
 			};
+
+			if (data.viewMode == 'one-to-many') this.reportLayoutType = EReportLayoutType.OneToMany;
+			else this.reportLayoutType = EReportLayoutType.OneToOne;
+
 			// Add the suspect Id if available
 			if (data.suspectId)
 				updatedParams = {
@@ -192,11 +199,6 @@ export class CopyleaksWebReportComponent implements OnInit, OnDestroy {
 			});
 		});
 	}
-
-	/**
-	 * Starts a subscription for the report layout query params
-	 */
-	private _initReportView() {}
 
 	ngOnDestroy() {
 		if (this.layoutChangesSub) this.layoutChangesSub.unsubscribe();

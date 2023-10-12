@@ -76,7 +76,7 @@ export class OneToManyReportLayoutDesktopComponent extends ReportLayoutBaseCompo
 		this.reportViewSvc.reportViewMode$.subscribe(data => {
 			if (!data) return;
 			this.isHtmlView = data.isHtmlView;
-			this.currentPageSource = data.sourcePageIndex;
+			this.currentPageSource = data.sourcePageIndex > this.numberOfPages ? 1 : data.sourcePageIndex;
 		});
 	}
 

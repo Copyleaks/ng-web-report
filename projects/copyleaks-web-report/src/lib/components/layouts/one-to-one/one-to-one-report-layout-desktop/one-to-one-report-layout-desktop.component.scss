@@ -1,0 +1,42 @@
+@import '../../../../styles/containers.styles.scss';
+
+:host {
+	display: flex;
+	flex-grow: 1;
+	gap: 8px;
+}
+
+.left-section {
+	@include cls-report-container-lvl-1;
+	display: flex;
+	flex-direction: column;
+	gap: 16px;
+	padding: 10px;
+	flex: 50%;
+	width: 50%;
+}
+
+.right-section {
+	@include cls-report-container-lvl-1;
+	padding: 10px;
+	display: flex;
+	flex-direction: column;
+	gap: 16px;
+	flex: 50%;
+	width: 50%;
+
+	@include cls-report-container-close-btn;
+
+	.results-alerts-container {
+		padding: 10px;
+		display: flex;
+		flex-direction: column;
+		gap: 16px;
+		flex-grow: 1;
+	}
+
+	copyleaks-content-viewer-container {
+		height: 80%;
+		flex-grow: 80;
+	}
+}

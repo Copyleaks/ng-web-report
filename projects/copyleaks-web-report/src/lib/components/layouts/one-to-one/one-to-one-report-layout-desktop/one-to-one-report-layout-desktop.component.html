@@ -1,0 +1,37 @@
+<!-- Left side section -->
+<div class="left-section">
+	<!--Report scan content viewer -->
+	<copyleaks-content-viewer-container
+		[isHtmlView]="isHtmlView"
+		[contentHtml]="sourceIframeHtml"
+		[scanSource]="sourceCrawledVersion"
+		[contentTextMatches]="sourceTextMatches"
+		[numberOfPages]="numberOfPagesSource"
+		[numberOfWords]="numberOfWords"
+		[currentPage]="currentPageSource"
+		viewMode="one-to-one"
+		reportOrigin="source"
+		(iFrameMessageEvent)="onSourceIFrameMessage($event)"
+		(viewChangeEvent)="onReportViewChange($event)"></copyleaks-content-viewer-container>
+</div>
+
+<!-- Right side section-->
+<div *ngIf="!hideRightSection" class="right-section">
+	<div class="close-btn" (click)="hideRightSection = !hideRightSection">X</div>
+
+	<!-- Report result item section -->
+	<copyleaks-report-results-item-container [flexGrow]="20"></copyleaks-report-results-item-container>
+
+	<!-- Report result content viewer -->
+	<copyleaks-content-viewer-container
+		[flexGrow]="80"
+		[isHtmlView]="isHtmlView"
+		[contentHtml]="suspectIframeHtml"
+		[contentTextMatches]="suspectTextMatches"
+		[numberOfPages]="numberOfPagesSuspect"
+		[currentPage]="currentPageSuspect"
+		viewMode="one-to-one"
+		reportOrigin="suspect"
+		(iFrameMessageEvent)="onSuspectIFrameMessage($event)"
+		(viewChangeEvent)="onReportViewChange($event)"></copyleaks-content-viewer-container>
+</div>

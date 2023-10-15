@@ -1,4 +1,4 @@
-import { Component, Input, OnDestroy, OnInit, TemplateRef, ViewChild } from '@angular/core';
+import { Component, Input, OnDestroy, OnInit, SimpleChanges, TemplateRef, ViewChild } from '@angular/core';
 import { EReportLayoutType, EResponsiveLayoutType } from './enums/copyleaks-web-report.enums';
 import { BreakpointObserver, Breakpoints } from '@angular/cdk/layout';
 import { map } from 'rxjs/operators';
@@ -72,6 +72,12 @@ export class CopyleaksWebReportComponent implements OnInit, OnDestroy {
 
 	ngAfterViewInit() {
 		this._initCustomTemplatesRefs();
+	}
+
+	ngOnChanges(changes: SimpleChanges): void {
+		if ('reportEndpointConfig' in changes && !changes['reportEndpointConfig'].firstChange) {
+			this._reportDataSvc.initReportData(this.reportEndpointConfig);
+		}
 	}
 
 	/**

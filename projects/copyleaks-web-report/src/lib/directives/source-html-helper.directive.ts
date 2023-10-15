@@ -1,5 +1,5 @@
 import { Component, Directive, ElementRef, OnDestroy, OnInit, Renderer2 } from '@angular/core';
-import { filter, map, withLatestFrom } from 'rxjs/operators';
+import { filter, map, takeUntil, withLatestFrom } from 'rxjs/operators';
 import { MatchSelectEvent, MatchJumpEvent } from '../models/report-iframe-events.models';
 import { MatchType } from '../models/report-matches.models';
 import { ReportMatchHighlightService } from '../services/report-match-highlight.service';
@@ -7,11 +7,14 @@ import { ReportViewService } from '../services/report-view.service';
 import { findRespectiveStart } from '../utils/report-match-helpers';
 import { ReportMatchesService } from '../services/report-matches.service';
 import { IComparisonCollection } from '../models/report-data.models';
+import { Subject } from 'rxjs';
 
 @Directive({
 	selector: '[crSourceHtmlHelper]',
 })
 export class SourceHtmlHelperComponent implements OnInit, OnDestroy {
+	private destroy$ = new Subject<void>();
+
 	constructor(
 		private _reportViewSvc: ReportViewService,
 		private _highlightSvc: ReportMatchHighlightService,
@@ -39,7 +42,8 @@ export class SourceHtmlHelperComponent implements OnInit, OnDestroy {
 		jump$
 			.pipe(
 				withLatestFrom(reportViewMode$),
-				filter(([, viewData]) => viewData.viewMode === 'one-to-one' && viewData.isHtmlView)
+				filter(([, viewData]) => viewData.viewMode === 'one-to-one' && viewData.isHtmlView),
+				takeUntil(this.destroy$)
 			)
 			.subscribe(([forward]) => {
 				this.messageFrame({ type: 'match-jump', forward } as MatchJumpEvent);
@@ -50,7 +54,8 @@ export class SourceHtmlHelperComponent implements OnInit, OnDestroy {
 				filter(ev => ev.origin === 'suspect' && ev.broadcast),
 				map(ev => ev.elem),
 				withLatestFrom(selectedResult$, sourceHtmlMatches$, reportViewMode$),
-				filter(([, , matches, viewData]) => viewData.isHtmlView && !!matches)
+				filter(([, , matches, viewData]) => viewData.isHtmlView && !!matches),
+				takeUntil(this.destroy$)
 			)
 			.subscribe(([elem, suspect, matches]) => {
 				if (elem && suspect?.result && matches) {
@@ -66,7 +71,8 @@ export class SourceHtmlHelperComponent implements OnInit, OnDestroy {
 		suspectHtml$
 			.pipe(
 				withLatestFrom(selectedResult$, sourceHtmlMatches$, reportViewMode$),
-				filter(([, , matches, viewData]) => viewData.isHtmlView && !!matches)
+				filter(([, , matches, viewData]) => viewData.isHtmlView && !!matches),
+				takeUntil(this.destroy$)
 			)
 			.subscribe(([match, suspect, matches]) => {
 				if (match && suspect && suspect.result && matches) {
@@ -96,9 +102,8 @@ export class SourceHtmlHelperComponent implements OnInit, OnDestroy {
 		this.messageFrame({ type: 'match-select', index } as MatchSelectEvent);
 	}
 
-	/**
-	 * Life-cycle method
-	 * empty for `untilDestroy` rxjs operator
-	 */
-	ngOnDestroy() {}
+	ngOnDestroy() {
+		this.destroy$.next();
+		this.destroy$.complete();
+	}
 }

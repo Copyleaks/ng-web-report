@@ -50,9 +50,8 @@ export class OriginalHtmlHelperComponent implements OnInit, OnDestroy {
 		this.frame && this.frame.postMessage(data, '*');
 	}
 
-	/**
-	 * Life-cycle method
-	 * empty for `untilDestroy` rxjs operator
-	 */
-	ngOnDestroy() {}
+	ngOnDestroy() {
+		this.destroy$.next();
+		this.destroy$.complete();
+	}
 }

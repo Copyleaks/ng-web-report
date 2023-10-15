@@ -1,5 +1,5 @@
 import { Directive, ElementRef, OnDestroy, OnInit, Renderer2 } from '@angular/core';
-import { filter, map, withLatestFrom } from 'rxjs/operators';
+import { filter, map, takeUntil, withLatestFrom } from 'rxjs/operators';
 import { MatchType } from '../models/report-matches.models';
 import { ReportMatchHighlightService } from '../services/report-match-highlight.service';
 import { ReportMatchesService } from '../services/report-matches.service';
@@ -7,11 +7,14 @@ import { ReportViewService } from '../services/report-view.service';
 import { findRespectiveStart } from '../utils/report-match-helpers';
 import { MatchSelectEvent } from '../models/report-iframe-events.models';
 import { IComparisonCollection } from '../models/report-data.models';
+import { Subject } from 'rxjs';
 
 @Directive({
 	selector: '[crSuspectHtmlHelper]',
 })
 export class SuspectHtmlHelperComponent implements OnInit, OnDestroy {
+	private destroy$ = new Subject<void>();
+
 	constructor(
 		private _reportViewSvc: ReportViewService,
 		private _highlightSvc: ReportMatchHighlightService,
@@ -22,11 +25,6 @@ export class SuspectHtmlHelperComponent implements OnInit, OnDestroy {
 	protected get frame() {
 		return this._element.nativeElement.contentWindow;
 	}
-	/**
-	 * Life-cycle method
-	 * empty for `untilDestroy` rxjs operator
-	 */
-	ngOnDestroy() {}
 
 	/**
 	 * Life-cycle method
@@ -45,7 +43,8 @@ export class SuspectHtmlHelperComponent implements OnInit, OnDestroy {
 				filter(ev => ev.origin === 'source' && ev.broadcast),
 				map(ev => ev.elem),
 				withLatestFrom(selectedResult$, suspectHtmlMatches$, reportViewMode$),
-				filter(([, , matches, viewData]) => viewData.isHtmlView && !!matches)
+				filter(([, , matches, viewData]) => viewData.isHtmlView && !!matches),
+				takeUntil(this.destroy$)
 			)
 			.subscribe(([elem, suspect, matches]) => {
 				if (elem && suspect && suspect.result && matches) {
@@ -69,7 +68,8 @@ export class SuspectHtmlHelperComponent implements OnInit, OnDestroy {
 						suspect.result != null &&
 						suspect.result != undefined &&
 						!!suspect.result.html.value
-				)
+				),
+				takeUntil(this.destroy$)
 			)
 			.subscribe(([match, suspect, matches]) => {
 				if (match && suspect && suspect.result && matches) {
@@ -97,5 +97,10 @@ export class SuspectHtmlHelperComponent implements OnInit, OnDestroy {
 	 */
 	protected markSingleMatchInFrame(index: number) {
 		this.messageFrame({ type: 'match-select', index } as MatchSelectEvent);
+	}
+
+	ngOnDestroy() {
+		this.destroy$.next();
+		this.destroy$.complete();
 	}
 }

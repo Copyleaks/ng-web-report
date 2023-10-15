@@ -1,5 +1,5 @@
 import { AfterContentInit, ContentChildren, Directive, Input, OnDestroy, QueryList } from '@angular/core';
-import { filter, take, withLatestFrom } from 'rxjs/operators';
+import { filter, take, takeUntil, withLatestFrom } from 'rxjs/operators';
 import { ContentMode } from '../models/report-config.models';
 import { Match } from '../models/report-matches.models';
 import { ReportDataService } from '../services/report-data.service';
@@ -8,12 +8,16 @@ import { ReportViewService } from '../services/report-view.service';
 import { ReportTextMatchComponent } from './report-text-match/report-text-match.component';
 import { IResultDetailResponse } from '../models/report-data.models';
 import * as helpers from '../utils/highlight-helpers';
+import { Subject } from 'rxjs';
 
 @Directive({
 	selector: '[crSuspectTextHelper]',
 })
 export class SuspectTextHelperDirective implements AfterContentInit, OnDestroy {
 	@Input() public host: { currentPage: number };
+
+	private destroy$ = new Subject<void>();
+
 	constructor(
 		private _highlightSvc: ReportMatchHighlightService,
 		private _viewService: ReportViewService,
@@ -39,7 +43,7 @@ export class SuspectTextHelperDirective implements AfterContentInit, OnDestroy {
 			}
 			this._highlightSvc.textMatchClicked({ elem: comp, broadcast: false, origin: 'suspect' });
 		} else {
-			this.children.changes.pipe(take(1)).subscribe(() => {
+			this.children.changes.pipe(take(1), takeUntil(this.destroy$)).subscribe(() => {
 				const comp = this.children.find(item => item.match.start === start);
 				if (comp === null || comp === undefined) {
 					throw new Error('Match component was not found in view');
@@ -60,7 +64,8 @@ export class SuspectTextHelperDirective implements AfterContentInit, OnDestroy {
 		textMatchClick$
 			.pipe(
 				filter(ev => ev.origin === 'source' && ev.broadcast),
-				withLatestFrom(selectedResult$)
+				withLatestFrom(selectedResult$),
+				takeUntil(this.destroy$)
 			)
 			.subscribe(([{ elem }, suspect]) => {
 				if (elem && suspect?.result) {
@@ -75,15 +80,16 @@ export class SuspectTextHelperDirective implements AfterContentInit, OnDestroy {
 				filter(
 					([, suspect]) =>
 						suspect != null && suspect != undefined && suspect.result != undefined && !suspect.result.html.value
-				)
+				),
+				takeUntil(this.destroy$)
 			)
 			.subscribe(([match, suspect]) => {
 				if (match && suspect?.result) this.handleBroadcast(match, suspect.result, 'html');
 			});
 	}
-	/**
-	 * Life-cycle method
-	 * empty for `untilDestroy` rxjs operator
-	 */
-	ngOnDestroy() {}
+
+	ngOnDestroy() {
+		this.destroy$.next();
+		this.destroy$.complete();
+	}
 }

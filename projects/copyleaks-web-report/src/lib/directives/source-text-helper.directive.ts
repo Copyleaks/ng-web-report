@@ -1,5 +1,5 @@
 import { Directive, AfterContentInit, OnDestroy, Input, ContentChildren, QueryList } from '@angular/core';
-import { filter, withLatestFrom, take } from 'rxjs/operators';
+import { filter, withLatestFrom, take, takeUntil } from 'rxjs/operators';
 import { ContentMode } from '../models/report-config.models';
 import { Match } from '../models/report-matches.models';
 import { ReportMatchHighlightService } from '../services/report-match-highlight.service';
@@ -8,12 +8,16 @@ import { ReportTextMatchComponent } from './report-text-match/report-text-match.
 import { IResultDetailResponse, IScanSource } from '../models/report-data.models';
 import * as helpers from '../utils/highlight-helpers';
 import { ReportDataService } from '../services/report-data.service';
+import { Subject } from 'rxjs';
 
 @Directive({
 	selector: '[crSourceTextHelper]',
 })
 export class SourceTextHelperDirective implements AfterContentInit, OnDestroy {
 	@Input() public host: { currentPage: number; contentTextMatches: any };
+
+	private destroy$ = new Subject<void>();
+
 	constructor(
 		private _highlightSvc: ReportMatchHighlightService,
 		private _viewService: ReportViewService,
@@ -39,7 +43,8 @@ export class SourceTextHelperDirective implements AfterContentInit, OnDestroy {
 			.pipe(
 				filter(ev => ev.origin === 'suspect' && ev.broadcast),
 				withLatestFrom(crawledVersion$, selectedResult$, reportViewMode$),
-				filter(([, , , viewData]) => !viewData.isHtmlView)
+				filter(([, , , viewData]) => !viewData.isHtmlView),
+				takeUntil(this.destroy$)
 			)
 			.subscribe(([{ elem }, source, suspect]) => {
 				if (elem && source && suspect?.result) {
@@ -50,7 +55,8 @@ export class SourceTextHelperDirective implements AfterContentInit, OnDestroy {
 		jump$
 			.pipe(
 				withLatestFrom(reportViewMode$),
-				filter(([, viewData]) => viewData.viewMode === 'one-to-one' && !viewData.isHtmlView)
+				filter(([, viewData]) => viewData.viewMode === 'one-to-one' && !viewData.isHtmlView),
+				takeUntil(this.destroy$)
 			)
 			.subscribe(([forward]) => this.handleJump(forward));
 
@@ -58,7 +64,8 @@ export class SourceTextHelperDirective implements AfterContentInit, OnDestroy {
 			.pipe(
 				withLatestFrom(crawledVersion$, selectedResult$, reportViewMode$),
 				filter(([, , , viewData]) => viewData.isHtmlView),
-				filter(([, source]) => !source?.html || !source.html.value)
+				filter(([, source]) => !source?.html || !source.html.value),
+				takeUntil(this.destroy$)
 			)
 			.subscribe(([match, source, suspect]) => {
 				if (match && source && suspect?.result) this.handleBroadcast(match, source, suspect.result, 'html');
@@ -79,7 +86,7 @@ export class SourceTextHelperDirective implements AfterContentInit, OnDestroy {
 			}
 			this._highlightSvc.textMatchClicked({ elem: comp, broadcast: false, origin: 'source' });
 		} else {
-			this.children.changes.pipe(take(1)).subscribe(() => {
+			this.children.changes.pipe(take(1), takeUntil(this.destroy$)).subscribe(() => {
 				const comp = this.children.find(item => item.match.start === start);
 				if (comp === null || comp === undefined) {
 					throw new Error('Match component was not found in view');
@@ -104,7 +111,7 @@ export class SourceTextHelperDirective implements AfterContentInit, OnDestroy {
 				: helpers.findPrevPageWithMatch(this.host.contentTextMatches, this.host.currentPage);
 			if (this.host.currentPage !== page) {
 				this._highlightSvc.textMatchClicked({ elem: this.current, broadcast: true, origin: 'source' });
-				this.children.changes.pipe(take(1)).subscribe(() => {
+				this.children.changes.pipe(take(1), takeUntil(this.destroy$)).subscribe(() => {
 					const comp = forward ? this.children.first : this.children.last;
 					this._highlightSvc.textMatchClicked({ elem: comp, broadcast: true, origin: 'source' });
 				});
@@ -125,9 +132,8 @@ export class SourceTextHelperDirective implements AfterContentInit, OnDestroy {
 		}
 	}
 
-	/**
-	 * Life-cycle method
-	 * empty for `untilDestroy` rxjs operator
-	 */
-	ngOnDestroy() {}
+	ngOnDestroy() {
+		this.destroy$.next();
+		this.destroy$.complete();
+	}
 }

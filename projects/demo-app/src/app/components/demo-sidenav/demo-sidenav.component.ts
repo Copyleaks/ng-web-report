@@ -26,6 +26,6 @@ export class DemoSidenavComponent {
 	}
 
 	navigateToReportPreview() {
-		this._router.navigate(['/previews']);
+		this._router.navigate(['/previews/default']);
 	}
 }

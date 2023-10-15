@@ -19,28 +19,28 @@
 			arrow_downward
 		</mat-icon>
 		<mat-icon
-			*ngIf="!isHtmlView || !hasHtml"
+			*ngIf="!isHtmlView || !hasHtml || isAlertsView"
 			fontSet="material-icons-round"
 			(click)="changeContentDirection('ltr')"
 			matTooltip="Align Left">
 			format_align_left
 		</mat-icon>
 		<mat-icon
-			*ngIf="!isHtmlView || !hasHtml"
+			*ngIf="!isHtmlView || !hasHtml || isAlertsView"
 			fontSet="material-icons-round"
 			(click)="changeContentDirection('rtl')"
 			matTooltip="Align right">
 			format_align_right
 		</mat-icon>
 		<mat-icon
-			*ngIf="!isHtmlView || !hasHtml"
+			*ngIf="!isHtmlView || !hasHtml || isAlertsView"
 			fontSet="material-icons-round"
 			(click)="increaseFontSize()"
 			matTooltip="Zoom in">
 			zoom_in
 		</mat-icon>
 		<mat-icon
-			*ngIf="!isHtmlView || !hasHtml"
+			*ngIf="!isHtmlView || !hasHtml || isAlertsView"
 			fontSet="material-icons-round"
 			(click)="decreaseFontSize()"
 			matTooltip="Zoom out">
@@ -48,7 +48,7 @@
 		</mat-icon>
 		<span class="icon-tooltip-wrapper" [matTooltip]="!hasHtml ? 'Only text view is available' : ''">
 			<mat-icon
-				*ngIf="isHtmlView && hasHtml"
+				*ngIf="isHtmlView && hasHtml && !isAlertsView"
 				[ngClass]="{
 					'disabled-icon': !hasHtml
 				}"
@@ -58,7 +58,7 @@
 				title
 			</mat-icon>
 			<mat-icon
-				*ngIf="!isHtmlView || (isHtmlView && !hasHtml)"
+				*ngIf="(!isHtmlView || (isHtmlView && !hasHtml)) && !isAlertsView"
 				[ngClass]="{
 					'disabled-icon': !hasHtml
 				}"
@@ -74,12 +74,12 @@
 	<ng-container [ngSwitch]="reportOrigin">
 		<ng-container *ngSwitchCase="'original'">
 			<iframe
-				[ngStyle]="{ display: !isHtmlView || !hasHtml ? 'none' : '' }"
+				[ngStyle]="{ display: !isHtmlView || !hasHtml || isAlertsView ? 'none' : '' }"
 				#contentIFrame
 				sandbox="allow-scripts"
 				crOriginalHtmlHelper></iframe>
 			<div
-				*ngIf="!isHtmlView || !hasHtml"
+				*ngIf="!isHtmlView || !hasHtml || isAlertsView"
 				class="text-container"
 				[ngStyle]="{ display: isHtmlView ? 'none' : '', 'font-size': contentZoom + 'em' }"
 				[dir]="contentDirection"
@@ -114,12 +114,12 @@
 
 		<ng-container *ngSwitchCase="'source'">
 			<iframe
-				[ngStyle]="{ display: !isHtmlView || !hasHtml ? 'none' : '' }"
+				[ngStyle]="{ display: !isHtmlView || !hasHtml || isAlertsView ? 'none' : '' }"
 				#contentIFrame
 				sandbox="allow-scripts"
 				crSourceHtmlHelper></iframe>
 			<div
-				*ngIf="!isHtmlView || !hasHtml"
+				*ngIf="!isHtmlView || !hasHtml || isAlertsView"
 				class="text-container"
 				[ngStyle]="{ display: isHtmlView ? 'none' : '', 'font-size': contentZoom + 'em' }"
 				[dir]="contentDirection"
@@ -154,12 +154,12 @@
 
 		<ng-container *ngSwitchCase="'suspect'">
 			<iframe
-				[ngStyle]="{ display: !isHtmlView || !hasHtml ? 'none' : '' }"
+				[ngStyle]="{ display: !isHtmlView || !hasHtml || isAlertsView ? 'none' : '' }"
 				#contentIFrame
 				sandbox="allow-scripts"
 				crSuspectHtmlHelper></iframe>
 			<div
-				*ngIf="!isHtmlView || !hasHtml"
+				*ngIf="!isHtmlView || !hasHtml || isAlertsView"
 				class="text-container"
 				crSuspectTextHelper
 				[host]="this"
@@ -189,7 +189,7 @@
 	</ng-container>
 
 	<cls-paginator
-		*ngIf="!isHtmlView || !hasHtml"
+		*ngIf="!isHtmlView || !hasHtml || isAlertsView"
 		[pageIndex]="currentPage"
 		[numberOfPages]="numberOfPages"
 		(page)="onPaginationEvent($event)"></cls-paginator>

@@ -1,13 +1,16 @@
 import { Directive, ElementRef, OnDestroy, OnInit } from '@angular/core';
-import { distinctUntilChanged, filter, map, withLatestFrom } from 'rxjs/operators';
+import { distinctUntilChanged, filter, map, takeUntil, withLatestFrom } from 'rxjs/operators';
 import { ReportMatchHighlightService } from '../services/report-match-highlight.service';
 import { ReportViewService } from '../services/report-view.service';
 import { MatchJumpEvent } from '../models/report-iframe-events.models';
+import { Subject } from 'rxjs';
 
 @Directive({
 	selector: '[crOriginalHtmlHelper]',
 })
 export class OriginalHtmlHelperComponent implements OnInit, OnDestroy {
+	private destroy$ = new Subject<void>();
+
 	constructor(
 		private _reportViewSvc: ReportViewService,
 		private _highlightSvc: ReportMatchHighlightService,
@@ -27,7 +30,8 @@ export class OriginalHtmlHelperComponent implements OnInit, OnDestroy {
 					viewModeData.viewMode === 'one-to-many' &&
 					viewModeData.isHtmlView
 			),
-			map(([jumpForward]) => jumpForward)
+			map(([jumpForward]) => jumpForward),
+			takeUntil(this.destroy$)
 		);
 		onOneToManyHtmlJump$.subscribe(jumpForward => {
 			this.messageFrame({ type: 'match-jump', forward: jumpForward } as MatchJumpEvent);

@@ -16,6 +16,10 @@ export abstract class ReportLayoutBaseComponent {
 
 	abstract get rerendered(): boolean;
 
+	get isAlertsMode(): boolean {
+		return !!this.reportViewSvc.selectedAlert;
+	}
+
 	constructor(
 		protected reportDataSvc: ReportDataService,
 		protected reportViewSvc: ReportViewService,

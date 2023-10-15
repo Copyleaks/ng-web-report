@@ -23,7 +23,6 @@ import { PageEvent } from '../../core/cls-paginator/models/cls-paginator.models'
 import { ReportMatchHighlightService } from '../../../services/report-match-highlight.service';
 import { IScanSource } from '../../../models/report-data.models';
 import { EResponsiveLayoutType } from '../../../enums/copyleaks-web-report.enums';
-import { ClsPaginatorComponent } from '../../core/cls-paginator/cls-paginator.component';
 import { ReportViewService } from '../../../services/report-view.service';
 
 @Component({
@@ -47,6 +46,17 @@ export class ContentViewerContainerComponent implements OnInit, AfterViewInit, O
 	 * @default `false`
 	 */
 	@Input() isHtmlView: boolean;
+
+	/**
+	 * @Input Determines if the view is for alerts or not.
+	 *
+	 * @description
+	 * When set to `true`, the component will view the source/result conent as TEXT and highlights the alert matches.
+	 * When set to `false`, the text view will be showed.
+	 *
+	 * @default `false`
+	 */
+	@Input() isAlertsView: boolean;
 
 	/**
 	 * @Input The scan source (the original scanned document) data

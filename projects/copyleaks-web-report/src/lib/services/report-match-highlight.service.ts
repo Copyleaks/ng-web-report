@@ -133,9 +133,7 @@ export class ReportMatchHighlightService implements OnDestroy {
 		if (prev === next) {
 			next = null;
 		}
-		setTimeout(() => {
-			helpers.onTextMatchChange([prev, next]);
-		});
+		helpers.onTextMatchChange([prev, next]);
 		this._originalText.next(next);
 	}
 
@@ -149,9 +147,7 @@ export class ReportMatchHighlightService implements OnDestroy {
 		if (prev === next) {
 			next = null;
 		}
-		setTimeout(() => {
-			helpers.onTextMatchChange([prev, next]);
-		});
+		helpers.onTextMatchChange([prev, next]);
 		this._sourceText.next(next);
 	}
 	/**
@@ -164,9 +160,7 @@ export class ReportMatchHighlightService implements OnDestroy {
 		if (prev === next) {
 			next = null;
 		}
-		setTimeout(() => {
-			helpers.onTextMatchChange([prev, next]);
-		});
+		helpers.onTextMatchChange([prev, next]);
 		this._suspectText.next(next);
 	}
 

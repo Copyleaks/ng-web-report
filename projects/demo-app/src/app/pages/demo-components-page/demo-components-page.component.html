@@ -1,4 +1,6 @@
-<div [style]="'width:100%'" fxLayout="column" fxLayoutAlign="start start" fxLayoutGap="8px">
-	<cr-report-results-item [style]="'width:100%'"></cr-report-results-item>
-	<cr-report-expand-result-item [style]="'width:100%'"></cr-report-expand-result-item>
+<div fxLayout="column" fxLayoutAlign="start start" fxLayoutGap="16px">
+	<div [style]="'width:100%'" fxLayout="column" fxLayoutAlign="start start" fxLayoutGap="8px">
+		<cr-report-results-item [resultItem]="resultItem" [style]="'width:100%'"></cr-report-results-item>
+		<cr-report-expand-result-item [resultItem]="resultItem" [style]="'width:100%'"></cr-report-expand-result-item>
+	</div>
 </div>

@@ -6,6 +6,7 @@ import {
 	IStatistics,
 } from 'projects/copyleaks-web-report/src/lib/models/report-data.models';
 import { ReportViewService } from 'projects/copyleaks-web-report/src/lib/services/report-view.service';
+import { IResultItem } from '../models/report-result-item.models';
 
 @Component({
 	selector: 'cr-report-results-item',
@@ -13,30 +14,13 @@ import { ReportViewService } from 'projects/copyleaks-web-report/src/lib/service
 	styleUrls: ['./report-results-item.component.scss'],
 })
 export class ReportResultsItemComponent implements OnInit {
-	@Input() previewResult: IResultPreviewBase = {
-		id: '00fe0c8338',
-		introduction: 'No introduction available.',
-		matchedWords: 400,
-		tags: [],
-		title: 'Copyleaks Internal Database',
-		type: 3,
-		url: 'url.com/slug/slug/123xyz..',
-	};
-
-	@Input() iStatisticsResult: IStatistics = {
-		identical: 88,
-		minorChanges: 2,
-		relatedMeaning: 2,
-	};
-	@Input() metadataSource: ISourceMetadataSection = {
-		words: 100,
-		excluded: 0,
-	};
-
+	@Input() resultItem: IResultItem;
 	@Input() showLoader: boolean = false;
-
 	@Output() hiddenResultEvent = new EventEmitter<string>();
 
+	previewResult: IResultPreviewBase;
+	iStatisticsResult: IStatistics;
+	metadataSource: ISourceMetadataSection;
 	eResultPreviewType = EResultPreviewType;
 
 	get authorName() {
@@ -58,7 +42,13 @@ export class ReportResultsItemComponent implements OnInit {
 	}
 	constructor(private _reportViewSvc: ReportViewService) {}
 
-	ngOnInit(): void {}
+	ngOnInit(): void {
+		if (this.resultItem) {
+			this.previewResult = this.resultItem.previewResult;
+			this.iStatisticsResult = this.resultItem.iStatisticsResult;
+			this.metadataSource = this.resultItem.metadataSource;
+		}
+	}
 
 	hiddenResultById() {
 		this.hiddenResultEvent.emit(this.previewResult.id);

@@ -3,19 +3,41 @@
 		<diV class="result-header" fxLayout="row" fxLayoutAlign="space-between center">
 			<div fxLayout="row" fxLayoutAlign="start start" fxLayoutGap="8px">
 				<div class="result-logo" fxLayout="column" fxLayoutAlign="center center">
-					<mat-icon>compare_arrows</mat-icon>
+					<ng-container [ngSwitch]="resultItem.previewResult.type">
+						<ng-container *ngSwitchCase="eResultPreviewType.Batch">
+							<mat-icon>compare_arrows</mat-icon>
+						</ng-container>
+						<ng-container *ngSwitchCase="eResultPreviewType.Repositroy">
+							<img class="title-img" src="assets/images/icons/repositories-icon.svg" />
+						</ng-container>
+						<ng-container *ngSwitchCase="eResultPreviewType.Internet">
+							<mat-icon>language</mat-icon>
+						</ng-container>
+						<ng-container *ngSwitchCase="eResultPreviewType.Database">
+							<mat-icon>language</mat-icon>
+						</ng-container>
+						<ng-container *ngSwitchDefault>
+							<mat-icon>language</mat-icon>
+						</ng-container>
+					</ng-container>
 				</div>
 				<div class="result-title-container" fxLayout="column" fxLayoutAlign="start start" fxLayoutGap="4px">
-					<span class="result-title">{{ previewResult.title }}</span>
-					<ng-container *ngIf="previewResult?.url; else resultSource">
+					<div fxLayout="row" fxLayoutAlign="start center" fxLayoutGap="4px">
+						<button class="exclude-button" (click)="exclude = !exclude">
+							<mat-icon *ngIf="exclude">visibility</mat-icon>
+							<mat-icon *ngIf="!exclude">visibility_off</mat-icon>
+						</button>
+						<span class="result-title">{{ resultItem.previewResult.title }}</span>
+					</div>
+					<ng-container *ngIf="resultItem.previewResult?.url; else resultSource">
 						<a
 							class="result-url-source"
-							[href]="previewResult.url"
+							[href]="resultItem.previewResult.url"
 							fxLayout="row"
 							fxLayoutAlign="center center"
 							fxLayoutGap="4px">
 							<mat-icon>open_in_new</mat-icon>
-							<span>Source: {{ previewResult?.url }}</span>
+							<span>Source: {{ resultItem.previewResult?.url }}</span>
 						</a>
 					</ng-container>
 					<ng-template #resultSource>
@@ -23,7 +45,7 @@
 					</ng-template>
 				</div>
 			</div>
-			<button class="back-button" fxLayout="row" fxLayoutAlign="center center" fxLayoutGap="4px">
+			<button class="back-button" (click)="clickBack()" fxLayout="row" fxLayoutAlign="center center" fxLayoutGap="4px">
 				<span>Back</span>
 				<mat-icon>chevron_right</mat-icon>
 			</button>
@@ -43,6 +65,9 @@
 	</div>
 
 	<div class="plagiarism-detection-container">
-		<cr-percentage-result-item></cr-percentage-result-item>
+		<cr-percentage-result-item
+			[metadataSource]="resultItem.metadataSource"
+			[iStatisticsResult]="resultItem.iStatisticsResult"
+			[similarWords]="resultItem.previewResult.matchedWords"></cr-percentage-result-item>
 	</div>
 </div>

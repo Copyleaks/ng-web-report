@@ -1,6 +1,8 @@
 import { Component, Input, OnInit } from '@angular/core';
 import { EResultPreviewType } from 'projects/copyleaks-web-report/src/lib/enums/copyleaks-web-report.enums';
 import { IResultPreviewBase } from 'projects/copyleaks-web-report/src/lib/models/report-data.models';
+import { IResultItem } from '../models/report-result-item.models';
+import { ReportViewService } from 'projects/copyleaks-web-report/src/lib/services/report-view.service';
 
 @Component({
 	selector: 'cr-report-expand-result-item',
@@ -8,22 +10,15 @@ import { IResultPreviewBase } from 'projects/copyleaks-web-report/src/lib/models
 	styleUrls: ['./report-expand-result-item.component.scss'],
 })
 export class ReportExpandResultItemComponent implements OnInit {
-	constructor() {}
-	@Input() previewResult: IResultPreviewBase = {
-		id: '00fe0c8338',
-		introduction: 'No introduction available.',
-		matchedWords: 400,
-		tags: [],
-		title: 'Copyleaks Internal Database',
-		type: 3,
-		url: 'url.com/slug/slug/123xyz..',
-	};
-
+	@Input() resultItem: IResultItem;
 	@Input() languageResult: string[] = ['Chips', 'Chips'];
 
+	showMorePercentage: boolean = false;
+	eResultPreviewType = EResultPreviewType;
+	exclude: boolean;
 	get authorName() {
-		if (this.previewResult) {
-			switch (this.previewResult.type) {
+		if (this.resultItem.previewResult) {
+			switch (this.resultItem.previewResult.type) {
 				case EResultPreviewType.Internet:
 					return 'Internet Result';
 				case EResultPreviewType.Database:
@@ -39,7 +34,14 @@ export class ReportExpandResultItemComponent implements OnInit {
 		return '';
 	}
 
-	showMorePercentage: boolean = false;
-
+	constructor(private _reportViewSvc: ReportViewService) {}
 	ngOnInit(): void {}
+
+	clickBack() {
+		this._reportViewSvc.reportViewMode$.next({
+			isHtmlView: true,
+			viewMode: 'one-to-many',
+			sourcePageIndex: 1,
+		});
+	}
 }

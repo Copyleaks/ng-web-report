@@ -1,5 +1,4 @@
 import { Component, Input, OnInit } from '@angular/core';
-import { IMatchType } from '../models/report-result-item.models';
 import { ISourceMetadataSection, IStatistics } from 'projects/copyleaks-web-report/src/lib/models/report-data.models';
 
 @Component({

@@ -19,6 +19,21 @@
 				}
 			}
 			.result-title-container {
+				.exclude-button {
+					cursor: pointer;
+					background-color: $color-white;
+					padding: 0px;
+					border: 0px;
+					mat-icon {
+						display: flex;
+						align-items: center;
+						font-size: 20px;
+						width: 20px;
+						height: 20px;
+						color: $color-medium-dark;
+						opacity: 0.4;
+					}
+				}
 				.result-title {
 					font-weight: 700;
 					font-size: 14px;

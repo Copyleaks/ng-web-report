@@ -75,7 +75,9 @@
 			</div>
 			<div fxLayout="row" fxLayoutAlign="start center" fxLayoutGap="12px">
 				<span class="percentage-match">{{ identicalPercentage }}%</span>
-				<span *ngIf="!showTooltip" class="number-words-match">1580</span>
+				<span *ngIf="!showTooltip && iStatisticsResult" class="number-words-match">
+					{{ iStatisticsResult.identical }}
+				</span>
 			</div>
 		</div>
 		<!--minorChanges-->
@@ -86,7 +88,9 @@
 			</div>
 			<div fxLayout="row" fxLayoutAlign="start center" fxLayoutGap="12px">
 				<span class="percentage-match">{{ minorChangesPercentage }}%</span>
-				<span *ngIf="!showTooltip" class="number-words-match">6000</span>
+				<span *ngIf="!showTooltip && iStatisticsResult" class="number-words-match">
+					{{ iStatisticsResult.minorChanges }}
+				</span>
 			</div>
 		</div>
 		<!-- paraphrased -->
@@ -97,7 +101,9 @@
 			</div>
 			<div fxLayout="row" fxLayoutAlign="start center" fxLayoutGap="12px">
 				<span class="percentage-match">{{ paraphrasedPercentage }}%</span>
-				<span *ngIf="!showTooltip" class="number-words-match">50</span>
+				<span *ngIf="!showTooltip && iStatisticsResult" class="number-words-match">
+					{{ iStatisticsResult.relatedMeaning }}
+				</span>
 			</div>
 		</div>
 	</div>

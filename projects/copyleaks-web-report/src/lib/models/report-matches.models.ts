@@ -135,7 +135,16 @@ export interface AIMatch extends Match {
 	probability: number;
 }
 
+/**
+ * Type definition for allowed report origins.
+ *
+ * @type
+ * - 'original': Scan source in "one-to-many" view.
+ * - 'source': Scan source in "one-to-one" view.
+ * - 'suspect': Result view in scan report.
+ */
 export type ReportOrigin = 'original' | 'source' | 'suspect';
+
 export interface TextMatchHighlightEvent {
 	elem: ReportTextMatchComponent | null;
 	origin: ReportOrigin;

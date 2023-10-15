@@ -44,14 +44,12 @@
 }
 
 .results-container,
-.report-actions-container,
-.powered-by-copyleaks-container {
+.report-actions-container {
 	@include cls-report-container-lvl-1;
 }
 
 .powered-by-copyleaks-container {
 	display: flex;
-	@include cls-report-container-lvl-1;
 	padding: 8px;
 	justify-content: center;
 	align-items: center;

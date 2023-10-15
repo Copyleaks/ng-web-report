@@ -1,0 +1,27 @@
+<div fxLayout="row" fxLayoutAlign="space-between center">
+	<div
+		*ngIf="!showSearchFiled"
+		fxLayout="row"
+		fxLayoutAlign="start center"
+		fxLayoutGap="10px"
+		class="tootal-results-container">
+		<span class="tootal-results">{{ resultsActions.totalResults }} Results</span>
+		<mat-icon class="separate-circle-icon" fontSet="material-icons-round">circle</mat-icon>
+		<span class="tootal-excuded">{{ resultsActions.totalExcluded }} excluded</span>
+		<mat-icon class="separate-circle-icon" fontSet="material-icons-round">circle</mat-icon>
+		<span class="tootal-filtered">{{ resultsActions.totalFiltered }} filtered</span>
+	</div>
+
+	<div *ngIf="showSearchFiled" fxLayout="row" fxLayoutAlign="start center" class="input-search-container">
+		<button class="search-button" (click)="startSearch()">
+			<mat-icon>search</mat-icon>
+		</button>
+		<input placeholder="Search {item type}" type="text" />
+		<mat-icon fontSet="material-icons-outlined" (click)="showSearch()">cancel</mat-icon>
+	</div>
+
+	<div fxLayout="row" fxLayoutAlign="start center" fxLayoutGap="8px" class="results-search-filter-container">
+		<mat-icon *ngIf="!showSearchFiled" (click)="showSearch()">search</mat-icon>
+		<mat-icon (click)="showFilterDialog()">filter_list</mat-icon>
+	</div>
+</div>

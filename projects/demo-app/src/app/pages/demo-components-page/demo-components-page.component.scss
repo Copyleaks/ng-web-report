@@ -1,5 +1,26 @@
+@import '../../../../../copyleaks-web-report/src/lib/styles/website-colors.styles.scss';
 :host {
 	display: flex;
 	flex-direction: column;
 	width: 100%;
+}
+
+.component-conatiner {
+	.results-item-container {
+		width: 100%;
+		background-color: $color-white;
+		border-radius: 10px;
+		padding: 5px;
+	}
+	span {
+		font-size: 14px;
+		font-weight: 500;
+	}
+
+	.component {
+		width: 700px;
+		padding: 10px;
+		border-radius: 10px;
+		background-color: $color-white;
+	}
 }

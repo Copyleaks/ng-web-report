@@ -15,7 +15,7 @@ import {
 import { Comparison, ICompleteResultNotificationAlert, IScanSource } from '../models/report-data.models';
 
 import { CopyleaksReportOptions } from '../models/report-options.models';
-import { EMatchClassification } from '../enums/copyleaks-web-report.enums';
+import { EExcludeReason, EMatchClassification } from '../enums/copyleaks-web-report.enums';
 
 /** A reduce function to extrace `MatchEndpoint`s */
 const extractMatchEndpoints = (acc: MatchEndpoint[], curr: Match): MatchEndpoint[] => {
@@ -499,4 +499,34 @@ export const processSuspectHtml = (suspect: ResultDetailItem, options: Copyleaks
 	const related = options.showRelated ? suspectHtmlRelatedMeaning(suspect) : [];
 	const grouped = mergeMatches([...identical, ...minor, ...related]);
 	return fillMissingGaps(grouped, suspect.result?.html.value?.length ?? 0);
+};
+
+/**
+ * Render list of matches in the iframe's HTML
+ * @param matches the matches to render
+ */
+export const getRenderedMatches = (matches: Match[] | null, originalHtml: string): string | null => {
+	if (!matches || !originalHtml) return originalHtml;
+
+	// Add the matches to the html and return the updated html
+	const html = matches.reduceRight((prev: string, curr: Match, i: number) => {
+		let slice = originalHtml?.substring(curr.start, curr.end);
+		switch (curr.type) {
+			case MatchType.excluded:
+				if (curr.reason === EExcludeReason.PartialScan) {
+					slice = `<span exclude-partial-scan data-type="${curr.type}" data-index="${i}">${slice}</span>`;
+				} else {
+					slice = `<span exclude>${slice}</span>`;
+				}
+				break;
+			case MatchType.none:
+				break;
+			default:
+				slice = `<span match data-type="${curr.type}" data-index="${i}" data-gid="${curr.gid}">${slice}</span>`;
+				break;
+		}
+		return slice ? slice?.concat(prev) : '';
+	}, '');
+
+	return html;
 };

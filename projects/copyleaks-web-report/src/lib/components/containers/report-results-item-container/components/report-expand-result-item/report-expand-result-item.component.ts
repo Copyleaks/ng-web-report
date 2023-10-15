@@ -1,6 +1,5 @@
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { EResultPreviewType } from 'projects/copyleaks-web-report/src/lib/enums/copyleaks-web-report.enums';
-import { IResultPreviewBase } from 'projects/copyleaks-web-report/src/lib/models/report-data.models';
 import { IResultItem } from '../models/report-result-item.models';
 import { ReportViewService } from 'projects/copyleaks-web-report/src/lib/services/report-view.service';
 
@@ -12,10 +11,12 @@ import { ReportViewService } from 'projects/copyleaks-web-report/src/lib/service
 export class ReportExpandResultItemComponent implements OnInit {
 	@Input() resultItem: IResultItem;
 	@Input() languageResult: string[] = ['Chips', 'Chips'];
+	@Output() excludeResultEvent = new EventEmitter<string>();
 
 	showMorePercentage: boolean = false;
 	eResultPreviewType = EResultPreviewType;
-	exclude: boolean;
+	exclude: boolean = false;
+
 	get authorName() {
 		if (this.resultItem.previewResult) {
 			switch (this.resultItem.previewResult.type) {
@@ -43,5 +44,10 @@ export class ReportExpandResultItemComponent implements OnInit {
 			viewMode: 'one-to-many',
 			sourcePageIndex: 1,
 		});
+	}
+
+	excludeResult() {
+		this.exclude = !this.exclude;
+		this.excludeResultEvent.emit(this.resultItem.previewResult.id);
 	}
 }

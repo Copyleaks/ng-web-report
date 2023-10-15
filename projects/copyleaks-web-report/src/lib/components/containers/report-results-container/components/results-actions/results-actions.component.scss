@@ -1,0 +1,67 @@
+@import '../../../../../styles/website-colors.styles.scss';
+
+.tootal-results-container {
+	.tootal-results {
+		font-weight: 700;
+		font-size: 14px;
+	}
+
+	.separate-circle-icon {
+		height: 4px;
+		width: 4px;
+		font-size: 4px;
+		color: $color-medium-dark;
+		opacity: 0.4;
+	}
+
+	.tootal-excuded,
+	.tootal-filtered {
+		font-weight: 400;
+		font-size: 14px;
+		color: $color-primary;
+		text-decoration: underline;
+	}
+}
+
+.input-search-container {
+	border: 1px solid;
+	border-color: $color-primary;
+	background-color: $color-container-background;
+	border-radius: 30px;
+	padding: 2px;
+	width: 100%;
+	mat-icon {
+		color: $color-black;
+		cursor: pointer;
+		height: 18px;
+		width: 18px;
+		font-size: 18px;
+	}
+	.search-button {
+		display: flex;
+		align-items: center;
+		justify-content: center;
+		background-color: $color-white;
+		border-radius: 50%;
+		height: 24px;
+		width: 24px;
+		padding: 0;
+		border: 0;
+	}
+	input {
+		width: 100%;
+		border: 0px;
+		outline: 0px;
+		background-color: $color-container-background;
+	}
+}
+
+.results-search-filter-container {
+	mat-icon {
+		cursor: pointer;
+		color: $color-dark-blue;
+		height: 18px;
+		width: 18px;
+		font-size: 18px;
+	}
+}

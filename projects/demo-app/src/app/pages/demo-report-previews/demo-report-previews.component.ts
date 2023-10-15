@@ -11,9 +11,9 @@ export class DemoReportPreviewsComponent {
 	ReportLayoutType = EReportLayoutType;
 	endpointsConfig: IClsReportEndpointConfigModel = {
 		authToken: '', // optional
-		crawledVersion: `assets/scans/bundle/default/source.json`,
-		completeResults: `assets/scans/bundle/default/complete.json`,
-		result: `assets/scans/bundle/default/results/{RESULT_ID}`, // inside the package, we will be assignment the RESULT_ID
+		crawledVersion: `assets/scans/bundle/Filter/source.json`,
+		completeResults: `assets/scans/bundle/Filter/complete.json`,
+		result: `assets/scans/bundle/Filter/results/{RESULT_ID}`, // inside the package, we will be assignment the RESULT_ID
 		filter: {
 			get: '', // optional
 			update: '', // optional

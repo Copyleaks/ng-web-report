@@ -195,7 +195,7 @@
 	</ng-container>
 
 	<cls-paginator
-		*ngIf="!isHtmlView || !hasHtml || isAlertsView"
+		*ngIf="(!isHtmlView || !hasHtml || isAlertsView) && numberOfPages > 1"
 		[pageIndex]="currentPage"
 		[numberOfPages]="numberOfPages"
 		(page)="onPaginationEvent($event)"></cls-paginator>

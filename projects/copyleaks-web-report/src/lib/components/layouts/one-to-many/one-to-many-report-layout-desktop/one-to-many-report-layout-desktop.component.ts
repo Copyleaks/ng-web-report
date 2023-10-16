@@ -8,13 +8,14 @@ import { ReportViewService } from '../../../../services/report-view.service';
 import { ReportLayoutBaseComponent } from '../../base/report-layout-base.component';
 import { ReportMatchHighlightService } from 'projects/copyleaks-web-report/src/lib/services/report-match-highlight.service';
 import { EResponsiveLayoutType } from 'projects/copyleaks-web-report/src/lib/enums/copyleaks-web-report.enums';
+import { untilDestroy } from 'projects/copyleaks-web-report/src/lib/utils/untilDestroy';
 
 @Component({
 	selector: 'copyleaks-one-to-many-report-layout-desktop',
 	templateUrl: './one-to-many-report-layout-desktop.component.html',
 	styleUrls: ['./one-to-many-report-layout-desktop.component.scss'],
 })
-export class OneToManyReportLayoutDesktopComponent extends ReportLayoutBaseComponent implements OnInit {
+export class OneToManyReportLayoutDesktopComponent extends ReportLayoutBaseComponent implements OnInit, OnDestroy {
 	hideRightSection: boolean = false;
 
 	reportCrawledVersion: IScanSource;
@@ -47,14 +48,14 @@ export class OneToManyReportLayoutDesktopComponent extends ReportLayoutBaseCompo
 	}
 
 	ngOnInit(): void {
-		this.reportDataSvc.crawledVersion$.subscribe(data => {
+		this.reportDataSvc.crawledVersion$.pipe(untilDestroy(this)).subscribe(data => {
 			if (data) {
 				this.reportCrawledVersion = data;
 				this.numberOfPages = data.text?.pages?.startPosition?.length ?? 1;
 			}
 		});
 
-		this.matchSvc.originalHtmlMatches$.subscribe(data => {
+		this.matchSvc.originalHtmlMatches$.pipe(untilDestroy(this)).subscribe(data => {
 			const updatedHtml = this._getRenderedMatches(data, this.reportCrawledVersion?.html.value);
 			if (updatedHtml && data) {
 				this.iframeHtml = updatedHtml;
@@ -63,17 +64,17 @@ export class OneToManyReportLayoutDesktopComponent extends ReportLayoutBaseCompo
 			}
 		});
 
-		this.matchSvc.originalTextMatches$.subscribe(data => {
+		this.matchSvc.originalTextMatches$.pipe(untilDestroy(this)).subscribe(data => {
 			if (data) {
 				this.contentTextMatches = data;
 			}
 		});
 
-		this.reportViewSvc.reportViewMode$.subscribe(data => {
+		this.reportViewSvc.reportViewMode$.pipe(untilDestroy(this)).subscribe(data => {
 			if (!data) return;
 			this.isHtmlView = data.isHtmlView;
 			this.currentPageSource = data.sourcePageIndex;
-			this.reportDataSvc.scanResultsPreviews$.subscribe(previews => {
+			this.reportDataSvc.scanResultsPreviews$.pipe(untilDestroy(this)).subscribe(previews => {
 				if (previews && previews.notifications) {
 					const selectedAlert = previews.notifications.alerts.find(a => a.code === data.alertCode);
 					if (selectedAlert) {
@@ -116,4 +117,6 @@ export class OneToManyReportLayoutDesktopComponent extends ReportLayoutBaseCompo
 				console.error('unknown event', message);
 		}
 	}
+
+	ngOnDestroy(): void {}
 }

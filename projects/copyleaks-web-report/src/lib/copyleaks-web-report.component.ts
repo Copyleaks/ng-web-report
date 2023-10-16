@@ -10,6 +10,7 @@ import { IClsReportEndpointConfigModel, ViewMode } from './models/report-config.
 import { ReportMatchHighlightService } from './services/report-match-highlight.service';
 import { ActivatedRoute, Router } from '@angular/router';
 import { IReportViewEvent, IReportViewQueryParams } from './models/report-view.models';
+import { untilDestroy } from './utils/untilDestroy';
 
 @Component({
 	selector: 'copyleaks-web-report',
@@ -50,10 +51,6 @@ export class CopyleaksWebReportComponent implements OnInit, OnDestroy {
 	// Template references related properties
 	customActionsTemplateRef: TemplateRef<any>;
 	customResultsTemplateRef: TemplateRef<any>;
-
-	layoutChangesSub: any;
-	queryParamsSub: any;
-	viewChangesSub: any;
 
 	constructor(
 		private _breakpointObserver: BreakpointObserver,
@@ -113,7 +110,7 @@ export class CopyleaksWebReportComponent implements OnInit, OnDestroy {
 			Breakpoints.TabletPortrait,
 		]);
 
-		this.layoutChangesSub = layoutChanges
+		layoutChanges
 			.pipe(
 				map(result => {
 					if (result.matches) {
@@ -137,7 +134,8 @@ export class CopyleaksWebReportComponent implements OnInit, OnDestroy {
 						else return EResponsiveLayoutType.Mobile;
 					}
 					return null;
-				})
+				}),
+				untilDestroy(this)
 			)
 			.subscribe((layout: EResponsiveLayoutType | null) => {
 				this.responsiveLayoutType = layout;
@@ -177,7 +175,7 @@ export class CopyleaksWebReportComponent implements OnInit, OnDestroy {
 			alertCode: alertCode,
 		} as IReportViewEvent);
 
-		this._reportViewSvc.reportViewMode$.subscribe(data => {
+		this._reportViewSvc.reportViewMode$.pipe(untilDestroy(this)).subscribe(data => {
 			if (!data) return;
 			let updatedParams: IReportViewQueryParams = {
 				viewMode: data.viewMode,
@@ -212,9 +210,5 @@ export class CopyleaksWebReportComponent implements OnInit, OnDestroy {
 		});
 	}
 
-	ngOnDestroy() {
-		if (this.layoutChangesSub) this.layoutChangesSub.unsubscribe();
-		if (this.queryParamsSub) this.queryParamsSub.unsubscribe();
-		if (this.viewChangesSub) this.viewChangesSub.unsubscribe();
-	}
+	ngOnDestroy() {}
 }

@@ -9,6 +9,7 @@ import {
 	TemplateRef,
 } from '@angular/core';
 import { ReportNgTemplatesService } from '../../../services/report-ng-templates.service';
+import { untilDestroy } from '../../../utils/untilDestroy';
 
 @Component({
 	selector: 'copyleaks-report-actions-container',
@@ -51,7 +52,7 @@ export class ReportActionsContainerComponent implements OnInit, AfterViewInit, O
 				?.customActionsTemplate as TemplateRef<any>;
 
 		// Starts a subscription for the custom actions reference changes
-		this.customTemplateRefSub = this._reportNgTemplatesSvc.reportTemplatesSubject$.subscribe(refs => {
+		this._reportNgTemplatesSvc.reportTemplatesSubject$.pipe(untilDestroy(this)).subscribe(refs => {
 			if (refs?.customActionsTemplate !== undefined && this.customActionsTemplateRef == undefined) {
 				this.customActionsTemplateRef = refs?.customActionsTemplate as TemplateRef<any>;
 				this.cdr.detectChanges();
@@ -63,7 +64,5 @@ export class ReportActionsContainerComponent implements OnInit, AfterViewInit, O
 		this.display = 'none';
 	}
 
-	ngOnDestroy(): void {
-		if (this.customTemplateRefSub) this.customTemplateRefSub.unsubscribe();
-	}
+	ngOnDestroy(): void {}
 }

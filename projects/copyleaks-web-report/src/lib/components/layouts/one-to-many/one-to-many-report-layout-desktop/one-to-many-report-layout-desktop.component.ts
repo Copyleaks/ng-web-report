@@ -8,7 +8,7 @@ import { ReportViewService } from '../../../../services/report-view.service';
 import { ReportLayoutBaseComponent } from '../../base/report-layout-base.component';
 import { ReportMatchHighlightService } from 'projects/copyleaks-web-report/src/lib/services/report-match-highlight.service';
 import { EResponsiveLayoutType } from 'projects/copyleaks-web-report/src/lib/enums/copyleaks-web-report.enums';
-import { untilDestroy } from 'projects/copyleaks-web-report/src/lib/utils/untilDestroy';
+import { untilDestroy } from 'projects/copyleaks-web-report/src/lib/utils/until-destroy';
 
 @Component({
 	selector: 'copyleaks-one-to-many-report-layout-desktop',

@@ -1,4 +1,4 @@
-import { ReportTextMatchComponent } from '../directives/report-text-match/report-text-match.component';
+import { ReportTextMatchComponent } from '../components/core/report-text-match/report-text-match.component';
 import { EMatchClassification } from '../enums/copyleaks-web-report.enums';
 
 import { EExcludeReason } from '../enums/copyleaks-web-report.enums';

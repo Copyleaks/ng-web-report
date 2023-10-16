@@ -10,7 +10,7 @@ import { BehaviorSubject, Subscription, forkJoin, from } from 'rxjs';
 import { concatMap } from 'rxjs/operators';
 import { ResultDetailItem } from '../models/report-matches.models';
 import { IClsReportEndpointConfigModel } from '../models/report-config.models';
-import { untilDestroy } from '../utils/untilDestroy';
+import { untilDestroy } from '../utils/until-destroy';
 
 @Injectable()
 export class ReportDataService {

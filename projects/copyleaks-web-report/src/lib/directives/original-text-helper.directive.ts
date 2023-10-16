@@ -2,11 +2,11 @@ import { AfterContentInit, ContentChildren, Directive, Input, OnDestroy, QueryLi
 import { distinctUntilChanged, filter, take, takeUntil, withLatestFrom } from 'rxjs/operators';
 import { ReportMatchHighlightService } from '../services/report-match-highlight.service';
 import * as helpers from '../utils/highlight-helpers';
-import { ReportTextMatchComponent } from './report-text-match/report-text-match.component';
+import { ReportTextMatchComponent } from '../components/core/report-text-match/report-text-match.component';
 import { ReportViewService } from '../services/report-view.service';
 import { TextMatchHighlightEvent } from '../models/report-matches.models';
 import { Subject } from 'rxjs';
-import { untilDestroy } from '../utils/untilDestroy';
+import { untilDestroy } from '../utils/until-destroy';
 
 @Directive({
 	selector: '[crOriginalTextHelper]',

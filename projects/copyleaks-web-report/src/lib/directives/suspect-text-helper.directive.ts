@@ -5,11 +5,11 @@ import { Match } from '../models/report-matches.models';
 import { ReportDataService } from '../services/report-data.service';
 import { ReportMatchHighlightService } from '../services/report-match-highlight.service';
 import { ReportViewService } from '../services/report-view.service';
-import { ReportTextMatchComponent } from './report-text-match/report-text-match.component';
+import { ReportTextMatchComponent } from '../components/core/report-text-match/report-text-match.component';
 import { IResultDetailResponse } from '../models/report-data.models';
 import * as helpers from '../utils/highlight-helpers';
 import { Subject } from 'rxjs';
-import { untilDestroy } from '../utils/untilDestroy';
+import { untilDestroy } from '../utils/until-destroy';
 
 @Directive({
 	selector: '[crSuspectTextHelper]',

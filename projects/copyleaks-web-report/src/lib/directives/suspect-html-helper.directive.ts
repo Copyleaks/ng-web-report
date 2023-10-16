@@ -8,7 +8,7 @@ import { findRespectiveStart } from '../utils/report-match-helpers';
 import { MatchSelectEvent } from '../models/report-iframe-events.models';
 import { IComparisonCollection } from '../models/report-data.models';
 import { Subject } from 'rxjs';
-import { untilDestroy } from '../utils/untilDestroy';
+import { untilDestroy } from '../utils/until-destroy';
 
 @Directive({
 	selector: '[crSuspectHtmlHelper]',

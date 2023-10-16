@@ -1,18 +1,7 @@
-import {
-	AfterContentInit,
-	Component,
-	ElementRef,
-	EventEmitter,
-	HostBinding,
-	HostListener,
-	Input,
-	OnDestroy,
-	Output,
-	Renderer2,
-} from '@angular/core';
-import { Match, ReportOrigin } from '../../models/report-matches.models';
+import { AfterContentInit, Component, ElementRef, HostBinding, HostListener, Input, Renderer2 } from '@angular/core';
+import { Match, ReportOrigin } from '../../../models/report-matches.models';
 import scrollIntoView from 'scroll-into-view-if-needed';
-import { ReportMatchHighlightService } from '../../services/report-match-highlight.service';
+import { ReportMatchHighlightService } from '../../../services/report-match-highlight.service';
 
 @Component({
 	selector: 'span[cr-match]',

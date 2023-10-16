@@ -4,7 +4,7 @@ import { ReportMatchHighlightService } from '../services/report-match-highlight.
 import { ReportViewService } from '../services/report-view.service';
 import { MatchJumpEvent } from '../models/report-iframe-events.models';
 import { Subject } from 'rxjs';
-import { untilDestroy } from '../utils/untilDestroy';
+import { untilDestroy } from '../utils/until-destroy';
 
 @Directive({
 	selector: '[crOriginalHtmlHelper]',

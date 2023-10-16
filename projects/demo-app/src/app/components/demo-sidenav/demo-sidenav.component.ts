@@ -51,6 +51,20 @@ export class DemoSidenavComponent implements OnInit {
 			});
 	}
 
+	navigateToOneToOneReportPreview() {
+		this._router
+			.navigate([`/previews/Filter`], {
+				queryParams: {
+					viewMode: 'one-to-one',
+					contentMode: 'html',
+					suspectId: 'b031b941a1',
+				},
+			})
+			.then(() => {
+				window.location.reload();
+			});
+	}
+
 	openMenu(trigger: MatMenuTrigger) {
 		trigger.openMenu();
 	}

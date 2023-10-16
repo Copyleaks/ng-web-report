@@ -9,7 +9,7 @@ import {
 	TemplateRef,
 } from '@angular/core';
 import { ReportNgTemplatesService } from '../../../services/report-ng-templates.service';
-import { untilDestroy } from '../../../utils/untilDestroy';
+import { untilDestroy } from '../../../utils/until-destroy';
 
 @Component({
 	selector: 'copyleaks-report-actions-container',

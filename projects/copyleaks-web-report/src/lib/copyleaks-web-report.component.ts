@@ -10,7 +10,7 @@ import { IClsReportEndpointConfigModel, ViewMode } from './models/report-config.
 import { ReportMatchHighlightService } from './services/report-match-highlight.service';
 import { ActivatedRoute, Router } from '@angular/router';
 import { IReportViewEvent, IReportViewQueryParams } from './models/report-view.models';
-import { untilDestroy } from './utils/untilDestroy';
+import { untilDestroy } from './utils/until-destroy';
 
 @Component({
 	selector: 'copyleaks-web-report',

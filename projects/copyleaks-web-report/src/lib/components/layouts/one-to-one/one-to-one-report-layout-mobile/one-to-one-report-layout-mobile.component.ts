@@ -17,7 +17,7 @@ import * as helpers from '../../../../utils/report-match-helpers';
 import { ReportLayoutBaseComponent } from '../../base/report-layout-base.component';
 import { EResponsiveLayoutType } from 'projects/copyleaks-web-report/src/lib/enums/copyleaks-web-report.enums';
 import { filter } from 'rxjs/operators';
-import { untilDestroy } from 'projects/copyleaks-web-report/src/lib/utils/untilDestroy';
+import { untilDestroy } from 'projects/copyleaks-web-report/src/lib/utils/until-destroy';
 
 @Component({
 	selector: 'copyleaks-one-to-one-report-layout-mobile',

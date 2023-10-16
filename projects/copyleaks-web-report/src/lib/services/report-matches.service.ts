@@ -9,7 +9,7 @@ import { SlicedMatch, Match, ResultDetailItem } from '../models/report-matches.m
 import { ReportViewService } from './report-view.service';
 import { IReportViewEvent } from '../models/report-view.models';
 import { ALERTS } from '../enums/copyleaks-web-report.consts';
-import { untilDestroy } from '../utils/untilDestroy';
+import { untilDestroy } from '../utils/until-destroy';
 
 /**
  * Service that calculates the matches highlight positions with respect to the view and content mode.

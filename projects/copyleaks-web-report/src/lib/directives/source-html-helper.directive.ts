@@ -7,7 +7,7 @@ import { ReportViewService } from '../services/report-view.service';
 import { findRespectiveStart } from '../utils/report-match-helpers';
 import { ReportMatchesService } from '../services/report-matches.service';
 import { IComparisonCollection } from '../models/report-data.models';
-import { untilDestroy } from '../utils/untilDestroy';
+import { untilDestroy } from '../utils/until-destroy';
 
 @Directive({
 	selector: '[crSourceHtmlHelper]',

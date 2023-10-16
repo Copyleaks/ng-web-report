@@ -19,7 +19,7 @@ import { PostMessageEvent } from 'projects/copyleaks-web-report/src/lib/models/r
 import { ReportMatchHighlightService } from 'projects/copyleaks-web-report/src/lib/services/report-match-highlight.service';
 import { ReportLayoutBaseComponent } from '../../base/report-layout-base.component';
 import { filter } from 'rxjs/operators';
-import { untilDestroy } from 'projects/copyleaks-web-report/src/lib/utils/untilDestroy';
+import { untilDestroy } from 'projects/copyleaks-web-report/src/lib/utils/until-destroy';
 
 @Component({
 	selector: 'copyleaks-one-to-one-report-layout-desktop',

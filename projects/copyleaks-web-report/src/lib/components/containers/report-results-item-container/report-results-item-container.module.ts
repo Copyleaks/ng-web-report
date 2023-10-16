@@ -12,6 +12,7 @@ import { PercentageResultItemComponent } from './components/percentage-result-it
 import { ReportViewService } from '../../../services/report-view.service';
 import { ReportExpandResultItemComponent } from './components/report-expand-result-item/report-expand-result-item.component';
 import { MatChipsModule } from '@angular/material/chips';
+import { UnavailableResultItemComponent } from './components/unavailable-result-item/unavailable-result-item.component';
 
 @NgModule({
 	declarations: [
@@ -19,8 +20,14 @@ import { MatChipsModule } from '@angular/material/chips';
 		ReportResultsItemComponent,
 		PercentageResultItemComponent,
 		ReportExpandResultItemComponent,
+		UnavailableResultItemComponent,
 	],
-	exports: [ReportResultsItemContainerComponent, ReportResultsItemComponent, ReportExpandResultItemComponent],
+	exports: [
+		ReportResultsItemContainerComponent,
+		ReportResultsItemComponent,
+		ReportExpandResultItemComponent,
+		UnavailableResultItemComponent,
+	],
 	imports: [
 		CommonModule,
 		MatIconModule,

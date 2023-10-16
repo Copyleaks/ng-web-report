@@ -43,7 +43,7 @@ export class DemoSidenavComponent implements OnInit {
 			.navigate([`/previews/${option ?? 'default'}`], {
 				queryParams: {
 					alertCode: alertCode,
-					contentMode: 'text',
+					contentMode: alertCode ? 'text' : 'html',
 				},
 			})
 			.then(() => {

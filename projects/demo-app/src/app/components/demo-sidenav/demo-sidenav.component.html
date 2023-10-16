@@ -108,19 +108,35 @@
 </mat-sidenav-container>
 
 <mat-menu #previewsMenu="matMenu">
-	<button (click)="navigateToReportPreview('default')" mat-menu-item>
+	<button
+		(click)="navigateToReportPreview('default')"
+		matTooltip="Scanned Website Example"
+		matTooltipPosition="right"
+		mat-menu-item>
 		<mat-icon class="item-icon" fontSet="material-icons-round">code</mat-icon>
 		<span class="item-text">HTML</span>
 	</button>
-	<button (click)="navigateToReportPreview('Filter')" mat-menu-item>
+	<button
+		(click)="navigateToReportPreview('Filter')"
+		matTooltipPosition="right"
+		matTooltip="Scanned PDF Example"
+		mat-menu-item>
 		<mat-icon class="item-icon" fontSet="material-icons-round">picture_as_pdf</mat-icon>
 		<span class="item-text">PDF</span>
 	</button>
-	<button (click)="navigateToReportPreview('ai-content', 'suspected-ai-text')" mat-menu-item>
+	<button
+		(click)="navigateToReportPreview('ai-content', 'suspected-ai-text')"
+		matTooltipPosition="right"
+		matTooltip="Suspected AI Text Example"
+		mat-menu-item>
 		<mat-icon class="item-icon" fontSet="material-icons-round">smart_toy</mat-icon>
 		<span class="item-text">AI</span>
 	</button>
-	<button (click)="navigateToReportPreview('default', 'suspected-character-replacement')" mat-menu-item>
+	<button
+		(click)="navigateToReportPreview('default', 'suspected-character-replacement')"
+		matTooltipPosition="right"
+		matTooltip="Suspected Character Replacement Example"
+		mat-menu-item>
 		<mat-icon class="item-icon" fontSet="material-icons-round">text_fields</mat-icon>
 		<span class="item-text">SCR</span>
 	</button>

@@ -45,7 +45,6 @@
 	}
 
 	.results-alerts-container {
-		@include cls-report-container-lvl-2;
 		padding: 10px;
 		display: flex;
 		flex-direction: column;
@@ -55,11 +54,11 @@
 		overflow-y: auto;
 
 		copyleaks-report-alerts-container {
-			height: 35%;
+			max-height: 35%;
 			overflow-y: auto;
 		}
 		copyleaks-report-results-container {
-			height: 65%;
+			height: 95%;
 			overflow-y: auto;
 		}
 	}

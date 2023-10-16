@@ -41,6 +41,7 @@
 		border: 0;
 		background-color: $color-white;
 		padding: 0px;
+		gap: 4px;
 		cursor: pointer;
 		mat-icon {
 			width: 18px;
@@ -52,6 +53,16 @@
 			font-size: 14px;
 			font-weight: 500;
 			color: $color-primary;
+		}
+	}
+
+	.alert-card-preview:hover {
+		mat-icon {
+			color: $color-primary;
+		}
+
+		span {
+			text-decoration: underline;
 		}
 	}
 	.disclamer {

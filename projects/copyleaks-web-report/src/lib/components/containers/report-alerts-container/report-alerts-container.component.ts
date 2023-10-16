@@ -1,4 +1,5 @@
 import { Component, HostBinding, Input, OnInit } from '@angular/core';
+import { ICompleteResultNotificationAlert } from '../../../models/report-data.models';
 
 @Component({
 	selector: 'copyleaks-report-alerts-container',
@@ -17,11 +18,14 @@ export class ReportAlertsContainerComponent implements OnInit {
 	 */
 	@Input() flexGrow: number;
 
+	/**
+	 * @Input Alerts list.
+	 */
+	@Input() alerts: ICompleteResultNotificationAlert[];
+
+	hideAlerts: boolean = false;
+
 	ngOnInit(): void {
 		if (this.flexGrow !== undefined && this.flexGrow !== null) this.flexGrowProp = this.flexGrow;
-	}
-
-	hideAlertsContainer() {
-		this.display = 'none';
 	}
 }

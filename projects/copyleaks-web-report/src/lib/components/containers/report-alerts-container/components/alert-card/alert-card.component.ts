@@ -1,8 +1,8 @@
 import { Component, Input, OnInit } from '@angular/core';
 import { ALERTS } from 'projects/copyleaks-web-report/src/lib/enums/copyleaks-web-report.consts';
 import { ECompleteResultNotificationAlertSeverity } from 'projects/copyleaks-web-report/src/lib/enums/copyleaks-web-report.enums';
-import { ReportAlertsService } from '../../service/report-alerts.service';
 import { ICompleteResultNotificationAlert } from 'projects/copyleaks-web-report/src/lib/models/report-data.models';
+import { ReportViewService } from 'projects/copyleaks-web-report/src/lib/services/report-view.service';
 
 @Component({
 	selector: 'cr-alert-card',
@@ -11,6 +11,8 @@ import { ICompleteResultNotificationAlert } from 'projects/copyleaks-web-report/
 })
 export class AlertCardComponent implements OnInit {
 	@Input() alert: ICompleteResultNotificationAlert;
+	@Input() isSelected: boolean = false;
+
 	severity = ECompleteResultNotificationAlertSeverity;
 
 	matChipList: string[] = ['Late', 'Late'];
@@ -18,20 +20,24 @@ export class AlertCardComponent implements OnInit {
 
 	get displayPreviewButton() {
 		return (
-			this.alert?.helpLink &&
-			(this.alert?.code == ALERTS.SUSPECTED_CHARACTER_REPLACEMENT_CODE ||
-				this.alert?.code == ALERTS.SUSPECTED_AI_TEXT_DETECTED)
+			(this.alert?.helpLink && this.alert?.code == ALERTS.SUSPECTED_CHARACTER_REPLACEMENT_CODE) ||
+			this.alert?.code == ALERTS.SUSPECTED_AI_TEXT_DETECTED
 		);
 	}
 
-	get selectedAlert() {
-		return this._reportAlertsService?.showAlertPreview$.value;
+	constructor(private _reportView: ReportViewService) {}
+
+	ngOnInit(): void {
+		if (this._reportView.reportViewMode.alertCode == this.alert.code) this.isSelected = true;
 	}
-	constructor(private _reportAlertsService: ReportAlertsService) {}
 
-	ngOnInit(): void {}
+	toggleAlertPreview() {
+		this.isSelected = !this.isSelected;
 
-	showAlertPreview() {
-		this._reportAlertsService.setShowAlertPreview$(!this.selectedAlert);
+		this._reportView.selectedAlert$.next(!this.isSelected ? null : this.alert);
+		this._reportView.reportViewMode$.next({
+			...this._reportView.reportViewMode,
+			alertCode: !this.isSelected ? undefined : this.alert.code,
+		});
 	}
 }

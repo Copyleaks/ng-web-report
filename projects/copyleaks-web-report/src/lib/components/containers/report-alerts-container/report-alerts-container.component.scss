@@ -1,11 +1,70 @@
-@import '../../../styles/containers.styles.scss';
+@import '../../../styles/website-colors.styles.scss';
 
 :host {
-	@include cls-report-container-lvl-3;
-	@include cls-report-container-close-btn;
-
 	display: flex;
-	align-items: center;
-	justify-content: center;
+	flex-direction: column;
+	align-items: flex-start;
+	justify-content: flex-start;
+	gap: 8px;
 	flex-grow: 35;
+
+	.container-title {
+		display: flex;
+		flex-direction: row;
+		gap: 16px;
+		flex-wrap: wrap;
+		align-items: center;
+		justify-content: flex-start;
+
+		mat-icon {
+			$icon-size: 24px;
+			font-size: $icon-size;
+			width: $icon-size;
+			height: $icon-size;
+			color: $color-error;
+		}
+
+		.title {
+			color: $color-black;
+			font-size: 18px;
+			font-style: normal;
+			font-weight: 700;
+		}
+	}
+
+	.container-alerts {
+		display: flex;
+		flex-direction: column;
+		align-items: flex-start;
+		justify-content: flex-start;
+		gap: 8px;
+		overflow-x: hidden;
+		max-height: 100%;
+		overflow-y: auto;
+
+		cr-alert-card {
+			width: 100%;
+		}
+	}
+
+	.hide-alerts-icon {
+		$icon-size: 18px;
+		font-size: $icon-size;
+		width: $icon-size;
+		height: $icon-size;
+		color: $color-black;
+		cursor: pointer;
+	}
+
+	.hide-alerts-icon:hover {
+		color: $color-primary;
+	}
+
+	.container-top {
+		display: flex;
+		flex-direction: row;
+		justify-content: space-between;
+		align-items: center;
+		width: 100%;
+	}
 }

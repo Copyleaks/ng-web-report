@@ -2,7 +2,7 @@ import { Component, OnDestroy, OnInit, Renderer2 } from '@angular/core';
 import { ReportDataService } from '../../../../services/report-data.service';
 import { ReportMatchesService } from '../../../../services/report-matches.service';
 import { Match, SlicedMatch } from '../../../../models/report-matches.models';
-import { IScanSource, ResultPreview } from '../../../../models/report-data.models';
+import { ICompleteResultNotificationAlert, IScanSource, ResultPreview } from '../../../../models/report-data.models';
 import { PostMessageEvent } from '../../../../models/report-iframe-events.models';
 import { ReportViewService } from 'projects/copyleaks-web-report/src/lib/services/report-view.service';
 import { ReportLayoutBaseComponent } from '../../base/report-layout-base.component';
@@ -28,6 +28,7 @@ export class OneToManyReportLayoutMobileComponent extends ReportLayoutBaseCompon
 
 	oneToOneRerendered: boolean = false;
 	EResponsiveLayoutType = EResponsiveLayoutType;
+	alerts: ICompleteResultNotificationAlert[];
 
 	override get rerendered(): boolean {
 		return this.oneToOneRerendered;
@@ -56,6 +57,10 @@ export class OneToManyReportLayoutMobileComponent extends ReportLayoutBaseCompon
 		});
 
 		this.matchSvc.originalHtmlMatches$.pipe(untilDestroy(this)).subscribe(data => {
+			if (data != this.reportMatches) {
+				this.oneToOneRerendered = false;
+			}
+			this.reportMatches = data ?? [];
 			const updatedHtml = this._getRenderedMatches(data, this.reportCrawledVersion?.html.value);
 			if (updatedHtml && data) {
 				this.iframeHtml = updatedHtml;
@@ -73,6 +78,16 @@ export class OneToManyReportLayoutMobileComponent extends ReportLayoutBaseCompon
 			if (!data) return;
 			this.isHtmlView = data.isHtmlView;
 			this.currentPageSource = data.sourcePageIndex;
+			this.reportDataSvc.scanResultsPreviews$.pipe(untilDestroy(this)).subscribe(previews => {
+				if (previews && previews.notifications) {
+					const selectedAlert = previews.notifications.alerts.find(a => a.code === data.alertCode);
+					if (selectedAlert) {
+						this.reportViewSvc.selectedAlert$.next(selectedAlert);
+						this.isHtmlView = false;
+					}
+					this.alerts = previews.notifications?.alerts ?? [];
+				}
+			});
 		});
 	}
 

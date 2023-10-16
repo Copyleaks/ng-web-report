@@ -48,9 +48,9 @@
 		</mat-icon>
 		<span class="icon-tooltip-wrapper" [matTooltip]="!hasHtml ? 'Only text view is available' : ''">
 			<mat-icon
-				*ngIf="isHtmlView && hasHtml && !isAlertsView"
+				*ngIf="isHtmlView && hasHtml"
 				[ngClass]="{
-					'disabled-icon': !hasHtml
+					'disabled-icon': !hasHtml || isAlertsView
 				}"
 				fontSet="material-icons-round"
 				(click)="onViewChange()"
@@ -58,9 +58,9 @@
 				title
 			</mat-icon>
 			<mat-icon
-				*ngIf="(!isHtmlView || (isHtmlView && !hasHtml)) && !isAlertsView"
+				*ngIf="!isHtmlView || (isHtmlView && !hasHtml)"
 				[ngClass]="{
-					'disabled-icon': !hasHtml
+					'disabled-icon': !hasHtml || isAlertsView
 				}"
 				fontSet="material-icons-round"
 				(click)="onViewChange()"

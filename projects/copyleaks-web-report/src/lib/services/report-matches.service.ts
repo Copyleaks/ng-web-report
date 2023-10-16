@@ -69,16 +69,12 @@ export class ReportMatchesService implements OnDestroy {
 			.pipe(
 				untilDestroy(this),
 				filter(
-					([scanSource, scanResults, viewMode, selectedAlert]) =>
-						scanSource != undefined &&
-						scanResults != undefined &&
-						viewMode != null &&
-						viewMode.viewMode === 'one-to-many' &&
-						selectedAlert === null
+					([scanSource, , viewMode, selectedAlert]) =>
+						scanSource != undefined && viewMode != null && viewMode.viewMode === 'one-to-many' && selectedAlert === null
 				)
 			)
 			.subscribe(([scanSource, scanResults, viewMode]) => {
-				if (!scanSource || !scanResults || !viewMode) return;
+				if (!scanSource || !viewMode) return;
 
 				// process the mathces according to the report view
 				if (viewMode.isHtmlView) {
@@ -187,11 +183,11 @@ export class ReportMatchesService implements OnDestroy {
 	 * @param source  the scan source
 	 */
 	private _processOneToManyMatchesHtml(
-		results: ResultDetailItem[],
+		results: ResultDetailItem[] | undefined,
 		settings: CopyleaksReportOptions,
 		source: IScanSource
 	) {
-		const html = helpers.processSourceHtml(results, settings, source);
+		const html = helpers.processSourceHtml(results ?? [], settings, source);
 		if (html) {
 			this._originalHtmlMatches.next(html);
 		}
@@ -205,11 +201,11 @@ export class ReportMatchesService implements OnDestroy {
 	 * @param source  the scan source
 	 */
 	private _processOneToManyMatchesText(
-		results: ResultDetailItem[],
+		results: ResultDetailItem[] | undefined,
 		settings: CopyleaksReportOptions,
 		source: IScanSource
 	) {
-		const text = helpers.processSourceText(results, settings, source);
+		const text = helpers.processSourceText(results ?? [], settings, source);
 		if (text) {
 			this._originalTextMatches.next(text);
 		}

@@ -28,14 +28,14 @@
 				fxLayoutAlign="center center"
 				fxLayoutGap="4px"
 				class="alert-card-preview"
-				(click)="showAlertPreview()">
-				<ng-container *ngIf="selectedAlert; else notSelected">
-					<mat-icon>visibility {{ selectedAlert }}</mat-icon>
-					<span>show</span>
+				(click)="toggleAlertPreview()">
+				<ng-container *ngIf="isSelected; else notSelected">
+					<mat-icon fontSet="material-icons-round">visibility_off</mat-icon>
+					<span>hide</span>
 				</ng-container>
 				<ng-template #notSelected>
-					<mat-icon>visibility_off</mat-icon>
-					<span>hide</span>
+					<mat-icon fontSet="material-icons-round">visibility</mat-icon>
+					<span>show</span>
 				</ng-template>
 			</button>
 			<span class="disclamer">Disclamer</span>

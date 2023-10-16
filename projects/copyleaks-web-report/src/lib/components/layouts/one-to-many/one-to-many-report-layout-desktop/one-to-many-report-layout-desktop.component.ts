@@ -3,7 +3,7 @@ import { ReportDataService } from '../../../../services/report-data.service';
 import { Match, SlicedMatch } from '../../../../models/report-matches.models';
 import { ReportMatchesService } from '../../../../services/report-matches.service';
 import { PostMessageEvent } from '../../../../models/report-iframe-events.models';
-import { IScanSource, ResultPreview } from '../../../../models/report-data.models';
+import { ICompleteResultNotificationAlert, IScanSource, ResultPreview } from '../../../../models/report-data.models';
 import { ReportViewService } from '../../../../services/report-view.service';
 import { ReportLayoutBaseComponent } from '../../base/report-layout-base.component';
 import { ReportMatchHighlightService } from 'projects/copyleaks-web-report/src/lib/services/report-match-highlight.service';
@@ -28,6 +28,7 @@ export class OneToManyReportLayoutDesktopComponent extends ReportLayoutBaseCompo
 
 	oneToOneRerendered: boolean = false;
 	EResponsiveLayoutType = EResponsiveLayoutType;
+	alerts: ICompleteResultNotificationAlert[];
 
 	override get rerendered(): boolean {
 		return this.oneToOneRerendered;
@@ -56,11 +57,14 @@ export class OneToManyReportLayoutDesktopComponent extends ReportLayoutBaseCompo
 		});
 
 		this.matchSvc.originalHtmlMatches$.pipe(untilDestroy(this)).subscribe(data => {
+			if (data != this.reportMatches) {
+				this.oneToOneRerendered = false;
+			}
+			this.reportMatches = data ?? [];
 			const updatedHtml = this._getRenderedMatches(data, this.reportCrawledVersion?.html.value);
 			if (updatedHtml && data) {
 				this.iframeHtml = updatedHtml;
 				this.oneToOneRerendered = true;
-				this.reportMatches = data;
 			}
 		});
 
@@ -81,6 +85,7 @@ export class OneToManyReportLayoutDesktopComponent extends ReportLayoutBaseCompo
 						this.reportViewSvc.selectedAlert$.next(selectedAlert);
 						this.isHtmlView = false;
 					}
+					this.alerts = previews.notifications?.alerts ?? [];
 				}
 			});
 		});

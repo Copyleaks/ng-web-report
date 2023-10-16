@@ -3,7 +3,10 @@
 
 <div class="middle-section">
 	<!-- Report alerts -->
-	<copyleaks-report-alerts-container class="alerts-container" [flexGrow]="20"></copyleaks-report-alerts-container>
+	<copyleaks-report-alerts-container
+		*ngIf="alerts && alerts.length > 0"
+		[alerts]="alerts"
+		[flexGrow]="20"></copyleaks-report-alerts-container>
 
 	<!-- Report scan content section -->
 	<div class="content-section">

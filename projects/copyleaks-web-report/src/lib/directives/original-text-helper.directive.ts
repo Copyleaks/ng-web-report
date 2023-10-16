@@ -6,6 +6,7 @@ import { ReportTextMatchComponent } from './report-text-match/report-text-match.
 import { ReportViewService } from '../services/report-view.service';
 import { TextMatchHighlightEvent } from '../models/report-matches.models';
 import { Subject } from 'rxjs';
+import { untilDestroy } from '../utils/untilDestroy';
 
 @Directive({
 	selector: '[crOriginalTextHelper]',
@@ -20,8 +21,6 @@ export class OriginalTextHelperDirective implements AfterContentInit, OnDestroy 
 	@ContentChildren(ReportTextMatchComponent)
 	private children: QueryList<ReportTextMatchComponent>;
 	private current: ReportTextMatchComponent | null;
-
-	private destroy$ = new Subject<void>();
 
 	/**
 	 * Handles the jump logic
@@ -38,7 +37,7 @@ export class OriginalTextHelperDirective implements AfterContentInit, OnDestroy 
 				this.host.currentPage
 			);
 			if (this.host.currentPage !== page) {
-				this.children.changes.pipe(take(1), takeUntil(this.destroy$)).subscribe(() => {
+				this.children.changes.pipe(take(1)).subscribe(() => {
 					const comp = forward ? this.children.first : this.children.last;
 					this.highlightService.textMatchClicked({ elem: comp, broadcast: true, origin: 'original' });
 				});
@@ -74,7 +73,7 @@ export class OriginalTextHelperDirective implements AfterContentInit, OnDestroy 
 			.pipe(
 				withLatestFrom(reportViewMode$),
 				filter(([, viewData]) => viewData.viewMode === 'one-to-many' && !viewData.isHtmlView),
-				takeUntil(this.destroy$)
+				untilDestroy(this)
 			)
 			.subscribe(([forward]) => this.handleJump(forward));
 
@@ -86,7 +85,7 @@ export class OriginalTextHelperDirective implements AfterContentInit, OnDestroy 
 					([textMatchClickEvent, viewData]) =>
 						textMatchClickEvent && viewData.viewMode === 'one-to-many' && !viewData.isHtmlView
 				),
-				takeUntil(this.destroy$)
+				untilDestroy(this)
 			)
 			.subscribe(([textMatchClickEvent, ,]) => {
 				this.lastSelectedOriginalTextMatch = textMatchClickEvent;
@@ -98,7 +97,7 @@ export class OriginalTextHelperDirective implements AfterContentInit, OnDestroy 
 				filter(
 					viewData => this.lastSelectedOriginalTextMatch && viewData.viewMode === 'one-to-many' && !viewData.isHtmlView
 				),
-				takeUntil(this.destroy$)
+				untilDestroy(this)
 			)
 			.subscribe(_ => {
 				setTimeout(() => {
@@ -113,8 +112,5 @@ export class OriginalTextHelperDirective implements AfterContentInit, OnDestroy 
 			});
 	}
 
-	ngOnDestroy() {
-		this.destroy$.next();
-		this.destroy$.complete();
-	}
+	ngOnDestroy() {}
 }

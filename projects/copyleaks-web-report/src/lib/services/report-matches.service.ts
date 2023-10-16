@@ -9,6 +9,7 @@ import { SlicedMatch, Match, ResultDetailItem } from '../models/report-matches.m
 import { ReportViewService } from './report-view.service';
 import { IReportViewEvent } from '../models/report-view.models';
 import { ALERTS } from '../enums/copyleaks-web-report.consts';
+import { untilDestroy } from '../utils/untilDestroy';
 
 /**
  * Service that calculates the matches highlight positions with respect to the view and content mode.
@@ -52,8 +53,6 @@ export class ReportMatchesService implements OnDestroy {
 		return this._originalHtmlMatches.asObservable().pipe();
 	}
 
-	private _unsubscribe$: Subject<void> = new Subject();
-
 	constructor(private _reportDataSvc: ReportDataService, private _reportViewSvc: ReportViewService) {
 		this._initOneToManyMatchesHandler();
 		this._initOneToOneMatchesHandler();
@@ -68,7 +67,7 @@ export class ReportMatchesService implements OnDestroy {
 			this._reportViewSvc.selectedAlert$,
 		])
 			.pipe(
-				takeUntil(this._unsubscribe$),
+				untilDestroy(this),
 				filter(
 					([scanSource, scanResults, viewMode, selectedAlert]) =>
 						scanSource != undefined &&
@@ -122,7 +121,7 @@ export class ReportMatchesService implements OnDestroy {
 			this._reportViewSvc.selectedAlert$,
 		])
 			.pipe(
-				takeUntil(this._unsubscribe$),
+				untilDestroy(this),
 				filter(
 					([scanSource, scanResults, viewMode, selectedAlert]) =>
 						scanSource != undefined &&
@@ -155,7 +154,7 @@ export class ReportMatchesService implements OnDestroy {
 	private _initAlertMatchesHandler() {
 		combineLatest([this._reportDataSvc.crawledVersion$, this._reportViewSvc.selectedAlert$])
 			.pipe(
-				takeUntil(this._unsubscribe$),
+				untilDestroy(this),
 				filter(
 					([scanSource, selectedAlert]) =>
 						scanSource != null && scanSource != undefined && selectedAlert != null && selectedAlert != undefined
@@ -309,9 +308,5 @@ export class ReportMatchesService implements OnDestroy {
 		this._suspectHtmlMatches && this._suspectHtmlMatches.complete();
 		this._originalTextMatches && this._originalTextMatches.complete();
 		this._originalHtmlMatches && this._originalHtmlMatches.complete();
-
-		// Stop subscriptions
-		this._unsubscribe$.next();
-		this._unsubscribe$.complete();
 	}
 }

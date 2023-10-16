@@ -8,13 +8,12 @@ import { findRespectiveStart } from '../utils/report-match-helpers';
 import { MatchSelectEvent } from '../models/report-iframe-events.models';
 import { IComparisonCollection } from '../models/report-data.models';
 import { Subject } from 'rxjs';
+import { untilDestroy } from '../utils/untilDestroy';
 
 @Directive({
 	selector: '[crSuspectHtmlHelper]',
 })
 export class SuspectHtmlHelperComponent implements OnInit, OnDestroy {
-	private destroy$ = new Subject<void>();
-
 	constructor(
 		private _reportViewSvc: ReportViewService,
 		private _highlightSvc: ReportMatchHighlightService,
@@ -44,7 +43,7 @@ export class SuspectHtmlHelperComponent implements OnInit, OnDestroy {
 				map(ev => ev.elem),
 				withLatestFrom(selectedResult$, suspectHtmlMatches$, reportViewMode$),
 				filter(([, , matches, viewData]) => viewData.isHtmlView && !!matches),
-				takeUntil(this.destroy$)
+				untilDestroy(this)
 			)
 			.subscribe(([elem, suspect, matches]) => {
 				if (elem && suspect && suspect.result && matches) {
@@ -60,7 +59,7 @@ export class SuspectHtmlHelperComponent implements OnInit, OnDestroy {
 		sourceHtml$
 			.pipe(
 				withLatestFrom(selectedResult$, suspectHtmlMatches$, reportViewMode$),
-				filter(([, suspect, matches, viewData]) => viewData.isHtmlView && !!matches),
+				filter(([, , matches, viewData]) => viewData.isHtmlView && !!matches),
 				filter(
 					([, suspect, ,]) =>
 						suspect != undefined &&
@@ -69,7 +68,7 @@ export class SuspectHtmlHelperComponent implements OnInit, OnDestroy {
 						suspect.result != undefined &&
 						!!suspect.result.html.value
 				),
-				takeUntil(this.destroy$)
+				untilDestroy(this)
 			)
 			.subscribe(([match, suspect, matches]) => {
 				if (match && suspect && suspect.result && matches) {
@@ -99,8 +98,5 @@ export class SuspectHtmlHelperComponent implements OnInit, OnDestroy {
 		this.messageFrame({ type: 'match-select', index } as MatchSelectEvent);
 	}
 
-	ngOnDestroy() {
-		this.destroy$.next();
-		this.destroy$.complete();
-	}
+	ngOnDestroy() {}
 }

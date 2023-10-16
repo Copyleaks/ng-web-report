@@ -6,6 +6,7 @@ import { HtmlMatchClickEvent, Match, TextMatchHighlightEvent } from '../models/r
 import { ContentMode, ViewMode } from '../models/report-config.models';
 import * as helpers from '../utils/highlight-helpers';
 import { ReportViewService } from './report-view.service';
+import { untilDestroy } from '../utils/untilDestroy';
 
 @Injectable()
 export class ReportMatchHighlightService implements OnDestroy {
@@ -21,7 +22,7 @@ export class ReportMatchHighlightService implements OnDestroy {
 	private readonly _clear = new Subject<ViewMode>();
 
 	constructor(private _reportViewService: ReportViewService) {
-		this.textMatchClick$.subscribe(event => {
+		this.textMatchClick$.pipe(untilDestroy(this)).subscribe(event => {
 			switch (event.origin) {
 				case 'original':
 					this.setOriginalTextMatch(event?.elem);

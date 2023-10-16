@@ -4,13 +4,12 @@ import { ReportMatchHighlightService } from '../services/report-match-highlight.
 import { ReportViewService } from '../services/report-view.service';
 import { MatchJumpEvent } from '../models/report-iframe-events.models';
 import { Subject } from 'rxjs';
+import { untilDestroy } from '../utils/untilDestroy';
 
 @Directive({
 	selector: '[crOriginalHtmlHelper]',
 })
 export class OriginalHtmlHelperComponent implements OnInit, OnDestroy {
-	private destroy$ = new Subject<void>();
-
 	constructor(
 		private _reportViewSvc: ReportViewService,
 		private _highlightSvc: ReportMatchHighlightService,
@@ -31,7 +30,7 @@ export class OriginalHtmlHelperComponent implements OnInit, OnDestroy {
 					viewModeData.isHtmlView
 			),
 			map(([jumpForward]) => jumpForward),
-			takeUntil(this.destroy$)
+			untilDestroy(this)
 		);
 		onOneToManyHtmlJump$.subscribe(jumpForward => {
 			this.messageFrame({ type: 'match-jump', forward: jumpForward } as MatchJumpEvent);
@@ -50,8 +49,5 @@ export class OriginalHtmlHelperComponent implements OnInit, OnDestroy {
 		this.frame && this.frame.postMessage(data, '*');
 	}
 
-	ngOnDestroy() {
-		this.destroy$.next();
-		this.destroy$.complete();
-	}
+	ngOnDestroy() {}
 }

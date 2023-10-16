@@ -7,14 +7,12 @@ import { ReportViewService } from '../services/report-view.service';
 import { findRespectiveStart } from '../utils/report-match-helpers';
 import { ReportMatchesService } from '../services/report-matches.service';
 import { IComparisonCollection } from '../models/report-data.models';
-import { Subject } from 'rxjs';
+import { untilDestroy } from '../utils/untilDestroy';
 
 @Directive({
 	selector: '[crSourceHtmlHelper]',
 })
 export class SourceHtmlHelperComponent implements OnInit, OnDestroy {
-	private destroy$ = new Subject<void>();
-
 	constructor(
 		private _reportViewSvc: ReportViewService,
 		private _highlightSvc: ReportMatchHighlightService,
@@ -43,7 +41,7 @@ export class SourceHtmlHelperComponent implements OnInit, OnDestroy {
 			.pipe(
 				withLatestFrom(reportViewMode$),
 				filter(([, viewData]) => viewData.viewMode === 'one-to-one' && viewData.isHtmlView),
-				takeUntil(this.destroy$)
+				untilDestroy(this)
 			)
 			.subscribe(([forward]) => {
 				this.messageFrame({ type: 'match-jump', forward } as MatchJumpEvent);
@@ -55,7 +53,7 @@ export class SourceHtmlHelperComponent implements OnInit, OnDestroy {
 				map(ev => ev.elem),
 				withLatestFrom(selectedResult$, sourceHtmlMatches$, reportViewMode$),
 				filter(([, , matches, viewData]) => viewData.isHtmlView && !!matches),
-				takeUntil(this.destroy$)
+				untilDestroy(this)
 			)
 			.subscribe(([elem, suspect, matches]) => {
 				if (elem && suspect?.result && matches) {
@@ -72,7 +70,7 @@ export class SourceHtmlHelperComponent implements OnInit, OnDestroy {
 			.pipe(
 				withLatestFrom(selectedResult$, sourceHtmlMatches$, reportViewMode$),
 				filter(([, , matches, viewData]) => viewData.isHtmlView && !!matches),
-				takeUntil(this.destroy$)
+				untilDestroy(this)
 			)
 			.subscribe(([match, suspect, matches]) => {
 				if (match && suspect && suspect.result && matches) {
@@ -102,8 +100,5 @@ export class SourceHtmlHelperComponent implements OnInit, OnDestroy {
 		this.messageFrame({ type: 'match-select', index } as MatchSelectEvent);
 	}
 
-	ngOnDestroy() {
-		this.destroy$.next();
-		this.destroy$.complete();
-	}
+	ngOnDestroy() {}
 }

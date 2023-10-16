@@ -9,14 +9,13 @@ import { IResultDetailResponse, IScanSource } from '../models/report-data.models
 import * as helpers from '../utils/highlight-helpers';
 import { ReportDataService } from '../services/report-data.service';
 import { Subject } from 'rxjs';
+import { untilDestroy } from '../utils/untilDestroy';
 
 @Directive({
 	selector: '[crSourceTextHelper]',
 })
 export class SourceTextHelperDirective implements AfterContentInit, OnDestroy {
 	@Input() public host: { currentPage: number; contentTextMatches: any };
-
-	private destroy$ = new Subject<void>();
 
 	constructor(
 		private _highlightSvc: ReportMatchHighlightService,
@@ -38,13 +37,13 @@ export class SourceTextHelperDirective implements AfterContentInit, OnDestroy {
 		const { textMatchClick$, jump$, sourceText$, suspectHtml$ } = this._highlightSvc;
 		const { crawledVersion$ } = this._dataSvc;
 		const { reportViewMode$, selectedResult$ } = this._viewService;
-		sourceText$.subscribe(value => (this.current = value));
+		sourceText$.pipe(untilDestroy(this)).subscribe(value => (this.current = value));
 		textMatchClick$
 			.pipe(
 				filter(ev => ev.origin === 'suspect' && ev.broadcast),
 				withLatestFrom(crawledVersion$, selectedResult$, reportViewMode$),
 				filter(([, , , viewData]) => !viewData.isHtmlView),
-				takeUntil(this.destroy$)
+				untilDestroy(this)
 			)
 			.subscribe(([{ elem }, source, suspect]) => {
 				if (elem && source && suspect?.result) {
@@ -56,7 +55,7 @@ export class SourceTextHelperDirective implements AfterContentInit, OnDestroy {
 			.pipe(
 				withLatestFrom(reportViewMode$),
 				filter(([, viewData]) => viewData.viewMode === 'one-to-one' && !viewData.isHtmlView),
-				takeUntil(this.destroy$)
+				untilDestroy(this)
 			)
 			.subscribe(([forward]) => this.handleJump(forward));
 
@@ -65,7 +64,7 @@ export class SourceTextHelperDirective implements AfterContentInit, OnDestroy {
 				withLatestFrom(crawledVersion$, selectedResult$, reportViewMode$),
 				filter(([, , , viewData]) => viewData.isHtmlView),
 				filter(([, source]) => !source?.html || !source.html.value),
-				takeUntil(this.destroy$)
+				untilDestroy(this)
 			)
 			.subscribe(([match, source, suspect]) => {
 				if (match && source && suspect?.result) this.handleBroadcast(match, source, suspect.result, 'html');
@@ -132,8 +131,5 @@ export class SourceTextHelperDirective implements AfterContentInit, OnDestroy {
 		}
 	}
 
-	ngOnDestroy() {
-		this.destroy$.next();
-		this.destroy$.complete();
-	}
+	ngOnDestroy() {}
 }

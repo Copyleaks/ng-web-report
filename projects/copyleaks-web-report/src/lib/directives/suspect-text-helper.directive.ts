@@ -9,14 +9,13 @@ import { ReportTextMatchComponent } from './report-text-match/report-text-match.
 import { IResultDetailResponse } from '../models/report-data.models';
 import * as helpers from '../utils/highlight-helpers';
 import { Subject } from 'rxjs';
+import { untilDestroy } from '../utils/untilDestroy';
 
 @Directive({
 	selector: '[crSuspectTextHelper]',
 })
 export class SuspectTextHelperDirective implements AfterContentInit, OnDestroy {
 	@Input() public host: { currentPage: number };
-
-	private destroy$ = new Subject<void>();
 
 	constructor(
 		private _highlightSvc: ReportMatchHighlightService,
@@ -65,7 +64,7 @@ export class SuspectTextHelperDirective implements AfterContentInit, OnDestroy {
 			.pipe(
 				filter(ev => ev.origin === 'source' && ev.broadcast),
 				withLatestFrom(selectedResult$),
-				takeUntil(this.destroy$)
+				untilDestroy(this)
 			)
 			.subscribe(([{ elem }, suspect]) => {
 				if (elem && suspect?.result) {
@@ -81,15 +80,12 @@ export class SuspectTextHelperDirective implements AfterContentInit, OnDestroy {
 					([, suspect]) =>
 						suspect != null && suspect != undefined && suspect.result != undefined && !suspect.result.html.value
 				),
-				takeUntil(this.destroy$)
+				untilDestroy(this)
 			)
 			.subscribe(([match, suspect]) => {
 				if (match && suspect?.result) this.handleBroadcast(match, suspect.result, 'html');
 			});
 	}
 
-	ngOnDestroy() {
-		this.destroy$.next();
-		this.destroy$.complete();
-	}
+	ngOnDestroy() {}
 }

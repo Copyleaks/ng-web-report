@@ -1,4 +1,4 @@
-import { Component, OnInit, Renderer2 } from '@angular/core';
+import { Component, OnDestroy, OnInit, Renderer2 } from '@angular/core';
 import { ReportDataService } from '../../../../services/report-data.service';
 import { Match, SlicedMatch } from '../../../../models/report-matches.models';
 import { ReportMatchesService } from '../../../../services/report-matches.service';
@@ -73,6 +73,15 @@ export class OneToManyReportLayoutDesktopComponent extends ReportLayoutBaseCompo
 			if (!data) return;
 			this.isHtmlView = data.isHtmlView;
 			this.currentPageSource = data.sourcePageIndex;
+			this.reportDataSvc.scanResultsPreviews$.subscribe(previews => {
+				if (previews && previews.notifications) {
+					const selectedAlert = previews.notifications.alerts.find(a => a.code === data.alertCode);
+					if (selectedAlert) {
+						this.reportViewSvc.selectedAlert$.next(selectedAlert);
+						this.isHtmlView = false;
+					}
+				}
+			});
 		});
 	}
 

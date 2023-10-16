@@ -116,4 +116,12 @@
 		<mat-icon class="item-icon" fontSet="material-icons-round">picture_as_pdf</mat-icon>
 		<span class="item-text">PDF</span>
 	</button>
+	<button (click)="navigateToReportPreview('ai-content', 'suspected-ai-text')" mat-menu-item>
+		<mat-icon class="item-icon" fontSet="material-icons-round">smart_toy</mat-icon>
+		<span class="item-text">AI</span>
+	</button>
+	<button (click)="navigateToReportPreview('default', 'suspected-character-replacement')" mat-menu-item>
+		<mat-icon class="item-icon" fontSet="material-icons-round">text_fields</mat-icon>
+		<span class="item-text">SCR</span>
+	</button>
 </mat-menu>

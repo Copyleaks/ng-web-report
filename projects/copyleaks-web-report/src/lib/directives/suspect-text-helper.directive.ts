@@ -43,7 +43,7 @@ export class SuspectTextHelperDirective implements AfterContentInit, OnDestroy {
 			}
 			this._highlightSvc.textMatchClicked({ elem: comp, broadcast: false, origin: 'suspect' });
 		} else {
-			this.children.changes.pipe(take(1), takeUntil(this.destroy$)).subscribe(() => {
+			this.children.changes.pipe(take(1)).subscribe(() => {
 				const comp = this.children.find(item => item.match.start === start);
 				if (comp === null || comp === undefined) {
 					throw new Error('Match component was not found in view');

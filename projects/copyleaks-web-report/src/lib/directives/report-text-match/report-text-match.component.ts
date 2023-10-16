@@ -6,6 +6,7 @@ import {
 	HostBinding,
 	HostListener,
 	Input,
+	OnDestroy,
 	Output,
 	Renderer2,
 } from '@angular/core';
@@ -32,8 +33,6 @@ export class ReportTextMatchComponent implements AfterContentInit {
 	@Input()
 	public origin: ReportOrigin;
 
-	@Output() matchSelected = new EventEmitter<Match>();
-
 	private _focused = false;
 	/** focused flag, if set to `true` the element will be highlighted */
 	@HostBinding('class.cr-highlight')
@@ -56,7 +55,6 @@ export class ReportTextMatchComponent implements AfterContentInit {
 	 */
 	@HostListener('click')
 	public click() {
-		this.matchSelected.emit(this.match);
 		this._highlightService.textMatchClicked({ elem: this, broadcast: true, origin: this.origin });
 	}
 

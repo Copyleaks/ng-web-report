@@ -46,12 +46,13 @@ export class CopyleaksWebReportComponent implements OnInit, OnDestroy {
 	// Layout realated properties
 	ReportLayoutType = EReportLayoutType;
 	ResponsiveLayoutType = EResponsiveLayoutType;
-	layoutChangesSub: any;
-	queryParamsSub: any;
 
 	// Template references related properties
 	customActionsTemplateRef: TemplateRef<any>;
 	customResultsTemplateRef: TemplateRef<any>;
+
+	layoutChangesSub: any;
+	queryParamsSub: any;
 	viewChangesSub: any;
 
 	constructor(
@@ -159,6 +160,7 @@ export class CopyleaksWebReportComponent implements OnInit, OnDestroy {
 		const sourcePage = params['sourcePage'];
 		const suspectPage = params['suspectPage'];
 		const suspectId = params['suspectId'];
+		const alertCode = params['alertCode'];
 
 		this.reportLayoutType = viewMode ?? 'one-to-many';
 
@@ -172,14 +174,18 @@ export class CopyleaksWebReportComponent implements OnInit, OnDestroy {
 			sourcePageIndex: sourcePage ? Number(sourcePage) ?? 1 : 1,
 			suspectId: suspectId,
 			suspectPageIndex: suspectPage ? Number(suspectPage) ?? 1 : 1,
+			alertCode: alertCode,
 		} as IReportViewEvent);
 
-		this.viewChangesSub = this._reportViewSvc.reportViewMode$.subscribe(data => {
+		this._reportViewSvc.reportViewMode$.subscribe(data => {
 			if (!data) return;
 			let updatedParams: IReportViewQueryParams = {
 				viewMode: data.viewMode,
 				contentMode: data.isHtmlView ? 'html' : 'text',
-				sourcePage: String(data.sourcePageIndex),
+				sourcePage: String(data.sourcePageIndex) ?? '1',
+				suspectPage: String(data.suspectPageIndex) ?? '1',
+				suspectId: data.suspectId,
+				alertCode: data.alertCode,
 			};
 
 			if (data.viewMode == 'one-to-many') this.reportLayoutType = EReportLayoutType.OneToMany;

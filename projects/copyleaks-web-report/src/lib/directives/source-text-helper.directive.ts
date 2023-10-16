@@ -86,7 +86,7 @@ export class SourceTextHelperDirective implements AfterContentInit, OnDestroy {
 			}
 			this._highlightSvc.textMatchClicked({ elem: comp, broadcast: false, origin: 'source' });
 		} else {
-			this.children.changes.pipe(take(1), takeUntil(this.destroy$)).subscribe(() => {
+			this.children.changes.pipe(take(1)).subscribe(() => {
 				const comp = this.children.find(item => item.match.start === start);
 				if (comp === null || comp === undefined) {
 					throw new Error('Match component was not found in view');
@@ -111,7 +111,7 @@ export class SourceTextHelperDirective implements AfterContentInit, OnDestroy {
 				: helpers.findPrevPageWithMatch(this.host.contentTextMatches, this.host.currentPage);
 			if (this.host.currentPage !== page) {
 				this._highlightSvc.textMatchClicked({ elem: this.current, broadcast: true, origin: 'source' });
-				this.children.changes.pipe(take(1), takeUntil(this.destroy$)).subscribe(() => {
+				this.children.changes.pipe(take(1)).subscribe(() => {
 					const comp = forward ? this.children.first : this.children.last;
 					this._highlightSvc.textMatchClicked({ elem: comp, broadcast: true, origin: 'source' });
 				});

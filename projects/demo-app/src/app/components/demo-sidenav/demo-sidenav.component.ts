@@ -38,10 +38,17 @@ export class DemoSidenavComponent implements OnInit {
 		this._router.navigate(['/v2/web-report/bundle/default']);
 	}
 
-	navigateToReportPreview(option: string | null = null) {
-		this._router.navigate([`/previews/${option ?? 'default'}`]).then(() => {
-			window.location.reload();
-		});
+	navigateToReportPreview(option: string | null = null, alertCode: string | null = null) {
+		this._router
+			.navigate([`/previews/${option ?? 'default'}`], {
+				queryParams: {
+					alertCode: alertCode,
+					contentMode: 'text',
+				},
+			})
+			.then(() => {
+				window.location.reload();
+			});
 	}
 
 	openMenu(trigger: MatMenuTrigger) {

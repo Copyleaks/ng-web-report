@@ -79,9 +79,11 @@
 				sandbox="allow-scripts"
 				crOriginalHtmlHelper></iframe>
 			<div
-				*ngIf="!isHtmlView || !hasHtml || isAlertsView"
 				class="text-container"
-				[ngStyle]="{ display: isHtmlView ? 'none' : '', 'font-size': contentZoom + 'em' }"
+				[ngStyle]="{
+					display: !(!isHtmlView || !hasHtml || isAlertsView) ? 'none' : '',
+					'font-size': contentZoom + 'em'
+				}"
 				[dir]="contentDirection"
 				crOriginalTextHelper
 				[host]="this"
@@ -119,9 +121,11 @@
 				sandbox="allow-scripts"
 				crSourceHtmlHelper></iframe>
 			<div
-				*ngIf="!isHtmlView || !hasHtml || isAlertsView"
 				class="text-container"
-				[ngStyle]="{ display: isHtmlView ? 'none' : '', 'font-size': contentZoom + 'em' }"
+				[ngStyle]="{
+					display: !(!isHtmlView || !hasHtml || isAlertsView) ? 'none' : '',
+					'font-size': contentZoom + 'em'
+				}"
 				[dir]="contentDirection"
 				crSourceTextHelper
 				[host]="this"
@@ -159,12 +163,14 @@
 				sandbox="allow-scripts"
 				crSuspectHtmlHelper></iframe>
 			<div
-				*ngIf="!isHtmlView || !hasHtml || isAlertsView"
 				class="text-container"
 				crSuspectTextHelper
 				[host]="this"
 				text-container
-				[ngStyle]="{ 'font-size': contentZoom + 'em' }"
+				[ngStyle]="{
+					display: !(!isHtmlView || !hasHtml || isAlertsView) ? 'none' : '',
+					'font-size': contentZoom + 'em'
+				}"
 				[dir]="contentDirection">
 				<ng-container *ngIf="contentTextMatches; else clean">
 					<ng-container *ngFor="let partial of contentTextMatches[currentPage - 1]">

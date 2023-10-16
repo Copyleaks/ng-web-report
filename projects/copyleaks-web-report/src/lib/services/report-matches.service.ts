@@ -65,15 +65,17 @@ export class ReportMatchesService implements OnDestroy {
 			this._reportDataSvc.crawledVersion$,
 			this._reportDataSvc.scanResultsDetails$,
 			this._reportViewSvc.reportViewMode$,
+			this._reportViewSvc.selectedAlert$,
 		])
 			.pipe(
 				takeUntil(this._unsubscribe$),
 				filter(
-					([scanSource, scanResults, viewMode]) =>
+					([scanSource, scanResults, viewMode, selectedAlert]) =>
 						scanSource != undefined &&
 						scanResults != undefined &&
 						viewMode != null &&
-						viewMode.viewMode === 'one-to-many'
+						viewMode.viewMode === 'one-to-many' &&
+						selectedAlert === null
 				)
 			)
 			.subscribe(([scanSource, scanResults, viewMode]) => {
@@ -117,15 +119,17 @@ export class ReportMatchesService implements OnDestroy {
 			this._reportDataSvc.crawledVersion$,
 			this._reportViewSvc.selectedResult$,
 			this._reportViewSvc.reportViewMode$,
+			this._reportViewSvc.selectedAlert$,
 		])
 			.pipe(
 				takeUntil(this._unsubscribe$),
 				filter(
-					([scanSource, scanResults, viewMode]) =>
+					([scanSource, scanResults, viewMode, selectedAlert]) =>
 						scanSource != undefined &&
 						scanResults != undefined &&
 						viewMode != null &&
-						viewMode.viewMode === 'one-to-one'
+						viewMode.viewMode === 'one-to-one' &&
+						selectedAlert === null
 				)
 			)
 			.subscribe(([scanSource, selectedResult, viewMode]) => {
@@ -153,8 +157,8 @@ export class ReportMatchesService implements OnDestroy {
 			.pipe(
 				takeUntil(this._unsubscribe$),
 				filter(
-					([scanSource, selectedResult]) =>
-						scanSource != null && scanSource != undefined && selectedResult != null && selectedResult != undefined
+					([scanSource, selectedAlert]) =>
+						scanSource != null && scanSource != undefined && selectedAlert != null && selectedAlert != undefined
 				)
 			)
 			.subscribe(([scanSource, selectedAlert]) => {

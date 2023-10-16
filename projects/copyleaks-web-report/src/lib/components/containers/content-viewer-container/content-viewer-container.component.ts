@@ -253,6 +253,10 @@ export class ContentViewerContainerComponent implements OnInit, AfterViewInit, O
 			this._renderer.setAttribute(this.contentIFrame.nativeElement, 'srcdoc', changes['contentHtml'].currentValue);
 			this._cdr.detectChanges();
 		}
+
+		if ('currentPage' in changes || ('numberOfPages' in changes && this.currentPage && this.numberOfPages)) {
+			this.currentPage = this.currentPage > this.numberOfPages || this.currentPage <= 0 ? 1 : this.currentPage;
+		}
 	}
 
 	/**

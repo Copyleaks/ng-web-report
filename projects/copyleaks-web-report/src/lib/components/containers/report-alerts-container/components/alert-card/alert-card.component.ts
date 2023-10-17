@@ -37,6 +37,7 @@ export class AlertCardComponent implements OnInit {
 		this._reportView.selectedAlert$.next(!this.isSelected ? null : this.alert);
 		this._reportView.reportViewMode$.next({
 			...this._reportView.reportViewMode,
+			isHtmlView: !this.isSelected ? this._reportView.reportViewMode.isHtmlView : false,
 			alertCode: !this.isSelected ? undefined : this.alert.code,
 		});
 	}

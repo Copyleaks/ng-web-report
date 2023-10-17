@@ -168,7 +168,7 @@ export class CopyleaksWebReportComponent implements OnInit, OnDestroy {
 
 		this._reportViewSvc.reportViewMode$.next({
 			viewMode: this.reportLayoutType === EReportLayoutType.OneToOne ? 'one-to-one' : 'one-to-many',
-			isHtmlView: !contentMode || contentMode == 'html',
+			isHtmlView: (!contentMode || contentMode == 'html') && !alertCode,
 			sourcePageIndex: sourcePage ? Number(sourcePage) ?? 1 : 1,
 			suspectId: suspectId,
 			suspectPageIndex: suspectPage ? Number(suspectPage) ?? 1 : 1,

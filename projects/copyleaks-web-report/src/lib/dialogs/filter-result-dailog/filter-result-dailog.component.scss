@@ -1,0 +1,25 @@
+@import '../../styles/website-colors.styles.scss';
+
+.header-container {
+	width: 100%;
+	.title-container {
+		width: 100%;
+		span {
+			color: $color-black;
+			font-weight: 700;
+			font-size: 20px;
+		}
+	}
+	.clear-button {
+		color: $color-primary;
+		mat-icon {
+			font-size: 24px;
+			width: 24px;
+			height: 24px;
+		}
+		span {
+			font-size: 14px;
+			font-weight: 500;
+		}
+	}
+}

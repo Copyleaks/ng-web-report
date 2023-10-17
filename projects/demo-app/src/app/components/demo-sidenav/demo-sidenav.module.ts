@@ -8,6 +8,7 @@ import { MatIconModule } from '@angular/material/icon';
 import { MatListModule } from '@angular/material/list';
 import { RouterModule } from '@angular/router';
 import { MatMenuModule } from '@angular/material/menu';
+import { MatTooltipModule } from '@angular/material/tooltip';
 
 @NgModule({
 	declarations: [DemoSidenavComponent],
@@ -20,6 +21,7 @@ import { MatMenuModule } from '@angular/material/menu';
 		RouterModule,
 		MatListModule,
 		MatMenuModule,
+		MatTooltipModule,
 	],
 	exports: [DemoSidenavComponent],
 })

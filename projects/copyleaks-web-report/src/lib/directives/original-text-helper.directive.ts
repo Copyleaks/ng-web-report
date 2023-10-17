@@ -1,10 +1,12 @@
 import { AfterContentInit, ContentChildren, Directive, Input, OnDestroy, QueryList } from '@angular/core';
-import { distinctUntilChanged, filter, take, withLatestFrom } from 'rxjs/operators';
+import { distinctUntilChanged, filter, take, takeUntil, withLatestFrom } from 'rxjs/operators';
 import { ReportMatchHighlightService } from '../services/report-match-highlight.service';
 import * as helpers from '../utils/highlight-helpers';
-import { ReportTextMatchComponent } from './report-text-match/report-text-match.component';
+import { ReportTextMatchComponent } from '../components/core/report-text-match/report-text-match.component';
 import { ReportViewService } from '../services/report-view.service';
 import { TextMatchHighlightEvent } from '../models/report-matches.models';
+import { Subject } from 'rxjs';
+import { untilDestroy } from '../utils/until-destroy';
 
 @Directive({
 	selector: '[crOriginalTextHelper]',
@@ -70,7 +72,8 @@ export class OriginalTextHelperDirective implements AfterContentInit, OnDestroy 
 		jump$
 			.pipe(
 				withLatestFrom(reportViewMode$),
-				filter(([, viewData]) => viewData.viewMode === 'one-to-many' && !viewData.isHtmlView)
+				filter(([, viewData]) => viewData.viewMode === 'one-to-many' && !viewData.isHtmlView),
+				untilDestroy(this)
 			)
 			.subscribe(([forward]) => this.handleJump(forward));
 
@@ -81,7 +84,8 @@ export class OriginalTextHelperDirective implements AfterContentInit, OnDestroy 
 				filter(
 					([textMatchClickEvent, viewData]) =>
 						textMatchClickEvent && viewData.viewMode === 'one-to-many' && !viewData.isHtmlView
-				)
+				),
+				untilDestroy(this)
 			)
 			.subscribe(([textMatchClickEvent, ,]) => {
 				this.lastSelectedOriginalTextMatch = textMatchClickEvent;
@@ -92,7 +96,8 @@ export class OriginalTextHelperDirective implements AfterContentInit, OnDestroy 
 				distinctUntilChanged(),
 				filter(
 					viewData => this.lastSelectedOriginalTextMatch && viewData.viewMode === 'one-to-many' && !viewData.isHtmlView
-				)
+				),
+				untilDestroy(this)
 			)
 			.subscribe(_ => {
 				setTimeout(() => {
@@ -107,9 +112,5 @@ export class OriginalTextHelperDirective implements AfterContentInit, OnDestroy 
 			});
 	}
 
-	/**
-	 * Life-cycle method
-	 * empty for `untilDestroy` rxjs operator
-	 */
 	ngOnDestroy() {}
 }

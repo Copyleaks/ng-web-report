@@ -2,11 +2,27 @@
 	::ng-deep {
 		.mat-list-item-content {
 			display: flex !important;
-			flex-direction: column !important;
+			flex-direction: row !important;
 			align-items: center !important;
 			width: 100% !important;
 			gap: 8px !important;
 			height: fit-content !important;
+
+			.item-expand-icon {
+				display: none;
+				position: absolute;
+				right: -4px;
+			}
+
+			.item-expand-icon:hover {
+				color: #3f9af5;
+			}
+		}
+
+		.mat-list-item-content:hover {
+			.item-expand-icon {
+				display: block;
+			}
 		}
 	}
 

@@ -371,7 +371,6 @@ export const processSuspectedCharacterMatches = (
 	source: IScanSource,
 	alertToMatch: ICompleteResultNotificationAlert
 ): SlicedMatch[][] => {
-	debugger;
 	const matches: Match[] = [];
 	const data: {
 		starts: number[];
@@ -480,7 +479,7 @@ export const processSourceHtml = (
 		: [];
 	const excluded = sourceHtmlExcluded(source);
 	const grouped = mergeMatches([...identical, ...minor, ...related, ...excluded]);
-	const final = fillMissingGaps(grouped, source.html.value.length);
+	const final = fillMissingGaps(grouped, source.html?.value?.length);
 	return final;
 };
 

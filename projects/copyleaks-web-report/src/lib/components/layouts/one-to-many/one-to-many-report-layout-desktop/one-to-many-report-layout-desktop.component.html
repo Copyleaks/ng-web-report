@@ -6,6 +6,7 @@
 	<!-- Report content container  -->
 	<copyleaks-content-viewer-container
 		[isHtmlView]="isHtmlView"
+		[isAlertsView]="isAlertsMode"
 		[contentHtml]="iframeHtml"
 		[scanSource]="reportCrawledVersion"
 		[contentTextMatches]="contentTextMatches"
@@ -29,7 +30,10 @@
 	<!-- Report results & alerts container -->
 	<div class="results-alerts-container">
 		<!-- Report alerts container -->
-		<copyleaks-report-alerts-container [flexGrow]="35"></copyleaks-report-alerts-container>
+		<copyleaks-report-alerts-container
+			*ngIf="alerts && alerts.length > 0"
+			[alerts]="alerts"
+			[flexGrow]="25"></copyleaks-report-alerts-container>
 
 		<!-- Report results container -->
 		<copyleaks-report-results-container [flexGrow]="65"></copyleaks-report-results-container>

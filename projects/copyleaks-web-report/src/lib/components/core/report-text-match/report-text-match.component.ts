@@ -1,17 +1,7 @@
-import {
-	AfterContentInit,
-	Component,
-	ElementRef,
-	EventEmitter,
-	HostBinding,
-	HostListener,
-	Input,
-	Output,
-	Renderer2,
-} from '@angular/core';
-import { Match, ReportOrigin } from '../../models/report-matches.models';
+import { AfterContentInit, Component, ElementRef, HostBinding, HostListener, Input, Renderer2 } from '@angular/core';
+import { Match, ReportOrigin } from '../../../models/report-matches.models';
 import scrollIntoView from 'scroll-into-view-if-needed';
-import { ReportMatchHighlightService } from '../../services/report-match-highlight.service';
+import { ReportMatchHighlightService } from '../../../services/report-match-highlight.service';
 
 @Component({
 	selector: 'span[cr-match]',
@@ -31,8 +21,6 @@ export class ReportTextMatchComponent implements AfterContentInit {
 
 	@Input()
 	public origin: ReportOrigin;
-
-	@Output() matchSelected = new EventEmitter<Match>();
 
 	private _focused = false;
 	/** focused flag, if set to `true` the element will be highlighted */
@@ -56,7 +44,6 @@ export class ReportTextMatchComponent implements AfterContentInit {
 	 */
 	@HostListener('click')
 	public click() {
-		this.matchSelected.emit(this.match);
 		this._highlightService.textMatchClicked({ elem: this, broadcast: true, origin: this.origin });
 	}
 

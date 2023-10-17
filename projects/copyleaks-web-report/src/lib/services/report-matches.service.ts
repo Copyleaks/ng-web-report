@@ -1,13 +1,15 @@
 import { Injectable, OnDestroy } from '@angular/core';
 import { BehaviorSubject, Subject, combineLatest } from 'rxjs';
 import * as helpers from '../utils/report-match-helpers';
-import { IScanSource } from '../models/report-data.models';
+import { ICompleteResultNotificationAlert, IScanSource } from '../models/report-data.models';
 import { CopyleaksReportOptions } from '../models/report-options.models';
 import { ReportDataService } from './report-data.service';
 import { filter, takeUntil } from 'rxjs/operators';
 import { SlicedMatch, Match, ResultDetailItem } from '../models/report-matches.models';
 import { ReportViewService } from './report-view.service';
 import { IReportViewEvent } from '../models/report-view.models';
+import { ALERTS } from '../constants/report-alerts.constants';
+import { untilDestroy } from '../utils/until-destroy';
 
 /**
  * Service that calculates the matches highlight positions with respect to the view and content mode.
@@ -51,11 +53,10 @@ export class ReportMatchesService implements OnDestroy {
 		return this._originalHtmlMatches.asObservable().pipe();
 	}
 
-	private _unsubscribe$: Subject<void> = new Subject();
-
 	constructor(private _reportDataSvc: ReportDataService, private _reportViewSvc: ReportViewService) {
 		this._initOneToManyMatchesHandler();
 		this._initOneToOneMatchesHandler();
+		this._initAlertMatchesHandler();
 	}
 
 	private _initOneToManyMatchesHandler() {
@@ -63,19 +64,17 @@ export class ReportMatchesService implements OnDestroy {
 			this._reportDataSvc.crawledVersion$,
 			this._reportDataSvc.scanResultsDetails$,
 			this._reportViewSvc.reportViewMode$,
+			this._reportViewSvc.selectedAlert$,
 		])
 			.pipe(
-				takeUntil(this._unsubscribe$),
+				untilDestroy(this),
 				filter(
-					([scanSource, scanResults, viewMode]) =>
-						scanSource != undefined &&
-						scanResults != undefined &&
-						viewMode != null &&
-						viewMode.viewMode === 'one-to-many'
+					([scanSource, , viewMode, selectedAlert]) =>
+						scanSource != undefined && viewMode != null && viewMode.viewMode === 'one-to-many' && selectedAlert === null
 				)
 			)
 			.subscribe(([scanSource, scanResults, viewMode]) => {
-				if (!scanSource || !scanResults || !viewMode) return;
+				if (!scanSource || !viewMode) return;
 
 				// process the mathces according to the report view
 				if (viewMode.isHtmlView) {
@@ -115,15 +114,17 @@ export class ReportMatchesService implements OnDestroy {
 			this._reportDataSvc.crawledVersion$,
 			this._reportViewSvc.selectedResult$,
 			this._reportViewSvc.reportViewMode$,
+			this._reportViewSvc.selectedAlert$,
 		])
 			.pipe(
-				takeUntil(this._unsubscribe$),
+				untilDestroy(this),
 				filter(
-					([scanSource, scanResults, viewMode]) =>
+					([scanSource, scanResults, viewMode, selectedAlert]) =>
 						scanSource != undefined &&
 						scanResults != undefined &&
 						viewMode != null &&
-						viewMode.viewMode === 'one-to-one'
+						viewMode.viewMode === 'one-to-one' &&
+						selectedAlert === null
 				)
 			)
 			.subscribe(([scanSource, selectedResult, viewMode]) => {
@@ -146,6 +147,34 @@ export class ReportMatchesService implements OnDestroy {
 			});
 	}
 
+	private _initAlertMatchesHandler() {
+		combineLatest([this._reportDataSvc.crawledVersion$, this._reportViewSvc.selectedAlert$])
+			.pipe(
+				untilDestroy(this),
+				filter(
+					([scanSource, selectedAlert]) =>
+						scanSource != null && scanSource != undefined && selectedAlert != null && selectedAlert != undefined
+				)
+			)
+			.subscribe(([scanSource, selectedAlert]) => {
+				if (!scanSource || !selectedAlert) return;
+
+				this._processAlertMatches(
+					// !MOCK data for scan report options
+					{
+						showRelated: true,
+						showIdentical: true,
+						showMinorChanges: true,
+						showPageSources: true,
+						showOnlyTopResults: true,
+						setAsDefault: true,
+					} as CopyleaksReportOptions,
+					scanSource,
+					selectedAlert
+				);
+			});
+	}
+
 	/**
 	 * Process matches on the `one-to-many` view mode
 	 * will calculate the matches when showing `text` or `html` for the first time
@@ -154,11 +183,11 @@ export class ReportMatchesService implements OnDestroy {
 	 * @param source  the scan source
 	 */
 	private _processOneToManyMatchesHtml(
-		results: ResultDetailItem[],
+		results: ResultDetailItem[] | undefined,
 		settings: CopyleaksReportOptions,
 		source: IScanSource
 	) {
-		const html = helpers.processSourceHtml(results, settings, source);
+		const html = helpers.processSourceHtml(results ?? [], settings, source);
 		if (html) {
 			this._originalHtmlMatches.next(html);
 		}
@@ -172,11 +201,11 @@ export class ReportMatchesService implements OnDestroy {
 	 * @param source  the scan source
 	 */
 	private _processOneToManyMatchesText(
-		results: ResultDetailItem[],
+		results: ResultDetailItem[] | undefined,
 		settings: CopyleaksReportOptions,
 		source: IScanSource
 	) {
-		const text = helpers.processSourceText(results, settings, source);
+		const text = helpers.processSourceText(results ?? [], settings, source);
 		if (text) {
 			this._originalTextMatches.next(text);
 		}
@@ -230,6 +259,42 @@ export class ReportMatchesService implements OnDestroy {
 	}
 
 	/**
+	 * Process matches on the `suspected-character-replacement` view mode
+	 * will calculate the matches when showing `text` or `html` for the first time
+	 * @param settings the report settings
+	 * @param source  the scan source
+	 */
+	private _processAlertMatches(
+		settings: CopyleaksReportOptions,
+		source: IScanSource,
+		selectedAlert: ICompleteResultNotificationAlert
+	) {
+		let text: SlicedMatch[][];
+
+		// check if the selected alert code is valid
+		if (selectedAlert?.code) {
+			switch (selectedAlert.code) {
+				case ALERTS.SUSPECTED_AI_TEXT_DETECTED:
+					text = helpers.processAICheatingMatches(source, selectedAlert);
+					break;
+				case ALERTS.SUSPECTED_CHARACTER_REPLACEMENT_CODE:
+					text = helpers.processSuspectedCharacterMatches(source, selectedAlert);
+					break;
+				default:
+					text = [];
+					break;
+			}
+		}
+		// otherwise, update the text view with zero results
+		else text = helpers.processSourceText([], settings, source);
+		if (text) this._originalTextMatches.next(text);
+
+		// update the html view with zero results
+		const html = helpers.processSourceHtml([], settings, source);
+		if (html) this._originalHtmlMatches.next(html);
+	}
+
+	/**
 	 * dtor
 	 */
 	ngOnDestroy() {
@@ -239,9 +304,5 @@ export class ReportMatchesService implements OnDestroy {
 		this._suspectHtmlMatches && this._suspectHtmlMatches.complete();
 		this._originalTextMatches && this._originalTextMatches.complete();
 		this._originalHtmlMatches && this._originalHtmlMatches.complete();
-
-		// Stop subscriptions
-		this._unsubscribe$.next();
-		this._unsubscribe$.complete();
 	}
 }

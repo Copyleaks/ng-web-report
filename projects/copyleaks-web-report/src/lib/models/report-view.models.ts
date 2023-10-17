@@ -7,6 +7,7 @@ export interface IReportViewEvent {
 	sourcePageIndex: number;
 	suspectPageIndex?: number;
 	suspectId?: string;
+	alertCode?: string;
 }
 
 export interface IReportViewQueryParams {
@@ -15,6 +16,7 @@ export interface IReportViewQueryParams {
 	sourcePage: string;
 	suspectPage?: string;
 	suspectId?: string;
+	alertCode?: string;
 }
 
 export interface IReportResponsiveMode {

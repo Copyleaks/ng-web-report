@@ -29,27 +29,73 @@
 	<mat-sidenav #sidenav class="custom-sidenav" mode="side" opened="true">
 		<!-- Sidenav content -->
 		<mat-nav-list [disableRipple]="true">
-			<mat-list-item [routerLink]="['/previews']" routerLinkActive="side-nav-actions-active" [disableRipple]="true">
-				<mat-icon class="item-icon" fontSet="material-icons-round">preview</mat-icon>
-				<span class="item-text">Report Previews</span>
+			<mat-list-item class [disableRipple]="true">
+				<div
+					[routerLink]="['/previews', 'Filter']"
+					routerLinkActive="side-nav-actions-active"
+					[routerLinkActiveOptions]="{ exact: true }"
+					style="
+						display: flex;
+						flex-direction: column;
+						align-items: center;
+						width: 100%;
+						gap: 8px;
+						height: fit-content;
+					">
+					<mat-icon class="item-icon" fontSet="material-icons-round">preview</mat-icon>
+					<span class="item-text">Report Previews</span>
+				</div>
+				<mat-icon class="item-expand-icon" fontSet="material-icons-round" [matMenuTriggerFor]="previewsMenu">
+					chevron_right
+				</mat-icon>
 			</mat-list-item>
 
 			<mat-list-item [routerLink]="['/layouts']" routerLinkActive="side-nav-actions-active" [disableRipple]="true">
-				<mat-icon class="item-icon" fontSet="material-icons-round">dashboard</mat-icon>
-				<span class="item-text">Layouts</span>
+				<div
+					style="
+						display: flex;
+						flex-direction: column;
+						align-items: center;
+						width: 100%;
+						gap: 8px;
+						height: fit-content;
+					">
+					<mat-icon class="item-icon" fontSet="material-icons-round">dashboard</mat-icon>
+					<span class="item-text">Layouts</span>
+				</div>
 			</mat-list-item>
 
 			<mat-list-item [routerLink]="['/components']" routerLinkActive="side-nav-actions-active" [disableRipple]="true">
-				<mat-icon class="item-icon" fontSet="material-icons-round">widgets</mat-icon>
-				<span class="item-text">Components</span>
+				<div
+					style="
+						display: flex;
+						flex-direction: column;
+						align-items: center;
+						width: 100%;
+						gap: 8px;
+						height: fit-content;
+					">
+					<mat-icon class="item-icon" fontSet="material-icons-round">widgets</mat-icon>
+					<span class="item-text">Components</span>
+				</div>
 			</mat-list-item>
 
 			<mat-list-item
 				[routerLink]="['/v2/web-report/bundle/default']"
 				routerLinkActive="side-nav-actions-active"
 				[disableRipple]="true">
-				<mat-icon class="item-icon" fontSet="material-icons-round">dns</mat-icon>
-				<span class="item-text">Report Bundle</span>
+				<div
+					style="
+						display: flex;
+						flex-direction: column;
+						align-items: center;
+						width: 100%;
+						gap: 8px;
+						height: fit-content;
+					">
+					<mat-icon class="item-icon" fontSet="material-icons-round">dns</mat-icon>
+					<span class="item-text">Report Bundle</span>
+				</div>
 			</mat-list-item>
 		</mat-nav-list>
 	</mat-sidenav>
@@ -60,3 +106,47 @@
 		</div>
 	</mat-sidenav-content>
 </mat-sidenav-container>
+
+<mat-menu #previewsMenu="matMenu">
+	<button
+		(click)="navigateToReportPreview('default')"
+		matTooltip="Scanned Website Example"
+		matTooltipPosition="right"
+		mat-menu-item>
+		<mat-icon class="item-icon" fontSet="material-icons-round">code</mat-icon>
+		<span class="item-text">HTML</span>
+	</button>
+	<button
+		(click)="navigateToReportPreview('Filter')"
+		matTooltipPosition="right"
+		matTooltip="Scanned PDF Example"
+		mat-menu-item>
+		<mat-icon class="item-icon" fontSet="material-icons-round">picture_as_pdf</mat-icon>
+		<span class="item-text">PDF</span>
+	</button>
+	<button
+		(click)="navigateToReportPreview('ai-content', 'suspected-ai-text')"
+		matTooltipPosition="right"
+		matTooltip="Suspected AI Text Example"
+		mat-menu-item>
+		<mat-icon class="item-icon" fontSet="material-icons-round">smart_toy</mat-icon>
+		<span class="item-text">AI</span>
+	</button>
+	<button
+		(click)="navigateToReportPreview('default', 'suspected-character-replacement')"
+		matTooltipPosition="right"
+		matTooltip="Suspected Character Replacement Example"
+		mat-menu-item>
+		<mat-icon class="item-icon" fontSet="material-icons-round">text_fields</mat-icon>
+		<span class="item-text">SCR</span>
+	</button>
+
+	<button
+		(click)="navigateToOneToOneReportPreview()"
+		matTooltipPosition="right"
+		matTooltip="One To One Layout Example"
+		mat-menu-item>
+		<mat-icon class="item-icon" fontSet="material-icons-round">compare</mat-icon>
+		<span class="item-text">One To One</span>
+	</button>
+</mat-menu>

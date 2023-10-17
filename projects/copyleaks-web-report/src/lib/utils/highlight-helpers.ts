@@ -1,4 +1,4 @@
-import { ReportTextMatchComponent } from '../directives/report-text-match/report-text-match.component';
+import { ReportTextMatchComponent } from '../components/core/report-text-match/report-text-match.component';
 import { Comparison, IComparisonCollection } from '../models/report-data.models';
 import { Match, MatchType, SlicedMatch } from '../models/report-matches.models';
 

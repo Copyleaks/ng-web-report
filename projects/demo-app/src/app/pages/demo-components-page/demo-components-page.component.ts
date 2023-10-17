@@ -2,7 +2,10 @@ import { Component } from '@angular/core';
 import { IResultItem } from 'projects/copyleaks-web-report/src/lib/components/containers/report-results-item-container/components/models/report-result-item.models';
 import { IResultsActions } from 'projects/copyleaks-web-report/src/lib/components/containers/report-results-container/components/results-actions/models/results-actions.models';
 import { IAuthorAlertCard } from 'projects/copyleaks-web-report/src/lib/components/containers/report-alerts-container/components/author-alert-card/models/author-alert-card.models';
-import { ECompleteResultNotificationAlertSeverity } from 'projects/copyleaks-web-report/src/lib/enums/copyleaks-web-report.enums';
+import {
+	ECompleteResultNotificationAlertSeverity,
+	EResponsiveLayoutType,
+} from 'projects/copyleaks-web-report/src/lib/enums/copyleaks-web-report.enums';
 import { ICompleteResultNotificationAlert } from 'projects/copyleaks-web-report/src/lib/models/report-data.models';
 import { ILockResultItem } from 'projects/copyleaks-web-report/src/lib/components/containers/report-results-item-container/components/lock-result-item/models/lock-result-item.models';
 
@@ -41,6 +44,7 @@ export class DemoComponentsPageComponent {
 		}
 	}
 
+	eResponsiveLayoutType = EResponsiveLayoutType;
 	resultItem: IResultItem = {
 		previewResult: {
 			id: '00fe0c8338',

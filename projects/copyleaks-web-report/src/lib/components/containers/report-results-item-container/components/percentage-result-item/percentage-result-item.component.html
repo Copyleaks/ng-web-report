@@ -6,7 +6,7 @@
 
 		<div class="percentage-container" fxLayout="row" fxLayoutGap="8px" fxLayoutAlign="start center">
 			<ng-container *ngTemplateOutlet="percentageLessResult"></ng-container>
-			<span class="similar-words-percentage">{{ similarWordsPercentage }}%</span>
+			<span class="similar-words-percentage">{{ similarWordsPercentage | similarity }}</span>
 		</div>
 	</div>
 
@@ -19,7 +19,7 @@
 		<div class="percentage-header-container" fxLayout="column" fxLayoutAlign="start start" fxLayoutGap="4px">
 			<div class="percentage-title" fxLayout="row" fxLayoutAlign="space-between start">
 				<span>Plagiarism Detection</span>
-				<span>{{ similarWordsPercentage }}%</span>
+				<span>{{ similarWordsPercentage | similarity }}</span>
 			</div>
 
 			<div
@@ -52,9 +52,9 @@
 
 <ng-template #percentageLessResult>
 	<div class="percentage-result" fxLayout="row" fxLayoutAlign="start center">
-		<div class="rectangle identical" [style.width]="identicalPercentage + '%'"></div>
-		<div class="rectangle minorChanges" [style.width]="minorChangesPercentage + '%'"></div>
-		<div class="rectangle paraphrased" [style.width]="paraphrasedPercentage + '%'"></div>
+		<div class="rectangle identical" [style.width]="identicalPercentage | similarity"></div>
+		<div class="rectangle minorChanges" [style.width]="minorChangesPercentage | similarity"></div>
+		<div class="rectangle paraphrased" [style.width]="paraphrasedPercentage | similarity"></div>
 	</div>
 </ng-template>
 
@@ -74,7 +74,7 @@
 				<span class="type-name">IDENTICAL</span>
 			</div>
 			<div fxLayout="row" fxLayoutAlign="start center" fxLayoutGap="12px">
-				<span class="percentage-match">{{ identicalPercentage }}%</span>
+				<span class="percentage-match">{{ identicalPercentage | similarity }}</span>
 				<span *ngIf="!showTooltip && iStatisticsResult" class="number-words-match">
 					{{ iStatisticsResult.identical }}
 				</span>
@@ -87,7 +87,7 @@
 				<span class="type-name">MINORCHANGES</span>
 			</div>
 			<div fxLayout="row" fxLayoutAlign="start center" fxLayoutGap="12px">
-				<span class="percentage-match">{{ minorChangesPercentage }}%</span>
+				<span class="percentage-match">{{ minorChangesPercentage | similarity }}</span>
 				<span *ngIf="!showTooltip && iStatisticsResult" class="number-words-match">
 					{{ iStatisticsResult.minorChanges }}
 				</span>
@@ -100,7 +100,7 @@
 				<span class="type-name">PARAPHRASED</span>
 			</div>
 			<div fxLayout="row" fxLayoutAlign="start center" fxLayoutGap="12px">
-				<span class="percentage-match">{{ paraphrasedPercentage }}%</span>
+				<span class="percentage-match">{{ paraphrasedPercentage | similarity }}</span>
 				<span *ngIf="!showTooltip && iStatisticsResult" class="number-words-match">
 					{{ iStatisticsResult.relatedMeaning }}
 				</span>

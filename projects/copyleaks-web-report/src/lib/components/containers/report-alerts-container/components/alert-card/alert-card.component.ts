@@ -15,7 +15,7 @@ export class AlertCardComponent implements OnInit {
 
 	severity = ECompleteResultNotificationAlertSeverity;
 
-	matChipList: string[] = ['Late', 'Late'];
+	matChipList: string[] = [];
 	showMatChipList: boolean = true;
 
 	get displayPreviewButton() {

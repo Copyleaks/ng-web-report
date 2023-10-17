@@ -14,35 +14,6 @@ import { ICompleteResultNotificationAlert } from 'projects/copyleaks-web-report/
 	styleUrls: ['./demo-components-page.component.scss'],
 })
 export class DemoComponentsPageComponent {
-	allResultsItem: IResultItem[] = [];
-	constructor() {
-		let count = 0;
-		while (count < 40) {
-			this.allResultsItem.push({
-				previewResult: {
-					id: '00fe0c8338',
-					introduction: 'No introduction available.',
-					matchedWords: 400,
-					tags: [],
-					title: 'Copyleaks Internal Database ' + count,
-					type: 3,
-					url: 'url.com/slug/slug/123xyz..',
-				},
-
-				iStatisticsResult: {
-					identical: 88,
-					minorChanges: 2,
-					relatedMeaning: 2,
-				},
-				metadataSource: {
-					words: 100,
-					excluded: 0,
-				},
-			});
-			count += 1;
-		}
-	}
-
 	reportResponsive: EResponsiveLayoutType;
 	resultItem: IResultItem = {
 		previewResult: {

@@ -65,9 +65,6 @@
 	</div>
 
 	<div class="plagiarism-detection-container">
-		<cr-percentage-result-item
-			[metadataSource]="resultItem.metadataSource"
-			[iStatisticsResult]="resultItem.iStatisticsResult"
-			[similarWords]="resultItem.previewResult.matchedWords"></cr-percentage-result-item>
+		<cr-percentage-result-item [resultItem]="resultItem"></cr-percentage-result-item>
 	</div>
 </div>

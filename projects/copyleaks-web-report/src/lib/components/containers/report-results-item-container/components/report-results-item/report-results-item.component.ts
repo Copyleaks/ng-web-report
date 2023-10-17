@@ -19,8 +19,6 @@ export class ReportResultsItemComponent implements OnInit {
 	@Output() hiddenResultEvent = new EventEmitter<string>();
 
 	previewResult: IResultPreviewBase;
-	iStatisticsResult: IStatistics;
-	metadataSource: ISourceMetadataSection;
 	eResultPreviewType = EResultPreviewType;
 
 	get authorName() {
@@ -45,8 +43,6 @@ export class ReportResultsItemComponent implements OnInit {
 	ngOnInit(): void {
 		if (this.resultItem) {
 			this.previewResult = this.resultItem.previewResult;
-			this.iStatisticsResult = this.resultItem.iStatisticsResult;
-			this.metadataSource = this.resultItem.metadataSource;
 		}
 	}
 

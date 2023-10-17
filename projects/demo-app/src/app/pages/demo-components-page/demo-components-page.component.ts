@@ -2,7 +2,10 @@ import { Component } from '@angular/core';
 import { IResultItem } from 'projects/copyleaks-web-report/src/lib/components/containers/report-results-item-container/components/models/report-result-item.models';
 import { IResultsActions } from 'projects/copyleaks-web-report/src/lib/components/containers/report-results-container/components/results-actions/models/results-actions.models';
 import { IAuthorAlertCard } from 'projects/copyleaks-web-report/src/lib/components/containers/report-alerts-container/components/author-alert-card/models/author-alert-card.models';
-import { ECompleteResultNotificationAlertSeverity } from 'projects/copyleaks-web-report/src/lib/enums/copyleaks-web-report.enums';
+import {
+	ECompleteResultNotificationAlertSeverity,
+	EResponsiveLayoutType,
+} from 'projects/copyleaks-web-report/src/lib/enums/copyleaks-web-report.enums';
 import { ICompleteResultNotificationAlert } from 'projects/copyleaks-web-report/src/lib/models/report-data.models';
 
 @Component({
@@ -11,6 +14,36 @@ import { ICompleteResultNotificationAlert } from 'projects/copyleaks-web-report/
 	styleUrls: ['./demo-components-page.component.scss'],
 })
 export class DemoComponentsPageComponent {
+	allResultsItem: IResultItem[] = [];
+	constructor() {
+		let count = 0;
+		while (count < 40) {
+			this.allResultsItem.push({
+				previewResult: {
+					id: '00fe0c8338',
+					introduction: 'No introduction available.',
+					matchedWords: 400,
+					tags: [],
+					title: 'Copyleaks Internal Database ' + count,
+					type: 3,
+					url: 'url.com/slug/slug/123xyz..',
+				},
+
+				iStatisticsResult: {
+					identical: 88,
+					minorChanges: 2,
+					relatedMeaning: 2,
+				},
+				metadataSource: {
+					words: 100,
+					excluded: 0,
+				},
+			});
+			count += 1;
+		}
+	}
+
+	reportResponsive: EResponsiveLayoutType;
 	resultItem: IResultItem = {
 		previewResult: {
 			id: '00fe0c8338',
@@ -32,6 +65,7 @@ export class DemoComponentsPageComponent {
 			excluded: 0,
 		},
 	};
+
 	resultsActions: IResultsActions = {
 		totalResults: '23',
 		totalExcluded: '17',

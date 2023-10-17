@@ -1,5 +1,6 @@
 import { Component, Input, OnInit } from '@angular/core';
 import { ISourceMetadataSection, IStatistics } from 'projects/copyleaks-web-report/src/lib/models/report-data.models';
+import { IResultItem } from '../models/report-result-item.models';
 
 @Component({
 	selector: 'cr-percentage-result-item',
@@ -7,11 +8,12 @@ import { ISourceMetadataSection, IStatistics } from 'projects/copyleaks-web-repo
 	styleUrls: ['./percentage-result-item.component.scss'],
 })
 export class PercentageResultItemComponent implements OnInit {
-	@Input() metadataSource: ISourceMetadataSection;
-	@Input() iStatisticsResult: IStatistics;
-	@Input() similarWords: number;
+	@Input() resultItem: IResultItem;
 	@Input() showTooltip: boolean = false;
 	showMorePercentage: boolean = false;
+	metadataSource: ISourceMetadataSection;
+	iStatisticsResult: IStatistics;
+	similarWords: number;
 
 	get identicalPercentage() {
 		if (this.iStatisticsResult && this.metadataSource) {
@@ -43,5 +45,11 @@ export class PercentageResultItemComponent implements OnInit {
 
 	constructor() {}
 
-	ngOnInit(): void {}
+	ngOnInit(): void {
+		if (this.resultItem) {
+			this.metadataSource = this.resultItem.metadataSource;
+			this.iStatisticsResult = this.resultItem.iStatisticsResult;
+			this.similarWords = this.resultItem.previewResult.matchedWords;
+		}
+	}
 }

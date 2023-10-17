@@ -2,6 +2,7 @@ import { Injectable } from '@angular/core';
 import { BehaviorSubject, Subject } from 'rxjs';
 import { IReportResponsiveMode, IReportViewEvent } from '../models/report-view.models';
 import { ResultDetailItem } from '../models/report-matches.models';
+import { ICompleteResultNotificationAlert } from '../models/report-data.models';
 
 @Injectable()
 export class ReportViewService {
@@ -33,6 +34,16 @@ export class ReportViewService {
 	/** Getter for the report selected result. */
 	public get selectedResult() {
 		return this._selectedResult$.value;
+	}
+
+	private _selectedAlert$ = new BehaviorSubject<ICompleteResultNotificationAlert | null>(null);
+	/** Emits matches that are relevant to source html one-to-many mode */
+	public get selectedAlert$() {
+		return this._selectedAlert$;
+	}
+	/** Getter for the report selected result. */
+	public get selectedAlert() {
+		return this._selectedAlert$.value;
 	}
 
 	constructor() {}

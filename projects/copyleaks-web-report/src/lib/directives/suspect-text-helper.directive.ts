@@ -1,19 +1,22 @@
 import { AfterContentInit, ContentChildren, Directive, Input, OnDestroy, QueryList } from '@angular/core';
-import { filter, take, withLatestFrom } from 'rxjs/operators';
+import { filter, take, takeUntil, withLatestFrom } from 'rxjs/operators';
 import { ContentMode } from '../models/report-config.models';
 import { Match } from '../models/report-matches.models';
 import { ReportDataService } from '../services/report-data.service';
 import { ReportMatchHighlightService } from '../services/report-match-highlight.service';
 import { ReportViewService } from '../services/report-view.service';
-import { ReportTextMatchComponent } from './report-text-match/report-text-match.component';
+import { ReportTextMatchComponent } from '../components/core/report-text-match/report-text-match.component';
 import { IResultDetailResponse } from '../models/report-data.models';
 import * as helpers from '../utils/highlight-helpers';
+import { Subject } from 'rxjs';
+import { untilDestroy } from '../utils/until-destroy';
 
 @Directive({
 	selector: '[crSuspectTextHelper]',
 })
 export class SuspectTextHelperDirective implements AfterContentInit, OnDestroy {
 	@Input() public host: { currentPage: number };
+
 	constructor(
 		private _highlightSvc: ReportMatchHighlightService,
 		private _viewService: ReportViewService,
@@ -60,7 +63,8 @@ export class SuspectTextHelperDirective implements AfterContentInit, OnDestroy {
 		textMatchClick$
 			.pipe(
 				filter(ev => ev.origin === 'source' && ev.broadcast),
-				withLatestFrom(selectedResult$)
+				withLatestFrom(selectedResult$),
+				untilDestroy(this)
 			)
 			.subscribe(([{ elem }, suspect]) => {
 				if (elem && suspect?.result) {
@@ -75,15 +79,13 @@ export class SuspectTextHelperDirective implements AfterContentInit, OnDestroy {
 				filter(
 					([, suspect]) =>
 						suspect != null && suspect != undefined && suspect.result != undefined && !suspect.result.html.value
-				)
+				),
+				untilDestroy(this)
 			)
 			.subscribe(([match, suspect]) => {
 				if (match && suspect?.result) this.handleBroadcast(match, suspect.result, 'html');
 			});
 	}
-	/**
-	 * Life-cycle method
-	 * empty for `untilDestroy` rxjs operator
-	 */
+
 	ngOnDestroy() {}
 }

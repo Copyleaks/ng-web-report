@@ -10,6 +10,7 @@ import { BehaviorSubject, Subscription, forkJoin, from } from 'rxjs';
 import { concatMap } from 'rxjs/operators';
 import { ResultDetailItem } from '../models/report-matches.models';
 import { IClsReportEndpointConfigModel } from '../models/report-config.models';
+import { untilDestroy } from '../utils/until-destroy';
 
 @Injectable()
 export class ReportDataService {
@@ -69,8 +70,6 @@ export class ReportDataService {
 		return this._crawledVersion$.value;
 	}
 
-	private subscriptions: Subscription[] = [];
-
 	constructor(private _http: HttpClient) {}
 
 	/**
@@ -105,21 +104,21 @@ export class ReportDataService {
 		const crawledVersionReq = this._http.get<IScanSource>(endpointsConfig.crawledVersion);
 		const completeResultsReq = this._http.get<ICompleteResults>(endpointsConfig.completeResults);
 
-		const sub = forkJoin([crawledVersionReq, completeResultsReq]).subscribe(
-			([crawledVersionRes, completeResultsRes]) => {
-				this._crawledVersion$.next(crawledVersionRes);
-				this._scanResultsPreviews$.next(completeResultsRes);
+		forkJoin([crawledVersionReq, completeResultsReq])
+			.pipe(untilDestroy(this))
+			.subscribe(
+				([crawledVersionRes, completeResultsRes]) => {
+					this._crawledVersion$.next(crawledVersionRes);
+					this._scanResultsPreviews$.next(completeResultsRes);
 
-				// Load all the complete scan results
-				this.loadAllReportScanResults(completeResultsRes);
-			},
-			error => {
-				// TODO: Error handling
-				console.error('Error occurred:', error);
-			}
-		);
-
-		this.subscriptions.push(sub);
+					// Load all the complete scan results
+					this.loadAllReportScanResults(completeResultsRes);
+				},
+				error => {
+					// TODO: Error handling
+					console.error('Error occurred:', error);
+				}
+			);
 	}
 
 	public loadAllReportScanResults(completeResults: ICompleteResults) {
@@ -147,8 +146,11 @@ export class ReportDataService {
 
 			// Send the GET results requests in batches
 			const fetchResultsBatches = from(idBatches);
-			const sub = fetchResultsBatches
-				.pipe(concatMap(ids => forkJoin(...ids.map(id => this.getReportResultAsync(id)))))
+			fetchResultsBatches
+				.pipe(
+					concatMap(ids => forkJoin(...ids.map(id => this.getReportResultAsync(id)))),
+					untilDestroy(this)
+				)
 				.subscribe((results: ResultDetailItem[]) => {
 					if (results) {
 						// Add the new fetched results to the Cache subject
@@ -156,8 +158,6 @@ export class ReportDataService {
 						this._scanResultsDetails$.next([...fetchedResults, ...results] as ResultDetailItem[]);
 					}
 				});
-
-			this.subscriptions.push(sub);
 		}
 	}
 
@@ -177,7 +177,5 @@ export class ReportDataService {
 		} as ResultDetailItem;
 	}
 
-	ngOnDestroy() {
-		if (this.subscriptions && this.subscriptions.length > 0) this.subscriptions.forEach(sub => sub.unsubscribe());
-	}
+	ngOnDestroy() {}
 }

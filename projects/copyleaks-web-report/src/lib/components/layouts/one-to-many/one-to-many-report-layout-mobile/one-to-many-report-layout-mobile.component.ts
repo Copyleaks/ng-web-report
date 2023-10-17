@@ -1,24 +1,21 @@
-import { Component, OnInit, Renderer2 } from '@angular/core';
+import { Component, OnDestroy, OnInit, Renderer2 } from '@angular/core';
 import { ReportDataService } from '../../../../services/report-data.service';
-import iframeJsScript from '../../../../utils/one-to-many-iframe-logic';
-import { COPYLEAKS_REPORT_IFRAME_STYLES } from '../../../../constants/iframe-styles.constants';
 import { ReportMatchesService } from '../../../../services/report-matches.service';
 import { Match, SlicedMatch } from '../../../../models/report-matches.models';
-import { IScanSource, ResultPreview } from '../../../../models/report-data.models';
+import { ICompleteResultNotificationAlert, IScanSource, ResultPreview } from '../../../../models/report-data.models';
 import { PostMessageEvent } from '../../../../models/report-iframe-events.models';
-import { IReportViewEvent } from '../../../../models/report-view.models';
-import * as helpers from '../../../../utils/report-match-helpers';
 import { ReportViewService } from 'projects/copyleaks-web-report/src/lib/services/report-view.service';
 import { ReportLayoutBaseComponent } from '../../base/report-layout-base.component';
 import { ReportMatchHighlightService } from 'projects/copyleaks-web-report/src/lib/services/report-match-highlight.service';
 import { EResponsiveLayoutType } from 'projects/copyleaks-web-report/src/lib/enums/copyleaks-web-report.enums';
+import { untilDestroy } from 'projects/copyleaks-web-report/src/lib/utils/until-destroy';
 
 @Component({
 	selector: 'copyleaks-one-to-many-report-layout-mobile',
 	templateUrl: './one-to-many-report-layout-mobile.component.html',
 	styleUrls: ['./one-to-many-report-layout-mobile.component.scss'],
 })
-export class OneToManyReportLayoutMobileComponent extends ReportLayoutBaseComponent implements OnInit {
+export class OneToManyReportLayoutMobileComponent extends ReportLayoutBaseComponent implements OnInit, OnDestroy {
 	hideRightSection: boolean = false;
 
 	reportCrawledVersion: IScanSource;
@@ -31,6 +28,7 @@ export class OneToManyReportLayoutMobileComponent extends ReportLayoutBaseCompon
 
 	oneToOneRerendered: boolean = false;
 	EResponsiveLayoutType = EResponsiveLayoutType;
+	alerts: ICompleteResultNotificationAlert[];
 
 	override get rerendered(): boolean {
 		return this.oneToOneRerendered;
@@ -51,14 +49,18 @@ export class OneToManyReportLayoutMobileComponent extends ReportLayoutBaseCompon
 	}
 
 	ngOnInit(): void {
-		this.reportDataSvc.crawledVersion$.subscribe(data => {
+		this.reportDataSvc.crawledVersion$.pipe(untilDestroy(this)).subscribe(data => {
 			if (data) {
 				this.reportCrawledVersion = data;
 				this.numberOfPages = data.text?.pages?.startPosition?.length ?? 1;
 			}
 		});
 
-		this.matchSvc.originalHtmlMatches$.subscribe(data => {
+		this.matchSvc.originalHtmlMatches$.pipe(untilDestroy(this)).subscribe(data => {
+			if (data != this.reportMatches) {
+				this.oneToOneRerendered = false;
+			}
+			this.reportMatches = data ?? [];
 			const updatedHtml = this._getRenderedMatches(data, this.reportCrawledVersion?.html.value);
 			if (updatedHtml && data) {
 				this.iframeHtml = updatedHtml;
@@ -66,16 +68,26 @@ export class OneToManyReportLayoutMobileComponent extends ReportLayoutBaseCompon
 			}
 		});
 
-		this.matchSvc.originalTextMatches$.subscribe(data => {
+		this.matchSvc.originalTextMatches$.pipe(untilDestroy(this)).subscribe(data => {
 			if (data) {
 				this.contentTextMatches = data;
 			}
 		});
 
-		this.reportViewSvc.reportViewMode$.subscribe(data => {
+		this.reportViewSvc.reportViewMode$.pipe(untilDestroy(this)).subscribe(data => {
 			if (!data) return;
 			this.isHtmlView = data.isHtmlView;
 			this.currentPageSource = data.sourcePageIndex;
+			this.reportDataSvc.scanResultsPreviews$.pipe(untilDestroy(this)).subscribe(previews => {
+				if (previews && previews.notifications) {
+					const selectedAlert = previews.notifications.alerts.find(a => a.code === data.alertCode);
+					if (selectedAlert) {
+						this.reportViewSvc.selectedAlert$.next(selectedAlert);
+						this.isHtmlView = false;
+					}
+					this.alerts = previews.notifications?.alerts ?? [];
+				}
+			});
 		});
 	}
 
@@ -110,4 +122,6 @@ export class OneToManyReportLayoutMobileComponent extends ReportLayoutBaseCompon
 				console.error('unknown event', message);
 		}
 	}
+
+	ngOnDestroy(): void {}
 }

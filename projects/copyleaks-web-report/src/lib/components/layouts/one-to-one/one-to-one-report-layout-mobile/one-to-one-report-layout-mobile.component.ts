@@ -1,5 +1,5 @@
 import { Component, OnInit, Renderer2 } from '@angular/core';
-import { COPYLEAKS_REPORT_IFRAME_STYLES } from 'projects/copyleaks-web-report/src/lib/constants/iframe-styles.constants';
+import { COPYLEAKS_REPORT_IFRAME_STYLES } from 'projects/copyleaks-web-report/src/lib/constants/report-iframe-styles.constants';
 import { IScanSource } from 'projects/copyleaks-web-report/src/lib/models/report-data.models';
 import { PostMessageEvent } from 'projects/copyleaks-web-report/src/lib/models/report-iframe-events.models';
 import {
@@ -17,6 +17,7 @@ import * as helpers from '../../../../utils/report-match-helpers';
 import { ReportLayoutBaseComponent } from '../../base/report-layout-base.component';
 import { EResponsiveLayoutType } from 'projects/copyleaks-web-report/src/lib/enums/copyleaks-web-report.enums';
 import { filter } from 'rxjs/operators';
+import { untilDestroy } from 'projects/copyleaks-web-report/src/lib/utils/until-destroy';
 
 @Component({
 	selector: 'copyleaks-one-to-one-report-layout-mobile',
@@ -67,18 +68,18 @@ export class OneToOneReportLayoutMobileComponent extends ReportLayoutBaseCompone
 	}
 
 	ngOnInit(): void {
-		this.reportDataSvc.crawledVersion$.subscribe(data => {
+		this.reportDataSvc.crawledVersion$.pipe(untilDestroy(this)).subscribe(data => {
 			if (data) {
 				this.sourceCrawledVersion = data;
 				this.numberOfPagesSource = data.text?.pages?.startPosition?.length ?? 1;
 			}
 		});
 
-		this.matchSvc.suspectTextMatches$.subscribe(data => {
+		this.matchSvc.suspectTextMatches$.pipe(untilDestroy(this)).subscribe(data => {
 			if (data) this.suspectTextMatches = data;
 		});
 
-		this.matchSvc.sourceHtmlMatches$.subscribe(data => {
+		this.matchSvc.sourceHtmlMatches$.pipe(untilDestroy(this)).subscribe(data => {
 			const rerenderedMatches = this._getRenderedMatches(data, this.sourceCrawledVersion?.html?.value);
 			if (rerenderedMatches && data) {
 				this.sourceIframeHtml = rerenderedMatches;
@@ -87,16 +88,16 @@ export class OneToOneReportLayoutMobileComponent extends ReportLayoutBaseCompone
 			}
 		});
 
-		this.matchSvc.sourceTextMatches$.subscribe(data => {
+		this.matchSvc.sourceTextMatches$.pipe(untilDestroy(this)).subscribe(data => {
 			if (data) this.sourceTextMatches = data;
 		});
 
-		this.reportViewSvc.selectedResult$.subscribe(resultData => {
+		this.reportViewSvc.selectedResult$.pipe(untilDestroy(this)).subscribe(resultData => {
 			if (resultData) {
 				this.numberOfPagesSuspect = resultData.result?.text?.pages?.startPosition?.length ?? 1;
 				this.resultData = resultData;
 			}
-			this.matchSvc.suspectHtmlMatches$.subscribe(data => {
+			this.matchSvc.suspectHtmlMatches$.pipe(untilDestroy(this)).subscribe(data => {
 				if (!resultData?.result?.html.value) return;
 				const rerenderedMatches = this._getRenderedMatches(data, resultData?.result?.html?.value);
 				if (rerenderedMatches && data) {
@@ -107,27 +108,32 @@ export class OneToOneReportLayoutMobileComponent extends ReportLayoutBaseCompone
 			});
 		});
 
-		this.reportViewSvc.reportViewMode$.pipe(filter(data => data.viewMode === 'one-to-one')).subscribe(data => {
-			if (!data) return;
-			this.isHtmlView = data.isHtmlView;
-			this.currentPageSource = data.sourcePageIndex;
-			if (data.suspectPageIndex) this.currentPageSuspect = data.suspectPageIndex;
-			this.reportDataSvc.scanResultsDetails$.subscribe(results => {
-				if (!results) return;
-				const foundSuspect = results?.find(result => result.id === data.suspectId);
-				if (foundSuspect) this.reportViewSvc.selectedResult$.next(foundSuspect);
-				else {
-					// if the result is not found, then change the view to one-to-many
-					this.reportViewSvc.reportViewMode$.next({
-						isHtmlView: data.isHtmlView,
-						viewMode: 'one-to-many',
-						sourcePageIndex: data.sourcePageIndex,
-						suspectPageIndex: data.suspectPageIndex,
-						suspectId: undefined,
-					});
-				}
+		this.reportViewSvc.reportViewMode$
+			.pipe(
+				filter(data => data.viewMode === 'one-to-one'),
+				untilDestroy(this)
+			)
+			.subscribe(data => {
+				if (!data) return;
+				this.isHtmlView = data.isHtmlView;
+				this.currentPageSource = data.sourcePageIndex;
+				if (data.suspectPageIndex) this.currentPageSuspect = data.suspectPageIndex;
+				this.reportDataSvc.scanResultsDetails$.pipe(untilDestroy(this)).subscribe(results => {
+					if (!results) return;
+					const foundSuspect = results?.find(result => result.id === data.suspectId);
+					if (foundSuspect) this.reportViewSvc.selectedResult$.next(foundSuspect);
+					else {
+						// if the result is not found, then change the view to one-to-many
+						this.reportViewSvc.reportViewMode$.next({
+							isHtmlView: data.isHtmlView,
+							viewMode: 'one-to-many',
+							sourcePageIndex: data.sourcePageIndex,
+							suspectPageIndex: data.suspectPageIndex,
+							suspectId: undefined,
+						});
+					}
+				});
 			});
-		});
 	}
 
 	onSourceIFrameMessage(message: PostMessageEvent) {

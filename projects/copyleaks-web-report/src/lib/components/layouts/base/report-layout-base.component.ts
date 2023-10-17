@@ -1,7 +1,7 @@
 import { Renderer2 } from '@angular/core';
 import { ReportDataService } from '../../../services/report-data.service';
 import iframeJsScript from '../../../utils/one-to-many-iframe-logic';
-import { COPYLEAKS_REPORT_IFRAME_STYLES } from '../../../constants/iframe-styles.constants';
+import { COPYLEAKS_REPORT_IFRAME_STYLES } from '../../../constants/report-iframe-styles.constants';
 import { Match } from '../../../models/report-matches.models';
 import { ReportMatchesService } from '../../../services/report-matches.service';
 import { IReportViewEvent } from '../../../models/report-view.models';
@@ -15,6 +15,10 @@ export abstract class ReportLayoutBaseComponent {
 	isHtmlView: boolean;
 
 	abstract get rerendered(): boolean;
+
+	get isAlertsMode(): boolean {
+		return !!this.reportViewSvc.selectedAlert;
+	}
 
 	constructor(
 		protected reportDataSvc: ReportDataService,

@@ -1,2 +1,17 @@
-<span class="container-text">Alerts Container</span>
-<div class="close-btn" (click)="hideAlertsContainer()">X</div>
+<div class="container-top">
+	<div class="container-title">
+		<mat-icon fontSet="material-icons-round">warning_amber</mat-icon>
+		<span class="title">Alerts</span>
+	</div>
+
+	<mat-icon class="hide-alerts-icon" (click)="hideAlertsClick()" fontSet="material-icons-round">
+		{{ hideAlerts ? 'arrow_drop_down' : 'arrow_drop_up' }}
+	</mat-icon>
+</div>
+
+<div *ngIf="!hideAlerts" #firstAlert class="container-alerts">
+	<ng-container *ngFor="let alert of alerts; let isFirst = first">
+		<cr-alert-card *ngIf="isFirst" [alert]="alert"></cr-alert-card>
+		<cr-alert-card [alert]="alert" *ngIf="!isFirst"></cr-alert-card>
+	</ng-container>
+</div>

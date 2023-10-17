@@ -24,6 +24,11 @@ export class ReportAlertsContainerComponent implements OnInit, AfterViewInit {
 	@Input() flexGrow: number;
 
 	/**
+	 * @Input {boolean} Flag indicating whether the view is a mobile or not.
+	 */
+	@Input() isMobile: number;
+
+	/**
 	 * @Input Alerts list.
 	 */
 	@Input() alerts: ICompleteResultNotificationAlert[];
@@ -37,7 +42,7 @@ export class ReportAlertsContainerComponent implements OnInit, AfterViewInit {
 
 	ngAfterViewInit() {
 		setTimeout(() => {
-			if (this.firstAlert) {
+			if (this.firstAlert && this.alerts?.length === 1) {
 				this.containerHeight = this.firstAlert.nativeElement.offsetHeight;
 				this.minHeight = `${this.containerHeight + 50}px`;
 			}

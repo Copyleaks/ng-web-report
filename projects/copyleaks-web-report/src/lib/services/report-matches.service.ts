@@ -8,7 +8,7 @@ import { filter, takeUntil } from 'rxjs/operators';
 import { SlicedMatch, Match, ResultDetailItem } from '../models/report-matches.models';
 import { ReportViewService } from './report-view.service';
 import { IReportViewEvent } from '../models/report-view.models';
-import { ALERTS } from '../enums/copyleaks-web-report.consts';
+import { ALERTS } from '../constants/report-alerts.constants';
 import { untilDestroy } from '../utils/until-destroy';
 
 /**

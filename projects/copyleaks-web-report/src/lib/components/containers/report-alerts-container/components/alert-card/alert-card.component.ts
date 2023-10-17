@@ -1,5 +1,5 @@
 import { Component, Input, OnInit } from '@angular/core';
-import { ALERTS } from 'projects/copyleaks-web-report/src/lib/enums/copyleaks-web-report.consts';
+import { ALERTS } from 'projects/copyleaks-web-report/src/lib/constants/report-alerts.constants';
 import { ECompleteResultNotificationAlertSeverity } from 'projects/copyleaks-web-report/src/lib/enums/copyleaks-web-report.enums';
 import { ICompleteResultNotificationAlert } from 'projects/copyleaks-web-report/src/lib/models/report-data.models';
 import { ReportViewService } from 'projects/copyleaks-web-report/src/lib/services/report-view.service';

@@ -4,6 +4,7 @@ import { fromEvent } from 'rxjs';
 import { debounceTime, take } from 'rxjs/operators';
 import { ReportViewService } from '../../../services/report-view.service';
 import { EnumNavigateMobileButton } from './components/models/report-result-item.enum';
+import { EResponsiveLayoutType } from '../../../enums/copyleaks-web-report.enums';
 
 @Component({
 	selector: 'copyleaks-report-results-item-container',
@@ -16,18 +17,18 @@ export class ReportResultsItemContainerComponent implements OnInit, AfterViewIni
 
 	@HostBinding('style.flex-grow')
 	flexGrowProp: number;
-
 	/**
 	 * @Input {number} Flex grow property - flex-grow
 	 */
 	@Input() flexGrow: number;
-
+	@Input() reportResponsive: EResponsiveLayoutType;
+	@Input() allResultsItem: IResultItem[] = [];
 	@ViewChild('resultsContainer', { read: ElementRef }) public resultsContainer: ElementRef;
 
 	private _startingIndex: number = 0;
 	private _pageSize: number = 10;
 	private _currentPage: number = 1;
-	showList: IResultItem[] = [];
+
 	resultItemList: IResultItem[];
 	lastItemLoading: boolean = true;
 
@@ -36,73 +37,25 @@ export class ReportResultsItemContainerComponent implements OnInit, AfterViewIni
 	enumNavigateMobileButton = EnumNavigateMobileButton;
 	showMatChip: boolean = true;
 
-	resultItem: IResultItem = {
-		previewResult: {
-			id: '00fe0c8338',
-			introduction: 'No introduction available.',
-			matchedWords: 400,
-			tags: [],
-			title: 'Copyleaks Internal Database',
-			type: 3,
-			url: 'url.com/slug/slug/123xyz..',
-		},
-
-		iStatisticsResult: {
-			identical: 88,
-			minorChanges: 2,
-			relatedMeaning: 2,
-		},
-		metadataSource: {
-			words: 100,
-			excluded: 0,
-		},
-	};
-
 	get EndingIndex(): number {
 		return this._startingIndex + this._pageSize * this._currentPage;
 	}
 
-	get resultItemLength() {
-		return this.showList.length;
+	get allResultsItemLength() {
+		return this.allResultsItem?.length;
 	}
 
-	constructor(private _reportViewService: ReportViewService, private _renderer: Renderer2) {
-		let count = 0;
-		while (count < 40) {
-			this.showList.push({
-				previewResult: {
-					id: '00fe0c8338',
-					introduction: 'No introduction available.',
-					matchedWords: 400,
-					tags: [],
-					title: 'Copyleaks Internal Database ' + count,
-					type: 3,
-					url: 'url.com/slug/slug/123xyz..',
-				},
-
-				iStatisticsResult: {
-					identical: 88,
-					minorChanges: 2,
-					relatedMeaning: 2,
-				},
-				metadataSource: {
-					words: 100,
-					excluded: 0,
-				},
-			});
-			count += 1;
-		}
-
-		if (this.resultItemLength > this._pageSize) {
-			this.resultItemList = this.showList.slice(this._startingIndex, this.EndingIndex);
-		} else {
-			this.resultItemList = this.showList;
-		}
-	}
+	constructor(private _renderer: Renderer2) {}
 
 	ngOnInit(): void {
 		if (this.flexGrow !== undefined && this.flexGrow !== null) this.flexGrowProp = this.flexGrow;
-		this.isMobile = false;
+		this.isMobile = this.reportResponsive == EResponsiveLayoutType.Mobile;
+
+		if (this.allResultsItemLength > this._pageSize) {
+			this.resultItemList = this.allResultsItem.slice(this._startingIndex, this.EndingIndex);
+		} else {
+			this.resultItemList = this.allResultsItem;
+		}
 	}
 
 	ngAfterViewInit(): void {
@@ -112,37 +65,33 @@ export class ReportResultsItemContainerComponent implements OnInit, AfterViewIni
 	}
 
 	private onTableScroll(e: any): void {
+		const scrollThreshold = 200;
+
 		if (this.isMobile) {
 			const tableViewWidth = e.target.offsetWidth;
 			const tableScrollWidth = e.target.scrollWidth;
 			const scrollLocation = e.target.scrollLeft;
-			const scrollThreshold = 200;
-			const scrollDownLimit = tableScrollWidth - tableViewWidth - scrollThreshold;
-			if (scrollLocation > scrollDownLimit && this.EndingIndex < this.showList.length) {
+			const scrollRightLimit = tableScrollWidth - tableViewWidth - scrollThreshold;
+			if (scrollLocation > scrollRightLimit && this.EndingIndex < this.allResultsItemLength) {
 				this._currentPage += 1;
-				this.resultItemList = this.showList.slice(this._startingIndex, this.EndingIndex);
+				this.lastItemLoading = true;
+				this.resultItemList = this.allResultsItem.slice(this._startingIndex, this.EndingIndex);
 				this.scrollTo(tableScrollWidth / 2 + tableViewWidth);
-			}
-			if (this.EndingIndex >= this.showList.length) {
-				this.lastItemLoading = false;
 			}
 		} else {
 			const tableViewHeight = e.target.offsetHeight;
 			const tableScrollHeight = e.target.scrollHeight;
 			const scrollLocation = e.target.scrollTop;
-
-			const scrollThreshold = 200;
 			const scrollDownLimit = tableScrollHeight - tableViewHeight - scrollThreshold;
-			if (scrollLocation > scrollDownLimit && this.EndingIndex < this.showList.length) {
+			if (scrollLocation > scrollDownLimit && this.EndingIndex < this.allResultsItemLength) {
 				this._currentPage += 1;
 				this.lastItemLoading = true;
-				this.resultItemList = this.showList.slice(this._startingIndex, this.EndingIndex);
-
+				this.resultItemList = this.allResultsItem.slice(this._startingIndex, this.EndingIndex);
 				this.scrollTo(tableScrollHeight / 2 + tableViewHeight);
 			}
-			if (this.EndingIndex >= this.showList.length) {
-				this.lastItemLoading = false;
-			}
+		}
+		if (this.EndingIndex >= this.allResultsItemLength) {
+			this.lastItemLoading = false;
 		}
 	}
 

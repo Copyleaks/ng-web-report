@@ -12,7 +12,7 @@ import { PercentageResultItemComponent } from './components/percentage-result-it
 import { ReportViewService } from '../../../services/report-view.service';
 import { ReportExpandResultItemComponent } from './components/report-expand-result-item/report-expand-result-item.component';
 import { MatChipsModule } from '@angular/material/chips';
-import { UnavailableResultItemComponent } from './components/unavailable-result-item/unavailable-result-item.component';
+import { LockResultItemComponent } from './components/lock-result-item/lock-result-item.component';
 
 @NgModule({
 	declarations: [
@@ -20,13 +20,13 @@ import { UnavailableResultItemComponent } from './components/unavailable-result-
 		ReportResultsItemComponent,
 		PercentageResultItemComponent,
 		ReportExpandResultItemComponent,
-		UnavailableResultItemComponent,
+		LockResultItemComponent,
 	],
 	exports: [
 		ReportResultsItemContainerComponent,
 		ReportResultsItemComponent,
 		ReportExpandResultItemComponent,
-		UnavailableResultItemComponent,
+		LockResultItemComponent,
 	],
 	imports: [
 		CommonModule,
@@ -38,6 +38,5 @@ import { UnavailableResultItemComponent } from './components/unavailable-result-
 		SimilarityPipeModule,
 		MatChipsModule,
 	],
-	providers: [ReportViewService],
 })
 export class ReportResultsItemContainerModule {}

@@ -1,8 +1,8 @@
-<!-- <div class="report-results-item-container">
+<div class="report-results-item-container">
 	<span>scroll result item</span>
-	<copyleaks-report-results-item-container></copyleaks-report-results-item-container>
-</div> -->
-<cr-unavailable-result-item></cr-unavailable-result-item>
+	<copyleaks-report-results-item-container [allResultsItem]="allResultsItem"></copyleaks-report-results-item-container>
+</div>
+
 <div fxLayout="column" fxLayoutAlign="start start" fxLayoutGap="8px">
 	<!-- Results item -->
 	<div
@@ -17,6 +17,14 @@
 		</div>
 		<span>Results item one-to-one</span>
 		<cr-report-expand-result-item [resultItem]="resultItem" [style]="'width:100%'"></cr-report-expand-result-item>
+	</div>
+
+	<!-- lock Result -->
+	<div class="component-conatiner" fxLayout="column" fxLayoutAlign="start start" fxLayoutGap="2px">
+		<span>Lock Result</span>
+		<div class="component">
+			<cr-lock-result-item [lockResultItem]="lockResultItem"></cr-lock-result-item>
+		</div>
 	</div>
 
 	<!-- Results Actions -->

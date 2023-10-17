@@ -1,4 +1,4 @@
-export interface IUnavailableResultItem {
+export interface ILockResultItem {
 	title: string;
 	titleIcon: string;
 	description: string;

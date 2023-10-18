@@ -27,6 +27,11 @@
 		flex-grow: 80;
 	}
 }
+copyleaks-report-results-item-container,
+copyleaks-content-viewer-container {
+	box-shadow: -2px -2px 8px 0px rgba(255, 255, 255, 0.5), 2px 2px 4px 0px rgba(0, 0, 0, 0.15);
+	border-radius: 10px;
+}
 
 copyleaks-content-viewer-container {
 	border-radius: 10px;

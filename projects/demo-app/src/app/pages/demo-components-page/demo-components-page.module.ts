@@ -5,9 +5,10 @@ import { ReportAlertsContainerModule } from 'projects/copyleaks-web-report/src/l
 import { PoweredByModule } from 'projects/copyleaks-web-report/src/lib/components/core/powered-by/powered-by.module';
 import { DemoComponentsPageRoutingModule } from './demo-components-page-routing.module';
 import { DemoComponentsPageComponent } from './demo-components-page.component';
-import { ReportResultsItemContainerModule } from 'projects/copyleaks-web-report/src/lib/components/containers/report-results-item-container/report-results-item-container.module';
 import { SimilarityPipeModule } from 'projects/copyleaks-web-report/src/lib/pipes/similarity-pipe.module';
 import { ReportResultsContainerModule } from 'projects/copyleaks-web-report/src/lib/components/containers/report-results-container/report-results-container.module';
+import { ReportViewService } from 'projects/copyleaks-web-report/src/lib/services/report-view.service';
+import { ReportResultsItemContainerModule } from 'projects/copyleaks-web-report/src/lib/components/containers/report-results-item-container/report-results-item-container.module';
 
 @NgModule({
 	declarations: [DemoComponentsPageComponent],
@@ -21,5 +22,6 @@ import { ReportResultsContainerModule } from 'projects/copyleaks-web-report/src/
 		ReportResultsContainerModule,
 		FlexLayoutModule,
 	],
+	providers: [ReportViewService],
 })
 export class DemoComponentsPageModule {}

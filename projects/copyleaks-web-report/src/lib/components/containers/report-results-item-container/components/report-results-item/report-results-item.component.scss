@@ -1,15 +1,17 @@
 @import '../../../../../styles/website-colors.styles.scss';
 
-.result-item-container {
-	border: 2px solid;
-	border-color: $color-container-background;
-	border-radius: 10px;
+.result-item-hover-container {
 	&:hover {
 		border-color: $color-primary;
 		.percentage-result-item-container {
 			background-color: $color-light-primary;
 		}
 	}
+}
+.result-item-container {
+	border: 2px solid;
+	border-color: $color-container-background;
+	border-radius: 10px;
 
 	.item-container {
 		background-color: $color-white;

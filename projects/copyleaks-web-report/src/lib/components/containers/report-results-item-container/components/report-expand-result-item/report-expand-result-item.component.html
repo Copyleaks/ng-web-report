@@ -23,7 +23,7 @@
 				</div>
 				<div class="result-title-container" fxLayout="column" fxLayoutAlign="start start" fxLayoutGap="4px">
 					<div fxLayout="row" fxLayoutAlign="start center" fxLayoutGap="4px">
-						<button class="exclude-button" (click)="exclude = !exclude">
+						<button class="exclude-button" (click)="excludeResult()">
 							<mat-icon *ngIf="exclude">visibility</mat-icon>
 							<mat-icon *ngIf="!exclude">visibility_off</mat-icon>
 						</button>

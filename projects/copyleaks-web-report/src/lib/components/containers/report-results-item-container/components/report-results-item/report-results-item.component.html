@@ -1,4 +1,8 @@
-<div class="result-item-container" fxLayout="column" fxLayoutAlign="start center">
+<div
+	class="result-item-container"
+	[ngClass]="{ 'result-item-hover-container': !showLoader }"
+	fxLayout="column"
+	fxLayoutAlign="start center">
 	<div fxLayout="column" fxLayoutAlign="start" class="item-container">
 		<div class="item-header-container" fxLayout="row" fxLayoutAlign="space-between center">
 			<div class="item-header" fxLayout="row" fxLayoutAlign="start start" fxLayoutGap="8px">

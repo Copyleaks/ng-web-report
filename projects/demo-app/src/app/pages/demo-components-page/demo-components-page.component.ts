@@ -7,6 +7,7 @@ import {
 	EResponsiveLayoutType,
 } from 'projects/copyleaks-web-report/src/lib/enums/copyleaks-web-report.enums';
 import { ICompleteResultNotificationAlert } from 'projects/copyleaks-web-report/src/lib/models/report-data.models';
+import { ILockResultItem } from 'projects/copyleaks-web-report/src/lib/components/containers/report-results-item-container/components/lock-result-item/models/lock-result-item.models';
 
 @Component({
 	selector: 'app-demo-components-page',
@@ -14,7 +15,36 @@ import { ICompleteResultNotificationAlert } from 'projects/copyleaks-web-report/
 	styleUrls: ['./demo-components-page.component.scss'],
 })
 export class DemoComponentsPageComponent {
-	reportResponsive: EResponsiveLayoutType;
+	allResultsItem: IResultItem[] = [];
+	constructor() {
+		let count = 0;
+		while (count < 40) {
+			this.allResultsItem.push({
+				previewResult: {
+					id: '00fe0c8338',
+					introduction: 'No introduction available.',
+					matchedWords: 400,
+					tags: [],
+					title: 'Copyleaks Internal Database ' + count,
+					type: 3,
+					url: 'url.com/slug/slug/123xyz..',
+				},
+
+				iStatisticsResult: {
+					identical: 88,
+					minorChanges: 2,
+					relatedMeaning: 2,
+				},
+				metadataSource: {
+					words: 100,
+					excluded: 0,
+				},
+			});
+			count += 1;
+		}
+	}
+
+	eResponsiveLayoutType = EResponsiveLayoutType;
 	resultItem: IResultItem = {
 		previewResult: {
 			id: '00fe0c8338',
@@ -35,6 +65,15 @@ export class DemoComponentsPageComponent {
 			words: 100,
 			excluded: 0,
 		},
+	};
+
+	lockResultItem: ILockResultItem = {
+		title: 'This is a partial report',
+		titleIcon: 'lock',
+		description: "You don't have enough credits to complete the scan.",
+		buttonDescription: 'To continue this scan',
+		buttonText: 'Upgrade',
+		buttonIcon: 'all_inclusive',
 	};
 
 	resultsActions: IResultsActions = {

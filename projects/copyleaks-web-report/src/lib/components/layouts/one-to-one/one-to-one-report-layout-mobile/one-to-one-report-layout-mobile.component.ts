@@ -1,5 +1,4 @@
 import { Component, OnInit, Renderer2 } from '@angular/core';
-import { COPYLEAKS_REPORT_IFRAME_STYLES } from 'projects/copyleaks-web-report/src/lib/constants/report-iframe-styles.constants';
 import { IScanSource } from 'projects/copyleaks-web-report/src/lib/models/report-data.models';
 import { PostMessageEvent } from 'projects/copyleaks-web-report/src/lib/models/report-iframe-events.models';
 import {

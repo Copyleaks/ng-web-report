@@ -1,0 +1,15 @@
+@import '../../../../../styles/website-colors.styles.scss';
+
+.empty-result-state-container {
+	.empty-state-image {
+		width: 260px;
+		height: 261px;
+		background-color: #d9d9d9;
+		border-radius: 16px;
+	}
+	.empty-state-text {
+		color: $color-primary;
+		font-size: 18px;
+		font-weight: 700;
+	}
+}

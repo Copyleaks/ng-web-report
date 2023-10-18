@@ -64,13 +64,15 @@ export class ReportStatisticsService implements OnDestroy {
 		suspect: ResultDetailItem,
 		options: CopyleaksReportOptions
 	) {
+		const aiStatistics = helpers.getAiStatistics(completeResult);
 		this._statistics.next({
 			identical: options.showIdentical && suspect.result ? suspect.result.statistics.identical : 0,
 			relatedMeaning: options.showRelated && suspect.result ? suspect.result.statistics.relatedMeaning : 0,
 			minorChanges: options.showMinorChanges && suspect.result ? suspect.result.statistics.minorChanges : 0,
 			omittedWords: completeResult.scannedDocument.totalExcluded,
 			total: completeResult.scannedDocument.totalWords,
-			aiScore: helpers.calculateAiScore(completeResult),
+			aiScore: aiStatistics?.ai ?? 0,
+			humanScore: aiStatistics?.human ?? 0,
 		});
 	}
 
@@ -103,13 +105,15 @@ export class ReportStatisticsService implements OnDestroy {
 		) {
 			// * if results are still loading  or no results are fitlered while all match types are visible
 			// * we can use the complete result stats without heavy calculations
+			const aiStatistics = helpers.getAiStatistics(completeResult);
 			stats = {
 				identical: completeResult.results.score.identicalWords,
 				relatedMeaning: completeResult.results.score.relatedMeaningWords,
 				minorChanges: completeResult.results.score.minorChangedWords,
 				omittedWords: completeResult.scannedDocument.totalExcluded,
 				total: completeResult.scannedDocument.totalWords,
-				aiScore: helpers.calculateAiScore(completeResult),
+				aiScore: aiStatistics?.ai ?? 0,
+				humanScore: aiStatistics?.human ?? 0,
 			};
 		} else {
 			stats = helpers.calculateStatistics(completeResult, filteredResults, options);

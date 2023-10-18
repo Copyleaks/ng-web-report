@@ -1,6 +1,14 @@
 import { ALERTS } from '../constants/report-alerts.constants';
-import { IAIScanHttpResult, IAIScanResultItem, ICompleteResults } from '../models/report-data.models';
-import { ComparisonKey, Match, MatchType, ResultDetailItem, SubjectResultKey } from '../models/report-matches.models';
+import { ICompleteResults } from '../models/report-data.models';
+import {
+	AIScanResult,
+	AIScanResultSummary,
+	ComparisonKey,
+	Match,
+	MatchType,
+	ResultDetailItem,
+	SubjectResultKey,
+} from '../models/report-matches.models';
 import { CopyleaksReportOptions } from '../models/report-options.models';
 import { ReportStatistics } from '../models/report-statistics.models';
 
@@ -168,6 +176,8 @@ export const calculateStatistics = (
 	);
 	aggregatedScore = isNaN(aggregatedScore) ? 0 : aggregatedScore;
 
+	const aiStatistics = getAiStatistics(completeResult);
+
 	return {
 		aggregatedScore,
 		identical: identicalCount,
@@ -175,17 +185,16 @@ export const calculateStatistics = (
 		minorChanges: minorChangesCount,
 		omittedWords: totalExcluded,
 		total: totalWords,
-		aiScore: calculateAiScore(completeResult),
+		aiScore: aiStatistics?.ai ?? 0,
+		humanScore: aiStatistics?.human ?? 0,
 	};
 };
 
-export const calculateAiScore = (completeResult: ICompleteResults): number => {
-	let aiScore = 0;
+export const getAiStatistics = (completeResult: ICompleteResults): AIScanResultSummary | null => {
 	const aiAlert = completeResult.notifications?.alerts.find(a => a.code === ALERTS.SUSPECTED_AI_TEXT_DETECTED);
 	if (aiAlert) {
-		const aiData: IAIScanHttpResult = JSON.parse(aiAlert.additionalData);
-		aiScore = aiData?.summary?.ai ?? 0;
+		const aiData: AIScanResult = JSON.parse(aiAlert.additionalData);
+		return aiData.summary;
 	}
-
-	return aiScore;
+	return null;
 };

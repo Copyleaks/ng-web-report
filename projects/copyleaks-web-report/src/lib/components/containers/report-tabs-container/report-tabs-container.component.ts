@@ -1,14 +1,16 @@
-import { Component, Input, OnInit } from '@angular/core';
+import { ChangeDetectorRef, Component, Input, OnDestroy, OnInit, TemplateRef } from '@angular/core';
 import { EReportViewType } from '../../../enums/copyleaks-web-report.enums';
 import { ReportViewService } from '../../../services/report-view.service';
 import { ALERTS } from '../../../constants/report-alerts.constants';
+import { ReportNgTemplatesService } from '../../../services/report-ng-templates.service';
+import { untilDestroy } from '../../../utils/until-destroy';
 
 @Component({
 	selector: 'copyleaks-report-tabs-container',
 	templateUrl: './report-tabs-container.component.html',
 	styleUrls: ['./report-tabs-container.component.scss'],
 })
-export class ReportTabsContainerComponent implements OnInit {
+export class ReportTabsContainerComponent implements OnInit, OnDestroy {
 	/**
 	 * @Input {boolean} Flag indicating whether to show the report AI tab or not.
 	 */
@@ -55,10 +57,22 @@ export class ReportTabsContainerComponent implements OnInit {
 	@Input() hideAiTap = false;
 
 	EReportViewType = EReportViewType;
+	customTabsTemplateRef: TemplateRef<any>[] | undefined = undefined;
 
-	constructor(private _reportViewSvc: ReportViewService) {}
+	constructor(
+		private _reportViewSvc: ReportViewService,
+		private _reportNgTemplatesSvc: ReportNgTemplatesService,
+		private cdr: ChangeDetectorRef
+	) {}
 
-	ngOnInit(): void {}
+	ngOnInit(): void {
+		this._reportNgTemplatesSvc.reportTemplatesSubject$.pipe(untilDestroy(this)).subscribe(refs => {
+			if (refs?.customTabsTemplates !== undefined && this.customTabsTemplateRef == undefined) {
+				this.customTabsTemplateRef = refs?.customTabsTemplates as TemplateRef<any>[];
+				this.cdr.detectChanges();
+			}
+		});
+	}
 
 	selectTap(selectedTab: EReportViewType) {
 		this.selectedTap = selectedTab;
@@ -87,4 +101,6 @@ export class ReportTabsContainerComponent implements OnInit {
 				break;
 		}
 	}
+
+	ngOnDestroy(): void {}
 }

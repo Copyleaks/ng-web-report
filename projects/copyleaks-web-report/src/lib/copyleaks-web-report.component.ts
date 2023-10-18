@@ -30,6 +30,7 @@ import { ALERTS } from './constants/report-alerts.constants';
 export class CopyleaksWebReportComponent implements OnInit, OnDestroy {
 	@ViewChild('customActionsTemplate', { static: true }) customActionsTemplate: TemplateRef<any>;
 	@ViewChild('customResultsTemplate', { static: true }) customResultsTemplate: TemplateRef<any>;
+	@ViewChild('customTabsTemplate', { static: true }) customTabsTemplate: TemplateRef<any>;
 
 	/**
 	 * @Input {ReportLayoutType} - The copyleaks report layout type.

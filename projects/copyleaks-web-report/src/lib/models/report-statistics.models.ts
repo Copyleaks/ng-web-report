@@ -16,4 +16,6 @@ export interface ReportStatistics {
 	total?: number;
 	/** AI probability */
 	aiScore: number;
+	/** Human probability */
+	humanScore: number;
 }

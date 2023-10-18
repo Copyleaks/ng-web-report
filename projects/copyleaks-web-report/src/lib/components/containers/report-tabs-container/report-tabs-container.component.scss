@@ -4,9 +4,11 @@
 :host {
 	display: flex;
 	flex-direction: row;
+	flex-wrap: wrap;
 
 	.tab-ai,
-	.tab-plagiarism {
+	.tab-plagiarism,
+	::ng-deep .custom-tab {
 		padding: 16px;
 		display: flex;
 		flex-direction: column;

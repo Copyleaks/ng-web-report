@@ -46,3 +46,7 @@
 	</div>
 	<!-- <div class="close-btn" (click)="hideAiTap = !hideAiTap">X</div> -->
 </div>
+
+<ng-container *ngFor="let ref of customTabsTemplateRef">
+	<ng-container *ngTemplateOutlet="ref"></ng-container>
+</ng-container>

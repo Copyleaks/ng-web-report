@@ -35,7 +35,7 @@ export class OneToManyReportLayoutDesktopComponent extends ReportLayoutBaseCompo
 	oneToOneRerendered: boolean = false;
 	EResponsiveLayoutType = EResponsiveLayoutType;
 	alerts: ICompleteResultNotificationAlert[];
-	reportStatistics: ReportStatistics;
+	reportStatistics: ReportStatistics | undefined;
 	selectedTap: EReportViewType = EReportViewType.PlagiarismView;
 
 	override get rerendered(): boolean {
@@ -56,7 +56,7 @@ export class OneToManyReportLayoutDesktopComponent extends ReportLayoutBaseCompo
 	get plagiarismScore() {
 		const res = Math.min(
 			1,
-			this.combined / ((this.reportStatistics?.total ?? 0) - this.reportStatistics?.omittedWords)
+			this.combined / ((this.reportStatistics?.total ?? 0) - (this.reportStatistics?.omittedWords ?? 0))
 		);
 		return isNaN(res) ? 0 : res;
 	}
@@ -113,7 +113,6 @@ export class OneToManyReportLayoutDesktopComponent extends ReportLayoutBaseCompo
 
 		this.statisticsSvc.statistics$.pipe(untilDestroy(this)).subscribe(data => {
 			if (data) this.reportStatistics = data;
-			console.log(data);
 		});
 	}
 

@@ -1,18 +1,18 @@
 import { Injectable, OnDestroy } from '@angular/core';
 import { BehaviorSubject, Subject } from 'rxjs';
 import { filter, map, withLatestFrom } from 'rxjs/operators';
-import { ReportTextMatchComponent } from '../components/core/report-text-match/report-text-match.component';
 import { HtmlMatchClickEvent, Match, TextMatchHighlightEvent } from '../models/report-matches.models';
 import { ContentMode, ViewMode } from '../models/report-config.models';
 import * as helpers from '../utils/highlight-helpers';
 import { ReportViewService } from './report-view.service';
 import { untilDestroy } from '../utils/until-destroy';
+import { CrTextMatchComponent } from '../components/core/cr-text-match/cr-text-match.component';
 
 @Injectable()
 export class ReportMatchHighlightService implements OnDestroy {
-	private readonly _originalText = new BehaviorSubject<ReportTextMatchComponent | null>(null);
-	private readonly _sourceText = new BehaviorSubject<ReportTextMatchComponent | null>(null);
-	private readonly _suspectText = new BehaviorSubject<ReportTextMatchComponent | null>(null);
+	private readonly _originalText = new BehaviorSubject<CrTextMatchComponent | null>(null);
+	private readonly _sourceText = new BehaviorSubject<CrTextMatchComponent | null>(null);
+	private readonly _suspectText = new BehaviorSubject<CrTextMatchComponent | null>(null);
 	private readonly _originalHtml = new BehaviorSubject<Match | null>(null);
 	private readonly _sourceHtml = new BehaviorSubject<Match | null>(null);
 	private readonly _suspectHtml = new BehaviorSubject<Match | null>(null);
@@ -129,7 +129,7 @@ export class ReportMatchHighlightService implements OnDestroy {
 	 * This will mark/unmark the text match in the original component while in `one-to-many` view mode
 	 * @param match The match to mark/unmark
 	 */
-	public setOriginalTextMatch(next: ReportTextMatchComponent | null) {
+	public setOriginalTextMatch(next: CrTextMatchComponent | null) {
 		const prev = this._originalText.value;
 		if (prev === next) {
 			next = null;
@@ -145,7 +145,7 @@ export class ReportMatchHighlightService implements OnDestroy {
 	 * This will mark/unmark the text match in the original component while in `one-to-one` view mode
 	 * @param match The match to mark/unmark
 	 */
-	public setSourceTextMatch(next: ReportTextMatchComponent | null) {
+	public setSourceTextMatch(next: CrTextMatchComponent | null) {
 		const prev = this._sourceText.value;
 		if (prev === next) {
 			next = null;
@@ -160,7 +160,7 @@ export class ReportMatchHighlightService implements OnDestroy {
 	 * This will mark/unmark the text match in the suspect component while in `one-to-one` view mode
 	 * @param next The match to mark/unmark
 	 */
-	public setSuspectTextMatch(next: ReportTextMatchComponent | null) {
+	public setSuspectTextMatch(next: CrTextMatchComponent | null) {
 		const prev = this._suspectText.value;
 		if (prev === next) {
 			next = null;

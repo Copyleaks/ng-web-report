@@ -37,4 +37,14 @@ export class ReportNgTemplatesService {
 			customResultsTemplate: template,
 		} as ICustomClsReportTemplatesRefs);
 	}
+
+	/**
+	 * Setter for the custom report results section template reference.
+	 */
+	public setReportCustomTabsTemplateRef(templates: TemplateRef<any>[]) {
+		this._reportTemplatesRefs$.next({
+			...this._reportTemplatesRefs$.value,
+			customTabsTemplates: templates,
+		} as ICustomClsReportTemplatesRefs);
+	}
 }

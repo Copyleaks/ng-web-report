@@ -34,17 +34,12 @@
 	box-sizing: border-box;
 	@include cls-report-container-close-btn;
 
-	copyleaks-report-actions-container {
-		flex-grow: 10;
-		height: 10%;
-	}
-
 	.results-alerts-container {
 		display: flex;
 		flex-direction: column;
 		gap: 16px;
-		flex-grow: 90;
-		height: 90%;
+		flex-grow: 100;
+		height: auto;
 		padding: 8px;
 		overflow-y: auto;
 		box-shadow: -2px -2px 8px 0px rgba(255, 255, 255, 0.5), 2px 2px 4px 0px rgba(0, 0, 0, 0.15);

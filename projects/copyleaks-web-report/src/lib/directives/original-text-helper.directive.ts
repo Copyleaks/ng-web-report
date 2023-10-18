@@ -2,11 +2,11 @@ import { AfterContentInit, ContentChildren, Directive, Input, OnDestroy, QueryLi
 import { distinctUntilChanged, filter, take, takeUntil, withLatestFrom } from 'rxjs/operators';
 import { ReportMatchHighlightService } from '../services/report-match-highlight.service';
 import * as helpers from '../utils/highlight-helpers';
-import { ReportTextMatchComponent } from '../components/core/report-text-match/report-text-match.component';
 import { ReportViewService } from '../services/report-view.service';
 import { TextMatchHighlightEvent } from '../models/report-matches.models';
 import { Subject } from 'rxjs';
 import { untilDestroy } from '../utils/until-destroy';
+import { CrTextMatchComponent } from '../components/core/cr-text-match/cr-text-match.component';
 
 @Directive({
 	selector: '[crOriginalTextHelper]',
@@ -18,9 +18,9 @@ export class OriginalTextHelperDirective implements AfterContentInit, OnDestroy 
 
 	constructor(private highlightService: ReportMatchHighlightService, private _viewService: ReportViewService) {}
 
-	@ContentChildren(ReportTextMatchComponent)
-	private children: QueryList<ReportTextMatchComponent>;
-	private current: ReportTextMatchComponent | null;
+	@ContentChildren(CrTextMatchComponent)
+	private children: QueryList<CrTextMatchComponent>;
+	private current: CrTextMatchComponent | null;
 
 	/**
 	 * Handles the jump logic

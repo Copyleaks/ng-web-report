@@ -9,17 +9,70 @@
 			font-weight: 700;
 			font-size: 20px;
 		}
-	}
-	.clear-button {
-		color: $color-primary;
-		mat-icon {
-			font-size: 24px;
-			width: 24px;
-			height: 24px;
+
+		.clear-button {
+			cursor: pointer;
+			border: 0px;
+			background-color: $color-white;
+			color: $color-primary;
+			mat-icon {
+				font-size: 24px;
+				width: 24px;
+				height: 24px;
+			}
+			span {
+				color: $color-primary;
+				font-size: 14px;
+				font-weight: 500;
+			}
 		}
-		span {
+	}
+	.result-container {
+		.tootal-results {
+			color: $color-black;
+			font-size: 16px;
+			font-weight: 700;
+		}
+		.tootal-excuded {
+			font-weight: 400;
 			font-size: 14px;
-			font-weight: 500;
+			color: $color-primary;
+			text-decoration: underline;
+		}
+		.tootal-filtered {
+			font-weight: 400;
+			font-size: 14px;
+			color: $color-dark-blue;
+		}
+		.separate-circle-icon {
+			height: 4px;
+			width: 4px;
+			font-size: 4px;
+			color: $color-medium-dark;
+			opacity: 0.4;
+		}
+	}
+}
+.body-container {
+	.body-title {
+		font-size: 16px;
+		font-weight: 700;
+		color: $color-black;
+	}
+	.source-type-contaier {
+		.surce-type-title {
+			.surce-type-icon-container {
+				width: 24px;
+				height: 24px;
+				border: 2px solid;
+				border-radius: 50%;
+				color: $color-primary;
+				mat-icon {
+					font-size: 18px;
+					height: 18px;
+					width: 18px;
+				}
+			}
 		}
 	}
 }

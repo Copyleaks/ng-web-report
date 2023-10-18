@@ -53,6 +53,7 @@
 			font-size: 14px;
 			font-weight: 500;
 			color: $color-primary;
+			font-family: 'Open Sans', sans-serif !important;
 		}
 	}
 
@@ -69,6 +70,11 @@
 		color: $color-primary;
 		font-size: 14px;
 		font-weight: 500;
+		text-decoration: none;
+	}
+
+	.disclamer:hover {
+		text-decoration: underline;
 	}
 	.alert-card-message {
 		font-weight: 500;

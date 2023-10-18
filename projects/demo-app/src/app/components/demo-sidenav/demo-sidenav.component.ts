@@ -53,11 +53,11 @@ export class DemoSidenavComponent implements OnInit {
 
 	navigateToOneToOneReportPreview() {
 		this._router
-			.navigate([`/previews/Filter`], {
+			.navigate([`/previews/default`], {
 				queryParams: {
 					viewMode: 'one-to-one',
-					contentMode: 'html',
-					suspectId: 'b031b941a1',
+					contentMode: 'text',
+					suspectId: '34dbbae35a',
 				},
 			})
 			.then(() => {

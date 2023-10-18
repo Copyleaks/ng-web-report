@@ -1,13 +1,8 @@
 import { Component, OnDestroy, OnInit, Renderer2 } from '@angular/core';
-import { COPYLEAKS_REPORT_IFRAME_STYLES } from 'projects/copyleaks-web-report/src/lib/constants/report-iframe-styles.constants';
-import {
-	EExcludeReason,
-	EResponsiveLayoutType,
-} from 'projects/copyleaks-web-report/src/lib/enums/copyleaks-web-report.enums';
+import { EResponsiveLayoutType } from 'projects/copyleaks-web-report/src/lib/enums/copyleaks-web-report.enums';
 import { IScanSource } from 'projects/copyleaks-web-report/src/lib/models/report-data.models';
 import {
 	Match,
-	MatchType,
 	ResultDetailItem,
 	SlicedMatch,
 } from 'projects/copyleaks-web-report/src/lib/models/report-matches.models';

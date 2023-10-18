@@ -38,7 +38,7 @@
 					<span>show</span>
 				</ng-template>
 			</button>
-			<span class="disclamer">Disclamer</span>
+			<a *ngIf="alert?.helpLink" class="disclamer" [href]="alert.helpLink" target="_blank">Disclamer</a>
 		</div>
 	</div>
 	<span class="alert-card-message">

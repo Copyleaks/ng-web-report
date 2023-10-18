@@ -63,7 +63,7 @@ export class CopyleaksWebReportComponent implements OnInit, OnDestroy {
 
 	ngOnInit(): void {
 		if (this.responsiveLayoutType == null) this._initResponsiveLayoutType();
-		this._initReportLayoutType();
+		if (!this.reportLayoutType) this._initReportLayoutType();
 
 		if (this.reportEndpointConfig) this._reportDataSvc.initReportData(this.reportEndpointConfig);
 	}

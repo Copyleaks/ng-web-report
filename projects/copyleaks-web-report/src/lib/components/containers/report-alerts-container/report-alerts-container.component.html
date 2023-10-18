@@ -1,17 +1,23 @@
-<div class="container-top">
-	<div class="container-title">
-		<mat-icon fontSet="material-icons-round">warning_amber</mat-icon>
-		<span class="title">Alerts</span>
-	</div>
+<mat-accordion>
+	<mat-expansion-panel #panel [expanded]="true" (opened)="showAlertsClick()" (closed)="hideAlertsClick()">
+		<mat-expansion-panel-header>
+			<mat-panel-title>
+				<div class="container-title">
+					<mat-icon fontSet="material-icons-round">warning_amber</mat-icon>
+					<span class="title">Alerts</span>
+				</div>
+			</mat-panel-title>
 
-	<mat-icon class="hide-alerts-icon" (click)="hideAlertsClick()" fontSet="material-icons-round">
-		{{ hideAlerts ? 'arrow_drop_down' : 'arrow_drop_up' }}
-	</mat-icon>
-</div>
+			<mat-panel-description>
+				<mat-icon class="hide-alerts-icon" fontSet="material-icons-round">arrow_drop_down</mat-icon>
+			</mat-panel-description>
+		</mat-expansion-panel-header>
 
-<div *ngIf="!hideAlerts" #firstAlert class="container-alerts">
-	<ng-container *ngFor="let alert of alerts; let isFirst = first">
-		<cr-alert-card *ngIf="isFirst" [alert]="alert"></cr-alert-card>
-		<cr-alert-card [alert]="alert" *ngIf="!isFirst"></cr-alert-card>
-	</ng-container>
-</div>
+		<div #firstAlert class="container-alerts">
+			<ng-container *ngFor="let alert of alerts; let isFirst = first">
+				<cr-alert-card *ngIf="isFirst" [alert]="alert"></cr-alert-card>
+				<cr-alert-card [alert]="alert" *ngIf="!isFirst"></cr-alert-card>
+			</ng-container>
+		</div>
+	</mat-expansion-panel>
+</mat-accordion>

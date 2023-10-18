@@ -1,0 +1,81 @@
+@import '../../../../../styles/website-colors.styles.scss';
+
+.top-container {
+	width: 100%;
+	background-color: $color-white;
+	border: 2px solid;
+	border-radius: 10px;
+	border-color: $color-primary;
+	.header-container {
+		width: 100%;
+		padding: 4px 8px;
+		mat-icon {
+			font-size: 24px;
+			width: 24px;
+			height: 24px;
+			color: $color-dark-blue;
+		}
+		h2 {
+			font-size: 20px;
+			color: $color-dark-blue;
+			margin: 0px;
+		}
+	}
+	.body-container {
+		width: 100%;
+		padding: 8px;
+		.description-container {
+			display: flex;
+			align-items: center;
+			justify-content: center;
+			width: 100%;
+			span {
+				word-wrap: break-word;
+				text-align: center;
+				font-size: 18px;
+				font-weight: 700;
+				color: $color-black;
+			}
+		}
+
+		.button-container {
+			width: 100%;
+			.button-description {
+				width: 100%;
+				color: $color-black;
+				font-weight: 500;
+				font-size: 14px;
+			}
+			.button {
+				cursor: pointer;
+				width: 100%;
+				background-color: $color-primary;
+				border: 2px solid;
+				border-radius: 24px 0px 16px 24px;
+				border-color: $color-primary;
+				padding: 4px 24px;
+				&:hover {
+					background-color: $color-white;
+					span {
+						color: $color-primary;
+					}
+					mat-icon {
+						color: $color-primary;
+					}
+				}
+
+				span {
+					font-size: 16px;
+					font-weight: 700;
+					color: $color-white;
+				}
+				mat-icon {
+					color: $color-white;
+					font-size: 24px;
+					width: 24px;
+					height: 24px;
+				}
+			}
+		}
+	}
+}

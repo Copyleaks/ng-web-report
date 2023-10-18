@@ -1,0 +1,110 @@
+<div class="plagiarism-detection-percentage-container">
+	<div *ngIf="showTooltip" class="percentage-with-tooltip-container" fxLayout="row" fxLayoutAlign="center center">
+		<div class="tooltip-result" fxLayout="column" fxLayoutAlign="start start">
+			<ng-container *ngTemplateOutlet="matchTypeCotainer"></ng-container>
+		</div>
+
+		<div class="percentage-container" fxLayout="row" fxLayoutGap="8px" fxLayoutAlign="start center">
+			<ng-container *ngTemplateOutlet="percentageLessResult"></ng-container>
+			<span class="similar-words-percentage">{{ similarWordsPercentage | similarity }}</span>
+		</div>
+	</div>
+
+	<div
+		*ngIf="!showTooltip"
+		class="percentage-without-tooltip-container"
+		fxLayout="row"
+		fxLayoutAlign="space-between start"
+		fxLayoutGap="4px">
+		<div class="percentage-header-container" fxLayout="column" fxLayoutAlign="start start" fxLayoutGap="4px">
+			<div class="percentage-title" fxLayout="row" fxLayoutAlign="space-between start">
+				<span>Plagiarism Detection</span>
+				<span>{{ similarWordsPercentage | similarity }}</span>
+			</div>
+
+			<div
+				class="match-type-result-container"
+				fxLayout="column"
+				fxLayoutAlign="start start"
+				*ngIf="showMorePercentage; else showLessPerDetails">
+				<ng-container *ngTemplateOutlet="matchTypeCotainer"></ng-container>
+			</div>
+
+			<ng-template #showLessPerDetails>
+				<ng-container *ngTemplateOutlet="percentageLessResult"></ng-container>
+			</ng-template>
+		</div>
+
+		<button
+			class="more-percentage-details-button"
+			fxLayout="row"
+			fxLayoutAlign="start end"
+			(click)="showMorePercentage = !showMorePercentage">
+			<ng-container *ngIf="showMorePercentage; else showLessPerDetailsIcon">
+				<mat-icon>arrow_drop_up</mat-icon>
+			</ng-container>
+			<ng-template #showLessPerDetailsIcon>
+				<mat-icon>arrow_drop_down</mat-icon>
+			</ng-template>
+		</button>
+	</div>
+</div>
+
+<ng-template #percentageLessResult>
+	<div class="percentage-result" fxLayout="row" fxLayoutAlign="start center">
+		<div class="rectangle identical" [style.width]="identicalPercentage | similarity"></div>
+		<div class="rectangle minorChanges" [style.width]="minorChangesPercentage | similarity"></div>
+		<div class="rectangle paraphrased" [style.width]="paraphrasedPercentage | similarity"></div>
+	</div>
+</ng-template>
+
+<ng-template #matchTypeCotainer>
+	<div class="match-type-top-container" fxLayout="column" fxLayoutAlign="start start">
+		<div *ngIf="!showTooltip" class="match-type-title" fxLayout="row" fxLayoutAlign="space-between center">
+			<span>Match type</span>
+			<div fxLayout="row" fxLayoutAlign="start center" fxLayoutGap="12px">
+				<span class="percentage-match">Match</span>
+				<span class="number-words-match">Words</span>
+			</div>
+		</div>
+		<!--identical-->
+		<div class="match-type-cotainer" fxLayout="row" fxLayoutAlign="space-between center">
+			<div fxLayout="row" fxLayoutGap="8px" fxLayoutAlign="start center">
+				<span class="dot identical"></span>
+				<span class="type-name">IDENTICAL</span>
+			</div>
+			<div fxLayout="row" fxLayoutAlign="start center" fxLayoutGap="12px">
+				<span class="percentage-match">{{ identicalPercentage | similarity }}</span>
+				<span *ngIf="!showTooltip && iStatisticsResult" class="number-words-match">
+					{{ iStatisticsResult.identical }}
+				</span>
+			</div>
+		</div>
+		<!--minorChanges-->
+		<div class="match-type-cotainer" fxLayout="row" fxLayoutAlign="space-between center">
+			<div fxLayout="row" fxLayoutGap="8px" fxLayoutAlign="start center">
+				<span class="dot minorChanges"></span>
+				<span class="type-name">MINORCHANGES</span>
+			</div>
+			<div fxLayout="row" fxLayoutAlign="start center" fxLayoutGap="12px">
+				<span class="percentage-match">{{ minorChangesPercentage | similarity }}</span>
+				<span *ngIf="!showTooltip && iStatisticsResult" class="number-words-match">
+					{{ iStatisticsResult.minorChanges }}
+				</span>
+			</div>
+		</div>
+		<!-- paraphrased -->
+		<div class="match-type-cotainer" fxLayout="row" fxLayoutAlign="space-between center">
+			<div fxLayout="row" fxLayoutGap="8px" fxLayoutAlign="start center">
+				<span class="dot paraphrased"></span>
+				<span class="type-name">PARAPHRASED</span>
+			</div>
+			<div fxLayout="row" fxLayoutAlign="start center" fxLayoutGap="12px">
+				<span class="percentage-match">{{ paraphrasedPercentage | similarity }}</span>
+				<span *ngIf="!showTooltip && iStatisticsResult" class="number-words-match">
+					{{ iStatisticsResult.relatedMeaning }}
+				</span>
+			</div>
+		</div>
+	</div>
+</ng-template>

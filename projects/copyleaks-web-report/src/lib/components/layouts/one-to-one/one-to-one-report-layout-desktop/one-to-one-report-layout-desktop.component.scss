@@ -1,4 +1,5 @@
 @import '../../../../styles/containers.styles.scss';
+@import '../../../../styles/website-colors.styles.scss';
 
 :host {
 	display: flex;
@@ -17,19 +18,9 @@
 .right-section {
 	display: flex;
 	flex-direction: column;
-	gap: 16px;
+	gap: 8px;
 	flex: 50%;
 	width: 50%;
-
-	@include cls-report-container-close-btn;
-
-	.results-alerts-container {
-		padding: 10px;
-		display: flex;
-		flex-direction: column;
-		gap: 16px;
-		flex-grow: 1;
-	}
 
 	copyleaks-content-viewer-container {
 		height: 80%;
@@ -38,5 +29,10 @@
 }
 
 copyleaks-content-viewer-container {
+	border-radius: 10px;
+}
+
+copyleaks-report-results-item-container {
+	background-color: $color-white;
 	border-radius: 10px;
 }

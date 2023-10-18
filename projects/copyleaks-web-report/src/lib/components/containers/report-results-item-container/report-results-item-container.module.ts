@@ -9,7 +9,6 @@ import { MatButtonModule } from '@angular/material/button';
 import { NgxSkeletonLoaderModule } from 'ngx-skeleton-loader';
 import { SimilarityPipeModule } from '../../../pipes/similarity-pipe.module';
 import { PercentageResultItemComponent } from './components/percentage-result-item/percentage-result-item.component';
-import { ReportViewService } from '../../../services/report-view.service';
 import { ReportExpandResultItemComponent } from './components/report-expand-result-item/report-expand-result-item.component';
 import { MatChipsModule } from '@angular/material/chips';
 import { LockResultItemComponent } from './components/lock-result-item/lock-result-item.component';

@@ -2,9 +2,6 @@
 @import '../../../styles/website-colors.styles.scss';
 
 :host {
-	@include cls-report-container-lvl-2;
-	@include cls-report-container-close-btn;
-
 	padding: 10px;
 	display: flex;
 	flex-direction: row;

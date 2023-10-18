@@ -7,8 +7,14 @@ import { ICompleteResultNotificationAlert, IScanSource, ResultPreview } from '..
 import { ReportViewService } from '../../../../services/report-view.service';
 import { ReportLayoutBaseComponent } from '../../base/report-layout-base.component';
 import { ReportMatchHighlightService } from 'projects/copyleaks-web-report/src/lib/services/report-match-highlight.service';
-import { EResponsiveLayoutType } from 'projects/copyleaks-web-report/src/lib/enums/copyleaks-web-report.enums';
+import {
+	EReportViewType,
+	EResponsiveLayoutType,
+} from 'projects/copyleaks-web-report/src/lib/enums/copyleaks-web-report.enums';
 import { untilDestroy } from 'projects/copyleaks-web-report/src/lib/utils/until-destroy';
+import { ReportStatisticsService } from 'projects/copyleaks-web-report/src/lib/services/report-statistics.service';
+import { ReportStatistics } from 'projects/copyleaks-web-report/src/lib/models/report-statistics.models';
+import { ALERTS } from 'projects/copyleaks-web-report/src/lib/constants/report-alerts.constants';
 
 @Component({
 	selector: 'copyleaks-one-to-many-report-layout-desktop',
@@ -29,6 +35,8 @@ export class OneToManyReportLayoutDesktopComponent extends ReportLayoutBaseCompo
 	oneToOneRerendered: boolean = false;
 	EResponsiveLayoutType = EResponsiveLayoutType;
 	alerts: ICompleteResultNotificationAlert[];
+	reportStatistics: ReportStatistics;
+	selectedTap: EReportViewType = EReportViewType.PlagiarismView;
 
 	override get rerendered(): boolean {
 		return this.oneToOneRerendered;
@@ -38,14 +46,30 @@ export class OneToManyReportLayoutDesktopComponent extends ReportLayoutBaseCompo
 		return this.reportDataSvc.scanResultsPreviews?.scannedDocument?.totalWords;
 	}
 
+	get combined() {
+		if (!this.reportStatistics) return 0;
+		return (
+			this.reportStatistics?.identical + this.reportStatistics?.relatedMeaning + this.reportStatistics?.minorChanges
+		);
+	}
+
+	get plagiarismScore() {
+		const res = Math.min(
+			1,
+			this.combined / ((this.reportStatistics?.total ?? 0) - this.reportStatistics?.omittedWords)
+		);
+		return isNaN(res) ? 0 : res;
+	}
+
 	constructor(
 		reportDataSvc: ReportDataService,
 		reportViewSvc: ReportViewService,
 		matchSvc: ReportMatchesService,
 		renderer: Renderer2,
-		highlightSvc: ReportMatchHighlightService
+		highlightSvc: ReportMatchHighlightService,
+		statisticsSvc: ReportStatisticsService
 	) {
-		super(reportDataSvc, reportViewSvc, matchSvc, renderer, highlightSvc);
+		super(reportDataSvc, reportViewSvc, matchSvc, renderer, highlightSvc, statisticsSvc);
 	}
 
 	ngOnInit(): void {
@@ -78,16 +102,18 @@ export class OneToManyReportLayoutDesktopComponent extends ReportLayoutBaseCompo
 			if (!data) return;
 			this.isHtmlView = data.isHtmlView;
 			this.currentPageSource = data.sourcePageIndex;
+			this.selectedTap =
+				data.alertCode === ALERTS.SUSPECTED_AI_TEXT_DETECTED ? EReportViewType.AIView : EReportViewType.PlagiarismView;
 			this.reportDataSvc.scanResultsPreviews$.pipe(untilDestroy(this)).subscribe(previews => {
-				if (previews && previews.notifications) {
-					const selectedAlert = previews.notifications.alerts.find(a => a.code === data.alertCode);
-					if (selectedAlert) {
-						this.reportViewSvc.selectedAlert$.next(selectedAlert);
-						this.isHtmlView = false;
-					}
-					this.alerts = previews.notifications?.alerts ?? [];
-				}
+				// this.reportViewSvc.selectedAlert$.next(data?.alertCode ?? null);
+				if (data?.alertCode) this.isHtmlView = false;
+				this.alerts = previews?.notifications?.alerts ?? [];
 			});
+		});
+
+		this.statisticsSvc.statistics$.pipe(untilDestroy(this)).subscribe(data => {
+			if (data) this.reportStatistics = data;
+			console.log(data);
 		});
 	}
 

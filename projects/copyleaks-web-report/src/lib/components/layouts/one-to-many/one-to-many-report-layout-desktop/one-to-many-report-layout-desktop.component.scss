@@ -7,16 +7,12 @@
 }
 
 .left-section {
-	@include cls-report-container-lvl-1;
 	flex: 70%;
 	width: 70%;
 	display: flex;
 	flex-direction: column;
-	gap: 16px;
-	padding: 10px;
 
 	copyleaks-report-tabs-container {
-		height: 10%;
 		flex-grow: 10;
 	}
 

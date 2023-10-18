@@ -36,7 +36,7 @@ export class ReportViewService {
 		return this._selectedResult$.value;
 	}
 
-	private _selectedAlert$ = new BehaviorSubject<ICompleteResultNotificationAlert | null>(null);
+	private _selectedAlert$ = new BehaviorSubject<string | null>(null);
 	/** Emits matches that are relevant to source html one-to-many mode */
 	public get selectedAlert$() {
 		return this._selectedAlert$;

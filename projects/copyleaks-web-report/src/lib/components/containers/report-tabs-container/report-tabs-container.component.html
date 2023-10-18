@@ -1,8 +1,48 @@
-<div *ngIf="!hidePlagarismTap" class="tab-plagiarism" [style.flex-grow]="1">
-	<span class="container-text">Plagiarism Tab</span>
-	<div class="close-btn" (click)="hidePlagarismTap = !hidePlagarismTap">X</div>
+<div
+	*ngIf="!hidePlagarismTap"
+	class="tab-plagiarism"
+	[style.flex-grow]="1"
+	[class.tab-selected]="selectedTap === EReportViewType.PlagiarismView"
+	(click)="selectTap(EReportViewType.PlagiarismView)">
+	<div class="bar-title-container">
+		<span class="bar-title">Plagiarism</span>
+		<span class="bar-score">{{ plagarismScore | percent : '1.0-1' }}</span>
+	</div>
+	<div class="grade-bar">
+		<div class="bar plagiarism" [style.width.%]="100">
+			<div
+				class="identical"
+				[class.first-percentage]="!!identicalTotal"
+				[class.last-percentage]="!minorChangesTotal && !paraphrasedTotal"
+				[style.width.%]="(identicalTotal / wordsTotal) * 100"
+				[style.border]="!identicalTotal ? 'none' : ''"></div>
+			<div
+				class="minor-changes"
+				[class.first-percentage]="!identicalTotal"
+				[class.last-percentage]="!paraphrasedTotal"
+				[style.width.%]="(minorChangesTotal / wordsTotal) * 100"
+				[style.border]="!minorChangesTotal ? 'none' : ''"></div>
+			<div
+				class="paraphrased last-percentage"
+				[class.first-percentage]="!identicalTotal && !minorChangesTotal"
+				[style.width.%]="(paraphrasedTotal / wordsTotal) * 100"
+				[style.border]="!paraphrasedTotal ? 'none' : ''"></div>
+		</div>
+	</div>
+	<!-- <div class="close-btn" (click)="hidePlagarismTap = !hidePlagarismTap">X</div> -->
 </div>
-<div *ngIf="!hideAiTap" class="tab-ai" [style.flex-grow]="1">
-	<span class="container-text">AI Tab</span>
-	<div class="close-btn" (click)="hideAiTap = !hideAiTap">X</div>
+<div
+	*ngIf="!hideAiTap"
+	class="tab-ai"
+	[style.flex-grow]="1"
+	[class.tab-selected]="selectedTap === EReportViewType.AIView"
+	(click)="selectTap(EReportViewType.AIView)">
+	<div class="bar-title-container">
+		<span class="bar-title">AI Content</span>
+		<span class="bar-score">{{ aiScore | percent : '1.0-1' }}</span>
+	</div>
+	<div class="grade-bar">
+		<div class="bar ai-content" [style.width.%]="aiScore * 100" [style.border]="!aiScore ? 'none' : ''"></div>
+	</div>
+	<!-- <div class="close-btn" (click)="hideAiTap = !hideAiTap">X</div> -->
 </div>

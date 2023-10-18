@@ -224,7 +224,7 @@ export interface IResultDetailResponse {
 }
 
 /** Type representing the statistics section of a scan result */
-interface IStatistics {
+export interface IStatistics {
 	identical: number;
 	minorChanges: number;
 	relatedMeaning: number;

@@ -1,4 +1,5 @@
 @import '../../../styles/containers.styles.scss';
+@import '../../../styles/website-colors.styles.scss';
 
 :host {
 	@include cls-report-container-lvl-2;
@@ -10,5 +11,57 @@
 	align-items: center;
 	justify-content: center;
 	flex-grow: 20;
-	overflow-y: auto;
+	overflow-y: hidden;
+}
+
+.report-results-item-top-container {
+	height: 100%;
+	width: 100%;
+
+	.navigate-mobie-button-contaienr {
+		.navigate-mobie-button-select {
+			background-color: $color-primary !important;
+		}
+
+		.navigate-mobie-button {
+			width: 12px;
+			height: 12px;
+			border-radius: 50%;
+			background-color: $color-dialog-background;
+			border: 0px;
+		}
+
+		.mat-chip-navigate {
+			min-height: 25px;
+			font-size: 12px;
+			font-weight: 500;
+			color: $color-white;
+			background-color: $color-dark-blue;
+		}
+	}
+
+	.results-item-top-container {
+		display: flex;
+		width: 100%;
+		height: 100%;
+		overflow: auto;
+		.results-item-mobile-container {
+			display: flex;
+			flex-direction: row;
+			align-items: center;
+			justify-content: center;
+			cr-report-results-item {
+				min-width: 313px;
+			}
+		}
+		.results-item-container {
+			display: flex;
+			flex-direction: column;
+			align-items: flex-start;
+			justify-content: flex-start;
+			gap: 4px;
+			width: 100%;
+			height: 100%;
+		}
+	}
 }

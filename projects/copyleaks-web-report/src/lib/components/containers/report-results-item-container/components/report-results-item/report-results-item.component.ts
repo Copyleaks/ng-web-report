@@ -7,6 +7,7 @@ import {
 } from 'projects/copyleaks-web-report/src/lib/models/report-data.models';
 import { ReportViewService } from 'projects/copyleaks-web-report/src/lib/services/report-view.service';
 import { IResultItem } from '../models/report-result-item.models';
+import { IPercentageResult } from '../percentage-result-item/models/percentage-result-item.models';
 
 @Component({
 	selector: 'cr-report-results-item',
@@ -18,6 +19,7 @@ export class ReportResultsItemComponent implements OnInit {
 	@Input() showLoader: boolean = false;
 	@Output() hiddenResultEvent = new EventEmitter<string>();
 
+	percentageResult: IPercentageResult;
 	previewResult: IResultPreviewBase;
 	eResultPreviewType = EResultPreviewType;
 
@@ -43,6 +45,10 @@ export class ReportResultsItemComponent implements OnInit {
 	ngOnInit(): void {
 		if (this.resultItem) {
 			this.previewResult = this.resultItem.previewResult;
+			this.percentageResult = {
+				resultItem: this.resultItem,
+				showTooltip: true,
+			};
 		}
 	}
 

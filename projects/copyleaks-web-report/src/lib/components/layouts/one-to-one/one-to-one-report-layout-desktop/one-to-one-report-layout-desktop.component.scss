@@ -7,18 +7,14 @@
 }
 
 .left-section {
-	@include cls-report-container-lvl-1;
 	display: flex;
 	flex-direction: column;
 	gap: 16px;
-	padding: 10px;
 	flex: 50%;
 	width: 50%;
 }
 
 .right-section {
-	@include cls-report-container-lvl-1;
-	padding: 10px;
 	display: flex;
 	flex-direction: column;
 	gap: 16px;
@@ -39,4 +35,8 @@
 		height: 80%;
 		flex-grow: 80;
 	}
+}
+
+copyleaks-content-viewer-container {
+	border-radius: 10px;
 }

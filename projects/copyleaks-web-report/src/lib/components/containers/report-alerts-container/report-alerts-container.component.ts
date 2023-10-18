@@ -1,6 +1,5 @@
 import { AfterViewInit, Component, ElementRef, HostBinding, Input, OnInit, ViewChild } from '@angular/core';
 import { ICompleteResultNotificationAlert } from '../../../models/report-data.models';
-import { trigger, state, transition, animate, style } from '@angular/animations';
 
 @Component({
 	selector: 'copyleaks-report-alerts-container',

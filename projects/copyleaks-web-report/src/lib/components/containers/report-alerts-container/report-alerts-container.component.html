@@ -16,7 +16,7 @@
 		<div #firstAlert class="container-alerts">
 			<ng-container *ngFor="let alert of alerts; let isFirst = first">
 				<cr-alert-card *ngIf="isFirst" [alert]="alert"></cr-alert-card>
-				<cr-alert-card [alert]="alert" *ngIf="!isFirst"></cr-alert-card>
+				<cr-alert-card *ngIf="!isFirst" [alert]="alert"></cr-alert-card>
 			</ng-container>
 		</div>
 	</mat-expansion-panel>

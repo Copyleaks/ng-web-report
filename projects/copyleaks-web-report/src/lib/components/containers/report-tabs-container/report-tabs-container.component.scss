@@ -1,19 +1,113 @@
 @import '../../../styles/containers.styles.scss';
+@import '../../../styles/website-colors.styles.scss';
 
 :host {
-	@include cls-report-container-lvl-2;
-	@include cls-report-container-close-btn;
-
 	display: flex;
 	flex-direction: row;
-	padding: 10px;
 
 	.tab-ai,
 	.tab-plagiarism {
+		padding: 16px;
+		display: flex;
+		flex-direction: column;
+		align-items: flex-start;
+		justify-content: center;
+		gap: 4px;
+		border-radius: 10px 10px 0px 0px;
+		border: 1px solid $color-white;
+		background: $color-container-background;
+		cursor: pointer;
+
+		cursor: pointer;
 		padding: 10px;
+		position: relative;
+		transition: all 0.3s ease-in-out;
+		transition: background 0.5s ease-in-out;
+
+		/* Underline for selected tab */
+		&::after {
+			content: '';
+			position: absolute;
+			bottom: 0;
+			left: 0;
+			width: 0;
+			height: 2px;
+			background-color: $color-primary;
+			transition: width 0.3s ease-in-out;
+		}
+	}
+
+	.tab-selected {
+		background: $color-white;
+	}
+	.tab-selected::after {
+		width: 100%;
+	}
+
+	.grade-bar {
+		display: flex;
+		flex-direction: column;
+		width: 100%;
+		background-color: $color-white;
+		border: 1px solid $color-effect-dialog-background;
+		border-radius: 10px;
+		box-sizing: border-box;
+		height: 8px;
+	}
+
+	.bar {
+		height: 100%;
 		display: flex;
 		align-items: center;
-		justify-content: center;
-		@include cls-report-container-lvl-3;
+		justify-content: flex-start;
+		* {
+			height: 100%;
+		}
+	}
+
+	.identical {
+		background-color: $color-plagiarism-identical;
+		border: 1px solid $color-plagiarism-identical;
+		border-radius: 4px 0px 0px 4px;
+	}
+
+	.paraphrased {
+		background-color: $color-plagiarism-paraphrased;
+		border: 1px solid $color-plagiarism-paraphrased;
+	}
+
+	.minor-changes {
+		background-color: $color-plagiarism-minor-changes;
+		border: 1px solid $color-plagiarism-minor-changes;
+	}
+
+	.ai-content {
+		background-color: $color-ai-detected-text;
+		border: 1px solid $color-ai-detected-text;
+		border-radius: 10px;
+	}
+
+	.first-percentage {
+		border-top-left-radius: 10px;
+		border-bottom-left-radius: 10px;
+	}
+
+	.last-percentage {
+		border-top-right-radius: 10px;
+		border-bottom-right-radius: 10px;
+	}
+
+	.bar-title-container {
+		display: flex;
+		flex-direction: row;
+		width: 100%;
+		justify-content: space-between;
+		.bar-title,
+		.bar-score {
+			color: $color-black;
+			font-size: 18px;
+			font-style: normal;
+			font-weight: 700;
+		}
 	}
 }

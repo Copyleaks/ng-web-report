@@ -11,6 +11,8 @@ import { ReportMatchHighlightService } from './services/report-match-highlight.s
 import { ActivatedRoute, Router } from '@angular/router';
 import { IReportViewEvent, IReportViewQueryParams } from './models/report-view.models';
 import { untilDestroy } from './utils/until-destroy';
+import { ReportStatisticsService } from './services/report-statistics.service';
+import { ALERTS } from './constants/report-alerts.constants';
 
 @Component({
 	selector: 'copyleaks-web-report',
@@ -22,6 +24,7 @@ import { untilDestroy } from './utils/until-destroy';
 		ReportMatchesService,
 		ReportViewService,
 		ReportMatchHighlightService,
+		ReportStatisticsService,
 	],
 })
 export class CopyleaksWebReportComponent implements OnInit, OnDestroy {
@@ -174,6 +177,8 @@ export class CopyleaksWebReportComponent implements OnInit, OnDestroy {
 			suspectPageIndex: suspectPage ? Number(suspectPage) ?? 1 : 1,
 			alertCode: alertCode,
 		} as IReportViewEvent);
+
+		if (alertCode) this._reportViewSvc.selectedAlert$.next(alertCode);
 
 		this._reportViewSvc.reportViewMode$.pipe(untilDestroy(this)).subscribe(data => {
 			if (!data) return;

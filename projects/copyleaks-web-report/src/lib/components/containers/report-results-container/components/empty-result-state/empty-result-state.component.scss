@@ -1,9 +1,11 @@
 @import '../../../../../styles/website-colors.styles.scss';
 
 .empty-result-state-container {
+	width: 100%;
+	height: 100%;
 	.empty-state-image {
-		width: 260px;
-		height: 261px;
+		width: 100%;
+		height: 100%;
 		background-color: #d9d9d9;
 		border-radius: 16px;
 	}

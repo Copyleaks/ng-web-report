@@ -6,10 +6,19 @@ import { MatSlideToggleModule } from '@angular/material/slide-toggle';
 import { MatDividerModule } from '@angular/material/divider';
 import { FlexLayoutModule } from '@angular/flex-layout';
 import { MatSliderModule } from '@angular/material/slider';
+import { MatCheckboxModule } from '@angular/material/checkbox';
 
 @NgModule({
 	declarations: [FilterResultDailogComponent],
 	exports: [FilterResultDailogComponent],
-	imports: [CommonModule, MatIconModule, FlexLayoutModule, MatSlideToggleModule, MatDividerModule, MatSliderModule],
+	imports: [
+		CommonModule,
+		MatIconModule,
+		FlexLayoutModule,
+		MatSlideToggleModule,
+		MatDividerModule,
+		MatSliderModule,
+		MatCheckboxModule,
+	],
 })
 export class FilterResultDailogModule {}

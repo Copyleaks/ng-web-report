@@ -11,6 +11,7 @@ import { ReportResultsItemContainerModule } from 'projects/copyleaks-web-report/
 import { CrPoweredByModule } from 'projects/copyleaks-web-report/src/lib/components/core/cr-powered-by/cr-powered-by.module';
 import { CrCustomTabsModule } from 'projects/copyleaks-web-report/src/lib/components/core/cr-custom-tabs/cr-custom-tabs.module';
 import { CrCustomTabItemModule } from 'projects/copyleaks-web-report/src/lib/components/core/cr-custom-tabs/components/cr-custom-tab-item/cr-custom-tab-item.module';
+import { ReportNgTemplatesService } from 'projects/copyleaks-web-report/src/lib/services/report-ng-templates.service';
 
 @NgModule({
 	declarations: [DemoComponentsPageComponent],
@@ -26,6 +27,6 @@ import { CrCustomTabItemModule } from 'projects/copyleaks-web-report/src/lib/com
 		CrCustomTabsModule,
 		CrCustomTabItemModule,
 	],
-	providers: [ReportViewService],
+	providers: [ReportViewService, ReportNgTemplatesService],
 })
 export class DemoComponentsPageModule {}

@@ -1,6 +1,8 @@
 import { Component, Input, OnInit } from '@angular/core';
 import { ISourceMetadataSection, IStatistics } from 'projects/copyleaks-web-report/src/lib/models/report-data.models';
 import { IResultItem } from '../models/report-result-item.models';
+import { EMatchType } from './models/percentage-result-item.enum';
+import { IPercentageResult } from './models/percentage-result-item.models';
 
 @Component({
 	selector: 'cr-percentage-result-item',
@@ -8,48 +10,53 @@ import { IResultItem } from '../models/report-result-item.models';
 	styleUrls: ['./percentage-result-item.component.scss'],
 })
 export class PercentageResultItemComponent implements OnInit {
-	@Input() resultItem: IResultItem;
-	@Input() showTooltip: boolean = false;
-	showMorePercentage: boolean = false;
+	@Input() percentageResult: IPercentageResult;
+
+	showPlagiarismPercentages: boolean = false;
 	metadataSource: ISourceMetadataSection;
 	iStatisticsResult: IStatistics;
 	similarWords: number;
-
-	get identicalPercentage() {
-		if (this.iStatisticsResult && this.metadataSource) {
-			return this.iStatisticsResult.identical / (this.metadataSource.words - this.metadataSource.excluded);
-		}
-		return 0;
-	}
-
-	get minorChangesPercentage() {
-		if (this.iStatisticsResult && this.metadataSource) {
-			return this.iStatisticsResult.minorChanges / (this.metadataSource.words - this.metadataSource.excluded);
-		}
-		return 0;
-	}
-
-	get paraphrasedPercentage() {
-		if (this.iStatisticsResult && this.metadataSource) {
-			return this.iStatisticsResult.relatedMeaning / (this.metadataSource.words - this.metadataSource.excluded);
-		}
-		return 0;
-	}
-
-	get similarWordsPercentage() {
-		if (this.iStatisticsResult && this.metadataSource) {
-			return this.similarWords / (this.metadataSource.words - this.metadataSource.excluded);
-		}
-		return 0;
-	}
+	eMatchType = EMatchType;
 
 	constructor() {}
 
+	get stackedBarHeight() {
+		return this.percentageResult?.stackedBarHeight || '4px';
+	}
+
+	get stackedBarBackgroundColor() {
+		return this.percentageResult?.stackedBarBackgroundColor || '#fbffff';
+	}
 	ngOnInit(): void {
-		if (this.resultItem) {
-			this.metadataSource = this.resultItem.metadataSource;
-			this.iStatisticsResult = this.resultItem.iStatisticsResult;
-			this.similarWords = this.resultItem.previewResult.matchedWords;
+		if (this.percentageResult?.resultItem) {
+			this.metadataSource = this.percentageResult.resultItem.metadataSource;
+			this.iStatisticsResult = this.percentageResult.resultItem.iStatisticsResult;
+			this.similarWords = this.percentageResult.resultItem.previewResult.matchedWords;
 		}
+	}
+
+	getMatchTypePercentage(eMatchType: EMatchType) {
+		if (this.iStatisticsResult && this.metadataSource) {
+			const result = this.metadataSource.words - this.metadataSource.excluded;
+			switch (eMatchType) {
+				case EMatchType.Identical: {
+					return this.iStatisticsResult.identical / result;
+				}
+				case EMatchType.MinorChanges: {
+					return this.iStatisticsResult.minorChanges / result;
+				}
+				case EMatchType.Paraphrased: {
+					return this.iStatisticsResult.relatedMeaning / result;
+				}
+				case EMatchType.SimilarWords: {
+					return this.similarWords / result;
+				}
+				default: {
+					return 0;
+				}
+			}
+		}
+
+		return 0;
 	}
 }

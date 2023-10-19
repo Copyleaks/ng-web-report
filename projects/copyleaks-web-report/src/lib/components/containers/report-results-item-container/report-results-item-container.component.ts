@@ -2,9 +2,9 @@ import { AfterViewInit, Component, ElementRef, HostBinding, Input, OnInit, Rende
 import { IResultItem } from './components/models/report-result-item.models';
 import { fromEvent } from 'rxjs';
 import { debounceTime, take } from 'rxjs/operators';
-import { ReportViewService } from '../../../services/report-view.service';
 import { EnumNavigateMobileButton } from './components/models/report-result-item.enum';
 import { EResponsiveLayoutType } from '../../../enums/copyleaks-web-report.enums';
+import { untilDestroy } from '../../../utils/until-destroy';
 
 @Component({
 	selector: 'copyleaks-report-results-item-container',
@@ -24,6 +24,7 @@ export class ReportResultsItemContainerComponent implements OnInit, AfterViewIni
 	@Input() reportResponsive: EResponsiveLayoutType;
 	@Input() allResultsItem: IResultItem[] = [];
 	@ViewChild('resultsContainer', { read: ElementRef }) public resultsContainer: ElementRef;
+	@ViewChild('resultitem', { read: ElementRef }) public resultitem: ElementRef;
 
 	private _startingIndex: number = 0;
 	private _pageSize: number = 10;
@@ -49,18 +50,19 @@ export class ReportResultsItemContainerComponent implements OnInit, AfterViewIni
 
 	ngOnInit(): void {
 		if (this.flexGrow !== undefined && this.flexGrow !== null) this.flexGrowProp = this.flexGrow;
-		this.isMobile = this.reportResponsive == EResponsiveLayoutType.Mobile;
+		this.isMobile = true; //this.reportResponsive == EResponsiveLayoutType.Mobile;
 
 		if (this.allResultsItemLength > this._pageSize) {
 			this.resultItemList = this.allResultsItem.slice(this._startingIndex, this.EndingIndex);
 		} else {
 			this.resultItemList = this.allResultsItem;
 		}
+		this.navigateMobileButton = EnumNavigateMobileButton.FirstButton;
 	}
 
 	ngAfterViewInit(): void {
 		fromEvent(this.resultsContainer.nativeElement, 'scroll')
-			.pipe(debounceTime(500))
+			.pipe(debounceTime(200), untilDestroy(this))
 			.subscribe((e: any) => this.onTableScroll(e));
 	}
 
@@ -72,6 +74,7 @@ export class ReportResultsItemContainerComponent implements OnInit, AfterViewIni
 			const tableScrollWidth = e.target.scrollWidth;
 			const scrollLocation = e.target.scrollLeft;
 			const scrollRightLimit = tableScrollWidth - tableViewWidth - scrollThreshold;
+			this.updateNavigateButton(scrollLocation);
 			if (scrollLocation > scrollRightLimit && this.EndingIndex < this.allResultsItemLength) {
 				this._currentPage += 1;
 				this.lastItemLoading = true;
@@ -108,32 +111,60 @@ export class ReportResultsItemContainerComponent implements OnInit, AfterViewIni
 	}
 
 	//#region navigate mobile button
-	firstButton() {
-		this.scrollTo(0);
-		this.navigateMobileButton = EnumNavigateMobileButton.FirstButton;
+	navigateButton(navigateButton: EnumNavigateMobileButton) {
+		const navigateNum = this.resultItemList.length / 5;
+		const resultitemWidth = this.resultitem.nativeElement.offsetWidth;
+		const viewWidth = resultitemWidth * navigateNum;
+		switch (navigateButton) {
+			case EnumNavigateMobileButton.FirstButton: {
+				this.scrollTo(0);
+				this.navigateMobileButton = EnumNavigateMobileButton.FirstButton;
+				break;
+			}
+			case EnumNavigateMobileButton.SecondButton: {
+				this.scrollTo(viewWidth);
+				this.navigateMobileButton = EnumNavigateMobileButton.SecondButton;
+				break;
+			}
+			case EnumNavigateMobileButton.ThirdButton: {
+				this.scrollTo(viewWidth * 2);
+				this.navigateMobileButton = EnumNavigateMobileButton.ThirdButton;
+				break;
+			}
+			case EnumNavigateMobileButton.FourthButton: {
+				this.scrollTo(viewWidth * 3);
+				this.navigateMobileButton = EnumNavigateMobileButton.FourthButton;
+				break;
+			}
+			case EnumNavigateMobileButton.FifthButton: {
+				this.scrollTo(viewWidth * 4);
+				this.navigateMobileButton = EnumNavigateMobileButton.FifthButton;
+				break;
+			}
+			case EnumNavigateMobileButton.None: {
+				this.scrollTo(this.resultsContainer.nativeElement.scrollWidth);
+				this.navigateMobileButton = EnumNavigateMobileButton.None;
+				break;
+			}
+		}
 	}
-	secondButton() {
-		this.scrollTo(313);
-		console.log(this.resultsContainer.nativeElement.offsetWidth);
 
-		this.navigateMobileButton = EnumNavigateMobileButton.SecondButton;
-	}
-	thirdButton() {
-		this.scrollTo(this.resultsContainer.nativeElement.offsetWidth * 2);
-		this.navigateMobileButton = EnumNavigateMobileButton.ThirdButton;
-	}
-	fourthButton() {
-		this.scrollTo(this.resultsContainer.nativeElement.offsetWidth * 3);
-		this.navigateMobileButton = EnumNavigateMobileButton.FourthButton;
-	}
-	fifthButton() {
-		this.scrollTo(this.resultsContainer.nativeElement.offsetWidth * 4);
-		this.navigateMobileButton = EnumNavigateMobileButton.FifthButton;
-	}
-
-	matChipButton() {
-		this.scrollTo(this.resultsContainer.nativeElement.scrollWidth);
-		this.navigateMobileButton = EnumNavigateMobileButton.None;
+	updateNavigateButton(scrollLocation: number) {
+		const navigateNum = this.resultItemList.length / 5;
+		const resultitemWidth = this.resultitem.nativeElement.offsetWidth;
+		const viewWidth = resultitemWidth * navigateNum;
+		if (0 <= scrollLocation && viewWidth > scrollLocation) {
+			this.navigateMobileButton = EnumNavigateMobileButton.FirstButton;
+		} else if (viewWidth <= scrollLocation && viewWidth * 2 > scrollLocation) {
+			this.navigateMobileButton = EnumNavigateMobileButton.SecondButton;
+		} else if (viewWidth * 2 <= scrollLocation && viewWidth * 3 > scrollLocation) {
+			this.navigateMobileButton = EnumNavigateMobileButton.ThirdButton;
+		} else if (viewWidth * 3 <= scrollLocation && viewWidth * 4 > scrollLocation) {
+			this.navigateMobileButton = EnumNavigateMobileButton.FourthButton;
+		} else if (viewWidth * 4 <= scrollLocation) {
+			this.navigateMobileButton = EnumNavigateMobileButton.FifthButton;
+		}
 	}
 	//#endregion
+	ngOnDestroy() {}
 }

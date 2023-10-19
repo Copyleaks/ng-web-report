@@ -7,14 +7,16 @@
 	fxLayoutAlign="start center"
 	fxLayoutGap="8px">
 	<div #resultsContainer class="results-item-top-container">
-		<div [ngClass]="{ 'results-item-container': !isMobile, 'results-item-mobile-container': isMobile }">
+		<div
+			fxLayoutGap="8px"
+			[ngClass]="{ 'results-item-container': !isMobile, 'results-item-mobile-container': isMobile }">
 			<div
 				style="width: 100%"
 				fxLayout="column"
 				fxLayoutAlign="start start"
 				fxLayoutGap="4px"
 				*ngFor="let item of resultItemList">
-				<cr-report-results-item [resultItem]="item" [style]="'width:100%'"></cr-report-results-item>
+				<cr-report-results-item #resultitem [resultItem]="item" [style]="'width:100%'"></cr-report-results-item>
 			</div>
 			<ng-container *ngIf="lastItemLoading">
 				<cr-report-results-item [showLoader]="true" [style]="'width:100%'"></cr-report-results-item>
@@ -32,37 +34,40 @@
 			[ngClass]="{
 				'navigate-mobie-button-select ': navigateMobileButton == enumNavigateMobileButton.FirstButton
 			}"
-			(click)="firstButton()"></button>
+			(click)="navigateButton(enumNavigateMobileButton.FirstButton)"></button>
 		<button
 			*ngIf="allResultsItemLength > 1"
 			class="navigate-mobie-button"
 			[ngClass]="{
 				'navigate-mobie-button-select ': navigateMobileButton == enumNavigateMobileButton.SecondButton
 			}"
-			(click)="secondButton()"></button>
+			(click)="navigateButton(enumNavigateMobileButton.SecondButton)"></button>
 		<button
 			*ngIf="allResultsItemLength > 2"
 			class="navigate-mobie-button"
 			[ngClass]="{
 				'navigate-mobie-button-select ': navigateMobileButton == enumNavigateMobileButton.ThirdButton
 			}"
-			(click)="thirdButton()"></button>
+			(click)="navigateButton(enumNavigateMobileButton.ThirdButton)"></button>
 		<button
 			*ngIf="allResultsItemLength > 3"
 			class="navigate-mobie-button"
 			[ngClass]="{
 				'navigate-mobie-button-select ': navigateMobileButton == enumNavigateMobileButton.FourthButton
 			}"
-			(click)="fourthButton()"></button>
+			(click)="navigateButton(enumNavigateMobileButton.FourthButton)"></button>
 		<button
 			*ngIf="allResultsItemLength > 4"
 			class="navigate-mobie-button"
 			[ngClass]="{
 				'navigate-mobie-button-select ': navigateMobileButton == enumNavigateMobileButton.FifthButton
 			}"
-			(click)="fifthButton()"></button>
+			(click)="navigateButton(enumNavigateMobileButton.FifthButton)"></button>
 
-		<mat-chip (click)="matChipButton()" class="mat-chip-navigate" *ngIf="showMatChip && allResultsItemLength > 5">
+		<mat-chip
+			(click)="navigateButton(enumNavigateMobileButton.None)"
+			class="mat-chip-navigate"
+			*ngIf="showMatChip && allResultsItemLength > 5">
 			{{ allResultsItemLength - 5 }}
 		</mat-chip>
 	</div>

@@ -1,11 +1,11 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { PoweredByComponent } from './powered-by.component';
+import { CrPoweredByComponent } from './cr-powered-by.component';
 import { FlexLayoutModule } from '@angular/flex-layout';
 
 @NgModule({
-	declarations: [PoweredByComponent],
+	declarations: [CrPoweredByComponent],
 	imports: [CommonModule, FlexLayoutModule],
-	exports: [PoweredByComponent],
+	exports: [CrPoweredByComponent],
 })
-export class PoweredByModule {}
+export class CrPoweredByModule {}

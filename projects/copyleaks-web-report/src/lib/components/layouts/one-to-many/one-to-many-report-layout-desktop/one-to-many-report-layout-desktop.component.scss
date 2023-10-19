@@ -1,4 +1,5 @@
 @import '../../../../styles/containers.styles.scss';
+@import '../../../../styles/website-colors.styles.scss';
 
 :host {
 	display: flex;
@@ -7,16 +8,12 @@
 }
 
 .left-section {
-	@include cls-report-container-lvl-1;
 	flex: 70%;
 	width: 70%;
 	display: flex;
 	flex-direction: column;
-	gap: 16px;
-	padding: 10px;
 
 	copyleaks-report-tabs-container {
-		height: 10%;
 		flex-grow: 10;
 	}
 
@@ -28,33 +25,34 @@
 }
 
 .right-section {
-	@include cls-report-container-lvl-1;
 	flex: 30%;
 	width: 30%;
-	padding: 10px;
 	display: flex;
 	flex-direction: column;
-	gap: 16px;
+	gap: 8px;
 	height: 100%;
 	box-sizing: border-box;
 	@include cls-report-container-close-btn;
 
-	copyleaks-report-actions-container {
-		flex-grow: 10;
-		height: 10%;
-	}
-
 	.results-alerts-container {
-		padding: 10px;
 		display: flex;
 		flex-direction: column;
 		gap: 16px;
-		flex-grow: 90;
-		height: 90%;
+		flex-grow: 100;
+		height: auto;
+		padding: 8px;
 		overflow-y: auto;
+		box-shadow: -2px -2px 8px 0px rgba(255, 255, 255, 0.5), 2px 2px 4px 0px rgba(0, 0, 0, 0.15);
+		border-radius: 10px;
+		background-color: $color-white;
 		copyleaks-report-results-container {
 			height: 95%;
 			overflow-y: auto;
 		}
 	}
+}
+
+.left-section {
+	box-shadow: -2px -2px 8px 0px rgba(255, 255, 255, 0.5), 2px 2px 4px 0px rgba(0, 0, 0, 0.15);
+	border-radius: 10px;
 }

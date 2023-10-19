@@ -11,5 +11,5 @@ import { fadeIn } from 'ng-animate';
 export class SkeletonLoaderComponent {
 	@Input() showLoader = false;
 	@Input() count = 1;
-	@Input() appearance = 'line';
+	@Input() appearance: '' | 'circle' | 'line' = 'line';
 }

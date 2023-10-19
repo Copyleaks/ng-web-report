@@ -5,10 +5,10 @@ import { ReportMatchHighlightService } from '../../../services/report-match-high
 
 @Component({
 	selector: 'span[cr-match]',
-	styleUrls: ['./report-text-match.component.scss'],
+	styleUrls: ['./cr-text-match.component.scss'],
 	template: '<ng-content></ng-content>',
 })
-export class ReportTextMatchComponent implements AfterContentInit {
+export class CrTextMatchComponent implements AfterContentInit {
 	constructor(
 		public element: ElementRef<HTMLElement>,
 		private renderer: Renderer2,

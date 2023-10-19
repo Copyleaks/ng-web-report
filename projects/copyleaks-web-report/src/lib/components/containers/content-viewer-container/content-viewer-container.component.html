@@ -194,9 +194,9 @@
 		<cr-powered-by></cr-powered-by>
 	</ng-container>
 
-	<cls-paginator
+	<cr-paginator
 		*ngIf="(!isHtmlView || !hasHtml || isAlertsView) && numberOfPages > 1"
 		[pageIndex]="currentPage"
 		[numberOfPages]="numberOfPages"
-		(page)="onPaginationEvent($event)"></cls-paginator>
+		(page)="onPaginationEvent($event)"></cr-paginator>
 </div>

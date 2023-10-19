@@ -19,7 +19,7 @@ import { IReportViewEvent } from '../../../models/report-view.models';
 import { MatchType, ReportOrigin, ResultDetailItem, SlicedMatch } from '../../../models/report-matches.models';
 import { DirectionMode as ReportContentDirectionMode, ViewMode } from '../../../models/report-config.models';
 import { TEXT_FONT_SIZE_UNIT, MIN_TEXT_ZOOM, MAX_TEXT_ZOOM } from '../../../constants/report-content.constants';
-import { PageEvent } from '../../core/cls-paginator/models/cls-paginator.models';
+import { PageEvent } from '../../core/cr-paginator/models/cr-paginator.models';
 import { ReportMatchHighlightService } from '../../../services/report-match-highlight.service';
 import { IScanSource } from '../../../models/report-data.models';
 import { EResponsiveLayoutType } from '../../../enums/copyleaks-web-report.enums';

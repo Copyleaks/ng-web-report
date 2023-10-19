@@ -1,0 +1,6 @@
+<ng-template #tabTemplate>
+	<div class="custom-tab" (click)="clickEvent()" [style.flex-grow]="flexGrow">
+		<ng-content select="cr-custom-tab-item-title"></ng-content>
+		<ng-content select="cr-custom-tab-item-content"></ng-content>
+	</div>
+</ng-template>

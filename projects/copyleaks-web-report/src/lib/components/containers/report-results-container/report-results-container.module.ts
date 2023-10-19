@@ -4,10 +4,11 @@ import { ReportResultsContainerComponent } from './report-results-container.comp
 import { ResultsActionsComponent } from './components/results-actions/results-actions.component';
 import { MatIconModule } from '@angular/material/icon';
 import { FlexLayoutModule } from '@angular/flex-layout';
+import { EmptyResultStateComponent } from './components/empty-result-state/empty-result-state.component';
 
 @NgModule({
-	declarations: [ReportResultsContainerComponent, ResultsActionsComponent],
+	declarations: [ReportResultsContainerComponent, ResultsActionsComponent, EmptyResultStateComponent],
 	imports: [CommonModule, MatIconModule, FlexLayoutModule],
-	exports: [ReportResultsContainerComponent, ResultsActionsComponent],
+	exports: [ReportResultsContainerComponent, ResultsActionsComponent, EmptyResultStateComponent],
 })
 export class ReportResultsContainerModule {}

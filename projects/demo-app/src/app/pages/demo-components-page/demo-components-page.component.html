@@ -28,6 +28,14 @@
 			<cr-lock-result-item [lockResultItem]="lockResultItem"></cr-lock-result-item>
 		</div>
 	</div>
+	<!-- Empty state -->
+	<div class="component-conatiner" fxLayout="column" fxLayoutAlign="start start" fxLayoutGap="2px">
+		<span>Empty state :</span>
+		<div class="component">
+			<cr-empty-result-state></cr-empty-result-state>
+		</div>
+	</div>
+	<!--  ------------ -->
 
 	<!-- Results Actions -->
 	<div class="component-conatiner" fxLayout="column" fxLayoutAlign="start start" fxLayoutGap="2px">
@@ -56,4 +64,13 @@
 		</div>
 	</div>
 	<!--  ------------ -->
+
+	<div>
+		<cr-custom-tabs>
+			<cr-custom-tab-item>
+				<cr-custom-tab-item-title>....</cr-custom-tab-item-title>
+				<cr-custom-tab-item-content>....</cr-custom-tab-item-content>
+			</cr-custom-tab-item>
+		</cr-custom-tabs>
+	</div>
 </div>

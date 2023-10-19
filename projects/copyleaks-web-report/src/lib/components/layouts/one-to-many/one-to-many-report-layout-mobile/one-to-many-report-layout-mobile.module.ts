@@ -6,7 +6,7 @@ import { ReportActionsContainerModule } from '../../../containers/report-actions
 import { ReportAlertsContainerModule } from '../../../containers/report-alerts-container/report-alerts-container.module';
 import { ReportResultsContainerModule } from '../../../containers/report-results-container/report-results-container.module';
 import { ReportTabsContainerModule } from '../../../containers/report-tabs-container/report-tabs-container.module';
-import { PoweredByModule } from '../../../core/powered-by/powered-by.module';
+import { CrPoweredByModule } from '../../../core/cr-powered-by/cr-powered-by.module';
 
 @NgModule({
 	declarations: [OneToManyReportLayoutMobileComponent],
@@ -17,7 +17,7 @@ import { PoweredByModule } from '../../../core/powered-by/powered-by.module';
 		ReportActionsContainerModule,
 		ReportAlertsContainerModule,
 		ReportResultsContainerModule,
-		PoweredByModule,
+		CrPoweredByModule,
 	],
 	exports: [OneToManyReportLayoutMobileComponent],
 })

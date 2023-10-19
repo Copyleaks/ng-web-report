@@ -1,4 +1,4 @@
-import { ReportTextMatchComponent } from '../components/core/report-text-match/report-text-match.component';
+import { CrTextMatchComponent } from '../components/core/cr-text-match/cr-text-match.component';
 import { EMatchClassification } from '../enums/copyleaks-web-report.enums';
 
 import { EExcludeReason } from '../enums/copyleaks-web-report.enums';
@@ -146,7 +146,7 @@ export interface AIMatch extends Match {
 export type ReportOrigin = 'original' | 'source' | 'suspect';
 
 export interface TextMatchHighlightEvent {
-	elem: ReportTextMatchComponent | null;
+	elem: CrTextMatchComponent | null;
 	origin: ReportOrigin;
 	broadcast: boolean;
 }

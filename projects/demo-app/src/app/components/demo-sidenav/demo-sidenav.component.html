@@ -31,17 +31,8 @@
 		<mat-nav-list [disableRipple]="true">
 			<mat-list-item class [disableRipple]="true">
 				<div
-					[routerLink]="['/previews', 'Filter']"
-					routerLinkActive="side-nav-actions-active"
-					[routerLinkActiveOptions]="{ exact: true }"
-					style="
-						display: flex;
-						flex-direction: column;
-						align-items: center;
-						width: 100%;
-						gap: 8px;
-						height: fit-content;
-					">
+					style="display: flex; flex-direction: column; align-items: center; width: 100%; gap: 8px; height: fit-content"
+					(click)="navigateToReportPreview()">
 					<mat-icon class="item-icon" fontSet="material-icons-round">preview</mat-icon>
 					<span class="item-text">Report Previews</span>
 				</div>

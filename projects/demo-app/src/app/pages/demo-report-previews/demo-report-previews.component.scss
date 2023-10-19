@@ -1,4 +1,24 @@
 :host {
 	width: 100%;
 	display: flex;
+
+	a {
+		color: #3f9af5;
+		font-size: 16px;
+		font-style: normal;
+		font-weight: 500;
+		line-height: normal;
+		text-decoration: none;
+	}
+
+	a:hover {
+		text-decoration: underline;
+	}
+
+	mat-icon {
+		color: #a0a9bf;
+		width: 18px;
+		height: 18px;
+		font-size: 18px;
+	}
 }

@@ -4,12 +4,12 @@ import { ContentMode } from '../models/report-config.models';
 import { Match } from '../models/report-matches.models';
 import { ReportMatchHighlightService } from '../services/report-match-highlight.service';
 import { ReportViewService } from '../services/report-view.service';
-import { ReportTextMatchComponent } from '../components/core/report-text-match/report-text-match.component';
 import { IResultDetailResponse, IScanSource } from '../models/report-data.models';
 import * as helpers from '../utils/highlight-helpers';
 import { ReportDataService } from '../services/report-data.service';
 import { Subject } from 'rxjs';
 import { untilDestroy } from '../utils/until-destroy';
+import { CrTextMatchComponent } from '../components/core/cr-text-match/cr-text-match.component';
 
 @Directive({
 	selector: '[crSourceTextHelper]',
@@ -23,9 +23,9 @@ export class SourceTextHelperDirective implements AfterContentInit, OnDestroy {
 		private _dataSvc: ReportDataService
 	) {}
 
-	@ContentChildren(ReportTextMatchComponent)
-	private children: QueryList<ReportTextMatchComponent>;
-	private current: ReportTextMatchComponent | null;
+	@ContentChildren(CrTextMatchComponent)
+	private children: QueryList<CrTextMatchComponent>;
+	private current: CrTextMatchComponent | null;
 
 	/**
 	 * Life-cycle method

@@ -62,7 +62,7 @@ export class ReportResultsItemContainerComponent implements OnInit, AfterViewIni
 
 	ngAfterViewInit(): void {
 		fromEvent(this.resultsContainer.nativeElement, 'scroll')
-			.pipe(debounceTime(200))
+			.pipe(debounceTime(200), untilDestroy(this))
 			.subscribe((e: any) => this.onTableScroll(e));
 	}
 
@@ -166,4 +166,5 @@ export class ReportResultsItemContainerComponent implements OnInit, AfterViewIni
 		}
 	}
 	//#endregion
+	ngOnDestroy() {}
 }

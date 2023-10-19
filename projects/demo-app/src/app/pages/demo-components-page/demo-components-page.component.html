@@ -7,18 +7,15 @@
 
 <div fxLayout="column" fxLayoutAlign="start start" fxLayoutGap="8px">
 	<!-- Results item -->
-	<div
-		class="component-conatiner"
-		[style]="'width:100%'"
-		fxLayout="column"
-		fxLayoutAlign="start start"
-		fxLayoutGap="8px">
+	<div class="component-conatiner" fxLayout="column" fxLayoutAlign="start start" fxLayoutGap="8px">
 		<span>Results item one-to-many</span>
 		<div class="results-item-container">
-			<cr-report-results-item [resultItem]="resultItem" [style]="'width:100%'"></cr-report-results-item>
+			<cr-report-results-item [resultItem]="resultItem"></cr-report-results-item>
 		</div>
 		<span>Results item one-to-one</span>
-		<cr-report-expand-result-item [resultItem]="resultItem" [style]="'width:100%'"></cr-report-expand-result-item>
+		<div class="results-item-container">
+			<cr-report-expand-result-item [resultItem]="resultItem"></cr-report-expand-result-item>
+		</div>
 	</div>
 
 	<!-- lock Result -->
@@ -31,8 +28,10 @@
 	<!-- Empty state -->
 	<div class="component-conatiner" fxLayout="column" fxLayoutAlign="start start" fxLayoutGap="2px">
 		<span>Empty state :</span>
-		<div class="component">
-			<cr-empty-result-state></cr-empty-result-state>
+		<div class="component" fxLayout="column" fxLayoutAlign="center center">
+			<div class="empty-result-state-conatainer">
+				<cr-empty-result-state></cr-empty-result-state>
+			</div>
 		</div>
 	</div>
 	<!--  ------------ -->
@@ -50,8 +49,8 @@
 	<div class="component-conatiner" fxLayout="column" fxLayoutAlign="start start" fxLayoutGap="2px">
 		<span>Alerts :</span>
 		<div class="component" fxLayout="column" fxLayoutAlign="center start" fxLayoutGap="8px">
-			<cr-alert-card style="width: 100%" [alert]="alert"></cr-alert-card>
-			<cr-author-alert-card style="width: 100%" [authorAlert]="authorAlert"></cr-author-alert-card>
+			<cr-alert-card class="alert-card-component" [alert]="alert"></cr-alert-card>
+			<cr-author-alert-card class="author-alert-card-component" [authorAlert]="authorAlert"></cr-author-alert-card>
 		</div>
 	</div>
 	<!--  ------------ -->

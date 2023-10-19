@@ -1,5 +1,8 @@
 @import '../../../../../styles/website-colors.styles.scss';
 
+:host {
+	width: 100%;
+}
 .author-alert-card-container {
 	width: 100%;
 	background-color: $color-white;

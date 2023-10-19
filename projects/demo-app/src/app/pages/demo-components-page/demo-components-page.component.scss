@@ -11,6 +11,7 @@
 	}
 }
 .component-conatiner {
+	width: 100%;
 	.results-item-container {
 		width: 100%;
 		background-color: $color-white;
@@ -27,5 +28,9 @@
 		padding: 10px;
 		border-radius: 10px;
 		background-color: $color-white;
+		.empty-result-state-conatainer {
+			width: 350px;
+			height: 400px;
+		}
 	}
 }

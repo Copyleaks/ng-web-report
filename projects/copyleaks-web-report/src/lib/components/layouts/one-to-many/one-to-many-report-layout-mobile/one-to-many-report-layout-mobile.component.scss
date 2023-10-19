@@ -15,11 +15,15 @@
 	gap: 8px;
 }
 
+.content-section {
+	gap: 0px;
+	box-shadow: -2px -2px 8px 0px rgba(255, 255, 255, 0.5), 2px 2px 4px 0px rgba(0, 0, 0, 0.15);
+	border-radius: 10px;
+}
+
 .middle-section {
-	@include cls-report-container-lvl-1;
 	flex-grow: 65;
 	height: 65%;
-	padding: 16px;
 
 	.alerts-container {
 		overflow-y: auto;
@@ -34,18 +38,12 @@
 }
 
 .alerts-container {
-	@include cls-report-container-lvl-2;
 	height: 20%;
 }
 
 .results-container {
 	height: 15%;
 	overflow-y: auto;
-}
-
-.results-container,
-.report-actions-container {
-	@include cls-report-container-lvl-1;
 }
 
 .powered-by-copyleaks-container {

@@ -1,0 +1,136 @@
+<div
+	class="plagiarism-detection-percentage-top-container"
+	fxLayout="row"
+	fxLayoutAlign="space-between start"
+	fxLayoutGap="4px">
+	<div
+		class="plagiarism-detection-percentage-container"
+		fxLayout="column"
+		fxLayoutAlign="start start"
+		fxLayoutGap="4px">
+		<div
+			*ngIf="percentageResult?.title"
+			class="plagiarism-detection-title"
+			fxLayout="row"
+			fxLayoutAlign="space-between start">
+			<span>{{ percentageResult.title }}</span>
+			<span>{{ getMatchTypePercentage(eMatchType.SimilarWords) | similarity }}</span>
+		</div>
+		<div
+			class="plagiarism-detection-percentage-result"
+			fxLayout="column"
+			fxLayoutAlign="start start"
+			*ngIf="showPlagiarismPercentages && percentageResult?.showArrowButton; else showStackedBar">
+			<ng-container *ngTemplateOutlet="plagiarismPercentage"></ng-container>
+		</div>
+
+		<ng-template #showStackedBar>
+			<div class="stacked-bar-top-container" fxLayout="row" fxLayoutGap="8px" fxLayoutAlign="center center">
+				<div class="stacked-bar-container">
+					<div
+						*ngIf="percentageResult?.showTooltip"
+						class="stacked-bar-tooltip-result"
+						fxLayout="column"
+						fxLayoutAlign="start start">
+						<ng-container *ngTemplateOutlet="plagiarismPercentage"></ng-container>
+					</div>
+					<ng-container *ngTemplateOutlet="stackedBar"></ng-container>
+				</div>
+				<span *ngIf="!percentageResult?.title" class="similar-words-percentage">
+					{{ getMatchTypePercentage(eMatchType.SimilarWords) | similarity }}
+				</span>
+			</div>
+		</ng-template>
+	</div>
+
+	<button
+		*ngIf="percentageResult?.showArrowButton"
+		class="show-plagiarism-detection-button"
+		fxLayout="row"
+		fxLayoutAlign="start end"
+		(click)="showPlagiarismPercentages = !showPlagiarismPercentages">
+		<ng-container *ngIf="showPlagiarismPercentages; else showLessPerDetailsIcon">
+			<mat-icon>arrow_drop_up</mat-icon>
+		</ng-container>
+		<ng-template #showLessPerDetailsIcon>
+			<mat-icon>arrow_drop_down</mat-icon>
+		</ng-template>
+	</button>
+</div>
+
+<!-- #percentageLessResult -->
+<ng-template #stackedBar>
+	<div
+		class="stacked-bar"
+		[style.background-color]="stackedBarBackgroundColor"
+		fxLayout="row"
+		fxLayoutAlign="start center">
+		<div
+			class="identical"
+			[style.height]="stackedBarHeight"
+			[style.width]="getMatchTypePercentage(eMatchType.Identical) | similarity"></div>
+		<div
+			class="minorChanges"
+			[style.height]="stackedBarHeight"
+			[style.width]="getMatchTypePercentage(eMatchType.MinorChanges) | similarity"></div>
+		<div
+			class="paraphrased"
+			[style.height]="stackedBarHeight"
+			[style.width]="getMatchTypePercentage(eMatchType.Paraphrased) | similarity"></div>
+	</div>
+</ng-template>
+
+<ng-template #plagiarismPercentage>
+	<div class="match-type-top-container" fxLayout="column" fxLayoutAlign="start start" fxLayoutGap="6px">
+		<div
+			*ngIf="!percentageResult?.showTooltip"
+			class="match-type-title"
+			fxLayout="row"
+			fxLayoutAlign="space-between center">
+			<span>Match type</span>
+			<div fxLayout="row" fxLayoutAlign="start center" fxLayoutGap="12px">
+				<span class="percentage-match">Match</span>
+				<span class="number-words-match">Words</span>
+			</div>
+		</div>
+		<!--identical-->
+		<div class="match-type-cotainer" fxLayout="row" fxLayoutAlign="space-between center">
+			<div fxLayout="row" fxLayoutGap="8px" fxLayoutAlign="start center">
+				<span class="dot identical"></span>
+				<span class="type-name">IDENTICAL</span>
+			</div>
+			<div fxLayout="row" fxLayoutAlign="start center" fxLayoutGap="12px">
+				<span class="percentage-match">{{ getMatchTypePercentage(eMatchType.Identical) | similarity }}</span>
+				<span *ngIf="!percentageResult?.showTooltip && iStatisticsResult" class="number-words-match">
+					{{ iStatisticsResult.identical }}
+				</span>
+			</div>
+		</div>
+		<!--minorChanges-->
+		<div class="match-type-cotainer" fxLayout="row" fxLayoutAlign="space-between center">
+			<div fxLayout="row" fxLayoutGap="8px" fxLayoutAlign="start center">
+				<span class="dot minorChanges"></span>
+				<span class="type-name">MINORCHANGES</span>
+			</div>
+			<div fxLayout="row" fxLayoutAlign="start center" fxLayoutGap="12px">
+				<span class="percentage-match">{{ getMatchTypePercentage(eMatchType.MinorChanges) | similarity }}</span>
+				<span *ngIf="!percentageResult?.showTooltip && iStatisticsResult" class="number-words-match">
+					{{ iStatisticsResult.minorChanges }}
+				</span>
+			</div>
+		</div>
+		<!-- paraphrased -->
+		<div class="match-type-cotainer" fxLayout="row" fxLayoutAlign="space-between center">
+			<div fxLayout="row" fxLayoutGap="8px" fxLayoutAlign="start center">
+				<span class="dot paraphrased"></span>
+				<span class="type-name">PARAPHRASED</span>
+			</div>
+			<div fxLayout="row" fxLayoutAlign="start center" fxLayoutGap="12px">
+				<span class="percentage-match">{{ getMatchTypePercentage(eMatchType.Paraphrased) | similarity }}</span>
+				<span *ngIf="!percentageResult?.showTooltip && iStatisticsResult" class="number-words-match">
+					{{ iStatisticsResult.relatedMeaning }}
+				</span>
+			</div>
+		</div>
+	</div>
+</ng-template>

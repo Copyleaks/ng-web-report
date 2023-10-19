@@ -1,0 +1,107 @@
+@import '../../../../../styles/website-colors.styles.scss';
+
+.expand-result-top-continer {
+	background-color: $color-white;
+	border-radius: 10px;
+	.expand-result-continer {
+		width: 100%;
+		.result-header {
+			width: 100%;
+			padding: 8px 4px 4px 8px;
+			.result-logo {
+				border: 2px solid;
+				border-radius: 50%;
+				border-color: $color-primary;
+				min-width: 34px;
+				min-height: 34px;
+				mat-icon {
+					color: $color-primary;
+				}
+			}
+			.result-title-container {
+				.exclude-button {
+					cursor: pointer;
+					background-color: $color-white;
+					padding: 0px;
+					border: 0px;
+					mat-icon {
+						display: flex;
+						align-items: center;
+						font-size: 20px;
+						width: 20px;
+						height: 20px;
+						color: $color-medium-dark;
+						opacity: 0.4;
+					}
+				}
+				.result-title {
+					font-weight: 700;
+					font-size: 14px;
+					color: $color-black;
+				}
+				.result-source {
+					font-size: 14px;
+					font-weight: 500;
+					color: $color-medium-dark;
+				}
+				.result-url-source {
+					color: $color-primary;
+					text-decoration: none;
+					mat-icon {
+						font-size: 16px;
+						height: 16px;
+						width: 16px;
+					}
+					span {
+						font-size: 14px;
+						font-weight: 500;
+						text-decoration: underline;
+					}
+				}
+			}
+			.back-button {
+				background-color: $color-white;
+				color: $color-dark-blue;
+				border: 0px;
+				cursor: pointer;
+				span {
+					font-size: 14px;
+					font-weight: 500;
+				}
+				mat-icon {
+					font-size: 18px;
+					height: 18px;
+					width: 18px;
+				}
+			}
+		}
+		.mat-chip-list-container {
+			padding: 8px 4px;
+			width: 100%;
+			height: 100%;
+			mat-chip-list {
+				box-sizing: border-box;
+				width: 100%;
+				padding: 4px;
+				.mat-chip-container {
+					margin-right: 4px;
+					mat-chip {
+						background-color: $color-dark-blue;
+						color: $color-container-background;
+						min-height: 22px;
+						font-weight: 500;
+						font-size: 14px;
+						padding: 2px 8px;
+						border-radius: 16px;
+						margin: 0px;
+					}
+				}
+			}
+		}
+	}
+	.plagiarism-detection-container {
+		width: 100%;
+		padding: 2px 4px 4px 4px;
+		box-sizing: border-box;
+	}
+}

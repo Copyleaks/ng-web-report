@@ -5,7 +5,18 @@
 	width: 100%;
 }
 
+.report-results-item-container {
+	copyleaks-report-results-item-container {
+		height: 410px;
+	}
+}
 .component-conatiner {
+	.results-item-container {
+		width: 100%;
+		background-color: $color-white;
+		border-radius: 10px;
+		padding: 5px;
+	}
 	span {
 		font-size: 14px;
 		font-weight: 500;

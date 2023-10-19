@@ -1,6 +1,43 @@
 <cr-filter-result-dailog></cr-filter-result-dailog>
+<div class="report-results-item-container">
+	<span>scroll result item</span>
+	<copyleaks-report-results-item-container
+		[allResultsItem]="allResultsItem"
+		[reportResponsive]="eResponsiveLayoutType.Desktop"></copyleaks-report-results-item-container>
+</div>
 
 <div fxLayout="column" fxLayoutAlign="start start" fxLayoutGap="8px">
+	<!-- Results item -->
+	<div
+		class="component-conatiner"
+		[style]="'width:100%'"
+		fxLayout="column"
+		fxLayoutAlign="start start"
+		fxLayoutGap="8px">
+		<span>Results item one-to-many</span>
+		<div class="results-item-container">
+			<cr-report-results-item [resultItem]="resultItem" [style]="'width:100%'"></cr-report-results-item>
+		</div>
+		<span>Results item one-to-one</span>
+		<cr-report-expand-result-item [resultItem]="resultItem" [style]="'width:100%'"></cr-report-expand-result-item>
+	</div>
+
+	<!-- lock Result -->
+	<div class="component-conatiner" fxLayout="column" fxLayoutAlign="start start" fxLayoutGap="2px">
+		<span>Lock Result</span>
+		<div class="component">
+			<cr-lock-result-item [lockResultItem]="lockResultItem"></cr-lock-result-item>
+		</div>
+	</div>
+	<!-- Empty state -->
+	<div class="component-conatiner" fxLayout="column" fxLayoutAlign="start start" fxLayoutGap="2px">
+		<span>Empty state :</span>
+		<div class="component">
+			<cr-empty-result-state></cr-empty-result-state>
+		</div>
+	</div>
+	<!--  ------------ -->
+
 	<!-- Results Actions -->
 	<div class="component-conatiner" fxLayout="column" fxLayoutAlign="start start" fxLayoutGap="2px">
 		<span>Results Actions :</span>

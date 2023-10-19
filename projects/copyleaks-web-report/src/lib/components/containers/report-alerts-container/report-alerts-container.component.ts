@@ -44,15 +44,18 @@ export class ReportAlertsContainerComponent implements OnInit, AfterViewInit {
 		setTimeout(() => {
 			if (this.firstAlert && this.alerts?.length === 1) {
 				this.containerHeight = this.firstAlert.nativeElement.offsetHeight;
-				this.minHeight = `${this.containerHeight + 50}px`;
+				this.minHeight = `${this.containerHeight + 30}px`;
 			}
 		});
 	}
 
 	hideAlertsClick() {
-		this.hideAlerts = !this.hideAlerts;
+		this.hideAlerts = true;
+		this.minHeight = '';
+	}
 
-		if (this.hideAlerts) this.minHeight = '0px';
-		else this.minHeight = `${this.containerHeight + 50}px`;
+	showAlertsClick() {
+		this.hideAlerts = false;
+		this.minHeight = `${this.containerHeight + 30}px`;
 	}
 }

@@ -1,24 +1,15 @@
-import {
-	ChangeDetectionStrategy,
-	ChangeDetectorRef,
-	Component,
-	EventEmitter,
-	Input,
-	OnInit,
-	Output,
-	SimpleChanges,
-} from '@angular/core';
-import { IPaginateData, PageEvent } from './models/cls-paginator.models';
+import { ChangeDetectorRef, Component, EventEmitter, Input, OnInit, Output, SimpleChanges } from '@angular/core';
+import { IPaginateData, PageEvent } from './models/cr-paginator.models';
 
 /**
  * Class representing a new design for the Copyleaks Paginator.
  */
 @Component({
-	selector: 'cls-paginator',
-	templateUrl: './cls-paginator.component.html',
-	styleUrls: ['./cls-paginator.component.scss'],
+	selector: 'cr-paginator',
+	templateUrl: './cr-paginator.component.html',
+	styleUrls: ['./cr-paginator.component.scss'],
 })
-export class ClsPaginatorComponent implements OnInit {
+export class CrPaginatorComponent implements OnInit {
 	/***
 	 * The current selected page size
 	 * @Input

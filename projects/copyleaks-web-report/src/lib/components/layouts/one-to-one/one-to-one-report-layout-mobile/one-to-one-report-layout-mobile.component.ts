@@ -1,5 +1,4 @@
 import { Component, OnInit, Renderer2 } from '@angular/core';
-import { COPYLEAKS_REPORT_IFRAME_STYLES } from 'projects/copyleaks-web-report/src/lib/constants/report-iframe-styles.constants';
 import { IScanSource } from 'projects/copyleaks-web-report/src/lib/models/report-data.models';
 import { PostMessageEvent } from 'projects/copyleaks-web-report/src/lib/models/report-iframe-events.models';
 import {
@@ -18,6 +17,7 @@ import { ReportLayoutBaseComponent } from '../../base/report-layout-base.compone
 import { EResponsiveLayoutType } from 'projects/copyleaks-web-report/src/lib/enums/copyleaks-web-report.enums';
 import { filter } from 'rxjs/operators';
 import { untilDestroy } from 'projects/copyleaks-web-report/src/lib/utils/until-destroy';
+import { ReportStatisticsService } from 'projects/copyleaks-web-report/src/lib/services/report-statistics.service';
 
 @Component({
 	selector: 'copyleaks-one-to-one-report-layout-mobile',
@@ -61,9 +61,10 @@ export class OneToOneReportLayoutMobileComponent extends ReportLayoutBaseCompone
 		reportViewSvc: ReportViewService,
 		matchSvc: ReportMatchesService,
 		renderer: Renderer2,
-		highlightSvc: ReportMatchHighlightService
+		highlightSvc: ReportMatchHighlightService,
+		statisticsSvc: ReportStatisticsService
 	) {
-		super(reportDataSvc, reportViewSvc, matchSvc, renderer, highlightSvc);
+		super(reportDataSvc, reportViewSvc, matchSvc, renderer, highlightSvc, statisticsSvc);
 		this.iframeJsScript = iframeJsScript;
 	}
 

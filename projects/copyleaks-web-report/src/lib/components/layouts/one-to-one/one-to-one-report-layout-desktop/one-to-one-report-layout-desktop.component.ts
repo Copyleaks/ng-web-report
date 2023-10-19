@@ -1,13 +1,8 @@
 import { Component, OnDestroy, OnInit, Renderer2 } from '@angular/core';
-import { COPYLEAKS_REPORT_IFRAME_STYLES } from 'projects/copyleaks-web-report/src/lib/constants/report-iframe-styles.constants';
-import {
-	EExcludeReason,
-	EResponsiveLayoutType,
-} from 'projects/copyleaks-web-report/src/lib/enums/copyleaks-web-report.enums';
+import { EResponsiveLayoutType } from 'projects/copyleaks-web-report/src/lib/enums/copyleaks-web-report.enums';
 import { IScanSource } from 'projects/copyleaks-web-report/src/lib/models/report-data.models';
 import {
 	Match,
-	MatchType,
 	ResultDetailItem,
 	SlicedMatch,
 } from 'projects/copyleaks-web-report/src/lib/models/report-matches.models';
@@ -20,6 +15,7 @@ import { ReportMatchHighlightService } from 'projects/copyleaks-web-report/src/l
 import { ReportLayoutBaseComponent } from '../../base/report-layout-base.component';
 import { filter } from 'rxjs/operators';
 import { untilDestroy } from 'projects/copyleaks-web-report/src/lib/utils/until-destroy';
+import { ReportStatisticsService } from 'projects/copyleaks-web-report/src/lib/services/report-statistics.service';
 
 @Component({
 	selector: 'copyleaks-one-to-one-report-layout-desktop',
@@ -65,9 +61,10 @@ export class OneToOneReportLayoutDesktopComponent extends ReportLayoutBaseCompon
 		reportViewSvc: ReportViewService,
 		matchSvc: ReportMatchesService,
 		renderer: Renderer2,
-		highlightSvc: ReportMatchHighlightService
+		highlightSvc: ReportMatchHighlightService,
+		statisticsSvc: ReportStatisticsService
 	) {
-		super(reportDataSvc, reportViewSvc, matchSvc, renderer, highlightSvc);
+		super(reportDataSvc, reportViewSvc, matchSvc, renderer, highlightSvc, statisticsSvc);
 		this.iframeJsScript = iframeJsScript;
 	}
 

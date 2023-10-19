@@ -30,6 +30,11 @@ export enum EResponsiveLayoutType {
 	Mobile = 'mobile',
 }
 
+export enum EReportViewType {
+	AIView = 'AIView',
+	PlagiarismView = 'PlagiarismView',
+}
+
 /**
  * Enum representing reasons for exclusion
  */

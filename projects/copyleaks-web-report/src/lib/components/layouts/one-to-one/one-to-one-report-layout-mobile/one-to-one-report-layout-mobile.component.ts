@@ -17,6 +17,7 @@ import { ReportLayoutBaseComponent } from '../../base/report-layout-base.compone
 import { EResponsiveLayoutType } from 'projects/copyleaks-web-report/src/lib/enums/copyleaks-web-report.enums';
 import { filter } from 'rxjs/operators';
 import { untilDestroy } from 'projects/copyleaks-web-report/src/lib/utils/until-destroy';
+import { ReportStatisticsService } from 'projects/copyleaks-web-report/src/lib/services/report-statistics.service';
 
 @Component({
 	selector: 'copyleaks-one-to-one-report-layout-mobile',
@@ -60,9 +61,10 @@ export class OneToOneReportLayoutMobileComponent extends ReportLayoutBaseCompone
 		reportViewSvc: ReportViewService,
 		matchSvc: ReportMatchesService,
 		renderer: Renderer2,
-		highlightSvc: ReportMatchHighlightService
+		highlightSvc: ReportMatchHighlightService,
+		statisticsSvc: ReportStatisticsService
 	) {
-		super(reportDataSvc, reportViewSvc, matchSvc, renderer, highlightSvc);
+		super(reportDataSvc, reportViewSvc, matchSvc, renderer, highlightSvc, statisticsSvc);
 		this.iframeJsScript = iframeJsScript;
 	}
 

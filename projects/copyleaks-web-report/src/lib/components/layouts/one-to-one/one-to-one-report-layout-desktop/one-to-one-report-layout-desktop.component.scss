@@ -1,4 +1,5 @@
 @import '../../../../styles/containers.styles.scss';
+@import '../../../../styles/website-colors.styles.scss';
 
 :host {
 	display: flex;
@@ -7,36 +8,36 @@
 }
 
 .left-section {
-	@include cls-report-container-lvl-1;
 	display: flex;
 	flex-direction: column;
 	gap: 16px;
-	padding: 10px;
 	flex: 50%;
 	width: 50%;
 }
 
 .right-section {
-	@include cls-report-container-lvl-1;
-	padding: 10px;
 	display: flex;
 	flex-direction: column;
-	gap: 16px;
+	gap: 8px;
 	flex: 50%;
 	width: 50%;
-
-	@include cls-report-container-close-btn;
-
-	.results-alerts-container {
-		padding: 10px;
-		display: flex;
-		flex-direction: column;
-		gap: 16px;
-		flex-grow: 1;
-	}
 
 	copyleaks-content-viewer-container {
 		height: 80%;
 		flex-grow: 80;
 	}
+}
+copyleaks-report-results-item-container,
+copyleaks-content-viewer-container {
+	box-shadow: -2px -2px 8px 0px rgba(255, 255, 255, 0.5), 2px 2px 4px 0px rgba(0, 0, 0, 0.15);
+	border-radius: 10px;
+}
+
+copyleaks-content-viewer-container {
+	border-radius: 10px;
+}
+
+copyleaks-report-results-item-container {
+	background-color: $color-white;
+	border-radius: 10px;
 }

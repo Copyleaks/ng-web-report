@@ -4,7 +4,7 @@ import { OneToOneReportLayoutMobileComponent } from './one-to-one-report-layout-
 import { ContentViewerContainerModule } from '../../../containers/content-viewer-container/content-viewer-container.module';
 import { ReportActionsContainerModule } from '../../../containers/report-actions-container/report-actions-container.module';
 import { ReportResultsItemContainerModule } from '../../../containers/report-results-item-container/report-results-item-container.module';
-import { PoweredByModule } from '../../../core/powered-by/powered-by.module';
+import { CrPoweredByModule } from '../../../core/cr-powered-by/cr-powered-by.module';
 
 @NgModule({
 	declarations: [OneToOneReportLayoutMobileComponent],
@@ -13,7 +13,7 @@ import { PoweredByModule } from '../../../core/powered-by/powered-by.module';
 		ContentViewerContainerModule,
 		ReportActionsContainerModule,
 		ReportResultsItemContainerModule,
-		PoweredByModule,
+		CrPoweredByModule,
 	],
 	exports: [OneToOneReportLayoutMobileComponent],
 })

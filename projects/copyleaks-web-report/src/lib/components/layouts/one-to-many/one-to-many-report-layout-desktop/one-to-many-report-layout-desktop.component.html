@@ -1,7 +1,14 @@
 <!-- Left side section -->
 <div class="left-section">
 	<!-- Report tabs container --->
-	<copyleaks-report-tabs-container></copyleaks-report-tabs-container>
+	<copyleaks-report-tabs-container
+		[selectedTap]="selectedTap"
+		[plagarismScore]="plagiarismScore"
+		[aiScore]="reportStatistics?.aiScore ?? 0"
+		[wordsTotal]="reportStatistics?.total ?? 0"
+		[identicalTotal]="reportStatistics?.identical ?? 0"
+		[minorChangesTotal]="reportStatistics?.minorChanges ?? 0"
+		[paraphrasedTotal]="reportStatistics?.relatedMeaning ?? 0"></copyleaks-report-tabs-container>
 
 	<!-- Report content container  -->
 	<copyleaks-content-viewer-container
@@ -22,7 +29,7 @@
 
 <!-- Right side section -->
 <div *ngIf="!hideRightSection" class="right-section" id="one-to-many-report-right-section">
-	<div class="close-btn" (click)="hideRightSection = !hideRightSection">X</div>
+	<!-- <div class="close-btn" (click)="hideRightSection = !hideRightSection">X</div> -->
 
 	<!-- Report actions container -->
 	<copyleaks-report-actions-container></copyleaks-report-actions-container>

@@ -1,0 +1,18 @@
+<div class="top-container" fxLayout="column" fxLayoutAlign="start center">
+	<div class="header-container" fxLayout="row" fxLayoutAlign="center center">
+		<mat-icon class="title-icon">{{ lockResultItem.titleIcon }}</mat-icon>
+		<h2>{{ lockResultItem.title }}</h2>
+	</div>
+	<div class="body-container" fxLayout="column" fxLayoutAlign="center center" fxLayoutGap="16px">
+		<div class="description-container">
+			<span>{{ lockResultItem.description }}</span>
+		</div>
+		<div class="button-container" fxLayout="column" fxLayoutAlign="start center" fxLayoutGap="4px">
+			<span class="button-description">{{ lockResultItem.buttonDescription }}:</span>
+			<button class="button" fxLayout="row" fxLayoutAlign="center center" fxLayoutGap="8px">
+				<span>{{ lockResultItem.buttonText }}</span>
+				<mat-icon>{{ lockResultItem.buttonIcon }}</mat-icon>
+			</button>
+		</div>
+	</div>
+</div>

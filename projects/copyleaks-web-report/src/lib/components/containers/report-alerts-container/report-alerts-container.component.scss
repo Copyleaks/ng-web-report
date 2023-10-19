@@ -73,7 +73,10 @@
 	::ng-deep {
 		.mat-expansion-panel-content {
 			overflow-y: auto;
-			max-height: 250px;
+			max-height: 100%;
+			@media screen and (min-width: 960px) {
+				max-height: 250px;
+			}
 		}
 
 		/* Hide default toggle icon */
@@ -98,5 +101,10 @@
 		.mat-expansion-panel-header {
 			padding-right: 0px !important;
 		}
+	}
+
+	mat-accordion {
+		width: 100%;
+		height: 100%;
 	}
 }

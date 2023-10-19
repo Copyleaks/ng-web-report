@@ -1,4 +1,4 @@
-import { ReportTextMatchComponent } from '../components/core/report-text-match/report-text-match.component';
+import { CrTextMatchComponent } from '../components/core/cr-text-match/cr-text-match.component';
 import { Comparison, IComparisonCollection } from '../models/report-data.models';
 import { Match, MatchType, SlicedMatch } from '../models/report-matches.models';
 
@@ -94,7 +94,7 @@ export const findPrevPageWithMatch = (matches: SlicedMatch[][], current: number)
  * @param next the match to mark/unmark next
  * @returns `true` if the match is eventualy highlighted
  */
-export const onTextMatchChange = ([prev, next]: [ReportTextMatchComponent | null, ReportTextMatchComponent | null]) => {
+export const onTextMatchChange = ([prev, next]: [CrTextMatchComponent | null, CrTextMatchComponent | null]) => {
 	if (next) {
 		if (prev && prev !== next) {
 			prev.focused = false;

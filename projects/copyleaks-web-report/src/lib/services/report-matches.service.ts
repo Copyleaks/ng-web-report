@@ -1,7 +1,7 @@
 import { Injectable, OnDestroy } from '@angular/core';
 import { BehaviorSubject, Subject, combineLatest } from 'rxjs';
 import * as helpers from '../utils/report-match-helpers';
-import { ICompleteResultNotificationAlert, IScanSource } from '../models/report-data.models';
+import { ICompleteResultNotificationAlert, ICompleteResults, IScanSource } from '../models/report-data.models';
 import { CopyleaksReportOptions } from '../models/report-options.models';
 import { ReportDataService } from './report-data.service';
 import { filter, takeUntil } from 'rxjs/operators';
@@ -148,7 +148,11 @@ export class ReportMatchesService implements OnDestroy {
 	}
 
 	private _initAlertMatchesHandler() {
-		combineLatest([this._reportDataSvc.crawledVersion$, this._reportViewSvc.selectedAlert$])
+		combineLatest([
+			this._reportDataSvc.crawledVersion$,
+			this._reportViewSvc.selectedAlert$,
+			this._reportDataSvc.scanResultsPreviews$,
+		])
 			.pipe(
 				untilDestroy(this),
 				filter(
@@ -156,8 +160,8 @@ export class ReportMatchesService implements OnDestroy {
 						scanSource != null && scanSource != undefined && selectedAlert != null && selectedAlert != undefined
 				)
 			)
-			.subscribe(([scanSource, selectedAlert]) => {
-				if (!scanSource || !selectedAlert) return;
+			.subscribe(([scanSource, selectedAlert, completeResults]) => {
+				if (!scanSource || !selectedAlert || !completeResults) return;
 
 				this._processAlertMatches(
 					// !MOCK data for scan report options
@@ -170,6 +174,7 @@ export class ReportMatchesService implements OnDestroy {
 						setAsDefault: true,
 					} as CopyleaksReportOptions,
 					scanSource,
+					completeResults,
 					selectedAlert
 				);
 			});
@@ -267,13 +272,15 @@ export class ReportMatchesService implements OnDestroy {
 	private _processAlertMatches(
 		settings: CopyleaksReportOptions,
 		source: IScanSource,
-		selectedAlert: ICompleteResultNotificationAlert
+		completeResults: ICompleteResults,
+		selectedAlertCode: string
 	) {
 		let text: SlicedMatch[][];
 
 		// check if the selected alert code is valid
-		if (selectedAlert?.code) {
-			switch (selectedAlert.code) {
+		const selectedAlert = completeResults.notifications?.alerts.find(alert => alert.code === selectedAlertCode);
+		if (selectedAlert) {
+			switch (selectedAlertCode) {
 				case ALERTS.SUSPECTED_AI_TEXT_DETECTED:
 					text = helpers.processAICheatingMatches(source, selectedAlert);
 					break;

@@ -16,10 +16,8 @@
 }
 
 .middle-section {
-	@include cls-report-container-lvl-1;
 	flex-grow: 80;
 	height: 80%;
-	padding: 16px;
 	copyleaks-content-viewer-container {
 		height: 43%;
 	}
@@ -37,14 +35,13 @@
 	@include cls-report-container-lvl-2;
 }
 
-.report-actions-container,
-.middle-section {
-	@include cls-report-container-lvl-1;
-}
-
 .powered-by-copyleaks-container {
 	display: flex;
 	padding: 8px;
 	justify-content: center;
 	align-items: center;
+}
+
+copyleaks-content-viewer-container {
+	border-radius: 10px;
 }

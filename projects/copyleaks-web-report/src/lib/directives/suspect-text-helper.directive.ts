@@ -5,11 +5,11 @@ import { Match } from '../models/report-matches.models';
 import { ReportDataService } from '../services/report-data.service';
 import { ReportMatchHighlightService } from '../services/report-match-highlight.service';
 import { ReportViewService } from '../services/report-view.service';
-import { ReportTextMatchComponent } from '../components/core/report-text-match/report-text-match.component';
 import { IResultDetailResponse } from '../models/report-data.models';
 import * as helpers from '../utils/highlight-helpers';
 import { Subject } from 'rxjs';
 import { untilDestroy } from '../utils/until-destroy';
+import { CrTextMatchComponent } from '../components/core/cr-text-match/cr-text-match.component';
 
 @Directive({
 	selector: '[crSuspectTextHelper]',
@@ -23,8 +23,8 @@ export class SuspectTextHelperDirective implements AfterContentInit, OnDestroy {
 		private _dataSvc: ReportDataService
 	) {}
 
-	@ContentChildren(ReportTextMatchComponent)
-	private children: QueryList<ReportTextMatchComponent>;
+	@ContentChildren(CrTextMatchComponent)
+	private children: QueryList<CrTextMatchComponent>;
 
 	/**
 	 * Handle a match click that was broadcasted by the source text helper

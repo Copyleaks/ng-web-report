@@ -8,11 +8,11 @@
 			</button>
 		</div>
 		<div class="result-container" fxLayout="row" fxLayoutAlign="start center" fxLayoutGap="4px">
-			<span class="tootal-results">35 Results</span>
+			<span class="total-results">35 Results</span>
 			<mat-icon class="separate-circle-icon" fontSet="material-icons-round">circle</mat-icon>
-			<span class="tootal-excuded">7 excluded</span>
+			<span class="total-excuded">7 excluded</span>
 			<mat-icon class="separate-circle-icon" fontSet="material-icons-round">circle</mat-icon>
-			<span class="tootal-filtered">12 filtered</span>
+			<span class="total-filtered">12 filtered</span>
 		</div>
 	</div>
 	<div class="body-container" fxLayout="row" fxLayoutAlign="start start" fxLayoutGap="32px">
@@ -31,7 +31,7 @@
 								<mat-icon>language</mat-icon>
 							</div>
 							<span class="mat-slide-title">{{ item }}</span>
-							<span class="tootal-source">(3)</span>
+							<span class="total-source">(3)</span>
 						</div>
 						<mat-slide-toggle></mat-slide-toggle>
 					</div>
@@ -123,7 +123,37 @@
 			<!-- Included Tags -->
 			<section class="included-tags-container" fxLayout="column" fxLayoutAlign="start start" fxLayoutGap="8px">
 				<span class="body-title">Included Tags</span>
+				<div class="search-tag-container" fxLayout="row" fxLayoutAlign="start center" fxLayoutGap="8px">
+					<div class="search-icon" fxLayout="column" fxLayoutAlign="center center">
+						<mat-icon>search</mat-icon>
+					</div>
+					<input class="included-tags-input" [type]="'text'" placeholder="Search {item type}" />
+				</div>
+				<div class="mat-chip-container" fxLayout="row" fxLayoutAlign="space-between center">
+					<button class="arrow-drop-button" (click)="showMoreMenu = !showMoreMenu">
+						<ng-container *ngIf="showMoreMenu; else showLessMenuIcon">
+							<mat-icon>arrow_drop_down</mat-icon>
+						</ng-container>
+						<ng-template #showLessMenuIcon>
+							<mat-icon>arrow_drop_up</mat-icon>
+						</ng-template>
+					</button>
+					<mat-chip-list>
+						<ng-container *ngFor="let tag of selectedTags; let idx = index">
+							<mat-chip class="selected-tag-mat-chip" *ngIf="idx < 4">
+								{{ tag }}
+							</mat-chip>
+						</ng-container>
+					</mat-chip-list>
+					<div class="total-select-tags">
+						<span>+ {{ selectedTags.length - 4 }}</span>
+					</div>
+				</div>
 			</section>
 		</div>
+	</div>
+	<div class="apply-and-discard-contaier" fxLayout="row" fxLayoutAlign="end center" fxLayoutGap="32px">
+		<button class="discard-changes-button">Discard changes</button>
+		<button class="apply-filters-button">Apply filters</button>
 	</div>
 </div>

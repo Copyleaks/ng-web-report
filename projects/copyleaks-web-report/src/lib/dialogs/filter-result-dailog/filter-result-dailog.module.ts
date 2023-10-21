@@ -7,6 +7,7 @@ import { MatDividerModule } from '@angular/material/divider';
 import { FlexLayoutModule } from '@angular/flex-layout';
 import { MatSliderModule } from '@angular/material/slider';
 import { MatCheckboxModule } from '@angular/material/checkbox';
+import { MatChipsModule } from '@angular/material/chips';
 
 @NgModule({
 	declarations: [FilterResultDailogComponent],
@@ -19,6 +20,7 @@ import { MatCheckboxModule } from '@angular/material/checkbox';
 		MatDividerModule,
 		MatSliderModule,
 		MatCheckboxModule,
+		MatChipsModule,
 	],
 })
 export class FilterResultDailogModule {}

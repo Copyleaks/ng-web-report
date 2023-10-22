@@ -18,26 +18,16 @@
 	<div class="body-container" fxLayout="row" fxLayoutAlign="start start" fxLayoutGap="32px">
 		<div class="left-side-container" fxLayout="column" fxLayoutAlign="start start" fxLayoutGap="16px">
 			<!-- source type -->
-			<section class="section-container" fxLayout="column" fxLayoutAlign="start start" fxLayoutGap="16px">
+			<section
+				class="section-container sources-type-top-container"
+				fxLayout="column"
+				fxLayoutAlign="start start"
+				fxLayoutGap="16px">
 				<span class="body-title">Source type</span>
-				<div class="source-type-list-container" fxLayout="column" fxLayoutAlign="start start" fxLayoutGap="8px">
-					<div
-						*ngFor="let item of surceTypeList"
-						class="mat-slide-container source-type-contaier"
-						fxLayout="row"
-						fxLayoutAlign="space-between center">
-						<div class="source-type-title-conatier" fxLayout="row" fxLayoutAlign="center center" fxLayoutGap="8px">
-							<div class="source-type-icon-container" fxLayout="column" fxLayoutAlign="center center">
-								<mat-icon>language</mat-icon>
-							</div>
-							<span class="mat-slide-title">{{ item }}</span>
-							<span class="total-source">(3)</span>
-						</div>
-						<mat-slide-toggle></mat-slide-toggle>
-					</div>
-				</div>
+				<cr-source-type-filter-result class="sources-type-container"></cr-source-type-filter-result>
+				<mat-divider></mat-divider>
 			</section>
-			<mat-divider></mat-divider>
+
 			<!-- results meta -->
 			<section class="section-container" fxLayout="column" fxLayoutAlign="start start" fxLayoutGap="16px">
 				<span class="body-title">Results meta</span>
@@ -47,8 +37,12 @@
 							<span class="mat-slide-title">Result word limit:</span>
 							<mat-slide-toggle></mat-slide-toggle>
 						</div>
-						<mat-slider class="mat-slider-container" min="10" max="100"></mat-slider>
-						<span class="limit-result">30/1023 words</span>
+						<mat-slider
+							class="mat-slider-container"
+							[(ngModel)]="wordLimit"
+							[min]="minWordLimit"
+							[max]="maxWordLimit"></mat-slider>
+						<span class="limit-result">{{ wordLimit }} / {{ maxWordLimit }} words</span>
 					</div>
 					<mat-divider></mat-divider>
 					<div class="result-publication-top-container" fxLayout="column" fxLayoutAlign="start start" fxLayoutGap="4px">
@@ -57,7 +51,7 @@
 								<span class="mat-slide-title">Results publication date:</span>
 								<mat-slide-toggle></mat-slide-toggle>
 							</div>
-							<mat-slider class="mat-slider-container" min="10" max="100"></mat-slider>
+							<mat-slider invert class="mat-slider-container" min="10" max="100"></mat-slider>
 							<div class="date-container" fxLayout="row" fxLayoutAlign="start center" fxLayoutGap="4px">
 								<span class="start-from">Starting from:</span>
 								<span class="publication-date">May 2023</span>

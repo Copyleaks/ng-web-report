@@ -1,0 +1,50 @@
+<div
+	class="container"
+	[class.scroll-padding]="totalSourceType.repository.length > 1"
+	fxLayout="column"
+	fxLayoutAlign="start start"
+	fxLayoutGap="8px">
+	<ng-container *ngIf="totalSourceType.totalInternet">
+		<cr-mat-slide-filter-result class="mat-slide-filter-result" [title]="'Internet Source'">
+			<mat-slide-logo>
+				<div class="source-type-icon-container" fxLayout="column" fxLayoutAlign="center center">
+					<mat-icon>language</mat-icon>
+				</div>
+			</mat-slide-logo>
+		</cr-mat-slide-filter-result>
+	</ng-container>
+	<ng-container *ngIf="totalSourceType.totalInternalDatabase">
+		<cr-mat-slide-filter-result class="mat-slide-filter-result" [title]="'Internal Database'">
+			<mat-slide-logo>
+				<div class="source-type-icon-container" fxLayout="column" fxLayoutAlign="center center">
+					<img class="title-img" src="assets/images/icons/repositories-icon.svg" />
+				</div>
+			</mat-slide-logo>
+		</cr-mat-slide-filter-result>
+	</ng-container>
+	<ng-container *ngIf="totalSourceType.totalbatch">
+		<cr-mat-slide-filter-result class="mat-slide-filter-result" [title]="'This batch'">
+			<mat-slide-logo>
+				<div class="source-type-icon-container" fxLayout="column" fxLayoutAlign="center center">
+					<mat-icon>compare_arrows</mat-icon>
+				</div>
+			</mat-slide-logo>
+		</cr-mat-slide-filter-result>
+	</ng-container>
+	<ng-container *ngIf="totalSourceType.repository.length">
+		<div
+			*ngFor="let item of totalSourceType.repository"
+			class="repository-container"
+			fxLayout="column"
+			fxLayoutAlign="start start"
+			fxLayoutGap="8px">
+			<cr-mat-slide-filter-result class="mat-slide-filter-result" [title]="item">
+				<mat-slide-logo>
+					<div class="source-type-icon-container" fxLayout="column" fxLayoutAlign="center center">
+						<mat-icon>compare_arrows</mat-icon>
+					</div>
+				</mat-slide-logo>
+			</cr-mat-slide-filter-result>
+		</div>
+	</ng-container>
+</div>

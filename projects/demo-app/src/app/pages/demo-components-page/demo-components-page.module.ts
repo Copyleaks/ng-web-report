@@ -13,6 +13,7 @@ import { CrPoweredByModule } from 'projects/copyleaks-web-report/src/lib/compone
 import { CrCustomTabsModule } from 'projects/copyleaks-web-report/src/lib/components/core/cr-custom-tabs/cr-custom-tabs.module';
 import { CrCustomTabItemModule } from 'projects/copyleaks-web-report/src/lib/components/core/cr-custom-tabs/components/cr-custom-tab-item/cr-custom-tab-item.module';
 import { ReportNgTemplatesService } from 'projects/copyleaks-web-report/src/lib/services/report-ng-templates.service';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 
 @NgModule({
 	declarations: [DemoComponentsPageComponent],
@@ -28,6 +29,8 @@ import { ReportNgTemplatesService } from 'projects/copyleaks-web-report/src/lib/
 		FilterResultDailogModule,
 		CrCustomTabsModule,
 		CrCustomTabItemModule,
+		FormsModule,
+		ReactiveFormsModule,
 	],
 	providers: [ReportViewService, ReportNgTemplatesService],
 })

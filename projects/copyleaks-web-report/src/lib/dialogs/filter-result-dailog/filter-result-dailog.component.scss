@@ -57,6 +57,7 @@
 			}
 		}
 	}
+
 	.body-container {
 		width: 100%;
 
@@ -66,49 +67,23 @@
 			color: $color-black;
 		}
 
-		.mat-slide-container {
-			width: 100%;
-			.mat-slide-title {
-				color: $color-black;
-				font-size: 16px;
-				font-weight: 500;
-			}
-		}
-
 		.left-side-container {
 			width: 100%;
 			flex: 1;
 			mat-divider {
 				width: 100%;
 			}
+			.sources-type-top-container {
+				overflow: hidden;
+				height: 180px;
+				width: 100%;
+				.sources-type-container {
+					width: 100%;
+				}
+			}
 			.section-container {
 				width: 100%;
 
-				.source-type-list-container {
-					width: 100%;
-					.source-type-contaier {
-						padding: 2px;
-						.source-type-title-conatier {
-							.source-type-icon-container {
-								width: 24px;
-								height: 24px;
-								border: 2px solid;
-								border-radius: 50%;
-								color: $color-primary;
-								mat-icon {
-									font-size: 17px;
-									height: 17px;
-									width: 17px;
-								}
-							}
-							.total-source {
-								color: $color-black;
-								font-size: 12px;
-								font-weight: 500;
-							}
-						}
-					}
-				}
 				.results-container {
 					width: 100%;
 					.result-word-limit-container {

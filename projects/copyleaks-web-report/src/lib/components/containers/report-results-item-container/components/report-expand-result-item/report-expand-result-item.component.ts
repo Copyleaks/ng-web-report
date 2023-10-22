@@ -55,9 +55,9 @@ export class ReportExpandResultItemComponent implements OnInit, OnChanges {
 
 	clickBack() {
 		this._reportViewSvc.reportViewMode$.next({
-			isHtmlView: true,
+			...this._reportViewSvc.reportViewMode,
 			viewMode: 'one-to-many',
-			sourcePageIndex: 1,
+			suspectId: undefined,
 		});
 	}
 

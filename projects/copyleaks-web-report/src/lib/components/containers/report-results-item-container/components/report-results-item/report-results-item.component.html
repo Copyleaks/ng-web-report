@@ -43,11 +43,23 @@
 					</ng-template>
 				</div>
 			</div>
-			<mat-icon *ngIf="!showLoader" class="item-menu" mat-icon [matMenuTriggerFor]="menu">more_vert</mat-icon>
+			<mat-icon
+				*ngIf="!showLoader"
+				class="item-menu"
+				mat-icon
+				[matMenuTriggerFor]="menu"
+				(click)="$event.stopPropagation()">
+				more_vert
+			</mat-icon>
 		</div>
 		<div class="item-body">
 			<ng-container *ngIf="!showLoader; else showItemBodySkeleton">
-				<a class="item-url" *ngIf="previewResult?.url" [href]="previewResult.url" target="_blank">
+				<a
+					class="item-url"
+					*ngIf="previewResult?.url"
+					[href]="previewResult.url"
+					target="_blank"
+					(click)="$event.stopPropagation()">
 					{{ previewResult.url }}
 				</a>
 				<div class="item-introduction" *ngIf="previewResult.introduction">

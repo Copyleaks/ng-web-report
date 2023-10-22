@@ -17,7 +17,7 @@ export class SourceTypeFilterResultComponent implements OnInit {
 		totalInternet: 3,
 		totalInternalDatabase: 3,
 		totalbatch: 3,
-		repository: ['rep1'],
+		repository: ['rep1', 'rep1', 'rep1'],
 	};
 
 	ngOnInit(): void {

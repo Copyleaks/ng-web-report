@@ -14,7 +14,7 @@ export class ReportTabsContainerComponent implements OnInit, OnDestroy {
 	/**
 	 * @Input {boolean} Flag indicating whether to show the report AI tab or not.
 	 */
-	@Input() selectedTap: EReportViewType = EReportViewType.PlagiarismView;
+	@Input() selectedTap: EReportViewType | undefined = EReportViewType.PlagiarismView;
 
 	/**
 	 * @Input {boolean} Flag indicating whether to show the report AI tab or not.
@@ -68,9 +68,15 @@ export class ReportTabsContainerComponent implements OnInit, OnDestroy {
 	ngOnInit(): void {
 		this._reportNgTemplatesSvc.reportTemplatesSubject$.pipe(untilDestroy(this)).subscribe(refs => {
 			if (refs?.customTabsTemplates !== undefined && this.customTabsTemplateRef == undefined) {
-				this.customTabsTemplateRef = refs?.customTabsTemplates as TemplateRef<any>[];
+				this.customTabsTemplateRef = refs?.customTabsTemplates?.map(
+					ctt => ctt.customTabTitleTemplates as TemplateRef<any>
+				);
 				this.cdr.detectChanges();
 			}
+		});
+
+		this._reportViewSvc.selectedCustomTabContent$.pipe(untilDestroy(this)).subscribe(content => {
+			this.selectedTap = content ? EReportViewType.CustomTabView : this.selectedTap;
 		});
 	}
 
@@ -86,6 +92,7 @@ export class ReportTabsContainerComponent implements OnInit, OnDestroy {
 					alertCode: ALERTS.SUSPECTED_AI_TEXT_DETECTED,
 				});
 				this._reportViewSvc.selectedAlert$.next(ALERTS.SUSPECTED_AI_TEXT_DETECTED);
+				this._reportViewSvc.selectedCustomTabContent$.next(null);
 
 				break;
 			case EReportViewType.PlagiarismView:
@@ -96,6 +103,7 @@ export class ReportTabsContainerComponent implements OnInit, OnDestroy {
 					alertCode: undefined,
 				});
 				this._reportViewSvc.selectedAlert$.next(null);
+				this._reportViewSvc.selectedCustomTabContent$.next(null);
 				break;
 			default:
 				break;

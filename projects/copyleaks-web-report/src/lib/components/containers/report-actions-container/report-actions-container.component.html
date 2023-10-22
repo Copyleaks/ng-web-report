@@ -1,5 +1,3 @@
-<div class="actions-container">
+<div class="actions-container" #actionsContainer [style.display]="showReportActions ? 'block' : 'none'">
 	<ng-container *ngTemplateOutlet="customActionsTemplateRef"></ng-container>
 </div>
-
-<!-- <div class="close-btn" (click)="hideReportActions()">X</div> -->

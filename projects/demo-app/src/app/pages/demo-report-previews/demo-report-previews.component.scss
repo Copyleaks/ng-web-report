@@ -2,7 +2,7 @@
 	width: 100%;
 	display: flex;
 
-	a {
+	.custom-tab-title {
 		color: #3f9af5;
 		font-size: 16px;
 		font-style: normal;
@@ -11,7 +11,7 @@
 		text-decoration: none;
 	}
 
-	a:hover {
+	.custom-tab-title:hover {
 		text-decoration: underline;
 	}
 

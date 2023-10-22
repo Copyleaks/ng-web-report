@@ -33,6 +33,7 @@ export enum EResponsiveLayoutType {
 export enum EReportViewType {
 	AIView = 'AIView',
 	PlagiarismView = 'PlagiarismView',
+	CustomTabView = 'CustomTabView',
 }
 
 /**

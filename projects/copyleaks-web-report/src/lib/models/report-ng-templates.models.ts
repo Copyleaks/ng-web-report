@@ -14,7 +14,19 @@ export interface ICustomClsReportTemplatesRefs {
 	customResultsTemplate: TemplateRef<any> | undefined;
 
 	/**
-	 * @property {TemplateRef<any>[] | undefined} customResultsTemplate - Custom report tabs section reference.
+	 * @property {ICustomClsReportTabTemplatesRefs[] | undefined} customResultsTemplate - Custom report tabs section references.
 	 */
-	customTabsTemplates: TemplateRef<any>[] | undefined;
+	customTabsTemplates: ICustomClsReportTabTemplatesRefs[] | undefined;
+}
+
+export interface ICustomClsReportTabTemplatesRefs {
+	/**
+	 * @property {TemplateRef<any> | undefined} customTabTitleTemplates - Custom report tab title reference.
+	 */
+	customTabTitleTemplates: TemplateRef<any> | undefined;
+
+	/**
+	 * @property {TemplateRef<any> | undefined} customTabContentTemplates - Custom report tab content reference.
+	 */
+	customTabContentTemplates: TemplateRef<any> | undefined;
 }

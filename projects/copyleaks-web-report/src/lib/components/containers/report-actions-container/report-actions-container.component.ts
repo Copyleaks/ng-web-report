@@ -1,12 +1,13 @@
 import {
 	AfterViewInit,
-	ChangeDetectorRef,
 	Component,
+	ElementRef,
 	HostBinding,
 	Input,
 	OnDestroy,
 	OnInit,
 	TemplateRef,
+	ViewChild,
 } from '@angular/core';
 import { ReportNgTemplatesService } from '../../../services/report-ng-templates.service';
 import { untilDestroy } from '../../../utils/until-destroy';
@@ -23,6 +24,8 @@ export class ReportActionsContainerComponent implements OnInit, AfterViewInit, O
 	@HostBinding('style.flex-grow')
 	flexGrowProp: number;
 
+	@ViewChild('actionsContainer', { static: true }) actionsContainer: ElementRef;
+
 	/**
 	 * @Input {number} Flex grow property - flex-grow
 	 */
@@ -31,7 +34,7 @@ export class ReportActionsContainerComponent implements OnInit, AfterViewInit, O
 	customActionsTemplateRef: TemplateRef<any>;
 	customTemplateRefSub: any;
 
-	constructor(private _reportNgTemplatesSvc: ReportNgTemplatesService, private cdr: ChangeDetectorRef) {}
+	constructor(private _reportNgTemplatesSvc: ReportNgTemplatesService) {}
 
 	ngOnInit(): void {
 		if (this.flexGrow !== undefined && this.flexGrow !== null) this.flexGrowProp = this.flexGrow;
@@ -53,15 +56,14 @@ export class ReportActionsContainerComponent implements OnInit, AfterViewInit, O
 
 		// Starts a subscription for the custom actions reference changes
 		this._reportNgTemplatesSvc.reportTemplatesSubject$.pipe(untilDestroy(this)).subscribe(refs => {
-			if (refs?.customActionsTemplate !== undefined && this.customActionsTemplateRef == undefined) {
+			if (refs?.customActionsTemplate !== undefined && this.customActionsTemplateRef == undefined)
 				this.customActionsTemplateRef = refs?.customActionsTemplate as TemplateRef<any>;
-				this.cdr.detectChanges();
-			}
 		});
 	}
 
-	hideReportActions() {
-		this.display = 'none';
+	get showReportActions() {
+		const containerDiv = this.actionsContainer?.nativeElement;
+		return containerDiv?.children?.length > 0;
 	}
 
 	ngOnDestroy(): void {}

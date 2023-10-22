@@ -3,9 +3,9 @@ import { trigger, transition, useAnimation } from '@angular/animations';
 import { fadeIn } from 'ng-animate';
 
 @Component({
-	selector: 'cls-skeleton-loader',
-	templateUrl: './skeleton-loader.component.html',
-	styleUrls: ['./skeleton-loader.component.scss'],
+	selector: 'cr-skeleton-loader',
+	templateUrl: './cr-skeleton-loader.component.html',
+	styleUrls: ['./cr-skeleton-loader.component.scss'],
 	animations: [trigger('fadeIn', [transition(':enter', useAnimation(fadeIn), { delay: 1 })])],
 })
 export class SkeletonLoaderComponent {

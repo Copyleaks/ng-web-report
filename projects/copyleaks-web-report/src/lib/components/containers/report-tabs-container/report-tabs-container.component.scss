@@ -39,9 +39,11 @@
 		}
 	}
 
+	::ng-deep .tab-selected,
 	.tab-selected {
 		background: $color-white;
 	}
+	::ng-deep .tab-selected::after,
 	.tab-selected::after {
 		width: 100%;
 	}

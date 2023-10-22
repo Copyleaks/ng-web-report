@@ -133,12 +133,20 @@
 	}
 }
 
+.first-percentage {
+	border-top-left-radius: 10px;
+	border-bottom-left-radius: 10px;
+}
+
+.last-percentage {
+	border-top-right-radius: 10px;
+	border-bottom-right-radius: 10px;
+}
+
 .identical {
-	border-radius: 4px 0 0 4px;
 	background-color: #fd7366;
 }
 .paraphrased {
-	border-radius: 0 4px 4px 0;
 	background-color: #fed5a9;
 }
 .minorChanges {

@@ -139,7 +139,8 @@ export abstract class OneToManyReportLayoutBaseComponent extends ReportLayoutBas
 						this.scanResultsView = allResults.map(result => {
 							const foundResultDetail = this.scanResultsDetails?.find(r => r.id === result.id);
 							return {
-								previewResult: result,
+								resultPreview: result,
+								resultDetails: foundResultDetail,
 								iStatisticsResult: foundResultDetail?.result?.statistics,
 								metadataSource: {
 									words: this.scanResultsPreviews?.scannedDocument.totalWords ?? 0,
@@ -175,7 +176,18 @@ export abstract class OneToManyReportLayoutBaseComponent extends ReportLayoutBas
 						selectedMatch?.ids?.includes(item.id)
 					) ?? []),
 				];
-				console.log('Results for selected match: ', viewedResults);
+				this.scanResultsView = viewedResults.map(result => {
+					const foundResultDetail = this.scanResultsDetails?.find(r => r.id === result.id);
+					return {
+						resultPreview: result,
+						resultDetails: foundResultDetail,
+						iStatisticsResult: foundResultDetail?.result?.statistics,
+						metadataSource: {
+							words: this.scanResultsPreviews?.scannedDocument.totalWords ?? 0,
+							excluded: this.scanResultsPreviews?.scannedDocument.totalExcluded ?? 0,
+						},
+					} as IResultItem;
+				});
 				break;
 			case 'upgrade-plan':
 				console.log(message);

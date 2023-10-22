@@ -1,4 +1,4 @@
-import { Component, EventEmitter, Input, OnChanges, OnInit, Output, SimpleChanges } from '@angular/core';
+import { Component, EventEmitter, HostListener, Input, OnChanges, OnInit, Output, SimpleChanges } from '@angular/core';
 import { EResultPreviewType } from 'projects/copyleaks-web-report/src/lib/enums/copyleaks-web-report.enums';
 import { IResultPreviewBase } from 'projects/copyleaks-web-report/src/lib/models/report-data.models';
 import { ReportViewService } from 'projects/copyleaks-web-report/src/lib/services/report-view.service';
@@ -18,6 +18,18 @@ export class ReportResultsItemComponent implements OnInit, OnChanges {
 	percentageResult: IPercentageResult;
 	previewResult: IResultPreviewBase;
 	eResultPreviewType = EResultPreviewType;
+
+	@HostListener('click', ['$event'])
+	handleClick() {
+		if (!this.resultItem || this.showLoader || !this.resultItem.resultDetails) return;
+
+		this._reportViewSvc.selectedResult$.next(this.resultItem.resultDetails);
+		this._reportViewSvc.reportViewMode$.next({
+			...this._reportViewSvc.reportViewMode,
+			viewMode: 'one-to-one',
+			suspectId: this.resultItem.resultPreview.id,
+		});
+	}
 
 	get authorName() {
 		if (this.previewResult) {
@@ -40,7 +52,7 @@ export class ReportResultsItemComponent implements OnInit, OnChanges {
 
 	ngOnInit(): void {
 		if (this.resultItem) {
-			this.previewResult = this.resultItem.previewResult;
+			this.previewResult = this.resultItem.resultPreview;
 			this.percentageResult = {
 				resultItem: this.resultItem,
 				showTooltip: true,
@@ -51,7 +63,7 @@ export class ReportResultsItemComponent implements OnInit, OnChanges {
 	ngOnChanges(changes: SimpleChanges): void {
 		if ('resultItem' in changes)
 			if (this.resultItem) {
-				this.previewResult = this.resultItem.previewResult;
+				this.previewResult = this.resultItem.resultPreview;
 				this.percentageResult = {
 					resultItem: this.resultItem,
 					showTooltip: true,

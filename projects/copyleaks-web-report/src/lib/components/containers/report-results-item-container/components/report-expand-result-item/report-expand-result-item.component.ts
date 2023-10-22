@@ -20,8 +20,8 @@ export class ReportExpandResultItemComponent implements OnInit, OnChanges {
 	exclude: boolean = false;
 
 	get authorName() {
-		if (this.resultItem?.previewResult) {
-			switch (this.resultItem?.previewResult.type) {
+		if (this.resultItem?.resultPreview) {
+			switch (this.resultItem?.resultPreview.type) {
 				case EResultPreviewType.Internet:
 					return 'Internet Result';
 				case EResultPreviewType.Database:
@@ -63,6 +63,6 @@ export class ReportExpandResultItemComponent implements OnInit, OnChanges {
 
 	excludeResult() {
 		this.exclude = !this.exclude;
-		this.excludeResultEvent.emit(this.resultItem?.previewResult.id);
+		this.excludeResultEvent.emit(this.resultItem?.resultPreview.id);
 	}
 }

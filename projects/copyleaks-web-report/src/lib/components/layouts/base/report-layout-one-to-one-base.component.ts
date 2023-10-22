@@ -100,7 +100,8 @@ export abstract class OneToOneReportLayoutBaseComponent extends ReportLayoutBase
 						...(previews.results?.repositories ?? []),
 					];
 					this.resultItem = {
-						previewResult: allResults.find(r => r.id === resultData.id),
+						resultPreview: allResults.find(r => r.id === resultData.id),
+						resultDetails: resultData,
 						iStatisticsResult: resultData?.result?.statistics,
 						metadataSource: {
 							words: previews?.scannedDocument.totalWords ?? 0,

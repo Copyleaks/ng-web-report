@@ -1,4 +1,4 @@
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, Input, OnChanges, OnInit, SimpleChanges } from '@angular/core';
 import { ISourceMetadataSection, IStatistics } from 'projects/copyleaks-web-report/src/lib/models/report-data.models';
 import { IResultItem } from '../models/report-result-item.models';
 import { EMatchType } from './models/percentage-result-item.enum';
@@ -9,7 +9,7 @@ import { IPercentageResult } from './models/percentage-result-item.models';
 	templateUrl: './percentage-result-item.component.html',
 	styleUrls: ['./percentage-result-item.component.scss'],
 })
-export class PercentageResultItemComponent implements OnInit {
+export class PercentageResultItemComponent implements OnInit, OnChanges {
 	@Input() percentageResult: IPercentageResult;
 
 	showPlagiarismPercentages: boolean = false;
@@ -27,11 +27,15 @@ export class PercentageResultItemComponent implements OnInit {
 	get stackedBarBackgroundColor() {
 		return this.percentageResult?.stackedBarBackgroundColor || '#fbffff';
 	}
-	ngOnInit(): void {
-		if (this.percentageResult?.resultItem) {
-			this.metadataSource = this.percentageResult.resultItem.metadataSource;
-			this.iStatisticsResult = this.percentageResult.resultItem.iStatisticsResult;
-			this.similarWords = this.percentageResult.resultItem.previewResult.matchedWords;
+	ngOnInit(): void {}
+
+	ngOnChanges(changes: SimpleChanges): void {
+		if ('percentageResult' in changes) {
+			if (this.percentageResult?.resultItem) {
+				this.metadataSource = this.percentageResult.resultItem.metadataSource;
+				this.iStatisticsResult = this.percentageResult.resultItem.iStatisticsResult;
+				this.similarWords = this.percentageResult.resultItem.previewResult.matchedWords;
+			}
 		}
 	}
 

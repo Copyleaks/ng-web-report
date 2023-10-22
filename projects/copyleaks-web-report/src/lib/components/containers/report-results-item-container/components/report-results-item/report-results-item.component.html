@@ -45,9 +45,9 @@
 			</div>
 			<mat-icon *ngIf="!showLoader" class="item-menu" mat-icon [matMenuTriggerFor]="menu">more_vert</mat-icon>
 		</div>
-		<div fxLayout="column" fxLayoutAlign="start" fxLayoutGap="8px" class="item-body">
+		<div class="item-body">
 			<ng-container *ngIf="!showLoader; else showItemBodySkeleton">
-				<a class="item-url" *ngIf="previewResult?.url" [href]="previewResult.url">
+				<a class="item-url" *ngIf="previewResult?.url" [href]="previewResult.url" target="_blank">
 					{{ previewResult.url }}
 				</a>
 				<div class="item-introduction" *ngIf="previewResult.introduction">

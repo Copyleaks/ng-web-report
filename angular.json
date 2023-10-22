@@ -53,7 +53,7 @@
 						"polyfills": "projects/demo-app/src/polyfills.ts",
 						"inlineStyleLanguage": "scss",
 						"assets": ["projects/demo-app/src/favicon.ico", "projects/demo-app/src/assets"],
-						"styles": ["projects/demo-app/src/styles.scss"],
+						"styles": ["projects/demo-app/src/styles.scss", "projects/demo-app/src/mat-theme.scss"],
 						"scripts": []
 					},
 					"configurations": {
@@ -107,7 +107,7 @@
 						"tsConfig": "projects/demo-app/tsconfig.spec.json",
 						"inlineStyleLanguage": "scss",
 						"assets": ["projects/demo-app/src/favicon.ico", "projects/demo-app/src/assets"],
-						"styles": ["projects/demo-app/src/styles.scss"],
+						"styles": ["projects/demo-app/src/styles.scss", "projects/demo-app/src/mat-theme.scss"],
 						"scripts": []
 					}
 				}

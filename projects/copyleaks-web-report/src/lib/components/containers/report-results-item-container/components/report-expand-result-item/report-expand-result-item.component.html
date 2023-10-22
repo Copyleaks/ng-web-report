@@ -1,9 +1,9 @@
-<div class="expand-result-top-continer" fxLayout="column" fxLayoutAlign="start start">
+<div class="expand-result-top-continer" fxLayout="column" fxLayoutAlign="space-between start">
 	<div class="expand-result-continer" fxLayout="column" fxLayoutAlign="start start">
 		<diV class="result-header" fxLayout="row" fxLayoutAlign="space-between center">
 			<div fxLayout="row" fxLayoutAlign="start start" fxLayoutGap="8px">
 				<div class="result-logo" fxLayout="column" fxLayoutAlign="center center">
-					<ng-container [ngSwitch]="resultItem.previewResult.type">
+					<ng-container [ngSwitch]="resultItem?.previewResult?.type">
 						<ng-container *ngSwitchCase="eResultPreviewType.Batch">
 							<mat-icon>compare_arrows</mat-icon>
 						</ng-container>
@@ -27,17 +27,18 @@
 							<mat-icon *ngIf="exclude">visibility</mat-icon>
 							<mat-icon *ngIf="!exclude">visibility_off</mat-icon>
 						</button>
-						<span class="result-title">{{ resultItem.previewResult.title }}</span>
+						<span class="result-title">{{ resultItem?.previewResult?.title }}</span>
 					</div>
-					<ng-container *ngIf="resultItem.previewResult?.url; else resultSource">
+					<ng-container *ngIf="resultItem?.previewResult?.url; else resultSource">
 						<a
 							class="result-url-source"
-							[href]="resultItem.previewResult.url"
+							[href]="resultItem?.previewResult?.url"
 							fxLayout="row"
 							fxLayoutAlign="center center"
-							fxLayoutGap="4px">
+							fxLayoutGap="4px"
+							target="_blank">
 							<mat-icon>open_in_new</mat-icon>
-							<span>Source: {{ resultItem.previewResult?.url }}</span>
+							<span>Source: {{ resultItem?.previewResult?.url }}</span>
 						</a>
 					</ng-container>
 					<ng-template #resultSource>
@@ -45,12 +46,23 @@
 					</ng-template>
 				</div>
 			</div>
-			<button class="back-button" (click)="clickBack()" fxLayout="row" fxLayoutAlign="center center" fxLayoutGap="4px">
+			<button
+				class="back-button"
+				fxLayout="row"
+				fxLayoutAlign="center center"
+				fxLayoutGap="4px"
+				mat-button
+				[disableRipple]="true"
+				(click)="clickBack()">
 				<span>Back</span>
 				<mat-icon>chevron_right</mat-icon>
 			</button>
 		</diV>
-		<div class="mat-chip-list-container" fxLayout="row" fxLayoutAlign="start start">
+		<div
+			*ngIf="languageResult && languageResult.length > 0"
+			class="mat-chip-list-container"
+			fxLayout="row"
+			fxLayoutAlign="start start">
 			<mat-chip-list>
 				<div
 					class="mat-chip-container"

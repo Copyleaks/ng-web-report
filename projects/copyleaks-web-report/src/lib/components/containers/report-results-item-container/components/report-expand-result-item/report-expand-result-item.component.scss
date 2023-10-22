@@ -3,11 +3,12 @@
 .expand-result-top-continer {
 	background-color: $color-white;
 	border-radius: 10px;
+	height: 100%;
+	overflow-y: auto;
 	.expand-result-continer {
 		width: 100%;
 		.result-header {
 			width: 100%;
-			padding: 8px 4px 4px 8px;
 			.result-logo {
 				border: 2px solid;
 				border-radius: 50%;
@@ -64,6 +65,10 @@
 				color: $color-dark-blue;
 				border: 0px;
 				cursor: pointer;
+				line-height: normal !important;
+				min-width: none;
+				padding: 0px;
+
 				span {
 					font-size: 14px;
 					font-weight: 500;
@@ -73,6 +78,21 @@
 					height: 18px;
 					width: 18px;
 				}
+
+				::ng-deep {
+					.mat-button-wrapper {
+						display: flex;
+						align-items: center;
+						justify-content: center;
+						margin-right: 0px;
+					}
+				}
+			}
+
+			.back-button:hover {
+				color: $color-primary;
+				background-color: $color-container-background;
+				border-radius: 16px;
 			}
 		}
 		.mat-chip-list-container {

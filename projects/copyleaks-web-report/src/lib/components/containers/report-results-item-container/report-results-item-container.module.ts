@@ -7,26 +7,14 @@ import { FlexLayoutModule } from '@angular/flex-layout';
 import { MatMenuModule } from '@angular/material/menu';
 import { MatButtonModule } from '@angular/material/button';
 import { NgxSkeletonLoaderModule } from 'ngx-skeleton-loader';
-import { SimilarityPipeModule } from '../../../pipes/similarity-pipe.module';
-import { PercentageResultItemComponent } from './components/percentage-result-item/percentage-result-item.component';
-import { ReportExpandResultItemComponent } from './components/report-expand-result-item/report-expand-result-item.component';
 import { MatChipsModule } from '@angular/material/chips';
 import { LockResultItemComponent } from './components/lock-result-item/lock-result-item.component';
 import { PercentageResultItemModule } from './components/percentage-result-item/percentage-result-item.module';
+import { ReportExpandResultItemComponent } from './components/report-expand-result-item/report-expand-result-item.component';
 
 @NgModule({
-	declarations: [
-		ReportResultsItemContainerComponent,
-		ReportResultsItemComponent,
-		ReportExpandResultItemComponent,
-		LockResultItemComponent,
-	],
-	exports: [
-		ReportResultsItemContainerComponent,
-		ReportResultsItemComponent,
-		ReportExpandResultItemComponent,
-		LockResultItemComponent,
-	],
+	declarations: [ReportResultsItemContainerComponent, ReportExpandResultItemComponent],
+	exports: [ReportResultsItemContainerComponent, ReportExpandResultItemComponent],
 	imports: [
 		CommonModule,
 		MatIconModule,

@@ -8,13 +8,21 @@ import { ReportStatisticsService } from 'projects/copyleaks-web-report/src/lib/s
 import { ReportStatistics } from 'projects/copyleaks-web-report/src/lib/models/report-statistics.models';
 import { ALERTS } from 'projects/copyleaks-web-report/src/lib/constants/report-alerts.constants';
 import { Renderer2 } from '@angular/core';
-import { IScanSource, ICompleteResultNotificationAlert, ResultPreview } from '../../../models/report-data.models';
+import {
+	IScanSource,
+	ICompleteResultNotificationAlert,
+	ResultPreview,
+	ICompleteResults,
+} from '../../../models/report-data.models';
 import { PostMessageEvent } from '../../../models/report-iframe-events.models';
-import { Match, SlicedMatch } from '../../../models/report-matches.models';
+import { Match, ResultDetailItem, SlicedMatch } from '../../../models/report-matches.models';
 import { ReportDataService } from '../../../services/report-data.service';
 import { ReportMatchesService } from '../../../services/report-matches.service';
 import { ReportViewService } from '../../../services/report-view.service';
 import { ReportLayoutBaseComponent } from './report-layout-base.component';
+import { combineLatest } from 'rxjs';
+import { IResultItem } from '../../containers/report-results-item-container/components/models/report-result-item.models';
+import { IResultsActions } from '../../containers/report-results-container/components/results-actions/models/results-actions.models';
 
 export abstract class OneToManyReportLayoutBaseComponent extends ReportLayoutBaseComponent {
 	hideRightSection: boolean = false;
@@ -32,6 +40,15 @@ export abstract class OneToManyReportLayoutBaseComponent extends ReportLayoutBas
 	alerts: ICompleteResultNotificationAlert[];
 	reportStatistics: ReportStatistics | undefined;
 	selectedTap: EReportViewType = EReportViewType.PlagiarismView;
+
+	scanResultsPreviews: ICompleteResults | undefined;
+	scanResultsDetails: ResultDetailItem[] | undefined;
+	scanResultsView: IResultItem[];
+	scanResultsActions: IResultsActions = {
+		totalResults: 0,
+		totalExcluded: 0,
+		totalFiltered: 0,
+	};
 
 	override get rerendered(): boolean {
 		return this.oneToOneRerendered;
@@ -99,11 +116,39 @@ export abstract class OneToManyReportLayoutBaseComponent extends ReportLayoutBas
 			this.currentPageSource = data.sourcePageIndex;
 			this.selectedTap =
 				data.alertCode === ALERTS.SUSPECTED_AI_TEXT_DETECTED ? EReportViewType.AIView : EReportViewType.PlagiarismView;
-			this.reportDataSvc.scanResultsPreviews$.pipe(untilDestroy(this)).subscribe(previews => {
-				// this.reportViewSvc.selectedAlert$.next(data?.alertCode ?? null);
-				if (data?.alertCode) this.isHtmlView = false;
-				this.alerts = previews?.notifications?.alerts ?? [];
-			});
+
+			combineLatest([this.reportDataSvc.scanResultsPreviews$, this.reportDataSvc.scanResultsDetails$])
+				.pipe(untilDestroy(this))
+				.subscribe(([previews, details]) => {
+					if (data?.alertCode) this.isHtmlView = false;
+					this.alerts = previews?.notifications?.alerts ?? [];
+					this.scanResultsPreviews = previews;
+					this.scanResultsDetails = details;
+
+					if (this.scanResultsPreviews && this.scanResultsDetails) {
+						this.scanResultsActions.totalResults = this.scanResultsDetails.length;
+						const allResults = [
+							...(this.scanResultsPreviews.results?.internet ?? []),
+							...(this.scanResultsPreviews.results?.database ?? []),
+							...(this.scanResultsPreviews.results?.batch ?? []),
+							...(this.scanResultsPreviews.results?.repositories ?? []),
+						];
+
+						console.log(allResults);
+
+						this.scanResultsView = allResults.map(result => {
+							const foundResultDetail = this.scanResultsDetails?.find(r => r.id === result.id);
+							return {
+								previewResult: result,
+								iStatisticsResult: foundResultDetail?.result?.statistics,
+								metadataSource: {
+									words: this.scanResultsPreviews?.scannedDocument.totalWords ?? 0,
+									excluded: this.scanResultsPreviews?.scannedDocument.totalExcluded ?? 0,
+								},
+							} as IResultItem;
+						});
+					}
+				});
 		});
 
 		this.statisticsSvc.statistics$.pipe(untilDestroy(this)).subscribe(data => {

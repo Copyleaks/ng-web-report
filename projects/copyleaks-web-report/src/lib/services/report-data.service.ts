@@ -11,6 +11,7 @@ import { concatMap } from 'rxjs/operators';
 import { ResultDetailItem } from '../models/report-matches.models';
 import { IClsReportEndpointConfigModel } from '../models/report-config.models';
 import { untilDestroy } from '../utils/until-destroy';
+import { EResultPreviewType } from '../enums/copyleaks-web-report.enums';
 
 @Injectable()
 export class ReportDataService {
@@ -109,6 +110,19 @@ export class ReportDataService {
 			.subscribe(
 				([crawledVersionRes, completeResultsRes]) => {
 					this._crawledVersion$.next(crawledVersionRes);
+
+					completeResultsRes.results.batch.forEach(result => {
+						result.type = EResultPreviewType.Batch;
+					});
+					completeResultsRes.results.database.forEach(result => {
+						result.type = EResultPreviewType.Database;
+					});
+					completeResultsRes.results.internet.forEach(result => {
+						result.type = EResultPreviewType.Internet;
+					});
+					completeResultsRes.results?.repositories?.forEach(result => {
+						result.type = EResultPreviewType.Repositroy;
+					});
 					this._scanResultsPreviews$.next(completeResultsRes);
 
 					// Load all the complete scan results

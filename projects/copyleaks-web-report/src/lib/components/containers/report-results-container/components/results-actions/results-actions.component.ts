@@ -7,7 +7,7 @@ import { IResultsActions } from './models/results-actions.models';
 	styleUrls: ['./results-actions.component.scss'],
 })
 export class ResultsActionsComponent implements OnInit {
-	@Input() resultsActions: IResultsActions;
+	@Input() resultsActions: IResultsActions | null;
 
 	showSearchFiled: boolean = false;
 	constructor() {}

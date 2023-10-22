@@ -12,6 +12,8 @@ import { IScanSource } from '../../../models/report-data.models';
 import { PostMessageEvent } from '../../../models/report-iframe-events.models';
 import { untilDestroy } from '../../../utils/until-destroy';
 import { ReportLayoutBaseComponent } from './report-layout-base.component';
+import { IResultItem } from '../../containers/report-results-item-container/components/models/report-result-item.models';
+import { combineLatest } from 'rxjs';
 
 export abstract class OneToOneReportLayoutBaseComponent extends ReportLayoutBaseComponent {
 	hideRightSection = false;
@@ -36,6 +38,7 @@ export abstract class OneToOneReportLayoutBaseComponent extends ReportLayoutBase
 	currentPageSuspect: number;
 	currentPageSource: number;
 	resultData: ResultDetailItem;
+	resultItem: IResultItem | null = null;
 
 	EResponsiveLayoutType = EResponsiveLayoutType;
 
@@ -84,21 +87,38 @@ export abstract class OneToOneReportLayoutBaseComponent extends ReportLayoutBase
 			if (data) this.sourceTextMatches = data;
 		});
 
-		this.reportViewSvc.selectedResult$.pipe(untilDestroy(this)).subscribe(resultData => {
-			if (resultData) {
-				this.numberOfPagesSuspect = resultData.result?.text?.pages?.startPosition?.length ?? 1;
-				this.resultData = resultData;
-			}
-			this.matchSvc.suspectHtmlMatches$.pipe(untilDestroy(this)).subscribe(data => {
-				if (!resultData?.result?.html.value) return;
-				const rerenderedMatches = this._getRenderedMatches(data, resultData?.result?.html?.value);
-				if (rerenderedMatches && data) {
-					this.suspectIframeHtml = rerenderedMatches;
-					this.rerenderedSuspect = true;
-					this.suspectHtmlMatches = data;
+		combineLatest([this.reportDataSvc.scanResultsPreviews$, this.reportViewSvc.selectedResult$])
+			.pipe(untilDestroy(this))
+			.subscribe(([previews, resultData]) => {
+				if (resultData && previews) {
+					this.numberOfPagesSuspect = resultData.result?.text?.pages?.startPosition?.length ?? 1;
+					this.resultData = resultData;
+					const allResults = [
+						...(previews.results?.internet ?? []),
+						...(previews.results?.database ?? []),
+						...(previews.results?.batch ?? []),
+						...(previews.results?.repositories ?? []),
+					];
+					this.resultItem = {
+						previewResult: allResults.find(r => r.id === resultData.id),
+						iStatisticsResult: resultData?.result?.statistics,
+						metadataSource: {
+							words: previews?.scannedDocument.totalWords ?? 0,
+							excluded: previews?.scannedDocument.totalExcluded ?? 0,
+						},
+					} as IResultItem;
 				}
+
+				this.matchSvc.suspectHtmlMatches$.pipe(untilDestroy(this)).subscribe(data => {
+					if (!resultData?.result?.html.value) return;
+					const rerenderedMatches = this._getRenderedMatches(data, resultData?.result?.html?.value);
+					if (rerenderedMatches && data) {
+						this.suspectIframeHtml = rerenderedMatches;
+						this.rerenderedSuspect = true;
+						this.suspectHtmlMatches = data;
+					}
+				});
 			});
-		});
 
 		this.reportViewSvc.reportViewMode$
 			.pipe(

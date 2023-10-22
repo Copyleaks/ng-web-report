@@ -77,9 +77,9 @@ export class DemoComponentsPageComponent {
 	};
 
 	resultsActions: IResultsActions = {
-		totalResults: '23',
-		totalExcluded: '17',
-		totalFiltered: '14',
+		totalResults: 23,
+		totalExcluded: 17,
+		totalFiltered: 14,
 	};
 
 	alert: ICompleteResultNotificationAlert = {

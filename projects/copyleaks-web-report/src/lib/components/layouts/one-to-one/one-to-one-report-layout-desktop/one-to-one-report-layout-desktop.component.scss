@@ -40,4 +40,12 @@ copyleaks-content-viewer-container {
 copyleaks-report-results-item-container {
 	background-color: $color-white;
 	border-radius: 10px;
+	::ng-deep cr-report-results-item {
+		.result-item-container {
+			border: none !important;
+		}
+		.percentage-result-item-container {
+			display: none !important;
+		}
+	}
 }

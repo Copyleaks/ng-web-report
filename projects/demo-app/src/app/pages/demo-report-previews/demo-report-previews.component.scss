@@ -20,5 +20,10 @@
 		width: 18px;
 		height: 18px;
 		font-size: 18px;
+		cursor: pointer;
+	}
+
+	mat-icon:hover {
+		color: #3f9af5;
 	}
 }

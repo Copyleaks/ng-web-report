@@ -1,5 +1,16 @@
 @import '../../../../../styles/website-colors.styles.scss';
 
+:host {
+	display: flex;
+	flex-direction: row;
+	align-items: center;
+	justify-content: space-between;
+	padding: 0px 6px;
+	box-sizing: border-box;
+	gap: 10px;
+	min-height: 37px;
+}
+
 .tootal-results-container {
 	.tootal-results {
 		font-weight: 700;
@@ -64,4 +75,9 @@
 		width: 18px;
 		font-size: 18px;
 	}
+}
+
+mat-icon:hover {
+	color: $color-primary !important;
+	transition: 0.4s;
 }

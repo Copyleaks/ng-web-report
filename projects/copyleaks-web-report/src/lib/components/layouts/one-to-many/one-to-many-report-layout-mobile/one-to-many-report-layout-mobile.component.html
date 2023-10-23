@@ -40,7 +40,12 @@
 </div>
 
 <!-- Report results -->
-<copyleaks-report-results-container class="results-container" [flexGrow]="15"></copyleaks-report-results-container>
+<copyleaks-report-results-container
+	class="results-container"
+	[flexGrow]="15"
+	[allResultsItem]="scanResultsView"
+	[resultsActions]="scanResultsActions"
+	[isMobile]="true"></copyleaks-report-results-container>
 
 <!-- Powered by Copyleaks image section -->
 <div class="powered-by-copyleaks-container"><cr-powered-by></cr-powered-by></div>

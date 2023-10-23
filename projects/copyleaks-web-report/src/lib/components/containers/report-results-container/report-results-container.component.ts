@@ -65,6 +65,8 @@ export class ReportResultsContainerComponent implements OnInit, AfterViewInit, O
 	ngOnInit(): void {
 		if (this.flexGrow !== undefined && this.flexGrow !== null) this.flexGrowProp = this.flexGrow;
 
+		if (!this.allResultsItem || this.allResultsItem?.length === 0) this.lastItemLoading = false;
+
 		if (this.allResultsItemLength > this._pageSize) {
 			this.resultItemList = this.allResultsItem.slice(this._startingIndex, this.EndingIndex);
 		} else {
@@ -86,6 +88,8 @@ export class ReportResultsContainerComponent implements OnInit, AfterViewInit, O
 			} else {
 				this.resultItemList = this.allResultsItem;
 			}
+
+			if (!this.allResultsItem || this.allResultsItem?.length === 0) this.lastItemLoading = false;
 		}
 	}
 
@@ -135,7 +139,7 @@ export class ReportResultsContainerComponent implements OnInit, AfterViewInit, O
 
 	//#region navigate mobile button
 	navigateButton(navigateButton: EnumNavigateMobileButton) {
-		const navigateNum = this.resultItemList.length / 5;
+		const navigateNum = this.resultItemList?.length / 5;
 		const resultitemWidth = this.resultitem.nativeElement.offsetWidth;
 		const viewWidth = resultitemWidth * navigateNum;
 		switch (navigateButton) {
@@ -173,7 +177,7 @@ export class ReportResultsContainerComponent implements OnInit, AfterViewInit, O
 	}
 
 	updateNavigateButton(scrollLocation: number) {
-		const navigateNum = this.resultItemList.length / 5;
+		const navigateNum = this.resultItemList?.length / 5;
 		const resultitemWidth = this.resultitem.nativeElement.offsetWidth;
 		const viewWidth = resultitemWidth * navigateNum;
 		if (0 <= scrollLocation && viewWidth > scrollLocation) {

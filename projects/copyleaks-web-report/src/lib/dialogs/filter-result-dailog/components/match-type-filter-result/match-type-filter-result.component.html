@@ -1,1 +1,22 @@
-<p>match-type-filter-result works!</p>
+<div class="match-type-container" fxLayout="column" fxLayoutAlign="start start" fxLayoutGap="8px">
+	<!-- identical -->
+	<cr-mat-slide-filter-result [title]="'Identical Text'">
+		<mat-slide-logo>
+			<span class="dot identical-text"></span>
+		</mat-slide-logo>
+	</cr-mat-slide-filter-result>
+
+	<!-- minor -->
+	<cr-mat-slide-filter-result [title]="'Minor changes'">
+		<mat-slide-logo>
+			<span class="dot minor-changes"></span>
+		</mat-slide-logo>
+	</cr-mat-slide-filter-result>
+
+	<!-- Paraphrased -->
+	<cr-mat-slide-filter-result [title]="'Paraphrased'">
+		<mat-slide-logo>
+			<span class="dot paraphrased"></span>
+		</mat-slide-logo>
+	</cr-mat-slide-filter-result>
+</div>

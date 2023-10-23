@@ -31,68 +31,16 @@
 			<!-- results meta -->
 			<section class="section-container" fxLayout="column" fxLayoutAlign="start start" fxLayoutGap="16px">
 				<span class="body-title">Results meta</span>
-				<div class="results-container" fxLayout="column" fxLayoutAlign="start start" fxLayoutGap="16px">
-					<div class="result-word-limit-container" fxLayout="column" fxLayoutAlign="start start">
-						<div class="mat-slide-container" fxLayout="row" fxLayoutAlign="space-between center">
-							<span class="mat-slide-title">Result word limit:</span>
-							<mat-slide-toggle></mat-slide-toggle>
-						</div>
-						<mat-slider
-							class="mat-slider-container"
-							[(ngModel)]="wordLimit"
-							[min]="minWordLimit"
-							[max]="maxWordLimit"></mat-slider>
-						<span class="limit-result">{{ wordLimit }} / {{ maxWordLimit }} words</span>
-					</div>
-					<mat-divider></mat-divider>
-					<div class="result-publication-top-container" fxLayout="column" fxLayoutAlign="start start" fxLayoutGap="4px">
-						<div class="result-publication-container" fxLayout="column" fxLayoutAlign="start start">
-							<div class="mat-slide-container" fxLayout="row" fxLayoutAlign="space-between center">
-								<span class="mat-slide-title">Results publication date:</span>
-								<mat-slide-toggle></mat-slide-toggle>
-							</div>
-							<mat-slider invert class="mat-slider-container" min="10" max="100"></mat-slider>
-							<div class="date-container" fxLayout="row" fxLayoutAlign="start center" fxLayoutGap="4px">
-								<span class="start-from">Starting from:</span>
-								<span class="publication-date">May 2023</span>
-							</div>
-						</div>
-						<mat-checkbox class="include-results-checkbox">Include results with no dates</mat-checkbox>
-					</div>
-				</div>
+				<cr-meta-filter-result class="meta-filter-container"></cr-meta-filter-result>
 			</section>
 		</div>
 		<mat-divider vertical style="height: 100px"></mat-divider>
+
 		<div class="right-side-conatier" fxLayout="column" fxLayoutAlign="start start" fxLayoutGap="16px">
 			<!-- match type -->
 			<section class="match-type-container" fxLayout="column" fxLayoutAlign="start start" fxLayoutGap="16px">
 				<span class="body-title">Match types</span>
-				<div class="match-type-list-container" fxLayout="column" fxLayoutAlign="start start" fxLayoutGap="8px">
-					<!-- identical -->
-					<div class="mat-slide-container" fxLayout="row" fxLayoutAlign="space-between center">
-						<div fxLayout="row" fxLayoutGap="8px" fxLayoutAlign="start center">
-							<span class="dot identical-text"></span>
-							<span class="mat-slide-title">Identical Text</span>
-						</div>
-						<mat-slide-toggle></mat-slide-toggle>
-					</div>
-					<!-- minor -->
-					<div class="mat-slide-container" fxLayout="row" fxLayoutAlign="space-between center">
-						<div fxLayout="row" fxLayoutGap="8px" fxLayoutAlign="start center">
-							<span class="dot minor-changes"></span>
-							<span class="mat-slide-title">Minor changes</span>
-						</div>
-						<mat-slide-toggle></mat-slide-toggle>
-					</div>
-					<!-- Paraphrased -->
-					<div class="mat-slide-container" fxLayout="row" fxLayoutAlign="space-between center">
-						<div fxLayout="row" fxLayoutGap="8px" fxLayoutAlign="start center">
-							<span class="dot paraphrased"></span>
-							<span class="mat-slide-title">Paraphrased</span>
-						</div>
-						<mat-slide-toggle></mat-slide-toggle>
-					</div>
-				</div>
+				<cr-match-type-filter-result class="match-type-filter-container"></cr-match-type-filter-result>
 			</section>
 			<mat-divider></mat-divider>
 			<!--General filters-->

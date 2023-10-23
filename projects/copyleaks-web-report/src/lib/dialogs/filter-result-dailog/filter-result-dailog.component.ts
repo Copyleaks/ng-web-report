@@ -10,7 +10,6 @@ export class FilterResultDailogComponent implements OnInit {
 	ilterResultForm: FormGroup;
 	constructor() {}
 
-	surceTypeList: string[] = ['Internet Source', 'Internal Database', '{repository1 name}', 'This batch'];
 	selectedTags: string[] = ['.png', '.web', '.png', '.web', '.png', '.web', '.png', '.web'];
 	//Results meta
 	///Result word limit

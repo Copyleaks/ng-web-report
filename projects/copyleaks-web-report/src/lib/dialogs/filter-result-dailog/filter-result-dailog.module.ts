@@ -8,7 +8,7 @@ import { FlexLayoutModule } from '@angular/flex-layout';
 import { MatSliderModule } from '@angular/material/slider';
 import { MatCheckboxModule } from '@angular/material/checkbox';
 import { MatChipsModule } from '@angular/material/chips';
-import { FormsModule } from '@angular/forms';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { SourceTypeFilterResultComponent } from './components/source-type-filter-result/source-type-filter-result.component';
 import { MatchTypeFilterResultComponent } from './components/match-type-filter-result/match-type-filter-result.component';
 import { GeneralFilterResultComponent } from './components/general-filter-result/general-filter-result.component';
@@ -33,6 +33,7 @@ import {
 	exports: [FilterResultDailogComponent],
 	imports: [
 		CommonModule,
+		ReactiveFormsModule,
 		FormsModule,
 		MatIconModule,
 		FlexLayoutModule,

@@ -1,9 +1,9 @@
 @import '../../../../styles/website-colors.styles.scss';
-@import '../../../../styles/cls-mat-components-overrides//cls-mat-slide-toggle-overrides.scss';
 
 :host {
 	height: 100%;
-	overflow: auto;
+	overflow-y: auto;
+	overflow-x: hidden;
 }
 
 .container {

@@ -1,0 +1,18 @@
+.match-type-container {
+	width: 100%;
+	.dot {
+		display: flex;
+		width: 10px;
+		height: 10px;
+		border-radius: 50%;
+	}
+	.identical-text {
+		background-color: #fd7366;
+	}
+	.minor-changes {
+		background-color: #fe9391;
+	}
+	.paraphrased {
+		background-color: #fed5a9;
+	}
+}

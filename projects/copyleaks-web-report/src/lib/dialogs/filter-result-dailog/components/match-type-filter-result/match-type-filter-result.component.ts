@@ -1,15 +1,12 @@
 import { Component, OnInit } from '@angular/core';
 
 @Component({
-  selector: 'lib-match-type-filter-result',
-  templateUrl: './match-type-filter-result.component.html',
-  styleUrls: ['./match-type-filter-result.component.css']
+	selector: 'cr-match-type-filter-result',
+	templateUrl: './match-type-filter-result.component.html',
+	styleUrls: ['./match-type-filter-result.component.scss'],
 })
 export class MatchTypeFilterResultComponent implements OnInit {
+	constructor() {}
 
-  constructor() { }
-
-  ngOnInit(): void {
-  }
-
+	ngOnInit(): void {}
 }

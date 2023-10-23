@@ -9,23 +9,46 @@ import { TotalSourceType } from './models/source-type-filter-result.models';
 	styleUrls: ['./source-type-filter-result.component.scss'],
 })
 export class SourceTypeFilterResultComponent implements OnInit {
-	surceType: FormGroup;
+	surceTypeForm: FormGroup;
 	eResultPreviewType = EResultPreviewType;
-	constructor(private _formBuilder: FormBuilder) {}
 
 	totalSourceType: TotalSourceType = {
 		totalInternet: 3,
 		totalInternalDatabase: 3,
 		totalbatch: 3,
-		repository: ['rep1', 'rep1', 'rep1'],
+		repository: ['rep1'],
 	};
 
+	get repositoriesForm() {
+		return this.surceTypeForm.get('repositories') as FormGroup;
+	}
+
+	get internetValue() {
+		return this.surceTypeForm.get('internet')?.value;
+	}
+	get internetForm() {
+		return this.surceTypeForm.get('internet') as FormControl;
+	}
+
+	constructor(private _formBuilder: FormBuilder) {}
+
 	ngOnInit(): void {
-		this.surceType = this._formBuilder.group({
-			internet: new FormControl(''),
-			database: new FormControl(''),
-			batch: new FormControl(''),
-			repositories: this._formBuilder.array([]),
+		this.surceTypeForm = this._formBuilder.group({
+			internet: new FormControl(true),
+			database: new FormControl(true),
+			batch: new FormControl(false),
+			repositories: this._formBuilder.group([]),
 		});
+
+		if (this.totalSourceType?.repository) {
+			this.totalSourceType?.repository.forEach(repo => {
+				this.addRepositoryControl(repo);
+			});
+		}
+	}
+
+	addRepositoryControl(controlName: string) {
+		const repositories = this.repositoriesForm;
+		repositories.addControl(controlName, new FormControl(false));
 	}
 }

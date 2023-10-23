@@ -51,6 +51,7 @@ export class ReportResultsContainerComponent implements OnInit, AfterViewInit, O
 	navigateMobileButton: EnumNavigateMobileButton;
 	enumNavigateMobileButton = EnumNavigateMobileButton;
 	showMatChip: boolean = true;
+	searchedValue: string;
 
 	get EndingIndex(): number {
 		return this._startingIndex + this._pageSize * this._currentPage;
@@ -83,6 +84,10 @@ export class ReportResultsContainerComponent implements OnInit, AfterViewInit, O
 
 	ngOnChanges(changes: SimpleChanges): void {
 		if ('allResultsItem' in changes) {
+			this.searchedValue = '';
+			this._startingIndex = 0;
+			this._pageSize = 10;
+			this._currentPage = 1;
 			if (this.allResultsItemLength > this._pageSize) {
 				this.resultItemList = this.allResultsItem.slice(this._startingIndex, this.EndingIndex);
 			} else {
@@ -95,6 +100,8 @@ export class ReportResultsContainerComponent implements OnInit, AfterViewInit, O
 
 	private onTableScroll(e: any): void {
 		const scrollThreshold = 200;
+
+		if (!!this.searchedValue) return;
 
 		if (this.isMobile) {
 			const tableViewWidth = e.target.offsetWidth;
@@ -192,6 +199,31 @@ export class ReportResultsContainerComponent implements OnInit, AfterViewInit, O
 			this.navigateMobileButton = EnumNavigateMobileButton.FifthButton;
 		}
 	}
+
+	onSearch(value: string): void {
+		this.searchedValue = value;
+
+		if (!value || value === '') {
+			if (!this.allResultsItem || this.allResultsItem?.length === 0) this.lastItemLoading = false;
+
+			if (this.allResultsItemLength > this._pageSize) {
+				this.resultItemList = this.allResultsItem.slice(this._startingIndex, this.EndingIndex);
+			} else {
+				this.resultItemList = this.allResultsItem;
+			}
+			return;
+		}
+
+		value = value.toLowerCase();
+
+		this.resultItemList = this.allResultsItem.filter(
+			r =>
+				r.resultPreview.introduction.toLowerCase().includes(value) ||
+				r.resultPreview.title.toLowerCase().includes(value)
+		);
+		this.lastItemLoading = false;
+	}
+
 	//#endregion
 	ngOnDestroy() {}
 }

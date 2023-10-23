@@ -134,8 +134,6 @@ export abstract class OneToManyReportLayoutBaseComponent extends ReportLayoutBas
 							...(this.scanResultsPreviews.results?.repositories ?? []),
 						];
 
-						console.log(allResults);
-
 						this.scanResultsView = allResults.map(result => {
 							const foundResultDetail = this.scanResultsDetails?.find(r => r.id === result.id);
 							return {

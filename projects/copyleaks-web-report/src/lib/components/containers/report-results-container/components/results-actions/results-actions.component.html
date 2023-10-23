@@ -20,7 +20,7 @@
 	<button class="search-button" (click)="startSearch()">
 		<mat-icon>search</mat-icon>
 	</button>
-	<input placeholder="Search {item type}" type="text" />
+	<input placeholder="Search {item type}" type="text" matInput [formControl]="searchFc" />
 	<mat-icon fontSet="material-icons-outlined" (click)="showSearch()">cancel</mat-icon>
 </div>
 

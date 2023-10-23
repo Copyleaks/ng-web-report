@@ -1,5 +1,8 @@
 @import '../../styles/website-colors.styles.scss';
 
+:host {
+	position: relative;
+}
 .tooltip {
 	min-width: 170px;
 	position: fixed;
@@ -180,6 +183,8 @@
 	display: flex;
 	justify-content: space-between;
 	align-items: center;
+	background-color: $color-white;
+	z-index: 1000000000000000;
 }
 
 .percentage {

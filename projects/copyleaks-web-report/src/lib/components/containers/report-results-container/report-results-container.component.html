@@ -2,7 +2,9 @@
 <div class="close-btn" (click)="hideResultItem()">X</div> -->
 <cr-results-actions
 	*ngIf="allResultsItem && allResultsItem.length > 0"
-	[resultsActions]="resultsActions"></cr-results-actions>
+	[resultsActions]="resultsActions"
+	[searchedValue]="searchedValue"
+	(onSearch)="onSearch($event)"></cr-results-actions>
 
 <div
 	class="report-results-item-top-container"
@@ -13,19 +15,28 @@
 	<div #resultsContainer class="results-item-top-container">
 		<div
 			fxLayoutGap="8px"
-			[ngClass]="{ 'results-item-container': !isMobile, 'results-item-mobile-container': isMobile }">
-			<div
-				style="width: 100%"
-				fxLayout="column"
-				fxLayoutAlign="start start"
-				fxLayoutGap="4px"
-				*ngFor="let item of resultItemList">
-				<cr-report-results-item #resultitem [resultItem]="item" [style]="'width:100%'"></cr-report-results-item>
-			</div>
-			<ng-container *ngIf="lastItemLoading">
-				<cr-report-results-item [showLoader]="true" [style]="'width:100%'"></cr-report-results-item>
+			[ngClass]="{
+				'results-item-container': !isMobile,
+				'results-item-mobile-container': isMobile,
+				'empty-results-container': !resultItemList || resultItemList.length === 0
+			}">
+			<ng-container *ngIf="resultItemList && resultItemList.length > 0; else emptyState">
+				<div
+					style="width: 100%"
+					fxLayout="column"
+					fxLayoutAlign="start start"
+					fxLayoutGap="4px"
+					*ngFor="let item of resultItemList">
+					<cr-report-results-item #resultitem [resultItem]="item" [style]="'width:100%'"></cr-report-results-item>
+				</div>
+				<ng-container *ngIf="lastItemLoading">
+					<cr-report-results-item [showLoader]="true" [style]="'width:100%'"></cr-report-results-item>
+				</ng-container>
 			</ng-container>
 		</div>
+		<ng-template #emptyState>
+			<cr-empty-result-state></cr-empty-result-state>
+		</ng-template>
 	</div>
 	<div
 		class="navigate-mobie-button-contaienr"

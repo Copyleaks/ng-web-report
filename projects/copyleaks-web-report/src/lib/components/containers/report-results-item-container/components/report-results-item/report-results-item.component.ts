@@ -77,10 +77,16 @@ export class ReportResultsItemComponent implements OnInit, OnChanges {
 
 	comapreResult() {
 		this._reportViewSvc.reportViewMode$.next({
-			isHtmlView: true,
+			...this._reportViewSvc.reportViewMode,
 			viewMode: 'one-to-one',
 			sourcePageIndex: 1,
+			suspectPageIndex: 1,
 			suspectId: this.previewResult.id,
 		});
+	}
+
+	visitResultSource() {
+		if (!this.previewResult.url) return;
+		window.open(this.previewResult.url, '_blank');
 	}
 }

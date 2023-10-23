@@ -1,5 +1,5 @@
 import { ChangeDetectorRef, Component, Input, OnDestroy, OnInit, TemplateRef } from '@angular/core';
-import { EReportViewType } from '../../../enums/copyleaks-web-report.enums';
+import { EReportScoreTooltipPosition, EReportViewType } from '../../../enums/copyleaks-web-report.enums';
 import { ReportViewService } from '../../../services/report-view.service';
 import { ALERTS } from '../../../constants/report-alerts.constants';
 import { ReportNgTemplatesService } from '../../../services/report-ng-templates.service';
@@ -57,6 +57,7 @@ export class ReportTabsContainerComponent implements OnInit, OnDestroy {
 	@Input() hideAiTap = false;
 
 	EReportViewType = EReportViewType;
+	EReportScoreTooltipPosition = EReportScoreTooltipPosition;
 	customTabsTemplateRef: TemplateRef<any>[] | undefined = undefined;
 
 	constructor(

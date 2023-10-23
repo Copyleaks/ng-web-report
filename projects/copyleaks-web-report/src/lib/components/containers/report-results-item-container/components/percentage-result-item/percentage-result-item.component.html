@@ -25,15 +25,21 @@
 		</div>
 
 		<ng-template #showStackedBar>
-			<div class="stacked-bar-top-container" fxLayout="row" fxLayoutGap="8px" fxLayoutAlign="center center">
+			<div
+				[crReportScoreTooltip]="
+					percentageResult && percentageResult.showTooltip
+						? {
+								identicalPct: getMatchTypePercentage(eMatchType.Identical),
+								minorChangesPct: getMatchTypePercentage(eMatchType.MinorChanges),
+								paraphrasedPct: getMatchTypePercentage(eMatchType.Paraphrased)
+						  }
+						: null
+				"
+				class="stacked-bar-top-container"
+				fxLayout="row"
+				fxLayoutGap="8px"
+				fxLayoutAlign="center center">
 				<div class="stacked-bar-container">
-					<div
-						*ngIf="percentageResult?.showTooltip"
-						class="stacked-bar-tooltip-result"
-						fxLayout="column"
-						fxLayoutAlign="start start">
-						<ng-container *ngTemplateOutlet="plagiarismPercentage"></ng-container>
-					</div>
 					<ng-container *ngTemplateOutlet="stackedBar"></ng-container>
 				</div>
 				<span *ngIf="!percentageResult?.title" class="similar-words-percentage">

@@ -36,6 +36,14 @@ export enum EReportViewType {
 	CustomTabView = 'CustomTabView',
 }
 
+export enum EReportScoreTooltipPosition {
+	ABOVE = 'above',
+	BELOW = 'below',
+	LEFT = 'left',
+	RIGHT = 'right',
+	DEFAULT = 'above',
+}
+
 /**
  * Enum representing reasons for exclusion
  */

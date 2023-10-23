@@ -1,6 +1,12 @@
 <div
 	*ngIf="!hidePlagarismTap"
 	class="tab-plagiarism"
+	[crReportScoreTooltip]="{
+		identicalPct: identicalTotal / wordsTotal,
+		minorChangesPct: minorChangesTotal / wordsTotal,
+		paraphrasedPct: paraphrasedTotal / wordsTotal
+	}"
+	[crReportScoreTooltipPosition]="EReportScoreTooltipPosition.BELOW"
 	[style.flex-grow]="1"
 	[class.tab-selected]="selectedTap === EReportViewType.PlagiarismView"
 	(click)="selectTap(EReportViewType.PlagiarismView)">
@@ -34,6 +40,11 @@
 <div
 	*ngIf="!hideAiTap"
 	class="tab-ai"
+	[crReportScoreTooltip]="{
+		aiPct: aiScore,
+		humanPct: 1 - aiScore
+	}"
+	[crReportScoreTooltipPosition]="EReportScoreTooltipPosition.BELOW"
 	[style.flex-grow]="1"
 	[class.tab-selected]="selectedTap === EReportViewType.AIView"
 	(click)="selectTap(EReportViewType.AIView)">

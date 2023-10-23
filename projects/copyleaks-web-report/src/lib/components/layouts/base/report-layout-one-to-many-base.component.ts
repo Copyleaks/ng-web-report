@@ -162,20 +162,28 @@ export abstract class OneToManyReportLayoutBaseComponent extends ReportLayoutBas
 			case 'match-select':
 				const selectedMatch = message.index !== -1 ? this.reportMatches[message.index] : null;
 				let viewedResults: ResultPreview[] = [];
-				viewedResults = [
-					...(this.reportDataSvc.scanResultsPreviews?.results?.internet?.filter(item =>
-						selectedMatch?.ids?.includes(item.id)
-					) ?? []),
-					...(this.reportDataSvc.scanResultsPreviews?.results?.batch?.filter(item =>
-						selectedMatch?.ids?.includes(item.id)
-					) ?? []),
-					...(this.reportDataSvc.scanResultsPreviews?.results?.database?.filter(item =>
-						selectedMatch?.ids?.includes(item.id)
-					) ?? []),
-					...(this.reportDataSvc.scanResultsPreviews?.results?.repositories?.filter(item =>
-						selectedMatch?.ids?.includes(item.id)
-					) ?? []),
-				];
+				if (selectedMatch)
+					viewedResults = [
+						...(this.reportDataSvc.scanResultsPreviews?.results?.internet?.filter(item =>
+							selectedMatch?.ids?.includes(item.id)
+						) ?? []),
+						...(this.reportDataSvc.scanResultsPreviews?.results?.batch?.filter(item =>
+							selectedMatch?.ids?.includes(item.id)
+						) ?? []),
+						...(this.reportDataSvc.scanResultsPreviews?.results?.database?.filter(item =>
+							selectedMatch?.ids?.includes(item.id)
+						) ?? []),
+						...(this.reportDataSvc.scanResultsPreviews?.results?.repositories?.filter(item =>
+							selectedMatch?.ids?.includes(item.id)
+						) ?? []),
+					];
+				else
+					viewedResults = [
+						...(this.reportDataSvc.scanResultsPreviews?.results?.internet ?? []),
+						...(this.reportDataSvc.scanResultsPreviews?.results?.batch ?? []),
+						...(this.reportDataSvc.scanResultsPreviews?.results?.database ?? []),
+						...(this.reportDataSvc.scanResultsPreviews?.results?.repositories ?? []),
+					];
 				this.scanResultsView = viewedResults.map(result => {
 					const foundResultDetail = this.scanResultsDetails?.find(r => r.id === result.id);
 					return {

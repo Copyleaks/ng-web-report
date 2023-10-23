@@ -102,7 +102,6 @@ export class ReportTabsContainerComponent implements OnInit, OnDestroy {
 				this._reportViewSvc.reportViewMode$.next({
 					...this._reportViewSvc.reportViewMode,
 					viewMode: 'one-to-many',
-					isHtmlView: false,
 					alertCode: undefined,
 					sourcePageIndex: 1,
 					suspectPageIndex: 1,

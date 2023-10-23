@@ -1,4 +1,5 @@
 @import '../../../../styles/containers.styles.scss';
+@import '../../../../styles/website-colors.styles.scss';
 
 :host {
 	display: flex;
@@ -18,12 +19,11 @@
 .middle-section {
 	flex-grow: 80;
 	height: 80%;
-	copyleaks-content-viewer-container {
-		height: 43%;
-	}
+
 	copyleaks-report-results-item-container {
-		height: 15%;
-		padding: 0px !important;
+		height: 20%;
+		padding: 10px !important;
+		background-color: $color-white;
 		::ng-deep cr-report-results-item {
 			.result-item-container {
 				border: none !important;
@@ -55,4 +55,15 @@ copyleaks-content-viewer-container,
 copyleaks-report-results-item-container {
 	border-radius: 10px;
 	box-shadow: -2px -2px 8px 0px rgba(255, 255, 255, 0.5), 2px 2px 4px 0px rgba(0, 0, 0, 0.15);
+}
+
+copyleaks-content-viewer-container {
+	height: 40%;
+	flex-grow: 40;
+}
+
+.report-actions-container {
+	::ng-deep .actions-container {
+		padding: 0px !important;
+	}
 }

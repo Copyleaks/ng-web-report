@@ -58,6 +58,8 @@ export class ReportExpandResultItemComponent implements OnInit, OnChanges {
 			...this._reportViewSvc.reportViewMode,
 			viewMode: 'one-to-many',
 			suspectId: undefined,
+			sourcePageIndex: 1,
+			suspectPageIndex: 1,
 		});
 	}
 

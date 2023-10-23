@@ -91,6 +91,8 @@ export class ReportTabsContainerComponent implements OnInit, OnDestroy {
 					viewMode: 'one-to-many',
 					isHtmlView: false,
 					alertCode: ALERTS.SUSPECTED_AI_TEXT_DETECTED,
+					sourcePageIndex: 1,
+					suspectPageIndex: 1,
 				});
 				this._reportViewSvc.selectedAlert$.next(ALERTS.SUSPECTED_AI_TEXT_DETECTED);
 				this._reportViewSvc.selectedCustomTabContent$.next(null);
@@ -102,6 +104,8 @@ export class ReportTabsContainerComponent implements OnInit, OnDestroy {
 					viewMode: 'one-to-many',
 					isHtmlView: false,
 					alertCode: undefined,
+					sourcePageIndex: 1,
+					suspectPageIndex: 1,
 				});
 				this._reportViewSvc.selectedAlert$.next(null);
 				this._reportViewSvc.selectedCustomTabContent$.next(null);

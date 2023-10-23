@@ -43,6 +43,8 @@ export class AlertCardComponent implements OnInit, OnDestroy {
 			...this._reportView.reportViewMode,
 			isHtmlView: !this.isSelected ? this._reportView.reportViewMode.isHtmlView : false,
 			alertCode: !this.isSelected ? undefined : this.alert.code,
+			sourcePageIndex: 1,
+			suspectPageIndex: 1,
 		});
 	}
 

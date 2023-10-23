@@ -28,6 +28,8 @@ export class ReportResultsItemComponent implements OnInit, OnChanges {
 			...this._reportViewSvc.reportViewMode,
 			viewMode: 'one-to-one',
 			suspectId: this.resultItem.resultPreview.id,
+			sourcePageIndex: 1,
+			suspectPageIndex: 1,
 		});
 	}
 

@@ -57,3 +57,9 @@ copyleaks-report-alerts-container {
 	max-height: 20%;
 	overflow-y: auto;
 }
+
+.report-actions-container {
+	::ng-deep .actions-container {
+		padding: 0px !important;
+	}
+}

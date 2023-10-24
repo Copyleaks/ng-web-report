@@ -1,15 +1,12 @@
 import { Component, OnInit } from '@angular/core';
 
 @Component({
-  selector: 'lib-general-filter-result',
-  templateUrl: './general-filter-result.component.html',
-  styleUrls: ['./general-filter-result.component.css']
+	selector: 'cr-general-filter-result',
+	templateUrl: './general-filter-result.component.html',
+	styleUrls: ['./general-filter-result.component.scss'],
 })
 export class GeneralFilterResultComponent implements OnInit {
+	constructor() {}
 
-  constructor() { }
-
-  ngOnInit(): void {
-  }
-
+	ngOnInit(): void {}
 }

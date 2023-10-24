@@ -46,51 +46,13 @@
 			<!--General filters-->
 			<section class="general-filters-container" fxLayout="column" fxLayoutAlign="start start" fxLayoutGap="16px">
 				<span class="body-title">General filters</span>
-				<div class="general-filters-list-container" fxLayout="column" fxLayoutAlign="start start" fxLayoutGap="8px">
-					<div class="mat-slide-container" fxLayout="row" fxLayoutAlign="space-between center">
-						<span class="mat-slide-title">Show only the top 100 results</span>
-						<mat-slide-toggle></mat-slide-toggle>
-					</div>
-					<div class="mat-slide-container" fxLayout="row" fxLayoutAlign="space-between center">
-						<span class="mat-slide-title">Alerts</span>
-						<mat-slide-toggle></mat-slide-toggle>
-					</div>
-					<div class="mat-slide-container" fxLayout="row" fxLayoutAlign="space-between center">
-						<span class="mat-slide-title">Same author submissions</span>
-						<mat-slide-toggle></mat-slide-toggle>
-					</div>
-				</div>
+				<cr-general-filter-result class="general-filter-container"></cr-general-filter-result>
 			</section>
 			<mat-divider></mat-divider>
 			<!-- Included Tags -->
 			<section class="included-tags-container" fxLayout="column" fxLayoutAlign="start start" fxLayoutGap="8px">
 				<span class="body-title">Included Tags</span>
-				<div class="search-tag-container" fxLayout="row" fxLayoutAlign="start center" fxLayoutGap="8px">
-					<div class="search-icon" fxLayout="column" fxLayoutAlign="center center">
-						<mat-icon>search</mat-icon>
-					</div>
-					<input class="included-tags-input" [type]="'text'" placeholder="Search {item type}" />
-				</div>
-				<div class="mat-chip-container" fxLayout="row" fxLayoutAlign="space-between center">
-					<button class="arrow-drop-button" (click)="showMoreMenu = !showMoreMenu">
-						<ng-container *ngIf="showMoreMenu; else showLessMenuIcon">
-							<mat-icon>arrow_drop_down</mat-icon>
-						</ng-container>
-						<ng-template #showLessMenuIcon>
-							<mat-icon>arrow_drop_up</mat-icon>
-						</ng-template>
-					</button>
-					<mat-chip-list>
-						<ng-container *ngFor="let tag of selectedTags; let idx = index">
-							<mat-chip class="selected-tag-mat-chip" *ngIf="idx < 4">
-								{{ tag }}
-							</mat-chip>
-						</ng-container>
-					</mat-chip-list>
-					<div class="total-select-tags">
-						<span>+ {{ selectedTags.length - 4 }}</span>
-					</div>
-				</div>
+				<cr-included-tags-filter-result class="included-tags-filter-result"></cr-included-tags-filter-result>
 			</section>
 		</div>
 	</div>

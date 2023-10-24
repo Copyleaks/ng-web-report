@@ -136,18 +136,20 @@ export abstract class OneToManyReportLayoutBaseComponent extends ReportLayoutBas
 							...(this.scanResultsPreviews.results?.repositories ?? []),
 						];
 
-						this.scanResultsView = allResults.map(result => {
-							const foundResultDetail = this.scanResultsDetails?.find(r => r.id === result.id);
-							return {
-								resultPreview: result,
-								resultDetails: foundResultDetail,
-								iStatisticsResult: foundResultDetail?.result?.statistics,
-								metadataSource: {
-									words: this.scanResultsPreviews?.scannedDocument.totalWords ?? 0,
-									excluded: this.scanResultsPreviews?.scannedDocument.totalExcluded ?? 0,
-								},
-							} as IResultItem;
-						});
+						this.scanResultsView = allResults
+							.sort((a, b) => b.matchedWords - a.matchedWords)
+							.map(result => {
+								const foundResultDetail = this.scanResultsDetails?.find(r => r.id === result.id);
+								return {
+									resultPreview: result,
+									resultDetails: foundResultDetail,
+									iStatisticsResult: foundResultDetail?.result?.statistics,
+									metadataSource: {
+										words: this.scanResultsPreviews?.scannedDocument.totalWords ?? 0,
+										excluded: this.scanResultsPreviews?.scannedDocument.totalExcluded ?? 0,
+									},
+								} as IResultItem;
+							});
 					}
 				});
 		});
@@ -206,17 +208,19 @@ export abstract class OneToManyReportLayoutBaseComponent extends ReportLayoutBas
 				...(this.reportDataSvc.scanResultsPreviews?.results?.database ?? []),
 				...(this.reportDataSvc.scanResultsPreviews?.results?.repositories ?? []),
 			];
-		this.scanResultsView = viewedResults.map(result => {
-			const foundResultDetail = this.scanResultsDetails?.find(r => r.id === result.id);
-			return {
-				resultPreview: result,
-				resultDetails: foundResultDetail,
-				iStatisticsResult: foundResultDetail?.result?.statistics,
-				metadataSource: {
-					words: this.scanResultsPreviews?.scannedDocument.totalWords ?? 0,
-					excluded: this.scanResultsPreviews?.scannedDocument.totalExcluded ?? 0,
-				},
-			} as IResultItem;
-		});
+		this.scanResultsView = viewedResults
+			.sort((a, b) => b.matchedWords - a.matchedWords)
+			.map(result => {
+				const foundResultDetail = this.scanResultsDetails?.find(r => r.id === result.id);
+				return {
+					resultPreview: result,
+					resultDetails: foundResultDetail,
+					iStatisticsResult: foundResultDetail?.result?.statistics,
+					metadataSource: {
+						words: this.scanResultsPreviews?.scannedDocument.totalWords ?? 0,
+						excluded: this.scanResultsPreviews?.scannedDocument.totalExcluded ?? 0,
+					},
+				} as IResultItem;
+			});
 	}
 }

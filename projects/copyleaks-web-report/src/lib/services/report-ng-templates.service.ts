@@ -1,6 +1,6 @@
 import { Injectable, TemplateRef } from '@angular/core';
 import { BehaviorSubject } from 'rxjs';
-import { ICustomClsReportTemplatesRefs } from '../models/report-ng-templates.models';
+import { ICustomClsReportTabTemplatesRefs, ICustomClsReportTemplatesRefs } from '../models/report-ng-templates.models';
 
 @Injectable()
 export class ReportNgTemplatesService {
@@ -41,7 +41,7 @@ export class ReportNgTemplatesService {
 	/**
 	 * Setter for the custom report results section template reference.
 	 */
-	public setReportCustomTabsTemplateRef(templates: TemplateRef<any>[]) {
+	public setReportCustomTabsTemplateRef(templates: ICustomClsReportTabTemplatesRefs[]) {
 		this._reportTemplatesRefs$.next({
 			...this._reportTemplatesRefs$.value,
 			customTabsTemplates: templates,

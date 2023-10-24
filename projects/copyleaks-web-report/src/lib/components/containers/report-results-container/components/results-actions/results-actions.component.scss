@@ -1,5 +1,16 @@
 @import '../../../../../styles/website-colors.styles.scss';
 
+:host {
+	display: flex;
+	flex-direction: row;
+	align-items: center;
+	justify-content: space-between;
+	padding: 0px 6px;
+	box-sizing: border-box;
+	gap: 10px;
+	min-height: 37px;
+}
+
 .tootal-results-container {
 	.tootal-results {
 		font-weight: 700;
@@ -33,9 +44,6 @@
 	mat-icon {
 		color: $color-black;
 		cursor: pointer;
-		height: 18px;
-		width: 18px;
-		font-size: 18px;
 	}
 	.search-button {
 		display: flex;
@@ -47,12 +55,19 @@
 		width: 24px;
 		padding: 0;
 		border: 0;
+		mat-icon {
+			background-color: $color-white;
+			border-radius: 50%;
+		}
 	}
 	input {
 		width: 100%;
 		border: 0px;
 		outline: 0px;
 		background-color: $color-container-background;
+		margin: 0px !important;
+		font-size: 16px;
+		font-family: 'Open Sans', sans-serif !important;
 	}
 }
 
@@ -64,4 +79,9 @@
 		width: 18px;
 		font-size: 18px;
 	}
+}
+
+mat-icon:hover {
+	color: $color-primary !important;
+	transition: 0.4s;
 }

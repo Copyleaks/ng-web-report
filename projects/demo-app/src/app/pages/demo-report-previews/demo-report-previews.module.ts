@@ -8,6 +8,8 @@ import { CrActionsModule } from 'projects/copyleaks-web-report/src/lib/component
 import { CrCustomTabItemModule } from 'projects/copyleaks-web-report/src/lib/components/core/cr-custom-tabs/components/cr-custom-tab-item/cr-custom-tab-item.module';
 import { CrCustomTabsModule } from 'projects/copyleaks-web-report/src/lib/components/core/cr-custom-tabs/cr-custom-tabs.module';
 import { MatIconModule } from '@angular/material/icon';
+import { ReportResultsContainerModule } from 'projects/copyleaks-web-report/src/lib/components/containers/report-results-container/report-results-container.module';
+import { ReportResultsItemContainerModule } from 'projects/copyleaks-web-report/src/lib/components/containers/report-results-item-container/report-results-item-container.module';
 
 @NgModule({
 	declarations: [DemoReportPreviewsComponent],
@@ -19,6 +21,8 @@ import { MatIconModule } from '@angular/material/icon';
 		CrCustomTabsModule,
 		CrCustomTabItemModule,
 		MatIconModule,
+		ReportResultsContainerModule,
+		ReportResultsItemContainerModule,
 	],
 	exports: [DemoReportPreviewsComponent],
 })

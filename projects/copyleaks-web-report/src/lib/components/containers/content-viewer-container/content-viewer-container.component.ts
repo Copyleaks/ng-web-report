@@ -12,6 +12,7 @@ import {
 	Output,
 	Renderer2,
 	SimpleChanges,
+	TemplateRef,
 	ViewChild,
 } from '@angular/core';
 import { PostMessageEvent } from '../../../models/report-iframe-events.models';
@@ -24,6 +25,7 @@ import { ReportMatchHighlightService } from '../../../services/report-match-high
 import { IScanSource } from '../../../models/report-data.models';
 import { EResponsiveLayoutType } from '../../../enums/copyleaks-web-report.enums';
 import { ReportViewService } from '../../../services/report-view.service';
+import { untilDestroy } from '../../../utils/until-destroy';
 
 @Component({
 	selector: 'copyleaks-content-viewer-container',
@@ -231,6 +233,8 @@ export class ContentViewerContainerComponent implements OnInit, AfterViewInit, O
 	MatchType = MatchType; // Match type enum
 	EResponsiveLayoutType = EResponsiveLayoutType;
 
+	customTabContent: TemplateRef<any> | null;
+
 	constructor(
 		private _renderer: Renderer2,
 		private _cdr: ChangeDetectorRef,
@@ -241,6 +245,10 @@ export class ContentViewerContainerComponent implements OnInit, AfterViewInit, O
 	ngOnInit(): void {
 		if (this.flexGrow !== undefined && this.flexGrow !== null) this.flexGrowProp = this.flexGrow;
 		if (this.currentPage > this.numberOfPages) this.currentPage = 1;
+
+		this._viewSvc.selectedCustomTabContent$.pipe(untilDestroy(this)).subscribe(content => {
+			this.customTabContent = content;
+		});
 	}
 
 	ngAfterViewInit() {
@@ -328,4 +336,6 @@ export class ContentViewerContainerComponent implements OnInit, AfterViewInit, O
 	onJumpToNextMatchClick(next: boolean = true) {
 		this._highlightService.jump(next);
 	}
+
+	ngOnDestroy(): void {}
 }

@@ -3,7 +3,12 @@
 
 <div class="middle-section">
 	<!-- Report result item section -->
-	<copyleaks-report-results-item-container [flexGrow]="15"></copyleaks-report-results-item-container>
+	<copyleaks-report-results-item-container
+		[isMobile]="false"
+		[resultItem]="resultItem"
+		[reportResponsive]="EResponsiveLayoutType.Mobile"
+		[flexGrow]="20"
+		[isMobile]="true"></copyleaks-report-results-item-container>
 
 	<!--Report scan content viewer -->
 	<copyleaks-content-viewer-container
@@ -23,7 +28,6 @@
 
 	<!-- Report result content viewer -->
 	<copyleaks-content-viewer-container
-		[flexGrow]="80"
 		[isHtmlView]="isHtmlView"
 		[contentHtml]="suspectIframeHtml"
 		[resultData]="resultData"

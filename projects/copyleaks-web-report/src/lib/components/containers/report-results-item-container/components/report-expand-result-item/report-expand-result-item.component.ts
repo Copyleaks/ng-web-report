@@ -1,7 +1,7 @@
-import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
+import { Component, EventEmitter, Input, OnChanges, OnInit, Output, SimpleChanges } from '@angular/core';
 import { EResultPreviewType } from 'projects/copyleaks-web-report/src/lib/enums/copyleaks-web-report.enums';
-import { IResultItem } from '../models/report-result-item.models';
 import { ReportViewService } from 'projects/copyleaks-web-report/src/lib/services/report-view.service';
+import { IResultItem } from '../models/report-result-item.models';
 import { IPercentageResult } from '../percentage-result-item/models/percentage-result-item.models';
 
 @Component({
@@ -9,9 +9,9 @@ import { IPercentageResult } from '../percentage-result-item/models/percentage-r
 	templateUrl: './report-expand-result-item.component.html',
 	styleUrls: ['./report-expand-result-item.component.scss'],
 })
-export class ReportExpandResultItemComponent implements OnInit {
-	@Input() resultItem: IResultItem;
-	@Input() languageResult: string[] = ['Chips', 'Chips'];
+export class ReportExpandResultItemComponent implements OnInit, OnChanges {
+	@Input() resultItem: IResultItem | null = null;
+	@Input() languageResult: string[] = [];
 	@Output() excludeResultEvent = new EventEmitter<string>();
 
 	percentageResult: IPercentageResult;
@@ -20,8 +20,8 @@ export class ReportExpandResultItemComponent implements OnInit {
 	exclude: boolean = false;
 
 	get authorName() {
-		if (this.resultItem.previewResult) {
-			switch (this.resultItem.previewResult.type) {
+		if (this.resultItem?.resultPreview) {
+			switch (this.resultItem?.resultPreview.type) {
 				case EResultPreviewType.Internet:
 					return 'Internet Result';
 				case EResultPreviewType.Database:
@@ -38,10 +38,13 @@ export class ReportExpandResultItemComponent implements OnInit {
 	}
 
 	constructor(private _reportViewSvc: ReportViewService) {}
-	ngOnInit(): void {
-		if (this.resultItem) {
+
+	ngOnInit(): void {}
+
+	ngOnChanges(changes: SimpleChanges): void {
+		if ('resultItem' in changes && changes['resultItem'].currentValue) {
 			this.percentageResult = {
-				resultItem: this.resultItem,
+				resultItem: changes['resultItem'].currentValue,
 				title: 'Plagiarism Detection',
 				showArrowButton: true,
 				stackedBarHeight: '8px',
@@ -52,14 +55,16 @@ export class ReportExpandResultItemComponent implements OnInit {
 
 	clickBack() {
 		this._reportViewSvc.reportViewMode$.next({
-			isHtmlView: true,
+			...this._reportViewSvc.reportViewMode,
 			viewMode: 'one-to-many',
+			suspectId: undefined,
 			sourcePageIndex: 1,
+			suspectPageIndex: 1,
 		});
 	}
 
 	excludeResult() {
 		this.exclude = !this.exclude;
-		this.excludeResultEvent.emit(this.resultItem.previewResult.id);
+		this.excludeResultEvent.emit(this.resultItem?.resultPreview.id);
 	}
 }

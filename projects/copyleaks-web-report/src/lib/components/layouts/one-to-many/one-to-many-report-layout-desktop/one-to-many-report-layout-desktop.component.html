@@ -29,8 +29,6 @@
 
 <!-- Right side section -->
 <div *ngIf="!hideRightSection" class="right-section" id="one-to-many-report-right-section">
-	<!-- <div class="close-btn" (click)="hideRightSection = !hideRightSection">X</div> -->
-
 	<!-- Report actions container -->
 	<copyleaks-report-actions-container></copyleaks-report-actions-container>
 
@@ -43,6 +41,9 @@
 			[flexGrow]="25"></copyleaks-report-alerts-container>
 
 		<!-- Report results container -->
-		<copyleaks-report-results-container [flexGrow]="65"></copyleaks-report-results-container>
+		<copyleaks-report-results-container
+			[flexGrow]="65"
+			[allResultsItem]="scanResultsView"
+			[resultsActions]="scanResultsActions"></copyleaks-report-results-container>
 	</div>
 </div>

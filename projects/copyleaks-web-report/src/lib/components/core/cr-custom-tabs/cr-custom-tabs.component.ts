@@ -1,6 +1,7 @@
 import { Component, ContentChildren, OnInit, QueryList, TemplateRef } from '@angular/core';
 import { CrCustomTabItemComponent } from './components/cr-custom-tab-item/cr-custom-tab-item.component';
 import { ReportNgTemplatesService } from '../../../services/report-ng-templates.service';
+import { ICustomClsReportTabTemplatesRefs } from '../../../models/report-ng-templates.models';
 
 @Component({
 	selector: 'cr-custom-tabs',
@@ -10,11 +11,14 @@ import { ReportNgTemplatesService } from '../../../services/report-ng-templates.
 export class CrCustomTabsComponent implements OnInit {
 	@ContentChildren(CrCustomTabItemComponent) tabItems: QueryList<CrCustomTabItemComponent>;
 
-	templateRefsArray: TemplateRef<any>[] = [];
+	templateRefsArray: ICustomClsReportTabTemplatesRefs[] = [];
 
 	ngAfterContentInit() {
 		this.tabItems.forEach(tabItem => {
-			this.templateRefsArray.push(tabItem.tabTemplate);
+			this.templateRefsArray.push({
+				customTabTitleTemplates: tabItem.tabTemplateTitle,
+				customTabContentTemplates: tabItem.tabTemplateContent,
+			} as ICustomClsReportTabTemplatesRefs);
 		});
 
 		if (this.templateRefsArray.length > 0)

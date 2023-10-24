@@ -1,87 +1,89 @@
-<div *ngIf="!hideTitleContainer" class="title-and-actions-container">
+<div *ngIf="!hideTitleContainer && !customTabContent" class="title-and-actions-container">
 	<div class="title-container">
 		<span class="title">{{ reportOrigin != 'suspect' ? 'Submitted text' : 'Found text' }}</span>
 		<span *ngIf="numberOfWords" class="number-of-words">({{ numberOfWords }} words)</span>
 	</div>
 	<div class="actions-container">
-		<mat-icon
-			*ngIf="reportOrigin != 'suspect'"
-			fontSet="material-icons-round"
-			matTooltip="Go to previous match"
-			(click)="onJumpToNextMatchClick(false)">
-			arrow_upward
-		</mat-icon>
-		<mat-icon
-			*ngIf="reportOrigin != 'suspect'"
-			fontSet="material-icons-round"
-			matTooltip="Go to next match"
-			(click)="onJumpToNextMatchClick()">
-			arrow_downward
-		</mat-icon>
-		<mat-icon
-			*ngIf="!isHtmlView || !hasHtml || isAlertsView"
-			fontSet="material-icons-round"
-			(click)="changeContentDirection('ltr')"
-			matTooltip="Align Left">
-			format_align_left
-		</mat-icon>
-		<mat-icon
-			*ngIf="!isHtmlView || !hasHtml || isAlertsView"
-			fontSet="material-icons-round"
-			(click)="changeContentDirection('rtl')"
-			matTooltip="Align right">
-			format_align_right
-		</mat-icon>
-		<mat-icon
-			*ngIf="!isHtmlView || !hasHtml || isAlertsView"
-			fontSet="material-icons-round"
-			(click)="increaseFontSize()"
-			matTooltip="Zoom in">
-			zoom_in
-		</mat-icon>
-		<mat-icon
-			*ngIf="!isHtmlView || !hasHtml || isAlertsView"
-			fontSet="material-icons-round"
-			(click)="decreaseFontSize()"
-			matTooltip="Zoom out">
-			zoom_out
-		</mat-icon>
-		<span class="icon-tooltip-wrapper" [matTooltip]="!hasHtml ? 'Only text view is available' : ''">
+		<ng-container *ngIf="!customTabContent">
 			<mat-icon
-				*ngIf="isHtmlView && hasHtml"
-				[ngClass]="{
-					'disabled-icon': !hasHtml || isAlertsView
-				}"
+				*ngIf="reportOrigin != 'suspect'"
 				fontSet="material-icons-round"
-				(click)="onViewChange()"
-				matTooltip="Switch to textual mode">
-				title
+				matTooltip="Go to previous match"
+				(click)="onJumpToNextMatchClick(false)">
+				arrow_upward
 			</mat-icon>
 			<mat-icon
-				*ngIf="!isHtmlView || (isHtmlView && !hasHtml)"
-				[ngClass]="{
-					'disabled-icon': !hasHtml || isAlertsView
-				}"
+				*ngIf="reportOrigin != 'suspect'"
 				fontSet="material-icons-round"
-				(click)="onViewChange()"
-				matTooltip="Switch to rich text mode">
-				image
+				matTooltip="Go to next match"
+				(click)="onJumpToNextMatchClick()">
+				arrow_downward
 			</mat-icon>
-		</span>
+			<mat-icon
+				*ngIf="!isHtmlView || !hasHtml || isAlertsView"
+				fontSet="material-icons-round"
+				(click)="changeContentDirection('ltr')"
+				matTooltip="Align Left">
+				format_align_left
+			</mat-icon>
+			<mat-icon
+				*ngIf="!isHtmlView || !hasHtml || isAlertsView"
+				fontSet="material-icons-round"
+				(click)="changeContentDirection('rtl')"
+				matTooltip="Align right">
+				format_align_right
+			</mat-icon>
+			<mat-icon
+				*ngIf="!isHtmlView || !hasHtml || isAlertsView"
+				fontSet="material-icons-round"
+				(click)="increaseFontSize()"
+				matTooltip="Zoom in">
+				zoom_in
+			</mat-icon>
+			<mat-icon
+				*ngIf="!isHtmlView || !hasHtml || isAlertsView"
+				fontSet="material-icons-round"
+				(click)="decreaseFontSize()"
+				matTooltip="Zoom out">
+				zoom_out
+			</mat-icon>
+			<span class="icon-tooltip-wrapper" [matTooltip]="!hasHtml ? 'Only text view is available' : ''">
+				<mat-icon
+					*ngIf="isHtmlView && hasHtml"
+					[ngClass]="{
+						'disabled-icon': !hasHtml || isAlertsView
+					}"
+					fontSet="material-icons-round"
+					(click)="onViewChange()"
+					matTooltip="Switch to textual mode">
+					title
+				</mat-icon>
+				<mat-icon
+					*ngIf="!isHtmlView || (isHtmlView && !hasHtml)"
+					[ngClass]="{
+						'disabled-icon': !hasHtml || isAlertsView
+					}"
+					fontSet="material-icons-round"
+					(click)="onViewChange()"
+					matTooltip="Switch to rich text mode">
+					image
+				</mat-icon>
+			</span>
+		</ng-container>
 	</div>
 </div>
 <div class="content-container">
 	<ng-container [ngSwitch]="reportOrigin">
 		<ng-container *ngSwitchCase="'original'">
 			<iframe
-				[ngStyle]="{ display: !isHtmlView || !hasHtml || isAlertsView ? 'none' : '' }"
+				[ngStyle]="{ display: !isHtmlView || !hasHtml || isAlertsView || customTabContent ? 'none' : '' }"
 				#contentIFrame
 				sandbox="allow-scripts"
 				crOriginalHtmlHelper></iframe>
 			<div
 				class="text-container"
 				[ngStyle]="{
-					display: !(!isHtmlView || !hasHtml || isAlertsView) ? 'none' : '',
+					display: !(!isHtmlView || !hasHtml || isAlertsView) || customTabContent ? 'none' : '',
 					'font-size': contentZoom + 'em'
 				}"
 				[dir]="contentDirection"
@@ -116,14 +118,14 @@
 
 		<ng-container *ngSwitchCase="'source'">
 			<iframe
-				[ngStyle]="{ display: !isHtmlView || !hasHtml || isAlertsView ? 'none' : '' }"
+				[ngStyle]="{ display: !isHtmlView || !hasHtml || isAlertsView || customTabContent ? 'none' : '' }"
 				#contentIFrame
 				sandbox="allow-scripts"
 				crSourceHtmlHelper></iframe>
 			<div
 				class="text-container"
 				[ngStyle]="{
-					display: !(!isHtmlView || !hasHtml || isAlertsView) ? 'none' : '',
+					display: !(!isHtmlView || !hasHtml || isAlertsView) || customTabContent ? 'none' : '',
 					'font-size': contentZoom + 'em'
 				}"
 				[dir]="contentDirection"
@@ -158,7 +160,7 @@
 
 		<ng-container *ngSwitchCase="'suspect'">
 			<iframe
-				[ngStyle]="{ display: !isHtmlView || !hasHtml || isAlertsView ? 'none' : '' }"
+				[ngStyle]="{ display: !isHtmlView || !hasHtml || isAlertsView || customTabContent ? 'none' : '' }"
 				#contentIFrame
 				sandbox="allow-scripts"
 				crSuspectHtmlHelper></iframe>
@@ -168,7 +170,7 @@
 				[host]="this"
 				text-container
 				[ngStyle]="{
-					display: !(!isHtmlView || !hasHtml || isAlertsView) ? 'none' : '',
+					display: !(!isHtmlView || !hasHtml || isAlertsView) || customTabContent ? 'none' : '',
 					'font-size': contentZoom + 'em'
 				}"
 				[dir]="contentDirection">
@@ -188,14 +190,16 @@
 		</ng-container>
 		<ng-container *ngSwitchDefault></ng-container>
 	</ng-container>
+
+	<ng-container *ngTemplateOutlet="customTabContent"></ng-container>
 </div>
-<div class="paginator-container">
+<div class="paginator-container" [ngStyle]="{ 'justify-content': customTabContent ? 'center' : '' }">
 	<ng-container *ngIf="!hidePoweredBy">
 		<cr-powered-by></cr-powered-by>
 	</ng-container>
 
 	<cr-paginator
-		*ngIf="(!isHtmlView || !hasHtml || isAlertsView) && numberOfPages > 1"
+		*ngIf="(!isHtmlView || !hasHtml || isAlertsView) && numberOfPages > 1 && !customTabContent"
 		[pageIndex]="currentPage"
 		[numberOfPages]="numberOfPages"
 		(page)="onPaginationEvent($event)"></cr-paginator>

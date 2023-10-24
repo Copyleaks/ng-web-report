@@ -2,7 +2,7 @@
 	width: 100%;
 	display: flex;
 
-	a {
+	.custom-tab-title {
 		color: #3f9af5;
 		font-size: 16px;
 		font-style: normal;
@@ -11,7 +11,7 @@
 		text-decoration: none;
 	}
 
-	a:hover {
+	.custom-tab-title:hover {
 		text-decoration: underline;
 	}
 
@@ -20,5 +20,14 @@
 		width: 18px;
 		height: 18px;
 		font-size: 18px;
+		cursor: pointer;
+	}
+
+	mat-icon:hover {
+		color: #3f9af5;
+	}
+
+	copyleaks-web-report {
+		width: 100%;
 	}
 }

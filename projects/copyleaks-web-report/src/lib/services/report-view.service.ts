@@ -1,4 +1,4 @@
-import { Injectable } from '@angular/core';
+import { Injectable, TemplateRef } from '@angular/core';
 import { BehaviorSubject, Subject } from 'rxjs';
 import { IReportResponsiveMode, IReportViewEvent } from '../models/report-view.models';
 import { ResultDetailItem } from '../models/report-matches.models';
@@ -44,6 +44,16 @@ export class ReportViewService {
 	/** Getter for the report selected result. */
 	public get selectedAlert() {
 		return this._selectedAlert$.value;
+	}
+
+	private _selectedCustomTabContent$ = new BehaviorSubject<TemplateRef<any> | null>(null);
+	/** Emits matches that are relevant to source html one-to-many mode */
+	public get selectedCustomTabContent$() {
+		return this._selectedCustomTabContent$;
+	}
+	/** Getter for the report selected result. */
+	public get selectedCustomTabContent() {
+		return this._selectedCustomTabContent$.value;
 	}
 
 	constructor() {}

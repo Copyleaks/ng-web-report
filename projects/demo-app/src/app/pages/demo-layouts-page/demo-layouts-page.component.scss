@@ -26,4 +26,16 @@
 		border-top-style: solid;
 		border-top-color: #0000001f;
 	}
+
+	mat-icon {
+		color: #a0a9bf;
+		width: 18px;
+		height: 18px;
+		font-size: 18px;
+		cursor: pointer;
+	}
+
+	mat-icon:hover {
+		color: #3f9af5;
+	}
 }

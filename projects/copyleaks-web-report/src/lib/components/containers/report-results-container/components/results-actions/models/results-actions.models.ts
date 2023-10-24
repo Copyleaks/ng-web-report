@@ -1,5 +1,5 @@
 export interface IResultsActions {
-	totalResults: string;
-	totalExcluded: string;
-	totalFiltered: string;
+	totalResults: number;
+	totalExcluded: number;
+	totalFiltered: number;
 }

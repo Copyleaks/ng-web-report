@@ -22,7 +22,7 @@
 							<mat-icon>language</mat-icon>
 						</ng-container>
 						<ng-container *ngSwitchCase="eResultPreviewType.Database">
-							<mat-icon>language</mat-icon>
+							<img class="title-img" src="assets/images/icons/repositories-copyleaks-icon.svg" />
 						</ng-container>
 						<ng-container *ngSwitchDefault>
 							<mat-icon>language</mat-icon>
@@ -43,11 +43,23 @@
 					</ng-template>
 				</div>
 			</div>
-			<mat-icon *ngIf="!showLoader" class="item-menu" mat-icon [matMenuTriggerFor]="menu">more_vert</mat-icon>
+			<mat-icon
+				*ngIf="!showLoader"
+				class="item-menu"
+				mat-icon
+				[matMenuTriggerFor]="menu"
+				(click)="$event.stopPropagation()">
+				more_vert
+			</mat-icon>
 		</div>
-		<div fxLayout="column" fxLayoutAlign="start" fxLayoutGap="8px" class="item-body">
+		<div class="item-body">
 			<ng-container *ngIf="!showLoader; else showItemBodySkeleton">
-				<a class="item-url" *ngIf="previewResult?.url" [href]="previewResult.url">
+				<a
+					class="item-url"
+					*ngIf="previewResult?.url"
+					[href]="previewResult.url"
+					target="_blank"
+					(click)="$event.stopPropagation()">
 					{{ previewResult.url }}
 				</a>
 				<div class="item-introduction" *ngIf="previewResult.introduction">
@@ -75,7 +87,7 @@
 		<mat-icon class="mat-menu-item-icon">visibility_off</mat-icon>
 		<span class="mat-menu-item-text">Exclude result</span>
 	</button>
-	<button mat-menu-item>
+	<button *ngIf="previewResult?.url" mat-menu-item (click)="visitResultSource()">
 		<mat-icon class="mat-menu-item-icon">open_in_new</mat-icon>
 		<span class="mat-menu-item-text">Visit result source</span>
 	</button>

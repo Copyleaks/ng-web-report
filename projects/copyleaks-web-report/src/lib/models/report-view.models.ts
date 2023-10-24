@@ -22,3 +22,14 @@ export interface IReportViewQueryParams {
 export interface IReportResponsiveMode {
 	mode: EResponsiveLayoutType;
 }
+
+export interface IReportScoreTooltipModel {
+	// Plagarism score
+	identicalPct?: number;
+	minorChangesPct?: number;
+	paraphrasedPct?: number;
+
+	// AI score
+	aiPct?: number;
+	humanPct?: number;
+}

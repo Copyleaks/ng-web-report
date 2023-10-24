@@ -33,6 +33,15 @@ export enum EResponsiveLayoutType {
 export enum EReportViewType {
 	AIView = 'AIView',
 	PlagiarismView = 'PlagiarismView',
+	CustomTabView = 'CustomTabView',
+}
+
+export enum EReportScoreTooltipPosition {
+	ABOVE = 'above',
+	BELOW = 'below',
+	LEFT = 'left',
+	RIGHT = 'right',
+	DEFAULT = 'above',
 }
 
 /**

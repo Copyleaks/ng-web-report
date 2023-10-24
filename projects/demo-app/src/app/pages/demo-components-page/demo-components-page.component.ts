@@ -20,7 +20,7 @@ export class DemoComponentsPageComponent {
 		let count = 0;
 		while (count < 40) {
 			this.allResultsItem.push({
-				previewResult: {
+				resultPreview: {
 					id: '00fe0c8338',
 					introduction: 'No introduction available.',
 					matchedWords: 400,
@@ -46,7 +46,7 @@ export class DemoComponentsPageComponent {
 
 	eResponsiveLayoutType = EResponsiveLayoutType;
 	resultItem: IResultItem = {
-		previewResult: {
+		resultPreview: {
 			id: '00fe0c8338',
 			introduction: 'No introduction available.',
 			matchedWords: 400,
@@ -77,9 +77,9 @@ export class DemoComponentsPageComponent {
 	};
 
 	resultsActions: IResultsActions = {
-		totalResults: '23',
-		totalExcluded: '17',
-		totalFiltered: '14',
+		totalResults: 23,
+		totalExcluded: 17,
+		totalFiltered: 14,
 	};
 
 	alert: ICompleteResultNotificationAlert = {

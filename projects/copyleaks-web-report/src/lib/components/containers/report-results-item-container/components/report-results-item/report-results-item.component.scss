@@ -1,5 +1,9 @@
 @import '../../../../../styles/website-colors.styles.scss';
 
+:host {
+	cursor: pointer;
+}
+
 .result-item-hover-container {
 	&:hover {
 		border-color: $color-primary;
@@ -8,6 +12,10 @@
 		}
 	}
 }
+.result-item-hover-container {
+	transition: 0.7s;
+}
+
 .result-item-container {
 	border: 2px solid;
 	border-color: $color-container-background;
@@ -21,6 +29,7 @@
 			width: 100%;
 			padding: 2px;
 			.item-header {
+				padding: 4px 0px 0px 4px;
 				width: 100%;
 				.item-logo {
 					border: 2px solid;
@@ -66,9 +75,21 @@
 				cursor: pointer;
 				color: $color-dark-blue;
 			}
+			.item-menu:hover {
+				cursor: pointer;
+				color: $color-primary;
+				transition: 0.4s;
+			}
 		}
 		.item-body {
 			padding: 4px 16px;
+			width: 100%;
+			flex-direction: column;
+			display: flex;
+			justify-content: flex-start;
+			box-sizing: border-box;
+			// align-items: stretch;
+			gap: 8px;
 			.item-url {
 				font-weight: 400;
 				font-size: 14px;
@@ -76,16 +97,18 @@
 				overflow: hidden;
 				text-overflow: ellipsis;
 				white-space: nowrap;
+				max-width: 500px;
 			}
 			.item-introduction {
+				width: 100%;
 				font-weight: 500;
 				font-size: 14px;
 				color: $color-black;
 				overflow: hidden;
-				display: -webkit-box;
-				-webkit-line-clamp: 2; /* number of lines to show */
-				line-clamp: 2;
-				-webkit-box-orient: vertical;
+				// display: -webkit-box;
+				// -webkit-line-clamp: 2; /* number of lines to show */
+				// line-clamp: 2;
+				// -webkit-box-orient: vertical;
 			}
 			.url-skeleton {
 				width: 90%;

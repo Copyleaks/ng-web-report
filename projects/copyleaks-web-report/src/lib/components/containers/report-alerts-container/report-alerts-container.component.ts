@@ -51,11 +51,15 @@ export class ReportAlertsContainerComponent implements OnInit, AfterViewInit {
 
 	hideAlertsClick() {
 		this.hideAlerts = true;
-		this.minHeight = '';
+		setTimeout(() => {
+			this.minHeight = '';
+		});
 	}
 
 	showAlertsClick() {
 		this.hideAlerts = false;
-		this.minHeight = `${this.containerHeight + 30}px`;
+		setTimeout(() => {
+			this.minHeight = `${this.containerHeight + 30}px`;
+		});
 	}
 }

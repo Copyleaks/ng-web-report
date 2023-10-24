@@ -21,7 +21,11 @@
 	<!-- <div class="close-btn" (click)="hideRightSection = !hideRightSection">X</div> -->
 
 	<!-- Report result item section -->
-	<copyleaks-report-results-item-container [flexGrow]="20"></copyleaks-report-results-item-container>
+	<copyleaks-report-results-item-container
+		[flexGrow]="20"
+		[isMobile]="false"
+		[resultItem]="resultItem"
+		[reportResponsive]="EResponsiveLayoutType.Desktop"></copyleaks-report-results-item-container>
 
 	<!-- Report result content viewer -->
 	<copyleaks-content-viewer-container

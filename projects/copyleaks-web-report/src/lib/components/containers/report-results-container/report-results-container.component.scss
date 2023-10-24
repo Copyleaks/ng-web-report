@@ -1,18 +1,92 @@
+@import '../../../styles/website-colors.styles.scss';
 @import '../../../styles/containers.styles.scss';
 
 :host {
-	@include cls-report-container-lvl-3;
-	@include cls-report-container-close-btn;
-
 	display: flex;
+	flex-direction: column;
 	align-items: center;
-	justify-content: center;
+	justify-content: flex-start;
 	flex-grow: 65;
+	gap: 10px;
+
+	cr-results-actions {
+		width: 100%;
+		max-height: 10%;
+		flex-grow: 10;
+	}
 
 	.container-text {
-		height: 100%;
 		text-align: center;
 		display: flex;
 		align-items: center;
+	}
+
+	.report-results-item-top-container {
+		width: 100%;
+		height: 90%;
+		flex-grow: 90;
+
+		.navigate-mobie-button-contaienr {
+			.navigate-mobie-button-select {
+				background-color: $color-primary !important;
+			}
+
+			.navigate-mobie-button {
+				width: 12px;
+				height: 12px;
+				border-radius: 50%;
+				background-color: $color-dialog-background;
+				border: 0px;
+			}
+
+			.mat-chip-navigate {
+				min-height: 25px;
+				font-size: 12px;
+				font-weight: 500;
+				color: $color-white;
+				background-color: $color-dark-blue;
+			}
+		}
+
+		.results-item-top-container {
+			display: flex;
+			align-items: flex-start;
+			width: 100%;
+			height: 100%;
+			overflow: auto;
+			.results-item-mobile-container {
+				width: 100%;
+				display: flex;
+				flex-direction: row;
+				align-items: center;
+				justify-content: center;
+				cr-report-results-item {
+					min-width: 313px;
+				}
+			}
+			.results-item-container {
+				display: flex;
+				flex-direction: column;
+				align-items: flex-start;
+				justify-content: flex-start;
+				gap: 4px;
+				width: 100%;
+				height: 100%;
+			}
+		}
+	}
+
+	.empty-results-container {
+		display: flex;
+		align-items: center !important;
+		justify-content: center !important;
+		height: 100%;
+
+		cr-empty-result-state {
+			width: 100%;
+			height: 100%;
+			max-width: 260px;
+			max-height: 289px;
+		}
 	}
 }

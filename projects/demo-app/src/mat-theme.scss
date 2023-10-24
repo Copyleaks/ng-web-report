@@ -1,0 +1,42 @@
+@use '@angular/material' as mat;
+@import '../../copyleaks-web-report/src/lib/styles/website-colors.styles.scss';
+
+@include mat.core();
+
+// Define the typography config function.
+$copyleaks-design-v2-typography: mat.define-typography-config(
+	$font-family: 'Open Sans, sans-serif',
+);
+
+$copyleaks-design-v2-primary: mat.define-palette($copyleaks-primary-palette);
+$copyleaks-design-v2-accent: mat.define-palette($copyleaks-primary-palette);
+$copyleaks-design-v2-warn: mat.define-palette($copyleaks-warn-palette);
+
+// Copyleaks theme object which consists of configurations for individual
+// theming systems such as "color" or "typography".
+$copyleaks-design-v2-theme: mat.define-light-theme(
+	(
+		color: (
+			primary: $copyleaks-design-v2-primary,
+			accent: $copyleaks-design-v2-accent,
+			warn: $copyleaks-design-v2-warn,
+		),
+		typography: $copyleaks-design-v2-typography,
+	)
+);
+
+// Add typography definitions.
+// Copyleaks theme object which consists of configurations for individual
+// theming systems such as "color" or "typography".
+$copyleaks-design-v2-theme: mat.define-light-theme(
+	(
+		color: (
+			primary: $copyleaks-design-v2-primary,
+			accent: $copyleaks-design-v2-accent,
+			warn: $copyleaks-design-v2-warn,
+		),
+		typography: $copyleaks-design-v2-typography,
+	)
+);
+
+@include mat.all-component-themes($copyleaks-design-v2-theme);

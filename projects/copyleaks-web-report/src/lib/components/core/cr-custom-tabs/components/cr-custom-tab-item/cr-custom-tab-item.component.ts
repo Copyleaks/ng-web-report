@@ -1,4 +1,6 @@
 import { Component, HostBinding, Input, OnInit, TemplateRef, ViewChild } from '@angular/core';
+import { ReportViewService } from 'projects/copyleaks-web-report/src/lib/services/report-view.service';
+import { untilDestroy } from 'projects/copyleaks-web-report/src/lib/utils/until-destroy';
 
 @Component({
 	selector: 'cr-custom-tab-item',
@@ -6,18 +8,29 @@ import { Component, HostBinding, Input, OnInit, TemplateRef, ViewChild } from '@
 	styleUrls: ['./cr-custom-tab-item.component.scss'],
 })
 export class CrCustomTabItemComponent implements OnInit {
-	@ViewChild('tabTemplate', { static: true }) tabTemplate: TemplateRef<any>;
+	@ViewChild('tabTemplateTitle', { static: true }) tabTemplateTitle: TemplateRef<any>;
+	@ViewChild('tabTemplateContent', { static: true }) tabTemplateContent: TemplateRef<any>;
 
 	/**
 	 * @Input Flex grow property - flex-grow
 	 */
 	@Input() flexGrow: number;
 
-	constructor() {}
+	selected: boolean = false;
 
-	ngOnInit(): void {}
+	constructor(private _reportViewSvc: ReportViewService) {}
 
-	clickEvent() {}
+	ngOnInit(): void {
+		this._reportViewSvc.selectedCustomTabContent$.pipe(untilDestroy(this)).subscribe(content => {
+			this.selected = content === this.tabTemplateContent;
+		});
+	}
+
+	clickEvent() {
+		this._reportViewSvc.selectedCustomTabContent$.next(this.tabTemplateContent);
+	}
+
+	ngOnDestroy(): void {}
 }
 
 @Component({

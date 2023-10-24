@@ -1,12 +1,12 @@
 @import '../../../styles/containers.styles.scss';
 
 :host {
-	padding: 10px;
 	display: flex;
 	flex-direction: row;
 	align-items: center;
 
 	.actions-container {
+		padding: 10px;
 		width: 100%;
 	}
 }

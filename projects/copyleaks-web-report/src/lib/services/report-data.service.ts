@@ -3,14 +3,14 @@ import { Injectable } from '@angular/core';
 import {
 	ICompleteResults,
 	IResultDetailResponse as IResultDetailResponse,
-	IResultPreviews,
 	IScanSource,
 } from '../models/report-data.models';
-import { BehaviorSubject, Subscription, forkJoin, from } from 'rxjs';
+import { BehaviorSubject, forkJoin, from } from 'rxjs';
 import { concatMap } from 'rxjs/operators';
 import { ResultDetailItem } from '../models/report-matches.models';
 import { IClsReportEndpointConfigModel } from '../models/report-config.models';
 import { untilDestroy } from '../utils/until-destroy';
+import { EResultPreviewType } from '../enums/copyleaks-web-report.enums';
 
 @Injectable()
 export class ReportDataService {
@@ -109,6 +109,19 @@ export class ReportDataService {
 			.subscribe(
 				([crawledVersionRes, completeResultsRes]) => {
 					this._crawledVersion$.next(crawledVersionRes);
+
+					completeResultsRes.results.batch.forEach(result => {
+						result.type = EResultPreviewType.Batch;
+					});
+					completeResultsRes.results.database.forEach(result => {
+						result.type = EResultPreviewType.Database;
+					});
+					completeResultsRes.results.internet.forEach(result => {
+						result.type = EResultPreviewType.Internet;
+					});
+					completeResultsRes.results?.repositories?.forEach(result => {
+						result.type = EResultPreviewType.Repositroy;
+					});
 					this._scanResultsPreviews$.next(completeResultsRes);
 
 					// Load all the complete scan results
@@ -165,9 +178,6 @@ export class ReportDataService {
 		if (!this._reportEndpointConfig$?.value?.result) return;
 
 		var requestUrl = this._reportEndpointConfig$.value.result.replace('{RESULT_ID}', resultId);
-
-		// TODO: ONLY FOR DEMO - REMOVE LATER
-		requestUrl += '.json';
 
 		const response = await this._http.get<IResultDetailResponse>(requestUrl).toPromise();
 

@@ -1,7 +1,10 @@
 .custom-tab {
-	display: flex;
-	flex-direction: row !important;
-	flex-wrap: wrap;
-	justify-content: space-between !important;
-	align-items: center !important;
+	::ng-deep cr-custom-tab-item-title {
+		width: 100%;
+		height: 100%;
+		display: flex;
+		:first-child {
+			width: 100%;
+		}
+	}
 }

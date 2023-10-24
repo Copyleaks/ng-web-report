@@ -17,7 +17,7 @@
 		::-webkit-scrollbar-track {
 			border-radius: 4px;
 			transform: matrix(0, 1, -1, 0, 0, 0);
-			background: #fbffff;
+			background: #ebf3f5;
 			border: 1px solid #fbffff;
 		}
 		::-webkit-scrollbar-thumb {
@@ -25,5 +25,12 @@
 			background: rgba(17, 41, 96, 0.4) !important;
 			box-shadow: 0px 1px 2px 0px rgba(0, 0, 0, 0.27) !important;
 		}
+	}
+
+	copyleaks-one-to-many-report-layout-mobile,
+	copyleaks-one-to-many-report-layout-desktop,
+	copyleaks-one-to-one-report-layout-mobile,
+	copyleaks-one-to-one-report-layout-desktop {
+		width: 100%;
 	}
 }

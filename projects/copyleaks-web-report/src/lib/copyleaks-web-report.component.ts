@@ -1,4 +1,14 @@
-import { Component, Input, OnDestroy, OnInit, SimpleChanges, TemplateRef, ViewChild } from '@angular/core';
+import {
+	Component,
+	EventEmitter,
+	Input,
+	OnDestroy,
+	OnInit,
+	Output,
+	SimpleChanges,
+	TemplateRef,
+	ViewChild,
+} from '@angular/core';
 import { EReportLayoutType, EResponsiveLayoutType } from './enums/copyleaks-web-report.enums';
 import { BreakpointObserver, Breakpoints } from '@angular/cdk/layout';
 import { map } from 'rxjs/operators';
@@ -6,13 +16,14 @@ import { ReportNgTemplatesService } from './services/report-ng-templates.service
 import { ReportDataService } from './services/report-data.service';
 import { ReportMatchesService } from './services/report-matches.service';
 import { ReportViewService } from './services/report-view.service';
-import { IClsReportEndpointConfigModel, ViewMode } from './models/report-config.models';
+import { IClsReportEndpointConfigModel } from './models/report-config.models';
 import { ReportMatchHighlightService } from './services/report-match-highlight.service';
 import { ActivatedRoute, Router } from '@angular/router';
 import { IReportViewEvent, IReportViewQueryParams } from './models/report-view.models';
 import { untilDestroy } from './utils/until-destroy';
 import { ReportStatisticsService } from './services/report-statistics.service';
-import { ALERTS } from './constants/report-alerts.constants';
+import { ReportHttpRequestErrorModel } from './models/report-errors.models';
+import { ReportErrorsService } from './services/report-errors.service';
 
 @Component({
 	selector: 'copyleaks-web-report',
@@ -47,6 +58,11 @@ export class CopyleaksWebReportComponent implements OnInit, OnDestroy {
 	 */
 	@Input() reportEndpointConfig: IClsReportEndpointConfigModel;
 
+	/**
+	 * @Output {IClsReportEndpointConfigModel} - The copyleaks report data endpoints configuration model.
+	 */
+	@Output() onReportRequestError = new EventEmitter<ReportHttpRequestErrorModel>();
+
 	// Layout realated properties
 	ReportLayoutType = EReportLayoutType;
 	ResponsiveLayoutType = EResponsiveLayoutType;
@@ -61,17 +77,28 @@ export class CopyleaksWebReportComponent implements OnInit, OnDestroy {
 		private _reportDataSvc: ReportDataService,
 		private _activatedRoute: ActivatedRoute,
 		private _reportViewSvc: ReportViewService,
+		private _reportErrorsSvc: ReportErrorsService,
 		private _router: Router
 	) {}
 
 	ngOnInit(): void {
+		// Handel responsive view changes
 		if (this.responsiveLayoutType == null) this._initResponsiveLayoutType();
+
+		// Handel report layout changes
 		if (!this.reportLayoutType) this._initReportLayoutType();
 
+		// Initialize the report data
 		if (this.reportEndpointConfig) this._reportDataSvc.initReportData(this.reportEndpointConfig);
+
+		// Handel report requests errors & emit it
+		this._reportErrorsSvc.reportHttpRequestError$
+			.pipe(untilDestroy(this))
+			.subscribe(error => this.onReportRequestError.emit(error));
 	}
 
 	ngAfterViewInit() {
+		// Read provided custom components
 		this._initCustomTemplatesRefs();
 	}
 

@@ -3,10 +3,9 @@ import { Injectable } from '@angular/core';
 import {
 	ICompleteResults,
 	IResultDetailResponse as IResultDetailResponse,
-	IResultPreviews,
 	IScanSource,
 } from '../models/report-data.models';
-import { BehaviorSubject, Subscription, forkJoin, from } from 'rxjs';
+import { BehaviorSubject, forkJoin, from } from 'rxjs';
 import { concatMap } from 'rxjs/operators';
 import { ResultDetailItem } from '../models/report-matches.models';
 import { IClsReportEndpointConfigModel } from '../models/report-config.models';
@@ -179,9 +178,6 @@ export class ReportDataService {
 		if (!this._reportEndpointConfig$?.value?.result) return;
 
 		var requestUrl = this._reportEndpointConfig$.value.result.replace('{RESULT_ID}', resultId);
-
-		// TODO: ONLY FOR DEMO - REMOVE LATER
-		requestUrl += '.json';
 
 		const response = await this._http.get<IResultDetailResponse>(requestUrl).toPromise();
 

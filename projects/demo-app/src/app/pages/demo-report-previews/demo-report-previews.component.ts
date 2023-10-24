@@ -41,7 +41,7 @@ export class DemoReportPreviewsComponent implements OnInit {
 				authToken: '', // optional
 				crawledVersion: `assets/scans/bundle/${id}/source.json`,
 				completeResults: `assets/scans/bundle/${id}/complete.json`,
-				result: `assets/scans/bundle/${id}/results/{RESULT_ID}`, // inside the package, we will be assignment the RESULT_ID
+				result: `assets/scans/bundle/${id}/results/{RESULT_ID}.json`, // inside the package, we will be assignment the RESULT_ID
 				filter: {
 					get: '', // optional
 					update: '', // optional

@@ -20,7 +20,7 @@ export class ResultsActionsComponent implements OnInit, OnChanges {
 	constructor() {}
 
 	ngOnInit(): void {
-		this.searchFc.valueChanges.pipe(debounceTime(2000)).subscribe(value => {
+		this.searchFc.valueChanges.pipe(debounceTime(1000)).subscribe(value => {
 			this.onSearch.emit(value);
 		});
 	}

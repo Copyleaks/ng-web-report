@@ -50,6 +50,8 @@ export abstract class OneToManyReportLayoutBaseComponent extends ReportLayoutBas
 		totalFiltered: 0,
 	};
 
+	focusedMatch: Match | null;
+
 	override get rerendered(): boolean {
 		return this.oneToOneRerendered;
 	}
@@ -153,47 +155,21 @@ export abstract class OneToManyReportLayoutBaseComponent extends ReportLayoutBas
 		this.statisticsSvc.statistics$.pipe(untilDestroy(this)).subscribe(data => {
 			if (data) this.reportStatistics = data;
 		});
+
+		const { originalText$, originalHtml$ } = this.highlightSvc;
+		combineLatest([originalText$, originalHtml$, this.reportViewSvc.reportViewMode$])
+			.pipe(untilDestroy(this))
+			.subscribe(([text, html, content]) => {
+				this.focusedMatch = !content.isHtmlView ? text && text.match : html;
+				this.showResultsForSelectedMatch(this.focusedMatch);
+			});
 	}
 
 	onIFrameMessage(message: PostMessageEvent) {
 		switch (message.type) {
 			case 'match-select':
 				const selectedMatch = message.index !== -1 ? this.reportMatches[message.index] : null;
-				let viewedResults: ResultPreview[] = [];
-				if (selectedMatch)
-					viewedResults = [
-						...(this.reportDataSvc.scanResultsPreviews?.results?.internet?.filter(item =>
-							selectedMatch?.ids?.includes(item.id)
-						) ?? []),
-						...(this.reportDataSvc.scanResultsPreviews?.results?.batch?.filter(item =>
-							selectedMatch?.ids?.includes(item.id)
-						) ?? []),
-						...(this.reportDataSvc.scanResultsPreviews?.results?.database?.filter(item =>
-							selectedMatch?.ids?.includes(item.id)
-						) ?? []),
-						...(this.reportDataSvc.scanResultsPreviews?.results?.repositories?.filter(item =>
-							selectedMatch?.ids?.includes(item.id)
-						) ?? []),
-					];
-				else
-					viewedResults = [
-						...(this.reportDataSvc.scanResultsPreviews?.results?.internet ?? []),
-						...(this.reportDataSvc.scanResultsPreviews?.results?.batch ?? []),
-						...(this.reportDataSvc.scanResultsPreviews?.results?.database ?? []),
-						...(this.reportDataSvc.scanResultsPreviews?.results?.repositories ?? []),
-					];
-				this.scanResultsView = viewedResults.map(result => {
-					const foundResultDetail = this.scanResultsDetails?.find(r => r.id === result.id);
-					return {
-						resultPreview: result,
-						resultDetails: foundResultDetail,
-						iStatisticsResult: foundResultDetail?.result?.statistics,
-						metadataSource: {
-							words: this.scanResultsPreviews?.scannedDocument.totalWords ?? 0,
-							excluded: this.scanResultsPreviews?.scannedDocument.totalExcluded ?? 0,
-						},
-					} as IResultItem;
-				});
+				this.showResultsForSelectedMatch(selectedMatch);
 				break;
 			case 'upgrade-plan':
 				console.log(message);
@@ -204,5 +180,43 @@ export abstract class OneToManyReportLayoutBaseComponent extends ReportLayoutBas
 			default:
 				console.error('unknown event', message);
 		}
+	}
+
+	private showResultsForSelectedMatch(selectedMatch: Match | null) {
+		let viewedResults: ResultPreview[] = [];
+		if (selectedMatch)
+			viewedResults = [
+				...(this.reportDataSvc.scanResultsPreviews?.results?.internet?.filter(item =>
+					selectedMatch?.ids?.includes(item.id)
+				) ?? []),
+				...(this.reportDataSvc.scanResultsPreviews?.results?.batch?.filter(item =>
+					selectedMatch?.ids?.includes(item.id)
+				) ?? []),
+				...(this.reportDataSvc.scanResultsPreviews?.results?.database?.filter(item =>
+					selectedMatch?.ids?.includes(item.id)
+				) ?? []),
+				...(this.reportDataSvc.scanResultsPreviews?.results?.repositories?.filter(item =>
+					selectedMatch?.ids?.includes(item.id)
+				) ?? []),
+			];
+		else
+			viewedResults = [
+				...(this.reportDataSvc.scanResultsPreviews?.results?.internet ?? []),
+				...(this.reportDataSvc.scanResultsPreviews?.results?.batch ?? []),
+				...(this.reportDataSvc.scanResultsPreviews?.results?.database ?? []),
+				...(this.reportDataSvc.scanResultsPreviews?.results?.repositories ?? []),
+			];
+		this.scanResultsView = viewedResults.map(result => {
+			const foundResultDetail = this.scanResultsDetails?.find(r => r.id === result.id);
+			return {
+				resultPreview: result,
+				resultDetails: foundResultDetail,
+				iStatisticsResult: foundResultDetail?.result?.statistics,
+				metadataSource: {
+					words: this.scanResultsPreviews?.scannedDocument.totalWords ?? 0,
+					excluded: this.scanResultsPreviews?.scannedDocument.totalExcluded ?? 0,
+				},
+			} as IResultItem;
+		});
 	}
 }

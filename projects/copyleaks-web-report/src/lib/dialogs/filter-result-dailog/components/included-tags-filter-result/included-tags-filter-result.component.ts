@@ -7,7 +7,7 @@ import { ITagItem } from './models/included-tags-filter-result.models';
 	styleUrls: ['./included-tags-filter-result.component.scss'],
 })
 export class IncludedTagsFilterResultComponent implements OnInit {
-	@Input() listTagItem: ITagItem[] = [
+	@Input() allTagItem: ITagItem[] = [
 		{
 			tagName: 'Menu item1',
 			selected: true,
@@ -68,17 +68,23 @@ export class IncludedTagsFilterResultComponent implements OnInit {
 		},
 	];
 
+	listTagItem: ITagItem[];
 	showMoreMenu: boolean = false;
-
+	searchInput: string = '';
 	get selectedList() {
-		return this.listTagItem.filter(item => item.selected).map(item => item.tagName);
+		return this.allTagItem.filter(item => item.selected).map(item => item.tagName);
 	}
 
 	constructor() {}
-	ngOnInit(): void {}
+	ngOnInit(): void {
+		this.listTagItem = this.allTagItem;
+	}
 
 	searchButton() {}
+
 	selectTag(item: ITagItem) {
 		item.selected = !item.selected;
 	}
+
+	onSearchInputEnter() {}
 }

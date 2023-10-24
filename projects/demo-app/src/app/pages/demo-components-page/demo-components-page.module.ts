@@ -14,6 +14,7 @@ import { CrCustomTabsModule } from 'projects/copyleaks-web-report/src/lib/compon
 import { CrCustomTabItemModule } from 'projects/copyleaks-web-report/src/lib/components/core/cr-custom-tabs/components/cr-custom-tab-item/cr-custom-tab-item.module';
 import { ReportNgTemplatesService } from 'projects/copyleaks-web-report/src/lib/services/report-ng-templates.service';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { ReportMatchHighlightService } from 'projects/copyleaks-web-report/src/lib/services/report-match-highlight.service';
 
 @NgModule({
 	declarations: [DemoComponentsPageComponent],
@@ -32,6 +33,6 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 		FormsModule,
 		ReactiveFormsModule,
 	],
-	providers: [ReportViewService, ReportNgTemplatesService],
+	providers: [ReportViewService, ReportNgTemplatesService, ReportMatchHighlightService],
 })
 export class DemoComponentsPageModule {}

@@ -2,6 +2,7 @@
 	<div fxLayout="row" fxLayoutAlign="start center" fxLayoutGap="8px">
 		<ng-content select="mat-slide-logo"></ng-content>
 		<span class="mat-slide-title">{{ title }}</span>
+		<span class="mat-slide-total">(3)</span>
 	</div>
 	<mat-slide-toggle [checked]="value" (change)="chanegValue($event)"></mat-slide-toggle>
 </div>

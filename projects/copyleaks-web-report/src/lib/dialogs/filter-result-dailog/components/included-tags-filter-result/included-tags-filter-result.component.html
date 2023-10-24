@@ -3,7 +3,13 @@
 		<div class="search-icon" fxLayout="column" fxLayoutAlign="center center" (click)="searchButton()">
 			<mat-icon>search</mat-icon>
 		</div>
-		<input class="included-tags-input" [type]="'text'" placeholder="Search {item type}" />
+		<input
+			[(ngModel)]="searchInput"
+			(keyup.enter)="onSearchInputEnter()"
+			(keydown.enter)="onSearchInputEnter()"
+			class="included-tags-input"
+			[type]="'text'"
+			placeholder="Search {item type}" />
 	</div>
 	<div class="mat-chip-container" fxLayout="row" fxLayoutAlign="start center" fxLayoutGap="4px">
 		<button class="arrow-drop-button" (click)="showMoreMenu = !showMoreMenu">

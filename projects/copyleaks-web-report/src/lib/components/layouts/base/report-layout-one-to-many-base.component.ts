@@ -23,6 +23,7 @@ import { ReportLayoutBaseComponent } from './report-layout-base.component';
 import { combineLatest } from 'rxjs';
 import { IResultItem } from '../../containers/report-results-item-container/components/models/report-result-item.models';
 import { IResultsActions } from '../../containers/report-results-container/components/results-actions/models/results-actions.models';
+import { filter } from 'rxjs/internal/operators/filter';
 
 export abstract class OneToManyReportLayoutBaseComponent extends ReportLayoutBaseComponent {
 	hideRightSection: boolean = false;
@@ -160,7 +161,10 @@ export abstract class OneToManyReportLayoutBaseComponent extends ReportLayoutBas
 
 		const { originalText$, originalHtml$ } = this.highlightSvc;
 		combineLatest([originalText$, originalHtml$, this.reportViewSvc.reportViewMode$])
-			.pipe(untilDestroy(this))
+			.pipe(
+				untilDestroy(this),
+				filter(([, , content]) => !content.alertCode)
+			)
 			.subscribe(([text, html, content]) => {
 				this.focusedMatch = !content.isHtmlView ? text && text.match : html;
 				this.showResultsForSelectedMatch(this.focusedMatch);

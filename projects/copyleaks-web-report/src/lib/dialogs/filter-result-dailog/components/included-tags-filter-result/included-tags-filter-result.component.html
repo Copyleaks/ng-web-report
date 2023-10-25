@@ -34,7 +34,7 @@
 	<div *ngIf="showMoreMenu" class="tag-list-container" fxLayout="column" fxLayoutAlign="start start" fxLayoutGap="2px">
 		<div class="tag-list" *ngFor="let item of listTagItem" fxLayout="row" fxLayoutAlign="start center">
 			<mat-checkbox [checked]="item.selected == true" [(ngModel)]="item.selected" class="mat-checkbox-tag">
-				{{ item.tagName }}
+				{{ item.title }}
 			</mat-checkbox>
 		</div>
 	</div>

@@ -1,4 +1,7 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, Input, OnInit } from '@angular/core';
+import { FormGroup } from '@angular/forms';
+import { FilterResultDailogService } from '../../services/filter-result-dailog.service';
+import { EFilterResultForm } from '../../models/filter-result-dailog.enum';
 
 @Component({
 	selector: 'cr-match-type-filter-result',
@@ -6,7 +9,14 @@ import { Component, OnInit } from '@angular/core';
 	styleUrls: ['./match-type-filter-result.component.scss'],
 })
 export class MatchTypeFilterResultComponent implements OnInit {
-	constructor() {}
+	@Input() identicalTotal: number = 0;
+	@Input() minorChangesTotal: number = 0;
+	@Input() paraphrasedTotal: number = 0;
 
-	ngOnInit(): void {}
+	matchTypeForm: FormGroup;
+	eFilterResultForm = EFilterResultForm;
+	constructor(private filterService: FilterResultDailogService) {}
+	ngOnInit() {
+		this.matchTypeForm = this.filterService.matchTypeFormGroup;
+	}
 }

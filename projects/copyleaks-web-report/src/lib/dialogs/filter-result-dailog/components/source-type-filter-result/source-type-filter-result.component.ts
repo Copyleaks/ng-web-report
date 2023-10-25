@@ -1,7 +1,8 @@
-import { Component, OnInit } from '@angular/core';
-import { FormBuilder, FormControl, FormGroup } from '@angular/forms';
-import { EResultPreviewType } from 'projects/copyleaks-web-report/src/lib/enums/copyleaks-web-report.enums';
-import { TotalSourceType } from './models/source-type-filter-result.models';
+import { Component, Input, OnInit } from '@angular/core';
+import { FormControl, FormGroup } from '@angular/forms';
+import { ITotalSourceType } from './models/source-type-filter-result.models';
+import { FilterResultDailogService } from '../../services/filter-result-dailog.service';
+import { EFilterResultForm } from '../../models/filter-result-dailog.enum';
 
 @Component({
 	selector: 'cr-source-type-filter-result',
@@ -10,45 +11,37 @@ import { TotalSourceType } from './models/source-type-filter-result.models';
 })
 export class SourceTypeFilterResultComponent implements OnInit {
 	surceTypeForm: FormGroup;
-	eResultPreviewType = EResultPreviewType;
+	eFilterResultForm = EFilterResultForm;
 
-	totalSourceType: TotalSourceType = {
-		totalInternet: 3,
-		totalInternalDatabase: 3,
-		totalbatch: 3,
-		repository: ['rep1'],
+	@Input() loading: boolean;
+	@Input() totalSourceType: ITotalSourceType = {
+		totalInternet: 0,
+		totalInternalDatabase: 0,
+		totalbatch: 0,
 	};
 
 	get repositoriesForm() {
 		return this.surceTypeForm.get('repositories') as FormGroup;
 	}
 
-	get internetValue() {
-		return this.surceTypeForm.get('internet')?.value;
-	}
-	get internetForm() {
-		return this.surceTypeForm.get('internet') as FormControl;
+	get repositoryLength() {
+		return this.totalSourceType?.repository?.length || 0;
 	}
 
-	constructor(private _formBuilder: FormBuilder) {}
+	constructor(private filterService: FilterResultDailogService) {}
 
 	ngOnInit(): void {
-		this.surceTypeForm = this._formBuilder.group({
-			internet: new FormControl(true),
-			database: new FormControl(true),
-			batch: new FormControl(false),
-			repositories: this._formBuilder.group([]),
-		});
+		this.surceTypeForm = this.filterService.sourceTypeFormGroup;
 
-		if (this.totalSourceType?.repository) {
-			this.totalSourceType?.repository.forEach(repo => {
-				this.addRepositoryControl(repo);
-			});
-		}
+		// if (this.totalSourceType?.repository) {
+		// 	this.totalSourceType?.repository.forEach(repo => {
+		// 		this.addRepositoryControl(repo);
+		// 	});
+		// }
 	}
 
-	addRepositoryControl(controlName: string) {
+	addRepositoryControl(repo: any) {
 		const repositories = this.repositoriesForm;
-		repositories.addControl(controlName, new FormControl(false));
+		repositories.addControl(repo.name, new FormControl(false));
 	}
 }

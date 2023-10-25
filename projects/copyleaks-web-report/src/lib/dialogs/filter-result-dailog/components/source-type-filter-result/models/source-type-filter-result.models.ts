@@ -1,6 +1,11 @@
-export interface TotalSourceType {
+export interface ITotalSourceType {
 	totalInternet: number;
 	totalInternalDatabase: number;
 	totalbatch: number;
-	repository: string[];
+	repository?: string[];
 }
+
+// export interface IRepositorySourceType {
+// 	id: string;
+// 	name: string;
+// }

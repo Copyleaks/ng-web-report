@@ -19,6 +19,7 @@ import {
 	MatSlideLogoFilterResultComponent,
 } from './components/mat-slide-filter-result/mat-slide-filter-result.component';
 import { FilterResultDailogService } from './services/filter-result-dailog.service';
+import { ReportDataService } from '../../services/report-data.service';
 
 @NgModule({
 	declarations: [
@@ -44,6 +45,6 @@ import { FilterResultDailogService } from './services/filter-result-dailog.servi
 		MatCheckboxModule,
 		MatChipsModule,
 	],
-	providers: [FilterResultDailogService],
+	providers: [FilterResultDailogService, ReportDataService],
 })
 export class FilterResultDailogModule {}

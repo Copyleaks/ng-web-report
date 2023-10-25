@@ -1,4 +1,6 @@
 export interface ITagItem {
-	tagName: string;
-	selected: boolean;
+	code: string;
+	title: string;
+	description: string;
+	selected?: boolean;
 }

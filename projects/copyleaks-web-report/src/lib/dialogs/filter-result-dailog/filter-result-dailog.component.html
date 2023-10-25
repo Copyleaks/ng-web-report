@@ -2,17 +2,22 @@
 	<div class="header-container" fxLayout="column" fxLayoutAlign="start start" fxLayoutGap="8px">
 		<div class="title-container" fxLayout="row" fxLayoutAlign="space-between center" fxLayoutGap="4px">
 			<span>Filter Plagiarism Results</span>
-			<button class="clear-button" fxLayout="row" fxLayoutAlign="start center" fxLayoutGap="4px">
+			<button
+				(click)="clearFilterButton()"
+				class="clear-button"
+				fxLayout="row"
+				fxLayoutAlign="start center"
+				fxLayoutGap="4px">
 				<mat-icon>refresh</mat-icon>
 				<span>Clear filter</span>
 			</button>
 		</div>
 		<div class="result-container" fxLayout="row" fxLayoutAlign="start center" fxLayoutGap="4px">
-			<span class="total-results">35 Results</span>
+			<span class="total-results">Plagiarism Results ({{ resultsActions.totalResults }})</span>
 			<mat-icon class="separate-circle-icon" fontSet="material-icons-round">circle</mat-icon>
-			<span class="total-excuded">7 excluded</span>
+			<span class="total-excuded">{{ resultsActions.totalExcluded }} excluded</span>
 			<mat-icon class="separate-circle-icon" fontSet="material-icons-round">circle</mat-icon>
-			<span class="total-filtered">12 filtered</span>
+			<span class="total-filtered">{{ resultsActions.totalFiltered }} filtered</span>
 		</div>
 	</div>
 	<div class="body-container" fxLayout="row" fxLayoutAlign="start start" fxLayoutGap="32px">
@@ -24,7 +29,10 @@
 				fxLayoutAlign="start start"
 				fxLayoutGap="16px">
 				<span class="body-title">Source type</span>
-				<cr-source-type-filter-result class="sources-type-container"></cr-source-type-filter-result>
+				<cr-source-type-filter-result
+					[totalSourceType]="totalSourceType"
+					[loading]="loading"
+					class="sources-type-container"></cr-source-type-filter-result>
 			</section>
 			<mat-divider></mat-divider>
 

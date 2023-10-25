@@ -1,5 +1,7 @@
 import { Component, Input, OnInit } from '@angular/core';
 import { ITagItem } from './models/included-tags-filter-result.models';
+import { FilterResultDailogService } from '../../services/filter-result-dailog.service';
+import { FormControl } from '@angular/forms';
 
 @Component({
 	selector: 'cr-included-tags-filter-result',
@@ -9,74 +11,51 @@ import { ITagItem } from './models/included-tags-filter-result.models';
 export class IncludedTagsFilterResultComponent implements OnInit {
 	@Input() allTagItem: ITagItem[] = [
 		{
-			tagName: 'Menu item1',
-			selected: true,
+			code: '0',
+			title: 'Menu item1',
+			description: 'string',
 		},
 		{
-			tagName: 'Menu item2',
-			selected: true,
+			code: '1',
+			title: 'Menu item2',
+			description: 'string',
 		},
 		{
-			tagName: 'Menu item3',
-			selected: false,
+			code: '2',
+			title: 'Menu item12',
+			description: 'string',
 		},
 		{
-			tagName: 'Menu item4',
-			selected: false,
+			code: '3',
+			title: 'Menu item13',
+			description: 'string',
 		},
 		{
-			tagName: 'Menu item5',
-			selected: false,
+			code: '4',
+			title: 'Menu item14',
+			description: 'string',
 		},
 		{
-			tagName: 'Menu item6',
-			selected: false,
-		},
-
-		{
-			tagName: 'Menu item7',
-			selected: false,
-		},
-		{
-			tagName: 'Menu item11',
-			selected: false,
-		},
-		{
-			tagName: 'Menu item12',
-			selected: false,
-		},
-		{
-			tagName: 'Menu item13',
-			selected: false,
-		},
-		{
-			tagName: 'Menu item14',
-			selected: false,
-		},
-		{
-			tagName: 'Menu item15',
-			selected: false,
-		},
-		{
-			tagName: 'Menu item16',
-			selected: false,
-		},
-
-		{
-			tagName: 'Menu item17',
-			selected: false,
+			code: '5',
+			title: 'Menu item15',
+			description: 'string',
 		},
 	];
-
 	listTagItem: ITagItem[];
+
+	includedTagsForm: FormControl;
+	selectedTag: ITagItem[] = [];
 	showMoreMenu: boolean = false;
 	searchInput: string = '';
+
 	get selectedList() {
-		return this.allTagItem.filter(item => item.selected).map(item => item.tagName);
+		return (this.includedTagsForm.value as ITagItem[]).map(item => item.title);
 	}
 
-	constructor() {}
+	constructor(private filterService: FilterResultDailogService) {}
 	ngOnInit(): void {
+		this.includedTagsForm = this.filterService.IncludedTagsFormControl;
+
 		this.listTagItem = this.allTagItem;
 	}
 

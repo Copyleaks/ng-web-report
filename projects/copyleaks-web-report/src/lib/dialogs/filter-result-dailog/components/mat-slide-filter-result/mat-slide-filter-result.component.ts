@@ -17,7 +17,13 @@ import { MatSlideToggleChange } from '@angular/material/slide-toggle';
 export class MatSlideFilterResultComponent implements OnInit, ControlValueAccessor {
 	@Input() title: string;
 	@Input() total: number;
+
 	value: boolean;
+
+	get disabledSlide() {
+		return this.total === 0;
+	}
+
 	updateParentControllerValue: (value: boolean) => void;
 	ngOnInit(): void {}
 
@@ -29,13 +35,13 @@ export class MatSlideFilterResultComponent implements OnInit, ControlValueAccess
 		this.updateParentControllerValue = fn;
 	}
 
-	registerOnTouched(fn: any): void {}
-	onInputChange(value: string) {}
-
 	chanegValue(event: MatSlideToggleChange) {
 		this.value = event.checked;
 		this.updateParentControllerValue(this.value);
 	}
+
+	registerOnTouched(fn: any): void {}
+	onInputChange(value: string) {}
 }
 
 @Component({

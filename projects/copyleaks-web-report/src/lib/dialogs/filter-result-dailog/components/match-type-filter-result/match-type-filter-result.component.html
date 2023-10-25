@@ -1,20 +1,34 @@
-<div class="match-type-container" fxLayout="column" fxLayoutAlign="start start" fxLayoutGap="8px">
+<div
+	[formGroup]="matchTypeForm"
+	class="match-type-container"
+	fxLayout="column"
+	fxLayoutAlign="start start"
+	fxLayoutGap="8px">
 	<!-- identical -->
-	<cr-mat-slide-filter-result [title]="'Identical Text'">
+	<cr-mat-slide-filter-result
+		[formControlName]="eFilterResultForm.fcIdenticalText"
+		[title]="'Identical Text'"
+		[total]="identicalTotal">
 		<mat-slide-logo>
 			<span class="dot identical-text"></span>
 		</mat-slide-logo>
 	</cr-mat-slide-filter-result>
 
 	<!-- minor -->
-	<cr-mat-slide-filter-result [title]="'Minor changes'">
+	<cr-mat-slide-filter-result
+		[formControlName]="eFilterResultForm.fcMinorChanges"
+		[title]="'Minor changes'"
+		[total]="minorChangesTotal">
 		<mat-slide-logo>
 			<span class="dot minor-changes"></span>
 		</mat-slide-logo>
 	</cr-mat-slide-filter-result>
 
 	<!-- Paraphrased -->
-	<cr-mat-slide-filter-result [title]="'Paraphrased'">
+	<cr-mat-slide-filter-result
+		[formControlName]="eFilterResultForm.fcParaphrased"
+		[title]="'Paraphrased'"
+		[total]="paraphrasedTotal">
 		<mat-slide-logo>
 			<span class="dot paraphrased"></span>
 		</mat-slide-logo>

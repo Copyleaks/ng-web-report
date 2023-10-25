@@ -1,7 +1,6 @@
 <!-- <div class="actions-container">Result Item</div>
 <div class="close-btn" (click)="hideResultItem()">X</div> -->
 <cr-results-actions
-	*ngIf="allResultsItem && allResultsItem.length > 0"
 	[resultsActions]="resultsActions"
 	[searchedValue]="searchedValue"
 	(onSearch)="onSearch($event)"></cr-results-actions>
@@ -40,7 +39,7 @@
 	</div>
 	<div
 		class="navigate-mobie-button-contaienr"
-		*ngIf="isMobile && allResultsItemLength != 0"
+		*ngIf="isMobile && allResultsItemLength > 0"
 		fxLayout="row"
 		fxLayoutAlign="start center"
 		fxLayoutGap="8px">

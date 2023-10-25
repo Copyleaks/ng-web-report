@@ -6,7 +6,9 @@
 	display: flex;
 	flex-grow: 1;
 	gap: 8px;
+	height: 100%;
 }
+
 .middle-section,
 .content-section {
 	display: flex;
@@ -43,17 +45,39 @@
 }
 
 .results-container {
-	height: 15%;
-	overflow-y: auto;
+	height: auto !important;
+	flex-grow: 0 !important;
 	box-shadow: -2px -2px 8px 0px rgba(255, 255, 255, 0.5), 2px 2px 4px 0px rgba(0, 0, 0, 0.15);
 	border-radius: 10px;
 	background-color: $color-white;
-	padding: 4px 0px;
+
+	::ng-deep {
+		cr-results-actions {
+			padding: 8px 8px 0px 8px;
+		}
+		.report-results-item-top-container {
+			padding-bottom: 8px;
+		}
+
+		.results-item-top-container {
+			&::-webkit-scrollbar {
+				width: 0px !important;
+				height: 0px !important;
+			}
+			&::-webkit-scrollbar-thumb {
+				border: none !important;
+				background: none !important;
+				box-shadow: none !important;
+			}
+		}
+		cr-empty-result-state {
+			min-height: 118px;
+		}
+	}
 }
 
 .powered-by-copyleaks-container {
 	display: flex;
-	padding: 8px;
 	justify-content: center;
 	align-items: center;
 }

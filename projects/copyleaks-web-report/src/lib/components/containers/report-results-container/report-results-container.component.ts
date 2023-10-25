@@ -219,7 +219,8 @@ export class ReportResultsContainerComponent implements OnInit, AfterViewInit, O
 		this.resultItemList = this.allResultsItem.filter(
 			r =>
 				r.resultPreview.introduction.toLowerCase().includes(value) ||
-				r.resultPreview.title.toLowerCase().includes(value)
+				r.resultPreview.title.toLowerCase().includes(value) ||
+				(r.resultPreview.url && r.resultPreview.url.toLowerCase().includes(value))
 		);
 		this.lastItemLoading = false;
 	}

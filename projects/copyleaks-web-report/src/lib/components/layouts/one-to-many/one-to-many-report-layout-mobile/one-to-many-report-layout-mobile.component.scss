@@ -7,7 +7,6 @@
 	flex-grow: 1;
 	gap: 8px;
 }
-
 .middle-section,
 .content-section {
 	display: flex;
@@ -63,6 +62,23 @@ copyleaks-report-alerts-container {
 	overflow-y: auto;
 	flex-grow: 0 !important;
 	max-height: 25% !important;
+	::ng-deep {
+		mat-expansion-panel {
+			gap: 2px !important;
+		}
+		mat-expansion-panel-header {
+			border-radius: 10px !important;
+			background: $color-white !important;
+			padding: 4px 8px !important;
+		}
+		.alert-card-container {
+			border: none !important;
+		}
+
+		.mat-expansion-panel:not(.mat-expanded) .mat-expansion-panel-header:hover:not([aria-disabled='true']) {
+			background: $color-white !important;
+		}
+	}
 }
 
 .report-actions-container {

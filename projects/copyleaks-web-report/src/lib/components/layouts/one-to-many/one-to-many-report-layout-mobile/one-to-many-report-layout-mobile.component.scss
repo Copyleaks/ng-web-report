@@ -1,4 +1,5 @@
 @import '../../../../styles/containers.styles.scss';
+@import '../../../../styles/website-colors.styles.scss';
 
 :host {
 	flex-direction: column;
@@ -29,9 +30,10 @@
 		overflow-y: auto;
 	}
 }
+
 .content-section {
-	flex-grow: 80;
-	height: 80%;
+	flex-grow: 75;
+	height: 75%;
 	copyleaks-content-viewer-container {
 		overflow-y: auto;
 	}
@@ -44,6 +46,10 @@
 .results-container {
 	height: 15%;
 	overflow-y: auto;
+	box-shadow: -2px -2px 8px 0px rgba(255, 255, 255, 0.5), 2px 2px 4px 0px rgba(0, 0, 0, 0.15);
+	border-radius: 10px;
+	background-color: $color-white;
+	padding: 4px 0px;
 }
 
 .powered-by-copyleaks-container {
@@ -54,8 +60,9 @@
 }
 
 copyleaks-report-alerts-container {
-	max-height: 20%;
 	overflow-y: auto;
+	flex-grow: 0 !important;
+	max-height: 25% !important;
 }
 
 .report-actions-container {

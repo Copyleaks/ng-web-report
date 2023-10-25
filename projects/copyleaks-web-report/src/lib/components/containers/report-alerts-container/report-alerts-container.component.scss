@@ -72,6 +72,7 @@
 
 	::ng-deep {
 		.mat-expansion-panel-content {
+			display: flex;
 			overflow-y: auto;
 			max-height: 100%;
 			@media screen and (min-width: 960px) {
@@ -106,5 +107,6 @@
 	mat-accordion {
 		width: 100%;
 		height: 100%;
+		display: flex;
 	}
 }

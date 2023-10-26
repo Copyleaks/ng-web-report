@@ -1,0 +1,31 @@
+<div class="container" fxLayout="column" fxLayoutAlign="start start" fxLayoutGap="8px">
+	<div class="header-container" fxLayout="row" fxLayoutAlign="start center" fxLayoutGap="8px">
+		<span class="header">Excluded results</span>
+		<span class="total-excluded">(27)</span>
+	</div>
+	<div class="search-container" fxLayout="row" fxLayoutAlign="start center" fxLayoutGap="8px">
+		<div class="search-icon-contaier" fxLayout="row" fxLayoutAlign="center center">
+			<mat-icon>search</mat-icon>
+		</div>
+		<input class="search-input" [type]="'text'" placeholder="Search {item type}" />
+	</div>
+
+	<div class="results-top-container">
+		<div #resultsContainer class="results-container" fxLayout="column" fxLayoutGap="8px">
+			<ng-container *ngFor="let item of excludedResultist">
+				<cr-report-results-item
+					[resultItem]="item"
+					[showItemBody]="false"
+					[style]="'width:100%'"></cr-report-results-item>
+			</ng-container>
+			<ng-container *ngIf="lastItemLoading">
+				<cr-report-results-item
+					[showLoader]="true"
+					[showItemBody]="false"
+					[style]="'width:100%'"></cr-report-results-item>
+			</ng-container>
+		</div>
+	</div>
+
+	<button class="include-all-button">Include all</button>
+</div>

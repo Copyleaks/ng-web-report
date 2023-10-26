@@ -13,6 +13,7 @@ import { IPercentageResult } from '../percentage-result-item/models/percentage-r
 export class ReportResultsItemComponent implements OnInit, OnChanges {
 	@Input() resultItem: IResultItem;
 	@Input() showLoader: boolean = false;
+	@Input() showItemBody: boolean = true;
 	@Output() hiddenResultEvent = new EventEmitter<string>();
 
 	percentageResult: IPercentageResult;

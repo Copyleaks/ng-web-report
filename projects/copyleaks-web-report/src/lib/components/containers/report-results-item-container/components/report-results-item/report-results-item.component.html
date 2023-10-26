@@ -52,7 +52,7 @@
 				more_vert
 			</mat-icon>
 		</div>
-		<div class="item-body">
+		<div class="item-body" *ngIf="showItemBody">
 			<ng-container *ngIf="!showLoader; else showItemBodySkeleton">
 				<a
 					class="item-url"

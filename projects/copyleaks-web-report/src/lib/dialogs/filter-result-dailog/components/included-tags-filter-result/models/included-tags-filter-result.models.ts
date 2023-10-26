@@ -1,6 +1,5 @@
-export interface ITagItem {
-	code: string;
-	title: string;
-	description: string;
+import { IResultTag } from 'projects/copyleaks-web-report/src/lib/models/report-data.models';
+
+export interface ITagItem extends IResultTag {
 	selected?: boolean;
 }

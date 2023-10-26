@@ -20,6 +20,8 @@ import {
 } from './components/mat-slide-filter-result/mat-slide-filter-result.component';
 import { FilterResultDailogService } from './services/filter-result-dailog.service';
 import { ReportDataService } from '../../services/report-data.service';
+import { ExcludedResultsDailogComponent } from './components/excluded-results-dailog/excluded-results-dailog.component';
+import { ReportResultsContainerModule } from '../../components/containers/report-results-container/report-results-container.module';
 
 @NgModule({
 	declarations: [
@@ -31,8 +33,10 @@ import { ReportDataService } from '../../services/report-data.service';
 		MetaFilterResultComponent,
 		MatSlideFilterResultComponent,
 		MatSlideLogoFilterResultComponent,
+		ExcludedResultsDailogComponent,
 	],
 	exports: [FilterResultDailogComponent],
+	providers: [FilterResultDailogService, ReportDataService],
 	imports: [
 		CommonModule,
 		ReactiveFormsModule,
@@ -44,7 +48,7 @@ import { ReportDataService } from '../../services/report-data.service';
 		MatSliderModule,
 		MatCheckboxModule,
 		MatChipsModule,
+		ReportResultsContainerModule,
 	],
-	providers: [FilterResultDailogService, ReportDataService],
 })
 export class FilterResultDailogModule {}

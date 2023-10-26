@@ -4,6 +4,9 @@ import { IResultsActions } from '../../components/containers/report-results-cont
 import { IClsReportEndpointConfigModel } from '../../models/report-config.models';
 import { ReportDataService } from '../../services/report-data.service';
 import { ITotalSourceType } from './components/source-type-filter-result/models/source-type-filter-result.models';
+import { IResultItem } from '../../components/containers/report-results-item-container/components/models/report-result-item.models';
+import { untilDestroy } from '../../utils/until-destroy';
+import { combineLatest } from 'rxjs';
 
 @Component({
 	selector: 'cr-filter-result-dailog',
@@ -18,7 +21,7 @@ export class FilterResultDailogComponent implements OnInit {
 	};
 
 	totalSourceType: ITotalSourceType;
-
+	allResultsItem: IResultItem[] = [];
 	loading: boolean = true;
 	////
 	endpointsConfig: IClsReportEndpointConfigModel = {
@@ -31,7 +34,9 @@ export class FilterResultDailogComponent implements OnInit {
 			update: '', // optional
 		},
 	};
+	///
 
+	showExcludedDailog: boolean = true;
 	constructor(private filterService: FilterResultDailogService, private _reportDataSvc: ReportDataService) {}
 
 	ngOnInit() {
@@ -47,6 +52,29 @@ export class FilterResultDailogComponent implements OnInit {
 					totalInternalDatabase: results.database.length,
 					totalbatch: results.batch.length,
 				};
+
+				const allResults = [
+					...(results?.internet ?? []),
+					...(results?.database ?? []),
+					...(results?.batch ?? []),
+					...(results?.repositories ?? []),
+				];
+				this.allResultsItem = allResults.map(result => {
+					return {
+						resultPreview: result,
+
+						iStatisticsResult: {
+							identical: 12,
+							minorChanges: 12,
+							relatedMeaning: 12,
+						},
+						metadataSource: {
+							words: 0,
+							excluded: 0,
+						},
+					} as IResultItem;
+				});
+				console.log(this.allResultsItem);
 			}
 		});
 	}

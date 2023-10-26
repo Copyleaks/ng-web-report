@@ -31,6 +31,11 @@ export class ReportActionsContainerComponent implements OnInit, AfterViewInit, O
 	 */
 	@Input() flexGrow: number;
 
+	/**
+	 * @Input {boolean} Flag indicating whether to show the loading view or not.
+	 */
+	@Input() showLoadingView = false;
+
 	customActionsTemplateRef: TemplateRef<any>;
 	customTemplateRefSub: any;
 

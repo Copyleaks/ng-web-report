@@ -20,6 +20,10 @@ export class ReportResultsItemContainerComponent implements OnInit, AfterViewIni
 	@Input() reportResponsive: EResponsiveLayoutType;
 	@Input() resultItem: IResultItem | null = null;
 	@Input() isMobile: boolean;
+	/**
+	 * @Input {boolean} Flag indicating whether to show the loading view or not.
+	 */
+	@Input() showLoadingView = false;
 
 	constructor() {}
 

@@ -54,7 +54,7 @@ export class OriginalTextHelperDirective implements AfterContentInit, OnDestroy 
 		if (this.current) {
 			return forward ? this.current !== this.children.last : this.current !== this.children.first;
 		} else {
-			return this.children.length > 0;
+			return this.children?.length > 0;
 		}
 	}
 

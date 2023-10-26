@@ -22,13 +22,15 @@
 
 	<!-- Report result item section -->
 	<copyleaks-report-results-item-container
-		[flexGrow]="20"
+		style="display: flex; flex-direction: column; flex-shrink: 0; gap: 8px"
 		[isMobile]="false"
 		[resultItem]="resultItem"
-		[reportResponsive]="EResponsiveLayoutType.Desktop"></copyleaks-report-results-item-container>
+		[reportResponsive]="EResponsiveLayoutType.Desktop"
+		[showLoadingView]="isLoadingResultItem"></copyleaks-report-results-item-container>
 
 	<!-- Report result content viewer -->
 	<copyleaks-content-viewer-container
+		style="display: flex; flex-direction: column; flex-grow: 1; overflow-y: auto; gap: 8px"
 		[flexGrow]="80"
 		[isHtmlView]="isHtmlView"
 		[contentHtml]="suspectIframeHtml"

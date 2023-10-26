@@ -12,6 +12,11 @@ export class ResultsActionsComponent implements OnInit, OnChanges {
 	@Input() resultsActions: IResultsActions | null;
 	@Input() searchedValue: string | null = null;
 
+	/**
+	 * @Input {boolean} Flag indicating whether to show the loading view or not.
+	 */
+	@Input() showLoadingView = false;
+
 	@Output() onSearch = new EventEmitter<string>();
 
 	searchFc = new FormControl('');

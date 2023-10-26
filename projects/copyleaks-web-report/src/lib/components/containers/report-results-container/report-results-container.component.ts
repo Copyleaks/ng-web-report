@@ -38,6 +38,11 @@ export class ReportResultsContainerComponent implements OnInit, AfterViewInit, O
 	@Input() resultsActions: IResultsActions;
 	@Input() isMobile: boolean;
 
+	/**
+	 * @Input {boolean} Flag indicating whether to show the loading view or not.
+	 */
+	@Input() showLoadingView = false;
+
 	@ViewChild('resultsContainer', { read: ElementRef }) public resultsContainer: ElementRef;
 	@ViewChild('resultitem', { read: ElementRef }) public resultitem: ElementRef;
 
@@ -46,7 +51,7 @@ export class ReportResultsContainerComponent implements OnInit, AfterViewInit, O
 	private _currentPage: number = 1;
 
 	resultItemList: IResultItem[];
-	lastItemLoading: boolean = true;
+	lastItemLoading: boolean = false;
 
 	navigateMobileButton: EnumNavigateMobileButton;
 	enumNavigateMobileButton = EnumNavigateMobileButton;

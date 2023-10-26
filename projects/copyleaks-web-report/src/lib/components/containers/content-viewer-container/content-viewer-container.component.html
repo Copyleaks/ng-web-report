@@ -1,4 +1,4 @@
-<div *ngIf="!hideTitleContainer && !customTabContent" class="title-and-actions-container">
+<div *ngIf="!hideTitleContainer && !customTabContent && !showLoadingView" class="title-and-actions-container">
 	<div class="title-container">
 		<span class="title">{{ reportOrigin != 'suspect' ? 'Submitted text' : 'Found text' }}</span>
 		<span *ngIf="numberOfWords" class="number-of-words">({{ numberOfWords }} words)</span>
@@ -72,18 +72,25 @@
 		</ng-container>
 	</div>
 </div>
-<div class="content-container">
+<div
+	class="content-container"
+	[ngStyle]="{
+		display: showLoadingView ? 'none' : ''
+	}">
 	<ng-container [ngSwitch]="reportOrigin">
 		<ng-container *ngSwitchCase="'original'">
 			<iframe
-				[ngStyle]="{ display: !isHtmlView || !hasHtml || isAlertsView || customTabContent ? 'none' : '' }"
+				[ngStyle]="{
+					display: !isHtmlView || !hasHtml || isAlertsView || customTabContent || showLoadingView ? 'none' : ''
+				}"
 				#contentIFrame
 				sandbox="allow-scripts"
-				crOriginalHtmlHelper></iframe>
+				crOriginalHtmlHelper
+				(load)="onIFrameLoad()"></iframe>
 			<div
 				class="text-container"
 				[ngStyle]="{
-					display: !(!isHtmlView || !hasHtml || isAlertsView) || customTabContent ? 'none' : '',
+					display: !(!isHtmlView || !hasHtml || isAlertsView) || customTabContent || showLoadingView ? 'none' : '',
 					'font-size': contentZoom + 'em'
 				}"
 				[dir]="contentDirection"
@@ -118,14 +125,17 @@
 
 		<ng-container *ngSwitchCase="'source'">
 			<iframe
-				[ngStyle]="{ display: !isHtmlView || !hasHtml || isAlertsView || customTabContent ? 'none' : '' }"
+				[ngStyle]="{
+					display: !isHtmlView || !hasHtml || isAlertsView || customTabContent || showLoadingView ? 'none' : ''
+				}"
 				#contentIFrame
 				sandbox="allow-scripts"
-				crSourceHtmlHelper></iframe>
+				crSourceHtmlHelper
+				(load)="onIFrameLoad()"></iframe>
 			<div
 				class="text-container"
 				[ngStyle]="{
-					display: !(!isHtmlView || !hasHtml || isAlertsView) || customTabContent ? 'none' : '',
+					display: !(!isHtmlView || !hasHtml || isAlertsView) || customTabContent || showLoadingView ? 'none' : '',
 					'font-size': contentZoom + 'em'
 				}"
 				[dir]="contentDirection"
@@ -160,17 +170,20 @@
 
 		<ng-container *ngSwitchCase="'suspect'">
 			<iframe
-				[ngStyle]="{ display: !isHtmlView || !hasHtml || isAlertsView || customTabContent ? 'none' : '' }"
+				[ngStyle]="{
+					display: !isHtmlView || !hasHtml || isAlertsView || customTabContent || showLoadingView ? 'none' : ''
+				}"
 				#contentIFrame
 				sandbox="allow-scripts"
-				crSuspectHtmlHelper></iframe>
+				crSuspectHtmlHelper
+				(load)="onIFrameLoad()"></iframe>
 			<div
 				class="text-container"
 				crSuspectTextHelper
 				[host]="this"
 				text-container
 				[ngStyle]="{
-					display: !(!isHtmlView || !hasHtml || isAlertsView) || customTabContent ? 'none' : '',
+					display: !(!isHtmlView || !hasHtml || isAlertsView) || customTabContent || showLoadingView ? 'none' : '',
 					'font-size': contentZoom + 'em'
 				}"
 				[dir]="contentDirection">
@@ -193,7 +206,10 @@
 
 	<ng-container *ngTemplateOutlet="customTabContent"></ng-container>
 </div>
-<div class="paginator-container" [ngStyle]="{ 'justify-content': customTabContent ? 'center' : '' }">
+<div
+	*ngIf="!showLoadingView"
+	class="paginator-container"
+	[ngStyle]="{ 'justify-content': customTabContent ? 'center' : '' }">
 	<ng-container *ngIf="!hidePoweredBy">
 		<cr-powered-by></cr-powered-by>
 	</ng-container>
@@ -204,3 +220,61 @@
 		[numberOfPages]="numberOfPages"
 		(page)="onPaginationEvent($event)"></cr-paginator>
 </div>
+
+<ng-container *ngIf="showLoadingView">
+	<div class="title-and-actions-loader-container">
+		<div class="title-loader-container">
+			<ngx-skeleton-loader class="title-loader skeleton" [appearance]="'line'"></ngx-skeleton-loader>
+			<ngx-skeleton-loader class="stats-loader skeleton" [appearance]="'line'"></ngx-skeleton-loader>
+		</div>
+
+		<div class="actions-loader-container">
+			<ngx-skeleton-loader class="circle skeleton" [appearance]="'line'"></ngx-skeleton-loader>
+			<ngx-skeleton-loader class="circle skeleton" [appearance]="'line'"></ngx-skeleton-loader>
+			<ngx-skeleton-loader class="circle skeleton" [appearance]="'line'"></ngx-skeleton-loader>
+			<ngx-skeleton-loader class="circle skeleton" [appearance]="'line'"></ngx-skeleton-loader>
+			<ngx-skeleton-loader class="circle skeleton" [appearance]="'line'"></ngx-skeleton-loader>
+			<ngx-skeleton-loader class="circle skeleton" [appearance]="'line'"></ngx-skeleton-loader>
+		</div>
+	</div>
+
+	<div class="content-loader-container">
+		<div class="paragraph-loader-container">
+			<ngx-skeleton-loader class="skeleton" [appearance]="'line'" style="width: 97%"></ngx-skeleton-loader>
+			<ngx-skeleton-loader class="skeleton" [appearance]="'line'" style="width: 80%"></ngx-skeleton-loader>
+			<ngx-skeleton-loader class="skeleton" [appearance]="'line'" style="width: 85%"></ngx-skeleton-loader>
+			<ngx-skeleton-loader class="skeleton" [appearance]="'line'" style="width: 80%"></ngx-skeleton-loader>
+			<ngx-skeleton-loader class="skeleton" [appearance]="'line'" style="width: 90%"></ngx-skeleton-loader>
+			<ngx-skeleton-loader class="skeleton" [appearance]="'line'" style="width: 70%"></ngx-skeleton-loader>
+			<ngx-skeleton-loader class="skeleton" [appearance]="'line'" style="width: 85%"></ngx-skeleton-loader>
+			<ngx-skeleton-loader class="skeleton" [appearance]="'line'" style="width: 50%"></ngx-skeleton-loader>
+		</div>
+		<ngx-skeleton-loader
+			class="skeleton"
+			[appearance]="'line'"
+			style="width: 97%; visibility: hidden"></ngx-skeleton-loader>
+
+		<div class="paragraph-loader-container">
+			<ngx-skeleton-loader class="skeleton" [appearance]="'line'" style="width: 97%"></ngx-skeleton-loader>
+			<ngx-skeleton-loader class="skeleton" [appearance]="'line'" style="width: 80%"></ngx-skeleton-loader>
+			<ngx-skeleton-loader class="skeleton" [appearance]="'line'" style="width: 85%"></ngx-skeleton-loader>
+			<ngx-skeleton-loader class="skeleton" [appearance]="'line'" style="width: 80%"></ngx-skeleton-loader>
+			<ngx-skeleton-loader class="skeleton" [appearance]="'line'" style="width: 90%"></ngx-skeleton-loader>
+			<ngx-skeleton-loader class="skeleton" [appearance]="'line'" style="width: 70%"></ngx-skeleton-loader>
+			<ngx-skeleton-loader class="skeleton" [appearance]="'line'" style="width: 85%"></ngx-skeleton-loader>
+			<ngx-skeleton-loader class="skeleton" [appearance]="'line'" style="width: 50%"></ngx-skeleton-loader>
+		</div>
+
+		<ngx-skeleton-loader
+			class="skeleton"
+			[appearance]="'line'"
+			style="width: 97%; visibility: hidden"></ngx-skeleton-loader>
+
+		<div class="last-paragraph-loader-container">
+			<ngx-skeleton-loader class="skeleton" [appearance]="'line'" style="width: 97%"></ngx-skeleton-loader>
+			<ngx-skeleton-loader class="skeleton" [appearance]="'line'" style="width: 80%"></ngx-skeleton-loader>
+			<ngx-skeleton-loader class="skeleton" [appearance]="'line'" style="width: 85%"></ngx-skeleton-loader>
+			<ngx-skeleton-loader class="skeleton" [appearance]="'line'" style="width: 80%"></ngx-skeleton-loader>
+		</div>
+	</div>
+</ng-container>

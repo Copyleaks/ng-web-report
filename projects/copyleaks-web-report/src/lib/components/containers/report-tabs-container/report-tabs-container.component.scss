@@ -9,7 +9,8 @@
 
 	.tab-ai,
 	.tab-plagiarism,
-	::ng-deep .custom-tab {
+	::ng-deep .custom-tab,
+	.loading-tab {
 		padding: 16px;
 		display: flex;
 		flex-direction: column;
@@ -21,7 +22,6 @@
 		background: $color-container-background;
 		cursor: pointer;
 
-		cursor: pointer;
 		padding: 10px;
 		position: relative;
 		transition: all 0.3s ease-in-out;
@@ -113,6 +113,36 @@
 			font-size: 18px;
 			font-style: normal;
 			font-weight: 700;
+		}
+	}
+
+	.skeleton {
+		width: fit-content;
+		display: flex;
+		height: fit-content !important;
+		::ng-deep .loader {
+			height: 19px !important;
+			margin-bottom: 0px !important;
+			border-radius: 10px !important;
+			opacity: 0.2;
+			background-color: $color-medium-dark;
+		}
+	}
+
+	.loading-tab {
+		flex-grow: 1;
+		gap: 4px;
+
+		&.first {
+			background-color: $color-white;
+		}
+
+		.bar {
+			height: 10px !important;
+
+			::ng-deep .loader {
+				height: 10px !important;
+			}
 		}
 	}
 }

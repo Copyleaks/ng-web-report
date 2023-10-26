@@ -36,7 +36,7 @@ export abstract class OneToManyReportLayoutBaseComponent extends ReportLayoutBas
 	numberOfPages: number;
 	currentPageSource: number;
 
-	oneToOneRerendered: boolean = false;
+	oneToManyRerendered: boolean = false;
 	EResponsiveLayoutType = EResponsiveLayoutType;
 	alerts: ICompleteResultNotificationAlert[];
 	reportStatistics: ReportStatistics | undefined;
@@ -53,8 +53,11 @@ export abstract class OneToManyReportLayoutBaseComponent extends ReportLayoutBas
 
 	focusedMatch: Match | null;
 
+	isLoadingScanContent: boolean = false;
+	isLoadingScanResults: boolean = false;
+
 	override get rerendered(): boolean {
-		return this.oneToOneRerendered;
+		return this.oneToManyRerendered;
 	}
 
 	get numberOfWords(): number | undefined {
@@ -96,19 +99,22 @@ export abstract class OneToManyReportLayoutBaseComponent extends ReportLayoutBas
 		});
 
 		this.matchSvc.originalHtmlMatches$.pipe(untilDestroy(this)).subscribe(data => {
+			this.isLoadingScanContent = data === null;
+
 			if (data != this.reportMatches) {
-				this.oneToOneRerendered = false;
+				this.oneToManyRerendered = false;
 			}
 			this.reportMatches = data ?? [];
 			const updatedHtml = this._getRenderedMatches(data, this.reportCrawledVersion?.html.value);
 			if (updatedHtml && data) {
 				this.iframeHtml = updatedHtml;
-				this.oneToOneRerendered = true;
+				this.oneToManyRerendered = true;
 			}
 		});
 
 		this.matchSvc.originalTextMatches$.pipe(untilDestroy(this)).subscribe(data => {
 			if (data) {
+				this.isLoadingScanContent = false;
 				this.contentTextMatches = data;
 			}
 		});
@@ -127,6 +133,8 @@ export abstract class OneToManyReportLayoutBaseComponent extends ReportLayoutBas
 					this.alerts = previews?.notifications?.alerts ?? [];
 					this.scanResultsPreviews = previews;
 					this.scanResultsDetails = details;
+
+					this.isLoadingScanResults = this.scanResultsPreviews === undefined || this.scanResultsDetails === undefined;
 
 					if (this.scanResultsPreviews && this.scanResultsDetails) {
 						this.scanResultsActions.totalResults = this.scanResultsDetails.length;

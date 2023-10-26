@@ -29,6 +29,7 @@ export class ReportDataService {
 	}
 
 	private _scanResultsDetails$ = new BehaviorSubject<ResultDetailItem[] | undefined>(undefined);
+	private _loadedResultsDetails$: ResultDetailItem[] = [];
 	/**
 	 * Subject for sharing the report complete results.
 	 */
@@ -157,18 +158,31 @@ export class ReportDataService {
 				idBatches.push(resultsIds.slice(i, i + batchSize));
 			}
 
+			// Calculate the total number of batches you'll have
+			const totalBatches = idBatches.length;
+			let currentBatchIndex = 0; // Initialize a variable to keep track of the current batch index
+
+			if (totalBatches === 0) this._scanResultsDetails$.next([]);
+
 			// Send the GET results requests in batches
 			const fetchResultsBatches = from(idBatches);
 			fetchResultsBatches
 				.pipe(
-					concatMap(ids => forkJoin(...ids.map(id => this.getReportResultAsync(id)))),
+					concatMap(ids => {
+						currentBatchIndex++; // Increment the current batch index each time a new batch starts
+						return forkJoin(...ids.map(id => this.getReportResultAsync(id)));
+					}),
 					untilDestroy(this)
 				)
 				.subscribe((results: ResultDetailItem[]) => {
 					if (results) {
 						// Add the new fetched results to the Cache subject
-						const fetchedResults: ResultDetailItem[] = this._scanResultsDetails$.value ?? [];
-						this._scanResultsDetails$.next([...fetchedResults, ...results] as ResultDetailItem[]);
+						this._loadedResultsDetails$ = [...this._loadedResultsDetails$, ...results] as ResultDetailItem[];
+
+						// Check if this is the last batch
+						if (currentBatchIndex === totalBatches) {
+							this._scanResultsDetails$.next(this._loadedResultsDetails$);
+						}
 					}
 				});
 		}

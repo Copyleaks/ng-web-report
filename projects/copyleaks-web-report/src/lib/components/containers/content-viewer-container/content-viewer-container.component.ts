@@ -184,6 +184,11 @@ export class ContentViewerContainerComponent implements OnInit, AfterViewInit, O
 	@Input() reportResponsive: EResponsiveLayoutType;
 
 	/**
+	 * @Input {boolean} Flag indicating whether to show the loading view or not.
+	 */
+	@Input() showLoadingView = true;
+
+	/**
 	 * Emits iFrame messages to the parent layout component.
 	 *
 	 * @example
@@ -212,6 +217,7 @@ export class ContentViewerContainerComponent implements OnInit, AfterViewInit, O
 	 * @see IReportViewEvent
 	 */
 	@Output() viewChangeEvent = new EventEmitter<IReportViewEvent>();
+	iframeLoaded: boolean;
 
 	public get pages(): number[] {
 		if (this.scanSource) return this.scanSource && this.scanSource.text.pages.startPosition;
@@ -265,6 +271,16 @@ export class ContentViewerContainerComponent implements OnInit, AfterViewInit, O
 		if ('currentPage' in changes || ('numberOfPages' in changes && this.currentPage && this.numberOfPages)) {
 			this.currentPage = this.currentPage > this.numberOfPages || this.currentPage <= 0 ? 1 : this.currentPage;
 		}
+
+		if (
+			'contentTextMatches' in changes &&
+			changes['contentTextMatches'].currentValue != undefined &&
+			(!this.isHtmlView || !this.hasHtml)
+		)
+			this.showLoadingView = false;
+
+		if ('isAlertsView' in changes && !changes['isAlertsView'].currentValue && !changes['isAlertsView'].firstChange)
+			this.iframeLoaded = false;
 	}
 
 	/**
@@ -283,12 +299,14 @@ export class ContentViewerContainerComponent implements OnInit, AfterViewInit, O
 	}
 
 	onViewChange() {
+		if (!this.iframeLoaded) this.showLoadingView = true;
 		this.viewChangeEvent.emit({
 			...this._viewSvc.reportViewMode,
 			isHtmlView: !this.isHtmlView,
 			viewMode: this.viewMode,
 			sourcePageIndex: this.currentPage,
 		});
+		this._highlightService.clear();
 		this._cdr.detectChanges();
 	}
 
@@ -335,6 +353,13 @@ export class ContentViewerContainerComponent implements OnInit, AfterViewInit, O
 	 */
 	onJumpToNextMatchClick(next: boolean = true) {
 		this._highlightService.jump(next);
+	}
+
+	onIFrameLoad() {
+		if (this.contentHtml) {
+			this.iframeLoaded = true;
+			this.showLoadingView = false;
+		}
 	}
 
 	ngOnDestroy(): void {}

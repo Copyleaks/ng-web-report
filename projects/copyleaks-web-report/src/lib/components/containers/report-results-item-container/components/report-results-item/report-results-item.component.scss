@@ -71,14 +71,20 @@
 				}
 			}
 
-			.item-menu {
+			.item-menu,
+			.exclude-result {
 				cursor: pointer;
 				color: $color-dark-blue;
+				&:hover {
+					color: $color-primary;
+					transition: 0.4s;
+				}
 			}
-			.item-menu:hover {
-				cursor: pointer;
-				color: $color-primary;
-				transition: 0.4s;
+
+			.exclude-result {
+				font-size: 18px;
+				height: 18px;
+				width: 18px;
 			}
 		}
 		.item-body {

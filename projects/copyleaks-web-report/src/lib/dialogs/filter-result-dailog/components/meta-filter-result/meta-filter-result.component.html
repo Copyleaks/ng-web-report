@@ -1,24 +1,40 @@
 <div [formGroup]="form" class="results-container" fxLayout="column" fxLayoutAlign="start start" fxLayoutGap="16px">
-	<div class="result-word-limit-container" fxLayout="column" fxLayoutAlign="start start">
+	<div [formGroup]="wordLimitform" class="result-word-limit-container" fxLayout="column" fxLayoutAlign="start start">
 		<cr-mat-slide-filter-result
-			[formControlName]="'wordLimitForm'"
+			[formControlName]="eFilterResultForm.fcWordLimitEnabled"
 			[title]="'Result word limit:'"></cr-mat-slide-filter-result>
-		<ng-container *ngIf="wordLimitValue">
-			<mat-slider class="mat-slider-container" [min]="minWordLimit" [max]="maxWordLimit"></mat-slider>
-			<span class="limit-result">{{ WordLimitNumber }} / {{ maxWordLimit }} words</span>
+		<ng-container *ngIf="getEnabledValue(eFilterResultForm.fcWordLimitEnabled)">
+			<mat-slider
+				[formControlName]="eFilterResultForm.fcWordLimitTotalWordlimt"
+				class="mat-slider-container"
+				[min]="minWordLimit"
+				[max]="maxWordLimit"></mat-slider>
+			<span class="limit-result">{{ wordLimitTotalWord }} / {{ maxWordLimit }} words</span>
 		</ng-container>
 	</div>
 	<mat-divider></mat-divider>
-	<div class="result-publication-top-container" fxLayout="column" fxLayoutAlign="start start" fxLayoutGap="4px">
+	<div
+		[formGroup]="publicationDateForm"
+		class="result-publication-top-container"
+		fxLayout="column"
+		fxLayoutAlign="start start"
+		fxLayoutGap="4px">
 		<div class="result-publication-container" fxLayout="column" fxLayoutAlign="start start">
 			<cr-mat-slide-filter-result
-				[formControlName]="'publicationDateForm'"
+				[formControlName]="eFilterResultForm.fcPublicationEnabled"
 				[title]="'Results publication date:'"></cr-mat-slide-filter-result>
-			<ng-container *ngIf="publicationDateValue">
-				<mat-slider invert class="mat-slider-container" min="10" max="100"></mat-slider>
+			<ng-container *ngIf="getEnabledValue(eFilterResultForm.fcPublicationEnabled) && !!publicationDates?.length">
+				<mat-slider
+					invert
+					class="mat-slider-container"
+					[value]="valueSliderDate"
+					[disabled]="publicationDates.length < 2"
+					(change)="changeSliderDate($event)"
+					[min]="0"
+					[max]="maxSliderDates"></mat-slider>
 				<div class="date-container" fxLayout="row" fxLayoutAlign="start center" fxLayoutGap="4px">
 					<span class="start-from">Starting from:</span>
-					<span class="publication-date">May 2023</span>
+					<span class="publication-date">{{ publicationDateValue }}</span>
 				</div>
 			</ng-container>
 		</div>

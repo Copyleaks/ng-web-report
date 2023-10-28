@@ -45,7 +45,7 @@
 					<cr-meta-filter-result class="meta-filter-container"></cr-meta-filter-result>
 				</section>
 			</div>
-			<mat-divider vertical style="height: 100px"></mat-divider>
+			<mat-divider [vertical]="true" style="min-height: 70px"></mat-divider>
 
 			<div class="right-side-conatier" fxLayout="column" fxLayoutAlign="start start" fxLayoutGap="16px">
 				<!-- match type -->
@@ -74,5 +74,7 @@
 	</div>
 </ng-container>
 <ng-template #excludedDailog>
-	<cr-excluded-results-dailog [allResultsItem]="allResultsItem"></cr-excluded-results-dailog>
+	<cr-excluded-results-dailog
+		[allResultsItem]="allResultsItem"
+		(closeDailogEvent)="showExcludedDailog = !$event"></cr-excluded-results-dailog>
 </ng-template>

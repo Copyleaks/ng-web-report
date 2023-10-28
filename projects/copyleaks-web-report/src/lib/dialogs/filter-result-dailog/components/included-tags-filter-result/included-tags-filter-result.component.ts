@@ -60,14 +60,12 @@ export class IncludedTagsFilterResultComponent implements OnInit {
 	}
 
 	get searchValue() {
-		console.log(this.searchTagControl.value);
-
 		return this.searchTagControl.value;
 	}
 
 	constructor(private filterService: FilterResultDailogService) {}
 	ngOnInit(): void {
-		this.includedTagsForm = this.filterService.IncludedTagsFormControl;
+		this.includedTagsForm = this.filterService.includedTagsFormControl;
 
 		this.updateSelectedTag();
 

@@ -1,8 +1,12 @@
 <div class="container" fxLayout="column" fxLayoutAlign="start start" fxLayoutGap="8px">
-	<div class="header-container" fxLayout="row" fxLayoutAlign="start center" fxLayoutGap="8px">
-		<span class="header">Excluded results</span>
-		<span class="total-excluded">(27)</span>
+	<div class="header-container" fxLayout="row" fxLayoutAlign="space-between center">
+		<div fxLayoutAlign="start center" fxLayoutGap="8px">
+			<span class="header">Excluded results</span>
+			<span class="total-excluded">(27)</span>
+		</div>
+		<mat-icon class="close-icon" (click)="closeDailog()">close</mat-icon>
 	</div>
+
 	<div class="search-container" fxLayout="row" fxLayoutAlign="start center" fxLayoutGap="8px">
 		<div class="search-icon-contaier" fxLayout="row" fxLayoutAlign="center center">
 			<mat-icon>search</mat-icon>
@@ -15,6 +19,7 @@
 			<ng-container *ngFor="let item of excludedResultist">
 				<cr-report-results-item
 					[resultItem]="item"
+					[excludeResult]="true"
 					[showItemBody]="false"
 					[style]="'width:100%'"></cr-report-results-item>
 			</ng-container>
@@ -27,5 +32,5 @@
 		</div>
 	</div>
 
-	<button class="include-all-button">Include all</button>
+	<button class="include-all-button" (click)="includeAllButton()">Include all</button>
 </div>

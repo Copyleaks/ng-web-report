@@ -5,6 +5,7 @@
 	padding: 16px;
 	background-color: $color-white;
 	.header-container {
+		width: 100%;
 		.header {
 			color: $color-dark-blue;
 			font-size: 14px;
@@ -14,6 +15,10 @@
 			color: $color-black;
 			font-size: 12px;
 			font-weight: 700;
+		}
+		.close-icon {
+			cursor: pointer;
+			color: rgba(17, 41, 96, 0.4);
 		}
 	}
 

@@ -9,10 +9,10 @@ export enum EFilterResultForm {
 	//Results Meta
 	fgResultsMeta = 'resultsMeta',
 	fgWordLimit = 'wordLimit',
-	fcWordLimitEnabeld = 'enabled',
+	fcWordLimitEnabled = 'wordLimitEnabled',
 	fcWordLimitTotalWordlimt = 'totalWordlimt',
 	fgPublicationDate = 'publicationDate',
-	fcPublicationEnabeld = 'enabled',
+	fcPublicationEnabled = 'publicationEnabled',
 	fcPublicationStartDate = 'startDate',
 
 	//Match Type

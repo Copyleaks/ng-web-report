@@ -1,4 +1,14 @@
-import { AfterViewInit, Component, ElementRef, Input, OnInit, Renderer2, ViewChild } from '@angular/core';
+import {
+	AfterViewInit,
+	Component,
+	ElementRef,
+	EventEmitter,
+	Input,
+	OnInit,
+	Output,
+	Renderer2,
+	ViewChild,
+} from '@angular/core';
 import { IResultItem } from 'projects/copyleaks-web-report/src/lib/components/containers/report-results-item-container/components/models/report-result-item.models';
 import { untilDestroy } from 'projects/copyleaks-web-report/src/lib/utils/until-destroy';
 import { fromEvent } from 'rxjs';
@@ -11,6 +21,7 @@ import { debounceTime } from 'rxjs/operators';
 })
 export class ExcludedResultsDailogComponent implements OnInit, AfterViewInit {
 	@Input() allResultsItem: IResultItem[] = [];
+	@Output() closeDailogEvent = new EventEmitter<boolean>();
 
 	lastItemLoading: boolean = true;
 	private _startingIndex: number = 0;
@@ -53,8 +64,6 @@ export class ExcludedResultsDailogComponent implements OnInit, AfterViewInit {
 		const scrollDownLimit = tableScrollHeight - tableViewHeight - scrollThreshold;
 		if (scrollLocation > scrollDownLimit && this.EndingIndex < this.allResultsItemLength) {
 			this._currentPage += 1;
-			//this.lastItemLoading = true;
-			//this.resultItemList = this.allResultsItem.slice(this._startingIndex, this.EndingIndex);
 			this.scrollTo(tableScrollHeight / 2 + tableViewHeight);
 		}
 		if (this.EndingIndex >= this.allResultsItemLength) {
@@ -65,6 +74,12 @@ export class ExcludedResultsDailogComponent implements OnInit, AfterViewInit {
 	private scrollTo(position: number): void {
 		this._renderer.setProperty(this.resultsContainer.nativeElement, 'scrollTop', position);
 	}
+
+	closeDailog() {
+		this.closeDailogEvent.emit(true);
+	}
+
+	includeAllButton() {}
 
 	ngOnDestroy() {}
 }

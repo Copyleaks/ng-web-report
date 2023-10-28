@@ -44,7 +44,11 @@ export class FilterResultDailogService {
 		return this._filterResultForm?.get(EFilterResultForm.fgGeneralFilters) as FormGroup;
 	}
 
-	get IncludedTagsFormControl() {
+	get resultsMetaFormGroup() {
+		return this._filterResultForm?.get(EFilterResultForm.fgResultsMeta) as FormGroup;
+	}
+
+	get includedTagsFormControl() {
 		return this._filterResultForm?.get(EFilterResultForm.fcIncludedTags) as FormControl;
 	}
 
@@ -60,20 +64,12 @@ export class FilterResultDailogService {
 			}),
 			resultsMeta: this._formBuilder.group({
 				wordLimit: this._formBuilder.group({
-					enabled: new FormControl({
-						value: true,
-					}),
-					totalWordlimt: new FormControl({
-						value: 51,
-					}),
+					wordLimitEnabled: new FormControl(this.getFormControlValue(EFilterResultForm.fcWordLimitEnabled)),
+					totalWordlimt: new FormControl(this.getFormControlValue(EFilterResultForm.fcWordLimitTotalWordlimt)),
 				}),
 				publicationDate: this._formBuilder.group({
-					enabled: new FormControl({
-						value: true,
-					}),
-					startDate: new FormControl({
-						value: '',
-					}),
+					publicationEnabled: new FormControl(this.getFormControlValue(EFilterResultForm.fcPublicationEnabled)),
+					startDate: new FormControl(this.getFormControlValue(EFilterResultForm.fcPublicationStartDate)),
 				}),
 			}),
 			matchTypes: this._formBuilder.group({
@@ -100,6 +96,16 @@ export class FilterResultDailogService {
 			case EFilterResultForm.fcBatch:
 				return false;
 			//case EFilterResultForm.fgRepositories:
+
+			//Results Meta
+			case EFilterResultForm.fcWordLimitEnabled:
+				return true;
+			case EFilterResultForm.fcWordLimitTotalWordlimt:
+				return 56;
+			case EFilterResultForm.fcPublicationEnabled:
+				return true;
+			case EFilterResultForm.fcPublicationStartDate:
+				return 'June 2023';
 
 			//Match Type
 			case EFilterResultForm.fcIdenticalText:

@@ -4,7 +4,7 @@
 	fxLayout="column"
 	fxLayoutAlign="start center">
 	<div fxLayout="column" fxLayoutAlign="start" class="item-container">
-		<div class="item-header-container" fxLayout="row" fxLayoutAlign="space-between center">
+		<div class="item-header-container" fxLayout="row" fxLayoutAlign="space-between start">
 			<div class="item-header" fxLayout="row" fxLayoutAlign="start start" fxLayoutGap="8px">
 				<div
 					*ngIf="!showLoader; else showLogoSkeleton"
@@ -43,14 +43,22 @@
 					</ng-template>
 				</div>
 			</div>
-			<mat-icon
-				*ngIf="!showLoader"
-				class="item-menu"
-				mat-icon
-				[matMenuTriggerFor]="menu"
-				(click)="$event.stopPropagation()">
-				more_vert
-			</mat-icon>
+			<ng-container *ngIf="!showLoader">
+				<ng-container *ngIf="!excludeResult; else showExcludeResult">
+					<mat-icon class="item-menu" mat-icon [matMenuTriggerFor]="menu" (click)="$event.stopPropagation()">
+						more_vert
+					</mat-icon>
+				</ng-container>
+
+				<ng-template #showExcludeResult>
+					<ng-container *ngIf="!excludedResultsClick; else showResult">
+						<mat-icon class="exclude-result" mat-icon (click)="showResultById()">visibility</mat-icon>
+					</ng-container>
+					<ng-template #showResult>
+						<mat-icon class="exclude-result" mat-icon (click)="hiddenResultById()">visibility_off</mat-icon>
+					</ng-template>
+				</ng-template>
+			</ng-container>
 		</div>
 		<div class="item-body" *ngIf="showItemBody">
 			<ng-container *ngIf="!showLoader; else showItemBodySkeleton">
@@ -82,6 +90,7 @@
 		</ng-template>
 	</div>
 </div>
+
 <mat-menu class="result-item-menu-list" #menu="matMenu" yPosition="below">
 	<button mat-menu-item (click)="hiddenResultById()">
 		<mat-icon class="mat-menu-item-icon">visibility_off</mat-icon>

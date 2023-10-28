@@ -36,7 +36,7 @@ export class FilterResultDailogComponent implements OnInit {
 	};
 	///
 
-	showExcludedDailog: boolean = true;
+	showExcludedDailog: boolean = false;
 	constructor(private filterService: FilterResultDailogService, private _reportDataSvc: ReportDataService) {}
 
 	ngOnInit() {
@@ -74,7 +74,6 @@ export class FilterResultDailogComponent implements OnInit {
 						},
 					} as IResultItem;
 				});
-				console.log(this.allResultsItem);
 			}
 		});
 	}

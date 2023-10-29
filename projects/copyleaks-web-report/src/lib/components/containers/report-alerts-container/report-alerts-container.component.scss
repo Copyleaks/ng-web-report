@@ -100,7 +100,7 @@
 		}
 
 		.mat-expansion-panel-header {
-			padding: 8px !important;
+			padding-right: 0px !important;
 		}
 	}
 
@@ -108,5 +108,9 @@
 		width: 100%;
 		height: 100%;
 		display: flex;
+	}
+
+	::ng-deep .mobile-results-panel-header {
+		padding: 8px !important;
 	}
 }

@@ -25,13 +25,13 @@
 		</button>
 		<mat-chip-list>
 			<ng-container *ngFor="let tag of selectedList; let idx = index">
-				<mat-chip class="selected-tag-mat-chip" *ngIf="idx < 4">
+				<mat-chip class="selected-tag-mat-chip" *ngIf="idx < 2">
 					{{ tag }}
 				</mat-chip>
 			</ng-container>
 		</mat-chip-list>
-		<div class="total-select-tags" *ngIf="selectedList.length > 4">
-			<span>+{{ selectedList.length - 4 }}</span>
+		<div class="total-select-tags" *ngIf="selectedList.length > 2">
+			<span>+{{ selectedList.length - 2 }}</span>
 		</div>
 	</div>
 	<div *ngIf="showMoreMenu" class="tag-list-container" fxLayout="column" fxLayoutAlign="start start" fxLayoutGap="2px">

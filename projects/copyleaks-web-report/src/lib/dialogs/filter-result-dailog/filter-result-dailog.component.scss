@@ -2,8 +2,6 @@
 @import '../../styles/cls-mat-components-overrides//cls-mat-slide-toggle-overrides.scss';
 
 .top-container {
-	background-color: $color-white;
-	padding: 16px;
 	.header-container {
 		width: 100%;
 		.title-container {
@@ -17,6 +15,7 @@
 			.clear-button {
 				cursor: pointer;
 				border: 0px;
+				outline: none;
 				background-color: $color-white;
 				color: $color-primary;
 				mat-icon {
@@ -93,7 +92,6 @@
 		.right-side-conatier {
 			width: 100%;
 			flex: 1;
-
 			mat-divider {
 				width: 100%;
 			}
@@ -119,9 +117,13 @@
 				}
 			}
 		}
+
+		.vertical-divider {
+			opacity: 0.6;
+		}
 	}
 
-	.apply-and-discard-contaier {
+	.apply-and-discard-button-contaier {
 		width: 100%;
 		button {
 			cursor: pointer;

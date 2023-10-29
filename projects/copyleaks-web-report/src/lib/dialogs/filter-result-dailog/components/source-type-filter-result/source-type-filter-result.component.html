@@ -10,8 +10,7 @@
 		[class.scroll-padding]="repositoryLength > 1"
 		fxLayout="column"
 		fxLayoutAlign="start start"
-		fxLayoutGap="8px"
-		*ngIf="!loading">
+		fxLayoutGap="8px">
 		<!-- Internet Source -->
 		<ng-container>
 			<cr-mat-slide-filter-result
@@ -35,7 +34,7 @@
 				[total]="totalSourceType.totalInternalDatabase">
 				<mat-slide-logo>
 					<div class="source-type-icon-container" fxLayout="column" fxLayoutAlign="center center">
-						<img class="title-img" src="assets/images/icons/repositories-icon.svg" />
+						<img class="internal-database-icon" src="assets/images/icons/repositories-copyleaks-icon.svg" />
 					</div>
 				</mat-slide-logo>
 			</cr-mat-slide-filter-result>
@@ -55,7 +54,7 @@
 			</cr-mat-slide-filter-result>
 		</ng-container>
 		<!-- Repositories -->
-		<!-- <ng-container *ngIf="repositoryLength">
+		<ng-container *ngIf="repositoryLength">
 			<div
 				[formGroup]="repositoriesForm"
 				*ngFor="let item of totalSourceType.repository"
@@ -63,7 +62,10 @@
 				fxLayout="column"
 				fxLayoutAlign="start start"
 				fxLayoutGap="8px">
-				<cr-mat-slide-filter-result [formControlName]="item.name" class="mat-slide-filter-result" [title]="item.name">
+				<cr-mat-slide-filter-result
+					[formControlName]="item.repositoryId"
+					class="mat-slide-filter-result"
+					[title]="item.title">
 					<mat-slide-logo>
 						<div class="source-type-icon-container" fxLayout="column" fxLayoutAlign="center center">
 							<img class="title-img" src="assets/images/icons/repositories-icon.svg" />
@@ -71,6 +73,6 @@
 					</mat-slide-logo>
 				</cr-mat-slide-filter-result>
 			</div>
-		</ng-container> -->
+		</ng-container>
 	</form>
 </div>

@@ -10,18 +10,16 @@ import { EFilterResultForm } from '../../models/filter-result-dailog.enum';
 	styleUrls: ['./source-type-filter-result.component.scss'],
 })
 export class SourceTypeFilterResultComponent implements OnInit {
-	surceTypeForm: FormGroup;
-	eFilterResultForm = EFilterResultForm;
-
-	@Input() loading: boolean;
 	@Input() totalSourceType: ITotalSourceType = {
 		totalInternet: 0,
 		totalInternalDatabase: 0,
 		totalbatch: 0,
 	};
 
+	surceTypeForm: FormGroup;
+	eFilterResultForm = EFilterResultForm;
 	get repositoriesForm() {
-		return this.surceTypeForm.get('repositories') as FormGroup;
+		return this.surceTypeForm?.get(EFilterResultForm.fgRepositories) as FormGroup;
 	}
 
 	get repositoryLength() {
@@ -33,15 +31,15 @@ export class SourceTypeFilterResultComponent implements OnInit {
 	ngOnInit(): void {
 		this.surceTypeForm = this.filterService.sourceTypeFormGroup;
 
-		// if (this.totalSourceType?.repository) {
-		// 	this.totalSourceType?.repository.forEach(repo => {
-		// 		this.addRepositoryControl(repo);
-		// 	});
-		// }
+		if (this.totalSourceType?.repository) {
+			this.totalSourceType?.repository.forEach(repo => {
+				this.addRepositoryControl(repo.repositoryId);
+			});
+		}
 	}
 
-	addRepositoryControl(repo: any) {
+	addRepositoryControl(repoId: string) {
 		const repositories = this.repositoriesForm;
-		repositories.addControl(repo.name, new FormControl(false));
+		repositories.addControl(repoId, new FormControl(this.filterService.getRepositoryValueById(repoId)));
 	}
 }

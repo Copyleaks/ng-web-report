@@ -9,10 +9,11 @@ import {
 	Renderer2,
 	ViewChild,
 } from '@angular/core';
+import { FormControl } from '@angular/forms';
 import { IResultItem } from 'projects/copyleaks-web-report/src/lib/components/containers/report-results-item-container/components/models/report-result-item.models';
 import { untilDestroy } from 'projects/copyleaks-web-report/src/lib/utils/until-destroy';
 import { fromEvent } from 'rxjs';
-import { debounceTime } from 'rxjs/operators';
+import { debounceTime, startWith } from 'rxjs/operators';
 
 @Component({
 	selector: 'cr-excluded-results-dailog',
@@ -23,22 +24,32 @@ export class ExcludedResultsDailogComponent implements OnInit, AfterViewInit {
 	@Input() allResultsItem: IResultItem[] = [];
 	@Output() closeDailogEvent = new EventEmitter<boolean>();
 
-	lastItemLoading: boolean = true;
+	filteredList: IResultItem[];
+	searchControl = new FormControl('');
+
 	private _startingIndex: number = 0;
 	private _pageSize: number = 10;
 	private _currentPage: number = 1;
 
 	@ViewChild('resultsContainer', { read: ElementRef }) public resultsContainer: ElementRef;
 
+	get searchValue() {
+		return this.searchControl.value;
+	}
+
 	get allResultsItemLength() {
 		return this.allResultsItem?.length;
 	}
 
+	get filteredListLength() {
+		return this.filteredList?.length;
+	}
+
 	get excludedResultist() {
-		if (this.allResultsItemLength > this._pageSize) {
-			return this.allResultsItem.slice(this._startingIndex, this.EndingIndex);
+		if (this.filteredListLength > this._pageSize) {
+			return this.filteredList.slice(this._startingIndex, this.EndingIndex);
 		} else {
-			return this.allResultsItem;
+			return this.filteredList;
 		}
 	}
 
@@ -46,9 +57,21 @@ export class ExcludedResultsDailogComponent implements OnInit, AfterViewInit {
 		return this._startingIndex + this._pageSize * this._currentPage;
 	}
 
+	get lastItemLoading() {
+		if (this.EndingIndex >= this.filteredListLength || this.filteredListLength == 0) {
+			return false;
+		} else {
+			return true;
+		}
+	}
+
 	constructor(private _renderer: Renderer2) {}
 
-	ngOnInit() {}
+	ngOnInit() {
+		this.searchControl.valueChanges.pipe(untilDestroy(this), startWith('')).subscribe(value => {
+			this.filteredList = this._filterTags(value || '');
+		});
+	}
 
 	ngAfterViewInit(): void {
 		fromEvent(this.resultsContainer.nativeElement, 'scroll')
@@ -62,12 +85,9 @@ export class ExcludedResultsDailogComponent implements OnInit, AfterViewInit {
 		const scrollLocation = e.target.scrollTop;
 		const scrollThreshold = 200;
 		const scrollDownLimit = tableScrollHeight - tableViewHeight - scrollThreshold;
-		if (scrollLocation > scrollDownLimit && this.EndingIndex < this.allResultsItemLength) {
+		if (scrollLocation > scrollDownLimit && this.EndingIndex < this.filteredListLength) {
 			this._currentPage += 1;
 			this.scrollTo(tableScrollHeight / 2 + tableViewHeight);
-		}
-		if (this.EndingIndex >= this.allResultsItemLength) {
-			this.lastItemLoading = false;
 		}
 	}
 
@@ -75,8 +95,18 @@ export class ExcludedResultsDailogComponent implements OnInit, AfterViewInit {
 		this._renderer.setProperty(this.resultsContainer.nativeElement, 'scrollTop', position);
 	}
 
+	private _filterTags(value: string) {
+		return this.allResultsItem.filter(result =>
+			result?.resultPreview.title.toLowerCase().includes(value.toLowerCase())
+		);
+	}
+
 	closeDailog() {
 		this.closeDailogEvent.emit(true);
+	}
+
+	clearSearch() {
+		this.searchControl.setValue('');
 	}
 
 	includeAllButton() {}

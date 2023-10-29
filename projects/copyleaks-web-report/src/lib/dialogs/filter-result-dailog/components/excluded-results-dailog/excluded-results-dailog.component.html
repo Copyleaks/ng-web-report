@@ -2,16 +2,25 @@
 	<div class="header-container" fxLayout="row" fxLayoutAlign="space-between center">
 		<div fxLayoutAlign="start center" fxLayoutGap="8px">
 			<span class="header">Excluded results</span>
-			<span class="total-excluded">(27)</span>
+			<span class="total-excluded">({{ allResultsItemLength }})</span>
 		</div>
 		<mat-icon class="close-icon" (click)="closeDailog()">close</mat-icon>
 	</div>
 
 	<div class="search-container" fxLayout="row" fxLayoutAlign="start center" fxLayoutGap="8px">
-		<div class="search-icon-contaier" fxLayout="row" fxLayoutAlign="center center">
-			<mat-icon>search</mat-icon>
+		<div
+			class="search-icon-contaier"
+			fxLayout="row"
+			fxLayoutAlign="center center"
+			(click)="!!searchValue ? clearSearch() : ''">
+			<ng-container *ngIf="!searchValue; else clearSearchIcon">
+				<mat-icon>search</mat-icon>
+			</ng-container>
+			<ng-template #clearSearchIcon>
+				<mat-icon>close</mat-icon>
+			</ng-template>
 		</div>
-		<input class="search-input" [type]="'text'" placeholder="Search {item type}" />
+		<input class="search-input" [formControl]="searchControl" [type]="'text'" placeholder="Search {item type}" />
 	</div>
 
 	<div class="results-top-container">

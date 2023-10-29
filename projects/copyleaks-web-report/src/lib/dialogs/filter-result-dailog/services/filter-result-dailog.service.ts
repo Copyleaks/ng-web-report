@@ -70,6 +70,7 @@ export class FilterResultDailogService {
 				publicationDate: this._formBuilder.group({
 					publicationEnabled: new FormControl(this.getFormControlValue(EFilterResultForm.fcPublicationEnabled)),
 					startDate: new FormControl(this.getFormControlValue(EFilterResultForm.fcPublicationStartDate)),
+					resultsWithNoDates: new FormControl(this.getFormControlValue(EFilterResultForm.fcResultsWithNoDates)),
 				}),
 			}),
 			matchTypes: this._formBuilder.group({
@@ -95,8 +96,6 @@ export class FilterResultDailogService {
 				return false;
 			case EFilterResultForm.fcBatch:
 				return false;
-			//case EFilterResultForm.fgRepositories:
-
 			//Results Meta
 			case EFilterResultForm.fcWordLimitEnabled:
 				return true;
@@ -106,7 +105,8 @@ export class FilterResultDailogService {
 				return true;
 			case EFilterResultForm.fcPublicationStartDate:
 				return 'June 2023';
-
+			case EFilterResultForm.fcResultsWithNoDates:
+				return true;
 			//Match Type
 			case EFilterResultForm.fcIdenticalText:
 				return true;
@@ -114,7 +114,6 @@ export class FilterResultDailogService {
 				return false;
 			case EFilterResultForm.fcParaphrased:
 				return false;
-
 			//General Filters
 			case EFilterResultForm.fcTopResult:
 				return true;
@@ -122,11 +121,14 @@ export class FilterResultDailogService {
 				return false;
 			case EFilterResultForm.fcAuthorSubmissions:
 				return true;
-
 			case EFilterResultForm.fcIncludedTags:
 				return this.selectedTagItem ?? ([] as ITagItem[]);
 			default:
 				return null;
 		}
+	}
+
+	getRepositoryValueById(repoId: string) {
+		return true;
 	}
 }

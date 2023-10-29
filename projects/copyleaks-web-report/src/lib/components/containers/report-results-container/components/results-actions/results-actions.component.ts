@@ -2,6 +2,8 @@ import { Component, EventEmitter, Input, OnChanges, OnInit, Output, SimpleChange
 import { IResultsActions } from './models/results-actions.models';
 import { FormControl } from '@angular/forms';
 import { debounceTime } from 'rxjs/operators';
+import { MatDialog } from '@angular/material/dialog';
+import { FilterResultDailogComponent } from 'projects/copyleaks-web-report/src/lib/dialogs/filter-result-dailog/filter-result-dailog.component';
 
 @Component({
 	selector: 'cr-results-actions',
@@ -13,11 +15,10 @@ export class ResultsActionsComponent implements OnInit, OnChanges {
 	@Input() searchedValue: string | null = null;
 
 	@Output() onSearch = new EventEmitter<string>();
-
 	searchFc = new FormControl('');
-
 	showSearchFiled: boolean = false;
-	constructor() {}
+
+	constructor(private _matDialog: MatDialog) {}
 
 	ngOnInit(): void {
 		this.searchFc.valueChanges.pipe(debounceTime(1000)).subscribe(value => {
@@ -37,5 +38,10 @@ export class ResultsActionsComponent implements OnInit, OnChanges {
 
 	startSearch() {}
 
-	showFilterDialog() {}
+	showFilterDialog() {
+		this._matDialog.open(FilterResultDailogComponent, {
+			width: '670px',
+			panelClass: 'filter-result-dailog',
+		});
+	}
 }

@@ -14,6 +14,7 @@ export enum EFilterResultForm {
 	fgPublicationDate = 'publicationDate',
 	fcPublicationEnabled = 'publicationEnabled',
 	fcPublicationStartDate = 'startDate',
+	fcResultsWithNoDates = 'resultsWithNoDates',
 
 	//Match Type
 	fgMatchTypes = 'matchTypes',

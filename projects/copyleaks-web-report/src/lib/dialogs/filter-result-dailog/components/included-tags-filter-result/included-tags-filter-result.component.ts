@@ -12,44 +12,12 @@ import { Observable } from 'rxjs';
 	styleUrls: ['./included-tags-filter-result.component.scss'],
 })
 export class IncludedTagsFilterResultComponent implements OnInit {
-	@Input() allTagItem: ITagItem[] = [
-		{
-			code: '0',
-			title: 'Menu item1',
-			description: 'string',
-		},
-		{
-			code: '1',
-			title: 'Menu item2',
-			description: 'string',
-		},
-		{
-			code: '2',
-			title: 'Menu item12',
-			description: 'string',
-		},
-		{
-			code: '3',
-			title: 'Menu item13',
-			description: 'string',
-		},
-		{
-			code: '4',
-			title: 'Menu item14',
-			description: 'string',
-		},
-		{
-			code: '5',
-			title: 'Menu item15',
-			description: 'string',
-		},
-	];
+	@Input() allTagItem: ITagItem[];
 
 	includedTagsForm: FormControl;
 	filteredTagList: Observable<ITagItem[]>;
 	searchTagControl = new FormControl('');
 	showMoreMenu: boolean = false;
-	searchInput: string = '';
 
 	get includedTagsFormValue() {
 		return this.includedTagsForm.value as ITagItem[];

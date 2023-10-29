@@ -1,7 +1,7 @@
 import { Component, Input, OnInit } from '@angular/core';
-import { FormBuilder, FormControl, FormGroup } from '@angular/forms';
-import { FilterResultDailogService } from '../../services/filter-result-dailog.service';
+import { FormControl, FormGroup } from '@angular/forms';
 import { EFilterResultForm } from '../../models/filter-result-dailog.enum';
+import { FilterResultDailogService } from '../../services/filter-result-dailog.service';
 
 @Component({
 	selector: 'cr-meta-filter-result',
@@ -9,9 +9,9 @@ import { EFilterResultForm } from '../../models/filter-result-dailog.enum';
 	styleUrls: ['./meta-filter-result.component.scss'],
 })
 export class MetaFilterResultComponent implements OnInit {
-	@Input() minWordLimit: number = 0;
-	@Input() maxWordLimit: number = 1023;
-	@Input() publicationDates: string[] = ['May 2023', 'June 2023', 'July 2023'];
+	@Input() minWordLimit: number;
+	@Input() maxWordLimit: number;
+	@Input() publicationDates: string[];
 
 	form: FormGroup;
 	wordLimitform: FormGroup;

@@ -2,7 +2,6 @@
 @import '../../../../styles/cls-mat-components-overrides/cls-scroll-bar-overrides.scss';
 
 .container {
-	padding: 16px;
 	background-color: $color-white;
 	.header-container {
 		width: 100%;
@@ -32,6 +31,12 @@
 			border-radius: 50%;
 			width: 24px;
 			height: 24px;
+			&:hover {
+				background-color: $color-primary;
+				mat-icon {
+					color: $color-white;
+				}
+			}
 			mat-icon {
 				font-size: 18px;
 				width: 18px;

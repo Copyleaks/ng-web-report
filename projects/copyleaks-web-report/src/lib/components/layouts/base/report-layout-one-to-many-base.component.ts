@@ -23,7 +23,7 @@ import { ReportLayoutBaseComponent } from './report-layout-base.component';
 import { combineLatest } from 'rxjs';
 import { IResultItem } from '../../containers/report-results-item-container/components/models/report-result-item.models';
 import { IResultsActions } from '../../containers/report-results-container/components/results-actions/models/results-actions.models';
-import { filter } from 'rxjs/internal/operators/filter';
+import { filter } from 'rxjs/operators';
 
 export abstract class OneToManyReportLayoutBaseComponent extends ReportLayoutBaseComponent {
 	hideRightSection: boolean = false;

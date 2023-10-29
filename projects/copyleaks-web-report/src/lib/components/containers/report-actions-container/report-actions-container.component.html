@@ -1,10 +1,11 @@
-<ng-container *ngIf="!showLoadingView; else loadingViewRef">
-	<div class="actions-container" #actionsContainer [style.display]="showReportActions ? 'block' : 'none'">
-		<ng-container *ngTemplateOutlet="customActionsTemplateRef"></ng-container>
-	</div>
-</ng-container>
+<div
+	class="actions-container"
+	#actionsContainer
+	[style.display]="showReportActions && !showLoadingView ? 'block' : 'none'">
+	<ng-container *ngTemplateOutlet="customActionsTemplateRef"></ng-container>
+</div>
 
-<ng-template #loadingViewRef>
+<ng-container *ngIf="showLoadingView && showLoadingView">
 	<div class="actions-loader-container">
 		<div class="buttons-loader-container">
 			<ngx-skeleton-loader class="skeleton" [appearance]="'line'" style="width: 40%"></ngx-skeleton-loader>
@@ -16,4 +17,4 @@
 			<ngx-skeleton-loader class="skeleton circle" [appearance]="'line'"></ngx-skeleton-loader>
 		</div>
 	</div>
-</ng-template>
+</ng-container>

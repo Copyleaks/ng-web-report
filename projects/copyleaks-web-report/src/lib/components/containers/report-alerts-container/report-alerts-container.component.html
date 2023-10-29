@@ -1,5 +1,5 @@
 <mat-accordion>
-	<mat-expansion-panel #panel [expanded]="true" (opened)="showAlertsClick()" (closed)="hideAlertsClick()">
+	<mat-expansion-panel #panel [expanded]="!isMobile" (opened)="showAlertsClick()" (closed)="hideAlertsClick()">
 		<mat-expansion-panel-header>
 			<mat-panel-title>
 				<div class="container-title">

@@ -9,6 +9,7 @@
 		<copyleaks-report-alerts-container
 			*ngIf="alerts && alerts.length > 0 && !isLoadingScanResults"
 			[alerts]="alerts"
+			[isMobile]="true"
 			[flexGrow]="20"></copyleaks-report-alerts-container>
 
 		<!-- Report scan content section -->

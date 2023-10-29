@@ -3,13 +3,16 @@
 	[resultsActions]="resultsActions"
 	[searchedValue]="searchedValue"
 	[showLoadingView]="false"
+	[isMobile]="isMobile"
+	[expandSection]="showAlertsSection"
+	(onExpandToggle)="showAlertsSection = $event"
 	(onSearch)="onSearch($event)"></cr-results-actions>
 
 <div
 	class="report-results-item-top-container"
 	[style]="'width:100%'"
 	[ngStyle]="{
-		display: showLoadingView ? 'none' : 'flex'
+		display: showLoadingView || !showAlertsSection ? 'none' : 'flex'
 	}"
 	fxLayout="column"
 	fxLayoutAlign="start center"
@@ -41,7 +44,7 @@
 			</ng-container>
 		</div>
 		<ng-template #emptyState>
-			<cr-empty-result-state></cr-empty-result-state>
+			<cr-empty-result-state *ngIf="!showLoadingView"></cr-empty-result-state>
 		</ng-template>
 	</div>
 	<div

@@ -18,7 +18,7 @@
 	</div>
 
 	<div *ngIf="showSearchFiled" fxLayout="row" fxLayoutAlign="start center" class="input-search-container">
-		<button class="search-button" (click)="startSearch()">
+		<button class="search-button">
 			<mat-icon>search</mat-icon>
 		</button>
 		<input placeholder="Search {item type}" type="text" matInput [formControl]="searchFc" />
@@ -26,8 +26,16 @@
 	</div>
 
 	<div fxLayout="row" fxLayoutAlign="start center" fxLayoutGap="8px" class="results-search-filter-container">
-		<mat-icon *ngIf="!showSearchFiled" (click)="showSearch()">search</mat-icon>
-		<mat-icon (click)="showFilterDialog()">filter_list</mat-icon>
+		<mat-icon *ngIf="!showSearchFiled" (click)="showSearch()" fontSet="material-icons-round">search</mat-icon>
+		<mat-icon (click)="showFilterDialog()" fontSet="material-icons-round">filter_list</mat-icon>
+		<mat-icon
+			*ngIf="isMobile"
+			class="expand-icon"
+			(click)="expandResultsSection()"
+			[ngClass]="{ 'expanded-section-icon': expandSection }"
+			fontSet="material-icons-round">
+			arrow_drop_down
+		</mat-icon>
 	</div>
 </ng-container>
 

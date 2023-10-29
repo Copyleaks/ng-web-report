@@ -8,7 +8,6 @@
 	padding: 0px 6px;
 	box-sizing: border-box;
 	gap: 10px;
-	// min-height: 37px;
 }
 
 .skeleton {
@@ -124,4 +123,15 @@
 mat-icon:hover {
 	color: $color-primary !important;
 	transition: 0.4s;
+}
+
+.expanded-section-icon {
+	transform: rotate(180deg);
+}
+
+.expand-icon {
+	transition: transform 0.2s ease-in-out;
+	height: 24px !important;
+	width: 24px !important;
+	font-size: 24px !important;
 }

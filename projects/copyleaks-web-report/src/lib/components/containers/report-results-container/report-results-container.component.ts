@@ -43,6 +43,8 @@ export class ReportResultsContainerComponent implements OnInit, AfterViewInit, O
 	 */
 	@Input() showLoadingView = false;
 
+	showAlertsSection: boolean = true;
+
 	@ViewChild('resultsContainer', { read: ElementRef }) public resultsContainer: ElementRef;
 	@ViewChild('resultitem', { read: ElementRef }) public resultitem: ElementRef;
 

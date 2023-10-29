@@ -8,6 +8,7 @@
 	flex-grow: 1;
 	gap: 8px;
 	min-height: 500px !important;
+	max-width: 1440px !important;
 
 	::ng-deep {
 		::-webkit-scrollbar {

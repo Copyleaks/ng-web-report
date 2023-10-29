@@ -53,6 +53,7 @@
 						font-size: 16px;
 						font-weight: 500;
 						color: $color-black;
+						word-break: break-word;
 					}
 					.title-skeleton {
 						width: 50%;
@@ -74,6 +75,8 @@
 			.item-menu {
 				cursor: pointer;
 				color: $color-dark-blue;
+				align-self: flex-start;
+				padding: 2px;
 			}
 			.item-menu:hover {
 				cursor: pointer;

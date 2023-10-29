@@ -1,8 +1,19 @@
 <ng-container *ngIf="!showLoadingView; else loadingViewRef">
-	<div class="expand-result-top-continer" fxLayout="column" fxLayoutAlign="space-between start">
+	<div class="expand-result-top-continer" fxLayout="row" fxLayoutAlign="space-between start">
 		<div class="expand-result-continer" fxLayout="column" fxLayoutAlign="start start">
-			<diV class="result-header" fxLayout="row" fxLayoutAlign="space-between center">
-				<div fxLayout="row" fxLayoutAlign="start start" fxLayoutGap="8px">
+			<diV class="result-header" fxLayout="column" fxLayoutAlign="space-between center">
+				<button
+					class="back-button"
+					fxLayout="row"
+					fxLayoutAlign="center center"
+					fxLayoutGap="4px"
+					mat-button
+					[disableRipple]="true"
+					(click)="clickBack()">
+					<mat-icon>chevron_left</mat-icon>
+					<span>Back</span>
+				</button>
+				<div fxLayout="row" fxLayoutAlign="start start" fxLayoutGap="8px" style="width: 100%">
 					<div class="result-logo" fxLayout="column" fxLayoutAlign="center center">
 						<ng-container [ngSwitch]="resultItem?.resultPreview?.type">
 							<ng-container *ngSwitchCase="eResultPreviewType.Batch">
@@ -25,8 +36,8 @@
 					<div class="result-title-container" fxLayout="column" fxLayoutAlign="start start" fxLayoutGap="4px">
 						<div fxLayout="row" fxLayoutAlign="start center" fxLayoutGap="4px">
 							<button class="exclude-button" (click)="excludeResult()">
-								<mat-icon *ngIf="exclude">visibility</mat-icon>
-								<mat-icon *ngIf="!exclude">visibility_off</mat-icon>
+								<mat-icon *ngIf="exclude" matTooltip="Include result">visibility</mat-icon>
+								<mat-icon *ngIf="!exclude" matTooltip="Exclude result">visibility_off</mat-icon>
 							</button>
 							<span class="result-title">{{ resultItem?.resultPreview?.title }}</span>
 						</div>
@@ -39,7 +50,7 @@
 								fxLayoutGap="4px"
 								target="_blank">
 								<mat-icon>open_in_new</mat-icon>
-								<span>Source: {{ resultItem?.resultPreview?.url }}</span>
+								<span [title]="resultItem?.resultPreview?.url">Source: {{ resultItem?.resultPreview?.url }}</span>
 							</a>
 						</ng-container>
 						<ng-template #resultSource>
@@ -47,31 +58,21 @@
 						</ng-template>
 					</div>
 				</div>
-				<button
-					class="back-button"
-					fxLayout="row"
-					fxLayoutAlign="center center"
-					fxLayoutGap="4px"
-					mat-button
-					[disableRipple]="true"
-					(click)="clickBack()">
-					<span>Back</span>
-					<mat-icon>chevron_right</mat-icon>
-				</button>
 			</diV>
 			<div
-				*ngIf="languageResult && languageResult.length > 0"
+				*ngIf="resultItem?.resultPreview?.tags?.length"
 				class="mat-chip-list-container"
 				fxLayout="row"
 				fxLayoutAlign="start start">
 				<mat-chip-list>
 					<div
 						class="mat-chip-container"
-						*ngFor="let language of languageResult"
+						*ngFor="let tag of resultItem?.resultPreview?.tags"
 						fxLayout="row"
 						fxLayoutAlign="start start"
-						fxLayoutGap="4px">
-						<mat-chip>{{ language }}</mat-chip>
+						fxLayoutGap="4px"
+						[matTooltip]="tag?.description ?? ''">
+						<mat-chip>{{ tag?.title ?? '' }}</mat-chip>
 					</div>
 				</mat-chip-list>
 			</div>

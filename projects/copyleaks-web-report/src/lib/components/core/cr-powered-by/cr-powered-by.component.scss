@@ -1,5 +1,9 @@
 @import '../../../styles/website-colors.styles.scss';
 
+:host {
+	cursor: pointer;
+}
+
 .powered-by-container {
 	width: 100%;
 	height: 100%;

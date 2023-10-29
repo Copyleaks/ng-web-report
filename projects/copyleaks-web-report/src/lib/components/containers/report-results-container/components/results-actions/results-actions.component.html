@@ -5,7 +5,7 @@
 		fxLayoutAlign="start center"
 		fxLayoutGap="10px"
 		class="tootal-results-container">
-		<span class="tootal-results">{{ resultsActions?.totalResults }} Results</span>
+		<span class="tootal-results">Plagiarism Results ({{ resultsActions?.totalResults }})</span>
 		<ng-container *ngIf="resultsActions?.totalExcluded">
 			<mat-icon class="separate-circle-icon" fontSet="material-icons-round">circle</mat-icon>
 			<span class="tootal-excuded">{{ resultsActions?.totalExcluded }} excluded</span>
@@ -18,16 +18,27 @@
 	</div>
 
 	<div *ngIf="showSearchFiled" fxLayout="row" fxLayoutAlign="start center" class="input-search-container">
-		<button class="search-button">
-			<mat-icon>search</mat-icon>
-		</button>
-		<input placeholder="Search {item type}" type="text" matInput [formControl]="searchFc" />
-		<mat-icon fontSet="material-icons-outlined" (click)="showSearch()">cancel</mat-icon>
+		<mat-icon class="search-icon" fontSet="material-icons-round">search</mat-icon>
+		<input class="search-input" placeholder="Search Result" type="text" matInput [formControl]="searchFc" />
+		<mat-icon class="clear-icon" fontSet="material-icons-outlined" (click)="showSearch()">cancel</mat-icon>
 	</div>
 
 	<div fxLayout="row" fxLayoutAlign="start center" fxLayoutGap="8px" class="results-search-filter-container">
-		<mat-icon *ngIf="!showSearchFiled" (click)="showSearch()" fontSet="material-icons-round">search</mat-icon>
-		<mat-icon (click)="showFilterDialog()" fontSet="material-icons-round">filter_list</mat-icon>
+		<mat-icon
+			*ngIf="!showSearchFiled"
+			class="open-search-icon"
+			(click)="showSearch()"
+			fontSet="material-icons-round"
+			[ngClass]="{ 'disabled-icon': !resultsActions?.totalResults || resultsActions?.totalResults === 0 }">
+			search
+		</mat-icon>
+		<mat-icon
+			class="filter-search-icon"
+			(click)="showFilterDialog()"
+			fontSet="material-icons-round"
+			[ngClass]="{ 'disabled-icon': !resultsActions?.totalResults || resultsActions?.totalResults === 0 }">
+			filter_list
+		</mat-icon>
 		<mat-icon
 			*ngIf="isMobile"
 			class="expand-icon"

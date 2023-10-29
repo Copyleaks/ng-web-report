@@ -37,7 +37,7 @@
 	.results-alerts-container {
 		display: flex;
 		flex-direction: column;
-		gap: 16px;
+		gap: 10px;
 		flex-grow: 100;
 		height: auto;
 		padding: 8px;
@@ -55,4 +55,9 @@
 .left-section {
 	box-shadow: -2px -2px 8px 0px rgba(255, 255, 255, 0.5), 2px 2px 4px 0px rgba(0, 0, 0, 0.15);
 	border-radius: 10px;
+}
+
+copyleaks-report-alerts-container {
+	max-height: 25% !important;
+	flex-grow: 0 !important;
 }

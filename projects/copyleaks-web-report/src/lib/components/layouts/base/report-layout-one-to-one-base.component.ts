@@ -42,6 +42,14 @@ export abstract class OneToOneReportLayoutBaseComponent extends ReportLayoutBase
 
 	EResponsiveLayoutType = EResponsiveLayoutType;
 
+	isLoadingSourceContent: boolean = false;
+	isLoadingSuspectContent: boolean = false;
+	isLoadingResultItem: boolean = false;
+
+	get isLoadingScanContent(): boolean {
+		return (!this.suspectIframeHtml && !this.suspectTextMatches) || (!this.sourceIframeHtml && !this.sourceTextMatches);
+	}
+
 	get numberOfWords(): number | undefined {
 		return this.reportDataSvc.scanResultsPreviews?.scannedDocument?.totalWords;
 	}
@@ -90,6 +98,8 @@ export abstract class OneToOneReportLayoutBaseComponent extends ReportLayoutBase
 		combineLatest([this.reportDataSvc.scanResultsPreviews$, this.reportViewSvc.selectedResult$])
 			.pipe(untilDestroy(this))
 			.subscribe(([previews, resultData]) => {
+				this.isLoadingResultItem = resultData === null || previews === undefined;
+
 				if (resultData && previews) {
 					this.numberOfPagesSuspect = resultData.result?.text?.pages?.startPosition?.length ?? 1;
 					this.resultData = resultData;

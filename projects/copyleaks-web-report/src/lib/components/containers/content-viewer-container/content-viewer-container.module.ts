@@ -12,6 +12,7 @@ import { SuspectTextHelperDirective } from '../../../directives/suspect-text-hel
 import { CrPaginatorModule } from '../../core/cr-paginator/cr-paginator.module';
 import { ContentViewerContainerComponent } from './content-viewer-container.component';
 import { CrPoweredByModule } from '../../core/cr-powered-by/cr-powered-by.module';
+import { NgxSkeletonLoaderModule } from 'ngx-skeleton-loader';
 
 @NgModule({
 	declarations: [
@@ -24,7 +25,14 @@ import { CrPoweredByModule } from '../../core/cr-powered-by/cr-powered-by.module
 		SourceTextHelperDirective,
 		SuspectTextHelperDirective,
 	],
-	imports: [CommonModule, MatIconModule, MatTooltipModule, CrPaginatorModule, CrPoweredByModule],
+	imports: [
+		CommonModule,
+		MatIconModule,
+		MatTooltipModule,
+		CrPaginatorModule,
+		CrPoweredByModule,
+		NgxSkeletonLoaderModule,
+	],
 	exports: [ContentViewerContainerComponent],
 })
 export class ContentViewerContainerModule {}

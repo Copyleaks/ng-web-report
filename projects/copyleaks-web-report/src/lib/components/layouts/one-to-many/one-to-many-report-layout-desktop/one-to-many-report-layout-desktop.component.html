@@ -8,7 +8,8 @@
 		[wordsTotal]="reportStatistics?.total ?? 0"
 		[identicalTotal]="reportStatistics?.identical ?? 0"
 		[minorChangesTotal]="reportStatistics?.minorChanges ?? 0"
-		[paraphrasedTotal]="reportStatistics?.relatedMeaning ?? 0"></copyleaks-report-tabs-container>
+		[paraphrasedTotal]="reportStatistics?.relatedMeaning ?? 0"
+		[showLoadingView]="isLoadingScanContent"></copyleaks-report-tabs-container>
 
 	<!-- Report content container  -->
 	<copyleaks-content-viewer-container
@@ -30,13 +31,13 @@
 <!-- Right side section -->
 <div *ngIf="!hideRightSection" class="right-section" id="one-to-many-report-right-section">
 	<!-- Report actions container -->
-	<copyleaks-report-actions-container></copyleaks-report-actions-container>
+	<copyleaks-report-actions-container [showLoadingView]="isLoadingScanContent"></copyleaks-report-actions-container>
 
 	<!-- Report results & alerts container -->
 	<div class="results-alerts-container">
 		<!-- Report alerts container -->
 		<copyleaks-report-alerts-container
-			*ngIf="alerts && alerts.length > 0"
+			*ngIf="alerts && alerts.length > 0 && !isLoadingScanResults"
 			[alerts]="alerts"
 			[flexGrow]="25"></copyleaks-report-alerts-container>
 
@@ -44,6 +45,7 @@
 		<copyleaks-report-results-container
 			[flexGrow]="65"
 			[allResultsItem]="scanResultsView"
-			[resultsActions]="scanResultsActions"></copyleaks-report-results-container>
+			[resultsActions]="scanResultsActions"
+			[showLoadingView]="isLoadingScanResults"></copyleaks-report-results-container>
 	</div>
 </div>

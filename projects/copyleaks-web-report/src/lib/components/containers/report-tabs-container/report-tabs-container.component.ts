@@ -4,6 +4,7 @@ import { ReportViewService } from '../../../services/report-view.service';
 import { ALERTS } from '../../../constants/report-alerts.constants';
 import { ReportNgTemplatesService } from '../../../services/report-ng-templates.service';
 import { untilDestroy } from '../../../utils/until-destroy';
+import { ReportMatchHighlightService } from '../../../services/report-match-highlight.service';
 
 @Component({
 	selector: 'copyleaks-report-tabs-container',
@@ -56,6 +57,11 @@ export class ReportTabsContainerComponent implements OnInit, OnDestroy {
 	 */
 	@Input() hideAiTap = false;
 
+	/**
+	 * @Input {boolean} Flag indicating whether to show the loading view or not.
+	 */
+	@Input() showLoadingView = false;
+
 	EReportViewType = EReportViewType;
 	EReportScoreTooltipPosition = EReportScoreTooltipPosition;
 	customTabsTemplateRef: TemplateRef<any>[] | undefined = undefined;
@@ -63,7 +69,8 @@ export class ReportTabsContainerComponent implements OnInit, OnDestroy {
 	constructor(
 		private _reportViewSvc: ReportViewService,
 		private _reportNgTemplatesSvc: ReportNgTemplatesService,
-		private cdr: ChangeDetectorRef
+		private cdr: ChangeDetectorRef,
+		private _matchSvc: ReportMatchHighlightService
 	) {}
 
 	ngOnInit(): void {
@@ -82,7 +89,10 @@ export class ReportTabsContainerComponent implements OnInit, OnDestroy {
 	}
 
 	selectTap(selectedTab: EReportViewType) {
+		if (selectedTab == this.selectedTap) return;
+
 		this.selectedTap = selectedTab;
+		this._matchSvc.clear();
 
 		switch (selectedTab) {
 			case EReportViewType.AIView:

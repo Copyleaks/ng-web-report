@@ -111,6 +111,7 @@
 				font-size: 14px;
 				color: $color-black;
 				overflow: hidden;
+
 				// display: -webkit-box;
 				// -webkit-line-clamp: 2; /* number of lines to show */
 				// line-clamp: 2;
@@ -179,4 +180,15 @@
 			}
 		}
 	}
+}
+
+.mobile-text {
+	display: -webkit-box;
+	-webkit-box-orient: vertical;
+	-webkit-line-clamp: 2;
+	overflow: hidden;
+	text-overflow: ellipsis;
+	line-height: 1.5em;
+	max-height: 3em;
+	white-space: normal;
 }

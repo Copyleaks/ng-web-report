@@ -9,11 +9,12 @@ import { AuthorAlertCardComponent } from './components/author-alert-card/author-
 import { ReportViewService } from '../../../services/report-view.service';
 import { MatButtonModule } from '@angular/material/button';
 import { MatExpansionModule } from '@angular/material/expansion';
+import { ReportMatchHighlightService } from '../../../services/report-match-highlight.service';
 
 @NgModule({
 	declarations: [ReportAlertsContainerComponent, AlertCardComponent, AuthorAlertCardComponent],
 	imports: [CommonModule, MatIconModule, MatChipsModule, FlexLayoutModule, MatButtonModule, MatExpansionModule],
 	exports: [ReportAlertsContainerComponent, AlertCardComponent, AuthorAlertCardComponent],
-	providers: [ReportViewService],
+	providers: [ReportViewService, ReportMatchHighlightService],
 })
 export class ReportAlertsContainerModule {}

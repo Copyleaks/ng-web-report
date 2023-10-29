@@ -10,6 +10,7 @@ import { ReportViewService } from './report-view.service';
 import { IReportViewEvent } from '../models/report-view.models';
 import { ALERTS } from '../constants/report-alerts.constants';
 import { untilDestroy } from '../utils/until-destroy';
+import { ReportMatchHighlightService } from './report-match-highlight.service';
 
 /**
  * Service that calculates the matches highlight positions with respect to the view and content mode.

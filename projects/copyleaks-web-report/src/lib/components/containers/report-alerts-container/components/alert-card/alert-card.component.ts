@@ -30,7 +30,10 @@ export class AlertCardComponent implements OnInit, OnDestroy {
 	constructor(private _reportView: ReportViewService, private _reportMatchSvc: ReportMatchHighlightService) {}
 
 	ngOnInit(): void {
-		if (this._reportView.reportViewMode.alertCode == this.alert.code) this.isSelected = true;
+		if (this._reportView.reportViewMode.alertCode == this.alert.code) {
+			this.isSelected = true;
+			this._jumpToFirstMatch();
+		}
 		this._reportView.selectedAlert$.pipe(untilDestroy(this)).subscribe(data => {
 			this.isSelected = data === this.alert.code;
 		});
@@ -49,6 +52,16 @@ export class AlertCardComponent implements OnInit, OnDestroy {
 		});
 
 		if (!this.isSelected) this._reportMatchSvc.clear();
+		if (this.isSelected) {
+			this._jumpToFirstMatch();
+		}
+	}
+
+	private _jumpToFirstMatch() {
+		if (this.alert.code !== ALERTS.SUSPECTED_AI_TEXT_DETECTED)
+			setTimeout(() => {
+				this._reportMatchSvc.jump(true);
+			});
 	}
 
 	ngOnDestroy(): void {}

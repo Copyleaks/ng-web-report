@@ -1,51 +1,60 @@
-<!-- Report actions -->
-<copyleaks-report-actions-container class="report-actions-container"></copyleaks-report-actions-container>
+<div id="1" style="display: flex; flex-direction: column; flex-grow: 1; overflow-y: auto; gap: 8px">
+	<!-- Report actions -->
+	<copyleaks-report-actions-container
+		class="report-actions-container"
+		[showLoadingView]="isLoadingScanContent"></copyleaks-report-actions-container>
 
-<div class="middle-section">
-	<!-- Report alerts -->
-	<copyleaks-report-alerts-container
-		*ngIf="alerts && alerts.length > 0"
-		[alerts]="alerts"
-		[flexGrow]="20"></copyleaks-report-alerts-container>
+	<div class="middle-section">
+		<!-- Report alerts -->
+		<copyleaks-report-alerts-container
+			*ngIf="alerts && alerts.length > 0 && !isLoadingScanResults"
+			[alerts]="alerts"
+			[isMobile]="true"
+			[flexGrow]="20"></copyleaks-report-alerts-container>
 
-	<!-- Report scan content section -->
-	<div class="content-section">
-		<!-- Report scan content tabs -->
-		<copyleaks-report-tabs-container
-			[selectedTap]="selectedTap"
-			[plagarismScore]="plagiarismScore"
-			[aiScore]="reportStatistics?.aiScore ?? 0"
-			[wordsTotal]="reportStatistics?.total ?? 0"
-			[identicalTotal]="reportStatistics?.identical ?? 0"
-			[minorChangesTotal]="reportStatistics?.minorChanges ?? 0"
-			[paraphrasedTotal]="reportStatistics?.relatedMeaning ?? 0"></copyleaks-report-tabs-container>
+		<!-- Report scan content section -->
+		<div class="content-section">
+			<!-- Report scan content tabs -->
+			<copyleaks-report-tabs-container
+				[selectedTap]="selectedTap"
+				[plagarismScore]="plagiarismScore"
+				[aiScore]="reportStatistics?.aiScore ?? 0"
+				[wordsTotal]="reportStatistics?.total ?? 0"
+				[identicalTotal]="reportStatistics?.identical ?? 0"
+				[minorChangesTotal]="reportStatistics?.minorChanges ?? 0"
+				[paraphrasedTotal]="reportStatistics?.relatedMeaning ?? 0"
+				[showLoadingView]="isLoadingScanContent"></copyleaks-report-tabs-container>
 
-		<!-- Report scan content viewer -->
-		<copyleaks-content-viewer-container
-			[isHtmlView]="isHtmlView"
-			[isAlertsView]="isAlertsMode"
-			[contentHtml]="iframeHtml"
-			[scanSource]="reportCrawledVersion"
-			[contentTextMatches]="contentTextMatches"
-			[numberOfPages]="numberOfPages"
-			[numberOfWords]="numberOfWords"
-			[currentPage]="currentPageSource"
-			[reportResponsive]="EResponsiveLayoutType.Mobile"
-			[hidePoweredBy]="true"
-			viewMode="one-to-many"
-			reportOrigin="original"
-			(iFrameMessageEvent)="onIFrameMessage($event)"
-			(viewChangeEvent)="onReportViewChange($event)"></copyleaks-content-viewer-container>
+			<!-- Report scan content viewer -->
+			<copyleaks-content-viewer-container
+				[isHtmlView]="isHtmlView"
+				[isAlertsView]="isAlertsMode"
+				[contentHtml]="iframeHtml"
+				[scanSource]="reportCrawledVersion"
+				[contentTextMatches]="contentTextMatches"
+				[numberOfPages]="numberOfPages"
+				[numberOfWords]="numberOfWords"
+				[currentPage]="currentPageSource"
+				[reportResponsive]="EResponsiveLayoutType.Mobile"
+				[hidePoweredBy]="true"
+				viewMode="one-to-many"
+				reportOrigin="original"
+				(iFrameMessageEvent)="onIFrameMessage($event)"
+				(viewChangeEvent)="onReportViewChange($event)"></copyleaks-content-viewer-container>
+		</div>
 	</div>
 </div>
 
-<!-- Report results -->
-<copyleaks-report-results-container
-	class="results-container"
-	[flexGrow]="15"
-	[allResultsItem]="scanResultsView"
-	[resultsActions]="scanResultsActions"
-	[isMobile]="true"></copyleaks-report-results-container>
+<div id="2" style="display: flex; flex-direction: column; flex-shrink: 0; gap: 8px">
+	<!-- Report results -->
+	<copyleaks-report-results-container
+		class="results-container"
+		[flexGrow]="15"
+		[allResultsItem]="scanResultsView"
+		[resultsActions]="scanResultsActions"
+		[isMobile]="true"
+		[showLoadingView]="isLoadingScanResults"></copyleaks-report-results-container>
 
-<!-- Powered by Copyleaks image section -->
-<div class="powered-by-copyleaks-container"><cr-powered-by></cr-powered-by></div>
+	<!-- Powered by Copyleaks image section -->
+	<div class="powered-by-copyleaks-container"><cr-powered-by></cr-powered-by></div>
+</div>

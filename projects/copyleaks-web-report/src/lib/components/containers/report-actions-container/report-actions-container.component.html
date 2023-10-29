@@ -1,3 +1,20 @@
-<div class="actions-container" #actionsContainer [style.display]="showReportActions ? 'block' : 'none'">
+<div
+	class="actions-container"
+	#actionsContainer
+	[style.display]="showReportActions && !showLoadingView ? 'block' : 'none'">
 	<ng-container *ngTemplateOutlet="customActionsTemplateRef"></ng-container>
 </div>
+
+<ng-container *ngIf="showLoadingView && showLoadingView">
+	<div class="actions-loader-container">
+		<div class="buttons-loader-container">
+			<ngx-skeleton-loader class="skeleton" [appearance]="'line'" style="width: 40%"></ngx-skeleton-loader>
+			<ngx-skeleton-loader class="skeleton" [appearance]="'line'" style="width: 40%"></ngx-skeleton-loader>
+		</div>
+		<div class="icons-loader-container">
+			<ngx-skeleton-loader class="skeleton circle" [appearance]="'line'"></ngx-skeleton-loader>
+			<ngx-skeleton-loader class="skeleton circle" [appearance]="'line'"></ngx-skeleton-loader>
+			<ngx-skeleton-loader class="skeleton circle" [appearance]="'line'"></ngx-skeleton-loader>
+		</div>
+	</div>
+</ng-container>

@@ -3,9 +3,13 @@
 :host {
 	::ng-deep {
 		mat-expansion-panel {
+			display: flex;
+			flex-direction: column;
 			box-shadow: none !important;
 			color: $color-black !important;
 			background: none !important;
+			gap: 6px;
+			width: 100%;
 			.mat-expansion-panel-header,
 			.mat-expansion-panel-header.mat-expanded {
 				padding-left: 0px;
@@ -14,7 +18,7 @@
 			}
 
 			.mat-expansion-panel-body {
-				padding: 6px 0px 0px 0px !important;
+				padding: 0px !important;
 			}
 
 			.mat-expansion-panel-header-title {
@@ -24,6 +28,11 @@
 				line-height: normal;
 				color: $color-black !important;
 			}
+		}
+
+		.mat-accordion .mat-expansion-panel:not(.mat-expanded),
+		.mat-accordion .mat-expansion-panel:not(.mat-expansion-panel-spacing) {
+			gap: 0px !important;
 		}
 
 		.mat-expansion-panel:not(.mat-expanded) .mat-expansion-panel-header:hover:not([aria-disabled='true']) {

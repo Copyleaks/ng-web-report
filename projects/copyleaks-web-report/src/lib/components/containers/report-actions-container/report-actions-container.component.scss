@@ -1,12 +1,50 @@
 @import '../../../styles/containers.styles.scss';
+@import '../../../styles/website-colors.styles.scss';
 
 :host {
 	display: flex;
 	flex-direction: row;
 	align-items: center;
 
-	.actions-container {
-		padding: 10px;
+	.actions-container,
+	.actions-loader-container {
 		width: 100%;
+	}
+	.actions-loader-container {
+		display: flex;
+		flex-direction: row;
+
+		.icons-loader-container,
+		.buttons-loader-container {
+			width: 50%;
+			display: flex;
+			flex-direction: row;
+			gap: 8px;
+		}
+		.icons-loader-container {
+			justify-content: flex-end;
+		}
+	}
+	.skeleton {
+		width: fit-content;
+		display: flex;
+		height: fit-content !important;
+		::ng-deep .loader {
+			height: 19px !important;
+			margin-bottom: 0px !important;
+			border-radius: 10px !important;
+			opacity: 0.2;
+			background-color: $color-medium-dark;
+		}
+	}
+
+	.circle {
+		width: 24px !important;
+		height: 24px !important;
+		::ng-deep .loader {
+			border-radius: 50% !important;
+			width: 24px !important;
+			height: 24px !important;
+		}
 	}
 }

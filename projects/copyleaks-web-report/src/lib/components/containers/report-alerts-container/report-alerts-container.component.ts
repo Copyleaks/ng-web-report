@@ -26,7 +26,7 @@ export class ReportAlertsContainerComponent implements OnInit, AfterViewInit {
 	/**
 	 * @Input {boolean} Flag indicating whether the view is a mobile or not.
 	 */
-	@Input() isMobile: number;
+	@Input() isMobile: boolean;
 
 	/**
 	 * @Input Alerts list.

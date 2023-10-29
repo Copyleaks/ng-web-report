@@ -12,6 +12,11 @@ import { IPercentageResult } from '../percentage-result-item/models/percentage-r
 export class ReportExpandResultItemComponent implements OnInit, OnChanges {
 	@Input() resultItem: IResultItem | null = null;
 	@Input() languageResult: string[] = [];
+	/**
+	 * @Input {boolean} Flag indicating whether to show the loading view or not.
+	 */
+	@Input() showLoadingView = false;
+
 	@Output() excludeResultEvent = new EventEmitter<string>();
 
 	percentageResult: IPercentageResult;
@@ -60,6 +65,7 @@ export class ReportExpandResultItemComponent implements OnInit, OnChanges {
 			suspectId: undefined,
 			sourcePageIndex: 1,
 			suspectPageIndex: 1,
+			alertCode: undefined,
 		});
 	}
 

@@ -1,14 +1,19 @@
-<!-- <div class="actions-container">Result Item</div>
-<div class="close-btn" (click)="hideResultItem()">X</div> -->
 <cr-results-actions
-	*ngIf="allResultsItem && allResultsItem.length > 0"
+	*ngIf="!showLoadingView"
 	[resultsActions]="resultsActions"
 	[searchedValue]="searchedValue"
+	[showLoadingView]="false"
+	[isMobile]="isMobile"
+	[expandSection]="showAlertsSection"
+	(onExpandToggle)="showAlertsSection = $event"
 	(onSearch)="onSearch($event)"></cr-results-actions>
 
 <div
 	class="report-results-item-top-container"
 	[style]="'width:100%'"
+	[ngStyle]="{
+		display: showLoadingView || !showAlertsSection ? 'none' : 'flex'
+	}"
 	fxLayout="column"
 	fxLayoutAlign="start center"
 	fxLayoutGap="8px">
@@ -27,7 +32,11 @@
 					fxLayoutAlign="start start"
 					fxLayoutGap="4px"
 					*ngFor="let item of resultItemList">
-					<cr-report-results-item #resultitem [resultItem]="item" [style]="'width:100%'"></cr-report-results-item>
+					<cr-report-results-item
+						#resultitem
+						[resultItem]="item"
+						[isMobile]="isMobile"
+						[style]="'width:100%'"></cr-report-results-item>
 				</div>
 				<ng-container *ngIf="lastItemLoading">
 					<cr-report-results-item [showLoader]="true" [style]="'width:100%'"></cr-report-results-item>
@@ -35,12 +44,12 @@
 			</ng-container>
 		</div>
 		<ng-template #emptyState>
-			<cr-empty-result-state></cr-empty-result-state>
+			<cr-empty-result-state *ngIf="!showLoadingView"></cr-empty-result-state>
 		</ng-template>
 	</div>
 	<div
 		class="navigate-mobie-button-contaienr"
-		*ngIf="isMobile && allResultsItemLength != 0"
+		*ngIf="isMobile && allResultsItemLength > 0"
 		fxLayout="row"
 		fxLayoutAlign="start center"
 		fxLayoutGap="8px">
@@ -87,3 +96,28 @@
 		</mat-chip>
 	</div>
 </div>
+<ng-container *ngIf="showLoadingView">
+	<cr-results-actions [showLoadingView]="showLoadingView"></cr-results-actions>
+	<div
+		class="report-results-item-top-container"
+		[style]="'width:100%'"
+		fxLayout="column"
+		fxLayoutAlign="start center"
+		fxLayoutGap="8px">
+		<div #resultsContainer class="results-item-top-container">
+			<div
+				fxLayoutGap="8px"
+				[ngClass]="{
+					'results-item-container': !isMobile,
+					'results-item-mobile-container': isMobile
+				}">
+				<ng-container *ngFor="let _ of [1, 2, 3, 4, 5, 6, 7, 8]">
+					<cr-report-results-item [showLoader]="true" [style]="'width:100%'"></cr-report-results-item>
+				</ng-container>
+			</div>
+			<ng-template #emptyState>
+				<cr-empty-result-state></cr-empty-result-state>
+			</ng-template>
+		</div>
+	</div>
+</ng-container>

@@ -1,82 +1,150 @@
-<div class="expand-result-top-continer" fxLayout="column" fxLayoutAlign="space-between start">
-	<div class="expand-result-continer" fxLayout="column" fxLayoutAlign="start start">
-		<diV class="result-header" fxLayout="row" fxLayoutAlign="space-between center">
-			<div fxLayout="row" fxLayoutAlign="start start" fxLayoutGap="8px">
-				<div class="result-logo" fxLayout="column" fxLayoutAlign="center center">
-					<ng-container [ngSwitch]="resultItem?.resultPreview?.type">
-						<ng-container *ngSwitchCase="eResultPreviewType.Batch">
-							<mat-icon>compare_arrows</mat-icon>
+<ng-container *ngIf="!showLoadingView; else loadingViewRef">
+	<div class="expand-result-top-continer" fxLayout="column" fxLayoutAlign="space-between start">
+		<div class="expand-result-continer" fxLayout="column" fxLayoutAlign="start start">
+			<diV class="result-header" fxLayout="row" fxLayoutAlign="space-between center">
+				<div fxLayout="row" fxLayoutAlign="start start" fxLayoutGap="8px">
+					<div class="result-logo" fxLayout="column" fxLayoutAlign="center center">
+						<ng-container [ngSwitch]="resultItem?.resultPreview?.type">
+							<ng-container *ngSwitchCase="eResultPreviewType.Batch">
+								<mat-icon>compare_arrows</mat-icon>
+							</ng-container>
+							<ng-container *ngSwitchCase="eResultPreviewType.Repositroy">
+								<img class="title-img" src="assets/images/icons/repositories-icon.svg" />
+							</ng-container>
+							<ng-container *ngSwitchCase="eResultPreviewType.Internet">
+								<mat-icon>language</mat-icon>
+							</ng-container>
+							<ng-container *ngSwitchCase="eResultPreviewType.Database">
+								<img class="title-img" src="assets/images/icons/repositories-copyleaks-icon.svg" />
+							</ng-container>
+							<ng-container *ngSwitchDefault>
+								<mat-icon>language</mat-icon>
+							</ng-container>
 						</ng-container>
-						<ng-container *ngSwitchCase="eResultPreviewType.Repositroy">
-							<img class="title-img" src="assets/images/icons/repositories-icon.svg" />
-						</ng-container>
-						<ng-container *ngSwitchCase="eResultPreviewType.Internet">
-							<mat-icon>language</mat-icon>
-						</ng-container>
-						<ng-container *ngSwitchCase="eResultPreviewType.Database">
-							<img class="title-img" src="assets/images/icons/repositories-copyleaks-icon.svg" />
-						</ng-container>
-						<ng-container *ngSwitchDefault>
-							<mat-icon>language</mat-icon>
-						</ng-container>
-					</ng-container>
-				</div>
-				<div class="result-title-container" fxLayout="column" fxLayoutAlign="start start" fxLayoutGap="4px">
-					<div fxLayout="row" fxLayoutAlign="start center" fxLayoutGap="4px">
-						<button class="exclude-button" (click)="excludeResult()">
-							<mat-icon *ngIf="exclude">visibility</mat-icon>
-							<mat-icon *ngIf="!exclude">visibility_off</mat-icon>
-						</button>
-						<span class="result-title">{{ resultItem?.resultPreview?.title }}</span>
 					</div>
-					<ng-container *ngIf="resultItem?.resultPreview?.url; else resultSource">
-						<a
-							class="result-url-source"
-							[href]="resultItem?.resultPreview?.url"
-							fxLayout="row"
-							fxLayoutAlign="center center"
-							fxLayoutGap="4px"
-							target="_blank">
-							<mat-icon>open_in_new</mat-icon>
-							<span>Source: {{ resultItem?.resultPreview?.url }}</span>
-						</a>
-					</ng-container>
-					<ng-template #resultSource>
-						<span class="result-source">Source: {{ authorName }}</span>
-					</ng-template>
+					<div class="result-title-container" fxLayout="column" fxLayoutAlign="start start" fxLayoutGap="4px">
+						<div fxLayout="row" fxLayoutAlign="start center" fxLayoutGap="4px">
+							<button class="exclude-button" (click)="excludeResult()">
+								<mat-icon *ngIf="exclude">visibility</mat-icon>
+								<mat-icon *ngIf="!exclude">visibility_off</mat-icon>
+							</button>
+							<span class="result-title">{{ resultItem?.resultPreview?.title }}</span>
+						</div>
+						<ng-container *ngIf="resultItem?.resultPreview?.url; else resultSource">
+							<a
+								class="result-url-source"
+								[href]="resultItem?.resultPreview?.url"
+								fxLayout="row"
+								fxLayoutAlign="center center"
+								fxLayoutGap="4px"
+								target="_blank">
+								<mat-icon>open_in_new</mat-icon>
+								<span>Source: {{ resultItem?.resultPreview?.url }}</span>
+							</a>
+						</ng-container>
+						<ng-template #resultSource>
+							<span class="result-source">Source: {{ authorName }}</span>
+						</ng-template>
+					</div>
 				</div>
-			</div>
-			<button
-				class="back-button"
-				fxLayout="row"
-				fxLayoutAlign="center center"
-				fxLayoutGap="4px"
-				mat-button
-				[disableRipple]="true"
-				(click)="clickBack()">
-				<span>Back</span>
-				<mat-icon>chevron_right</mat-icon>
-			</button>
-		</diV>
-		<div
-			*ngIf="languageResult && languageResult.length > 0"
-			class="mat-chip-list-container"
-			fxLayout="row"
-			fxLayoutAlign="start start">
-			<mat-chip-list>
-				<div
-					class="mat-chip-container"
-					*ngFor="let language of languageResult"
+				<button
+					class="back-button"
 					fxLayout="row"
-					fxLayoutAlign="start start"
-					fxLayoutGap="4px">
-					<mat-chip>{{ language }}</mat-chip>
-				</div>
-			</mat-chip-list>
+					fxLayoutAlign="center center"
+					fxLayoutGap="4px"
+					mat-button
+					[disableRipple]="true"
+					(click)="clickBack()">
+					<span>Back</span>
+					<mat-icon>chevron_right</mat-icon>
+				</button>
+			</diV>
+			<div
+				*ngIf="languageResult && languageResult.length > 0"
+				class="mat-chip-list-container"
+				fxLayout="row"
+				fxLayoutAlign="start start">
+				<mat-chip-list>
+					<div
+						class="mat-chip-container"
+						*ngFor="let language of languageResult"
+						fxLayout="row"
+						fxLayoutAlign="start start"
+						fxLayoutGap="4px">
+						<mat-chip>{{ language }}</mat-chip>
+					</div>
+				</mat-chip-list>
+			</div>
+		</div>
+
+		<div class="plagiarism-detection-container">
+			<cr-percentage-result-item [percentageResult]="percentageResult"></cr-percentage-result-item>
 		</div>
 	</div>
+</ng-container>
 
-	<div class="plagiarism-detection-container">
-		<cr-percentage-result-item [percentageResult]="percentageResult"></cr-percentage-result-item>
+<ng-template #loadingViewRef>
+	<div class="loader-container">
+		<div class="left-side-loader">
+			<ngx-skeleton-loader class="skeleton back-btn" [appearance]="'line'"></ngx-skeleton-loader>
+			<div class="result-title-loader-container">
+				<ngx-skeleton-loader class="skeleton result-icon-loader" [appearance]="'line'"></ngx-skeleton-loader>
+				<div class="icons-loader-container">
+					<ngx-skeleton-loader class="skeleton icon-loader" [appearance]="'line'"></ngx-skeleton-loader>
+					<ngx-skeleton-loader class="skeleton icon-loader" [appearance]="'line'"></ngx-skeleton-loader>
+				</div>
+				<div class="info-loader-container">
+					<ngx-skeleton-loader class="skeleton" [appearance]="'line'"></ngx-skeleton-loader>
+					<ngx-skeleton-loader class="skeleton" [appearance]="'line'"></ngx-skeleton-loader>
+				</div>
+			</div>
+			<div class="result-chips-loader-container">
+				<ngx-skeleton-loader class="skeleton" [appearance]="'line'"></ngx-skeleton-loader>
+				<ngx-skeleton-loader class="skeleton" [appearance]="'line'"></ngx-skeleton-loader>
+			</div>
+		</div>
+		<div class="right-side-loader">
+			<ngx-skeleton-loader class="skeleton title-loader" [appearance]="'line'"></ngx-skeleton-loader>
+			<div class="stats-loader-container">
+				<ngx-skeleton-loader class="skeleton" [appearance]="'line'"></ngx-skeleton-loader>
+				<div class="stats-values-loader-container">
+					<ngx-skeleton-loader class="skeleton" [appearance]="'line'"></ngx-skeleton-loader>
+					<ngx-skeleton-loader class="skeleton" [appearance]="'line'"></ngx-skeleton-loader>
+				</div>
+			</div>
+
+			<div class="stats-loader-container">
+				<div class="specific-stat-loader-container">
+					<ngx-skeleton-loader class="skeleton" [appearance]="'line'"></ngx-skeleton-loader>
+					<ngx-skeleton-loader class="skeleton" [appearance]="'line'"></ngx-skeleton-loader>
+				</div>
+				<div class="stats-values-loader-container">
+					<ngx-skeleton-loader class="skeleton" [appearance]="'line'"></ngx-skeleton-loader>
+					<ngx-skeleton-loader class="skeleton" [appearance]="'line'"></ngx-skeleton-loader>
+				</div>
+			</div>
+
+			<div class="stats-loader-container">
+				<div class="specific-stat-loader-container">
+					<ngx-skeleton-loader class="skeleton" [appearance]="'line'"></ngx-skeleton-loader>
+					<ngx-skeleton-loader class="skeleton" [appearance]="'line'"></ngx-skeleton-loader>
+				</div>
+				<div class="stats-values-loader-container">
+					<ngx-skeleton-loader class="skeleton" [appearance]="'line'"></ngx-skeleton-loader>
+					<ngx-skeleton-loader class="skeleton" [appearance]="'line'"></ngx-skeleton-loader>
+				</div>
+			</div>
+
+			<div class="stats-loader-container">
+				<div class="specific-stat-loader-container">
+					<ngx-skeleton-loader class="skeleton" [appearance]="'line'"></ngx-skeleton-loader>
+					<ngx-skeleton-loader class="skeleton" [appearance]="'line'"></ngx-skeleton-loader>
+				</div>
+				<div class="stats-values-loader-container">
+					<ngx-skeleton-loader class="skeleton" [appearance]="'line'"></ngx-skeleton-loader>
+					<ngx-skeleton-loader class="skeleton" [appearance]="'line'"></ngx-skeleton-loader>
+				</div>
+			</div>
+		</div>
 	</div>
-</div>
+</ng-template>

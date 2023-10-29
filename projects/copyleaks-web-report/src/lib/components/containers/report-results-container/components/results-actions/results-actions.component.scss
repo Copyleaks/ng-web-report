@@ -8,7 +8,46 @@
 	padding: 0px 6px;
 	box-sizing: border-box;
 	gap: 10px;
-	min-height: 37px;
+}
+
+.skeleton {
+	width: fit-content;
+	display: flex;
+	height: fit-content !important;
+	::ng-deep .loader {
+		height: 19px !important;
+		margin-bottom: 0px !important;
+		border-radius: 10px !important;
+		opacity: 0.2;
+		background-color: $color-medium-dark;
+	}
+}
+
+.actions-loader-container {
+	width: 100%;
+	display: flex;
+	flex-direction: row;
+	justify-content: space-between;
+	align-items: center;
+	.search-input-loader {
+		::ng-deep .loader {
+			height: 13px !important;
+		}
+	}
+
+	.icons-loader-container {
+		display: flex;
+		flex-direction: row;
+		gap: 8px;
+
+		.circle {
+			::ng-deep .loader {
+				width: 24px !important;
+				height: 24px !important;
+				border-radius: 50% !important;
+			}
+		}
+	}
 }
 
 .tootal-results-container {
@@ -90,4 +129,15 @@
 mat-icon:hover {
 	color: $color-primary !important;
 	transition: 0.4s;
+}
+
+.expanded-section-icon {
+	transform: rotate(180deg);
+}
+
+.expand-icon {
+	transition: transform 0.2s ease-in-out;
+	height: 24px !important;
+	width: 24px !important;
+	font-size: 24px !important;
 }

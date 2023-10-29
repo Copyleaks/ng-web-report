@@ -34,7 +34,7 @@
 				</ng-template>
 				<div class="title-author-container" fxLayout="column" fxLayoutAlign="start" fxLayoutGap="2px">
 					<ng-container *ngIf="!showLoader; else showTitleSkeleton">
-						<span class="item-title">{{ previewResult.title }}</span>
+						<span class="item-title" [ngClass]="{ 'mobile-text': isMobile }">{{ previewResult.title }}</span>
 						<span class="author-name">{{ authorName }}</span>
 					</ng-container>
 					<ng-template #showTitleSkeleton>
@@ -70,7 +70,7 @@
 					(click)="$event.stopPropagation()">
 					{{ previewResult.url }}
 				</a>
-				<div class="item-introduction" *ngIf="previewResult.introduction">
+				<div *ngIf="previewResult.introduction" class="item-introduction" [ngClass]="{ 'mobile-text': isMobile }">
 					{{ previewResult.introduction }}
 				</div>
 			</ng-container>

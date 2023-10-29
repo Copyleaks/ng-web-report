@@ -15,6 +15,7 @@ export class ReportResultsItemComponent implements OnInit, OnChanges {
 	@Input() showLoader: boolean = false;
 	@Input() showItemBody: boolean = true;
 	@Input() excludeResult: boolean = false;
+	@Input() isMobile: boolean = false;
 	@Output() hiddenResultEvent = new EventEmitter<string>();
 	@Output() showResultEvent = new EventEmitter<string>();
 

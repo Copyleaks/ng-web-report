@@ -5,6 +5,7 @@
 	border-radius: 10px;
 	height: 100%;
 	overflow-y: auto;
+	gap: 10px;
 	.expand-result-continer {
 		width: 100%;
 		.result-header {
@@ -125,5 +126,154 @@
 		width: 100%;
 		padding: 2px 4px 4px 4px;
 		box-sizing: border-box;
+	}
+}
+
+.skeleton {
+	width: fit-content;
+	display: flex;
+	height: fit-content !important;
+	::ng-deep .loader {
+		height: 16px !important;
+		margin-bottom: 0px !important;
+		border-radius: 10px !important;
+		opacity: 0.2;
+		background-color: $color-medium-dark;
+	}
+}
+
+.loader-container {
+	display: flex;
+	flex-direction: row;
+	width: 100%;
+
+	.left-side-loader,
+	.right-side-loader {
+		width: 50%;
+		display: flex;
+		flex-direction: column;
+	}
+
+	.left-side-loader {
+		gap: 10px;
+		.back-btn {
+			width: 15%;
+			::ng-deep .loader {
+				height: 22px !important;
+			}
+		}
+		.result-title-loader-container {
+			width: 100%;
+			display: flex;
+			flex-direction: row;
+			align-items: center;
+			justify-content: flex-start;
+			gap: 8px;
+			.result-icon-loader {
+				::ng-deep .loader {
+					border-radius: 50% !important;
+					width: 32px !important;
+					height: 32px !important;
+				}
+			}
+			.icons-loader-container {
+				display: flex;
+				flex-direction: column;
+				gap: 4px;
+				.icon-loader {
+					::ng-deep .loader {
+						border-radius: 50% !important;
+						width: 16px !important;
+						height: 16px !important;
+					}
+				}
+			}
+
+			.info-loader-container {
+				display: flex;
+				flex-direction: column;
+				gap: 4px;
+				flex-grow: 1;
+				.skeleton {
+					width: 80%;
+				}
+				.skeleton:first-of-type {
+					width: 60%;
+				}
+			}
+		}
+
+		.result-chips-loader-container {
+			display: flex;
+			flex-direction: row;
+			gap: 4px;
+			.skeleton {
+				width: 15%;
+				::ng-deep .loader {
+					height: 22px !important;
+				}
+			}
+		}
+	}
+
+	.right-side-loader {
+		gap: 4px;
+		.title-loader {
+			width: 30%;
+			::ng-deep .loader {
+				height: 16px !important;
+			}
+		}
+
+		.stats-loader-container {
+			display: flex;
+			flex-direction: row;
+			justify-content: space-between;
+			padding-left: 8px;
+			align-items: center;
+
+			.skeleton:first-child {
+				width: 30%;
+				::ng-deep .loader {
+					height: 16px !important;
+				}
+			}
+
+			.stats-values-loader-container {
+				display: flex;
+				flex-direction: row;
+				align-items: center;
+				gap: 16px;
+				.skeleton {
+					width: 32px !important;
+					::ng-deep .loader {
+						height: 16px !important;
+					}
+				}
+			}
+
+			.specific-stat-loader-container {
+				display: flex;
+				flex-direction: row;
+				align-items: center;
+				gap: 4px;
+				flex-grow: 1;
+				.skeleton {
+					width: 30%;
+					::ng-deep .loader {
+						height: 16px !important;
+					}
+				}
+
+				.skeleton:first-child {
+					width: 16px !important;
+					::ng-deep .loader {
+						width: 16px !important;
+						height: 16px !important;
+						border-radius: 50% !important;
+					}
+				}
+			}
+		}
 	}
 }

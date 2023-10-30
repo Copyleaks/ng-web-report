@@ -16,11 +16,13 @@
 			<div class="result-container" fxLayout="row" fxLayoutAlign="start center" fxLayoutGap="4px">
 				<span class="total-results">Plagiarism Results ({{ resultsActions.totalResults }})</span>
 				<mat-icon class="separate-circle-icon" fontSet="material-icons-round">circle</mat-icon>
-				<span class="total-excuded" (click)="showExcludedDailog = !showExcludedDailog">
+				<span
+					class="total-excuded"
+					(click)="!!resultsActions.totalExcluded ? (showExcludedDailog = !showExcludedDailog) : ''">
 					{{ resultsActions.totalExcluded }} excluded
 				</span>
 				<mat-icon class="separate-circle-icon" fontSet="material-icons-round">circle</mat-icon>
-				<span class="total-filtered">{{ resultsActions.totalFiltered }} filtered</span>
+				<span class="total-filtered">{{ totalFiltered }} filtered</span>
 			</div>
 		</div>
 		<div class="body-container" fxLayout="row" fxLayoutGap="32px">

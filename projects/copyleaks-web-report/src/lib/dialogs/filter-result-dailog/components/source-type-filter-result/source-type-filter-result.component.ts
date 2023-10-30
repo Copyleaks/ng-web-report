@@ -33,7 +33,7 @@ export class SourceTypeFilterResultComponent implements OnInit {
 
 		if (this.totalSourceType?.repository) {
 			this.totalSourceType?.repository.forEach(repo => {
-				this.addRepositoryControl(repo.repositoryId);
+				this.addRepositoryControl(repo.id);
 			});
 		}
 	}

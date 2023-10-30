@@ -9,6 +9,8 @@ import {
 } from './components/source-type-filter-result/models/source-type-filter-result.models';
 import { FilterResultDailogService } from './services/filter-result-dailog.service';
 import { ITagItem } from './components/included-tags-filter-result/models/included-tags-filter-result.models';
+import { EFilterResultForm } from './models/filter-result-dailog.enum';
+import { FormGroup } from '@angular/forms';
 
 @Component({
 	selector: 'cr-filter-result-dailog',
@@ -16,12 +18,6 @@ import { ITagItem } from './components/included-tags-filter-result/models/includ
 	styleUrls: ['./filter-result-dailog.component.scss'],
 })
 export class FilterResultDailogComponent implements OnInit {
-	resultsActions: IResultsActions = {
-		totalResults: 30,
-		totalExcluded: 30,
-		totalFiltered: 30,
-	};
-
 	allTagItem: ITagItem[] = [
 		{
 			code: '0',
@@ -85,14 +81,6 @@ export class FilterResultDailogComponent implements OnInit {
 		},
 	];
 
-	minWordLimit: number = 0;
-	maxWordLimit: number = 1023;
-	publicationDates: string[] = ['May 2023', 'June 2023', 'July 2023'];
-
-	totalSourceType: ITotalSourceType;
-	allResultsItem: IResultItem[] = [];
-	loading: boolean = true;
-	////
 	endpointsConfig: IClsReportEndpointConfigModel = {
 		authToken: '', // optional
 		crawledVersion: `assets/scans/bundle/Filter/source.json`,
@@ -103,14 +91,70 @@ export class FilterResultDailogComponent implements OnInit {
 			update: '', // optional
 		},
 	};
-	///
 
+	resultsActions: IResultsActions = {
+		totalResults: 0,
+		totalExcluded: 0,
+		totalFiltered: 0,
+	};
+	totalSourceType: ITotalSourceType;
+	allResultsItem: IResultItem[] = [];
+	minWordLimit: number = 0;
+	maxWordLimit: number = 1023;
+	publicationDates: string[] = ['May 2023', 'June 2023', 'July 2023'];
+	loading: boolean = true;
 	showExcludedDailog: boolean = false;
+
+	get totalFiltered() {
+		return this.totalSourceType ? this.getTotalFilterdResult() : 0;
+	}
+
+	get sourceTypeFormGroup() {
+		return this.filterService.sourceTypeFormGroup;
+	}
+
 	constructor(private filterService: FilterResultDailogService, private _reportDataSvc: ReportDataService) {}
 
 	ngOnInit() {
 		this.filterService.initForm();
+
 		this.initResultItem();
+	}
+
+	getTotalFilterdResult() {
+		let totalEnabledSource = 0;
+		for (const controlName in this.sourceTypeFormGroup.controls) {
+			if (this.sourceTypeFormGroup.get(controlName)?.value) {
+				totalEnabledSource += this.getTotalForEchSourceType(controlName);
+			}
+		}
+		return totalEnabledSource;
+	}
+
+	getTotalForEchSourceType(eFilterResultForm: string) {
+		switch (eFilterResultForm) {
+			case EFilterResultForm.fcInternet:
+				return this.totalSourceType.totalInternet;
+			case EFilterResultForm.fcInternalDatabase:
+				return this.totalSourceType.totalInternalDatabase;
+			case EFilterResultForm.fcBatch:
+				return this.totalSourceType.totalbatch;
+			case EFilterResultForm.fgRepositories:
+				return this.getTotalEnabledRepositories();
+			default:
+				return 0;
+		}
+	}
+
+	getTotalEnabledRepositories() {
+		let countRepo = 0;
+		var repositories = this.sourceTypeFormGroup.get(EFilterResultForm.fgRepositories) as FormGroup;
+		for (const controlName in repositories.controls) {
+			if (repositories.get(controlName)?.value) {
+				countRepo += 1;
+			}
+		}
+		return countRepo;
 	}
 
 	initResultItem() {
@@ -133,6 +177,9 @@ export class FilterResultDailogComponent implements OnInit {
 					...(results?.batch ?? []),
 					...(results?.repositories ?? []),
 				];
+
+				this.resultsActions.totalResults = allResults.length;
+				//this.resultsActions.totalFiltered = this.filterService.gettotalFilterd(this.totalSourceType);
 				this.allResultsItem = allResults.map(result => {
 					return {
 						resultPreview: result,

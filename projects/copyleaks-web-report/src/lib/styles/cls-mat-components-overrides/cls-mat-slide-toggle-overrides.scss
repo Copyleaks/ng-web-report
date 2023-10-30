@@ -1,0 +1,30 @@
+@import '../website-colors.styles.scss';
+
+:host {
+	::ng-deep {
+		.mat-slide-toggle-bar {
+			background: $color-dialog-background !important;
+		}
+
+		// unchecked slide toggle button style
+		.mat-slide-toggle-thumb {
+			box-shadow: 0px 1px 2px 0px #00000045 !important;
+			background-color: $color-medium-dark !important;
+		}
+
+		// checked slide toggle button style
+		.mat-slide-toggle.mat-checked .mat-slide-toggle-thumb {
+			background-color: $color-primary !important;
+		}
+
+		.mat-slide-toggle {
+			white-space: pre-wrap;
+		}
+
+		.mat-slide-toggle-content {
+			white-space: pre-wrap;
+			overflow: hidden;
+			text-overflow: ellipsis;
+		}
+	}
+}

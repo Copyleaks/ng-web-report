@@ -1,0 +1,156 @@
+@import '../../styles/website-colors.styles.scss';
+@import '../../styles/cls-mat-components-overrides//cls-mat-slide-toggle-overrides.scss';
+
+.top-container {
+	.header-container {
+		width: 100%;
+		.title-container {
+			width: 100%;
+			span {
+				color: $color-black;
+				font-weight: 700;
+				font-size: 20px;
+			}
+
+			.clear-button {
+				cursor: pointer;
+				border: 0px;
+				outline: none;
+				background-color: $color-white;
+				color: $color-primary;
+				mat-icon {
+					font-size: 24px;
+					width: 24px;
+					height: 24px;
+				}
+				span {
+					color: $color-primary;
+					font-size: 14px;
+					font-weight: 500;
+				}
+			}
+		}
+		.result-container {
+			.total-results {
+				color: $color-black;
+				font-size: 16px;
+				font-weight: 700;
+			}
+			.total-excuded {
+				cursor: pointer;
+				font-weight: 400;
+				font-size: 14px;
+				color: $color-primary;
+				text-decoration: underline;
+			}
+			.total-filtered {
+				font-weight: 400;
+				font-size: 14px;
+				color: $color-dark-blue;
+			}
+			.separate-circle-icon {
+				height: 4px;
+				width: 4px;
+				font-size: 4px;
+				color: $color-medium-dark;
+				opacity: 0.4;
+			}
+		}
+	}
+
+	.body-container {
+		width: 100%;
+		height: 100%;
+		.body-title {
+			font-size: 16px;
+			font-weight: 700;
+			color: $color-black;
+		}
+
+		.left-side-container {
+			width: 100%;
+			flex: 1;
+			mat-divider {
+				width: 100%;
+			}
+
+			.sources-type-top-container {
+				width: 100%;
+				.sources-type-container {
+					width: 100%;
+				}
+			}
+
+			.section-container {
+				width: 100%;
+				.meta-filter-container {
+					width: 100%;
+				}
+			}
+		}
+
+		.right-side-conatier {
+			width: 100%;
+			flex: 1;
+			mat-divider {
+				width: 100%;
+			}
+
+			.match-type-container {
+				width: 100%;
+				.match-type-filter-container {
+					width: 100%;
+				}
+			}
+
+			.general-filters-container {
+				width: 100%;
+				.general-filter-container {
+					width: 100%;
+				}
+			}
+
+			.included-tags-container {
+				width: 100%;
+				.included-tags-filter-result {
+					width: 100%;
+				}
+			}
+		}
+
+		.vertical-divider {
+			opacity: 0.6;
+		}
+	}
+
+	.apply-and-discard-button-contaier {
+		width: 100%;
+		button {
+			cursor: pointer;
+			border-radius: 24px 0px 16px 24px;
+			height: 28px;
+		}
+		.discard-changes-button {
+			min-width: 161px;
+			font-size: 16px;
+			font-weight: 500;
+			color: $color-primary;
+			border: 2px solid;
+			border-color: $color-primary;
+			background-color: $color-white;
+		}
+		.apply-filters-button {
+			min-width: 220px;
+			font-size: 18px;
+			font-weight: 700;
+			background-color: $color-primary;
+			color: $color-white;
+			border: 2px solid;
+			border-color: $color-primary;
+			&:hover {
+				background-color: $color-white;
+				color: $color-primary;
+			}
+		}
+	}
+}

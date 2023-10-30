@@ -121,6 +121,12 @@
 	}
 }
 
+::ng-deep .filter-result-dailog .mat-dialog-container {
+	background-color: $color-white !important;
+	padding: 16px !important;
+	border-radius: 10px !important;
+}
+
 mat-icon:hover {
 	color: $color-primary !important;
 	transition: 0.4s;

@@ -1,0 +1,20 @@
+@import '../website-colors.styles.scss';
+
+:host {
+	::ng-deep {
+		::-webkit-scrollbar {
+			width: 8px;
+			height: 8px !important;
+		}
+		::-webkit-scrollbar-track {
+			border-radius: 4px;
+			transform: matrix(0, 1, -1, 0, 0, 0);
+			background: $color-container-background;
+			border: 1px solid $color-white;
+		}
+		::-webkit-scrollbar-thumb {
+			border-radius: 4px !important;
+			background: rgba(17, 41, 96, 0.4) !important;
+		}
+	}
+}

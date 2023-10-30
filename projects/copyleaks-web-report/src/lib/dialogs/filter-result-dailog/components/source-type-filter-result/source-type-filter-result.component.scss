@@ -1,0 +1,45 @@
+@import '../../../../styles/website-colors.styles.scss';
+@import '../../../../styles/cls-mat-components-overrides/cls-scroll-bar-overrides.scss';
+
+:host {
+	height: 100%;
+}
+
+.top-container {
+	.container {
+		width: 100%;
+		.mat-slide-filter-result {
+			padding: 2px;
+			box-sizing: border-box;
+			.source-type-icon-container {
+				width: 26px;
+				height: 26px;
+				border: 2px solid;
+				border-radius: 50%;
+				color: $color-primary;
+				mat-icon {
+					font-size: 17px;
+					height: 17px;
+					width: 17px;
+				}
+				.internal-database-icon {
+					width: 14px;
+				}
+			}
+		}
+		.repository-container {
+			width: 100%;
+		}
+	}
+	.scroll-padding {
+		padding: 0px 2px 0px 0px;
+	}
+}
+.top-container-scroll {
+	overflow: hidden;
+	max-height: 150px;
+	.container {
+		overflow-y: auto;
+		overflow-x: hidden;
+	}
+}

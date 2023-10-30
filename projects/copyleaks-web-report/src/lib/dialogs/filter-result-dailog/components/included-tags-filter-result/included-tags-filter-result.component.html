@@ -1,0 +1,48 @@
+<div class="contaienr" fxLayout="column" fxLayoutAlign="start start" fxLayoutGap="4px">
+	<div class="search-tag-container" fxLayout="row" fxLayoutAlign="start center" fxLayoutGap="8px">
+		<div class="search-icon" fxLayout="column" fxLayoutAlign="center center" (click)="searchValue ? clearSearch() : ''">
+			<ng-container *ngIf="!searchValue; else clearSearchIcon">
+				<mat-icon>search</mat-icon>
+			</ng-container>
+			<ng-template #clearSearchIcon>
+				<mat-icon>close</mat-icon>
+			</ng-template>
+		</div>
+		<input
+			[formControl]="searchTagControl"
+			class="included-tags-input"
+			[type]="'text'"
+			placeholder="Search {item type}" />
+	</div>
+	<div class="mat-chip-container" fxLayout="row" fxLayoutAlign="start center" fxLayoutGap="4px">
+		<button class="arrow-drop-button" (click)="showMoreMenu = !showMoreMenu">
+			<ng-container *ngIf="showMoreMenu; else showLessMenuIcon">
+				<mat-icon>arrow_drop_up</mat-icon>
+			</ng-container>
+			<ng-template #showLessMenuIcon>
+				<mat-icon>arrow_drop_down</mat-icon>
+			</ng-template>
+		</button>
+		<mat-chip-list>
+			<ng-container *ngFor="let tag of selectedList; let idx = index">
+				<mat-chip class="selected-tag-mat-chip" *ngIf="idx < 2">
+					{{ tag }}
+				</mat-chip>
+			</ng-container>
+		</mat-chip-list>
+		<div class="total-select-tags" *ngIf="selectedList.length > 2">
+			<span>+{{ selectedList.length - 2 }}</span>
+		</div>
+	</div>
+	<div *ngIf="showMoreMenu" class="tag-list-container" fxLayout="column" fxLayoutAlign="start start" fxLayoutGap="2px">
+		<div class="tag-list" *ngFor="let item of filteredTagList | async" fxLayout="row" fxLayoutAlign="start center">
+			<mat-checkbox
+				[checked]="item.selected == true"
+				[(ngModel)]="item.selected"
+				(change)="selectTag()"
+				class="mat-checkbox-tag">
+				{{ item.title }}
+			</mat-checkbox>
+		</div>
+	</div>
+</div>

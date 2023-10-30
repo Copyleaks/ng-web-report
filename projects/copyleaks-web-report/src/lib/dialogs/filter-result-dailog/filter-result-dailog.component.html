@@ -1,0 +1,90 @@
+<ng-container *ngIf="!showExcludedDailog; else excludedDailog">
+	<div class="top-container" fxLayout="column" fxLayoutGap="32px">
+		<div class="header-container" fxLayout="column" fxLayoutGap="8px">
+			<div class="title-container" fxLayout="row" fxLayoutAlign="space-between center" fxLayoutGap="4px">
+				<span>Filter Plagiarism Results</span>
+				<button
+					(click)="clearFilterButton()"
+					class="clear-button"
+					fxLayout="row"
+					fxLayoutAlign="start center"
+					fxLayoutGap="4px">
+					<mat-icon>refresh</mat-icon>
+					<span>Clear filter</span>
+				</button>
+			</div>
+			<div class="result-container" fxLayout="row" fxLayoutAlign="start center" fxLayoutGap="4px">
+				<span class="total-results">Plagiarism Results ({{ resultsActions.totalResults }})</span>
+				<mat-icon class="separate-circle-icon" fontSet="material-icons-round">circle</mat-icon>
+				<span
+					class="total-excuded"
+					(click)="!!resultsActions.totalExcluded ? (showExcludedDailog = !showExcludedDailog) : ''">
+					{{ resultsActions.totalExcluded }} excluded
+				</span>
+				<mat-icon class="separate-circle-icon" fontSet="material-icons-round">circle</mat-icon>
+				<span class="total-filtered">{{ totalFiltered }} filtered</span>
+			</div>
+		</div>
+		<div class="body-container" fxLayout="row" fxLayoutGap="32px">
+			<div class="left-side-container" fxLayout="column" fxLayoutGap="16px">
+				<!-- source type -->
+				<section class="section-container sources-type-top-container" fxLayout="column" fxLayoutGap="16px">
+					<span class="body-title">Source type</span>
+					<ng-container *ngIf="!loading">
+						<cr-source-type-filter-result
+							[totalSourceType]="totalSourceType"
+							class="sources-type-container"></cr-source-type-filter-result>
+					</ng-container>
+				</section>
+				<mat-divider></mat-divider>
+
+				<!-- results meta -->
+				<section class="section-container" fxLayout="column" fxLayoutGap="16px">
+					<span class="body-title">Results meta</span>
+					<cr-meta-filter-result
+						[publicationDates]="publicationDates"
+						[minWordLimit]="minWordLimit"
+						[maxWordLimit]="maxWordLimit"
+						class="meta-filter-container"></cr-meta-filter-result>
+				</section>
+			</div>
+
+			<mat-divider [vertical]="true" class="vertical-divider"></mat-divider>
+
+			<div class="right-side-conatier" fxLayout="column" fxLayoutGap="16px">
+				<!-- match type -->
+				<section class="match-type-container" fxLayout="column" fxLayoutGap="16px">
+					<span class="body-title">Match types</span>
+					<cr-match-type-filter-result
+						[identicalTotal]="12"
+						[minorChangesTotal]="10"
+						[paraphrasedTotal]="5"
+						class="match-type-filter-container"></cr-match-type-filter-result>
+				</section>
+				<mat-divider></mat-divider>
+				<!--General filters-->
+				<section class="general-filters-container" fxLayout="column" fxLayoutGap="16px">
+					<span class="body-title">General filters</span>
+					<cr-general-filter-result class="general-filter-container"></cr-general-filter-result>
+				</section>
+				<mat-divider></mat-divider>
+				<!-- Included Tags -->
+				<section class="included-tags-container" fxLayout="column" fxLayoutGap="8px">
+					<span class="body-title">Included Tags</span>
+					<cr-included-tags-filter-result
+						[allTagItem]="allTagItem"
+						class="included-tags-filter-result"></cr-included-tags-filter-result>
+				</section>
+			</div>
+		</div>
+		<div class="apply-and-discard-button-contaier" fxLayout="row" fxLayoutAlign="end center" fxLayoutGap="32px">
+			<button class="discard-changes-button">Discard changes</button>
+			<button class="apply-filters-button">Apply filters</button>
+		</div>
+	</div>
+</ng-container>
+<ng-template #excludedDailog>
+	<cr-excluded-results-dailog
+		[allResultsItem]="allResultsItem"
+		(closeDailogEvent)="showExcludedDailog = !$event"></cr-excluded-results-dailog>
+</ng-template>

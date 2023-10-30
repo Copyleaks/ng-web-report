@@ -15,7 +15,7 @@ import { ResultsActionsComponent } from './components/results-actions/results-ac
 import { ReportResultsContainerComponent } from './report-results-container.component';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { MatFormFieldModule } from '@angular/material/form-field';
-
+import { MatDialogModule } from '@angular/material/dialog';
 @NgModule({
 	declarations: [
 		ReportResultsContainerComponent,
@@ -37,6 +37,7 @@ import { MatFormFieldModule } from '@angular/material/form-field';
 		FormsModule,
 		MatFormFieldModule,
 		ReactiveFormsModule,
+		MatDialogModule,
 	],
 	exports: [
 		ReportResultsContainerComponent,

@@ -1,0 +1,78 @@
+<div
+	class="top-container"
+	[ngClass]="{ 'top-container-scroll': repositoryLength > 1 }"
+	fxLayout="column"
+	fxLayoutAlign="start start"
+	fxLayoutGap="16px">
+	<form
+		class="container"
+		[formGroup]="surceTypeForm"
+		[class.scroll-padding]="repositoryLength > 1"
+		fxLayout="column"
+		fxLayoutAlign="start start"
+		fxLayoutGap="8px">
+		<!-- Internet Source -->
+		<ng-container>
+			<cr-mat-slide-filter-result
+				class="mat-slide-filter-result"
+				[formControlName]="eFilterResultForm.fcInternet"
+				[title]="'Internet Source'"
+				[total]="totalSourceType.totalInternet">
+				<mat-slide-logo>
+					<div class="source-type-icon-container" fxLayout="column" fxLayoutAlign="center center">
+						<mat-icon>language</mat-icon>
+					</div>
+				</mat-slide-logo>
+			</cr-mat-slide-filter-result>
+		</ng-container>
+		<!-- Internal Database -->
+		<ng-container>
+			<cr-mat-slide-filter-result
+				class="mat-slide-filter-result"
+				[formControlName]="eFilterResultForm.fcInternalDatabase"
+				[title]="'Internal Database'"
+				[total]="totalSourceType.totalInternalDatabase">
+				<mat-slide-logo>
+					<div class="source-type-icon-container" fxLayout="column" fxLayoutAlign="center center">
+						<img class="internal-database-icon" src="assets/images/icons/repositories-copyleaks-icon.svg" />
+					</div>
+				</mat-slide-logo>
+			</cr-mat-slide-filter-result>
+		</ng-container>
+		<!-- Batch -->
+		<ng-container>
+			<cr-mat-slide-filter-result
+				[formControlName]="eFilterResultForm.fcBatch"
+				class="mat-slide-filter-result"
+				[title]="'This batch'"
+				[total]="totalSourceType.totalbatch">
+				<mat-slide-logo>
+					<div class="source-type-icon-container" fxLayout="column" fxLayoutAlign="center center">
+						<mat-icon>compare_arrows</mat-icon>
+					</div>
+				</mat-slide-logo>
+			</cr-mat-slide-filter-result>
+		</ng-container>
+		<!-- Repositories -->
+		<ng-container *ngIf="repositoryLength">
+			<div
+				[formGroup]="repositoriesForm"
+				*ngFor="let item of totalSourceType.repository"
+				class="repository-container"
+				fxLayout="column"
+				fxLayoutAlign="start start"
+				fxLayoutGap="8px">
+				<cr-mat-slide-filter-result
+					[formControlName]="item.repositoryId"
+					class="mat-slide-filter-result"
+					[title]="item.title">
+					<mat-slide-logo>
+						<div class="source-type-icon-container" fxLayout="column" fxLayoutAlign="center center">
+							<img class="title-img" src="assets/images/icons/repositories-icon.svg" />
+						</div>
+					</mat-slide-logo>
+				</cr-mat-slide-filter-result>
+			</div>
+		</ng-container>
+	</form>
+</div>

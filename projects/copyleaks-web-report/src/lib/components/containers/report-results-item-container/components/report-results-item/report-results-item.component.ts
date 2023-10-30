@@ -13,12 +13,16 @@ import { IPercentageResult } from '../percentage-result-item/models/percentage-r
 export class ReportResultsItemComponent implements OnInit, OnChanges {
 	@Input() resultItem: IResultItem;
 	@Input() showLoader: boolean = false;
+	@Input() showItemBody: boolean = true;
+	@Input() excludeResult: boolean = false;
 	@Input() isMobile: boolean = false;
 	@Output() hiddenResultEvent = new EventEmitter<string>();
+	@Output() showResultEvent = new EventEmitter<string>();
 
 	percentageResult: IPercentageResult;
 	previewResult: IResultPreviewBase;
 	eResultPreviewType = EResultPreviewType;
+	excludedResultsClick: boolean = false;
 
 	@HostListener('click', ['$event'])
 	handleClick() {
@@ -74,8 +78,14 @@ export class ReportResultsItemComponent implements OnInit, OnChanges {
 			}
 	}
 
+	showResultById() {
+		this.showResultEvent.emit(this.previewResult.id);
+		this.excludedResultsClick = true;
+	}
+
 	hiddenResultById() {
 		this.hiddenResultEvent.emit(this.previewResult.id);
+		this.excludedResultsClick = false;
 	}
 
 	comapreResult() {

@@ -1,0 +1,137 @@
+@import '../../../../styles/website-colors.styles.scss';
+@import '../../../../styles/cls-mat-components-overrides/cls-scroll-bar-overrides.scss';
+.contaienr {
+	.search-tag-container {
+		width: 100%;
+		padding: 4px 8px;
+		border-radius: 10px;
+		background-color: $color-container-background;
+		.included-tags-input {
+			height: 20px;
+			color: $color-black;
+			font-weight: 500;
+			font-size: 16px;
+			outline: none;
+			border: 0;
+			background-color: $color-container-background;
+		}
+		.included-tags-input::placeholder {
+			color: $color-black;
+			font-weight: 500;
+			font-size: 16px;
+		}
+
+		.search-icon {
+			width: 32px;
+			height: 32px;
+			border-radius: 50%;
+			background-color: $color-white;
+			cursor: pointer;
+			&:hover {
+				background-color: $color-primary;
+				mat-icon {
+					color: $color-white;
+				}
+			}
+			mat-icon {
+				color: $color-black;
+				font-size: 17px;
+				width: 17px;
+				height: 17px;
+			}
+		}
+	}
+	.mat-chip-container {
+		width: 100%;
+		.arrow-drop-button {
+			display: flex;
+			align-items: center;
+			justify-content: center;
+			border: 0;
+			background-color: $color-white;
+			cursor: pointer;
+			width: 18px;
+			height: 18px;
+			mat-icon {
+				width: 16px;
+				height: 16px;
+				font-size: 16px;
+				color: $color-black;
+			}
+		}
+		.selected-tag-mat-chip {
+			display: flex;
+			align-items: baseline;
+			justify-content: center;
+			min-height: 24px;
+			padding: 2px 8px;
+			background-color: $color-dark-blue;
+			color: $color-container-background;
+			font-size: 14px;
+			font-weight: 500;
+		}
+		.total-select-tags {
+			width: 21px;
+			height: 21px;
+			border: 2px solid;
+			padding: 3px;
+			border-color: $color-primary;
+			border-radius: 50%;
+			span {
+				display: flex;
+				align-items: center;
+				justify-content: center;
+				font-weight: 500;
+				font-size: 14px;
+				color: $color-primary;
+			}
+		}
+	}
+	.tag-list-container {
+		width: 100%;
+		height: 240px;
+		overflow-y: auto;
+		.tag-list {
+			width: 100%;
+			height: 32px;
+			padding: 0 8px;
+			box-sizing: border-box;
+			border-radius: 10px;
+			&:hover {
+				background-color: $color-container-background;
+			}
+			.mat-checkbox-tag {
+				display: flex;
+				align-items: center;
+				justify-content: flex-start;
+				width: 100%;
+				color: $color-medium-dark;
+				height: 32px;
+				font-size: 14px;
+				font-weight: 500;
+				::ng-deep .mat-checkbox-layout {
+					width: 100%;
+					display: flex;
+					justify-content: flex-start;
+					align-items: center;
+					.mat-checkbox-inner-container {
+						margin: 0 4px 0 0;
+						.mat-checkbox-frame {
+							border-color: $color-medium-dark;
+						}
+					}
+				}
+			}
+		}
+	}
+
+	::ng-deep {
+		::-webkit-scrollbar-track {
+			background: $color-white;
+		}
+		::-webkit-scrollbar-thumb {
+			box-shadow: none !important;
+			background: $color-medium-dark !important;
+		}
+	}
+}

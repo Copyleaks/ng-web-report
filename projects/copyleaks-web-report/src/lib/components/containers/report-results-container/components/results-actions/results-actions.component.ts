@@ -2,6 +2,8 @@ import { Component, EventEmitter, HostBinding, Input, OnChanges, OnInit, Output,
 import { IResultsActions } from './models/results-actions.models';
 import { FormControl } from '@angular/forms';
 import { debounceTime } from 'rxjs/operators';
+import { MatDialog } from '@angular/material/dialog';
+import { FilterResultDailogComponent } from 'projects/copyleaks-web-report/src/lib/dialogs/filter-result-dailog/filter-result-dailog.component';
 
 @Component({
 	selector: 'cr-results-actions',
@@ -30,9 +32,9 @@ export class ResultsActionsComponent implements OnInit, OnChanges {
 	@Output() onExpandToggle = new EventEmitter<boolean>();
 
 	searchFc = new FormControl('');
-
 	showSearchFiled: boolean = false;
-	constructor() {}
+
+	constructor(private _matDialog: MatDialog) {}
 
 	ngOnInit(): void {
 		this.searchFc.valueChanges.pipe(debounceTime(1000)).subscribe(value => {
@@ -57,5 +59,10 @@ export class ResultsActionsComponent implements OnInit, OnChanges {
 		else this.paddingProp = '8px 8px 8px 8px';
 	}
 
-	showFilterDialog() {}
+	showFilterDialog() {
+		this._matDialog.open(FilterResultDailogComponent, {
+			width: '670px',
+			panelClass: 'filter-result-dailog',
+		});
+	}
 }

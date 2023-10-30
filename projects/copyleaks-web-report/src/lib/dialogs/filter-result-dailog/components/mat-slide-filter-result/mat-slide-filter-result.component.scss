@@ -1,0 +1,20 @@
+@import '../../../../styles/website-colors.styles.scss';
+@import '../../../../styles/cls-mat-components-overrides//cls-mat-slide-toggle-overrides.scss';
+
+:host {
+	width: 100%;
+}
+
+.mat-slide-container {
+	width: 100%;
+	.mat-slide-title {
+		color: $color-black;
+		font-size: 16px;
+		font-weight: 500;
+	}
+	.mat-slide-total {
+		color: $color-black;
+		font-size: 12px;
+		font-weight: 500;
+	}
+}

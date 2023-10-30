@@ -175,7 +175,7 @@ export class FilterResultDailogComponent implements OnInit {
 					...(results?.internet ?? []),
 					...(results?.database ?? []),
 					...(results?.batch ?? []),
-					...(results?.repositories ?? []),
+					...(REPOSITORIES ?? []),
 				];
 
 				this.resultsActions.totalResults = allResults.length;

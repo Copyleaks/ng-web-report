@@ -47,7 +47,10 @@
 				matTooltip="Zoom out">
 				zoom_out
 			</mat-icon>
-			<span class="icon-tooltip-wrapper" [matTooltip]="!hasHtml ? 'Only text view is available' : ''">
+			<span
+				*ngIf="hasHtml && !isAlertsView"
+				class="icon-tooltip-wrapper"
+				[matTooltip]="!hasHtml ? 'Only text view is available' : ''">
 				<mat-icon
 					*ngIf="isHtmlView && hasHtml"
 					[ngClass]="{

@@ -11,21 +11,21 @@
 				<span class="identical dot"></span>
 				<span class="title">Identical</span>
 			</div>
-			<span class="percentage">{{ scoreStats?.identicalPct ?? 0 | similarity }}</span>
+			<span class="percentage">{{ scoreStats?.identicalPct ?? 0 | similarity : '1.1-1' }}</span>
 		</div>
 		<div class="minor-changes-stats">
 			<div class="title-container">
 				<span class="minor-changes dot"></span>
 				<span class="title">Minor changes</span>
 			</div>
-			<span class="percentage">{{ scoreStats?.minorChangesPct ?? 0 | similarity }}</span>
+			<span class="percentage">{{ scoreStats?.minorChangesPct ?? 0 | similarity : '1.1-1' }}</span>
 		</div>
 		<div class="paraphrased-stats">
 			<div class="title-container">
 				<span class="paraphrased dot"></span>
 				<span class="title">Paraphrased</span>
 			</div>
-			<span class="percentage">{{ scoreStats?.paraphrasedPct ?? 0 | similarity }}</span>
+			<span class="percentage">{{ scoreStats?.paraphrasedPct ?? 0 | similarity : '1.1-1' }}</span>
 		</div>
 		<div class="omitted-words-stats">
 			<div class="title-container">
@@ -35,7 +35,7 @@
 			<span class="percentage">
 				{{
 					1 - (scoreStats?.paraphrasedPct ?? 0) - (scoreStats?.minorChangesPct ?? 0) - (scoreStats?.identicalPct ?? 0)
-						| similarity
+						| similarity : '1.1-1'
 				}}
 			</span>
 		</div>
@@ -48,14 +48,14 @@
 					<span class="ai dot"></span>
 					<span class="title">AI Content</span>
 				</div>
-				<span class="percentage">{{ scoreStats?.aiPct ?? 0 | similarity }}</span>
+				<span class="percentage">{{ scoreStats?.aiPct ?? 0 | similarity : '1.1-1' }}</span>
 			</div>
 			<div class="human-stats">
 				<div class="title-container">
 					<span class="human dot"></span>
 					<span class="title">Human text</span>
 				</div>
-				<span class="percentage">{{ scoreStats?.humanPct ?? 0 | similarity }}</span>
+				<span class="percentage">{{ scoreStats?.humanPct ?? 0 | similarity : '1.1-1' }}</span>
 			</div>
 		</ng-container>
 	</ng-template>

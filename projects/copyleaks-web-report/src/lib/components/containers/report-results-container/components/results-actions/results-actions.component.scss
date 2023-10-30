@@ -1,4 +1,5 @@
 @import '../../../../../styles/website-colors.styles.scss';
+@import '../../../../../styles/styles.scss';
 
 :host {
 	display: flex;
@@ -8,6 +9,7 @@
 	padding: 0px 6px;
 	box-sizing: border-box;
 	gap: 10px;
+	min-height: 38px;
 }
 
 .skeleton {
@@ -104,7 +106,6 @@
 		border: 0px;
 		outline: 0px;
 		background-color: $color-container-background;
-		margin: 0px !important;
 		font-size: 16px;
 		font-family: 'Open Sans', sans-serif !important;
 	}
@@ -114,9 +115,9 @@
 	mat-icon {
 		cursor: pointer;
 		color: $color-dark-blue;
-		height: 18px;
-		width: 18px;
-		font-size: 18px;
+		width: 24px !important;
+		height: 24px !important;
+		font-size: 24px !important;
 	}
 }
 
@@ -137,7 +138,27 @@ mat-icon:hover {
 
 .expand-icon {
 	transition: transform 0.2s ease-in-out;
-	height: 24px !important;
-	width: 24px !important;
-	font-size: 24px !important;
+}
+
+.search-icon,
+.filter-search-icon {
+	line-height: normal !important;
+	color: $color-black;
+}
+
+.search-icon {
+	background-color: $color-white;
+	border-radius: 50%;
+	padding: 4px;
+}
+
+.clear-icon {
+	line-height: normal !important;
+	color: $color-black;
+	padding-right: 4px;
+}
+
+.search-input {
+	margin: 0px !important;
+	margin-left: 8px !important;
 }

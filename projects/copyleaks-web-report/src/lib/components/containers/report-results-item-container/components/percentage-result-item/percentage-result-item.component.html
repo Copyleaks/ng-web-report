@@ -56,10 +56,10 @@
 		fxLayoutAlign="start end"
 		(click)="showPlagiarismPercentages = !showPlagiarismPercentages">
 		<ng-container *ngIf="showPlagiarismPercentages; else showLessPerDetailsIcon">
-			<mat-icon>arrow_drop_up</mat-icon>
+			<mat-icon fontSet="material-icons-round">arrow_drop_up</mat-icon>
 		</ng-container>
 		<ng-template #showLessPerDetailsIcon>
-			<mat-icon>arrow_drop_down</mat-icon>
+			<mat-icon fontSet="material-icons-round">arrow_drop_down</mat-icon>
 		</ng-template>
 	</button>
 </div>
@@ -114,8 +114,8 @@
 				<span class="type-name">IDENTICAL</span>
 			</div>
 			<div fxLayout="row" fxLayoutAlign="start center" fxLayoutGap="12px">
-				<span class="percentage-match">{{ getMatchTypePercentage(eMatchType.Identical) | similarity }}</span>
-				<span *ngIf="!percentageResult?.showTooltip && iStatisticsResult" class="number-words-match">
+				<span class="percentage-match type-value">{{ getMatchTypePercentage(eMatchType.Identical) | similarity }}</span>
+				<span *ngIf="!percentageResult?.showTooltip && iStatisticsResult" class="number-words-match type-value">
 					{{ iStatisticsResult.identical }}
 				</span>
 			</div>
@@ -127,8 +127,10 @@
 				<span class="type-name">MINORCHANGES</span>
 			</div>
 			<div fxLayout="row" fxLayoutAlign="start center" fxLayoutGap="12px">
-				<span class="percentage-match">{{ getMatchTypePercentage(eMatchType.MinorChanges) | similarity }}</span>
-				<span *ngIf="!percentageResult?.showTooltip && iStatisticsResult" class="number-words-match">
+				<span class="percentage-match type-value">
+					{{ getMatchTypePercentage(eMatchType.MinorChanges) | similarity }}
+				</span>
+				<span *ngIf="!percentageResult?.showTooltip && iStatisticsResult" class="number-words-match type-value">
 					{{ iStatisticsResult.minorChanges }}
 				</span>
 			</div>
@@ -140,8 +142,10 @@
 				<span class="type-name">PARAPHRASED</span>
 			</div>
 			<div fxLayout="row" fxLayoutAlign="start center" fxLayoutGap="12px">
-				<span class="percentage-match">{{ getMatchTypePercentage(eMatchType.Paraphrased) | similarity }}</span>
-				<span *ngIf="!percentageResult?.showTooltip && iStatisticsResult" class="number-words-match">
+				<span class="percentage-match type-value">
+					{{ getMatchTypePercentage(eMatchType.Paraphrased) | similarity }}
+				</span>
+				<span *ngIf="!percentageResult?.showTooltip && iStatisticsResult" class="number-words-match type-value">
 					{{ iStatisticsResult.relatedMeaning }}
 				</span>
 			</div>

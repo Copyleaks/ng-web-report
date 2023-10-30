@@ -11,7 +11,6 @@ import { IPercentageResult } from '../percentage-result-item/models/percentage-r
 })
 export class ReportExpandResultItemComponent implements OnInit, OnChanges {
 	@Input() resultItem: IResultItem | null = null;
-	@Input() languageResult: string[] = [];
 	/**
 	 * @Input {boolean} Flag indicating whether to show the loading view or not.
 	 */

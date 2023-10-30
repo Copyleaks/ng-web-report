@@ -53,6 +53,7 @@
 						font-size: 16px;
 						font-weight: 500;
 						color: $color-black;
+						word-break: break-word;
 					}
 					.title-skeleton {
 						width: 50%;
@@ -79,6 +80,8 @@
 					color: $color-primary;
 					transition: 0.4s;
 				}
+				align-self: flex-start;
+				padding: 2px;
 			}
 
 			.exclude-result {

@@ -13,9 +13,6 @@ export class SimilarityPipe implements PipeTransform {
 	 */
 	transform(value: any, digitsInfo?: string, locale?: string): string | null {
 		let result = this.percentPipe.transform(value, digitsInfo, locale);
-		if (value > 0 && result && parseFloat(result) === 0) {
-			result = '< 1%';
-		}
 		if (value > 1) {
 			result = '100%';
 		}

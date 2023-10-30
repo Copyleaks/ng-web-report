@@ -6,17 +6,12 @@ import { ICompleteResultNotificationAlert } from '../../../models/report-data.mo
 	templateUrl: './report-alerts-container.component.html',
 	styleUrls: ['./report-alerts-container.component.scss'],
 })
-export class ReportAlertsContainerComponent implements OnInit, AfterViewInit {
+export class ReportAlertsContainerComponent implements OnInit {
 	@HostBinding('style.display')
 	display = 'flex';
 
 	@HostBinding('style.flex-grow')
 	flexGrowProp: number;
-
-	@HostBinding('style.min-height')
-	minHeight: string;
-
-	@ViewChild('firstAlert', { static: false }) firstAlert: ElementRef;
 
 	/**
 	 * @Input {number} Flex grow property - flex-grow
@@ -40,26 +35,11 @@ export class ReportAlertsContainerComponent implements OnInit, AfterViewInit {
 		if (this.flexGrow !== undefined && this.flexGrow !== null) this.flexGrowProp = this.flexGrow;
 	}
 
-	ngAfterViewInit() {
-		setTimeout(() => {
-			if (this.firstAlert && this.alerts?.length === 1) {
-				this.containerHeight = this.firstAlert.nativeElement.offsetHeight;
-				this.minHeight = `${this.containerHeight + 30}px`;
-			}
-		});
-	}
-
 	hideAlertsClick() {
 		this.hideAlerts = true;
-		setTimeout(() => {
-			this.minHeight = '';
-		});
 	}
 
 	showAlertsClick() {
 		this.hideAlerts = false;
-		setTimeout(() => {
-			this.minHeight = `${this.containerHeight + 30}px`;
-		});
 	}
 }

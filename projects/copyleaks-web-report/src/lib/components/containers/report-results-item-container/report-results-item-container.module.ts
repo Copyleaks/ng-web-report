@@ -11,6 +11,7 @@ import { MatChipsModule } from '@angular/material/chips';
 import { LockResultItemComponent } from './components/lock-result-item/lock-result-item.component';
 import { PercentageResultItemModule } from './components/percentage-result-item/percentage-result-item.module';
 import { ReportExpandResultItemComponent } from './components/report-expand-result-item/report-expand-result-item.component';
+import { MatTooltipModule } from '@angular/material/tooltip';
 
 @NgModule({
 	declarations: [ReportResultsItemContainerComponent, ReportExpandResultItemComponent],
@@ -23,6 +24,7 @@ import { ReportExpandResultItemComponent } from './components/report-expand-resu
 		MatButtonModule,
 		NgxSkeletonLoaderModule,
 		MatChipsModule,
+		MatTooltipModule,
 		PercentageResultItemModule,
 	],
 })

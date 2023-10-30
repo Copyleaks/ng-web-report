@@ -4,6 +4,7 @@
 <div class="middle-section">
 	<!-- Report result item section -->
 	<copyleaks-report-results-item-container
+		style="display: flex; flex-direction: column; flex-shrink: 0; gap: 8px"
 		[isMobile]="false"
 		[resultItem]="resultItem"
 		[reportResponsive]="EResponsiveLayoutType.Mobile"
@@ -11,36 +12,38 @@
 		[flexGrow]="20"
 		[isMobile]="true"></copyleaks-report-results-item-container>
 
-	<!--Report scan content viewer -->
-	<copyleaks-content-viewer-container
-		[isHtmlView]="isHtmlView"
-		[contentHtml]="sourceIframeHtml"
-		[scanSource]="sourceCrawledVersion"
-		[contentTextMatches]="sourceTextMatches"
-		[numberOfPages]="numberOfPagesSource"
-		[numberOfWords]="numberOfWords"
-		[currentPage]="currentPageSource"
-		[reportResponsive]="EResponsiveLayoutType.Mobile"
-		viewMode="one-to-one"
-		reportOrigin="source"
-		[hidePoweredBy]="true"
-		(iFrameMessageEvent)="onSourceIFrameMessage($event)"
-		(viewChangeEvent)="onReportViewChange($event)"></copyleaks-content-viewer-container>
+	<div style="display: flex; flex-direction: column; flex-grow: 1; overflow-y: auto; gap: 8px">
+		<!--Report scan content viewer -->
+		<copyleaks-content-viewer-container
+			[isHtmlView]="isHtmlView"
+			[contentHtml]="sourceIframeHtml"
+			[scanSource]="sourceCrawledVersion"
+			[contentTextMatches]="sourceTextMatches"
+			[numberOfPages]="numberOfPagesSource"
+			[numberOfWords]="numberOfWords"
+			[currentPage]="currentPageSource"
+			[reportResponsive]="EResponsiveLayoutType.Mobile"
+			viewMode="one-to-one"
+			reportOrigin="source"
+			[hidePoweredBy]="true"
+			(iFrameMessageEvent)="onSourceIFrameMessage($event)"
+			(viewChangeEvent)="onReportViewChange($event)"></copyleaks-content-viewer-container>
 
-	<!-- Report result content viewer -->
-	<copyleaks-content-viewer-container
-		[isHtmlView]="isHtmlView"
-		[contentHtml]="suspectIframeHtml"
-		[resultData]="resultData"
-		[contentTextMatches]="suspectTextMatches"
-		[numberOfPages]="numberOfPagesSuspect"
-		[currentPage]="currentPageSuspect"
-		[reportResponsive]="EResponsiveLayoutType.Mobile"
-		[hidePoweredBy]="true"
-		viewMode="one-to-one"
-		reportOrigin="suspect"
-		(iFrameMessageEvent)="onSuspectIFrameMessage($event)"
-		(viewChangeEvent)="onReportViewChange($event)"></copyleaks-content-viewer-container>
+		<!-- Report result content viewer -->
+		<copyleaks-content-viewer-container
+			[isHtmlView]="isHtmlView"
+			[contentHtml]="suspectIframeHtml"
+			[resultData]="resultData"
+			[contentTextMatches]="suspectTextMatches"
+			[numberOfPages]="numberOfPagesSuspect"
+			[currentPage]="currentPageSuspect"
+			[reportResponsive]="EResponsiveLayoutType.Mobile"
+			[hidePoweredBy]="true"
+			viewMode="one-to-one"
+			reportOrigin="suspect"
+			(iFrameMessageEvent)="onSuspectIFrameMessage($event)"
+			(viewChangeEvent)="onReportViewChange($event)"></copyleaks-content-viewer-container>
+	</div>
 </div>
 
 <!-- Powered by Copyleaks image section -->

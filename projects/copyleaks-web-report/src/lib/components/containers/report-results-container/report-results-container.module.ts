@@ -16,6 +16,8 @@ import { ReportResultsContainerComponent } from './report-results-container.comp
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatDialogModule } from '@angular/material/dialog';
+import { FilterResultDailogService } from '../../../dialogs/filter-result-dailog/services/filter-result-dailog.service';
+import { ReportDataService } from '../../../services/report-data.service';
 @NgModule({
 	declarations: [
 		ReportResultsContainerComponent,
@@ -46,5 +48,6 @@ import { MatDialogModule } from '@angular/material/dialog';
 		ReportResultsItemComponent,
 		LockResultItemComponent,
 	],
+	providers: [FilterResultDailogService, ReportDataService],
 })
 export class ReportResultsContainerModule {}

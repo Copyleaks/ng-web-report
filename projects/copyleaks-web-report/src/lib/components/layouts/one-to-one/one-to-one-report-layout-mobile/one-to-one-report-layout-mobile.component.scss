@@ -22,6 +22,7 @@
 		copyleaks-report-results-item-container {
 			height: 20%;
 			padding: 10px !important;
+			flex-grow: 0 !important;
 			background-color: $color-white;
 			::ng-deep cr-report-results-item {
 				.result-item-container {

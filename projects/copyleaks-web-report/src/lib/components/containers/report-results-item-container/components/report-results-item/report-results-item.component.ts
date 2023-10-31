@@ -35,6 +35,7 @@ export class ReportResultsItemComponent implements OnInit, OnChanges {
 			suspectId: this.resultItem.resultPreview.id,
 			sourcePageIndex: 1,
 			suspectPageIndex: 1,
+			alertCode: undefined,
 		});
 	}
 

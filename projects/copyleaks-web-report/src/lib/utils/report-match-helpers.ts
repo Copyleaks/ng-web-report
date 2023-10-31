@@ -16,6 +16,7 @@ import { Comparison, ICompleteResultNotificationAlert, IScanSource } from '../mo
 
 import { CopyleaksReportOptions } from '../models/report-options.models';
 import { EExcludeReason, EMatchClassification } from '../enums/copyleaks-web-report.enums';
+import { EXCLUDE_MESSAGE } from '../constants/report-exclude.constants';
 
 /** A reduce function to extrace `MatchEndpoint`s */
 const extractMatchEndpoints = (acc: MatchEndpoint[], curr: Match): MatchEndpoint[] => {
@@ -512,10 +513,12 @@ export const getRenderedMatches = (matches: Match[] | null, originalHtml: string
 		let slice = originalHtml?.substring(curr.start, curr.end);
 		switch (curr.type) {
 			case MatchType.excluded:
+				var reason = curr.reason ? EXCLUDE_MESSAGE[curr.reason] : null;
 				if (curr.reason === EExcludeReason.PartialScan) {
-					slice = `<span exclude-partial-scan data-type="${curr.type}" data-index="${i}">${slice}</span>`;
+					slice = `<span exclude-partial-scan data-type="${curr.type}" data-index="${i}" title="${reason}">${slice}</span>`;
 				} else {
-					slice = `<span exclude>${slice}</span>`;
+					if (reason) slice = `<span exclude title="${reason}">${slice}</span>`;
+					else slice = `<span exclude title="UnKnown">${slice}</span>`;
 				}
 				break;
 			case MatchType.none:

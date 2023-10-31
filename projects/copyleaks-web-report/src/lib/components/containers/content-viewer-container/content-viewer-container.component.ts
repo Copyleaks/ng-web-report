@@ -26,6 +26,7 @@ import { IScanSource } from '../../../models/report-data.models';
 import { EResponsiveLayoutType } from '../../../enums/copyleaks-web-report.enums';
 import { ReportViewService } from '../../../services/report-view.service';
 import { untilDestroy } from '../../../utils/until-destroy';
+import { EXCLUDE_MESSAGE } from '../../../constants/report-exclude.constants';
 
 @Component({
 	selector: 'copyleaks-content-viewer-container',
@@ -219,7 +220,10 @@ export class ContentViewerContainerComponent implements OnInit, AfterViewInit, O
 	@Output() viewChangeEvent = new EventEmitter<IReportViewEvent>();
 	iframeLoaded: boolean;
 
-	public get pages(): number[] {
+
+	EXCLUDE_MESSAGE = EXCLUDE_MESSAGE;
+
+	get pages(): number[] {
 		if (this.scanSource) return this.scanSource && this.scanSource.text.pages.startPosition;
 		if (this.resultData.result) return this.resultData.result?.text.pages.startPosition;
 

@@ -6,63 +6,81 @@
 	flex-grow: 1;
 	gap: 8px;
 	flex-direction: column;
-}
 
-.middle-section,
-.content-section {
-	display: flex;
-	flex-direction: column;
-	flex-grow: 1;
-	gap: 8px;
-}
+	.middle-section,
+	.content-section {
+		display: flex;
+		flex-direction: column;
+		flex-grow: 1;
+		gap: 8px;
+	}
 
-.middle-section {
-	flex-grow: 80;
-	height: 80%;
+	.middle-section {
+		flex-grow: 80;
+		height: 80%;
 
-	copyleaks-report-results-item-container {
-		height: 20%;
-		padding: 10px !important;
-		background-color: $color-white;
-		::ng-deep cr-report-results-item {
-			.result-item-container {
-				border: none !important;
-			}
-			.percentage-result-item-container {
-				display: none !important;
+		copyleaks-report-results-item-container {
+			height: 20%;
+			padding: 10px !important;
+			flex-grow: 0 !important;
+			background-color: $color-white;
+			::ng-deep cr-report-results-item {
+				.result-item-container {
+					border: none !important;
+				}
+				.percentage-result-item-container {
+					display: none !important;
+				}
 			}
 		}
 	}
-}
 
-.content-section {
-	flex-grow: 70;
-	height: 70%;
-}
+	.content-section {
+		flex-grow: 70;
+		height: 70%;
+	}
 
-.alerts-container {
-	@include cls-report-container-lvl-2;
-}
+	.alerts-container {
+		@include cls-report-container-lvl-2;
+	}
 
-.powered-by-copyleaks-container {
-	display: flex;
-	justify-content: center;
-	align-items: center;
-}
+	.powered-by-copyleaks-container {
+		display: flex;
+		justify-content: center;
+		align-items: center;
+	}
 
-copyleaks-content-viewer-container,
-copyleaks-report-results-item-container {
-	border-radius: 10px;
-	box-shadow: -2px -2px 8px 0px rgba(255, 255, 255, 0.5), 2px 2px 4px 0px rgba(0, 0, 0, 0.15);
-}
+	copyleaks-content-viewer-container,
+	copyleaks-report-results-item-container {
+		border-radius: 10px;
+		box-shadow: -2px -2px 8px 0px rgba(255, 255, 255, 0.5), 2px 2px 4px 0px rgba(0, 0, 0, 0.15);
+	}
 
-copyleaks-content-viewer-container {
-	height: 40%;
-	flex-grow: 40;
-}
+	copyleaks-content-viewer-container {
+		height: 40%;
+		flex-grow: 40;
+	}
 
-.report-actions-container {
-	::ng-deep .actions-container {
-		padding: 0px !important;
+	.report-actions-container {
+		::ng-deep .actions-container {
+			padding: 0px !important;
+		}
+	}
+
+	copyleaks-report-results-item-container {
+		overflow-y: visible !important;
+		height: auto !important;
+		::ng-deep {
+			.plagiarism-detection-container,
+			.expand-result-continer {
+				width: 100% !important;
+				max-width: 100% !important;
+			}
+
+			.expand-result-top-continer {
+				flex-direction: column !important;
+				height: auto !important;
+			}
+		}
 	}
 }

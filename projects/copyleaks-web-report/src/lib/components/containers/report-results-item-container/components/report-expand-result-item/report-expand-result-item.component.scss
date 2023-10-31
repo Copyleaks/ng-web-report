@@ -4,10 +4,13 @@
 	background-color: $color-white;
 	border-radius: 10px;
 	height: 100%;
+	width: 100%;
 	overflow-y: auto;
 	gap: 10px;
+
 	.expand-result-continer {
-		width: 50%;
+		max-width: 50%;
+		flex: 0 0 50%;
 		.result-header {
 			width: 100%;
 			gap: 8px;
@@ -22,6 +25,8 @@
 				}
 			}
 			.result-title-container {
+				flex-grow: 1;
+				width: calc(100% - 42px);
 				.exclude-button {
 					cursor: pointer;
 					background-color: $color-white;
@@ -41,6 +46,14 @@
 					font-weight: 700;
 					font-size: 14px;
 					color: $color-black;
+					display: -webkit-box;
+					-webkit-box-orient: vertical;
+					-webkit-line-clamp: 2; /* Number of lines to show */
+					overflow: hidden;
+					text-overflow: ellipsis;
+					line-height: 1.5em; /* Height of one line */
+					max-height: 3em; /* line-height multiplied by number of lines to show */
+					white-space: normal;
 				}
 				.result-source {
 					font-size: 14px;
@@ -50,9 +63,16 @@
 				.result-url-source {
 					color: $color-primary;
 					text-decoration: none;
-					word-break: break-all;
-					align-items: center !important;
-					justify-content: flex-start !important;
+
+					white-space: nowrap;
+					overflow: hidden;
+					text-overflow: ellipsis;
+					max-width: 100%;
+					display: flex;
+					justify-content: start;
+					align-items: center;
+					gap: 4px;
+
 					mat-icon {
 						font-size: 16px;
 						height: 16px;
@@ -62,10 +82,9 @@
 						font-size: 14px;
 						font-weight: 500;
 						text-decoration: underline;
-						// white-space: nowrap;
-						// overflow: hidden;
-						// text-overflow: ellipsis;
-						// max-width: 264px;
+						white-space: nowrap;
+						overflow: hidden;
+						text-overflow: ellipsis;
 					}
 				}
 			}
@@ -113,8 +132,12 @@
 				box-sizing: border-box;
 				width: 100%;
 				padding: 4px;
+				::ng-deep {
+					.mat-chip-list-wrapper {
+						gap: 4px !important;
+					}
+				}
 				.mat-chip-container {
-					margin-right: 4px;
 					mat-chip {
 						background-color: $color-dark-blue;
 						color: $color-container-background;

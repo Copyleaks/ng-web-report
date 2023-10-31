@@ -15,14 +15,19 @@
 			</div>
 			<div class="result-container" fxLayout="row" fxLayoutAlign="start center" fxLayoutGap="4px">
 				<span class="total-results">Plagiarism Results ({{ resultsActions.totalResults }})</span>
-				<mat-icon class="separate-circle-icon" fontSet="material-icons-round">circle</mat-icon>
-				<span
-					class="total-excuded"
-					(click)="!!resultsActions.totalExcluded ? (showExcludedDailog = !showExcludedDailog) : ''">
-					{{ resultsActions.totalExcluded }} excluded
-				</span>
-				<mat-icon class="separate-circle-icon" fontSet="material-icons-round">circle</mat-icon>
-				<span class="total-filtered">{{ totalFiltered }} filtered</span>
+				<ng-container *ngIf="!!resultsActions?.totalExcluded">
+					<mat-icon class="separate-circle-icon" fontSet="material-icons-round">circle</mat-icon>
+					<span
+						class="total-excuded"
+						(click)="!!resultsActions.totalExcluded ? (showExcludedDailog = !showExcludedDailog) : ''">
+						{{ resultsActions.totalExcluded }} excluded
+					</span>
+				</ng-container>
+
+				<ng-container *ngIf="!!totalFiltered">
+					<mat-icon class="separate-circle-icon" fontSet="material-icons-round">circle</mat-icon>
+					<span class="total-filtered">{{ totalFiltered }} filtered</span>
+				</ng-container>
 			</div>
 		</div>
 		<div class="body-container" fxLayout="row" fxLayoutGap="32px">
@@ -77,9 +82,9 @@
 				</section>
 			</div>
 		</div>
-		<div class="apply-and-discard-button-contaier" fxLayout="row" fxLayoutAlign="end center" fxLayoutGap="32px">
-			<button class="discard-changes-button">Discard changes</button>
-			<button class="apply-filters-button">Apply filters</button>
+		<div class="apply-and-discard-button-contaier" fxLayout="row" fxLayoutAlign="end center" fxLayoutGap="16px">
+			<button [disabled]="" mat-button class="discard-changes-button">Discard changes</button>
+			<button mat-button class="apply-filters-button">Apply filters</button>
 		</div>
 	</div>
 </ng-container>

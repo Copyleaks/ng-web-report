@@ -22,7 +22,7 @@ import { MetaFilterResultComponent } from './components/meta-filter-result/meta-
 import { SourceTypeFilterResultComponent } from './components/source-type-filter-result/source-type-filter-result.component';
 import { FilterResultDailogComponent } from './filter-result-dailog.component';
 import { FilterResultDailogService } from './services/filter-result-dailog.service';
-
+import { MatButtonModule } from '@angular/material/button';
 @NgModule({
 	declarations: [
 		FilterResultDailogComponent,
@@ -49,6 +49,7 @@ import { FilterResultDailogService } from './services/filter-result-dailog.servi
 		MatCheckboxModule,
 		MatChipsModule,
 		ReportResultsContainerModule,
+		MatButtonModule,
 	],
 })
 export class FilterResultDailogModule {}

@@ -11,6 +11,7 @@ import { FilterResultDailogService } from './services/filter-result-dailog.servi
 import { ITagItem } from './components/included-tags-filter-result/models/included-tags-filter-result.models';
 import { EFilterResultForm } from './models/filter-result-dailog.enum';
 import { FormGroup } from '@angular/forms';
+import { untilDestroy } from '../../utils/until-destroy';
 
 @Component({
 	selector: 'cr-filter-result-dailog',
@@ -160,7 +161,7 @@ export class FilterResultDailogComponent implements OnInit {
 	initResultItem() {
 		this._reportDataSvc.initReportData(this.endpointsConfig);
 
-		this._reportDataSvc.scanResultsPreviews$.subscribe(completeResults => {
+		this._reportDataSvc.scanResultsPreviews$.pipe(untilDestroy(this)).subscribe(completeResults => {
 			if (completeResults) {
 				this.loading = false;
 				const results = completeResults.results;
@@ -197,6 +198,6 @@ export class FilterResultDailogComponent implements OnInit {
 			}
 		});
 	}
-
+	ngOnDestroy() {}
 	clearFilterButton() {}
 }

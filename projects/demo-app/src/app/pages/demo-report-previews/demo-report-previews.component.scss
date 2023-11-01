@@ -31,4 +31,17 @@
 	copyleaks-web-report {
 		width: 100%;
 	}
+
+	.custom-empty-state-container {
+		padding: 30px;
+		cr-empty-result-state {
+			height: 300px;
+		}
+		.text-container {
+			font-size: 16px;
+			font-style: normal;
+			font-weight: 500;
+			line-height: normal;
+		}
+	}
 }

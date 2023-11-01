@@ -1,5 +1,5 @@
 <cr-results-actions
-	*ngIf="!showLoadingView"
+	*ngIf="!showLoadingView && !showCustomView"
 	[resultsActions]="resultsActions"
 	[searchedValue]="searchedValue"
 	[showLoadingView]="false"
@@ -12,7 +12,7 @@
 	class="report-results-item-top-container"
 	[style]="'width:100%'"
 	[ngStyle]="{
-		display: showLoadingView || !showAlertsSection ? 'none' : 'flex'
+		display: showLoadingView || !showAlertsSection || showCustomView ? 'none' : 'flex'
 	}"
 	fxLayout="column"
 	fxLayoutAlign="start center"
@@ -121,3 +121,12 @@
 		</div>
 	</div>
 </ng-container>
+
+<div
+	class="custom-results-container"
+	#customResultView
+	[ngStyle]="{
+		display: !showCustomView || showLoadingView ? 'none' : 'flex'
+	}">
+	<ng-container *ngTemplateOutlet="customResultsTemplate ?? null"></ng-container>
+</div>

@@ -9,6 +9,14 @@
 	flex-grow: 65;
 	gap: 10px;
 
+	.custom-results-container {
+		height: 100%;
+		display: flex;
+		flex-direction: column;
+		justify-content: center;
+		overflow-y: auto;
+	}
+
 	cr-results-actions {
 		width: 100%;
 	}
@@ -38,11 +46,14 @@
 			}
 
 			.mat-chip-navigate {
-				min-height: 25px;
 				font-size: 12px;
 				font-weight: 500;
 				color: $color-white;
 				background-color: $color-dark-blue;
+				padding: 2px 8px !important;
+				height: fit-content !important;
+				min-height: auto !important;
+				line-height: normal !important;
 			}
 		}
 

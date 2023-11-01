@@ -1,5 +1,6 @@
 import {
 	AfterViewInit,
+	ChangeDetectorRef,
 	Component,
 	ElementRef,
 	HostBinding,
@@ -8,6 +9,7 @@ import {
 	OnInit,
 	Renderer2,
 	SimpleChanges,
+	TemplateRef,
 	ViewChild,
 } from '@angular/core';
 import { fromEvent } from 'rxjs';
@@ -17,6 +19,7 @@ import { untilDestroy } from '../../../utils/until-destroy';
 import { EnumNavigateMobileButton } from '../report-results-item-container/components/models/report-result-item.enum';
 import { IResultItem } from '../report-results-item-container/components/models/report-result-item.models';
 import { IResultsActions } from './components/results-actions/models/results-actions.models';
+import { ReportNgTemplatesService } from '../../../services/report-ng-templates.service';
 
 @Component({
 	selector: 'copyleaks-report-results-container',
@@ -47,6 +50,7 @@ export class ReportResultsContainerComponent implements OnInit, AfterViewInit, O
 
 	@ViewChild('resultsContainer', { read: ElementRef }) public resultsContainer: ElementRef;
 	@ViewChild('resultitem', { read: ElementRef }) public resultitem: ElementRef;
+	@ViewChild('customResultView', { read: ElementRef }) public customResultView: ElementRef;
 
 	private _startingIndex: number = 0;
 	private _pageSize: number = 10;
@@ -60,6 +64,9 @@ export class ReportResultsContainerComponent implements OnInit, AfterViewInit, O
 	showMatChip: boolean = true;
 	searchedValue: string;
 
+	customResultsTemplate: TemplateRef<any> | undefined = undefined;
+	showCustomView: boolean;
+
 	get EndingIndex(): number {
 		return this._startingIndex + this._pageSize * this._currentPage;
 	}
@@ -68,7 +75,11 @@ export class ReportResultsContainerComponent implements OnInit, AfterViewInit, O
 		return this.allResultsItem?.length;
 	}
 
-	constructor(private _renderer: Renderer2) {}
+	constructor(
+		private _renderer: Renderer2,
+		private _reportNgTemplatesSvc: ReportNgTemplatesService,
+		private cdr: ChangeDetectorRef
+	) {}
 
 	ngOnInit(): void {
 		if (this.flexGrow !== undefined && this.flexGrow !== null) this.flexGrowProp = this.flexGrow;
@@ -81,12 +92,33 @@ export class ReportResultsContainerComponent implements OnInit, AfterViewInit, O
 			this.resultItemList = this.allResultsItem;
 		}
 		this.navigateMobileButton = EnumNavigateMobileButton.FirstButton;
+
+		this._reportNgTemplatesSvc.reportTemplatesSubject$.pipe(untilDestroy(this)).subscribe(refs => {
+			if (refs?.customResultsTemplate !== undefined && this.customResultsTemplate === undefined) {
+				this.customResultsTemplate = refs?.customResultsTemplate;
+
+				this.cdr.detectChanges();
+			}
+		});
 	}
 
 	ngAfterViewInit(): void {
 		fromEvent(this.resultsContainer.nativeElement, 'scroll')
 			.pipe(debounceTime(200), untilDestroy(this))
 			.subscribe((e: any) => this.onTableScroll(e));
+	}
+
+	ngAfterViewChecked() {
+		const container: HTMLElement = this.customResultView?.nativeElement;
+		if (container && container?.childElementCount > 0)
+			setTimeout(() => {
+				this.showCustomView = true;
+			});
+		else
+			setTimeout(() => {
+				this.showCustomView = false;
+			});
+		this.cdr.detectChanges();
 	}
 
 	ngOnChanges(changes: SimpleChanges): void {

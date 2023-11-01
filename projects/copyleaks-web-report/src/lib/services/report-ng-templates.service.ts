@@ -23,8 +23,8 @@ export class ReportNgTemplatesService {
 	 */
 	public setReportCustomActionsTemplateRef(template: TemplateRef<any>) {
 		this._reportTemplatesRefs$.next({
+			...this._reportTemplatesRefs$.value,
 			customActionsTemplate: template,
-			customResultsTemplate: this.reportTemplatesRefs?.customResultsTemplate,
 		} as ICustomClsReportTemplatesRefs);
 	}
 
@@ -33,7 +33,7 @@ export class ReportNgTemplatesService {
 	 */
 	public setReportCustomResultsTemplateRef(template: TemplateRef<any>) {
 		this._reportTemplatesRefs$.next({
-			customActionsTemplate: this.reportTemplatesRefs?.customActionsTemplate,
+			...this._reportTemplatesRefs$.value,
 			customResultsTemplate: template,
 		} as ICustomClsReportTemplatesRefs);
 	}

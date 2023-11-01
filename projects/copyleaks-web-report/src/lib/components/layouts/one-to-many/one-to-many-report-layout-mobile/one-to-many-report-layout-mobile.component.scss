@@ -52,6 +52,9 @@
 	background-color: $color-white;
 
 	::ng-deep {
+		cr-report-results-item {
+			max-width: 313px !important;
+		}
 		cr-results-actions {
 			padding: 8px 8px 0px 8px;
 		}

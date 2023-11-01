@@ -23,15 +23,15 @@
 			[ngClass]="{
 				'results-item-container': !isMobile,
 				'results-item-mobile-container': isMobile,
-				'empty-results-container': !resultItemList || resultItemList.length === 0
+				'empty-results-container': !displayedResults || displayedResults.length === 0
 			}">
-			<ng-container *ngIf="resultItemList && resultItemList.length > 0; else emptyState">
+			<ng-container *ngIf="displayedResults && displayedResults.length > 0; else emptyState">
 				<div
 					style="width: 100%"
 					fxLayout="column"
 					fxLayoutAlign="start start"
 					fxLayoutGap="4px"
-					*ngFor="let item of resultItemList">
+					*ngFor="let item of displayedResults">
 					<cr-report-results-item
 						#resultitem
 						[resultItem]="item"

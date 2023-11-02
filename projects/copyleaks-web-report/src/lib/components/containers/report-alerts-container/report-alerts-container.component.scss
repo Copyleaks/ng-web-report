@@ -113,4 +113,9 @@
 	::ng-deep .mobile-results-panel-header {
 		padding: 8px !important;
 	}
+
+	.item-with-padding {
+		padding-right: 5px !important;
+		box-sizing: border-box !important;
+	}
 }

@@ -19,7 +19,7 @@ import { IResultsActions } from './components/results-actions/models/results-act
 import { ReportNgTemplatesService } from '../../../services/report-ng-templates.service';
 import { untilDestroy } from '../../../utils/until-destroy';
 import { CdkVirtualScrollViewport } from '@angular/cdk/scrolling';
-import { Observable } from 'rxjs';
+import { Observable, fromEvent } from 'rxjs';
 import { map, pairwise, filter, distinctUntilChanged } from 'rxjs/operators';
 
 @Component({
@@ -65,6 +65,8 @@ export class ReportResultsContainerComponent implements OnInit, OnChanges {
 	showCustomView: boolean;
 	currentViewedIndex: number = 0;
 	scrollSub: any;
+	resizeSubscription: any;
+	addPaddingToContainer: boolean;
 
 	get allResultsItemLength() {
 		return this.allResults?.length;
@@ -92,6 +94,9 @@ export class ReportResultsContainerComponent implements OnInit, OnChanges {
 		this.cdr.detectChanges();
 
 		this.detectEndOfList();
+
+		// Call it after the view has been initialized
+		this.checkAndApplyPadding();
 	}
 
 	ngOnInit(): void {
@@ -110,6 +115,23 @@ export class ReportResultsContainerComponent implements OnInit, OnChanges {
 
 	ngAfterViewInit(): void {
 		this.detectEndOfList();
+
+		// Optionally, if you want to handle window resizing
+		this.resizeSubscription = fromEvent(window, 'resize').subscribe(() => {
+			this.checkAndApplyPadding();
+		});
+	}
+
+	checkAndApplyPadding() {
+		// Check if the viewport element is scrollable
+		if (!this.viewport) return;
+		const isScrollable =
+			this.viewport.elementRef.nativeElement.scrollHeight > this.viewport.elementRef.nativeElement.clientHeight;
+
+		// If it is, add a class or style to apply the padding
+		setTimeout(() => {
+			this.addPaddingToContainer = isScrollable;
+		});
 	}
 
 	hideResultItem() {

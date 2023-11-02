@@ -27,7 +27,10 @@
 			}">
 			<ng-container *ngIf="displayedResults && displayedResults.length > 0; else emptyState">
 				<ng-container *ngIf="!isMobile; else mobileContainerView">
-					<cdk-virtual-scroll-viewport class="desktop-scroll" itemSize="195">
+					<cdk-virtual-scroll-viewport
+						class="desktop-scroll"
+						itemSize="195"
+						[ngClass]="{ 'scroll-with-padding': addPaddingToContainer }">
 						<div
 							style="width: 100%"
 							fxLayout="column"

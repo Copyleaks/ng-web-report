@@ -37,6 +37,7 @@ export class ReportResultsItemComponent implements OnInit, OnChanges {
 			suspectPageIndex: 1,
 			alertCode: undefined,
 		});
+		this._reportViewSvc.selectedAlert$.next(null);
 	}
 
 	get authorName() {

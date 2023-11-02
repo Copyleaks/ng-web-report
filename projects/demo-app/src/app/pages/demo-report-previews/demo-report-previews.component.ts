@@ -11,16 +11,7 @@ import { IClsReportEndpointConfigModel } from 'projects/copyleaks-web-report/src
 })
 export class DemoReportPreviewsComponent implements OnInit {
 	ReportLayoutType = EReportLayoutType;
-	endpointsConfig: IClsReportEndpointConfigModel = {
-		authToken: '', // optional
-		crawledVersion: `assets/scans/bundle/Filter/source.json`,
-		completeResults: `assets/scans/bundle/Filter/complete.json`,
-		result: `assets/scans/bundle/Filter/results/{RESULT_ID}`, // inside the package, we will be assignment the RESULT_ID
-		filter: {
-			get: '', // optional
-			update: '', // optional
-		},
-	};
+	endpointsConfig: IClsReportEndpointConfigModel;
 	paramSub: any;
 
 	lockResultItem: ILockResultItem = {
@@ -35,13 +26,26 @@ export class DemoReportPreviewsComponent implements OnInit {
 	constructor(private _route: ActivatedRoute) {}
 
 	ngOnInit(): void {
+		const id = this._route.snapshot.paramMap.get('id');
+		const type = this._route.snapshot.paramMap.get('type');
+		this.endpointsConfig = {
+			authToken: '', // optional
+			crawledVersion: `assets/scans/${type}/${id}/source.json`,
+			completeResults: `assets/scans/${type}/${id}/complete.json`,
+			result: `assets/scans/${type}/${id}/results/{RESULT_ID}`, // inside the package, we will be assignment the RESULT_ID
+			filter: {
+				get: '', // optional
+				update: '', // optional
+			},
+		};
 		this.paramSub = this._route.paramMap.subscribe(params => {
 			const id = params.get('id');
+			const type = params.get('type');
 			this.endpointsConfig = {
 				authToken: '', // optional
-				crawledVersion: `assets/scans/bundle/${id}/source.json`,
-				completeResults: `assets/scans/bundle/${id}/complete.json`,
-				result: `assets/scans/bundle/${id}/results/{RESULT_ID}.json`, // inside the package, we will be assignment the RESULT_ID
+				crawledVersion: `assets/scans/${type}/${id}/source.json`,
+				completeResults: `assets/scans/${type}/${id}/complete.json`,
+				result: `assets/scans/${type}/${id}/results/{RESULT_ID}.json`, // inside the package, we will be assignment the RESULT_ID
 				filter: {
 					get: '', // optional
 					update: '', // optional

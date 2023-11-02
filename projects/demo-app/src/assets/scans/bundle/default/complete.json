@@ -20,7 +20,24 @@
         "id": "0883e9a28e",
         "title": "Martina Gedeck - The complete information and online sale with free shipping. Order and buy now f...",
         "introduction": "Martina Gedeck - The complete information and online sale with free shipping. Order and buy now for the lowest price in the best online store! Discounts & Coupons.",
-        "matchedWords": 1421
+        "matchedWords": 1421,        
+        "tags": [
+          {
+            "code": "123",
+            "title": "Aiham AbuRafea",
+            "description": "Aiham AbuRafea tag description"
+          },
+          {
+            "code": "1234",
+            "title": "Chips 1",
+            "description": "Chips 1 description"
+          },
+          {
+            "code": "1235",
+            "title": "Chips 2",
+            "description": "Chips 2 description"
+          }
+        ]
       },
       {
         "url": "https://en.wiktionary.org/wiki/a",
@@ -167,14 +184,91 @@
         "id": "f13f75e7d7",
         "title": "Tyler Seguin Biography- Salary, Earnings, Net worth, Married, Relationship, Affair, Age, Height, ...",
         "introduction": "Who is Tyler Seguin? Which team does Tyler Seguin play for? How much does he earn as annual salary from his club? Is he married? Who is his girlfriend?",
-        "matchedWords": 107
+        "matchedWords": 107         
       },
       {
         "url": "https://wikivisually.com/wiki/Martina_Gedeck",
         "id": "f7a13541e2",
         "title": "Martina Gedeck - WikiVisually",
         "introduction": "Martina Gedeck is a German actress. She came to broader, international attention due to her roles in films such as Mostly Martha, The Lives of Others, and The Baader Meinhof Complex. She has won numerous awards, including the",
-        "matchedWords": 1563
+        "matchedWords": 1563,
+        "tags": [
+          {
+            "code": "123",
+            "title": "Aiham AbuRafea",
+            "description": "Aiham AbuRafea tag description"
+          },
+          {
+            "code": "1234",
+            "title": "Chips 1",
+            "description": "Chips 1 description"
+          },
+          {
+            "code": "1235",
+            "title": "Chips 2",
+            "description": "Chips 2 description"
+          },
+          {
+            "code": "1235",
+            "title": "Chips 2",
+            "description": "Chips 2 description"
+          },
+          {
+            "code": "1235",
+            "title": "Chips 2",
+            "description": "Chips 2 description"
+          },
+          {
+            "code": "1235",
+            "title": "Chips 2",
+            "description": "Chips 2 description"
+          },
+          {
+            "code": "1235",
+            "title": "Chips 2",
+            "description": "Chips 2 description"
+          },
+          {
+            "code": "1235",
+            "title": "Chips 2",
+            "description": "Chips 2 description"
+          },
+          {
+            "code": "1235",
+            "title": "Chips 2",
+            "description": "Chips 2 description"
+          },
+          {
+            "code": "1235",
+            "title": "Chips 2",
+            "description": "Chips 2 description"
+          },
+          {
+            "code": "1235",
+            "title": "Chips 2",
+            "description": "Chips 2 description"
+          },
+          {
+            "code": "1235",
+            "title": "Chips 2",
+            "description": "Chips 2 description"
+          },
+          {
+            "code": "1235",
+            "title": "Chips 2",
+            "description": "Chips 2 description"
+          },
+          {
+            "code": "1235",
+            "title": "Chips 2",
+            "description": "Chips 2 description"
+          },
+          {
+            "code": "1235",
+            "title": "Chips 2",
+            "description": "Chips 2 description"
+          }
+        ]
       }
     ],
     "database": [

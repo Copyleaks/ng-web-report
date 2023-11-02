@@ -100,36 +100,36 @@
 
 <mat-menu #previewsMenu="matMenu">
 	<button
-		(click)="navigateToReportPreview('default')"
+		(click)="navigateToReportPreview('bundle/default')"
 		matTooltip="Scanned Website Example"
 		matTooltipPosition="right"
 		mat-menu-item>
 		<mat-icon class="item-icon" fontSet="material-icons-round">code</mat-icon>
-		<span class="item-text">HTML</span>
+		<span class="item-text">bundle -> HTML</span>
 	</button>
 	<button
-		(click)="navigateToReportPreview('Filter')"
+		(click)="navigateToReportPreview('bundle/Filter')"
 		matTooltipPosition="right"
 		matTooltip="Scanned PDF Example"
 		mat-menu-item>
 		<mat-icon class="item-icon" fontSet="material-icons-round">picture_as_pdf</mat-icon>
-		<span class="item-text">PDF</span>
+		<span class="item-text">bundle -> PDF</span>
 	</button>
 	<button
-		(click)="navigateToReportPreview('ai-content', 'suspected-ai-text')"
+		(click)="navigateToReportPreview('bundle/ai-content', 'suspected-ai-text')"
 		matTooltipPosition="right"
 		matTooltip="Suspected AI Text Example"
 		mat-menu-item>
 		<mat-icon class="item-icon" fontSet="material-icons-round">smart_toy</mat-icon>
-		<span class="item-text">AI</span>
+		<span class="item-text">bundle -> AI</span>
 	</button>
 	<button
-		(click)="navigateToReportPreview('default', 'suspected-character-replacement')"
+		(click)="navigateToReportPreview('bundle/default', 'suspected-character-replacement')"
 		matTooltipPosition="right"
 		matTooltip="Suspected Character Replacement Example"
 		mat-menu-item>
 		<mat-icon class="item-icon" fontSet="material-icons-round">text_fields</mat-icon>
-		<span class="item-text">SCR</span>
+		<span class="item-text">bundle -> SCR</span>
 	</button>
 
 	<button
@@ -138,6 +138,15 @@
 		matTooltip="One To One Layout Example"
 		mat-menu-item>
 		<mat-icon class="item-icon" fontSet="material-icons-round">compare</mat-icon>
-		<span class="item-text">One To One</span>
+		<span class="item-text">bundle -> One To One</span>
+	</button>
+
+	<button
+		(click)="navigateToReportPreview('plagiairsm-only/batch')"
+		matTooltipPosition="right"
+		matTooltip="One To One Layout Example"
+		mat-menu-item>
+		<mat-icon class="item-icon" fontSet="material-icons-round">compare</mat-icon>
+		<span class="item-text">plagiairsm-only -> batch</span>
 	</button>
 </mat-menu>

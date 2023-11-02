@@ -1,0 +1,269 @@
+{
+    "statistics": {
+        "identical": 179,
+        "minorChanges": 0,
+        "relatedMeaning": 0
+    },
+    "text": {
+        "comparison": {
+            "identical": {
+                "source": {
+                    "chars": {
+                        "starts": [
+                            0,
+                            47,
+                            138,
+                            277,
+                            349,
+                            465,
+                            596,
+                            719,
+                            858,
+                            941,
+                            1075,
+                            1166,
+                            1202
+                        ],
+                        "lengths": [
+                            45,
+                            90,
+                            138,
+                            71,
+                            115,
+                            130,
+                            122,
+                            138,
+                            82,
+                            133,
+                            90,
+                            35,
+                            56
+                        ]
+                    },
+                    "words": {
+                        "starts": [
+                            0,
+                            7,
+                            19,
+                            39,
+                            51,
+                            66,
+                            85,
+                            101,
+                            119,
+                            134,
+                            151,
+                            163,
+                            169
+                        ],
+                        "lengths": [
+                            6,
+                            11,
+                            19,
+                            11,
+                            14,
+                            18,
+                            15,
+                            17,
+                            14,
+                            16,
+                            11,
+                            5,
+                            9
+                        ]
+                    }
+                },
+                "suspected": {
+                    "chars": {
+                        "starts": [
+                            0,
+                            47,
+                            138,
+                            277,
+                            349,
+                            465,
+                            596,
+                            719,
+                            858,
+                            941,
+                            1075,
+                            1166,
+                            1202
+                        ],
+                        "lengths": [
+                            45,
+                            90,
+                            138,
+                            71,
+                            115,
+                            130,
+                            122,
+                            138,
+                            82,
+                            133,
+                            90,
+                            35,
+                            56
+                        ]
+                    },
+                    "words": {
+                        "starts": [
+                            0,
+                            7,
+                            19,
+                            39,
+                            51,
+                            66,
+                            85,
+                            101,
+                            119,
+                            134,
+                            151,
+                            163,
+                            169
+                        ],
+                        "lengths": [
+                            6,
+                            11,
+                            19,
+                            11,
+                            14,
+                            18,
+                            15,
+                            17,
+                            14,
+                            16,
+                            11,
+                            5,
+                            9
+                        ]
+                    }
+                }
+            },
+            "minorChanges": {
+                "source": {
+                    "chars": {
+                        "starts": [],
+                        "lengths": []
+                    },
+                    "words": {
+                        "starts": [],
+                        "lengths": []
+                    }
+                },
+                "suspected": {
+                    "chars": {
+                        "starts": [],
+                        "lengths": []
+                    },
+                    "words": {
+                        "starts": [],
+                        "lengths": []
+                    }
+                }
+            },
+            "relatedMeaning": {
+                "source": {
+                    "chars": {
+                        "starts": [],
+                        "lengths": []
+                    },
+                    "words": {
+                        "starts": [],
+                        "lengths": []
+                    }
+                },
+                "suspected": {
+                    "chars": {
+                        "starts": [],
+                        "lengths": []
+                    },
+                    "words": {
+                        "starts": [],
+                        "lengths": []
+                    }
+                }
+            }
+        },
+        "value": "Sure, here are ten sentences about Copyleaks:\n\nCopyleaks is a company that provides plagiarism detection and content protection services.\nIts technology uses artificial intelligence and machine learning to scan texts and documents for instances of copying or unauthorized use.\nCopyleaks was founded in 2012 and is headquartered in Tel Aviv, Israel.\nThe company offers a range of plagiarism detection tools for individuals, educators, businesses, and organizations.\nCopyleaks' services are used to check for plagiarism in academic papers, business documents, websites, and other types of content.\nThe company's technology can detect copied content in multiple languages, including English, Spanish, French, and Chinese.\nIn addition to plagiarism detection, Copyleaks also offers content protection services, such as digital watermarking and content tracking.\nThe company claims to have a success rate of over 99% in detecting copied content.\nCopyleaks has received positive reviews and press coverage for its innovative technology and effective plagiarism detection services.\nThe company has clients in various industries, including education, publishing, and media.\nI hope this information is helpful. Please let me know if you have any additional questions.",
+        "pages": {
+            "startPosition": [
+                0
+            ]
+        }
+    },
+    "html": {
+        "comparison": {
+            "identical": {
+                "groupId": [],
+                "source": {
+                    "chars": {
+                        "starts": [],
+                        "lengths": []
+                    },
+                    "words": {
+                        "starts": [],
+                        "lengths": []
+                    }
+                },
+                "suspected": {
+                    "chars": {
+                        "starts": [],
+                        "lengths": []
+                    },
+                    "words": {
+                        "starts": [],
+                        "lengths": []
+                    }
+                }
+            },
+            "minorChanges": {
+                "groupId": [],
+                "source": {
+                    "chars": {
+                        "starts": [],
+                        "lengths": []
+                    },
+                    "words": {
+                        "starts": [],
+                        "lengths": []
+                    }
+                },
+                "suspected": {
+                    "chars": {
+                        "starts": [],
+                        "lengths": []
+                    },
+                    "words": {
+                        "starts": [],
+                        "lengths": []
+                    }
+                }
+            },
+            "relatedMeaning": {
+                "groupId": [],
+                "source": {
+                    "chars": {
+                        "starts": [],
+                        "lengths": []
+                    },
+                    "words": {
+                        "starts": [],
+                        "lengths": []
+                    }
+                },
+                "suspected": {
+                    "chars": {
+                        "starts": [],
+                        "lengths": []
+                    },
+                    "words": {
+                        "starts": [],
+                        "lengths": []
+                    }
+                }
+            }
+        }
+    },
+    "version": 3
+}

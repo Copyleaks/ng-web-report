@@ -3,7 +3,7 @@ import { RouterModule, Routes } from '@angular/router';
 
 const routes: Routes = [
 	{
-		path: 'previews/:id',
+		path: 'previews/:type/:id',
 		loadChildren: () =>
 			import('./pages/demo-report-previews/demo-report-previews.module').then(mod => mod.DemoReportPreviewsModule),
 	},
@@ -24,7 +24,7 @@ const routes: Routes = [
 	},
 	{
 		path: '**',
-		redirectTo: 'previews/default',
+		redirectTo: 'previews/bundle/default',
 	},
 ];
 

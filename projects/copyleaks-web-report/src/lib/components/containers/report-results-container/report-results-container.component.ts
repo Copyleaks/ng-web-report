@@ -19,6 +19,8 @@ import { IResultsActions } from './components/results-actions/models/results-act
 import { ReportNgTemplatesService } from '../../../services/report-ng-templates.service';
 import { untilDestroy } from '../../../utils/until-destroy';
 import { CdkVirtualScrollViewport } from '@angular/cdk/scrolling';
+import { Observable } from 'rxjs';
+import { map, pairwise, filter, distinctUntilChanged } from 'rxjs/operators';
 
 @Component({
 	selector: 'copyleaks-report-results-container',
@@ -62,16 +64,13 @@ export class ReportResultsContainerComponent implements OnInit, OnChanges {
 	customResultsTemplate: TemplateRef<any> | undefined = undefined;
 	showCustomView: boolean;
 	currentViewedIndex: number = 0;
+	scrollSub: any;
 
 	get allResultsItemLength() {
 		return this.allResults?.length;
 	}
 
-	constructor(
-		private _renderer: Renderer2,
-		private _reportNgTemplatesSvc: ReportNgTemplatesService,
-		private cdr: ChangeDetectorRef
-	) {}
+	constructor(private _reportNgTemplatesSvc: ReportNgTemplatesService, private cdr: ChangeDetectorRef) {}
 
 	ngOnChanges(change: SimpleChanges) {
 		if (change['allResults']?.currentValue) {
@@ -91,6 +90,8 @@ export class ReportResultsContainerComponent implements OnInit, OnChanges {
 				this.showCustomView = false;
 			});
 		this.cdr.detectChanges();
+
+		this.detectEndOfList();
 	}
 
 	ngOnInit(): void {
@@ -102,10 +103,13 @@ export class ReportResultsContainerComponent implements OnInit, OnChanges {
 		this._reportNgTemplatesSvc.reportTemplatesSubject$.pipe(untilDestroy(this)).subscribe(refs => {
 			if (refs?.customResultsTemplate !== undefined && this.customResultsTemplate === undefined) {
 				this.customResultsTemplate = refs?.customResultsTemplate;
-
 				this.cdr.detectChanges();
 			}
 		});
+	}
+
+	ngAfterViewInit(): void {
+		this.detectEndOfList();
 	}
 
 	hideResultItem() {
@@ -197,6 +201,36 @@ export class ReportResultsContainerComponent implements OnInit, OnChanges {
 			default:
 				break;
 		}
+	}
+
+	private detectEndOfList() {
+		if (!this.viewport || this.scrollSub) {
+			return;
+		}
+
+		const scrolledIndexChange$: Observable<number> = this.viewport.scrolledIndexChange;
+
+		// Detect if we're at the end of the list
+		this.scrollSub = scrolledIndexChange$
+			.pipe(
+				map(index => index + this.viewport.getViewportSize() / 313),
+				pairwise(),
+				filter(([prevIndex, currIndex]) => {
+					const viewportSize = this.viewport.getViewportSize();
+					const totalContentSize = this.viewport.getDataLength() * 313;
+					// Determine if the end is reached by comparing the current index and the total content size
+					const endReached = currIndex > prevIndex && viewportSize + currIndex * 313 >= totalContentSize;
+					return endReached;
+				}),
+				distinctUntilChanged()
+			)
+			.subscribe(() => {
+				this.currentViewedIndex = this.allResultsItemLength - 1;
+				if (this.allResultsItemLength === 2) this.navigateMobileButton = EnumNavigateMobileButton.SecondButton;
+				if (this.allResultsItemLength === 3) this.navigateMobileButton = EnumNavigateMobileButton.ThirdButton;
+				if (this.allResultsItemLength === 4) this.navigateMobileButton = EnumNavigateMobileButton.FourthButton;
+				if (this.allResultsItemLength >= 5) this.navigateMobileButton = EnumNavigateMobileButton.FifthButton;
+			});
 	}
 
 	//#endregion

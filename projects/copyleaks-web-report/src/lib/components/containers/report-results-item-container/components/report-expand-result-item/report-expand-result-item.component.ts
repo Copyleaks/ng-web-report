@@ -3,6 +3,7 @@ import { EResultPreviewType } from 'projects/copyleaks-web-report/src/lib/enums/
 import { ReportViewService } from 'projects/copyleaks-web-report/src/lib/services/report-view.service';
 import { IResultItem } from '../models/report-result-item.models';
 import { IPercentageResult } from '../percentage-result-item/models/percentage-result-item.models';
+import { ReportMatchHighlightService } from 'projects/copyleaks-web-report/src/lib/services/report-match-highlight.service';
 
 @Component({
 	selector: 'cr-report-expand-result-item',
@@ -41,7 +42,7 @@ export class ReportExpandResultItemComponent implements OnInit, OnChanges {
 		return '';
 	}
 
-	constructor(private _reportViewSvc: ReportViewService) {}
+	constructor(private _reportViewSvc: ReportViewService, private _highlightService: ReportMatchHighlightService) {}
 
 	ngOnInit(): void {}
 
@@ -66,6 +67,10 @@ export class ReportExpandResultItemComponent implements OnInit, OnChanges {
 			suspectPageIndex: 1,
 			alertCode: undefined,
 		});
+
+		this._reportViewSvc.selectedAlert$.next(null);
+
+		this._highlightService.clear();
 	}
 
 	excludeResult() {

@@ -1,5 +1,5 @@
-<mat-accordion>
-	<mat-expansion-panel #panel [expanded]="!isMobile" (opened)="showAlertsClick()" (closed)="hideAlertsClick()">
+<mat-accordion #expansionPanel>
+	<mat-expansion-panel [expanded]="!isMobile" (opened)="showAlertsClick()" (closed)="hideAlertsClick()">
 		<mat-expansion-panel-header [ngClass]="{ 'mobile-results-panel-header': isMobile }">
 			<mat-panel-title>
 				<div class="container-title">
@@ -13,10 +13,16 @@
 			</mat-panel-description>
 		</mat-expansion-panel-header>
 
-		<div #firstAlert class="container-alerts">
+		<div #alertsContainer class="container-alerts">
 			<ng-container *ngFor="let alert of alerts; let isFirst = first">
-				<cr-alert-card *ngIf="isFirst" [alert]="alert"></cr-alert-card>
-				<cr-alert-card *ngIf="!isFirst" [alert]="alert"></cr-alert-card>
+				<cr-alert-card
+					*ngIf="isFirst"
+					[alert]="alert"
+					[ngClass]="{ 'item-with-padding': addPaddingToContainer }"></cr-alert-card>
+				<cr-alert-card
+					*ngIf="!isFirst"
+					[alert]="alert"
+					[ngClass]="{ 'item-with-padding': addPaddingToContainer }"></cr-alert-card>
 			</ng-container>
 		</div>
 	</mat-expansion-panel>

@@ -19,6 +19,7 @@
 .result-item-container {
 	border: 2px solid;
 	border-color: $color-container-background;
+	background-color: $color-white;
 	border-radius: 10px;
 
 	.item-container {
@@ -54,6 +55,11 @@
 						font-weight: 500;
 						color: $color-black;
 						word-break: break-word;
+						display: -webkit-box;
+						-webkit-line-clamp: 2;
+						-webkit-box-orient: vertical;
+						overflow: hidden;
+						text-overflow: ellipsis;
 					}
 					.title-skeleton {
 						width: 50%;
@@ -115,10 +121,11 @@
 				color: $color-black;
 				overflow: hidden;
 
-				// display: -webkit-box;
-				// -webkit-line-clamp: 2; /* number of lines to show */
-				// line-clamp: 2;
-				// -webkit-box-orient: vertical;
+				display: -webkit-box;
+				-webkit-line-clamp: 4;
+				-webkit-box-orient: vertical;
+				overflow: hidden;
+				text-overflow: ellipsis;
 			}
 			.url-skeleton {
 				width: 90%;

@@ -23,6 +23,8 @@ export class DemoReportPreviewsComponent implements OnInit {
 		buttonIcon: 'all_inclusive',
 	};
 
+	showCustomResults: boolean = false;
+
 	constructor(private _route: ActivatedRoute) {}
 
 	ngOnInit(): void {

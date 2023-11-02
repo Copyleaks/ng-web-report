@@ -1,13 +1,14 @@
-<copyleaks-web-report class="desktop-view" [reportEndpointConfig]="endpointsConfig">
-	<cr-actions>
-		<div style="display: flex; flex-direction: row; margin-left: auto; gap: 8px">
-			<mat-icon fontSet="material-icons-round">download</mat-icon>
-			<mat-icon fontSet="material-icons-round">share</mat-icon>
-			<mat-icon fontSet="material-icons-round">info</mat-icon>
-		</div>
-	</cr-actions>
+<ng-container *ngIf="endpointsConfig">
+	<copyleaks-web-report class="desktop-view" [reportEndpointConfig]="endpointsConfig">
+		<cr-actions>
+			<div style="display: flex; flex-direction: row; margin-left: auto; gap: 8px">
+				<mat-icon fontSet="material-icons-round">download</mat-icon>
+				<mat-icon fontSet="material-icons-round">share</mat-icon>
+				<mat-icon fontSet="material-icons-round">info</mat-icon>
+			</div>
+		</cr-actions>
 
-	<!-- <cr-custom-results *ngIf="showCustomResults">
+		<!-- <cr-custom-results *ngIf="showCustomResults">
 		<div class="custom-empty-state-container" style="display: flex; flex-direction: column; gap: 8px">
 			<cr-empty-result-state></cr-empty-result-state>
 			<div class="text-container" style="display: flex; flex-direction: column; gap: 4px">
@@ -79,7 +80,7 @@
 		</div>
 	</cr-custom-results> -->
 
-	<!-- <cr-custom-tabs>
+		<!-- <cr-custom-tabs>
 		<cr-custom-tab-item [flexGrow]="0.5">
 			<cr-custom-tab-item-title>
 				<div style="display: flex; flex-direction: row; justify-content: space-between; align-items: center">
@@ -92,4 +93,5 @@
 			</cr-custom-tab-item-content>
 		</cr-custom-tab-item>
 	</cr-custom-tabs> -->
-</copyleaks-web-report>
+	</copyleaks-web-report>
+</ng-container>

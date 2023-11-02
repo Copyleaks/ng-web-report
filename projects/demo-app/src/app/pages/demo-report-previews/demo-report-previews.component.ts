@@ -24,17 +24,19 @@ export class DemoReportPreviewsComponent implements OnInit {
 	};
 
 	showCustomResults: boolean = false;
+	id: string | null;
+	type: string | null;
 
 	constructor(private _route: ActivatedRoute) {}
 
 	ngOnInit(): void {
-		const id = this._route.snapshot.paramMap.get('id');
-		const type = this._route.snapshot.paramMap.get('type');
+		this.id = this._route.snapshot.paramMap.get('id');
+		this.type = this._route.snapshot.paramMap.get('type');
 		this.endpointsConfig = {
 			authToken: '', // optional
-			crawledVersion: `assets/scans/${type}/${id}/source.json`,
-			completeResults: `assets/scans/${type}/${id}/complete.json`,
-			result: `assets/scans/${type}/${id}/results/{RESULT_ID}`, // inside the package, we will be assignment the RESULT_ID
+			crawledVersion: `assets/scans/${this.type}/${this.id}/source.json`,
+			completeResults: `assets/scans/${this.type}/${this.id}/complete.json`,
+			result: `assets/scans/${this.type}/${this.id}/results/{RESULT_ID}.json`, // inside the package, we will be assignment the RESULT_ID
 			filter: {
 				get: '', // optional
 				update: '', // optional
@@ -43,11 +45,18 @@ export class DemoReportPreviewsComponent implements OnInit {
 		this.paramSub = this._route.paramMap.subscribe(params => {
 			const id = params.get('id');
 			const type = params.get('type');
+
+			if (this.id == id && this.type == type) {
+				return;
+			}
+
+			this.id = id;
+			this.type = type;
 			this.endpointsConfig = {
 				authToken: '', // optional
-				crawledVersion: `assets/scans/${type}/${id}/source.json`,
-				completeResults: `assets/scans/${type}/${id}/complete.json`,
-				result: `assets/scans/${type}/${id}/results/{RESULT_ID}.json`, // inside the package, we will be assignment the RESULT_ID
+				crawledVersion: `assets/scans/${this.type}/${this.id}/source.json`,
+				completeResults: `assets/scans/${this.type}/${this.id}/complete.json`,
+				result: `assets/scans/${this.type}/${this.id}/results/{RESULT_ID}.json`, // inside the package, we will be assignment the RESULT_ID
 				filter: {
 					get: '', // optional
 					update: '', // optional

@@ -26,18 +26,43 @@
 				'empty-results-container': !displayedResults || displayedResults.length === 0
 			}">
 			<ng-container *ngIf="displayedResults && displayedResults.length > 0; else emptyState">
-				<div
-					style="width: 100%"
-					fxLayout="column"
-					fxLayoutAlign="start start"
-					fxLayoutGap="4px"
-					*ngFor="let item of displayedResults">
-					<cr-report-results-item
-						#resultitem
-						[resultItem]="item"
-						[isMobile]="isMobile"
-						[style]="'width:100%'"></cr-report-results-item>
-				</div>
+				<ng-container *ngIf="!isMobile; else mobileContainerView">
+					<cdk-virtual-scroll-viewport class="desktop-scroll" itemSize="195">
+						<div
+							style="width: 100%"
+							fxLayout="column"
+							fxLayoutAlign="start start"
+							fxLayoutGap="4px"
+							*cdkVirtualFor="let item of displayedResults">
+							<cr-report-results-item
+								#resultitem
+								[resultItem]="item"
+								[isMobile]="isMobile"
+								style="width: 100%"></cr-report-results-item>
+						</div>
+					</cdk-virtual-scroll-viewport>
+				</ng-container>
+				<ng-template #mobileContainerView>
+					<cdk-virtual-scroll-viewport
+						class="mobile-scroll"
+						orientation="horizontal"
+						itemSize="313"
+						(scrolledIndexChange)="onScroll($event)">
+						<div
+							style="width: 100%"
+							fxLayout="column"
+							fxLayoutAlign="start start"
+							fxLayoutGap="4px"
+							*cdkVirtualFor="let item of displayedResults">
+							<cr-report-results-item
+								#resultitem
+								[resultItem]="item"
+								[isMobile]="isMobile"
+								style="width: 100%"></cr-report-results-item>
+						</div>
+					</cdk-virtual-scroll-viewport>
+				</ng-template>
+
 				<ng-container *ngIf="lastItemLoading">
 					<cr-report-results-item [showLoader]="true" [style]="'width:100%'"></cr-report-results-item>
 				</ng-container>
@@ -53,46 +78,52 @@
 		fxLayout="row"
 		fxLayoutAlign="start center"
 		fxLayoutGap="8px">
+		<mat-chip
+			*ngIf="allResultsItemLength > 5 && currentViewedIndex > 2"
+			(click)="scrollToIndex(0)"
+			class="mat-chip-navigate">
+			{{ currentViewedIndex < allResultsItemLength - 3 ? currentViewedIndex - 2 : allResultsItemLength - 5 }}
+		</mat-chip>
 		<button
 			class="navigate-mobie-button"
 			[ngClass]="{
 				'navigate-mobie-button-select ': navigateMobileButton == enumNavigateMobileButton.FirstButton
 			}"
-			(click)="navigateButton(enumNavigateMobileButton.FirstButton)"></button>
+			(click)="onDotNavigate(enumNavigateMobileButton.FirstButton)"></button>
 		<button
 			*ngIf="allResultsItemLength > 1"
 			class="navigate-mobie-button"
 			[ngClass]="{
 				'navigate-mobie-button-select ': navigateMobileButton == enumNavigateMobileButton.SecondButton
 			}"
-			(click)="navigateButton(enumNavigateMobileButton.SecondButton)"></button>
+			(click)="onDotNavigate(enumNavigateMobileButton.SecondButton)"></button>
 		<button
 			*ngIf="allResultsItemLength > 2"
 			class="navigate-mobie-button"
 			[ngClass]="{
 				'navigate-mobie-button-select ': navigateMobileButton == enumNavigateMobileButton.ThirdButton
 			}"
-			(click)="navigateButton(enumNavigateMobileButton.ThirdButton)"></button>
+			(click)="onDotNavigate(enumNavigateMobileButton.ThirdButton)"></button>
 		<button
 			*ngIf="allResultsItemLength > 3"
 			class="navigate-mobie-button"
 			[ngClass]="{
 				'navigate-mobie-button-select ': navigateMobileButton == enumNavigateMobileButton.FourthButton
 			}"
-			(click)="navigateButton(enumNavigateMobileButton.FourthButton)"></button>
+			(click)="onDotNavigate(enumNavigateMobileButton.FourthButton)"></button>
 		<button
 			*ngIf="allResultsItemLength > 4"
 			class="navigate-mobie-button"
 			[ngClass]="{
 				'navigate-mobie-button-select ': navigateMobileButton == enumNavigateMobileButton.FifthButton
 			}"
-			(click)="navigateButton(enumNavigateMobileButton.FifthButton)"></button>
+			(click)="onDotNavigate(enumNavigateMobileButton.FifthButton)"></button>
 
 		<mat-chip
-			(click)="navigateButton(enumNavigateMobileButton.None)"
-			class="mat-chip-navigate"
-			*ngIf="showMatChip && allResultsItemLength > 5">
-			{{ allResultsItemLength - 5 }}
+			*ngIf="allResultsItemLength > 5 && currentViewedIndex < allResultsItemLength - 3"
+			(click)="scrollToIndex(allResultsItemLength - 1)"
+			class="mat-chip-navigate">
+			{{ currentViewedIndex > 2 ? allResultsItemLength - currentViewedIndex - 3 : allResultsItemLength - 5 }}
 		</mat-chip>
 	</div>
 </div>

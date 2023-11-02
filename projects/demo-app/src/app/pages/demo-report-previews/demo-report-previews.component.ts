@@ -50,10 +50,6 @@ export class DemoReportPreviewsComponent implements OnInit {
 				},
 			};
 		});
-
-		setInterval(() => {
-			this.showCustomResults = !this.showCustomResults;
-		}, 5000);
 	}
 
 	ngOnDestroy(): void {

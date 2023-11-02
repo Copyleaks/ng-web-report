@@ -18,6 +18,7 @@ import { IResultItem } from '../report-results-item-container/components/models/
 import { IResultsActions } from './components/results-actions/models/results-actions.models';
 import { ReportNgTemplatesService } from '../../../services/report-ng-templates.service';
 import { untilDestroy } from '../../../utils/until-destroy';
+import { CdkVirtualScrollViewport } from '@angular/cdk/scrolling';
 
 @Component({
 	selector: 'copyleaks-report-results-container',
@@ -49,17 +50,18 @@ export class ReportResultsContainerComponent implements OnInit, OnChanges {
 	@ViewChild('resultsContainer', { read: ElementRef }) public resultsContainer: ElementRef;
 	@ViewChild('resultitem', { read: ElementRef }) public resultitem: ElementRef;
 	@ViewChild('customResultView', { read: ElementRef }) public customResultView: ElementRef;
+	@ViewChild(CdkVirtualScrollViewport, { static: false }) viewport: CdkVirtualScrollViewport;
 
 	displayedResults: IResultItem[];
 	lastItemLoading: boolean = false;
 
 	navigateMobileButton: EnumNavigateMobileButton;
 	enumNavigateMobileButton = EnumNavigateMobileButton;
-	showMatChip: boolean = true;
 	searchedValue: string;
 
 	customResultsTemplate: TemplateRef<any> | undefined = undefined;
 	showCustomView: boolean;
+	currentViewedIndex: number = 0;
 
 	get allResultsItemLength() {
 		return this.allResults?.length;
@@ -106,73 +108,11 @@ export class ReportResultsContainerComponent implements OnInit, OnChanges {
 		});
 	}
 
-	private scrollTo(position: number): void {
-		if (this.isMobile) {
-			this._renderer.setProperty(this.resultsContainer.nativeElement, 'scrollLeft', position);
-		} else {
-			this._renderer.setProperty(this.resultsContainer.nativeElement, 'scrollTop', position);
-		}
-	}
-
 	hideResultItem() {
 		this.displayProp = 'none';
 	}
 
 	//#region navigate mobile button
-	navigateButton(navigateButton: EnumNavigateMobileButton) {
-		const navigateNum = this.displayedResults?.length / 5;
-		const resultitemWidth = this.resultitem.nativeElement.offsetWidth;
-		const viewWidth = resultitemWidth * navigateNum;
-		switch (navigateButton) {
-			case EnumNavigateMobileButton.FirstButton: {
-				this.scrollTo(0);
-				this.navigateMobileButton = EnumNavigateMobileButton.FirstButton;
-				break;
-			}
-			case EnumNavigateMobileButton.SecondButton: {
-				this.scrollTo(viewWidth);
-				this.navigateMobileButton = EnumNavigateMobileButton.SecondButton;
-				break;
-			}
-			case EnumNavigateMobileButton.ThirdButton: {
-				this.scrollTo(viewWidth * 2);
-				this.navigateMobileButton = EnumNavigateMobileButton.ThirdButton;
-				break;
-			}
-			case EnumNavigateMobileButton.FourthButton: {
-				this.scrollTo(viewWidth * 3);
-				this.navigateMobileButton = EnumNavigateMobileButton.FourthButton;
-				break;
-			}
-			case EnumNavigateMobileButton.FifthButton: {
-				this.scrollTo(viewWidth * 4);
-				this.navigateMobileButton = EnumNavigateMobileButton.FifthButton;
-				break;
-			}
-			case EnumNavigateMobileButton.None: {
-				this.scrollTo(this.resultsContainer.nativeElement.scrollWidth);
-				this.navigateMobileButton = EnumNavigateMobileButton.None;
-				break;
-			}
-		}
-	}
-
-	updateNavigateButton(scrollLocation: number) {
-		const navigateNum = this.displayedResults?.length / 5;
-		const resultitemWidth = this.resultitem.nativeElement.offsetWidth;
-		const viewWidth = resultitemWidth * navigateNum;
-		if (0 <= scrollLocation && viewWidth > scrollLocation) {
-			this.navigateMobileButton = EnumNavigateMobileButton.FirstButton;
-		} else if (viewWidth <= scrollLocation && viewWidth * 2 > scrollLocation) {
-			this.navigateMobileButton = EnumNavigateMobileButton.SecondButton;
-		} else if (viewWidth * 2 <= scrollLocation && viewWidth * 3 > scrollLocation) {
-			this.navigateMobileButton = EnumNavigateMobileButton.ThirdButton;
-		} else if (viewWidth * 3 <= scrollLocation && viewWidth * 4 > scrollLocation) {
-			this.navigateMobileButton = EnumNavigateMobileButton.FourthButton;
-		} else if (viewWidth * 4 <= scrollLocation) {
-			this.navigateMobileButton = EnumNavigateMobileButton.FifthButton;
-		}
-	}
 
 	onSearch(value: string): void {
 		this.searchedValue = value;
@@ -190,6 +130,73 @@ export class ReportResultsContainerComponent implements OnInit, OnChanges {
 				r.resultPreview.title.toLowerCase().includes(value) ||
 				(r.resultPreview.url && r.resultPreview.url.toLowerCase().includes(value))
 		);
+	}
+
+	onScroll(index: number) {
+		this.currentViewedIndex = index;
+		console.log(this.currentViewedIndex);
+		if (index === 0) this.navigateMobileButton = EnumNavigateMobileButton.FirstButton;
+		else if (index === 1) this.navigateMobileButton = EnumNavigateMobileButton.SecondButton;
+		else if (
+			(index >= 2 && index != this.allResultsItemLength - 1 && index != this.allResultsItemLength - 2) ||
+			(index === 2 && this.allResultsItemLength <= 5)
+		)
+			this.navigateMobileButton = EnumNavigateMobileButton.ThirdButton;
+		else if (index === this.allResultsItemLength - 2) this.navigateMobileButton = EnumNavigateMobileButton.FourthButton;
+		else if (index === this.allResultsItemLength - 1) this.navigateMobileButton = EnumNavigateMobileButton.FifthButton;
+	}
+
+	// Function to scroll to the given index
+	scrollToIndex(index?: number): void {
+		if (!this.viewport) return;
+		if (index != undefined) this.viewport.scrollToIndex(index, 'smooth');
+	}
+
+	onDotNavigate(dot: EnumNavigateMobileButton) {
+		switch (dot) {
+			case EnumNavigateMobileButton.FirstButton: {
+				if (this.allResultsItemLength > 5 && this.currentViewedIndex >= this.allResultsItemLength - 3)
+					this.scrollToIndex(this.allResultsItemLength - 5);
+				else if (this.allResultsItemLength > 5 && this.currentViewedIndex >= 3)
+					this.scrollToIndex(this.currentViewedIndex - 2);
+				else this.scrollToIndex(0);
+				break;
+			}
+			case EnumNavigateMobileButton.SecondButton: {
+				if (this.allResultsItemLength > 5 && this.currentViewedIndex >= this.allResultsItemLength - 3)
+					this.scrollToIndex(this.allResultsItemLength - 4);
+				else if (this.allResultsItemLength > 5 && this.currentViewedIndex >= 3)
+					this.scrollToIndex(this.currentViewedIndex - 1);
+				else this.scrollToIndex(1);
+				break;
+			}
+			case EnumNavigateMobileButton.ThirdButton: {
+				if (this.allResultsItemLength > 5 && this.currentViewedIndex >= this.allResultsItemLength - 3)
+					this.scrollToIndex(this.allResultsItemLength - 3);
+				else if (this.allResultsItemLength > 5 && this.currentViewedIndex >= 3)
+					this.scrollToIndex(this.currentViewedIndex);
+				else this.scrollToIndex(2);
+				break;
+			}
+			case EnumNavigateMobileButton.FourthButton: {
+				if (this.allResultsItemLength > 5 && this.currentViewedIndex >= this.allResultsItemLength - 3)
+					this.scrollToIndex(this.allResultsItemLength - 2);
+				else if (this.allResultsItemLength > 5 && this.currentViewedIndex >= 3)
+					this.scrollToIndex(this.currentViewedIndex + 1);
+				else this.scrollToIndex(3);
+				break;
+			}
+			case EnumNavigateMobileButton.FifthButton: {
+				if (this.allResultsItemLength > 5 && this.currentViewedIndex >= this.allResultsItemLength - 3)
+					this.scrollToIndex(this.allResultsItemLength - 1);
+				else if (this.allResultsItemLength > 5 && this.currentViewedIndex >= 3)
+					this.scrollToIndex(this.currentViewedIndex + 2);
+				else this.scrollToIndex(4);
+				break;
+			}
+			default:
+				break;
+		}
 	}
 
 	//#endregion

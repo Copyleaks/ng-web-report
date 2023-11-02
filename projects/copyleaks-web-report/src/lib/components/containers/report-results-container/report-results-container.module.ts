@@ -18,6 +18,7 @@ import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatDialogModule } from '@angular/material/dialog';
 import { FilterResultDailogService } from '../../../dialogs/filter-result-dailog/services/filter-result-dailog.service';
 import { ReportDataService } from '../../../services/report-data.service';
+import { ScrollingModule } from '@angular/cdk/scrolling';
 @NgModule({
 	declarations: [
 		ReportResultsContainerComponent,
@@ -40,6 +41,7 @@ import { ReportDataService } from '../../../services/report-data.service';
 		MatFormFieldModule,
 		ReactiveFormsModule,
 		MatDialogModule,
+		ScrollingModule,
 	],
 	exports: [
 		ReportResultsContainerComponent,

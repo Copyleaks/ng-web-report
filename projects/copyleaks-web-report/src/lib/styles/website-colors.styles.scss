@@ -28,17 +28,6 @@ $color-plagiarism-paraphrased: #fed5a9;
 $color-plagiarism-omitted-words: #f6f6f6;
 $color-ai-detected-text: #c1addc;
 
-@use '@angular/material' as mat;
-@include mat.core();
-
-// Define the typography config function.
-$copyleaks-web-report-design-typography: mat.define-typography-config(
-	$font-family: 'haboro-soft, sans-serif',
-);
-
-// Now we have sweet buttons with Comic Sans.
-@include mat.button-typography($copyleaks-web-report-design-typography);
-
 // primary color palettes
 $copyleaks-primary-palette: (
 	50: #e8f3fe,

@@ -34,6 +34,7 @@ export class ReportAlertsContainerComponent implements OnInit {
 	hideAlerts: boolean = false;
 	containerHeight: number;
 	addPaddingToContainer: boolean;
+	stopPaddingCheck: boolean;
 
 	ngOnInit(): void {
 		if (this.flexGrow !== undefined && this.flexGrow !== null) this.flexGrowProp = this.flexGrow;
@@ -48,13 +49,12 @@ export class ReportAlertsContainerComponent implements OnInit {
 	}
 
 	ngAfterViewInit() {
-		// You may need to call this method at a different time,
-		// depending on when your content is loaded
 		this.checkForScrollbar();
 	}
 
 	private checkForScrollbar() {
-		// Using a setTimeout to ensure that the check happens after the view has been fully initialized
+		if (this.stopPaddingCheck) return;
+
 		setTimeout(() => {
 			const alertsContainer = this.alertsContainerRef.nativeElement;
 			const expansionPanel = this.expansionPanelRef.nativeElement;
@@ -64,5 +64,6 @@ export class ReportAlertsContainerComponent implements OnInit {
 
 			this.addPaddingToContainer = contentHeight > hostHeight - 24; // 24 is the title panel height
 		});
+		this.stopPaddingCheck = false;
 	}
 }

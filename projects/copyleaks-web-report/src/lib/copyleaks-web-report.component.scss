@@ -3,17 +3,38 @@
 @import './styles/cls-mat-components-overrides/cls-mat-select-overrides.scss';
 @import './styles/cls-mat-components-overrides/cls-mat-menu-overrides.scss';
 @import './styles/fonts/haboro-soft-fonts.scss';
+@import './styles/material-theme.scss';
 
 :host {
 	display: flex;
 	flex-grow: 1;
 	gap: 8px;
 	min-height: 500px !important;
-	max-width: 1440px !important;	
+	max-width: 1440px !important;
+	font-family: haboro-soft, sans-serif !important;
 
 	::ng-deep {
-		font-family: haboro-soft, sans-serif !important;
-		
+		button,
+		span,
+		div,
+		h1,
+		h2,
+		h3,
+		h4,
+		h5,
+		h6,
+		p,
+		a,
+		input,
+		textarea,
+		select,
+		label,
+		li,
+		td,
+		th {
+			font-family: haboro-soft, sans-serif !important;
+		}
+
 		::-webkit-scrollbar {
 			width: 8px;
 			height: 8px !important;

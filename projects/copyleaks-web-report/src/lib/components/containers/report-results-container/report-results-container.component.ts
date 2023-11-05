@@ -67,6 +67,7 @@ export class ReportResultsContainerComponent implements OnInit, OnChanges {
 	scrollSub: any;
 	resizeSubscription: any;
 	addPaddingToContainer: boolean;
+	stopPaddingCheck: boolean;
 
 	get allResultsItemLength() {
 		return this.allResults?.length;
@@ -91,11 +92,9 @@ export class ReportResultsContainerComponent implements OnInit, OnChanges {
 			setTimeout(() => {
 				this.showCustomView = false;
 			});
-		this.cdr.detectChanges();
 
 		this.detectEndOfList();
 
-		// Call it after the view has been initialized
 		this.checkAndApplyPadding();
 	}
 
@@ -116,22 +115,20 @@ export class ReportResultsContainerComponent implements OnInit, OnChanges {
 	ngAfterViewInit(): void {
 		this.detectEndOfList();
 
-		// Optionally, if you want to handle window resizing
 		this.resizeSubscription = fromEvent(window, 'resize').subscribe(() => {
 			this.checkAndApplyPadding();
 		});
 	}
 
 	checkAndApplyPadding() {
-		// Check if the viewport element is scrollable
-		if (!this.viewport) return;
+		if (!this.viewport || this.stopPaddingCheck) return;
 		const isScrollable =
 			this.viewport.elementRef.nativeElement.scrollHeight > this.viewport.elementRef.nativeElement.clientHeight;
 
-		// If it is, add a class or style to apply the padding
 		setTimeout(() => {
 			this.addPaddingToContainer = isScrollable;
 		});
+		this.stopPaddingCheck = true;
 	}
 
 	hideResultItem() {
@@ -160,7 +157,6 @@ export class ReportResultsContainerComponent implements OnInit, OnChanges {
 
 	onScroll(index: number) {
 		this.currentViewedIndex = index;
-		console.log(this.currentViewedIndex);
 		if (index === 0) this.navigateMobileButton = EnumNavigateMobileButton.FirstButton;
 		else if (index === 1) this.navigateMobileButton = EnumNavigateMobileButton.SecondButton;
 		else if (
@@ -244,7 +240,8 @@ export class ReportResultsContainerComponent implements OnInit, OnChanges {
 					const endReached = currIndex > prevIndex && viewportSize + currIndex * 313 >= totalContentSize;
 					return endReached;
 				}),
-				distinctUntilChanged()
+				distinctUntilChanged(),
+				untilDestroy(this)
 			)
 			.subscribe(() => {
 				this.currentViewedIndex = this.allResultsItemLength - 1;

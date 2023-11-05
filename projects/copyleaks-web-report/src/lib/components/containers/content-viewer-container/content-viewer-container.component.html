@@ -119,6 +119,7 @@
 						<!--  -->
 						<span
 							*ngIf="partial.match.type === MatchType.excluded && partial.match.reason == 8"
+							exclude-partial-scan
 							[title]="partial.match.reason ? EXCLUDE_MESSAGE[partial.match.reason] : ''">
 							{{ partial.content }}
 						</span>
@@ -168,6 +169,7 @@
 						<!--  -->
 						<span
 							*ngIf="partial.match.type === MatchType.excluded && partial.match.reason == 8"
+							exclude-partial-scan
 							[title]="EXCLUDE_MESSAGE[partial.match.reason]">
 							{{ partial.content }}
 						</span>

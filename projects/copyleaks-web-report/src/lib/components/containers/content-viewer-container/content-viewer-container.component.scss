@@ -152,6 +152,11 @@
 				}
 			}
 		}
+
+		span[exclude-partial-scan] {
+			filter: blur(6px);
+			cursor: pointer;
+		}
 	}
 
 	.icon-tooltip-wrapper {

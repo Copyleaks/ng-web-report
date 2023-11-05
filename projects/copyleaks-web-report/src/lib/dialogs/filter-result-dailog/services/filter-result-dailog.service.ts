@@ -88,6 +88,8 @@ export class FilterResultDailogService {
 	}
 
 	getFormControlValue(eFilterResultForm: EFilterResultForm) {
+		// TODO: load complete from data service.
+		// TODO: Map data according to complete result.
 		switch (eFilterResultForm) {
 			//Source Type
 			case EFilterResultForm.fcInternet:

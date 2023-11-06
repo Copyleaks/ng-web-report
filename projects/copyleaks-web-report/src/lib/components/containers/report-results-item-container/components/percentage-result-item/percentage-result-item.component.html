@@ -2,7 +2,16 @@
 	class="plagiarism-detection-percentage-top-container"
 	fxLayout="row"
 	fxLayoutAlign="space-between start"
-	fxLayoutGap="4px">
+	fxLayoutGap="4px"
+	[crReportScoreTooltip]="
+		percentageResult && percentageResult.showTooltip
+			? {
+					identicalPct: getMatchTypePercentage(eMatchType.Identical),
+					minorChangesPct: getMatchTypePercentage(eMatchType.MinorChanges),
+					paraphrasedPct: getMatchTypePercentage(eMatchType.Paraphrased)
+			  }
+			: null
+	">
 	<div
 		class="plagiarism-detection-percentage-container"
 		fxLayout="column"
@@ -25,20 +34,7 @@
 		</div>
 
 		<ng-template #showStackedBar>
-			<div
-				[crReportScoreTooltip]="
-					percentageResult && percentageResult.showTooltip
-						? {
-								identicalPct: getMatchTypePercentage(eMatchType.Identical),
-								minorChangesPct: getMatchTypePercentage(eMatchType.MinorChanges),
-								paraphrasedPct: getMatchTypePercentage(eMatchType.Paraphrased)
-						  }
-						: null
-				"
-				class="stacked-bar-top-container"
-				fxLayout="row"
-				fxLayoutGap="8px"
-				fxLayoutAlign="center center">
+			<div class="stacked-bar-top-container" fxLayout="row" fxLayoutGap="8px" fxLayoutAlign="center center">
 				<div class="stacked-bar-container">
 					<ng-container *ngTemplateOutlet="stackedBar"></ng-container>
 				</div>

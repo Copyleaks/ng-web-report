@@ -23,6 +23,7 @@ import { SourceTypeFilterResultComponent } from './components/source-type-filter
 import { FilterResultDailogComponent } from './filter-result-dailog.component';
 import { FilterResultDailogService } from './services/filter-result-dailog.service';
 import { MatButtonModule } from '@angular/material/button';
+import { MatInputModule } from '@angular/material/input';
 @NgModule({
 	declarations: [
 		FilterResultDailogComponent,
@@ -50,6 +51,7 @@ import { MatButtonModule } from '@angular/material/button';
 		MatChipsModule,
 		ReportResultsContainerModule,
 		MatButtonModule,
+		MatInputModule,
 	],
 })
 export class FilterResultDailogModule {}

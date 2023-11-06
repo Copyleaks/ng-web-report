@@ -99,13 +99,25 @@
 </mat-sidenav-container>
 
 <mat-menu #previewsMenu="matMenu">
+	<button mat-menu-item [matMenuTriggerFor]="bundleMenu" style="width: 200px">
+		<mat-icon class="item-icon" fontSet="material-icons-round">view_agenda</mat-icon>
+		<span class="item-text">Bundle</span>
+	</button>
+
+	<button mat-menu-item [matMenuTriggerFor]="plagiarismMenu" style="width: 200px">
+		<mat-icon class="item-icon" fontSet="material-icons-round">flag_circle</mat-icon>
+		<span class="item-text">Plagiairsm Only</span>
+	</button>
+</mat-menu>
+
+<mat-menu #bundleMenu="matMenu">
 	<button
 		(click)="navigateToReportPreview('bundle/default')"
 		matTooltip="Scanned Website Example"
 		matTooltipPosition="right"
 		mat-menu-item>
 		<mat-icon class="item-icon" fontSet="material-icons-round">code</mat-icon>
-		<span class="item-text">bundle -> HTML</span>
+		<span class="item-text">HTML</span>
 	</button>
 	<button
 		(click)="navigateToReportPreview('bundle/Filter')"
@@ -113,7 +125,7 @@
 		matTooltip="Scanned PDF Example"
 		mat-menu-item>
 		<mat-icon class="item-icon" fontSet="material-icons-round">picture_as_pdf</mat-icon>
-		<span class="item-text">bundle -> PDF</span>
+		<span class="item-text">PDF</span>
 	</button>
 	<button
 		(click)="navigateToReportPreview('bundle/ai-content', 'suspected-ai-text')"
@@ -121,7 +133,7 @@
 		matTooltip="Suspected AI Text Example"
 		mat-menu-item>
 		<mat-icon class="item-icon" fontSet="material-icons-round">smart_toy</mat-icon>
-		<span class="item-text">bundle -> AI</span>
+		<span class="item-text">AI</span>
 	</button>
 	<button
 		(click)="navigateToReportPreview('bundle/default', 'suspected-character-replacement')"
@@ -129,7 +141,7 @@
 		matTooltip="Suspected Character Replacement Example"
 		mat-menu-item>
 		<mat-icon class="item-icon" fontSet="material-icons-round">text_fields</mat-icon>
-		<span class="item-text">bundle -> SCR</span>
+		<span class="item-text">SCR</span>
 	</button>
 
 	<button
@@ -138,24 +150,26 @@
 		matTooltip="One To One Layout Example"
 		mat-menu-item>
 		<mat-icon class="item-icon" fontSet="material-icons-round">compare</mat-icon>
-		<span class="item-text">bundle -> One To One</span>
+		<span class="item-text">One To One</span>
 	</button>
+</mat-menu>
 
+<mat-menu #plagiarismMenu="matMenu">
 	<button
 		(click)="navigateToReportPreview('plagiairsm-only/batch')"
 		matTooltipPosition="right"
-		matTooltip="One To One Layout Example"
+		matTooltip="Report With Batch Result Example"
 		mat-menu-item>
-		<mat-icon class="item-icon" fontSet="material-icons-round">compare</mat-icon>
-		<span class="item-text">plagiairsm-only -> Batch</span>
+		<mat-icon class="item-icon" fontSet="material-icons-round">batch_prediction</mat-icon>
+		<span class="item-text">Batch</span>
 	</button>
 
 	<button
 		(click)="navigateToReportPreview('plagiairsm-only/partial-report')"
 		matTooltipPosition="right"
-		matTooltip="One To One Layout Example"
+		matTooltip="Partial Report Example"
 		mat-menu-item>
-		<mat-icon class="item-icon" fontSet="material-icons-round">compare</mat-icon>
-		<span class="item-text">plagiairsm-only -> Partial Report</span>
+		<mat-icon class="item-icon" fontSet="material-icons-round">hourglass_top</mat-icon>
+		<span class="item-text">Partial Report</span>
 	</button>
 </mat-menu>

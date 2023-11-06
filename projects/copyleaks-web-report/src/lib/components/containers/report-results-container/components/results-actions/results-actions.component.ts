@@ -37,7 +37,7 @@ export class ResultsActionsComponent implements OnInit, OnChanges {
 	constructor(private _matDialog: MatDialog) {}
 
 	ngOnInit(): void {
-		this.searchFc.valueChanges.pipe(debounceTime(1000)).subscribe(value => {
+		this.searchFc.valueChanges.pipe(debounceTime(500)).subscribe(value => {
 			this.onSearch.emit(value);
 		});
 	}

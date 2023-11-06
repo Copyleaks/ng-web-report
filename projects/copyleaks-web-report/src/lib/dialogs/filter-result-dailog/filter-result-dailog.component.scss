@@ -1,6 +1,15 @@
 @import '../../styles/website-colors.styles.scss';
 @import '../../styles/cls-mat-components-overrides//cls-mat-slide-toggle-overrides.scss';
 
+:host {
+	font-family: haboro-soft, sans-serif !important;
+	::ng-deep {
+		input,
+		button {
+			font-family: haboro-soft, sans-serif !important;
+		}
+	}
+}
 .top-container {
 	.header-container {
 		width: 100%;

@@ -14,7 +14,11 @@
 		color: $color-medium-dark;
 		font-weight: 500;
 		border-radius: 10px;
-		padding: 0px 16px;
+		padding: 5px 8px !important;
+		height: fit-content !important;
+		margin: 0px !important;
+		font-family: haboro-soft, sans-serif !important;
+		line-height: normal !important;
 
 		mat-icon {
 			color: $color-medium-dark;
@@ -61,5 +65,10 @@
 	.mat-checkbox-disabled {
 		opacity: 0.5 !important;
 		pointer-events: none !important;
+	}
+
+	.mat-menu-submenu-icon {
+		fill: #112960 !important;
+		border-radius: 5px;
 	}
 }

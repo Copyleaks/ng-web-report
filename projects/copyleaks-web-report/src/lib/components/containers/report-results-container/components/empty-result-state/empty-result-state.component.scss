@@ -1,13 +1,15 @@
 @import '../../../../../styles/website-colors.styles.scss';
+@import '../../../../../styles/styles.scss';
 
 .empty-result-state-container {
 	width: 100%;
 	height: 100%;
-	.empty-state-image {
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	justify-content: center;
+	svg {
 		width: 100%;
-		height: 100%;
-		background-color: #d9d9d9;
-		border-radius: 16px;
 	}
 	.empty-state-text {
 		color: $color-primary;

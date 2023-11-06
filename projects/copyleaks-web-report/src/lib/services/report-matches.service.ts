@@ -77,6 +77,13 @@ export class ReportMatchesService implements OnDestroy {
 			.subscribe(([scanSource, scanResults, viewMode]) => {
 				if (!scanSource || !viewMode) return;
 
+				if (!scanSource?.html?.value && viewMode.isHtmlView) {
+					this._reportViewSvc.reportViewMode$.next({
+						...this._reportViewSvc.reportViewMode,
+						isHtmlView: false,
+					});
+					return;
+				}
 				// process the mathces according to the report view
 				if (viewMode.isHtmlView) {
 					this._processOneToManyMatchesHtml(

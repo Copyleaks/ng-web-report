@@ -10,10 +10,11 @@ $copyleaks-design-v2-accent: mat.define-palette($copyleaks-primary-palette);
 $copyleaks-design-v2-warn: mat.define-palette($copyleaks-warn-palette);
 
 @import url('https://fonts.googleapis.com/css?family=Material+Icons|Material+Icons+Outlined|Material+Icons+Two+Tone|Material+Icons+Round|Material+Icons+Sharp');
+@import url('https://fonts.googleapis.com/css2?family=Almarai:wght@300;400;700;800&display=swap');
 @import './fonts/haboro-soft-fonts.scss';
 
 $copyleaks-design-v2-typography: mat-typography-config(
-	$font-family: 'haboro-soft, sans-serif',
+	$font-family: 'haboro-soft, Almarai, sans-serif',
 );
 
 // Copyleaks theme object which consists of configurations for individual

@@ -2,7 +2,7 @@
 	<div class="top-container" fxLayout="column" fxLayoutGap="32px">
 		<div class="header-container" fxLayout="column" fxLayoutGap="8px">
 			<div class="title-container" fxLayout="row" fxLayoutAlign="space-between center" fxLayoutGap="4px">
-				<span>Filter Plagiarism Results</span>
+				<span web-report-title-font>Filter Plagiarism Results</span>
 				<button
 					(click)="clearFilterButton()"
 					class="clear-button"
@@ -14,7 +14,7 @@
 				</button>
 			</div>
 			<div class="result-container" fxLayout="row" fxLayoutAlign="start center" fxLayoutGap="4px">
-				<span class="total-results">Plagiarism Results ({{ resultsActions.totalResults }})</span>
+				<span class="total-results" web-report-title-font>Plagiarism Results ({{ resultsActions.totalResults }})</span>
 				<ng-container *ngIf="!!resultsActions?.totalExcluded">
 					<mat-icon class="separate-circle-icon" fontSet="material-icons-round">circle</mat-icon>
 					<span
@@ -34,7 +34,7 @@
 			<div class="left-side-container" fxLayout="column" fxLayoutGap="16px">
 				<!-- source type -->
 				<section class="section-container sources-type-top-container" fxLayout="column" fxLayoutGap="16px">
-					<span class="body-title">Source type</span>
+					<span class="body-title" web-report-title-font>Source type</span>
 					<ng-container *ngIf="!loading">
 						<cr-source-type-filter-result
 							[totalSourceType]="totalSourceType"
@@ -45,7 +45,7 @@
 
 				<!-- results meta -->
 				<section class="section-container" fxLayout="column" fxLayoutGap="16px">
-					<span class="body-title">Results meta</span>
+					<span class="body-title" web-report-title-font>Results meta</span>
 					<cr-meta-filter-result
 						[publicationDates]="publicationDates"
 						[minWordLimit]="minWordLimit"
@@ -59,7 +59,7 @@
 			<div class="right-side-conatier" fxLayout="column" fxLayoutGap="16px">
 				<!-- match type -->
 				<section class="match-type-container" fxLayout="column" fxLayoutGap="16px">
-					<span class="body-title">Match types</span>
+					<span class="body-title" web-report-title-font>Match types</span>
 					<cr-match-type-filter-result
 						[identicalTotal]="12"
 						[minorChangesTotal]="10"
@@ -69,13 +69,13 @@
 				<mat-divider></mat-divider>
 				<!--General filters-->
 				<section class="general-filters-container" fxLayout="column" fxLayoutGap="16px">
-					<span class="body-title">General filters</span>
+					<span class="body-title" web-report-title-font>General filters</span>
 					<cr-general-filter-result class="general-filter-container"></cr-general-filter-result>
 				</section>
 				<mat-divider></mat-divider>
 				<!-- Included Tags -->
 				<section class="included-tags-container" fxLayout="column" fxLayoutGap="8px">
-					<span class="body-title">Included Tags</span>
+					<span class="body-title" web-report-title-font>Included Tags</span>
 					<cr-included-tags-filter-result
 						[allTagItem]="allTagItem"
 						class="included-tags-filter-result"></cr-included-tags-filter-result>
@@ -83,8 +83,8 @@
 			</div>
 		</div>
 		<div class="apply-and-discard-button-contaier" fxLayout="row" fxLayoutAlign="end center" fxLayoutGap="16px">
-			<button mat-button class="discard-changes-button">Discard changes</button>
-			<button mat-button class="apply-filters-button">Apply filters</button>
+			<button mat-button class="discard-changes-button" web-report-title-font>Discard changes</button>
+			<button mat-button class="apply-filters-button" web-report-title-font>Apply filters</button>
 		</div>
 	</div>
 </ng-container>

@@ -1,6 +1,6 @@
 <div *ngIf="!hideTitleContainer && !customTabContent && !showLoadingView" class="title-and-actions-container">
 	<div class="title-container">
-		<span class="title">{{ reportOrigin != 'suspect' ? 'Submitted text' : 'Found text' }}</span>
+		<span class="title" web-report-title-font>{{ reportOrigin != 'suspect' ? 'Submitted text' : 'Found text' }}</span>
 		<span *ngIf="numberOfWords" class="number-of-words">({{ numberOfWords }} words)</span>
 	</div>
 	<div class="actions-container">

@@ -1,7 +1,7 @@
 <div class="alert-card-container" fxLayout="column" fxLayoutAlign="start " fxLayoutGap="8px">
 	<div fxLayout="row" fxLayoutAlign="space-between start" fxLayoutGap="4px" class="alert-card-header">
 		<div fxLayout="column" fxLayoutAlign="center start" fxLayoutGap="4px">
-			<span class="alert-card-title">{{ alert.title }}</span>
+			<span class="alert-card-title" web-report-title-font>{{ alert.title }}</span>
 			<div fxLayout="row" fxLayoutAlign="start center" fxLayoutGap="8px">
 				<ng-container [ngSwitch]="alert.severity">
 					<p class="alert-card-severity" *ngSwitchCase="severity.VeryLow">Very Low</p>

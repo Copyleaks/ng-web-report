@@ -2,6 +2,7 @@
 @import './styles/styles.scss';
 @import './styles/cls-mat-components-overrides/cls-mat-select-overrides.scss';
 @import './styles/cls-mat-components-overrides/cls-mat-menu-overrides.scss';
+@import './styles/cls-mat-components-overrides/cls-scroll-bar-overrides.scss';
 @import './styles/fonts/haboro-soft-fonts.scss';
 @import './styles/material-theme.scss';
 
@@ -33,22 +34,6 @@
 		td,
 		th {
 			font-family: haboro-soft, sans-serif !important;
-		}
-
-		::-webkit-scrollbar {
-			width: 8px;
-			height: 8px !important;
-		}
-		::-webkit-scrollbar-track {
-			border-radius: 4px;
-			transform: matrix(0, 1, -1, 0, 0, 0);
-			background: #ebf3f5;
-			border: 1px solid #fbffff;
-		}
-		::-webkit-scrollbar-thumb {
-			border-radius: 4px !important;
-			background: rgba(17, 41, 96, 0.4) !important;
-			box-shadow: 0px 1px 2px 0px rgba(0, 0, 0, 0.27) !important;
 		}
 	}
 

@@ -2,7 +2,7 @@ import { Injectable, OnDestroy } from '@angular/core';
 import { BehaviorSubject, Subject, combineLatest } from 'rxjs';
 import * as helpers from '../utils/report-match-helpers';
 import { ICompleteResultNotificationAlert, ICompleteResults, IScanSource } from '../models/report-data.models';
-import { CopyleaksReportOptions } from '../models/report-options.models';
+import { ICopyleaksReportOptions } from '../models/report-options.models';
 import { ReportDataService } from './report-data.service';
 import { filter, takeUntil } from 'rxjs/operators';
 import { SlicedMatch, Match, ResultDetailItem } from '../models/report-matches.models';
@@ -11,6 +11,7 @@ import { IReportViewEvent } from '../models/report-view.models';
 import { ALERTS } from '../constants/report-alerts.constants';
 import { untilDestroy } from '../utils/until-destroy';
 import { ReportMatchHighlightService } from './report-match-highlight.service';
+import { EResultPreviewType } from '../enums/copyleaks-web-report.enums';
 
 /**
  * Service that calculates the matches highlight positions with respect to the view and content mode.
@@ -66,6 +67,8 @@ export class ReportMatchesService implements OnDestroy {
 			this._reportDataSvc.scanResultsDetails$,
 			this._reportViewSvc.reportViewMode$,
 			this._reportViewSvc.selectedAlert$,
+			this._reportDataSvc.filterOptions$,
+			this._reportDataSvc.excludedResultsIds$,
 		])
 			.pipe(
 				untilDestroy(this),
@@ -74,8 +77,8 @@ export class ReportMatchesService implements OnDestroy {
 						scanSource != undefined && viewMode != null && viewMode.viewMode === 'one-to-many' && selectedAlert === null
 				)
 			)
-			.subscribe(([scanSource, scanResults, viewMode]) => {
-				if (!scanSource || !viewMode) return;
+			.subscribe(([scanSource, scanResults, viewMode, , filterOptions, excludedResultsIds]) => {
+				if (!scanSource || !viewMode || !filterOptions || !excludedResultsIds) return;
 
 				if (!scanSource?.html?.value && viewMode.isHtmlView) {
 					this._reportViewSvc.reportViewMode$.next({
@@ -86,33 +89,9 @@ export class ReportMatchesService implements OnDestroy {
 				}
 				// process the mathces according to the report view
 				if (viewMode.isHtmlView) {
-					this._processOneToManyMatchesHtml(
-						scanResults,
-						// !MOCK data for scan report options
-						{
-							showRelated: true,
-							showIdentical: true,
-							showMinorChanges: true,
-							showPageSources: true,
-							showOnlyTopResults: true,
-							setAsDefault: true,
-						} as CopyleaksReportOptions,
-						scanSource
-					);
+					this._processOneToManyMatchesHtml(scanResults, filterOptions, excludedResultsIds, scanSource);
 				} else {
-					this._processOneToManyMatchesText(
-						scanResults,
-						// !MOCK data for scan report options
-						{
-							showRelated: true,
-							showIdentical: true,
-							showMinorChanges: true,
-							showPageSources: true,
-							showOnlyTopResults: true,
-							setAsDefault: true,
-						} as CopyleaksReportOptions,
-						scanSource
-					);
+					this._processOneToManyMatchesText(scanResults, filterOptions, excludedResultsIds, scanSource);
 				}
 			});
 	}
@@ -123,6 +102,7 @@ export class ReportMatchesService implements OnDestroy {
 			this._reportViewSvc.selectedResult$,
 			this._reportViewSvc.reportViewMode$,
 			this._reportViewSvc.selectedAlert$,
+			this._reportDataSvc.filterOptions$,
 		])
 			.pipe(
 				untilDestroy(this),
@@ -135,23 +115,10 @@ export class ReportMatchesService implements OnDestroy {
 						selectedAlert === null
 				)
 			)
-			.subscribe(([scanSource, selectedResult, viewMode]) => {
-				if (!scanSource || !selectedResult || !viewMode) return;
+			.subscribe(([scanSource, selectedResult, viewMode, , filterOptions]) => {
+				if (!scanSource || !selectedResult || !viewMode || !filterOptions) return;
 
-				this._processOneToOneMatches(
-					selectedResult,
-					// !MOCK data for scan report options
-					{
-						showRelated: true,
-						showIdentical: true,
-						showMinorChanges: true,
-						showPageSources: true,
-						showOnlyTopResults: true,
-						setAsDefault: true,
-					} as CopyleaksReportOptions,
-					scanSource,
-					viewMode
-				);
+				this._processOneToOneMatches(selectedResult, filterOptions, scanSource, viewMode);
 			});
 	}
 
@@ -160,31 +127,23 @@ export class ReportMatchesService implements OnDestroy {
 			this._reportDataSvc.crawledVersion$,
 			this._reportViewSvc.selectedAlert$,
 			this._reportDataSvc.scanResultsPreviews$,
+			this._reportDataSvc.filterOptions$,
 		])
 			.pipe(
 				untilDestroy(this),
 				filter(
-					([scanSource, selectedAlert]) =>
-						scanSource != null && scanSource != undefined && selectedAlert != null && selectedAlert != undefined
+					([scanSource, selectedAlert, , filterOptions]) =>
+						scanSource != null &&
+						scanSource != undefined &&
+						selectedAlert != null &&
+						selectedAlert != undefined &&
+						filterOptions != undefined
 				)
 			)
-			.subscribe(([scanSource, selectedAlert, completeResults]) => {
-				if (!scanSource || !selectedAlert || !completeResults) return;
+			.subscribe(([scanSource, selectedAlert, completeResults, filterOptions]) => {
+				if (!scanSource || !selectedAlert || !completeResults || !filterOptions) return;
 
-				this._processAlertMatches(
-					// !MOCK data for scan report options
-					{
-						showRelated: true,
-						showIdentical: true,
-						showMinorChanges: true,
-						showPageSources: true,
-						showOnlyTopResults: true,
-						setAsDefault: true,
-					} as CopyleaksReportOptions,
-					scanSource,
-					completeResults,
-					selectedAlert
-				);
+				this._processAlertMatches(filterOptions, scanSource, completeResults, selectedAlert);
 			});
 	}
 
@@ -197,9 +156,11 @@ export class ReportMatchesService implements OnDestroy {
 	 */
 	private _processOneToManyMatchesHtml(
 		results: ResultDetailItem[] | undefined,
-		settings: CopyleaksReportOptions,
+		settings: ICopyleaksReportOptions,
+		excludedResultsIds: string[],
 		source: IScanSource
 	) {
+		results = this._reportDataSvc.filterResults(results, settings, excludedResultsIds);
 		const html = helpers.processSourceHtml(results ?? [], settings, source);
 		if (html) {
 			this._originalHtmlMatches.next(html);
@@ -215,9 +176,11 @@ export class ReportMatchesService implements OnDestroy {
 	 */
 	private _processOneToManyMatchesText(
 		results: ResultDetailItem[] | undefined,
-		settings: CopyleaksReportOptions,
+		settings: ICopyleaksReportOptions,
+		excludedResultsIds: string[],
 		source: IScanSource
 	) {
+		results = this._reportDataSvc.filterResults(results, settings, excludedResultsIds);
 		const text = helpers.processSourceText(results ?? [], settings, source);
 		if (text) {
 			this._originalTextMatches.next(text);
@@ -233,7 +196,7 @@ export class ReportMatchesService implements OnDestroy {
 	 */
 	private _processOneToOneMatches(
 		item: ResultDetailItem,
-		settings: CopyleaksReportOptions,
+		settings: ICopyleaksReportOptions,
 		source: IScanSource,
 		viewMode: IReportViewEvent
 	) {
@@ -278,7 +241,7 @@ export class ReportMatchesService implements OnDestroy {
 	 * @param source  the scan source
 	 */
 	private _processAlertMatches(
-		settings: CopyleaksReportOptions,
+		settings: ICopyleaksReportOptions,
 		source: IScanSource,
 		completeResults: ICompleteResults,
 		selectedAlertCode: string

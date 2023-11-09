@@ -3,6 +3,7 @@ import { BehaviorSubject, Subject } from 'rxjs';
 import { IReportResponsiveMode, IReportViewEvent } from '../models/report-view.models';
 import { ResultDetailItem } from '../models/report-matches.models';
 import { ICompleteResultNotificationAlert } from '../models/report-data.models';
+import { ICopyleaksReportOptions } from '../models/report-options.models';
 
 @Injectable()
 export class ReportViewService {

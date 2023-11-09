@@ -125,6 +125,46 @@ export interface IResultPreviews {
  */
 export interface ICompleteResultsFilters {
 	resultIds: string[];
+	general?: IGeneralFilters;
+	sourceType?: ISourceTypeFilters;
+	matchType?: IMatchTypeFilters;
+	resultsMetaData?: IResultsMetaDataFilters;
+	includedTags?: string[];
+}
+
+export interface IGeneralFilters {
+	topResult: boolean;
+	alerts: boolean;
+	authorSubmissions: boolean;
+}
+
+export interface IMatchTypeFilters {
+	identicalText: boolean;
+	minorChanges: boolean;
+	paraphrased: boolean;
+}
+
+export interface ISourceTypeFilters {
+	internet: boolean;
+	internalDatabase: boolean;
+	batch: boolean;
+	repositories: string[];
+}
+
+export interface IResultsMetaDataFilters {
+	wordLimit: IWordLimitFilter;
+	publicationDate: IPublicationDateFilter;
+}
+
+export interface IWordLimitFilter {
+	wordLimitEnabled: boolean;
+	totalWordlimt?: number;
+}
+
+export interface IPublicationDateFilter {
+	publicationEnabled: boolean;
+	startDate?: Date;
+	resultsWithNoDates: boolean;
 }
 
 /** Type representing a summary of the scanned document from Copyleaks api */

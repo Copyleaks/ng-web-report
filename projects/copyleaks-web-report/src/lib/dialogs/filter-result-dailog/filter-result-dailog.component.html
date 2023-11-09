@@ -1,10 +1,10 @@
-<ng-container *ngIf="!showExcludedDailog; else excludedDailog">
+<ng-container *ngIf="!data.showExcludedDailog; else excludedDailog">
 	<div class="top-container" fxLayout="column" fxLayoutGap="32px">
 		<div class="header-container" fxLayout="column" fxLayoutGap="8px">
 			<div class="title-container" fxLayout="row" fxLayoutAlign="space-between center" fxLayoutGap="4px">
 				<span web-report-title-font>Filter Plagiarism Results</span>
 				<button
-					(click)="clearFilterButton()"
+					(click)="onClearFilter()"
 					class="clear-button"
 					fxLayout="row"
 					fxLayoutAlign="start center"
@@ -19,14 +19,14 @@
 					<mat-icon class="separate-circle-icon" fontSet="material-icons-round">circle</mat-icon>
 					<span
 						class="total-excuded"
-						(click)="!!resultsActions.totalExcluded ? (showExcludedDailog = !showExcludedDailog) : ''">
+						(click)="!!resultsActions.totalExcluded ? (data.showExcludedDailog = !data.showExcludedDailog) : ''">
 						{{ resultsActions.totalExcluded }} excluded
 					</span>
 				</ng-container>
 
-				<ng-container *ngIf="!!totalFiltered">
+				<ng-container *ngIf="!!resultsActions.totalFiltered">
 					<mat-icon class="separate-circle-icon" fontSet="material-icons-round">circle</mat-icon>
-					<span class="total-filtered">{{ totalFiltered }} filtered</span>
+					<span class="total-filtered">{{ resultsActions.totalFiltered }} filtered</span>
 				</ng-container>
 			</div>
 		</div>
@@ -61,20 +61,29 @@
 				<section class="match-type-container" fxLayout="column" fxLayoutGap="16px">
 					<span class="body-title" web-report-title-font>Match types</span>
 					<cr-match-type-filter-result
-						[identicalTotal]="12"
-						[minorChangesTotal]="10"
-						[paraphrasedTotal]="5"
+						[identicalTotal]="totalIdentical"
+						[minorChangesTotal]="totalMinorChanges"
+						[paraphrasedTotal]="totalParaphrased"
 						class="match-type-filter-container"></cr-match-type-filter-result>
 				</section>
 				<mat-divider></mat-divider>
 				<!--General filters-->
 				<section class="general-filters-container" fxLayout="column" fxLayoutGap="16px">
 					<span class="body-title" web-report-title-font>General filters</span>
-					<cr-general-filter-result class="general-filter-container"></cr-general-filter-result>
+					<cr-general-filter-result
+						class="general-filter-container"
+						[totalAlerts]="totalAlerts"
+						[totalSameAuthor]="totalSameAuthor"></cr-general-filter-result>
 				</section>
 				<mat-divider></mat-divider>
 				<!-- Included Tags -->
-				<section class="included-tags-container" fxLayout="column" fxLayoutGap="8px">
+				<section
+					class="included-tags-container"
+					fxLayout="column"
+					fxLayoutGap="8px"
+					[ngClass]="{
+						'disabled-section': !allTagItem || allTagItem.length === 0
+					}">
 					<span class="body-title" web-report-title-font>Included Tags</span>
 					<cr-included-tags-filter-result
 						[allTagItem]="allTagItem"
@@ -83,13 +92,18 @@
 			</div>
 		</div>
 		<div class="apply-and-discard-button-contaier" fxLayout="row" fxLayoutAlign="end center" fxLayoutGap="16px">
-			<button mat-button class="discard-changes-button" web-report-title-font>Discard changes</button>
-			<button mat-button class="apply-filters-button" web-report-title-font>Apply filters</button>
+			<cr-button [outlined]="true" padding="3px 24px" (click)="onDiscardChanges()" width="170px" color="primary">
+				<span class="discard-changes-button">Discard changes</span>
+			</cr-button>
+			<cr-button padding="3px 24px" (click)="onSaveChanges()" width="220px" color="primary">
+				<span class="apply-filters-button">Apply filters</span>
+			</cr-button>
 		</div>
 	</div>
 </ng-container>
 <ng-template #excludedDailog>
 	<cr-excluded-results-dailog
-		[allResultsItem]="allResultsItem"
-		(closeDailogEvent)="showExcludedDailog = !$event"></cr-excluded-results-dailog>
+		[allResultsItem]="excludedResults"
+		[reportDataSvc]="data.reportDataSvc"
+		(closeDailogEvent)="data.showExcludedDailog = !$event"></cr-excluded-results-dailog>
 </ng-template>

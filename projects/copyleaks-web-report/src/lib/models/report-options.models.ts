@@ -2,14 +2,8 @@ import { ResultPreview } from './report-data.models';
 
 /**
  * Type that holds the options for a report
- * @todo implement `showPageSources`
- * @todo implement `showOnlyTopResults`
  */
-export interface CopyleaksReportOptions {
-	/**  Display results that are actually visible in the current source page */
-	showPageSources?: boolean;
-	/** Display only the top 100 results of a scan */
-	showOnlyTopResults?: boolean;
+export interface ICopyleaksReportOptions {
 	/** Display identical highlights */
 	showIdentical?: boolean;
 	/** Display minor changes highlights */
@@ -18,6 +12,28 @@ export interface CopyleaksReportOptions {
 	showRelated?: boolean;
 	/** Set the current options as default using local storage */
 	setAsDefault?: boolean;
+	/** */
+	showInternetResults?: boolean;
+	/** */
+	showInternalDatabaseResults?: boolean;
+	/** */
+	showBatchResults?: boolean;
+	/** */
+	showRepositoriesResults?: string[];
+	/** */
+	wordLimit?: number;
+	/** */
+	publicationDate?: Date;
+	/** */
+	showTop100Results?: boolean;
+	/** */
+	showAlerts?: boolean;
+	/** */
+	showSameAuthorSubmissions?: boolean;
+	/** */
+	includeResultsWithoutDate?: boolean;
+	/** */
+	includedTags?: string[];
 }
 
 export interface CopyleaksResultCardAction {

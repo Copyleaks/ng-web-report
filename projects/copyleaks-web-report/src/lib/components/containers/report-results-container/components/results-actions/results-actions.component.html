@@ -8,12 +8,16 @@
 		<span class="tootal-results" web-report-title-font>Plagiarism Results ({{ resultsActions?.totalResults }})</span>
 		<ng-container *ngIf="resultsActions?.totalExcluded">
 			<mat-icon class="separate-circle-icon" fontSet="material-icons-round">circle</mat-icon>
-			<span class="tootal-excuded" web-report-title-font>{{ resultsActions?.totalExcluded }} excluded</span>
+			<span class="tootal-excuded" web-report-title-font (click)="showFilterDialog(true)">
+				{{ resultsActions?.totalExcluded }} excluded
+			</span>
 		</ng-container>
 
 		<ng-container *ngIf="resultsActions?.totalFiltered">
 			<mat-icon class="separate-circle-icon" fontSet="material-icons-round">circle</mat-icon>
-			<span class="tootal-filtered" web-report-title-font>{{ resultsActions?.totalFiltered }} filtered</span>
+			<span class="tootal-filtered" web-report-title-font (click)="showFilterDialog()">
+				{{ resultsActions?.totalFiltered }} filtered
+			</span>
 		</ng-container>
 	</div>
 

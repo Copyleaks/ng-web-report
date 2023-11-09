@@ -22,7 +22,8 @@
 		<div class="result-publication-container" fxLayout="column" fxLayoutAlign="start start">
 			<cr-mat-slide-filter-result
 				[formControlName]="eFilterResultForm.fcPublicationEnabled"
-				[title]="'Results publication date:'"></cr-mat-slide-filter-result>
+				[title]="'Results publication date:'"
+				[total]="publicationDates.length"></cr-mat-slide-filter-result>
 			<ng-container *ngIf="getEnabledValue(eFilterResultForm.fcPublicationEnabled) && !!publicationDates?.length">
 				<mat-slider
 					invert

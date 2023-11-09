@@ -28,9 +28,12 @@
 			<ng-container *ngFor="let item of excludedResultist">
 				<cr-report-results-item
 					[resultItem]="item"
+					[excludedResultsClick]="allIncluded"
 					[excludeResult]="true"
 					[showItemBody]="false"
-					[style]="'width:100%'"></cr-report-results-item>
+					[style]="'width:100%'"
+					(hiddenResultEvent)="excludeResultById($event)"
+					(showResultEvent)="includeResultById($event)"></cr-report-results-item>
 			</ng-container>
 			<ng-container *ngIf="lastItemLoading">
 				<cr-report-results-item

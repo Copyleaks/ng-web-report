@@ -4,6 +4,9 @@ import { FormControl } from '@angular/forms';
 import { debounceTime } from 'rxjs/operators';
 import { MatDialog } from '@angular/material/dialog';
 import { FilterResultDailogComponent } from 'projects/copyleaks-web-report/src/lib/dialogs/filter-result-dailog/filter-result-dailog.component';
+import { ReportDataService } from 'projects/copyleaks-web-report/src/lib/services/report-data.service';
+import { IFilterResultDailogData } from 'projects/copyleaks-web-report/src/lib/dialogs/filter-result-dailog/models/filter-result-dailog.enum';
+import { ReportViewService } from 'projects/copyleaks-web-report/src/lib/services/report-view.service';
 
 @Component({
 	selector: 'cr-results-actions',
@@ -34,7 +37,11 @@ export class ResultsActionsComponent implements OnInit, OnChanges {
 	searchFc = new FormControl('');
 	showSearchFiled: boolean = false;
 
-	constructor(private _matDialog: MatDialog) {}
+	constructor(
+		private _matDialog: MatDialog,
+		private _reportDataSvc: ReportDataService,
+		private _reportViewSvc: ReportViewService
+	) {}
 
 	ngOnInit(): void {
 		this.searchFc.valueChanges.pipe(debounceTime(500)).subscribe(value => {
@@ -59,10 +66,15 @@ export class ResultsActionsComponent implements OnInit, OnChanges {
 		else this.paddingProp = '8px 8px 8px 8px';
 	}
 
-	showFilterDialog() {
+	showFilterDialog(showExcludedDailog: boolean = false) {
 		this._matDialog.open(FilterResultDailogComponent, {
 			width: '670px',
 			panelClass: 'filter-result-dailog',
+			data: {
+				reportDataSvc: this._reportDataSvc,
+				reportViewSvc: this._reportViewSvc,
+				showExcludedDailog: showExcludedDailog,
+			} as IFilterResultDailogData,
 		});
 	}
 }

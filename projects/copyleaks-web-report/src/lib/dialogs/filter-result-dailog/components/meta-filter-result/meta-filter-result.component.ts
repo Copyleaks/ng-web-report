@@ -13,13 +13,25 @@ export class MetaFilterResultComponent implements OnInit {
 	@Input() maxWordLimit: number;
 	@Input() publicationDates: string[];
 
-	form: FormGroup;
-	wordLimitform: FormGroup;
-	publicationDateForm: FormGroup;
-	publicationDate: FormControl;
 	eFilterResultForm = EFilterResultForm;
 
 	constructor(private filterService: FilterResultDailogService) {}
+
+	get form(): FormGroup {
+		return this.filterService.resultsMetaFormGroup;
+	}
+
+	get wordLimitform(): FormGroup {
+		return this.getFormGroup(EFilterResultForm.fgWordLimit);
+	}
+
+	get publicationDateForm(): FormGroup {
+		return this.getFormGroup(EFilterResultForm.fgPublicationDate);
+	}
+
+	get publicationDate(): FormControl {
+		return this.publicationDateForm.get(EFilterResultForm.fcPublicationStartDate) as FormControl;
+	}
 
 	get wordLimitTotalWord() {
 		return this.wordLimitform.get(EFilterResultForm.fcWordLimitTotalWordlimt)?.value;
@@ -38,14 +50,7 @@ export class MetaFilterResultComponent implements OnInit {
 		return this.publicationDateForm.get(EFilterResultForm.fcPublicationStartDate)?.value;
 	}
 
-	ngOnInit(): void {
-		this.form = this.filterService.resultsMetaFormGroup;
-		if (this.form) {
-			this.wordLimitform = this.getFormGroup(EFilterResultForm.fgWordLimit);
-			this.publicationDateForm = this.getFormGroup(EFilterResultForm.fgPublicationDate);
-			this.publicationDate = this.publicationDateForm.get(EFilterResultForm.fcPublicationStartDate) as FormControl;
-		}
-	}
+	ngOnInit(): void {}
 
 	getFormGroup(eFilterResultForm: EFilterResultForm) {
 		return this.filterService.resultsMetaFormGroup.get(eFilterResultForm) as FormGroup;

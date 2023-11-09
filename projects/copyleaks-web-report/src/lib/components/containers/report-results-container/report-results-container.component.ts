@@ -19,8 +19,11 @@ import { IResultsActions } from './components/results-actions/models/results-act
 import { ReportNgTemplatesService } from '../../../services/report-ng-templates.service';
 import { untilDestroy } from '../../../utils/until-destroy';
 import { CdkVirtualScrollViewport } from '@angular/cdk/scrolling';
-import { Observable, fromEvent } from 'rxjs';
+import { Observable, combineLatest, fromEvent } from 'rxjs';
 import { map, pairwise, filter, distinctUntilChanged } from 'rxjs/operators';
+import { ReportDataService } from '../../../services/report-data.service';
+import { ResultDetailItem } from '../../../models/report-matches.models';
+import { ICopyleaksReportOptions } from '../../../models/report-options.models';
 
 @Component({
 	selector: 'copyleaks-report-results-container',
@@ -41,6 +44,7 @@ export class ReportResultsContainerComponent implements OnInit, OnChanges {
 	@Input() allResults: IResultItem[] = [];
 	@Input() resultsActions: IResultsActions;
 	@Input() isMobile: boolean;
+	@Input() filterOptions: ICopyleaksReportOptions;
 
 	/**
 	 * @Input {boolean} Flag indicating whether to show the loading view or not.
@@ -68,17 +72,37 @@ export class ReportResultsContainerComponent implements OnInit, OnChanges {
 	resizeSubscription: any;
 	addPaddingToContainer: boolean;
 	stopPaddingCheck: boolean;
+	filterIsOn: boolean;
+
+	excludedResultsIds: string[];
 
 	get allResultsItemLength() {
 		return this.allResults?.length;
 	}
 
-	constructor(private _reportNgTemplatesSvc: ReportNgTemplatesService, private cdr: ChangeDetectorRef) {}
+	constructor(
+		private _reportNgTemplatesSvc: ReportNgTemplatesService,
+		private cdr: ChangeDetectorRef,
+		private _reportDataSvc: ReportDataService
+	) {}
 
 	ngOnChanges(change: SimpleChanges) {
 		if (change['allResults']?.currentValue) {
 			this.searchedValue = '';
-			this.displayedResults = this.allResults;
+			if (!this.filterIsOn) this.displayedResults = this.allResults;
+		}
+		if (change['showLoadingView']?.currentValue == false) {
+			this._handelFilterUpdates();
+		}
+
+		if ('filterOptions' in change && change['filterOptions'].currentValue) {
+			this.displayedResults.forEach(result => {
+				result.iStatisticsResult = {
+					identical: this.filterOptions.showIdentical ? result.iStatisticsResult.identical : 0,
+					minorChanges: this.filterOptions.showMinorChanges ? result.iStatisticsResult.minorChanges : 0,
+					relatedMeaning: this.filterOptions.showRelated ? result.iStatisticsResult.relatedMeaning : 0,
+				};
+			});
 		}
 	}
 
@@ -110,6 +134,41 @@ export class ReportResultsContainerComponent implements OnInit, OnChanges {
 				this.cdr.detectChanges();
 			}
 		});
+	}
+
+	private _handelFilterUpdates() {
+		if (this._reportDataSvc.filterOptions && this._reportDataSvc.excludedResultsIds)
+			this._filterResults(this._reportDataSvc.filterOptions, this._reportDataSvc.excludedResultsIds);
+
+		combineLatest([this._reportDataSvc.filterOptions$, this._reportDataSvc.excludedResultsIds$])
+			.pipe(untilDestroy(this))
+			.subscribe(([filterOptions, excludedResultsIds]) => {
+				if (this.showLoadingView || !filterOptions || !excludedResultsIds) return;
+
+				this._filterResults(filterOptions, excludedResultsIds);
+			});
+	}
+
+	private _filterResults(filterOptions: ICopyleaksReportOptions, excludedResultsIds: string[]) {
+		this.excludedResultsIds = excludedResultsIds;
+
+		const filteredResults = this._reportDataSvc.filterResults(
+			this.allResults.map(result => result.resultDetails) as ResultDetailItem[],
+			filterOptions,
+			excludedResultsIds
+		);
+
+		this.displayedResults = [
+			...this.allResults.filter(result => !!filteredResults.find(r => r.id === result.resultDetails?.id)),
+		];
+
+		this.resultsActions = {
+			totalExcluded: excludedResultsIds?.length,
+			totalFiltered: filteredResults.length === this.allResults.length ? 0 : filteredResults.length,
+			totalResults: this.allResults.length,
+		};
+
+		this.filterIsOn = filteredResults.length !== this.allResults.length;
 	}
 
 	ngAfterViewInit(): void {
@@ -250,6 +309,17 @@ export class ReportResultsContainerComponent implements OnInit, OnChanges {
 				if (this.allResultsItemLength === 4) this.navigateMobileButton = EnumNavigateMobileButton.FourthButton;
 				if (this.allResultsItemLength >= 5) this.navigateMobileButton = EnumNavigateMobileButton.FifthButton;
 			});
+	}
+
+	includeResultById(resultId: string) {
+		const excludedResutsIds = this._reportDataSvc.excludedResultsIds ?? [];
+		this._reportDataSvc.excludedResultsIds$.next(excludedResutsIds.filter(id => id != resultId));
+	}
+
+	excludeResultById(resultId: string) {
+		const excludedResutsIds = new Set(this._reportDataSvc.excludedResultsIds);
+		excludedResutsIds.add(resultId);
+		this._reportDataSvc.excludedResultsIds$.next(Array.from(excludedResutsIds));
 	}
 
 	//#endregion

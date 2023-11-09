@@ -13,10 +13,7 @@ export class MatchTypeFilterResultComponent implements OnInit {
 	@Input() minorChangesTotal: number = 0;
 	@Input() paraphrasedTotal: number = 0;
 
-	matchTypeForm: FormGroup;
 	eFilterResultForm = EFilterResultForm;
-	constructor(private filterService: FilterResultDailogService) {}
-	ngOnInit() {
-		this.matchTypeForm = this.filterService.matchTypeFormGroup;
-	}
+	constructor(public filterService: FilterResultDailogService) {}
+	ngOnInit() {}
 }

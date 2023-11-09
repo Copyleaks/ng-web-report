@@ -16,7 +16,10 @@
 			matInput />
 	</div>
 	<div class="mat-chip-container" fxLayout="row" fxLayoutAlign="start center" fxLayoutGap="4px">
-		<button class="arrow-drop-button" (click)="showMoreMenu = !showMoreMenu">
+		<button
+			*ngIf="allTagItem && allTagItem.length > 0"
+			class="arrow-drop-button"
+			(click)="showMoreMenu = !showMoreMenu">
 			<ng-container *ngIf="showMoreMenu; else showLessMenuIcon">
 				<mat-icon>arrow_drop_up</mat-icon>
 			</ng-container>

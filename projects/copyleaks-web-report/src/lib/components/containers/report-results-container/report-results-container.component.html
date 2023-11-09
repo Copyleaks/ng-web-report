@@ -41,6 +41,8 @@
 								#resultitem
 								[resultItem]="item"
 								[isMobile]="isMobile"
+								(hiddenResultEvent)="excludeResultById($event)"
+								(showResultEvent)="includeResultById($event)"
 								style="width: 100%"></cr-report-results-item>
 						</div>
 					</cdk-virtual-scroll-viewport>

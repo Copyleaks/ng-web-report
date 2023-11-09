@@ -156,3 +156,9 @@
 .type-value {
 	font-weight: 700 !important;
 }
+
+.identical,
+.paraphrased,
+.minorChanges {
+	transition: width 2s;
+}

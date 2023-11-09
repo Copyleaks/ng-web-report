@@ -72,6 +72,7 @@
 		font-size: 14px;
 		color: $color-primary;
 		text-decoration: underline;
+		cursor: pointer;
 	}
 }
 
@@ -106,7 +107,7 @@
 		border: 0px;
 		outline: 0px;
 		background-color: $color-container-background;
-		font-size: 16px;		
+		font-size: 16px;
 	}
 }
 
@@ -141,7 +142,6 @@ mat-icon:hover {
 
 .search-icon,
 .filter-search-icon {
-	line-height: normal !important;
 	color: $color-black;
 }
 
@@ -152,7 +152,6 @@ mat-icon:hover {
 }
 
 .clear-icon {
-	line-height: normal !important;
 	color: $color-black;
 	padding-right: 4px;
 }

@@ -35,22 +35,11 @@ export class IncludedTagsFilterResultComponent implements OnInit {
 	ngOnInit(): void {
 		this.includedTagsForm = this.filterService.includedTagsFormControl;
 
-		this.updateSelectedTag();
-
 		this.filteredTagList = this.searchTagControl.valueChanges.pipe(
 			untilDestroy(this),
 			startWith(''),
 			map(value => this._filterTags(value || ''))
 		);
-	}
-
-	updateSelectedTag() {
-		this.includedTagsFormValue.forEach(item => {
-			const tag = this.allTagItem.find(tag => tag.code == item.code);
-			if (tag) {
-				tag.selected = true;
-			}
-		});
 	}
 
 	selectTag() {

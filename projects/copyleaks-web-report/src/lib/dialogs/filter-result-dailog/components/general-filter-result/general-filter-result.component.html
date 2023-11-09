@@ -1,4 +1,9 @@
-<div [formGroup]="generalFilterForm" class="container" fxLayout="column" fxLayoutAlign="start start" fxLayoutGap="8px">
+<div
+	[formGroup]="filterService.generalFiltersFormGroup"
+	class="container"
+	fxLayout="column"
+	fxLayoutAlign="start start"
+	fxLayoutGap="8px">
 	<!-- Top result -->
 	<cr-mat-slide-filter-result
 		[formControlName]="eFilterResultForm.fcTopResult"

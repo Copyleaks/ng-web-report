@@ -71,6 +71,12 @@
 		}
 	}
 
+	.identical,
+	.paraphrased,
+	.minor-changes {
+		transition: width 0.7s;
+	}
+
 	.identical {
 		background-color: $color-plagiarism-identical;
 		border: 1px solid $color-plagiarism-identical;

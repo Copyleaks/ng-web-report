@@ -220,7 +220,6 @@ export class ContentViewerContainerComponent implements OnInit, AfterViewInit, O
 	@Output() viewChangeEvent = new EventEmitter<IReportViewEvent>();
 	iframeLoaded: boolean;
 
-
 	EXCLUDE_MESSAGE = EXCLUDE_MESSAGE;
 
 	get pages(): number[] {
@@ -270,6 +269,7 @@ export class ContentViewerContainerComponent implements OnInit, AfterViewInit, O
 		if (changes['contentHtml'] && changes['contentHtml'].currentValue && this.contentIFrame?.nativeElement) {
 			this._renderer.setAttribute(this.contentIFrame.nativeElement, 'srcdoc', changes['contentHtml'].currentValue);
 			this._cdr.detectChanges();
+			this.showLoadingView = true;
 		}
 
 		if ('currentPage' in changes || ('numberOfPages' in changes && this.currentPage && this.numberOfPages)) {

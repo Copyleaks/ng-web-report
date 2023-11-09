@@ -1,6 +1,7 @@
 import { AfterViewInit, Component, HostBinding, Input, OnInit } from '@angular/core';
 import { EResponsiveLayoutType } from '../../../enums/copyleaks-web-report.enums';
 import { IResultItem } from './components/models/report-result-item.models';
+import { ReportDataService } from '../../../services/report-data.service';
 
 @Component({
 	selector: 'copyleaks-report-results-item-container',
@@ -25,11 +26,20 @@ export class ReportResultsItemContainerComponent implements OnInit, AfterViewIni
 	 */
 	@Input() showLoadingView = false;
 
-	constructor() {}
+	constructor(private _reportDataSvc: ReportDataService) {}
 
 	ngOnInit(): void {}
 
 	ngAfterViewInit(): void {}
+
+	excludeResultToggle(resultId: string) {
+		const isFound = !!this._reportDataSvc.excludedResultsIds?.find(id => id === resultId);
+		if (isFound)
+			this._reportDataSvc.excludedResultsIds$.next([
+				...(this._reportDataSvc.excludedResultsIds?.filter(id => id !== resultId) ?? []),
+			]);
+		else this._reportDataSvc.excludedResultsIds$.next([...(this._reportDataSvc.excludedResultsIds ?? []), resultId]);
+	}
 
 	//#endregion
 	ngOnDestroy() {}

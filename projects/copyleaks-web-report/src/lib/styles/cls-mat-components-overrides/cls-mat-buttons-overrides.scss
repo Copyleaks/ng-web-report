@@ -1,0 +1,32 @@
+@import '../website-colors.styles.scss';
+
+:host {
+	::ng-deep {
+		.mat-button-base.mat-primary {
+			border: 3px solid $color-primary;
+		}
+		.mat-button-base.mat-warn {
+			border: 3px solid $color-error;
+		}
+		.mat-button-base.mat-accent {
+			border: 3px solid $color-black;
+		}
+		.mat-button-base.mat-button-disabled {
+			border: 3px solid transparent !important;
+			pointer-events: none;
+		}
+
+		.mat-icon-button .mat-icon {
+			line-height: normal !important;
+		}
+
+		.mat-raised-button:not(.mat-button-disabled):active:not([class*='mat-elevation-z']) {
+			box-shadow: none !important;
+		}
+
+		.mat-flat-button.mat-button-disabled {
+			background-color: none !important;
+			background: none !important;
+		}
+	}
+}

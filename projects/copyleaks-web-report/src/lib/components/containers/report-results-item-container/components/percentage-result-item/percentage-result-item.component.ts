@@ -34,7 +34,10 @@ export class PercentageResultItemComponent implements OnInit, OnChanges {
 			if (this.percentageResult?.resultItem) {
 				this.metadataSource = this.percentageResult.resultItem.metadataSource;
 				this.iStatisticsResult = this.percentageResult.resultItem.iStatisticsResult;
-				this.similarWords = this.percentageResult.resultItem.resultPreview.matchedWords;
+				this.similarWords =
+					this.percentageResult.resultItem.iStatisticsResult.identical +
+					this.percentageResult.resultItem.iStatisticsResult.minorChanges +
+					this.percentageResult.resultItem.iStatisticsResult.relatedMeaning;
 			}
 		}
 	}

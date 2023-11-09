@@ -24,6 +24,7 @@ import { combineLatest } from 'rxjs';
 import { IResultItem } from '../../containers/report-results-item-container/components/models/report-result-item.models';
 import { IResultsActions } from '../../containers/report-results-container/components/results-actions/models/results-actions.models';
 import { filter } from 'rxjs/operators';
+import { ICopyleaksReportOptions } from '../../../models/report-options.models';
 
 export abstract class OneToManyReportLayoutBaseComponent extends ReportLayoutBaseComponent {
 	hideRightSection: boolean = false;
@@ -40,6 +41,7 @@ export abstract class OneToManyReportLayoutBaseComponent extends ReportLayoutBas
 	EResponsiveLayoutType = EResponsiveLayoutType;
 	alerts: ICompleteResultNotificationAlert[];
 	reportStatistics: ReportStatistics | undefined;
+	filterOptions: ICopyleaksReportOptions;
 	selectedTap: EReportViewType = EReportViewType.PlagiarismView;
 
 	scanResultsPreviews: ICompleteResults | undefined;
@@ -96,6 +98,17 @@ export abstract class OneToManyReportLayoutBaseComponent extends ReportLayoutBas
 				this.reportCrawledVersion = data;
 				this.numberOfPages = data.text?.pages?.startPosition?.length ?? 1;
 			}
+		});
+
+		this.reportDataSvc.filterOptions$.pipe(untilDestroy(this)).subscribe(data => {
+			if (!data) return;
+			if (data.showAlerts === false) {
+				this.alerts = [];
+				return;
+			}
+			this.filterOptions = data;
+			this.alerts =
+				this.scanResultsPreviews?.notifications?.alerts?.filter(a => a.code != ALERTS.SUSPECTED_AI_TEXT_DETECTED) ?? [];
 		});
 
 		this.matchSvc.originalHtmlMatches$.pipe(untilDestroy(this)).subscribe(data => {

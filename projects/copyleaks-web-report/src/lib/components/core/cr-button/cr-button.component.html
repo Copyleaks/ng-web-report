@@ -1,0 +1,114 @@
+<ng-template #buttonContent>
+	<div fxLayout="row" fxLayoutAlign="center center" [fxLayoutGap]="onlyIcon ? '0px' : '10px'">
+		<!-- button icon -->
+		<ng-template #btnIcon>
+			<mat-icon
+				*ngIf="icon && !showSpinner"
+				class="cls-button-icon"
+				fontSet="material-icons-round"
+				[ngStyle]="iconStyle">
+				{{ icon }}
+			</mat-icon>
+		</ng-template>
+		<!-- show icon on the left side of the text -->
+		<ng-container *ngIf="!isIconRighToText" [ngTemplateOutlet]="btnIcon"></ng-container>
+		<!-- inner text -->
+		<span class="cls-button-text">
+			<ng-content></ng-content>
+		</span>
+		<!-- show icon on the right side of the text -->
+		<ng-container *ngIf="isIconRighToText" [ngTemplateOutlet]="btnIcon"></ng-container>
+		<!-- button spinner -->
+		<cr-spinner *ngIf="showSpinner" size="20px"></cr-spinner>
+	</div>
+</ng-template>
+
+<!-- Check if the button is just a link and set the style accordingly -->
+<ng-container *ngIf="isLink; else normalButton">
+	<div class="tooltip-container" fxLayout="row" fxLayoutAlign="start center" [matTooltip]="buttonTooltip">
+		<a
+			[class]="linkButtonColorClassName + ' background-transition'"
+			[ngStyle]="buttonStyle"
+			mat-flat-button
+			[href]="href"
+			[target]="traget"
+			[color]="color"
+			[disabled]="disabled || showSpinner"
+			[attr.aria-label]="ariaLabel"
+			[tabIndex]="tabindex"
+			i18n-aria-label>
+			<ng-container *ngTemplateOutlet="buttonContent"></ng-container>
+		</a>
+	</div>
+</ng-container>
+
+<!-- Normal button -->
+<ng-template #normalButton>
+	<!-- Filled button -->
+	<div
+		class="tooltip-container"
+		fxLayout="row"
+		fxLayoutAlign="start center"
+		[matTooltip]="buttonTooltip"
+		i18n-matTooltip>
+		<ng-container *ngIf="!outlined; else outlinedButton">
+			<ng-container *ngIf="!onlyIcon; else onlyIconOutlinedButton">
+				<button
+					mat-raised-button
+					[ngStyle]="buttonStyle"
+					[class]="filledButtonColorClassName + ' background-transition'"
+					[color]="color"
+					[attr.aria-label]="ariaLabel"
+					[disabled]="disabled || showSpinner"
+					[tabIndex]="tabindex"
+					i18n-aria-label>
+					<ng-container *ngTemplateOutlet="buttonContent"></ng-container>
+				</button>
+			</ng-container>
+
+			<ng-template #onlyIconOutlinedButton>
+				<button
+					mat-icon-button
+					[ngStyle]="buttonStyle"
+					[class]="iconButtonColorClassName + ' background-transition'"
+					[color]="color"
+					[attr.aria-label]="ariaLabel"
+					[disabled]="disabled || showSpinner"
+					[tabIndex]="tabindex"
+					i18n-aria-label>
+					<ng-container *ngTemplateOutlet="buttonContent"></ng-container>
+				</button>
+			</ng-template>
+		</ng-container>
+
+		<!-- Outlined button -->
+		<ng-template #outlinedButton>
+			<ng-container *ngIf="!onlyIcon; else onlyIconOutlinedButton">
+				<button
+					mat-button
+					[class]="outlinedButtonColorClassName + ' background-transition'"
+					[ngStyle]="buttonStyle"
+					[color]="color"
+					[attr.aria-label]="ariaLabel"
+					[disabled]="disabled || showSpinner"
+					[tabIndex]="tabindex"
+					i18n-aria-label>
+					<ng-container *ngTemplateOutlet="buttonContent"></ng-container>
+				</button>
+			</ng-container>
+			<ng-template #onlyIconOutlinedButton>
+				<button
+					mat-icon-button
+					[ngStyle]="buttonStyle"
+					[class]="iconButtonColorClassName + ' background-transition'"
+					[color]="color"
+					[attr.aria-label]="ariaLabel"
+					[disabled]="disabled || showSpinner"
+					[tabIndex]="tabindex"
+					i18n-aria-label>
+					<ng-container *ngTemplateOutlet="buttonContent"></ng-container>
+				</button>
+			</ng-template>
+		</ng-template>
+	</div>
+</ng-template>

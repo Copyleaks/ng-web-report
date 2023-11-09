@@ -9,8 +9,14 @@
 		button {
 			font-family: haboro-soft, sans-serif !important;
 		}
+
+		.disabled-section {
+			opacity: 0.5;
+			pointer-events: none;
+		}
 	}
 }
+
 .top-container {
 	.header-container {
 		width: 100%;
@@ -140,26 +146,13 @@
 			border-radius: 24px 0px 16px 24px;
 		}
 		.discard-changes-button {
-			min-width: 161px;
-			font-size: 16px;
+			font-size: 16px !important;
 			font-weight: 500;
-			color: $color-primary;
-			border: 2px solid;
-			border-color: $color-primary;
-			background-color: $color-white;
+			font-family: haboro-soft, sans-serif !important;
 		}
 		.apply-filters-button {
-			min-width: 220px;
-			font-size: 18px;
-			font-weight: 700;
-			background-color: $color-primary;
-			color: $color-white;
-			border: 2px solid;
-			border-color: $color-primary;
-			&:hover {
-				background-color: $color-white;
-				color: $color-primary;
-			}
+			font-size: 18px !important;
+			font-weight: 700 !important;
 		}
 	}
 }

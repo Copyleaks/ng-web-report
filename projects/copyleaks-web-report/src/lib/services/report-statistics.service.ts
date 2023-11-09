@@ -5,7 +5,7 @@ import * as helpers from '../utils/report-statistics-helpers';
 import { ReportStatistics } from '../models/report-statistics.models';
 import { ICompleteResults } from '../models/report-data.models';
 import { ResultDetailItem } from '../models/report-matches.models';
-import { CopyleaksReportOptions } from '../models/report-options.models';
+import { ICopyleaksReportOptions } from '../models/report-options.models';
 import { untilDestroy } from '../utils/until-destroy';
 import { ReportDataService } from './report-data.service';
 import { ReportViewService } from './report-view.service';
@@ -14,7 +14,7 @@ import { ReportViewService } from './report-view.service';
 export class ReportStatisticsService implements OnDestroy {
 	private _statistics = new BehaviorSubject<ReportStatistics | undefined>(undefined);
 	constructor(private _reportDataSvc: ReportDataService, private _reportViewSvc: ReportViewService) {
-		const { scanResultsPreviews$, scanResultsDetails$ } = this._reportDataSvc;
+		const { scanResultsPreviews$, scanResultsDetails$, excludedResultsIds$, filterOptions$ } = this._reportDataSvc;
 		const { selectedResult$, reportViewMode$ } = this._reportViewSvc;
 
 		combineLatest([scanResultsPreviews$, selectedResult$, reportViewMode$])
@@ -31,24 +31,22 @@ export class ReportStatisticsService implements OnDestroy {
 						showPageSources: true,
 						showOnlyTopResults: true,
 						setAsDefault: true,
-					} as CopyleaksReportOptions);
+					} as ICopyleaksReportOptions);
 			});
 
-		combineLatest([scanResultsPreviews$, scanResultsDetails$, reportViewMode$])
+		combineLatest([scanResultsPreviews$, scanResultsDetails$, reportViewMode$, excludedResultsIds$, filterOptions$])
 			.pipe(
 				untilDestroy(this),
-				filter(([, , viewModeData]) => viewModeData?.viewMode === 'one-to-many')
+				filter(
+					([, , viewModeData, excludedResultsIds, filterOptions]) =>
+						viewModeData?.viewMode === 'one-to-many' && excludedResultsIds != undefined && filterOptions != undefined
+				)
 			)
-			.subscribe(([completeResult, results]) => {
-				if (completeResult)
-					this.retreieveOneToManyStatistics(completeResult, results ?? [], results ?? [], {
-						showRelated: true,
-						showIdentical: true,
-						showMinorChanges: true,
-						showPageSources: true,
-						showOnlyTopResults: true,
-						setAsDefault: true,
-					} as CopyleaksReportOptions);
+			.subscribe(([completeResult, results, , excludedResultsIds, filterOptions]) => {
+				if (completeResult && filterOptions && excludedResultsIds) {
+					const filteredResults = this._reportDataSvc.filterResults(results, filterOptions, excludedResultsIds);
+					this.retreieveOneToManyStatistics(completeResult, results ?? [], filteredResults, filterOptions);
+				}
 			});
 	}
 
@@ -62,7 +60,7 @@ export class ReportStatisticsService implements OnDestroy {
 	retreiveOneToOneStatistics(
 		completeResult: ICompleteResults,
 		suspect: ResultDetailItem,
-		options: CopyleaksReportOptions
+		options: ICopyleaksReportOptions
 	) {
 		const aiStatistics = helpers.getAiStatistics(completeResult);
 		this._statistics.next({
@@ -87,7 +85,7 @@ export class ReportStatisticsService implements OnDestroy {
 		completeResult: ICompleteResults,
 		results: ResultDetailItem[],
 		filteredResults: ResultDetailItem[],
-		options: CopyleaksReportOptions
+		options: ICopyleaksReportOptions
 	) {
 		const totalResults =
 			(completeResult.results.repositories && completeResult.results.repositories.length

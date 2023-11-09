@@ -11,6 +11,7 @@ import {
 } from '@angular/core';
 import { FormControl } from '@angular/forms';
 import { IResultItem } from 'projects/copyleaks-web-report/src/lib/components/containers/report-results-item-container/components/models/report-result-item.models';
+import { ReportDataService } from 'projects/copyleaks-web-report/src/lib/services/report-data.service';
 import { untilDestroy } from 'projects/copyleaks-web-report/src/lib/utils/until-destroy';
 import { fromEvent } from 'rxjs';
 import { debounceTime, startWith } from 'rxjs/operators';
@@ -22,10 +23,12 @@ import { debounceTime, startWith } from 'rxjs/operators';
 })
 export class ExcludedResultsDailogComponent implements OnInit, AfterViewInit {
 	@Input() allResultsItem: IResultItem[] = [];
+	@Input() reportDataSvc: ReportDataService;
 	@Output() closeDailogEvent = new EventEmitter<boolean>();
 
 	filteredList: IResultItem[];
 	searchControl = new FormControl('');
+	allIncluded: boolean;
 
 	private _startingIndex: number = 0;
 	private _pageSize: number = 10;
@@ -109,7 +112,21 @@ export class ExcludedResultsDailogComponent implements OnInit, AfterViewInit {
 		this.searchControl.setValue('');
 	}
 
-	includeAllButton() {}
+	includeAllButton() {
+		this.reportDataSvc.excludedResultsIds$.next([]);
+		this.allIncluded = true;
+	}
+
+	includeResultById(resultId: string) {
+		const excludedResutsIds = this.reportDataSvc.excludedResultsIds ?? [];
+		this.reportDataSvc.excludedResultsIds$.next(excludedResutsIds.filter(id => id != resultId));
+	}
+
+	excludeResultById(resultId: string) {
+		const excludedResutsIds = new Set(this.reportDataSvc.excludedResultsIds);
+		excludedResutsIds.add(resultId);
+		this.reportDataSvc.excludedResultsIds$.next(Array.from(excludedResutsIds));
+	}
 
 	ngOnDestroy() {}
 }

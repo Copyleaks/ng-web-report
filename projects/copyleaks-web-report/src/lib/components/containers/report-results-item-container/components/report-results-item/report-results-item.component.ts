@@ -4,6 +4,7 @@ import { IResultPreviewBase } from 'projects/copyleaks-web-report/src/lib/models
 import { ReportViewService } from 'projects/copyleaks-web-report/src/lib/services/report-view.service';
 import { IResultItem } from '../models/report-result-item.models';
 import { IPercentageResult } from '../percentage-result-item/models/percentage-result-item.models';
+import { ICopyleaksReportOptions } from 'projects/copyleaks-web-report/src/lib/models/report-options.models';
 
 @Component({
 	selector: 'cr-report-results-item',
@@ -16,13 +17,14 @@ export class ReportResultsItemComponent implements OnInit, OnChanges {
 	@Input() showItemBody: boolean = true;
 	@Input() excludeResult: boolean = false;
 	@Input() isMobile: boolean = false;
+	@Input() excludedResultsClick: boolean = false;
+
 	@Output() hiddenResultEvent = new EventEmitter<string>();
 	@Output() showResultEvent = new EventEmitter<string>();
 
 	percentageResult: IPercentageResult;
 	previewResult: IResultPreviewBase;
 	eResultPreviewType = EResultPreviewType;
-	excludedResultsClick: boolean = false;
 
 	@HostListener('click', ['$event'])
 	handleClick() {

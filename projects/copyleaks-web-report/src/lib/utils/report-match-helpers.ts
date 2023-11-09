@@ -14,7 +14,7 @@ import {
 } from '../models/report-matches.models';
 import { Comparison, ICompleteResultNotificationAlert, IScanSource } from '../models/report-data.models';
 
-import { CopyleaksReportOptions } from '../models/report-options.models';
+import { ICopyleaksReportOptions } from '../models/report-options.models';
 import { EExcludeReason, EMatchClassification } from '../enums/copyleaks-web-report.enums';
 import { EXCLUDE_MESSAGE } from '../constants/report-exclude.constants';
 
@@ -339,7 +339,7 @@ export const findRespectiveStart = (index: number, comparison: Comparison, fromS
  */
 export const processSourceText = (
 	results: ResultDetailItem | ResultDetailItem[],
-	settings: CopyleaksReportOptions,
+	settings: ICopyleaksReportOptions,
 	source: IScanSource,
 	text: boolean = true
 ) => {
@@ -437,7 +437,7 @@ export const processAICheatingMatches = (
  */
 export const processSuspectText = (
 	suspect: ResultDetailItem,
-	options: CopyleaksReportOptions,
+	options: ICopyleaksReportOptions,
 	text: boolean = true
 ): SlicedMatch[][] => {
 	const identical = options.showIdentical ? (text ? suspectTextIdentical : suspectHtmlIdentical)(suspect) : [];
@@ -462,7 +462,7 @@ export const processSuspectText = (
  */
 export const processSourceHtml = (
 	results: ResultDetailItem | ResultDetailItem[],
-	options: CopyleaksReportOptions,
+	options: ICopyleaksReportOptions,
 	source: IScanSource
 ) => {
 	if (!source || !source.html) {
@@ -490,7 +490,7 @@ export const processSourceHtml = (
  * @param suspect the suspect result item
  * @param options the current user options
  */
-export const processSuspectHtml = (suspect: ResultDetailItem, options: CopyleaksReportOptions): Match[] | null => {
+export const processSuspectHtml = (suspect: ResultDetailItem, options: ICopyleaksReportOptions): Match[] | null => {
 	if (!suspect || !suspect?.result?.html) {
 		return null;
 	}

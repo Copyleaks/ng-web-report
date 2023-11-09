@@ -16,21 +16,18 @@ export class SourceTypeFilterResultComponent implements OnInit {
 		totalbatch: 0,
 	};
 
-	surceTypeForm: FormGroup;
 	eFilterResultForm = EFilterResultForm;
 	get repositoriesForm() {
-		return this.surceTypeForm?.get(EFilterResultForm.fgRepositories) as FormGroup;
+		return this.filterService.sourceTypeFormGroup?.get(EFilterResultForm.fgRepositories) as FormGroup;
 	}
 
 	get repositoryLength() {
 		return this.totalSourceType?.repository?.length || 0;
 	}
 
-	constructor(private filterService: FilterResultDailogService) {}
+	constructor(public filterService: FilterResultDailogService) {}
 
 	ngOnInit(): void {
-		this.surceTypeForm = this.filterService.sourceTypeFormGroup;
-
 		if (this.totalSourceType?.repository) {
 			this.totalSourceType?.repository.forEach(repo => {
 				this.addRepositoryControl(repo.id);

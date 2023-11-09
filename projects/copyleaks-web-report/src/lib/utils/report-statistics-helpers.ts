@@ -9,7 +9,7 @@ import {
 	ResultDetailItem,
 	SubjectResultKey,
 } from '../models/report-matches.models';
-import { CopyleaksReportOptions } from '../models/report-options.models';
+import { ICopyleaksReportOptions } from '../models/report-options.models';
 import { ReportStatistics } from '../models/report-statistics.models';
 
 /**
@@ -149,7 +149,7 @@ export const mergeWords = (matches: Match[]): Match[] => {
 export const calculateStatistics = (
 	completeResult: ICompleteResults,
 	results: ResultDetailItem[],
-	options: CopyleaksReportOptions
+	options: ICopyleaksReportOptions
 ): ReportStatistics => {
 	const { totalWords, totalExcluded } = completeResult.scannedDocument;
 	const identical = options.showIdentical ? results.flatMap(createWordIntervalsFrom('identical', 'source')) : [];

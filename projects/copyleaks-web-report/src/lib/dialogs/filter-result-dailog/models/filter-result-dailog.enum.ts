@@ -1,3 +1,6 @@
+import { ReportDataService } from '../../../services/report-data.service';
+import { ReportViewService } from '../../../services/report-view.service';
+
 export enum EFilterResultForm {
 	//Source Type
 	fgSourceType = 'sourceType',
@@ -29,4 +32,10 @@ export enum EFilterResultForm {
 	fcAuthorSubmissions = 'authorSubmissions',
 
 	fcIncludedTags = 'includedTags',
+}
+
+export interface IFilterResultDailogData {
+	reportDataSvc: ReportDataService;
+	reportViewSvc: ReportViewService;
+	showExcludedDailog: boolean;
 }

@@ -1,0 +1,164 @@
+@import '../../../styles/cls-mat-components-overrides/cls-mat-buttons-overrides.scss';
+
+@mixin cls-button-design-v2-shadow {
+	box-shadow: 2px 2px 4px rgba(0, 0, 0, 0.15), -2px -2px 8px rgba(255, 255, 255, 0.25) !important;
+}
+
+@mixin cls-button-design-v2($color) {
+	display: flex;
+	flex-direction: row;
+	justify-content: center;
+	align-items: center;
+	padding: 8px 24px;
+	border-radius: 24px 0px 24px 24px;
+	line-height: normal;
+	white-space: normal;
+	border: 3px solid $color;
+	background: $color;
+	color: $color-white;
+	font-size: 16px;
+	align-self: stretch;
+	box-shadow: none;
+}
+
+@mixin cls-button-outline-design-v2($color) {
+	padding: 8px 24px;
+	font-size: 16px;
+	border-radius: 24px 0px 24px 24px;
+	line-height: normal;
+	background: transparent;
+	white-space: normal;
+	color: $color;
+	background: transparent;
+	border: 3px solid $color;
+	align-self: stretch;
+	box-shadow: none;
+}
+
+@mixin cls-link-button-design-v2($color) {
+	padding: 0px;
+	font-size: 16px;
+	border-radius: 24px 0px 24px 24px;
+	line-height: normal;
+	background: transparent;
+	box-shadow: none;
+	white-space: normal;
+	color: $color;
+	background: transparent;
+	border: none !important;
+	align-self: stretch;
+}
+
+@mixin cls-icon-button-design-v2($color) {
+	width: fit-content !important;
+	height: fit-content !important;
+	padding: 21px;
+	font-size: 16px;
+	border-radius: 50%;
+	background-color: $color !important;
+	line-height: normal;
+	background: transparent;
+	box-shadow: none !important;
+	white-space: normal;
+	background: transparent;
+	border: none !important;
+	align-self: stretch;
+	box-shadow: none;
+	mat-icon {
+		color: $color-white !important;
+	}
+}
+
+.warn-filled-button,
+.warn-filled-button-disabled {
+	@include cls-button-design-v2($color-error);
+}
+
+.warn-filled-button:hover {
+	@include cls-button-outline-design-v2($color-error);
+}
+
+.primary-filled-button,
+.primary-filled-button-disabled {
+	@include cls-button-design-v2($color-primary);
+}
+
+.primary-filled-button:hover {
+	@include cls-button-outline-design-v2($color-primary);
+}
+
+.accent-filled-button,
+.accent-filled-button-disabled {
+	@include cls-button-design-v2($color-black);
+}
+
+.accent-filled-button:hover {
+	@include cls-button-outline-design-v2($color-black);
+}
+
+.warn-outlined-button,
+.warn-outlined-button-disabled {
+	@include cls-button-outline-design-v2($color-error);
+}
+
+.warn-outlined-button:hover {
+	@include cls-button-design-v2($color-error);
+}
+
+.primary-outlined-button,
+.primary-outlined-button-disabled {
+	@include cls-button-outline-design-v2($color-primary);
+}
+
+.primary-outlined-button:hover {
+	@include cls-button-design-v2($color-primary);
+}
+
+.accent-outlined-button,
+.accent-outlined-button-disabled {
+	@include cls-button-outline-design-v2($color-black);
+}
+
+.accent-outlined-button:hover {
+	@include cls-button-design-v2($color-black);
+}
+
+.primary-link-button,
+.primary-link-button-disabled {
+	@include cls-link-button-design-v2($color-primary);
+}
+
+.warn-link-button,
+.warn-link-button-disabled {
+	@include cls-link-button-design-v2($color-error);
+}
+
+.accent-link-button,
+.accent-link-button-disabled {
+	@include cls-link-button-design-v2($color-black);
+}
+
+.primary-icon-button,
+.primary-icon-button-disabled {
+	@include cls-icon-button-design-v2($color-primary);
+}
+
+.warn-icon-button,
+.warn-icon-button-disabled {
+	@include cls-icon-button-design-v2($color-error);
+}
+
+.accent-icon-button,
+.accent-icon-button-disabled {
+	@include cls-icon-button-design-v2($color-black);
+}
+
+.tooltip-container {
+	width: 100%;
+}
+
+a:hover {
+	.cls-button-text {
+		text-decoration: underline;
+	}
+}

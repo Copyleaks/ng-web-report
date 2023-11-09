@@ -1,17 +1,17 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, Inject, OnInit } from '@angular/core';
 import { IResultsActions } from '../../components/containers/report-results-container/components/results-actions/models/results-actions.models';
 import { IResultItem } from '../../components/containers/report-results-item-container/components/models/report-result-item.models';
-import { IClsReportEndpointConfigModel } from '../../models/report-config.models';
-import { ReportDataService } from '../../services/report-data.service';
-import {
-	ITotalSourceType,
-	REPOSITORIES,
-} from './components/source-type-filter-result/models/source-type-filter-result.models';
+import { ITotalSourceType } from './components/source-type-filter-result/models/source-type-filter-result.models';
 import { FilterResultDailogService } from './services/filter-result-dailog.service';
 import { ITagItem } from './components/included-tags-filter-result/models/included-tags-filter-result.models';
-import { EFilterResultForm } from './models/filter-result-dailog.enum';
+import { EFilterResultForm, IFilterResultDailogData } from './models/filter-result-dailog.enum';
 import { FormGroup } from '@angular/forms';
 import { untilDestroy } from '../../utils/until-destroy';
+import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
+import { combineLatest } from 'rxjs';
+import { ALERTS } from '../../constants/report-alerts.constants';
+import { ICompleteResults } from '../../models/report-data.models';
+import { ResultDetailItem } from '../../models/report-matches.models';
 
 @Component({
 	selector: 'cr-filter-result-dailog',
@@ -19,106 +19,46 @@ import { untilDestroy } from '../../utils/until-destroy';
 	styleUrls: ['./filter-result-dailog.component.scss'],
 })
 export class FilterResultDailogComponent implements OnInit {
-	allTagItem: ITagItem[] = [
-		{
-			code: '0',
-			title: 'Menu item1',
-			description: 'string',
-		},
-		{
-			code: '1',
-			title: 'Menu item2',
-			description: 'string',
-		},
-		{
-			code: '2',
-			title: 'Menu item12',
-			description: 'string',
-		},
-		{
-			code: '3',
-			title: 'Menu item13',
-			description: 'string',
-		},
-		{
-			code: '4',
-			title: 'Menu item14',
-			description: 'string',
-		},
-		{
-			code: '5',
-			title: 'Menu item15',
-			description: 'string',
-		},
-		{
-			code: '10',
-			title: 'Menu item1',
-			description: 'string',
-		},
-		{
-			code: '11',
-			title: 'Menu item2',
-			description: 'string',
-		},
-		{
-			code: '12',
-			title: 'Menu item12',
-			description: 'string',
-		},
-		{
-			code: '13',
-			title: 'Menu item13',
-			description: 'string',
-		},
-		{
-			code: '14',
-			title: 'Menu item14',
-			description: 'string',
-		},
-		{
-			code: '15',
-			title: 'Menu item15',
-			description: 'string',
-		},
-	];
-
-	endpointsConfig: IClsReportEndpointConfigModel = {
-		authToken: '', // optional
-		crawledVersion: `assets/scans/bundle/Filter/source.json`,
-		completeResults: `assets/scans/bundle/Filter/complete.json`,
-		result: `assets/scans/bundle/Filter/results/{RESULT_ID}`, // inside the package, we will be assignment the RESULT_ID
-		filter: {
-			get: '', // optional
-			update: '', // optional
-		},
-	};
+	allTagItem: ITagItem[] = [];
 
 	resultsActions: IResultsActions = {
 		totalResults: 0,
 		totalExcluded: 0,
 		totalFiltered: 0,
 	};
+
 	totalSourceType: ITotalSourceType;
 	allResultsItem: IResultItem[] = [];
+	excludedResults: IResultItem[] = [];
 	minWordLimit: number = 0;
 	maxWordLimit: number = 1023;
-	publicationDates: string[] = ['May 2023', 'June 2023', 'July 2023'];
+	publicationDates: string[] = [];
 	loading: boolean = true;
-	showExcludedDailog: boolean = false;
+
+	totalIdentical: number = 0;
+	totalMinorChanges: number = 0;
+	totalParaphrased: number = 0;
+
+	totalSameAuthor: number = 0;
+	totalAlerts: number = 0;
+
+	completeResults: ICompleteResults;
 
 	get totalFiltered() {
 		return this.totalSourceType ? this.getTotalFilterdResult() : 0;
 	}
 
 	get sourceTypeFormGroup() {
-		return this.filterService.sourceTypeFormGroup;
+		return this._filterResultsSvc.sourceTypeFormGroup;
 	}
 
-	constructor(private filterService: FilterResultDailogService, private _reportDataSvc: ReportDataService) {}
+	constructor(
+		private _filterResultsSvc: FilterResultDailogService,
+		private _dialogRef: MatDialogRef<FilterResultDailogComponent>,
+		@Inject(MAT_DIALOG_DATA) public data: IFilterResultDailogData
+	) {}
 
 	ngOnInit() {
-		this.filterService.initForm();
-
 		this.initResultItem();
 	}
 
@@ -158,46 +98,165 @@ export class FilterResultDailogComponent implements OnInit {
 		return countRepo;
 	}
 
-	initResultItem() {
-		this._reportDataSvc.initReportData(this.endpointsConfig);
-
-		this._reportDataSvc.scanResultsPreviews$.pipe(untilDestroy(this)).subscribe(completeResults => {
-			if (completeResults) {
-				this.loading = false;
-				const results = completeResults.results;
-				this.totalSourceType = {
-					totalInternet: results.internet.length,
-					totalInternalDatabase: results.database.length,
-					totalbatch: results.batch.length,
-					repository: REPOSITORIES,
-				};
-
-				const allResults = [
-					...(results?.internet ?? []),
-					...(results?.database ?? []),
-					...(results?.batch ?? []),
-					...(REPOSITORIES ?? []),
-				];
-
-				this.resultsActions.totalResults = allResults.length;
-				//this.resultsActions.totalFiltered = this.filterService.gettotalFilterd(this.totalSourceType);
-				this.allResultsItem = allResults.map(result => {
-					return {
-						resultPreview: result,
-						iStatisticsResult: {
-							identical: 12,
-							minorChanges: 12,
-							relatedMeaning: 12,
-						},
-						metadataSource: {
-							words: 0,
-							excluded: 0,
-						},
-					} as IResultItem;
-				});
-			}
+	setTotalMatchTypesStatistics() {
+		this.allResultsItem.forEach(result => {
+			if (result.iStatisticsResult.identical && result.iStatisticsResult.identical > 0) this.totalIdentical++;
+			if (result.iStatisticsResult.minorChanges && result.iStatisticsResult.minorChanges > 0) this.totalMinorChanges++;
+			if (result.iStatisticsResult.relatedMeaning && result.iStatisticsResult.relatedMeaning > 0)
+				this.totalParaphrased++;
 		});
 	}
+
+	setExcludedResultsStats() {
+		const excludedResultsIds = this.data.reportDataSvc.excludedResultsIds;
+		const filteredResults = this.data.reportDataSvc.filterResults(
+			this.allResultsItem.map(result => result.resultDetails) as ResultDetailItem[],
+			this.getFilterCurrentData(),
+			excludedResultsIds ?? []
+		);
+		this.excludedResults = this.allResultsItem.filter(
+			result => !!excludedResultsIds?.find(id => result.resultDetails?.id === id)
+		);
+		this.resultsActions = {
+			totalExcluded: this.excludedResults.length,
+			totalFiltered: filteredResults?.length ?? 0,
+			totalResults: this.allResultsItem.length,
+		};
+	}
+
+	setResultsPublicationDate() {
+		const dates = new Set<string>(); // Use a Set to store unique month-year strings
+		this.allResultsItem.forEach(result => {
+			if (result.resultPreview?.metadata?.publishDate) {
+				// Create a new Date object from the publish date
+				const date = new Date(result.resultPreview.metadata.publishDate);
+				// Convert the date to a locale string with options for month and year
+				const monthYear = date.toLocaleString('default', { month: 'long', year: 'numeric' });
+				dates.add(monthYear); // Add the resulting string to the Set
+			}
+		});
+		this.publicationDates = [...dates];
+		if (this.publicationDates.length === 0)
+			this._filterResultsSvc.resultsMetaFormGroup
+				.get(EFilterResultForm.fgPublicationDate)
+				?.get(EFilterResultForm.fcPublicationEnabled)
+				?.disable();
+	}
+
+	initResultItem() {
+		combineLatest([this.data.reportDataSvc.scanResultsPreviews$, this.data.reportDataSvc.scanResultsDetails$])
+			.pipe(untilDestroy(this))
+			.subscribe(([completeResults, resultsDetails]) => {
+				if (completeResults) {
+					this.completeResults = completeResults;
+
+					const results = completeResults.results;
+					this.totalSourceType = {
+						totalInternet: results.internet.length,
+						totalInternalDatabase: results.database.length,
+						totalbatch: results.batch.length,
+						// TODO: Load the repos
+					};
+
+					const allResults = [
+						...(results?.internet ?? []),
+						...(results?.database ?? []),
+						...(results?.batch ?? []),
+						...(results?.repositories ?? []),
+					];
+
+					this.resultsActions.totalResults = allResults.length;
+					this.allResultsItem = allResults.map(result => {
+						const resultDetail = resultsDetails?.find(r => r.id === result.id);
+						return {
+							resultPreview: result,
+							resultDetails: resultDetail,
+							iStatisticsResult: {
+								identical: resultDetail?.result?.statistics.identical,
+								minorChanges: resultDetail?.result?.statistics.minorChanges,
+								relatedMeaning: resultDetail?.result?.statistics.relatedMeaning,
+							},
+							metadataSource: {
+								words: completeResults?.scannedDocument.totalWords ?? 0,
+								excluded: completeResults?.scannedDocument.totalExcluded ?? 0,
+							},
+						} as IResultItem;
+					});
+
+					this.setTotalMatchTypesStatistics();
+
+					this.totalAlerts =
+						completeResults?.notifications?.alerts?.filter(a => a.code != ALERTS.SUSPECTED_AI_TEXT_DETECTED)?.length ??
+						0;
+
+					this._filterResultsSvc.initForm(completeResults);
+
+					this.setExcludedResultsStats();
+					this.setResultsPublicationDate();
+					this.allTagItem = this._filterResultsSvc.selectedTagItem;
+
+					// TODO: get number of same author submissions
+
+					this.loading = false;
+				}
+			});
+	}
+
+	onClearFilter() {
+		this._filterResultsSvc.clearForm();
+	}
+
+	onDiscardChanges() {
+		this._filterResultsSvc.initForm(this.completeResults);
+	}
+
+	onSaveChanges() {
+		this.data.reportDataSvc.filterOptions$.next(this.getFilterCurrentData());
+
+		this._dialogRef.close();
+	}
+
+	getFilterCurrentData() {
+		return {
+			// Tags
+			includedTags: this._filterResultsSvc.selectedTagItem.filter(a => a.selected).map(a => a.code) ?? [],
+
+			// Matches
+			showIdentical: this._filterResultsSvc.matchTypeFormGroup.get(EFilterResultForm.fcIdenticalText)?.value,
+			showMinorChanges: this._filterResultsSvc.matchTypeFormGroup.get(EFilterResultForm.fcMinorChanges)?.value,
+			showRelated: this._filterResultsSvc.matchTypeFormGroup.get(EFilterResultForm.fcParaphrased)?.value,
+
+			// General
+			showAlerts: this._filterResultsSvc.generalFiltersFormGroup.get(EFilterResultForm.fcAlerts)?.value,
+			showSameAuthorSubmissions: this._filterResultsSvc.generalFiltersFormGroup.get(
+				EFilterResultForm.fcAuthorSubmissions
+			)?.value,
+			showTop100Results: this._filterResultsSvc.generalFiltersFormGroup.get(EFilterResultForm.fcTopResult)?.value,
+
+			// Source
+			showInternetResults: this._filterResultsSvc.sourceTypeFormGroup.get(EFilterResultForm.fcInternet)?.value,
+			showInternalDatabaseResults: this._filterResultsSvc.sourceTypeFormGroup.get(EFilterResultForm.fcInternalDatabase)
+				?.value,
+			showBatchResults: this._filterResultsSvc.sourceTypeFormGroup.get(EFilterResultForm.fcBatch)?.value,
+			// TODO: Repos ids list
+			// showRepositoriesResults:  this._filterResultsSvc.sourceTypeFormGroup.get(EFilterResultForm.).value,
+
+			// Metadata
+			wordLimit: this._filterResultsSvc.resultsMetaFormGroup
+				.get(EFilterResultForm.fgWordLimit)
+				?.get(EFilterResultForm.fcWordLimitEnabled)?.value
+				? this._filterResultsSvc.resultsMetaFormGroup
+						.get(EFilterResultForm.fgWordLimit)
+						?.get(EFilterResultForm.fcWordLimitTotalWordlimt)?.value
+				: undefined,
+			includeResultsWithoutDate: this._filterResultsSvc.resultsMetaFormGroup
+				.get(EFilterResultForm.fgPublicationDate)
+				?.get(EFilterResultForm.fcResultsWithNoDates)?.value,
+			publicationDate: this._filterResultsSvc.resultsMetaFormGroup
+				.get(EFilterResultForm.fgPublicationDate)
+				?.get(EFilterResultForm.fcPublicationStartDate)?.value,
+		};
+	}
+
 	ngOnDestroy() {}
-	clearFilterButton() {}
 }

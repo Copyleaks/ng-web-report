@@ -12,10 +12,15 @@
 			[formControl]="searchTagControl"
 			class="included-tags-input"
 			[type]="'text'"
-			placeholder="Search {item type}"
+			placeholder="Search Tag"
 			matInput />
 	</div>
-	<div class="mat-chip-container" fxLayout="row" fxLayoutAlign="start center" fxLayoutGap="4px">
+	<div
+		*ngIf="selectedList.length != 0"
+		class="mat-chip-container"
+		fxLayout="row"
+		fxLayoutAlign="start center"
+		fxLayoutGap="4px">
 		<button
 			*ngIf="allTagItem && allTagItem.length > 0"
 			class="arrow-drop-button"
@@ -38,7 +43,12 @@
 			<span>+{{ selectedList.length - 2 }}</span>
 		</div>
 	</div>
-	<div *ngIf="showMoreMenu" class="tag-list-container" fxLayout="column" fxLayoutAlign="start start" fxLayoutGap="2px">
+	<div
+		*ngIf="showMoreMenu || selectedList.length === 0"
+		class="tag-list-container"
+		fxLayout="column"
+		fxLayoutAlign="start start"
+		fxLayoutGap="2px">
 		<div class="tag-list" *ngFor="let item of filteredTagList | async" fxLayout="row" fxLayoutAlign="start center">
 			<mat-checkbox
 				[checked]="item.selected == true"

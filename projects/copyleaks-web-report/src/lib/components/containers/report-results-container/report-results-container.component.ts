@@ -90,6 +90,8 @@ export class ReportResultsContainerComponent implements OnInit, OnChanges {
 		if (change['allResults']?.currentValue) {
 			this.searchedValue = '';
 			if (!this.filterIsOn) this.displayedResults = this.allResults;
+			else if (this._reportDataSvc.filterOptions && this._reportDataSvc.excludedResultsIds)
+				this._filterResults(this._reportDataSvc.filterOptions, this._reportDataSvc.excludedResultsIds);
 		}
 		if (change['showLoadingView']?.currentValue == false) {
 			this._handelFilterUpdates();
@@ -174,12 +176,13 @@ export class ReportResultsContainerComponent implements OnInit, OnChanges {
 		];
 
 		this.resultsActions = {
+			...this.resultsActions,
 			totalExcluded: excludedResultsIds?.length,
-			totalFiltered: filteredResults.length === this.allResults.length ? 0 : filteredResults.length,
-			totalResults: this.allResults.length,
+			totalFiltered: filteredResults.length ===this._reportDataSvc.scanResultsDetails?.length ? 0 : filteredResults.length,
+			totalResults:this._reportDataSvc.scanResultsDetails?.length ?? 0,
 		};
 
-		this.filterIsOn = filteredResults.length !== this.allResults.length;
+		this.filterIsOn = filteredResults.length !== this._reportDataSvc.scanResultsDetails?.length;
 		if (!filterOptions.showIdentical || !filterOptions.showMinorChanges || !filterOptions.showRelated)
 			this.filterIsOn = true;
 	}

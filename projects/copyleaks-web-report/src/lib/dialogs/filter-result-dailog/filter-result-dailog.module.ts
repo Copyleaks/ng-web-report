@@ -24,7 +24,7 @@ import { FilterResultDailogComponent } from './filter-result-dailog.component';
 import { FilterResultDailogService } from './services/filter-result-dailog.service';
 import { MatButtonModule } from '@angular/material/button';
 import { MatInputModule } from '@angular/material/input';
-import { ClsButtonModule } from '../../components/core/cr-button/cr-button.module';
+import { CrButtonModule } from '../../components/core/cr-button/cr-button.module';
 @NgModule({
 	declarations: [
 		FilterResultDailogComponent,
@@ -51,7 +51,7 @@ import { ClsButtonModule } from '../../components/core/cr-button/cr-button.modul
 		MatCheckboxModule,
 		MatChipsModule,
 		ReportResultsContainerModule,
-		ClsButtonModule,
+		CrButtonModule,
 		MatButtonModule,
 		MatInputModule,
 	],

@@ -25,13 +25,14 @@ export class FilterResultDailogComponent implements OnInit {
 		totalResults: 0,
 		totalExcluded: 0,
 		totalFiltered: 0,
+		selectedResults: 0,
 	};
 
 	totalSourceType: ITotalSourceType;
 	allResultsItem: IResultItem[] = [];
 	excludedResults: IResultItem[] = [];
 	minWordLimit: number = 0;
-	maxWordLimit: number = 1023;
+	maxWordLimit: number = 0;
 	publicationDates: string[] = [];
 	loading: boolean = true;
 
@@ -121,6 +122,7 @@ export class FilterResultDailogComponent implements OnInit {
 			totalExcluded: this.excludedResults.length,
 			totalFiltered: filteredResults?.length ?? 0,
 			totalResults: this.allResultsItem.length,
+			selectedResults: 0,
 		};
 	}
 
@@ -141,6 +143,19 @@ export class FilterResultDailogComponent implements OnInit {
 				.get(EFilterResultForm.fgPublicationDate)
 				?.get(EFilterResultForm.fcPublicationEnabled)
 				?.disable();
+	}
+
+	setResultsWordsLimit() {
+		this.maxWordLimit = 0;
+		const allResults = [
+			...(this.completeResults.results?.internet ?? []),
+			...(this.completeResults.results?.database ?? []),
+			...(this.completeResults.results?.batch ?? []),
+			...(this.completeResults.results?.repositories ?? []),
+		];
+		allResults.forEach(r => {
+			if (r.matchedWords >= this.maxWordLimit) this.maxWordLimit = r.matchedWords;
+		});
 	}
 
 	initResultItem() {
@@ -193,6 +208,8 @@ export class FilterResultDailogComponent implements OnInit {
 
 					this.setExcludedResultsStats();
 					this.setResultsPublicationDate();
+					this.setResultsWordsLimit();
+
 					this.allTagItem = this._filterResultsSvc.selectedTagItem;
 
 					// TODO: get number of same author submissions
@@ -207,7 +224,7 @@ export class FilterResultDailogComponent implements OnInit {
 	}
 
 	onDiscardChanges() {
-		this._filterResultsSvc.initForm(this.completeResults);
+		this._dialogRef.close();
 	}
 
 	onSaveChanges() {

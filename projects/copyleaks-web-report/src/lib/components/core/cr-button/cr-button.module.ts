@@ -12,4 +12,4 @@ import { CrButtonComponent } from './cr-button.component';
 	imports: [CommonModule, MatIconModule, MatButtonModule, MatTooltipModule, FlexLayoutModule, CrSpinnerModule],
 	exports: [CrButtonComponent],
 })
-export class ClsButtonModule {}
+export class CrButtonModule {}

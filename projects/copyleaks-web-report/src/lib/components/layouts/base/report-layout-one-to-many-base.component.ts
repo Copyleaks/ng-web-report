@@ -51,6 +51,7 @@ export abstract class OneToManyReportLayoutBaseComponent extends ReportLayoutBas
 		totalResults: 0,
 		totalExcluded: 0,
 		totalFiltered: 0,
+		selectedResults: 0,
 	};
 
 	focusedMatch: Match | null;
@@ -233,6 +234,16 @@ export abstract class OneToManyReportLayoutBaseComponent extends ReportLayoutBas
 				...(this.reportDataSvc.scanResultsPreviews?.results?.database ?? []),
 				...(this.reportDataSvc.scanResultsPreviews?.results?.repositories ?? []),
 			];
+
+		if (this.reportDataSvc.filterOptions && this.reportDataSvc.excludedResultsIds) {
+			const filteredResults = this.reportDataSvc.filterResults(
+				this.scanResultsDetails,
+				this.reportDataSvc.filterOptions,
+				this.reportDataSvc.excludedResultsIds
+			);
+			viewedResults = viewedResults.filter(r => filteredResults.find(fr => fr.id === r.id));
+		}
+
 		this.scanResultsView = viewedResults
 			.sort((a, b) => b.matchedWords - a.matchedWords)
 			.map(result => {

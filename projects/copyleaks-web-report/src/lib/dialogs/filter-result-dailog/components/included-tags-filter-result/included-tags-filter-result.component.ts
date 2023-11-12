@@ -24,7 +24,7 @@ export class IncludedTagsFilterResultComponent implements OnInit {
 	}
 
 	get selectedList() {
-		return this.includedTagsFormValue.map(item => item.title);
+		return this.allTagItem.filter(item => item.selected).map(item => item.title);
 	}
 
 	get searchValue() {
@@ -44,6 +44,7 @@ export class IncludedTagsFilterResultComponent implements OnInit {
 
 	selectTag() {
 		this.includedTagsForm.setValue(this.allTagItem.filter(tag => tag.selected));
+		this.showMoreMenu = true;
 	}
 
 	private _filterTags(value: string) {

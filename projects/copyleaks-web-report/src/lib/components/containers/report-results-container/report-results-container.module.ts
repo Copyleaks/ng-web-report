@@ -19,6 +19,7 @@ import { MatDialogModule } from '@angular/material/dialog';
 import { FilterResultDailogService } from '../../../dialogs/filter-result-dailog/services/filter-result-dailog.service';
 import { ReportDataService } from '../../../services/report-data.service';
 import { ScrollingModule } from '@angular/cdk/scrolling';
+import { CrButtonModule } from '../../core/cr-button/cr-button.module';
 @NgModule({
 	declarations: [
 		ReportResultsContainerComponent,
@@ -42,6 +43,7 @@ import { ScrollingModule } from '@angular/cdk/scrolling';
 		ReactiveFormsModule,
 		MatDialogModule,
 		ScrollingModule,
+		CrButtonModule,
 	],
 	exports: [
 		ReportResultsContainerComponent,

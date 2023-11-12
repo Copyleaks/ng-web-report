@@ -197,6 +197,11 @@
       "621292b965",
       "d6c375a62f",
       "ce00fecc89"
-    ]
+    ],
+    "matchType": {
+      "identicalText": false,
+      "minorChanges": true,
+      "paraphrased": true
+    }
   }
 }

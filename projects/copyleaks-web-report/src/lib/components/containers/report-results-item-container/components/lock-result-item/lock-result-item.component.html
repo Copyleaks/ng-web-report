@@ -9,10 +9,13 @@
 		</div>
 		<div class="button-container" fxLayout="column" fxLayoutAlign="start center" fxLayoutGap="4px">
 			<span class="button-description">{{ lockResultItem.buttonDescription }}:</span>
-			<button class="button" fxLayout="row" fxLayoutAlign="center center" fxLayoutGap="8px">
+			<cr-button class="upgrade-btn" [icon]="lockResultItem.buttonIcon" width="100%" padding="4px 24px">
+				{{ lockResultItem.buttonText }}
+			</cr-button>
+			<!-- <button class="button" fxLayout="row" fxLayoutAlign="center center" fxLayoutGap="8px">
 				<span>{{ lockResultItem.buttonText }}</span>
 				<mat-icon>{{ lockResultItem.buttonIcon }}</mat-icon>
-			</button>
+			</button> -->
 		</div>
 	</div>
 </div>

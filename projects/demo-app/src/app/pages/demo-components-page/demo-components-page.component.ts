@@ -80,6 +80,7 @@ export class DemoComponentsPageComponent {
 		totalResults: 23,
 		totalExcluded: 17,
 		totalFiltered: 14,
+		selectedResults: 2,
 	};
 
 	alert: ICompleteResultNotificationAlert = {

@@ -12,7 +12,7 @@ import {
 } from '@angular/core';
 import { EReportLayoutType, EResponsiveLayoutType } from './enums/copyleaks-web-report.enums';
 import { BreakpointObserver, Breakpoints } from '@angular/cdk/layout';
-import { map } from 'rxjs/operators';
+import { filter, map } from 'rxjs/operators';
 import { ReportNgTemplatesService } from './services/report-ng-templates.service';
 import { ReportDataService } from './services/report-data.service';
 import { ReportMatchesService } from './services/report-matches.service';
@@ -26,6 +26,8 @@ import { ReportStatisticsService } from './services/report-statistics.service';
 import { ReportHttpRequestErrorModel } from './models/report-errors.models';
 import { ReportErrorsService } from './services/report-errors.service';
 import { CrCustomResultsComponent } from './components/core/cr-custom-results/cr-custom-results.component';
+import { combineLatest } from 'rxjs';
+import { ICompleteResults } from './models/report-data.models';
 
 @Component({
 	selector: 'copyleaks-web-report',
@@ -61,9 +63,14 @@ export class CopyleaksWebReportComponent implements OnInit, OnDestroy {
 	@Input() reportEndpointConfig: IClsReportEndpointConfigModel;
 
 	/**
-	 * @Output {IClsReportEndpointConfigModel} - The copyleaks report data endpoints configuration model.
+	 * @Output {ReportHttpRequestErrorModel} - Emits HTTP request data, when any request to update & fetch report data fails.
 	 */
 	@Output() onReportRequestError = new EventEmitter<ReportHttpRequestErrorModel>();
+
+	/**
+	 * @Output {ReportHttpRequestErrorModel} - Emits complete request updates.
+	 */
+	@Output() onCompleteResultUpdate = new EventEmitter<ICompleteResults>();
 
 	// Layout realated properties
 	ReportLayoutType = EReportLayoutType;
@@ -97,6 +104,13 @@ export class CopyleaksWebReportComponent implements OnInit, OnDestroy {
 		this._reportErrorsSvc.reportHttpRequestError$
 			.pipe(untilDestroy(this))
 			.subscribe(error => this.onReportRequestError.emit(error));
+
+		this._reportDataSvc.scanResultsPreviews$
+			.pipe(
+				untilDestroy(this),
+				filter(scanResultsPreviews => scanResultsPreviews != undefined)
+			)
+			.subscribe(scanResultsPreviews => this.onCompleteResultUpdate.emit(scanResultsPreviews));
 	}
 
 	ngAfterViewInit() {

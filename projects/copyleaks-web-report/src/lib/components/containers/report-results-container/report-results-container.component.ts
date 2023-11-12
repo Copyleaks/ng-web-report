@@ -159,7 +159,18 @@ export class ReportResultsContainerComponent implements OnInit, OnChanges {
 		);
 
 		this.displayedResults = [
-			...this.allResults.filter(result => !!filteredResults.find(r => r.id === result.resultDetails?.id)),
+			...this.allResults
+				.filter(result => !!filteredResults.find(r => r.id === result.resultDetails?.id))
+				.map(result => {
+					return {
+						...result,
+						iStatisticsResult: {
+							identical: filterOptions.showIdentical ? result.iStatisticsResult?.identical ?? 0 : 0,
+							minorChanges: filterOptions.showMinorChanges ? result.iStatisticsResult?.minorChanges ?? 0 : 0,
+							relatedMeaning: filterOptions.showRelated ? result.iStatisticsResult?.relatedMeaning ?? 0 : 0,
+						},
+					} as IResultItem;
+				}),
 		];
 
 		this.resultsActions = {
@@ -169,6 +180,8 @@ export class ReportResultsContainerComponent implements OnInit, OnChanges {
 		};
 
 		this.filterIsOn = filteredResults.length !== this.allResults.length;
+		if (!filterOptions.showIdentical || !filterOptions.showMinorChanges || !filterOptions.showRelated)
+			this.filterIsOn = true;
 	}
 
 	ngAfterViewInit(): void {

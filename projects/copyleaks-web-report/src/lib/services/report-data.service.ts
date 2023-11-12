@@ -385,6 +385,11 @@ export class ReportDataService {
 				completeResults.find(cr => cr.id === id && !!cr.metadata?.publishDate)
 			);
 
+		if (settings.includedTags && settings.includedTags.length > 0)
+			filteredResultsIds = filteredResultsIds.filter(id =>
+				completeResults.find(cr => cr.id === id && cr.tags?.find(t => settings.includedTags?.includes(t.code)))
+			);
+
 		return results.filter(r => !!filteredResultsIds.find(id => r.id === id));
 	}
 

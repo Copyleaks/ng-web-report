@@ -375,7 +375,7 @@ export class ReportDataService {
 				completeResults.find(
 					cr =>
 						cr.id === id &&
-						new Date(settings.publicationDate ?? new Date()).getTime() >=
+						new Date(settings.publicationDate ?? new Date()).getTime() <=
 							new Date(cr.metadata?.publishDate ?? settings.publicationDate ?? new Date()).getTime()
 				)
 			);

@@ -53,7 +53,10 @@ export class MetaFilterResultComponent implements OnInit {
 	}
 
 	ngOnInit(): void {
-		if (!this.publicationDateForm.get(EFilterResultForm.fcPublicationStartDate)?.value) {
+		if (
+			!this.publicationDateForm.get(EFilterResultForm.fcPublicationStartDate)?.value &&
+			this.publicationDateForm.get(EFilterResultForm.fcPublicationEnabled)?.value == true
+		) {
 			this.publicationDateForm
 				.get(EFilterResultForm.fcPublicationStartDate)
 				?.setValue(new Date(this.publicationDates[0]));

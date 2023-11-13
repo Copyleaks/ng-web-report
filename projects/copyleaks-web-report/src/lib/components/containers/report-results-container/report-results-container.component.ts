@@ -91,12 +91,8 @@ export class ReportResultsContainerComponent implements OnInit, OnChanges {
 			else if (this._reportDataSvc.filterOptions && this._reportDataSvc.excludedResultsIds)
 				this._filterResults(this._reportDataSvc.filterOptions, this._reportDataSvc.excludedResultsIds);
 		}
-		if (
-			change['showLoadingView']?.currentValue == false &&
-			this._reportDataSvc.filterOptions &&
-			this._reportDataSvc.excludedResultsIds
-		) {
-			this._filterResults(this._reportDataSvc.filterOptions, this._reportDataSvc.excludedResultsIds);
+		if (change['showLoadingView']?.currentValue == false) {
+			this._handelFilterUpdates();
 		}
 
 		if ('filterOptions' in change && change['filterOptions'].currentValue) {

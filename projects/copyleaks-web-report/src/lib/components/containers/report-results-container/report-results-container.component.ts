@@ -214,14 +214,16 @@ export class ReportResultsContainerComponent implements OnInit, OnChanges {
 	onSearch(value: string): void {
 		this.searchedValue = value;
 
+		if (this._reportDataSvc.filterOptions && this._reportDataSvc.excludedResultsIds)
+			this._filterResults(this._reportDataSvc.filterOptions, this._reportDataSvc.excludedResultsIds);
+
 		if (!value || value === '') {
-			this.displayedResults = this.allResults;
 			return;
 		}
 
 		value = value.toLowerCase();
 
-		this.displayedResults = this.allResults.filter(
+		this.displayedResults = this.displayedResults.filter(
 			r =>
 				r.resultPreview.introduction.toLowerCase().includes(value) ||
 				r.resultPreview.title.toLowerCase().includes(value) ||

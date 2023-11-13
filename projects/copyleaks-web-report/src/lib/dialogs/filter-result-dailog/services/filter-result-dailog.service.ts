@@ -176,7 +176,7 @@ export class FilterResultDailogService {
 			case EFilterResultForm.fcPublicationStartDate:
 				return this._completeResults.filters?.resultsMetaData?.publicationDate?.startDate != undefined
 					? this._completeResults.filters?.resultsMetaData?.publicationDate?.startDate
-					: false;
+					: null;
 			case EFilterResultForm.fcResultsWithNoDates:
 				return this._completeResults.filters?.resultsMetaData?.publicationDate?.resultsWithNoDates != undefined
 					? this._completeResults.filters?.resultsMetaData?.publicationDate?.resultsWithNoDates

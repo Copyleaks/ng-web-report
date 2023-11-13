@@ -15,18 +15,18 @@ export class MetaFilterResultComponent implements OnInit {
 
 	eFilterResultForm = EFilterResultForm;
 
-	constructor(private filterService: FilterResultDailogService) {}
+	constructor(public filterService: FilterResultDailogService) {}
 
 	get form(): FormGroup {
 		return this.filterService.resultsMetaFormGroup;
 	}
 
 	get wordLimitform(): FormGroup {
-		return this.getFormGroup(EFilterResultForm.fgWordLimit);
+		return this.filterService.resultsMetaFormGroup.get(EFilterResultForm.fgWordLimit) as FormGroup;
 	}
 
 	get publicationDateForm(): FormGroup {
-		return this.getFormGroup(EFilterResultForm.fgPublicationDate);
+		return this.filterService.resultsMetaFormGroup.get(EFilterResultForm.fgPublicationDate) as FormGroup;
 	}
 
 	get publicationDate(): FormControl {
@@ -47,10 +47,18 @@ export class MetaFilterResultComponent implements OnInit {
 	}
 
 	get publicationDateValue() {
-		return this.publicationDateForm.get(EFilterResultForm.fcPublicationStartDate)?.value;
+		const date = new Date(this.publicationDateForm.get(EFilterResultForm.fcPublicationStartDate)?.value);
+		const monthYear = date.toLocaleString('default', { month: 'long', year: 'numeric' });
+		return monthYear;
 	}
 
-	ngOnInit(): void {}
+	ngOnInit(): void {
+		if (!this.publicationDateForm.get(EFilterResultForm.fcPublicationStartDate)?.value) {
+			this.publicationDateForm
+				.get(EFilterResultForm.fcPublicationStartDate)
+				?.setValue(new Date(this.publicationDates[0]));
+		}
+	}
 
 	getFormGroup(eFilterResultForm: EFilterResultForm) {
 		return this.filterService.resultsMetaFormGroup.get(eFilterResultForm) as FormGroup;
@@ -68,6 +76,11 @@ export class MetaFilterResultComponent implements OnInit {
 	}
 
 	changeSliderDate($event: any) {
-		this.publicationDate?.setValue(this.publicationDates[$event.value]);
+		this.publicationDate?.setValue(new Date(this.publicationDates[$event.value]));
+	}
+
+	onPublicationEnabledChange(enabled: boolean) {
+		if (!enabled) this.publicationDate?.setValue(null);
+		else this.publicationDate?.setValue(new Date(this.publicationDates[0]));
 	}
 }

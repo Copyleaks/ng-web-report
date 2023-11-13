@@ -40,7 +40,10 @@
 			class="filter-search-icon"
 			(click)="showFilterDialog()"
 			fontSet="material-icons-round"
-			[ngClass]="{ 'disabled-icon': !resultsActions?.totalResults || resultsActions?.totalResults === 0 }">
+			[ngClass]="{
+				'disabled-icon': !resultsActions?.totalResults || resultsActions?.totalResults === 0,
+				'selected-icon': resultsActions?.totalFiltered != 0
+			}">
 			filter_list
 		</mat-icon>
 		<mat-icon

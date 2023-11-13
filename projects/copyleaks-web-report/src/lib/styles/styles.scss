@@ -1,3 +1,5 @@
+@import './website-colors.styles.scss';
+
 .cls-report-container-lvl-1 {
 	background-color: #dce8fc;
 	border: 1px solid #8ca4cd;
@@ -19,6 +21,10 @@
 .disabled-icon {
 	opacity: 0.5;
 	pointer-events: none;
+}
+
+.selected-icon {
+	color: $color-primary !important;
 }
 
 [web-report-title-font] {

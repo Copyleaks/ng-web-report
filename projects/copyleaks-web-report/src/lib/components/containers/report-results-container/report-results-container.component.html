@@ -4,8 +4,8 @@
 	[searchedValue]="searchedValue"
 	[showLoadingView]="false"
 	[isMobile]="isMobile"
-	[expandSection]="showAlertsSection"
-	(onExpandToggle)="showAlertsSection = $event"
+	[expandSection]="showResultsSection"
+	(onExpandToggle)="showResultsSection = $event"
 	(onSearch)="onSearch($event)"></cr-results-actions>
 
 <div
@@ -13,7 +13,7 @@
 	[style]="'width:100%'"
 	[ngStyle]="{
 		display:
-			showLoadingView || !showAlertsSection || !displayedResults || displayedResults.length === 0 ? 'none' : 'flex'
+			showLoadingView || !showResultsSection || !displayedResults || displayedResults.length === 0 ? 'none' : 'flex'
 	}"
 	fxLayout="column"
 	fxLayoutAlign="start center"
@@ -153,7 +153,9 @@
 </ng-container>
 
 <cr-empty-result-state
-	*ngIf="!showLoadingView && !showCustomView && (!displayedResults || displayedResults.length === 0)">
+	*ngIf="
+		!showLoadingView && !showCustomView && showResultsSection && (!displayedResults || displayedResults.length === 0)
+	">
 	>
 </cr-empty-result-state>
 
@@ -162,7 +164,9 @@
 	#customResultView
 	[ngStyle]="{
 		display:
-			!showCustomView || showLoadingView || !(!displayedResults || displayedResults.length === 0) ? 'none' : 'flex'
+			!showCustomView || showLoadingView || !(!displayedResults || displayedResults.length === 0) || !showResultsSection
+				? 'none'
+				: 'flex'
 	}">
 	<ng-container *ngTemplateOutlet="customResultsTemplate ?? null"></ng-container>
 </div>

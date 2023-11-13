@@ -49,7 +49,7 @@ export class ReportResultsContainerComponent implements OnInit, OnChanges {
 	 */
 	@Input() showLoadingView = false;
 
-	showAlertsSection: boolean = true;
+	showResultsSection: boolean = true;
 
 	@ViewChild('resultsContainer', { read: ElementRef }) public resultsContainer: ElementRef;
 	@ViewChild('resultitem', { read: ElementRef }) public resultitem: ElementRef;

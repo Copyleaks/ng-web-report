@@ -105,7 +105,7 @@ export class CopyleaksWebReportComponent implements OnInit, OnDestroy {
 		this._reportDataSvc.scanResultsPreviews$
 			.pipe(
 				untilDestroy(this),
-				filter(scanResultsPreviews => scanResultsPreviews != undefined)
+				filter(scanResultsPreviews => scanResultsPreviews != undefined && scanResultsPreviews.filters != undefined)
 			)
 			.subscribe(scanResultsPreviews => this.onCompleteResultUpdate.emit(scanResultsPreviews));
 	}

@@ -5,9 +5,7 @@ import {
 	Input,
 	OnChanges,
 	OnInit,
-	Renderer2,
 	ViewChild,
-	SimpleChange,
 	SimpleChanges,
 	ChangeDetectorRef,
 	TemplateRef,
@@ -178,8 +176,9 @@ export class ReportResultsContainerComponent implements OnInit, OnChanges {
 		this.resultsActions = {
 			...this.resultsActions,
 			totalExcluded: excludedResultsIds?.length,
-			totalFiltered: filteredResults.length ===this._reportDataSvc.scanResultsDetails?.length ? 0 : filteredResults.length,
-			totalResults:this._reportDataSvc.scanResultsDetails?.length ?? 0,
+			totalFiltered:
+				filteredResults.length === this._reportDataSvc.scanResultsDetails?.length ? 0 : filteredResults.length,
+			totalResults: this._reportDataSvc.scanResultsDetails?.length ?? 0,
 		};
 
 		this.filterIsOn = filteredResults.length !== this._reportDataSvc.scanResultsDetails?.length;

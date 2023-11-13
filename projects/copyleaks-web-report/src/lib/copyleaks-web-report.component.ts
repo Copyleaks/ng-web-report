@@ -1,6 +1,5 @@
 import {
 	Component,
-	ContentChild,
 	EventEmitter,
 	Input,
 	OnDestroy,
@@ -25,8 +24,6 @@ import { untilDestroy } from './utils/until-destroy';
 import { ReportStatisticsService } from './services/report-statistics.service';
 import { ReportHttpRequestErrorModel } from './models/report-errors.models';
 import { ReportErrorsService } from './services/report-errors.service';
-import { CrCustomResultsComponent } from './components/core/cr-custom-results/cr-custom-results.component';
-import { combineLatest } from 'rxjs';
 import { ICompleteResults } from './models/report-data.models';
 
 @Component({

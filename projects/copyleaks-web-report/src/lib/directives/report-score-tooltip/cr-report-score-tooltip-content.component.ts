@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { IReportScoreTooltipModel } from '../../models/report-view.models';
 import { EReportScoreTooltipPosition } from '../../enums/copyleaks-web-report.enums';
+import { ReportDataService } from '../../services/report-data.service';
 
 @Component({
 	selector: 'cr-report-score-tooltip-content',
@@ -15,7 +16,7 @@ export class CrReportScoreTooltipContentComponent implements OnInit {
 
 	EReportScoreTooltipPosition = EReportScoreTooltipPosition;
 
-	constructor() {}
+	constructor(public reportDataSvc: ReportDataService) {}
 
 	ngOnInit(): void {}
 }

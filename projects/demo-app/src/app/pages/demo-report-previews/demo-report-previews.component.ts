@@ -23,7 +23,7 @@ export class DemoReportPreviewsComponent implements OnInit {
 		buttonIcon: 'all_inclusive',
 	};
 
-	showCustomResults: boolean = false;
+	showCustomResults: boolean = true;
 	id: string | null;
 	type: string | null;
 

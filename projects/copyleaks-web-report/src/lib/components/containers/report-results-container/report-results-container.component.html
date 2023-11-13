@@ -1,5 +1,5 @@
 <cr-results-actions
-	*ngIf="!showLoadingView && !showCustomView"
+	*ngIf="!showLoadingView"
 	[resultsActions]="resultsActions"
 	[searchedValue]="searchedValue"
 	[showLoadingView]="false"
@@ -12,7 +12,8 @@
 	class="report-results-item-top-container"
 	[style]="'width:100%'"
 	[ngStyle]="{
-		display: showLoadingView || !showAlertsSection || showCustomView ? 'none' : 'flex'
+		display:
+			showLoadingView || !showAlertsSection || !displayedResults || displayedResults.length === 0 ? 'none' : 'flex'
 	}"
 	fxLayout="column"
 	fxLayoutAlign="start center"
@@ -22,10 +23,9 @@
 			fxLayoutGap="8px"
 			[ngClass]="{
 				'results-item-container': !isMobile,
-				'results-item-mobile-container': isMobile,
-				'empty-results-container': !displayedResults || displayedResults.length === 0
+				'results-item-mobile-container': isMobile
 			}">
-			<ng-container *ngIf="displayedResults && displayedResults.length > 0; else emptyState">
+			<ng-container *ngIf="displayedResults && displayedResults.length > 0">
 				<ng-container *ngIf="!isMobile; else mobileContainerView">
 					<cdk-virtual-scroll-viewport
 						class="desktop-scroll"
@@ -73,9 +73,6 @@
 				</ng-container>
 			</ng-container>
 		</div>
-		<ng-template #emptyState>
-			<cr-empty-result-state *ngIf="!showLoadingView"></cr-empty-result-state>
-		</ng-template>
 	</div>
 	<div
 		class="navigate-mobie-button-contaienr"
@@ -151,18 +148,21 @@
 					<cr-report-results-item [showLoader]="true" [style]="'width:100%'"></cr-report-results-item>
 				</ng-container>
 			</div>
-			<ng-template #emptyState>
-				<cr-empty-result-state></cr-empty-result-state>
-			</ng-template>
 		</div>
 	</div>
 </ng-container>
+
+<cr-empty-result-state
+	*ngIf="!showLoadingView && !showCustomView && (!displayedResults || displayedResults.length === 0)">
+	>
+</cr-empty-result-state>
 
 <div
 	class="custom-results-container"
 	#customResultView
 	[ngStyle]="{
-		display: !showCustomView || showLoadingView ? 'none' : 'flex'
+		display:
+			!showCustomView || showLoadingView || !(!displayedResults || displayedResults.length === 0) ? 'none' : 'flex'
 	}">
 	<ng-container *ngTemplateOutlet="customResultsTemplate ?? null"></ng-container>
 </div>

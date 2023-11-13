@@ -9,7 +9,7 @@
 		<div class="identical-stats">
 			<div class="title-container">
 				<span class="identical dot"></span>
-				<span class="title" [ngClass]="{ 'disabled-property': !reportDataSvc.filterOptions?.showIdentical }">
+				<span class="title" [ngClass]="{ 'disabled-property': reportDataSvc.filterOptions?.showIdentical === false }">
 					Identical
 				</span>
 			</div>
@@ -18,7 +18,9 @@
 		<div class="minor-changes-stats">
 			<div class="title-container">
 				<span class="minor-changes dot"></span>
-				<span class="title" [ngClass]="{ 'disabled-property': !reportDataSvc.filterOptions?.showMinorChanges }">
+				<span
+					class="title"
+					[ngClass]="{ 'disabled-property': reportDataSvc.filterOptions?.showMinorChanges === false }">
 					Minor changes
 				</span>
 			</div>
@@ -27,7 +29,7 @@
 		<div class="paraphrased-stats">
 			<div class="title-container">
 				<span class="paraphrased dot"></span>
-				<span class="title" [ngClass]="{ 'disabled-property': !reportDataSvc.filterOptions?.showRelated }">
+				<span class="title" [ngClass]="{ 'disabled-property': reportDataSvc.filterOptions?.showRelated === false }">
 					Paraphrased
 				</span>
 			</div>

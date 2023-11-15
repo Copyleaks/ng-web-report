@@ -62,11 +62,15 @@ export abstract class OneToManyReportLayoutBaseComponent extends ReportLayoutBas
 
 	hidePlagarismTap: boolean = false;
 	hideAiTap: boolean = false;
+	showDisabledProducts: boolean = false;
 
 	EReportViewType = EReportViewType;
 
 	// TODO: Remove mock data
-	authorAlert: IAuthorAlertCard;
+	authorAlert: IAuthorAlertCard = {
+		message: 'This user has potentially used AI-generated text X times already',
+		title: '3/10 Submissions',
+	};
 
 	override get rerendered(): boolean {
 		return this.oneToManyRerendered;
@@ -148,6 +152,8 @@ export abstract class OneToManyReportLayoutBaseComponent extends ReportLayoutBas
 			this.currentPageSource = data.sourcePageIndex;
 			this.selectedTap =
 				data.alertCode === ALERTS.SUSPECTED_AI_TEXT_DETECTED ? EReportViewType.AIView : EReportViewType.PlagiarismView;
+
+			this.showDisabledProducts = data.showDisabledProducts ?? false;
 
 			combineLatest([this.reportDataSvc.scanResultsPreviews$, this.reportDataSvc.scanResultsDetails$])
 				.pipe(untilDestroy(this))

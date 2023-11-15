@@ -11,7 +11,10 @@
 		[identicalTotal]="reportStatistics?.identical ?? 0"
 		[minorChangesTotal]="reportStatistics?.minorChanges ?? 0"
 		[paraphrasedTotal]="reportStatistics?.relatedMeaning ?? 0"
-		[showLoadingView]="isLoadingScanContent"></copyleaks-report-tabs-container>
+		[showLoadingView]="isLoadingScanContent"
+		[hideAiTap]="hideAiTap"
+		[hidePlagarismTap]="hidePlagarismTap"
+		[showDisabledProducts]="showDisabledProducts"></copyleaks-report-tabs-container>
 
 	<!-- Report content container  -->
 	<copyleaks-content-viewer-container

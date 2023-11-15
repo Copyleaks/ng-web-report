@@ -61,6 +61,11 @@ export class CopyleaksWebReportComponent implements OnInit, OnDestroy {
 	@Input() reportEndpointConfig: IClsReportEndpointConfigModel;
 
 	/**
+	 * @Input {boolean} - Flag indicating whether to still show the disabled products tabs.
+	 */
+	@Input() showDisabledProducts: boolean = false;
+
+	/**
 	 * @Output {ReportHttpRequestErrorModel} - Emits HTTP request data, when any request to update & fetch report data fails.
 	 */
 	@Output() onReportRequestError = new EventEmitter<ReportHttpRequestErrorModel>();
@@ -109,7 +114,11 @@ export class CopyleaksWebReportComponent implements OnInit, OnDestroy {
 				filter(scanResultsPreviews => scanResultsPreviews != undefined && scanResultsPreviews.filters != undefined)
 			)
 			.subscribe(scanResultsPreviews => {
-				if (!this._reportDataSvc.isPlagiarismEnabled() && this.reportLayoutType != EReportLayoutType.OnlyAi) {
+				if (
+					!this._reportDataSvc.isPlagiarismEnabled() &&
+					this.reportLayoutType != EReportLayoutType.OnlyAi &&
+					!this.showDisabledProducts
+				) {
 					this._reportViewSvc.reportViewMode$.next({
 						...this._reportViewSvc.reportViewMode,
 						viewMode: 'only-ai',
@@ -227,6 +236,7 @@ export class CopyleaksWebReportComponent implements OnInit, OnDestroy {
 			suspectId: suspectId,
 			suspectPageIndex: suspectPage ? Number(suspectPage) ?? 1 : 1,
 			alertCode: alertCode,
+			showDisabledProducts: this.showDisabledProducts,
 		} as IReportViewEvent);
 
 		if (alertCode) this._reportViewSvc.selectedAlert$.next(alertCode);

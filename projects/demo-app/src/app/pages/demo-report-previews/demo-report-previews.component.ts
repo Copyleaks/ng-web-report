@@ -23,9 +23,13 @@ export class DemoReportPreviewsComponent implements OnInit {
 		buttonIcon: 'all_inclusive',
 	};
 
-	showCustomResults: boolean = true;
 	id: string | null;
 	type: string | null;
+
+	viewDisabledProduct: boolean;
+	showCustomPlagiairsmTab: boolean;
+	showCustomAiTab: boolean;
+	showCustomResults: boolean = true;
 
 	constructor(private _route: ActivatedRoute) {}
 
@@ -42,6 +46,8 @@ export class DemoReportPreviewsComponent implements OnInit {
 				update: '', // optional
 			},
 		};
+		this._handleCustomComponentsView(this.id, this.type);
+
 		this.paramSub = this._route.paramMap.subscribe(params => {
 			const id = params.get('id');
 			const type = params.get('type');
@@ -62,7 +68,15 @@ export class DemoReportPreviewsComponent implements OnInit {
 					update: '', // optional
 				},
 			};
+
+			this._handleCustomComponentsView(id, type);
 		});
+	}
+
+	private _handleCustomComponentsView(id: string | null, type: string | null) {
+		this.showCustomPlagiairsmTab = type === 'plagiairsm-only';
+		this.showCustomAiTab = type === 'ai-only';
+		this.showCustomResults = id === 'custom-empty-state';
 	}
 
 	ngOnDestroy(): void {

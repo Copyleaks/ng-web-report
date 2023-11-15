@@ -1,0 +1,13 @@
+@import '../website-colors.styles.scss';
+
+::ng-deep {
+	.mat-tooltip.web-report-mat-tooltip {
+		font-size: 14px !important;
+		font-weight: 500 !important;
+		color: $color-white !important;
+		background-color: $color-medium-dark !important;
+		border-radius: 4px !important;
+		padding: 8px !important;
+		font-family: haboro-soft, sans-serif !important;
+	}
+}

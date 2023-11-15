@@ -1,0 +1,65 @@
+{
+  "scannedDocument": {
+    "scanId": "yxcz1onj731aomm1",
+    "totalWords": 176,
+    "totalExcluded": 0,
+    "credits": 5,
+    "expectedCredits": 5,
+    "creationTime": "2023-10-11T10:46:04.002491Z",
+    "metadata": {
+      "finalUrl": null,
+      "canonicalUrl": null,
+      "author": null,
+      "organization": null,
+      "filename": "copyleaks.txt",
+      "publishDate": null,
+      "creationDate": null,
+      "lastModificationDate": null,
+      "submissionDate": null,
+      "submittedBy": null,
+      "submitterAuthorId": null,
+      "customMetadata": null
+    },
+    "enabled": {
+      "plagiarismDetection": true,
+      "aiDetection": true
+    }
+  },
+  "results": {
+    "internet": [],
+    "database": [],
+    "batch": [],
+    "repositories": [],
+    "score": {
+      "identicalWords": 0,
+      "minorChangedWords": 0,
+      "relatedMeaningWords": 0,
+      "aggregatedScore": 0
+    }
+  },
+  "notifications": {
+    "alerts": [
+      {
+        "additionalData": "{\"results\":[{\"classification\":2,\"probability\":0.6504868,\"matches\":[{\"text\":{\"chars\":{\"starts\":[0],\"lengths\":[833]},\"words\":{\"starts\":[0],\"lengths\":[134]}}}]},{\"classification\":1,\"probability\":0.6117157,\"matches\":[{\"text\":{\"chars\":{\"starts\":[833],\"lengths\":[239]},\"words\":{\"starts\":[134],\"lengths\":[42]}}}]}],\"summary\":{\"human\":0.23863636,\"ai\":0.7613636},\"modelVersion\":\"v3\",\"translationProvider\":0,\"scannedDocument\":{}}",
+        "code": "suspected-ai-text",
+        "helpLink": null,
+        "message": "We are unable to verify that the text was written by a human.",
+        "severity": 4,
+        "title": "Suspected Cheating: AI Text detected"
+      },
+      {
+        "additionalData": "",
+        "code": "cross-language-same-as-doc-lang",
+        "helpLink": null,
+        "message": "Submitted language and cross-language text are the same language. No credits were used.",
+        "severity": 1,
+        "title": "Cross Language: Same Document Language"
+      }
+    ]
+  },
+  "hasPdfReport": true,
+  "filters": null,
+  "status": 0,
+  "error": null,
+  "developerPayload": ""
+}

@@ -1,17 +1,27 @@
-import { ChangeDetectorRef, Component, Input, OnDestroy, OnInit, TemplateRef } from '@angular/core';
+import {
+	ChangeDetectorRef,
+	Component,
+	Input,
+	OnChanges,
+	OnDestroy,
+	OnInit,
+	SimpleChanges,
+	TemplateRef,
+} from '@angular/core';
 import { EReportScoreTooltipPosition, EReportViewType } from '../../../enums/copyleaks-web-report.enums';
 import { ReportViewService } from '../../../services/report-view.service';
 import { ALERTS } from '../../../constants/report-alerts.constants';
 import { ReportNgTemplatesService } from '../../../services/report-ng-templates.service';
 import { untilDestroy } from '../../../utils/until-destroy';
 import { ReportMatchHighlightService } from '../../../services/report-match-highlight.service';
+import { ReportDataService } from '../../../services/report-data.service';
 
 @Component({
 	selector: 'copyleaks-report-tabs-container',
 	templateUrl: './report-tabs-container.component.html',
 	styleUrls: ['./report-tabs-container.component.scss'],
 })
-export class ReportTabsContainerComponent implements OnInit, OnDestroy {
+export class ReportTabsContainerComponent implements OnInit, OnDestroy, OnChanges {
 	/**
 	 * @Input {boolean} Flag indicating whether to show the report AI tab or not.
 	 */
@@ -62,12 +72,18 @@ export class ReportTabsContainerComponent implements OnInit, OnDestroy {
 	 */
 	@Input() showLoadingView = false;
 
+	/**
+	 * @Input {boolean} - Flag indicating whether to still show the disabled products tabs.
+	 */
+	@Input() showDisabledProducts: boolean = false;
+
 	EReportViewType = EReportViewType;
 	EReportScoreTooltipPosition = EReportScoreTooltipPosition;
 	customTabsTemplateRef: TemplateRef<any>[] | undefined = undefined;
 
 	constructor(
 		private _reportViewSvc: ReportViewService,
+		private _reportDataSvc: ReportDataService,
 		private _reportNgTemplatesSvc: ReportNgTemplatesService,
 		private cdr: ChangeDetectorRef,
 		private _matchSvc: ReportMatchHighlightService
@@ -88,8 +104,31 @@ export class ReportTabsContainerComponent implements OnInit, OnDestroy {
 		});
 	}
 
+	ngOnChanges(changes: SimpleChanges): void {
+		if (
+			'showDisabledProducts' in changes ||
+			'hidePlagarismTap' in changes ||
+			'hideAiTap' in changes ||
+			('showLoadingView' in changes && changes['showLoadingView'].currentValue === false)
+		) {
+			if (!this.showLoadingView && this.showDisabledProducts && this.hideAiTap) {
+				this.selectedTap = EReportViewType.PlagiarismView;
+				this._reportViewSvc.selectedAlert$.next(null);
+				this._reportViewSvc.reportViewMode$.next({ ...this._reportViewSvc.reportViewMode, alertCode: undefined });
+			}
+			if (!this.showLoadingView && this.showDisabledProducts && this.hidePlagarismTap) {
+				this.selectedTap = EReportViewType.AIView;
+				this._reportViewSvc.selectedAlert$.next(ALERTS.SUSPECTED_AI_TEXT_DETECTED);
+				this._reportViewSvc.reportViewMode$.next({
+					...this._reportViewSvc.reportViewMode,
+					alertCode: ALERTS.SUSPECTED_AI_TEXT_DETECTED,
+				});
+			}
+		}
+	}
+
 	selectTap(selectedTab: EReportViewType) {
-		if (selectedTab == this.selectedTap) return;
+		if (selectedTab == this.selectedTap || (this.hidePlagarismTap && this.showDisabledProducts)) return;
 
 		this.selectedTap = selectedTab;
 		this._matchSvc.clear();
@@ -98,7 +137,7 @@ export class ReportTabsContainerComponent implements OnInit, OnDestroy {
 			case EReportViewType.AIView:
 				this._reportViewSvc.reportViewMode$.next({
 					...this._reportViewSvc.reportViewMode,
-					viewMode: 'one-to-many',
+					viewMode: !this._reportDataSvc.isPlagiarismEnabled() ? 'only-ai' : 'one-to-many',
 					isHtmlView: false,
 					alertCode: ALERTS.SUSPECTED_AI_TEXT_DETECTED,
 					sourcePageIndex: 1,

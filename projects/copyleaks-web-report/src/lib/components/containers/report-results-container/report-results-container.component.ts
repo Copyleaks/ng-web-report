@@ -96,7 +96,7 @@ export class ReportResultsContainerComponent implements OnInit, OnChanges {
 		}
 
 		if ('filterOptions' in change && change['filterOptions'].currentValue) {
-			this.displayedResults.forEach(result => {
+			this.displayedResults?.forEach(result => {
 				result.iStatisticsResult = {
 					identical: this.filterOptions.showIdentical ? result.iStatisticsResult?.identical ?? 0 : 0,
 					minorChanges: this.filterOptions.showMinorChanges ? result.iStatisticsResult?.minorChanges ?? 0 : 0,

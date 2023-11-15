@@ -8,6 +8,7 @@ export interface IReportViewEvent {
 	suspectPageIndex?: number;
 	suspectId?: string;
 	alertCode?: string;
+	showDisabledProducts?: boolean;
 }
 
 export interface IReportViewQueryParams {

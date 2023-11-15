@@ -68,12 +68,14 @@ export class ResultsActionsComponent implements OnInit, OnChanges {
 
 	showFilterDialog(showExcludedDailog: boolean = false) {
 		this._matDialog.open(FilterResultDailogComponent, {
-			width: '670px',
+			maxWidth: '95%',
+			width: this.isMobile ? '' : '670px',
 			panelClass: 'filter-result-dailog',
 			data: {
 				reportDataSvc: this._reportDataSvc,
 				reportViewSvc: this._reportViewSvc,
 				showExcludedDailog: showExcludedDailog,
+				isMobile: this.isMobile,
 			} as IFilterResultDailogData,
 		});
 	}

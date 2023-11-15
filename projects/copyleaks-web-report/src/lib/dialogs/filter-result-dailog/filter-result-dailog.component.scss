@@ -1,7 +1,7 @@
 @import '../../styles/website-colors.styles.scss';
 @import '../../styles/styles.scss';
 @import '../../styles/cls-mat-components-overrides//cls-mat-slide-toggle-overrides.scss';
-
+@import '../../styles/cls-mat-components-overrides/cls-scroll-bar-overrides.scss';
 :host {
 	font-family: haboro-soft, sans-serif !important;
 	::ng-deep {
@@ -40,6 +40,7 @@
 					height: 24px;
 				}
 				span {
+					white-space: nowrap;
 					color: $color-primary;
 					font-size: 14px;
 					font-weight: 500;
@@ -71,6 +72,16 @@
 				color: $color-medium-dark;
 				opacity: 0.4;
 			}
+		}
+	}
+
+	.mobile-body-top-container {
+		height: 370px;
+		overflow: hidden;
+		.mobile-body-container {
+			overflow-y: auto;
+			overflow-x: hidden;
+			padding-right: 16px;
 		}
 	}
 

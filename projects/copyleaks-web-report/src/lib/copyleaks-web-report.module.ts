@@ -8,6 +8,8 @@ import { OneToOneReportLayoutMobileModule } from './components/layouts/one-to-on
 import { CopyleaksWebReportComponent } from './copyleaks-web-report.component';
 import { HttpRequestErrorInterceptorProvider } from './pipes/http-request-error-pipe/http-request-error-pipe.pipe';
 import { ReportErrorsService } from './services/report-errors.service';
+import { OnlyAiReportLayoutMobileModule } from './components/layouts/only-ai/only-ai-report-layout-mobile/only-ai-report-layout-mobile.module';
+import { OnlyAiReportLayoutDesktopModule } from './components/layouts/only-ai/only-ai-report-layout-desktop/only-ai-report-layout-desktop.module';
 
 @NgModule({
 	declarations: [CopyleaksWebReportComponent],
@@ -18,6 +20,8 @@ import { ReportErrorsService } from './services/report-errors.service';
 		OneToOneReportLayoutModule,
 		OneToManyReportLayoutMobileModule,
 		OneToManyReportLayoutDesktopModule,
+		OnlyAiReportLayoutDesktopModule,
+		OnlyAiReportLayoutMobileModule,
 	],
 	exports: [CopyleaksWebReportComponent],
 	providers: [HttpRequestErrorInterceptorProvider, ReportErrorsService],

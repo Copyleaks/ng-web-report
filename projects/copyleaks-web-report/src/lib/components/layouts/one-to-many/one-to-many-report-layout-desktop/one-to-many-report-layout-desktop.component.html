@@ -2,6 +2,8 @@
 <div class="left-section">
 	<!-- Report tabs container --->
 	<copyleaks-report-tabs-container
+		[hideAiTap]="hideAiTap"
+		[hidePlagarismTap]="hidePlagarismTap"
 		[selectedTap]="selectedTap"
 		[plagarismScore]="plagiarismScore"
 		[aiScore]="reportStatistics?.aiScore ?? 0"

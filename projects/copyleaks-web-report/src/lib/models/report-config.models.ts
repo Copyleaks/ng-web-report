@@ -5,7 +5,7 @@
  * - 'one-to-many': Source is displayed alongside multiple results.
  * - 'one-to-one': Source is displayed alongside a single result.
  */
-export type ViewMode = 'one-to-many' | 'one-to-one';
+export type ViewMode = 'one-to-many' | 'one-to-one' | 'only-ai';
 /** possible content modes of the report */
 export type ContentMode = 'text' | 'html';
 /** possible text direction modes of the report */

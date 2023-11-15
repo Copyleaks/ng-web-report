@@ -4,7 +4,11 @@
     "totalWords": 2205,
     "totalExcluded": 452,
     "credits": 9,
-    "creationTime": "2019-10-02T11:06:24"
+    "creationTime": "2019-10-02T11:06:24",
+    "enabled": {
+      "plagiarismDetection": true,
+      "aiDetection": true
+    }
   },
   "results": {
     "internet": [
@@ -20,7 +24,7 @@
         "id": "0883e9a28e",
         "title": "Martina Gedeck - The complete information and online sale with free shipping. Order and buy now f...",
         "introduction": "Martina Gedeck - The complete information and online sale with free shipping. Order and buy now for the lowest price in the best online store! Discounts & Coupons.",
-        "matchedWords": 1421,        
+        "matchedWords": 1421,
         "tags": [
           {
             "code": "123",
@@ -184,7 +188,7 @@
         "id": "f13f75e7d7",
         "title": "Tyler Seguin Biography- Salary, Earnings, Net worth, Married, Relationship, Affair, Age, Height, ...",
         "introduction": "Who is Tyler Seguin? Which team does Tyler Seguin play for? How much does he earn as annual salary from his club? Is he married? Who is his girlfriend?",
-        "matchedWords": 107         
+        "matchedWords": 107
       },
       {
         "url": "https://wikivisually.com/wiki/Martina_Gedeck",

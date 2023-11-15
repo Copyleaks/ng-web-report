@@ -1,0 +1,18 @@
+:host {
+	display: flex;
+	flex-direction: column;
+	flex-grow: 1;
+
+	copyleaks-report-actions-container {
+		margin-bottom: 12px;
+	}
+
+	copyleaks-report-tabs-container {
+		flex-grow: 10;
+	}
+
+	copyleaks-content-viewer-container {
+		height: 90% !important;
+		flex-grow: 90 !important;
+	}
+}

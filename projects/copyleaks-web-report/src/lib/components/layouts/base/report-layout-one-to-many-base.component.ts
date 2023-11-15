@@ -25,6 +25,7 @@ import { IResultItem } from '../../containers/report-results-item-container/comp
 import { IResultsActions } from '../../containers/report-results-container/components/results-actions/models/results-actions.models';
 import { filter } from 'rxjs/operators';
 import { ICopyleaksReportOptions } from '../../../models/report-options.models';
+import { IAuthorAlertCard } from '../../containers/report-alerts-container/components/author-alert-card/models/author-alert-card.models';
 
 export abstract class OneToManyReportLayoutBaseComponent extends ReportLayoutBaseComponent {
 	hideRightSection: boolean = false;
@@ -58,6 +59,14 @@ export abstract class OneToManyReportLayoutBaseComponent extends ReportLayoutBas
 
 	isLoadingScanContent: boolean = false;
 	isLoadingScanResults: boolean = false;
+
+	hidePlagarismTap: boolean = false;
+	hideAiTap: boolean = false;
+
+	EReportViewType = EReportViewType;
+
+	// TODO: Remove mock data
+	authorAlert: IAuthorAlertCard;
 
 	override get rerendered(): boolean {
 		return this.oneToManyRerendered;
@@ -149,6 +158,9 @@ export abstract class OneToManyReportLayoutBaseComponent extends ReportLayoutBas
 					this.scanResultsDetails = details;
 
 					this.isLoadingScanResults = this.scanResultsPreviews === undefined || this.scanResultsDetails === undefined;
+
+					this.hideAiTap = !this.reportDataSvc.isAiDetectionEnabled();
+					this.hidePlagarismTap = !this.reportDataSvc.isPlagiarismEnabled();
 
 					if (this.scanResultsPreviews && this.scanResultsDetails) {
 						this.scanResultsActions.totalResults = this.scanResultsDetails.length;

@@ -176,6 +176,12 @@ export interface IScannedDocument {
 	expectedCredits?: number;
 	creationTime: string;
 	metadata?: IResultMetaData;
+	enabled?: IScanEnabledSettings;
+}
+
+export interface IScanEnabledSettings {
+	aiDetection: boolean;
+	plagiarismDetection: boolean;
 }
 
 /** Type representing a summary of the reuslts of a scanned document */

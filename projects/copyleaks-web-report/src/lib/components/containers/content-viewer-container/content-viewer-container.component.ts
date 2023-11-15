@@ -27,6 +27,7 @@ import { EResponsiveLayoutType } from '../../../enums/copyleaks-web-report.enums
 import { ReportViewService } from '../../../services/report-view.service';
 import { untilDestroy } from '../../../utils/until-destroy';
 import { EXCLUDE_MESSAGE } from '../../../constants/report-exclude.constants';
+import { IAuthorAlertCard } from '../report-alerts-container/components/author-alert-card/models/author-alert-card.models';
 
 @Component({
 	selector: 'copyleaks-content-viewer-container',
@@ -188,6 +189,8 @@ export class ContentViewerContainerComponent implements OnInit, AfterViewInit, O
 	 * @Input {boolean} Flag indicating whether to show the loading view or not.
 	 */
 	@Input() showLoadingView = true;
+
+	@Input() authorAlert: IAuthorAlertCard;
 
 	/**
 	 * Emits iFrame messages to the parent layout component.

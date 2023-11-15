@@ -8,6 +8,7 @@ import { IAuthorAlertCard } from './models/author-alert-card.models';
 })
 export class AuthorAlertCardComponent implements OnInit {
 	@Input() authorAlert: IAuthorAlertCard;
+	@Input() onlyAiView: boolean = false;
 	constructor() {}
 
 	ngOnInit(): void {}

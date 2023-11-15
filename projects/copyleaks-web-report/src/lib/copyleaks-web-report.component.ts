@@ -25,6 +25,7 @@ import { ReportStatisticsService } from './services/report-statistics.service';
 import { ReportHttpRequestErrorModel } from './models/report-errors.models';
 import { ReportErrorsService } from './services/report-errors.service';
 import { ICompleteResults } from './models/report-data.models';
+import { ALERTS } from './constants/report-alerts.constants';
 
 @Component({
 	selector: 'copyleaks-web-report',
@@ -107,7 +108,17 @@ export class CopyleaksWebReportComponent implements OnInit, OnDestroy {
 				untilDestroy(this),
 				filter(scanResultsPreviews => scanResultsPreviews != undefined && scanResultsPreviews.filters != undefined)
 			)
-			.subscribe(scanResultsPreviews => this.onCompleteResultUpdate.emit(scanResultsPreviews));
+			.subscribe(scanResultsPreviews => {
+				if (!this._reportDataSvc.isPlagiarismEnabled() && this.reportLayoutType != EReportLayoutType.OnlyAi) {
+					this._reportViewSvc.reportViewMode$.next({
+						...this._reportViewSvc.reportViewMode,
+						viewMode: 'only-ai',
+						alertCode: ALERTS.SUSPECTED_AI_TEXT_DETECTED,
+					});
+					this._reportViewSvc.selectedAlert$.next(ALERTS.SUSPECTED_AI_TEXT_DETECTED);
+				}
+				this.onCompleteResultUpdate.emit(scanResultsPreviews);
+			});
 	}
 
 	ngAfterViewInit() {
@@ -232,7 +243,8 @@ export class CopyleaksWebReportComponent implements OnInit, OnDestroy {
 			};
 
 			if (data.viewMode == 'one-to-many') this.reportLayoutType = EReportLayoutType.OneToMany;
-			else this.reportLayoutType = EReportLayoutType.OneToOne;
+			else if (data.viewMode == 'one-to-one') this.reportLayoutType = EReportLayoutType.OneToOne;
+			else this.reportLayoutType = EReportLayoutType.OnlyAi;
 
 			// Add the suspect Id if available
 			if (data.suspectId)

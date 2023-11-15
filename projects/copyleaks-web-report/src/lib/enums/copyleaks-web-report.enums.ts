@@ -10,6 +10,10 @@ export enum EReportLayoutType {
 	 * One to many layout/view: The default report layout, which shows the document along with the results section.
 	 */
 	OneToMany = 'one-to-many',
+	/**
+	 * Only AI layout/view: The layout where there is only AI view (plagiarism is disabled).
+	 */
+	OnlyAi = 'only-ai',
 }
 
 /**

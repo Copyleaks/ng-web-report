@@ -75,6 +75,12 @@
 		</ng-container>
 	</div>
 </div>
+
+<cr-author-alert-card
+	*ngIf="!hideTitleContainer && !customTabContent && !showLoadingView && authorAlert"
+	[authorAlert]="authorAlert"
+	[onlyAiView]="!(reportResponsive === EResponsiveLayoutType.Mobile)"></cr-author-alert-card>
+
 <div
 	class="content-container"
 	[ngStyle]="{

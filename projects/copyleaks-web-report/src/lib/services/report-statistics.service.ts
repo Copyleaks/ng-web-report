@@ -39,7 +39,9 @@ export class ReportStatisticsService implements OnDestroy {
 				untilDestroy(this),
 				filter(
 					([, , viewModeData, excludedResultsIds, filterOptions]) =>
-						viewModeData?.viewMode === 'one-to-many' && excludedResultsIds != undefined && filterOptions != undefined
+						(viewModeData?.viewMode === 'one-to-many' || viewModeData?.viewMode === 'only-ai') &&
+						excludedResultsIds != undefined &&
+						filterOptions != undefined
 				)
 			)
 			.subscribe(([completeResult, results, , excludedResultsIds, filterOptions]) => {

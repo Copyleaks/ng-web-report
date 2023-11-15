@@ -13,6 +13,7 @@ import { CrPaginatorModule } from '../../core/cr-paginator/cr-paginator.module';
 import { ContentViewerContainerComponent } from './content-viewer-container.component';
 import { CrPoweredByModule } from '../../core/cr-powered-by/cr-powered-by.module';
 import { NgxSkeletonLoaderModule } from 'ngx-skeleton-loader';
+import { ReportAlertsContainerModule } from '../report-alerts-container/report-alerts-container.module';
 
 @NgModule({
 	declarations: [
@@ -32,6 +33,7 @@ import { NgxSkeletonLoaderModule } from 'ngx-skeleton-loader';
 		CrPaginatorModule,
 		CrPoweredByModule,
 		NgxSkeletonLoaderModule,
+		ReportAlertsContainerModule,
 	],
 	exports: [ContentViewerContainerComponent],
 })

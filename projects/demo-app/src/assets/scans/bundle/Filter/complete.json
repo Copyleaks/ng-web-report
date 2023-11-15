@@ -4,7 +4,11 @@
     "totalWords": 2413,
     "totalExcluded": 347,
     "credits": 10,
-    "creationTime": "2020-03-18T09:21:26"
+    "creationTime": "2020-03-18T09:21:26",
+    "enabled": {
+      "plagiarismDetection": true,
+      "aiDetection": true
+    }
   },
   "results": {
     "internet": [

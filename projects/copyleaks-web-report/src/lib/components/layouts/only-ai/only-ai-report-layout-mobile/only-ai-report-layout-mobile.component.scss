@@ -1,0 +1,53 @@
+@import '../../../../styles/containers.styles.scss';
+@import '../../../../styles/website-colors.styles.scss';
+
+:host {
+	flex-direction: column;
+	display: flex;
+	flex-grow: 1;
+	gap: 8px;
+	height: 100%;
+}
+
+.middle-section,
+.content-section {
+	display: flex;
+	flex-direction: column;
+	flex-grow: 1;
+	gap: 8px;
+}
+
+.content-section {
+	gap: 0px;
+	box-shadow: -2px -2px 8px 0px rgba(255, 255, 255, 0.5), 2px 2px 4px 0px rgba(0, 0, 0, 0.15);
+	border-radius: 10px;
+}
+
+.middle-section {
+	flex-grow: 65;
+	height: 65%;
+
+	.alerts-container {
+		overflow-y: auto;
+	}
+}
+
+.content-section {
+	flex-grow: 75;
+	height: 75%;
+	copyleaks-content-viewer-container {
+		overflow-y: auto;
+	}
+}
+
+.powered-by-copyleaks-container {
+	display: flex;
+	justify-content: center;
+	align-items: center;
+}
+
+.report-actions-container {
+	::ng-deep .actions-container {
+		padding: 0px !important;
+	}
+}

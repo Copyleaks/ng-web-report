@@ -1,0 +1,27 @@
+<copyleaks-report-actions-container [showLoadingView]="isLoadingScanContent"></copyleaks-report-actions-container>
+
+<copyleaks-report-tabs-container
+	[hideAiTap]="hideAiTap"
+	[hidePlagarismTap]="true"
+	[selectedTap]="EReportViewType.AIView"
+	[plagarismScore]="plagiarismScore"
+	[aiScore]="reportStatistics?.aiScore ?? 0"
+	[wordsTotal]="reportStatistics?.total ?? 0"
+	[showLoadingView]="isLoadingScanContent"></copyleaks-report-tabs-container>
+
+<!-- Report content container  -->
+<copyleaks-content-viewer-container
+	[isHtmlView]="isHtmlView"
+	[isAlertsView]="isAlertsMode"
+	[contentHtml]="iframeHtml"
+	[scanSource]="reportCrawledVersion"
+	[contentTextMatches]="contentTextMatches"
+	[numberOfPages]="numberOfPages"
+	[numberOfWords]="numberOfWords"
+	[currentPage]="currentPageSource"
+	[reportResponsive]="EResponsiveLayoutType.Desktop"
+	[authorAlert]="authorAlert"
+	viewMode="one-to-many"
+	reportOrigin="original"
+	(iFrameMessageEvent)="onIFrameMessage($event)"
+	(viewChangeEvent)="onReportViewChange($event)"></copyleaks-content-viewer-container>

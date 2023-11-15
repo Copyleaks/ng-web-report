@@ -1,14 +1,40 @@
-<div fxLayout="row" fxLayoutAlign="start start" fxLayoutGap="8px" class="author-alert-card-container">
+<div
+	fxLayout="row"
+	fxLayoutAlign="start start"
+	fxLayoutGap="8px"
+	[ngClass]="{
+		'only-ai-container': onlyAiView,
+		'author-alert-card-container': !onlyAiView
+	}">
 	<div fxLayout="row" fxLayoutAlign="center center">
 		<mat-icon fontSet="material-icons-round" class="author-alert-card-person-icon">person</mat-icon>
 	</div>
-	<div fxLayout="column" fxLayoutAlign="start start" fxLayoutGap="4px">
-		<div fxLayout="row" fxLayoutAlign="start center" fxLayoutGap="4px" class="author-alert-card-title">
-			<mat-chip-list>
-				<mat-chip>{{ authorAlert.title }}</mat-chip>
-			</mat-chip-list>
-			<mat-icon fontSet="material-icons-outlined">info</mat-icon>
+
+	<ng-container *ngIf="!onlyAiView; else onlyAiViewRef">
+		<div fxLayout="column" fxLayoutAlign="start start" fxLayoutGap="4px">
+			<div fxLayout="row" fxLayoutAlign="start center" fxLayoutGap="4px" class="author-alert-card-title">
+				<mat-chip-list>
+					<mat-chip>{{ authorAlert.title }}</mat-chip>
+				</mat-chip-list>
+				<mat-icon fontSet="material-icons-outlined">info</mat-icon>
+			</div>
+			<span class="author-alert-card-message">{{ authorAlert.message }}</span>
 		</div>
-		<span class="author-alert-card-message">{{ authorAlert.message }}</span>
-	</div>
+	</ng-container>
+
+	<ng-template #onlyAiViewRef>
+		<div class="author-alert-content-container">
+			<div class="author-alert-card-title">
+				{{ authorAlert.message }}
+			</div>
+			<div class="author-alert-card-message-container">
+				<mat-icon fontSet="material-icons-outlined">info</mat-icon>
+				<mat-chip-list>
+					<mat-chip>
+						{{ authorAlert.title }}
+					</mat-chip>
+				</mat-chip-list>
+			</div>
+		</div>
+	</ng-template>
 </div>

@@ -128,7 +128,12 @@ export class ReportTabsContainerComponent implements OnInit, OnDestroy, OnChange
 	}
 
 	selectTap(selectedTab: EReportViewType) {
-		if (selectedTab == this.selectedTap || (this.hidePlagarismTap && this.showDisabledProducts)) return;
+		if (
+			selectedTab == this.selectedTap ||
+			(selectedTab === EReportViewType.PlagiarismView && this.hidePlagarismTap && this.showDisabledProducts) ||
+			(selectedTab === EReportViewType.AIView && this.hideAiTap && this.showDisabledProducts)
+		)
+			return;
 
 		this.selectedTap = selectedTab;
 		this._matchSvc.clear();
@@ -137,7 +142,8 @@ export class ReportTabsContainerComponent implements OnInit, OnDestroy, OnChange
 			case EReportViewType.AIView:
 				this._reportViewSvc.reportViewMode$.next({
 					...this._reportViewSvc.reportViewMode,
-					viewMode: !this._reportDataSvc.isPlagiarismEnabled() ? 'only-ai' : 'one-to-many',
+					viewMode:
+						!this._reportDataSvc.isPlagiarismEnabled() && !this.showDisabledProducts ? 'only-ai' : 'one-to-many',
 					isHtmlView: false,
 					alertCode: ALERTS.SUSPECTED_AI_TEXT_DETECTED,
 					sourcePageIndex: 1,

@@ -15,9 +15,7 @@
 		[style.flex-grow]="1"
 		[class.tab-selected]="selectedTap === EReportViewType.PlagiarismView"
 		[class.tab-disabled]="hidePlagarismTap && showDisabledProducts"
-		[matTooltip]="
-			hidePlagarismTap && showDisabledProducts ? 'The Plagiarism view is disabled and cannot be selected.' : ''
-		"
+		[matTooltip]="hidePlagarismTap && showDisabledProducts ? 'Disabled' : ''"
 		matTooltipClass="web-report-mat-tooltip"
 		(click)="selectTap(EReportViewType.PlagiarismView)">
 		<div class="bar-title-container">
@@ -64,7 +62,7 @@
 		[style.flex-grow]="1"
 		[class.tab-selected]="selectedTap === EReportViewType.AIView"
 		[class.tab-disabled]="hideAiTap && showDisabledProducts"
-		[matTooltip]="hideAiTap && showDisabledProducts ? 'The AI view is disabled and cannot be selected.' : ''"
+		[matTooltip]="hideAiTap && showDisabledProducts ? 'Disabled' : ''"
 		matTooltipClass="web-report-mat-tooltip"
 		(click)="selectTap(EReportViewType.AIView)">
 		<div class="bar-title-container">

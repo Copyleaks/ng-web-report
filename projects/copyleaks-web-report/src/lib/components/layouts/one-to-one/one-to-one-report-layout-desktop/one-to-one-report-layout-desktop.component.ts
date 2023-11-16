@@ -5,6 +5,7 @@ import { ReportViewService } from 'projects/copyleaks-web-report/src/lib/service
 import { ReportMatchHighlightService } from 'projects/copyleaks-web-report/src/lib/services/report-match-highlight.service';
 import { ReportStatisticsService } from 'projects/copyleaks-web-report/src/lib/services/report-statistics.service';
 import { OneToOneReportLayoutBaseComponent } from '../../base/report-layout-one-to-one-base.component';
+import { ReportNgTemplatesService } from 'projects/copyleaks-web-report/src/lib/services/report-ng-templates.service';
 
 @Component({
 	selector: 'copyleaks-one-to-one-report-layout-desktop',
@@ -21,9 +22,10 @@ export class OneToOneReportLayoutDesktopComponent
 		matchSvc: ReportMatchesService,
 		renderer: Renderer2,
 		highlightSvc: ReportMatchHighlightService,
-		statisticsSvc: ReportStatisticsService
+		statisticsSvc: ReportStatisticsService,
+		templatesSvc: ReportNgTemplatesService
 	) {
-		super(reportDataSvc, reportViewSvc, matchSvc, renderer, highlightSvc, statisticsSvc);
+		super(reportDataSvc, reportViewSvc, matchSvc, renderer, highlightSvc, statisticsSvc, templatesSvc);
 	}
 
 	ngOnInit(): void {

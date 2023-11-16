@@ -20,6 +20,7 @@ export class ResultsActionsComponent implements OnInit, OnChanges {
 	@Input() resultsActions: IResultsActions | null;
 	@Input() searchedValue: string | null = null;
 	@Input() isMobile: boolean = false;
+	@Input() hideTotal: boolean = false;
 
 	/**
 	 * @Input {boolean} Flag indicating whether to show the loading view or not.

@@ -113,6 +113,11 @@
 		<mat-icon class="item-icon" fontSet="material-icons-round">smart_toy</mat-icon>
 		<span class="item-text">AI Only</span>
 	</button>
+
+	<button mat-menu-item style="width: 200px" (click)="navigateToReportPreview('all-disabled/default')">
+		<mat-icon class="item-icon" fontSet="material-icons-round">error</mat-icon>
+		<span class="item-text">Report Unavailable</span>
+	</button>
 </mat-menu>
 
 <mat-menu #bundleMenu="matMenu">
@@ -139,6 +144,14 @@
 		mat-menu-item>
 		<mat-icon class="item-icon" fontSet="material-icons-round">smart_toy</mat-icon>
 		<span class="item-text">AI</span>
+	</button>
+	<button
+		(click)="navigateToReportPreview('bundle/both')"
+		matTooltipPosition="right"
+		matTooltip="Suspected AI Text Example"
+		mat-menu-item>
+		<mat-icon class="item-icon" fontSet="material-icons-round">circle</mat-icon>
+		<span class="item-text">Both</span>
 	</button>
 	<button
 		(click)="navigateToReportPreview('bundle/default', 'suspected-character-replacement')"

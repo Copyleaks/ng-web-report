@@ -116,7 +116,7 @@ export class ReportTabsContainerComponent implements OnInit, OnDestroy, OnChange
 				this._reportViewSvc.selectedAlert$.next(null);
 				this._reportViewSvc.reportViewMode$.next({ ...this._reportViewSvc.reportViewMode, alertCode: undefined });
 			}
-			if (!this.showLoadingView && this.showDisabledProducts && this.hidePlagarismTap) {
+			if (!this.showLoadingView && this.showDisabledProducts && this.hidePlagarismTap && !this.hideAiTap) {
 				this.selectedTap = EReportViewType.AIView;
 				this._reportViewSvc.selectedAlert$.next(ALERTS.SUSPECTED_AI_TEXT_DETECTED);
 				this._reportViewSvc.reportViewMode$.next({

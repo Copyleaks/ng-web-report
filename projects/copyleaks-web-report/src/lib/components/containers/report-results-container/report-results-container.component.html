@@ -11,13 +11,11 @@
 <div
 	class="report-results-item-top-container"
 	[style]="'width:100%'"
-	[ngStyle]="{
-		display:
-			showLoadingView || !showResultsSection || !displayedResults || displayedResults.length === 0 ? 'none' : 'flex'
-	}"
-	fxLayout="column"
-	fxLayoutAlign="start center"
-	fxLayoutGap="8px">
+	[style.display]="
+		showLoadingView || !showResultsSection || !displayedResults || showCustomResults || displayedResults.length === 0
+			? 'none'
+			: 'flex'
+	">
 	<div #resultsContainer class="results-item-top-container">
 		<div
 			fxLayoutGap="8px"
@@ -64,6 +62,18 @@
 								[resultItem]="item"
 								[isMobile]="isMobile"
 								style="width: 100%"></cr-report-results-item>
+						</div>
+
+						<div
+							class="custom-results-container-mobile"
+							#customEmptyResultView
+							[ngStyle]="{
+								display:
+									customResultsTemplate && reportViewMode === ECustomResultsReportView.Partial && showResultsSection
+										? 'flex'
+										: 'none'
+							}">
+							<ng-container *ngTemplateOutlet="customResultsTemplate ?? null"></ng-container>
 						</div>
 					</cdk-virtual-scroll-viewport>
 				</ng-template>
@@ -154,19 +164,36 @@
 
 <cr-empty-result-state
 	*ngIf="
-		!showLoadingView && !showCustomView && showResultsSection && (!displayedResults || displayedResults.length === 0)
+		!showLoadingView &&
+		!showCustomView &&
+		showResultsSection &&
+		(!displayedResults || displayedResults.length === 0) &&
+		!(customResultsTemplate && reportViewMode === ECustomResultsReportView.Full)
 	">
 	>
 </cr-empty-result-state>
 
 <div
-	class="custom-results-container"
-	#customResultView
+	class="custom-empty-results-container"
+	#customEmptyResultView
 	[ngStyle]="{
 		display:
-			!showCustomView || showLoadingView || !(!displayedResults || displayedResults.length === 0) || !showResultsSection
+			!showCustomView ||
+			showLoadingView ||
+			!(!displayedResults || displayedResults.length === 0) ||
+			!showResultsSection ||
+			(customResultsTemplate && reportViewMode === ECustomResultsReportView.Full)
 				? 'none'
 				: 'flex'
+	}">
+	<ng-container *ngTemplateOutlet="customEmptyResultsTemplate ?? null"></ng-container>
+</div>
+
+<div
+	class="custom-results-container"
+	[ngStyle]="{
+		display:
+			customResultsTemplate && reportViewMode === ECustomResultsReportView.Full && showResultsSection ? 'flex' : 'none'
 	}">
 	<ng-container *ngTemplateOutlet="customResultsTemplate ?? null"></ng-container>
 </div>

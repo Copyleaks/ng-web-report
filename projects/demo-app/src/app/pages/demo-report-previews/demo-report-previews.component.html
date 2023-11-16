@@ -1,5 +1,8 @@
 <ng-container *ngIf="endpointsConfig">
-	<copyleaks-web-report class="desktop-view" [reportEndpointConfig]="endpointsConfig">
+	<copyleaks-web-report
+		class="desktop-view"
+		[reportEndpointConfig]="endpointsConfig"
+		[showDisabledProducts]="showCustomResults && reportView === 1">
 		<cr-actions>
 			<div style="display: flex; flex-direction: row; margin-left: auto; gap: 8px">
 				<mat-icon fontSet="material-icons-round">download</mat-icon>
@@ -9,7 +12,7 @@
 		</cr-actions>
 
 		<!-- Custom results empty state -->
-		<cr-custom-results *ngIf="showCustomResults">
+		<cr-custom-empty-results *ngIf="showCustomEmptyResults">
 			<div class="custom-empty-state-container" style="display: flex; flex-direction: column; gap: 8px">
 				<cr-empty-result-state></cr-empty-result-state>
 				<div class="text-container" style="display: flex; flex-direction: column; gap: 4px">
@@ -80,7 +83,7 @@
 					</span>
 				</div>
 			</div>
-		</cr-custom-results>
+		</cr-custom-empty-results>
 
 		<!-- Custom report tab with content -->
 		<cr-custom-tabs *ngIf="showCustomAiTab || showCustomPlagiairsmTab">
@@ -96,5 +99,11 @@
 				</cr-custom-tab-item-content>
 			</cr-custom-tab-item>
 		</cr-custom-tabs>
+
+		<cr-custom-results *ngIf="showCustomResults" [reportView]="reportView">
+			<cr-custom-results-box-content>
+				<cr-lock-result-item [lockResultItem]="lockResultItem"></cr-lock-result-item>
+			</cr-custom-results-box-content>
+		</cr-custom-results>
 	</copyleaks-web-report>
 </ng-container>

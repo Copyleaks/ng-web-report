@@ -42,6 +42,7 @@ import { ALERTS } from './constants/report-alerts.constants';
 })
 export class CopyleaksWebReportComponent implements OnInit, OnDestroy {
 	@ViewChild('customActionsTemplate', { static: true }) customActionsTemplate: TemplateRef<any>;
+	@ViewChild('customEmptyResultsTemplate', { static: true }) customEmptyResultsTemplate: TemplateRef<any>;
 	@ViewChild('customResultsTemplate', { static: true }) customResultsTemplate: TemplateRef<any>;
 
 	/**
@@ -78,10 +79,6 @@ export class CopyleaksWebReportComponent implements OnInit, OnDestroy {
 	// Layout realated properties
 	ReportLayoutType = EReportLayoutType;
 	ResponsiveLayoutType = EResponsiveLayoutType;
-
-	// Template references related properties
-	customActionsTemplateRef: TemplateRef<any>;
-	customResultsTemplateRef: TemplateRef<any>;
 
 	constructor(
 		private _breakpointObserver: BreakpointObserver,
@@ -148,6 +145,10 @@ export class CopyleaksWebReportComponent implements OnInit, OnDestroy {
 		// Read the report custom actions template reference.
 		if (this.customActionsTemplate)
 			this._reportNgTemplatesSvc.setReportCustomActionsTemplateRef(this.customActionsTemplate);
+
+		// Read the report custom empty results template reference.
+		if (this.customEmptyResultsTemplate)
+			this._reportNgTemplatesSvc.setReportCustomEmptyResultsTemplateRef(this.customEmptyResultsTemplate);
 
 		// Read the report custom results template reference.
 		if (this.customResultsTemplate)

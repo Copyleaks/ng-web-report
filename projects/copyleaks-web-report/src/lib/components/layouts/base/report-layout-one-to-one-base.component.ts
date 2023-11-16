@@ -14,6 +14,7 @@ import { untilDestroy } from '../../../utils/until-destroy';
 import { ReportLayoutBaseComponent } from './report-layout-base.component';
 import { IResultItem } from '../../containers/report-results-item-container/components/models/report-result-item.models';
 import { combineLatest } from 'rxjs';
+import { ReportNgTemplatesService } from '../../../services/report-ng-templates.service';
 
 export abstract class OneToOneReportLayoutBaseComponent extends ReportLayoutBaseComponent {
 	hideRightSection = false;
@@ -64,9 +65,10 @@ export abstract class OneToOneReportLayoutBaseComponent extends ReportLayoutBase
 		matchSvc: ReportMatchesService,
 		renderer: Renderer2,
 		highlightSvc: ReportMatchHighlightService,
-		statisticsSvc: ReportStatisticsService
+		statisticsSvc: ReportStatisticsService,
+		templatesSvc: ReportNgTemplatesService
 	) {
-		super(reportDataSvc, reportViewSvc, matchSvc, renderer, highlightSvc, statisticsSvc);
+		super(reportDataSvc, reportViewSvc, matchSvc, renderer, highlightSvc, statisticsSvc, templatesSvc);
 		this.iframeJsScript = iframeJsScript;
 	}
 

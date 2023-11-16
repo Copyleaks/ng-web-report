@@ -47,7 +47,7 @@
 		background-color: $color-white;
 		copyleaks-report-results-container {
 			height: 95%;
-			flex-grow: 95 !important;
+			flex-grow: 95;
 			overflow-y: auto;
 			::ng-deep .report-results-item-top-container {
 				height: calc(100% - 48px) !important;
@@ -64,4 +64,16 @@
 copyleaks-report-alerts-container {
 	max-height: 25% !important;
 	flex-grow: 0 !important;
+}
+
+.custom-results-container {
+	display: flex;
+	width: 100%;
+	overflow-y: hidden;
+}
+
+.container-with-custom-results {
+	flex-grow: 0 !important;
+	flex-shrink: 0 !important;
+	height: auto !important;
 }

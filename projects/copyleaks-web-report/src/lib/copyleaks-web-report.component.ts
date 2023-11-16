@@ -63,7 +63,7 @@ export class CopyleaksWebReportComponent implements OnInit, OnDestroy {
 	/**
 	 * @Input {boolean} - Flag indicating whether to still show the disabled products tabs.
 	 */
-	@Input() showDisabledProducts: boolean = true;
+	@Input() showDisabledProducts: boolean = false;
 
 	/**
 	 * @Output {ReportHttpRequestErrorModel} - Emits HTTP request data, when any request to update & fetch report data fails.

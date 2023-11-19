@@ -1,23 +1,23 @@
 {
-  "name": "web-report",
+  "name": "copyleaks-web-report",
   "version": "1.0.0",
   "scripts": {
     "ng": "ng",
     "start": "ng serve demo-app",
     "build": "ng build demo-app",
     "lint": "ng lint",
-    "lib:pack": "npm pack ./dist/web-report",
+    "lib:pack": "npm pack ./dist/copyleaks-web-report",
     "local:package": "npm run lib:prettier && npm run lib:build && npm run lib:pack",
-    "lib:test": "ng test web-report",
-    "lib:lint": "ng lint web-report",
+    "lib:test": "ng test copyleaks-web-report",
+    "lib:lint": "ng lint copyleaks-web-report",
     "lib:prettier": "prettier --write projects/copyleaks-web-report/**/*.{ts,js,css,scss,html} projects/demo-app/**/*.{ts,js,css,scss,html}",
-    "lib:version": "cd projects/web-report && npm version patch",
-    "lib:build": "ng build web-report --configuration production",
-    "lib:copy-readme": "copy ../README.md dist/web-report",
-    "lib:publish": "cd dist/web-report && npm publish",
+    "lib:version": "cd projects/copyleaks-web-report && npm version patch",
+    "lib:build": "ng build copyleaks-web-report --configuration production",
+    "lib:copy-readme": "copy ../README.md dist/copyleaks-web-report",
+    "lib:publish": "cd dist/copyleaks-web-report && npm publish",
     "script:extract-version": "node scripts/extract-version.js",
     "package": "npm run lib:prettier && npm run lib:version && npm run script:extract-version && npm run lib:build && npm run lib:publish",
-    "firebase-deploy":"npm run build && firebase deploy"
+    "firebase-deploy": "npm run build && firebase deploy"
   },
   "private": true,
   "dependencies": {

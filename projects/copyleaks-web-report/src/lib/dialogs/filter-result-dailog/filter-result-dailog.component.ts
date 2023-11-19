@@ -20,7 +20,7 @@ import { ResultDetailItem } from '../../models/report-matches.models';
 })
 export class FilterResultDailogComponent implements OnInit {
 	allTagItem: ITagItem[] = [];
-
+	isMobile: boolean = false;
 	resultsActions: IResultsActions = {
 		totalResults: 0,
 		totalExcluded: 0,
@@ -61,6 +61,7 @@ export class FilterResultDailogComponent implements OnInit {
 
 	ngOnInit() {
 		this.initResultItem();
+		this.isMobile = this.data?.isMobile;
 	}
 
 	getTotalFilterdResult() {

@@ -38,4 +38,5 @@ export interface IFilterResultDailogData {
 	reportDataSvc: ReportDataService;
 	reportViewSvc: ReportViewService;
 	showExcludedDailog: boolean;
+	isMobile: boolean;
 }

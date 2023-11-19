@@ -13,21 +13,40 @@
 					<span>Clear filter</span>
 				</button>
 			</div>
-			<div class="result-container" fxLayout="row" fxLayoutAlign="start center" fxLayoutGap="4px">
+			<div
+				class="result-container"
+				fxLayout="row"
+				fxLayoutAlign="start center"
+				fxLayoutGap="4px"
+				fxLayout.lt-md="column"
+				fxLayoutAlign.lt-md="center start"
+				fxLayoutGap.lt-md="10px">
 				<span class="total-results" web-report-title-font>Plagiarism Results ({{ resultsActions.totalResults }})</span>
-				<ng-container *ngIf="!!resultsActions?.totalExcluded">
-					<mat-icon class="separate-circle-icon" fontSet="material-icons-round">circle</mat-icon>
-					<span
-						class="total-excuded"
-						(click)="!!resultsActions.totalExcluded ? (data.showExcludedDailog = !data.showExcludedDailog) : ''">
-						{{ resultsActions.totalExcluded }} excluded
-					</span>
-				</ng-container>
+				<div fxLayout="row" fxLayoutAlign="start center" fxLayoutGap="4px">
+					<ng-container *ngIf="!!resultsActions?.totalExcluded">
+						<mat-icon
+							class="separate-circle-icon"
+							[class.hide-separate-circle-icon]="isMobile"
+							fontSet="material-icons-round">
+							circle
+						</mat-icon>
+						<span
+							class="total-excuded"
+							(click)="!!resultsActions.totalExcluded ? (data.showExcludedDailog = !data.showExcludedDailog) : ''">
+							{{ resultsActions.totalExcluded }} excluded
+						</span>
+					</ng-container>
 
-				<ng-container *ngIf="!!resultsActions.totalFiltered">
-					<mat-icon class="separate-circle-icon" fontSet="material-icons-round">circle</mat-icon>
-					<span class="total-filtered">{{ resultsActions.totalFiltered }} filtered</span>
-				</ng-container>
+					<ng-container *ngIf="!!resultsActions.totalFiltered">
+						<mat-icon
+							class="separate-circle-icon"
+							[class.hide-separate-circle-icon]="isMobile && !resultsActions.totalExcluded"
+							fontSet="material-icons-round">
+							circle
+						</mat-icon>
+						<span class="total-filtered">{{ resultsActions.totalFiltered }} filtered</span>
+					</ng-container>
+				</div>
 			</div>
 		</div>
 		<div fxLayoutAlign="start center" [class.mobile-body-top-container]="isMobile">
@@ -41,7 +60,7 @@
 				<div class="left-side-container" fxLayout="column" fxLayoutGap="16px">
 					<!-- source type -->
 					<section class="section-container sources-type-top-container" fxLayout="column" fxLayoutGap="16px">
-						<span class="body-title" web-report-title-font>Source type</span>
+						<span class="body-title" web-report-title-font>Source Type</span>
 						<ng-container *ngIf="!loading">
 							<cr-source-type-filter-result
 								[totalSourceType]="totalSourceType"
@@ -52,7 +71,7 @@
 
 					<!-- results meta -->
 					<section class="section-container" fxLayout="column" fxLayoutGap="16px">
-						<span class="body-title" web-report-title-font>Results meta</span>
+						<span class="body-title" web-report-title-font>Results Meta</span>
 						<cr-meta-filter-result
 							[publicationDates]="publicationDates"
 							[minWordLimit]="minWordLimit"
@@ -66,7 +85,7 @@
 				<div class="right-side-conatier" fxLayout="column" fxLayoutGap="16px">
 					<!-- match type -->
 					<section class="match-type-container" fxLayout="column" fxLayoutGap="16px">
-						<span class="body-title" web-report-title-font>Match types</span>
+						<span class="body-title" web-report-title-font>Match Types</span>
 						<cr-match-type-filter-result
 							[identicalTotal]="totalIdentical"
 							[minorChangesTotal]="totalMinorChanges"
@@ -76,7 +95,7 @@
 					<mat-divider></mat-divider>
 					<!--General filters-->
 					<section class="general-filters-container" fxLayout="column" fxLayoutGap="16px">
-						<span class="body-title" web-report-title-font>General filters</span>
+						<span class="body-title" web-report-title-font>General Filters</span>
 						<cr-general-filter-result
 							class="general-filter-container"
 							[totalAlerts]="totalAlerts"

@@ -69,6 +69,7 @@ export class ResultsActionsComponent implements OnInit, OnChanges {
 	showFilterDialog(showExcludedDailog: boolean = false) {
 		this._matDialog.open(FilterResultDailogComponent, {
 			maxWidth: '95%',
+			minWidth: this.isMobile ? '95%' : '',
 			width: this.isMobile ? '' : '670px',
 			panelClass: 'filter-result-dailog',
 			data: {

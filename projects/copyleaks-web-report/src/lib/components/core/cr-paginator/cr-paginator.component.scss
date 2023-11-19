@@ -20,6 +20,8 @@
 }
 
 .items-per-page {
+	display: flex;
+	align-items: center;
 	font-size: 14px;
 	color: $color-medium-dark;
 }

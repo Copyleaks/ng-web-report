@@ -60,10 +60,7 @@
 			[showLoadingView]="isLoadingScanResults"
 			[filterOptions]="filterOptions"></copyleaks-report-results-container>
 
-		<div
-			class="custom-results-container"
-			#customResultView
-			[style.flex-grow]="reportViewMode === ECustomResultsReportView.Full ? '1' : ''">
+		<div class="custom-results-container" #customResultView [style.flex-grow]="'1'">
 			<ng-container *ngTemplateOutlet="customResultsTemplate ?? null"></ng-container>
 		</div>
 	</div>

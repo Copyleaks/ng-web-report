@@ -112,8 +112,6 @@ export class ReportResultsContainerComponent implements OnInit, OnChanges {
 				};
 			});
 		}
-
-		if ('reportViewMode' in changes || 'customResultsTemplate' in changes) console.log(changes);
 	}
 
 	ngAfterViewChecked() {

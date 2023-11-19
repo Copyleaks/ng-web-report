@@ -64,17 +64,8 @@ export class CrCustomResultsComponent implements OnInit, OnChanges, AfterViewIni
 	ngAfterViewInit() {}
 
 	get listOfLoadingResults(): number[] {
-		switch (this.reportView) {
-			case ECustomResultsReportView.Full:
-				let numberOfLoadingResults = this.hostHeight / 145;
-				return Array.from({ length: Math.round(numberOfLoadingResults) + 1 }, (_, k) => k + 1);
-
-			case ECustomResultsReportView.Partial:
-				return [1, 2, 3];
-
-			default:
-				return [];
-		}
+		let numberOfLoadingResults = this.hostHeight / 145;
+		return Array.from({ length: Math.round(numberOfLoadingResults) + 1 }, (_, k) => k + 1);
 	}
 
 	get hostHeight(): number {

@@ -45,7 +45,7 @@
 			fontSet="material-icons-round"
 			[ngClass]="{
 				'disabled-icon': !resultsActions?.totalResults || resultsActions?.totalResults === 0,
-				'selected-icon': resultsActions?.totalFiltered != 0
+				'selected-icon': isFilterOn || resultsActions?.totalFiltered != 0
 			}">
 			filter_list
 		</mat-icon>

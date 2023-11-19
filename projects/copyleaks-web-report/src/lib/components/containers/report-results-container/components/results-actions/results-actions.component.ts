@@ -38,6 +38,10 @@ export class ResultsActionsComponent implements OnInit, OnChanges {
 	searchFc = new FormControl('');
 	showSearchFiled: boolean = false;
 
+	get isFilterOn(): boolean {
+		return this._reportDataSvc.isFilterOn;
+	}
+
 	constructor(
 		private _matDialog: MatDialog,
 		private _reportDataSvc: ReportDataService,

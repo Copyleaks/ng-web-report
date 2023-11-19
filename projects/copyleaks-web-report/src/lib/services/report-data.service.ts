@@ -92,6 +92,24 @@ export class ReportDataService {
 		return this._excludedResultsIds$.value;
 	}
 
+	public get isFilterOn(): boolean {
+		return (
+			this._filterOptions$.value?.showIdentical === false ||
+			this._filterOptions$.value?.showMinorChanges === false ||
+			this._filterOptions$.value?.showRelated === false ||
+			this._filterOptions$.value?.showAlerts === false ||
+			this._filterOptions$.value?.showSameAuthorSubmissions === false ||
+			this._filterOptions$.value?.showInternetResults === false ||
+			this._filterOptions$.value?.showInternalDatabaseResults === false ||
+			this._filterOptions$.value?.showBatchResults === false ||
+			this._filterOptions$.value?.showTop100Results === true ||
+			(this._filterOptions$.value?.includedTags?.length && this._filterOptions$.value?.includedTags?.length > 0) ||
+			!!this._filterOptions$.value?.publicationDate ||
+			!!this._filterOptions$.value?.wordLimit ||
+			this._filterOptions$.value?.includeResultsWithoutDate == false
+		);
+	}
+
 	constructor(private _http: HttpClient) {
 		combineLatest([this.filterOptions$, this.excludedResultsIds$])
 			.pipe(

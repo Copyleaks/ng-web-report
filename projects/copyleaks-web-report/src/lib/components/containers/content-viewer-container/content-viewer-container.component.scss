@@ -159,8 +159,11 @@
 		}
 
 		span[exclude-partial-scan] {
-			filter: blur(6px);
+			filter: blur(4px);
 			cursor: pointer;
+			background-color: rgba(7, 17, 52, 0.1) !important;
+			display: inline-block;
+			width: 100%;
 		}
 	}
 

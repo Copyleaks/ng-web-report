@@ -9,6 +9,7 @@ import { ReportViewService } from '../../../services/report-view.service';
 import * as helpers from '../../../utils/report-match-helpers';
 import { ReportMatchHighlightService } from '../../../services/report-match-highlight.service';
 import { ReportStatisticsService } from '../../../services/report-statistics.service';
+import { ReportNgTemplatesService } from '../../../services/report-ng-templates.service';
 
 export abstract class ReportLayoutBaseComponent {
 	iframeStyle: string = COPYLEAKS_REPORT_IFRAME_STYLES;
@@ -27,7 +28,8 @@ export abstract class ReportLayoutBaseComponent {
 		protected matchSvc: ReportMatchesService,
 		protected renderer: Renderer2,
 		protected highlightSvc: ReportMatchHighlightService,
-		protected statisticsSvc: ReportStatisticsService
+		protected statisticsSvc: ReportStatisticsService,
+		protected templatesSvc: ReportNgTemplatesService
 	) {}
 
 	onReportViewChange(event: IReportViewEvent) {

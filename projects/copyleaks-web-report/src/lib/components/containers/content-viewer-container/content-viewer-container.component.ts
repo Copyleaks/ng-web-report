@@ -259,7 +259,7 @@ export class ContentViewerContainerComponent implements OnInit, AfterViewInit, O
 		if (this.currentPage > this.numberOfPages) this.currentPage = 1;
 
 		this._viewSvc.selectedCustomTabContent$.pipe(untilDestroy(this)).subscribe(content => {
-			this.customTabContent = content;
+			if (this.viewMode !== 'one-to-one') this.customTabContent = content;
 		});
 	}
 

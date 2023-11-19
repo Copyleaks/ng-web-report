@@ -66,10 +66,18 @@
 					<div class="result-title-container" fxLayout="column" fxLayoutAlign="start start" fxLayoutGap="4px">
 						<div fxLayout="row" fxLayoutAlign="start center" fxLayoutGap="4px">
 							<button class="exclude-button" (click)="excludeResult()">
-								<mat-icon *ngIf="exclude" matTooltip="Include result" fontSet="material-icons-round">
+								<mat-icon
+									*ngIf="exclude"
+									matTooltip="Include result"
+									matTooltipClass="web-report-mat-tooltip"
+									fontSet="material-icons-round">
 									visibility
 								</mat-icon>
-								<mat-icon *ngIf="!exclude" matTooltip="Exclude result" fontSet="material-icons-round">
+								<mat-icon
+									*ngIf="!exclude"
+									matTooltip="Exclude result"
+									matTooltipClass="web-report-mat-tooltip"
+									fontSet="material-icons-round">
 									visibility_off
 								</mat-icon>
 							</button>
@@ -100,7 +108,8 @@
 						*ngFor="let tag of resultItem?.resultPreview?.tags"
 						fxLayout="row"
 						fxLayoutAlign="start start"
-						[matTooltip]="tag?.description ?? ''">
+						[matTooltip]="tag?.description ?? ''"
+						matTooltipClass="web-report-mat-tooltip">
 						<mat-chip>{{ tag?.title ?? '' }}</mat-chip>
 					</div>
 				</mat-chip-list>

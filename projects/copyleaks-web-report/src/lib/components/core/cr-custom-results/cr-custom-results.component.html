@@ -1,1 +1,17 @@
-<ng-content></ng-content>
+<cr-results-actions
+	*ngIf="reportView === ECustomResultsReportView.Full && responsiveMode !== EResponsiveLayoutType.Mobile"
+	[resultsActions]="resultsActionsMock"
+	[hideTotal]="true"></cr-results-actions>
+
+<section class="loading-section">
+	<div
+		class="centered-box-content-container"
+		[style.width]="responsiveMode !== EResponsiveLayoutType.Mobile ? '90%' : '100%'">
+		<ng-content select="cr-custom-results-box-content"></ng-content>
+	</div>
+	<ng-container *ngIf="responsiveMode !== EResponsiveLayoutType.Mobile">
+		<cr-report-results-item *ngFor="let i of listOfLoadingResults" [showLoader]="true"></cr-report-results-item>
+	</ng-container>
+
+	<div *ngIf="responsiveMode !== EResponsiveLayoutType.Mobile" class="results-loader-container"></div>
+</section>

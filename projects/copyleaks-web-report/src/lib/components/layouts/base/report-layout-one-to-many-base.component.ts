@@ -7,7 +7,7 @@ import { untilDestroy } from 'projects/copyleaks-web-report/src/lib/utils/until-
 import { ReportStatisticsService } from 'projects/copyleaks-web-report/src/lib/services/report-statistics.service';
 import { ReportStatistics } from 'projects/copyleaks-web-report/src/lib/models/report-statistics.models';
 import { ALERTS } from 'projects/copyleaks-web-report/src/lib/constants/report-alerts.constants';
-import { Renderer2 } from '@angular/core';
+import { Renderer2, TemplateRef } from '@angular/core';
 import {
 	IScanSource,
 	ICompleteResultNotificationAlert,
@@ -26,6 +26,8 @@ import { IResultsActions } from '../../containers/report-results-container/compo
 import { filter } from 'rxjs/operators';
 import { ICopyleaksReportOptions } from '../../../models/report-options.models';
 import { IAuthorAlertCard } from '../../containers/report-alerts-container/components/author-alert-card/models/author-alert-card.models';
+import { ReportNgTemplatesService } from '../../../services/report-ng-templates.service';
+import { ECustomResultsReportView } from '../../core/cr-custom-results/models/cr-custom-results.enums';
 
 export abstract class OneToManyReportLayoutBaseComponent extends ReportLayoutBaseComponent {
 	hideRightSection: boolean = false;
@@ -62,11 +64,19 @@ export abstract class OneToManyReportLayoutBaseComponent extends ReportLayoutBas
 
 	hidePlagarismTap: boolean = false;
 	hideAiTap: boolean = false;
+	showDisabledProducts: boolean = false;
+	reportViewMode: ECustomResultsReportView;
 
 	EReportViewType = EReportViewType;
+	ECustomResultsReportView = ECustomResultsReportView;
 
 	// TODO: Remove mock data
-	authorAlert: IAuthorAlertCard;
+	authorAlert: IAuthorAlertCard = {
+		message: 'This user has potentially used AI-generated text X times already',
+		title: '3/10 Submissions',
+	};
+
+	customResultsTemplate: TemplateRef<any> | undefined = undefined;
 
 	override get rerendered(): boolean {
 		return this.oneToManyRerendered;
@@ -97,9 +107,10 @@ export abstract class OneToManyReportLayoutBaseComponent extends ReportLayoutBas
 		matchSvc: ReportMatchesService,
 		renderer: Renderer2,
 		highlightSvc: ReportMatchHighlightService,
-		statisticsSvc: ReportStatisticsService
+		statisticsSvc: ReportStatisticsService,
+		templatesSvc: ReportNgTemplatesService
 	) {
-		super(reportDataSvc, reportViewSvc, matchSvc, renderer, highlightSvc, statisticsSvc);
+		super(reportDataSvc, reportViewSvc, matchSvc, renderer, highlightSvc, statisticsSvc, templatesSvc);
 	}
 
 	initOneToManyViewData(): void {
@@ -148,6 +159,8 @@ export abstract class OneToManyReportLayoutBaseComponent extends ReportLayoutBas
 			this.currentPageSource = data.sourcePageIndex;
 			this.selectedTap =
 				data.alertCode === ALERTS.SUSPECTED_AI_TEXT_DETECTED ? EReportViewType.AIView : EReportViewType.PlagiarismView;
+
+			this.showDisabledProducts = data.showDisabledProducts ?? false;
 
 			combineLatest([this.reportDataSvc.scanResultsPreviews$, this.reportDataSvc.scanResultsDetails$])
 				.pipe(untilDestroy(this))
@@ -203,6 +216,17 @@ export abstract class OneToManyReportLayoutBaseComponent extends ReportLayoutBas
 				this.focusedMatch = !content.isHtmlView ? text && text.match : html;
 				this.showResultsForSelectedMatch(this.focusedMatch);
 			});
+
+		this.templatesSvc.reportTemplatesSubject$.pipe(untilDestroy(this)).subscribe(refs => {
+			if (refs?.customResultsTemplate !== undefined && this.customResultsTemplate === undefined) {
+				this.customResultsTemplate = refs?.customResultsTemplate;
+			}
+		});
+
+		this.templatesSvc.reportTemplatesMode$.pipe(untilDestroy(this)).subscribe(mode => {
+			if (mode === undefined) return;
+			this.reportViewMode = mode;
+		});
 	}
 
 	onIFrameMessage(message: PostMessageEvent) {

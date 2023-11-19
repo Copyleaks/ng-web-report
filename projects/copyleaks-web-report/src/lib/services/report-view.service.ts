@@ -21,7 +21,7 @@ export class ReportViewService {
 		return this._reportViewMode$.value;
 	}
 
-	private _reportResponsiveMode$ = new Subject<IReportResponsiveMode>();
+	private _reportResponsiveMode$ = new BehaviorSubject<IReportResponsiveMode | null>(null);
 	/** Subject for sharing the report reposive view mode. */
 	public get reportResponsiveMode$() {
 		return this._reportResponsiveMode$;

@@ -1,19 +1,28 @@
 <ng-container *ngIf="!showLoadingView; else loadingViewRef">
 	<div
-		*ngIf="!hidePlagarismTap"
+		*ngIf="!hidePlagarismTap || showDisabledProducts"
 		class="tab-plagiarism"
-		[crReportScoreTooltip]="{
-			identicalPct: identicalTotal / wordsTotal,
-			minorChangesPct: minorChangesTotal / wordsTotal,
-			paraphrasedPct: paraphrasedTotal / wordsTotal
-		}"
+		[crReportScoreTooltip]="
+			hidePlagarismTap && showDisabledProducts
+				? null
+				: {
+						identicalPct: identicalTotal / wordsTotal,
+						minorChangesPct: minorChangesTotal / wordsTotal,
+						paraphrasedPct: paraphrasedTotal / wordsTotal
+				  }
+		"
 		[crReportScoreTooltipPosition]="EReportScoreTooltipPosition.BELOW"
 		[style.flex-grow]="1"
-		[class.tab-selected]="selectedTap === EReportViewType.PlagiarismView"
+		[class.tab-selected]="selectedTap === EReportViewType.PlagiarismView && !hidePlagarismTap"
+		[class.tab-disabled]="hidePlagarismTap && showDisabledProducts"
+		[matTooltip]="hidePlagarismTap && showDisabledProducts ? 'Disabled' : ''"
+		matTooltipClass="web-report-mat-tooltip"
 		(click)="selectTap(EReportViewType.PlagiarismView)">
 		<div class="bar-title-container">
 			<span class="bar-title" web-report-title-font>Plagiarism</span>
-			<span class="bar-score" web-report-title-font>{{ plagarismScore | percent : '1.0-1' }}</span>
+			<span class="bar-score" web-report-title-font>
+				{{ hidePlagarismTap && showDisabledProducts ? 'N/A' : (plagarismScore | percent : '1.0-1') }}
+			</span>
 		</div>
 		<div class="grade-bar">
 			<div class="bar plagiarism" [style.width.%]="100">
@@ -39,19 +48,28 @@
 		<!-- <div class="close-btn" (click)="hidePlagarismTap = !hidePlagarismTap">X</div> -->
 	</div>
 	<div
-		*ngIf="!hideAiTap"
+		*ngIf="!hideAiTap || showDisabledProducts"
 		class="tab-ai"
-		[crReportScoreTooltip]="{
-			aiPct: aiScore,
-			humanPct: 1 - aiScore
-		}"
+		[crReportScoreTooltip]="
+			hideAiTap && showDisabledProducts
+				? null
+				: {
+						aiPct: aiScore,
+						humanPct: 1 - aiScore
+				  }
+		"
 		[crReportScoreTooltipPosition]="EReportScoreTooltipPosition.BELOW"
 		[style.flex-grow]="1"
-		[class.tab-selected]="selectedTap === EReportViewType.AIView"
+		[class.tab-selected]="selectedTap === EReportViewType.AIView && !hideAiTap"
+		[class.tab-disabled]="hideAiTap && showDisabledProducts"
+		[matTooltip]="hideAiTap && showDisabledProducts ? 'Disabled' : ''"
+		matTooltipClass="web-report-mat-tooltip"
 		(click)="selectTap(EReportViewType.AIView)">
 		<div class="bar-title-container">
 			<span class="bar-title" web-report-title-font>AI Content</span>
-			<span class="bar-score" web-report-title-font>{{ aiScore | percent : '1.0-1' }}</span>
+			<span class="bar-score" web-report-title-font>
+				{{ hideAiTap && showDisabledProducts ? 'N/A' : (aiScore | percent : '1.0-1') }}
+			</span>
 		</div>
 		<div class="grade-bar">
 			<div class="bar ai-content" [style.width.%]="aiScore * 100" [style.border]="!aiScore ? 'none' : ''"></div>

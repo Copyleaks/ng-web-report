@@ -1,6 +1,7 @@
 import { Injectable, TemplateRef } from '@angular/core';
-import { BehaviorSubject } from 'rxjs';
+import { BehaviorSubject, Subject } from 'rxjs';
 import { ICustomClsReportTabTemplatesRefs, ICustomClsReportTemplatesRefs } from '../models/report-ng-templates.models';
+import { ECustomResultsReportView } from '../components/core/cr-custom-results/models/cr-custom-results.enums';
 
 @Injectable()
 export class ReportNgTemplatesService {
@@ -18,6 +19,14 @@ export class ReportNgTemplatesService {
 		return this._reportTemplatesRefs$.value;
 	}
 
+	private _reportTemplatesMode$ = new BehaviorSubject<ECustomResultsReportView | undefined>(undefined);
+	/**
+	 * Subject for sharing the report custom components references in the report library.
+	 */
+	public get reportTemplatesMode$() {
+		return this._reportTemplatesMode$;
+	}
+
 	/**
 	 * Setter for the custom report actions section template reference.
 	 */
@@ -31,10 +40,10 @@ export class ReportNgTemplatesService {
 	/**
 	 * Setter for the custom report results section template reference.
 	 */
-	public setReportCustomResultsTemplateRef(template: TemplateRef<any>) {
+	public setReportCustomEmptyResultsTemplateRef(template: TemplateRef<any>) {
 		this._reportTemplatesRefs$.next({
 			...this._reportTemplatesRefs$.value,
-			customResultsTemplate: template,
+			customEmptyResultsTemplate: template,
 		} as ICustomClsReportTemplatesRefs);
 	}
 
@@ -45,6 +54,16 @@ export class ReportNgTemplatesService {
 		this._reportTemplatesRefs$.next({
 			...this._reportTemplatesRefs$.value,
 			customTabsTemplates: templates,
+		} as ICustomClsReportTemplatesRefs);
+	}
+
+	/**
+	 * Setter for the custom report results section template reference.
+	 */
+	public setReportCustomResultsTemplateRef(template: TemplateRef<any>) {
+		this._reportTemplatesRefs$.next({
+			...this._reportTemplatesRefs$.value,
+			customResultsTemplate: template,
 		} as ICustomClsReportTemplatesRefs);
 	}
 }

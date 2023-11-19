@@ -11,7 +11,10 @@
 		[identicalTotal]="reportStatistics?.identical ?? 0"
 		[minorChangesTotal]="reportStatistics?.minorChanges ?? 0"
 		[paraphrasedTotal]="reportStatistics?.relatedMeaning ?? 0"
-		[showLoadingView]="isLoadingScanContent"></copyleaks-report-tabs-container>
+		[showLoadingView]="isLoadingScanContent"
+		[hideAiTap]="hideAiTap"
+		[hidePlagarismTap]="hidePlagarismTap"
+		[showDisabledProducts]="showDisabledProducts"></copyleaks-report-tabs-container>
 
 	<!-- Report content container  -->
 	<copyleaks-content-viewer-container
@@ -36,19 +39,29 @@
 	<copyleaks-report-actions-container [showLoadingView]="isLoadingScanContent"></copyleaks-report-actions-container>
 
 	<!-- Report results & alerts container -->
-	<div class="results-alerts-container">
+	<div class="results-alerts-container" [style.overflow]="isLoadingScanResults ? 'hidden' : ''">
 		<!-- Report alerts container -->
 		<copyleaks-report-alerts-container
-			*ngIf="alerts && alerts.length > 0 && !isLoadingScanResults"
+			*ngIf="alerts && alerts.length > 0 && !isLoadingScanResults && reportViewMode !== ECustomResultsReportView.Full"
+			[class.container-with-custom-results]="reportViewMode != undefined"
 			[alerts]="alerts"
 			[flexGrow]="25"></copyleaks-report-alerts-container>
 
 		<!-- Report results container -->
 		<copyleaks-report-results-container
+			*ngIf="
+				reportViewMode !== ECustomResultsReportView.Full &&
+				!(reportViewMode === 0 && (!scanResultsView || scanResultsView?.length === 0) && !isLoadingScanResults)
+			"
+			[class.container-with-custom-results]="reportViewMode != undefined"
 			[flexGrow]="65"
 			[allResults]="scanResultsView"
 			[resultsActions]="scanResultsActions"
 			[showLoadingView]="isLoadingScanResults"
 			[filterOptions]="filterOptions"></copyleaks-report-results-container>
+
+		<div class="custom-results-container" #customResultView [style.flex-grow]="'1'">
+			<ng-container *ngTemplateOutlet="customResultsTemplate ?? null"></ng-container>
+		</div>
 	</div>
 </div>

@@ -9,6 +9,7 @@
 				*ngIf="reportOrigin != 'suspect'"
 				fontSet="material-icons-round"
 				matTooltip="Go to previous match"
+				matTooltipClass="web-report-mat-tooltip"
 				(click)="onJumpToNextMatchClick(false)">
 				arrow_upward
 			</mat-icon>
@@ -16,6 +17,7 @@
 				*ngIf="reportOrigin != 'suspect'"
 				fontSet="material-icons-round"
 				matTooltip="Go to next match"
+				matTooltipClass="web-report-mat-tooltip"
 				(click)="onJumpToNextMatchClick()">
 				arrow_downward
 			</mat-icon>
@@ -23,34 +25,39 @@
 				*ngIf="!isHtmlView || !hasHtml || isAlertsView"
 				fontSet="material-icons-round"
 				(click)="changeContentDirection('ltr')"
-				matTooltip="Align Left">
+				matTooltip="Align Left"
+				matTooltipClass="web-report-mat-tooltip">
 				format_align_left
 			</mat-icon>
 			<mat-icon
 				*ngIf="!isHtmlView || !hasHtml || isAlertsView"
 				fontSet="material-icons-round"
 				(click)="changeContentDirection('rtl')"
-				matTooltip="Align right">
+				matTooltip="Align right"
+				matTooltipClass="web-report-mat-tooltip">
 				format_align_right
 			</mat-icon>
 			<mat-icon
 				*ngIf="!isHtmlView || !hasHtml || isAlertsView"
 				fontSet="material-icons-round"
 				(click)="increaseFontSize()"
-				matTooltip="Zoom in">
+				matTooltip="Zoom in"
+				matTooltipClass="web-report-mat-tooltip">
 				zoom_in
 			</mat-icon>
 			<mat-icon
 				*ngIf="!isHtmlView || !hasHtml || isAlertsView"
 				fontSet="material-icons-round"
 				(click)="decreaseFontSize()"
-				matTooltip="Zoom out">
+				matTooltip="Zoom out"
+				matTooltipClass="web-report-mat-tooltip">
 				zoom_out
 			</mat-icon>
 			<span
 				*ngIf="hasHtml && !isAlertsView"
 				class="icon-tooltip-wrapper"
-				[matTooltip]="!hasHtml ? 'Only text view is available' : ''">
+				[matTooltip]="!hasHtml ? 'Only text view is available' : ''"
+				matTooltipClass="web-report-mat-tooltip">
 				<mat-icon
 					*ngIf="isHtmlView && hasHtml"
 					[ngClass]="{
@@ -58,7 +65,8 @@
 					}"
 					fontSet="material-icons-round"
 					(click)="onViewChange()"
-					matTooltip="Switch to textual mode">
+					matTooltip="Switch to textual mode"
+					matTooltipClass="web-report-mat-tooltip">
 					title
 				</mat-icon>
 				<mat-icon
@@ -68,7 +76,8 @@
 					}"
 					fontSet="material-icons-round"
 					(click)="onViewChange()"
-					matTooltip="Switch to rich text mode">
+					matTooltip="Switch to rich text mode"
+					matTooltipClass="web-report-mat-tooltip">
 					image
 				</mat-icon>
 			</span>

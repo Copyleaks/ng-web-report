@@ -40,7 +40,7 @@ export class DemoSidenavComponent implements OnInit {
 
 	navigateToReportPreview(option: string | null = null, alertCode: string | null = null) {
 		this._router
-			.navigate([`/previews/${option ?? 'default'}`], {
+			.navigate([`/previews/${option ?? 'both'}`], {
 				queryParams: {
 					alertCode: alertCode,
 					contentMode: alertCode ? 'text' : 'html',

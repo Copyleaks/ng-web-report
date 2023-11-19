@@ -10,7 +10,9 @@ import { CrCustomTabsModule } from 'projects/copyleaks-web-report/src/lib/compon
 import { MatIconModule } from '@angular/material/icon';
 import { ReportResultsContainerModule } from 'projects/copyleaks-web-report/src/lib/components/containers/report-results-container/report-results-container.module';
 import { ReportResultsItemContainerModule } from 'projects/copyleaks-web-report/src/lib/components/containers/report-results-item-container/report-results-item-container.module';
+import { CrCustomEmptyResultsModule } from 'projects/copyleaks-web-report/src/lib/components/core/cr-custom-empty-results/cr-custom-empty-results.module';
 import { CrCustomResultsModule } from 'projects/copyleaks-web-report/src/lib/components/core/cr-custom-results/cr-custom-results.module';
+import { CrCustomResultsBoxContentModule } from 'projects/copyleaks-web-report/src/lib/components/core/cr-custom-results/components/cr-custom-results-box-content/cr-custom-results-box-content.module';
 
 @NgModule({
 	declarations: [DemoReportPreviewsComponent],
@@ -21,10 +23,12 @@ import { CrCustomResultsModule } from 'projects/copyleaks-web-report/src/lib/com
 		CrActionsModule,
 		CrCustomTabsModule,
 		CrCustomTabItemModule,
-		CrCustomResultsModule,
+		CrCustomEmptyResultsModule,
 		MatIconModule,
 		ReportResultsContainerModule,
 		ReportResultsItemContainerModule,
+		CrCustomResultsModule,
+		CrCustomResultsBoxContentModule,
 	],
 	exports: [DemoReportPreviewsComponent],
 })

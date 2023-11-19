@@ -22,6 +22,7 @@ import { map, pairwise, filter, distinctUntilChanged } from 'rxjs/operators';
 import { ReportDataService } from '../../../services/report-data.service';
 import { ResultDetailItem } from '../../../models/report-matches.models';
 import { ICopyleaksReportOptions } from '../../../models/report-options.models';
+import { ECustomResultsReportView } from '../../core/cr-custom-results/models/cr-custom-results.enums';
 
 @Component({
 	selector: 'copyleaks-report-results-container',
@@ -43,7 +44,8 @@ export class ReportResultsContainerComponent implements OnInit, OnChanges {
 	@Input() resultsActions: IResultsActions;
 	@Input() isMobile: boolean;
 	@Input() filterOptions: ICopyleaksReportOptions;
-
+	@Input() customResultsTemplate: TemplateRef<any> | undefined = undefined;
+	@Input() reportViewMode: ECustomResultsReportView;
 	/**
 	 * @Input {boolean} Flag indicating whether to show the loading view or not.
 	 */
@@ -53,7 +55,7 @@ export class ReportResultsContainerComponent implements OnInit, OnChanges {
 
 	@ViewChild('resultsContainer', { read: ElementRef }) public resultsContainer: ElementRef;
 	@ViewChild('resultitem', { read: ElementRef }) public resultitem: ElementRef;
-	@ViewChild('customResultView', { read: ElementRef }) public customResultView: ElementRef;
+	@ViewChild('customEmptyResultView', { read: ElementRef }) public customEmptyResultView: ElementRef;
 	@ViewChild(CdkVirtualScrollViewport, { static: false }) viewport: CdkVirtualScrollViewport;
 
 	displayedResults: IResultItem[];
@@ -63,7 +65,7 @@ export class ReportResultsContainerComponent implements OnInit, OnChanges {
 	enumNavigateMobileButton = EnumNavigateMobileButton;
 	searchedValue: string;
 
-	customResultsTemplate: TemplateRef<any> | undefined = undefined;
+	customEmptyResultsTemplate: TemplateRef<any> | undefined = undefined;
 	showCustomView: boolean;
 	currentViewedIndex: number = 0;
 	scrollSub: any;
@@ -74,8 +76,14 @@ export class ReportResultsContainerComponent implements OnInit, OnChanges {
 
 	excludedResultsIds: string[];
 
+	ECustomResultsReportView = ECustomResultsReportView;
+
 	get allResultsItemLength() {
 		return this.allResults?.length;
+	}
+
+	get showCustomResults() {
+		return this.reportViewMode === ECustomResultsReportView.Full;
 	}
 
 	constructor(
@@ -84,19 +92,19 @@ export class ReportResultsContainerComponent implements OnInit, OnChanges {
 		private _reportDataSvc: ReportDataService
 	) {}
 
-	ngOnChanges(change: SimpleChanges) {
-		if (change['allResults']?.currentValue) {
+	ngOnChanges(changes: SimpleChanges) {
+		if (changes['allResults']?.currentValue) {
 			this.searchedValue = '';
 			if (!this.filterIsOn) this.displayedResults = this.allResults;
 			else if (this._reportDataSvc.filterOptions && this._reportDataSvc.excludedResultsIds)
 				this._filterResults(this._reportDataSvc.filterOptions, this._reportDataSvc.excludedResultsIds);
 		}
-		if (change['showLoadingView']?.currentValue == false) {
+		if (changes['showLoadingView']?.currentValue == false) {
 			this._handelFilterUpdates();
 		}
 
-		if ('filterOptions' in change && change['filterOptions'].currentValue) {
-			this.displayedResults.forEach(result => {
+		if ('filterOptions' in changes && changes['filterOptions'].currentValue) {
+			this.displayedResults?.forEach(result => {
 				result.iStatisticsResult = {
 					identical: this.filterOptions.showIdentical ? result.iStatisticsResult?.identical ?? 0 : 0,
 					minorChanges: this.filterOptions.showMinorChanges ? result.iStatisticsResult?.minorChanges ?? 0 : 0,
@@ -107,7 +115,7 @@ export class ReportResultsContainerComponent implements OnInit, OnChanges {
 	}
 
 	ngAfterViewChecked() {
-		const container: HTMLElement = this.customResultView?.nativeElement;
+		const container: HTMLElement = this.customEmptyResultView?.nativeElement;
 		if (container && container?.childElementCount > 0)
 			setTimeout(() => {
 				this.showCustomView = true;
@@ -129,8 +137,8 @@ export class ReportResultsContainerComponent implements OnInit, OnChanges {
 		this.navigateMobileButton = EnumNavigateMobileButton.FirstButton;
 
 		this._reportNgTemplatesSvc.reportTemplatesSubject$.pipe(untilDestroy(this)).subscribe(refs => {
-			if (refs?.customResultsTemplate !== undefined && this.customResultsTemplate === undefined) {
-				this.customResultsTemplate = refs?.customResultsTemplate;
+			if (refs?.customEmptyResultsTemplate !== undefined && this.customEmptyResultsTemplate === undefined) {
+				this.customEmptyResultsTemplate = refs?.customEmptyResultsTemplate;
 				this.cdr.detectChanges();
 			}
 		});

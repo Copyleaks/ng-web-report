@@ -25,7 +25,10 @@
 				[identicalTotal]="reportStatistics?.identical ?? 0"
 				[minorChangesTotal]="reportStatistics?.minorChanges ?? 0"
 				[paraphrasedTotal]="reportStatistics?.relatedMeaning ?? 0"
-				[showLoadingView]="isLoadingScanContent"></copyleaks-report-tabs-container>
+				[showLoadingView]="isLoadingScanContent"
+				[showDisabledProducts]="showDisabledProducts"
+				[hideAiTap]="hideAiTap"
+				[hidePlagarismTap]="hidePlagarismTap"></copyleaks-report-tabs-container>
 
 			<!-- Report scan content viewer -->
 			<copyleaks-content-viewer-container
@@ -56,7 +59,9 @@
 		[resultsActions]="scanResultsActions"
 		[isMobile]="true"
 		[showLoadingView]="isLoadingScanResults"
-		[filterOptions]="filterOptions"></copyleaks-report-results-container>
+		[filterOptions]="filterOptions"
+		[reportViewMode]="reportViewMode"
+		[customResultsTemplate]="customResultsTemplate"></copyleaks-report-results-container>
 
 	<!-- Powered by Copyleaks image section -->
 	<div class="powered-by-copyleaks-container"><cr-powered-by></cr-powered-by></div>

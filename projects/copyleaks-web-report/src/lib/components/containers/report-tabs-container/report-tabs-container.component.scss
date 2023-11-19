@@ -152,4 +152,9 @@
 			}
 		}
 	}
+
+	.tab-disabled {
+		opacity: 0.5 !important;
+		cursor: not-allowed !important;
+	}
 }

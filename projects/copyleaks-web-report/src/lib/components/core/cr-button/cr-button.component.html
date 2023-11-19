@@ -25,7 +25,12 @@
 
 <!-- Check if the button is just a link and set the style accordingly -->
 <ng-container *ngIf="isLink; else normalButton">
-	<div class="tooltip-container" fxLayout="row" fxLayoutAlign="start center" [matTooltip]="buttonTooltip">
+	<div
+		class="tooltip-container"
+		fxLayout="row"
+		fxLayoutAlign="start center"
+		[matTooltip]="buttonTooltip"
+		matTooltipClass="web-report-mat-tooltip">
 		<a
 			[class]="linkButtonColorClassName + ' background-transition'"
 			[ngStyle]="buttonStyle"
@@ -50,6 +55,7 @@
 		fxLayout="row"
 		fxLayoutAlign="start center"
 		[matTooltip]="buttonTooltip"
+		matTooltipClass="web-report-mat-tooltip"
 		i18n-matTooltip>
 		<ng-container *ngIf="!outlined; else outlinedButton">
 			<ng-container *ngIf="!onlyIcon; else onlyIconOutlinedButton">

@@ -17,6 +17,7 @@ import { ResultDetailItem } from '../../models/report-matches.models';
 	selector: 'cr-filter-result-dailog',
 	templateUrl: './filter-result-dailog.component.html',
 	styleUrls: ['./filter-result-dailog.component.scss'],
+	providers: [FilterResultDailogService],
 })
 export class FilterResultDailogComponent implements OnInit {
 	allTagItem: ITagItem[] = [];

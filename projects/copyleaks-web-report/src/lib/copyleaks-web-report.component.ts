@@ -26,6 +26,7 @@ import { ReportHttpRequestErrorModel } from './models/report-errors.models';
 import { ReportErrorsService } from './services/report-errors.service';
 import { ICompleteResults } from './models/report-data.models';
 import { ALERTS } from './constants/report-alerts.constants';
+import { FilterResultDailogService } from './dialogs/filter-result-dailog/services/filter-result-dailog.service';
 
 @Component({
 	selector: 'copyleaks-web-report',
@@ -38,6 +39,7 @@ import { ALERTS } from './constants/report-alerts.constants';
 		ReportViewService,
 		ReportMatchHighlightService,
 		ReportStatisticsService,
+		FilterResultDailogService,
 	],
 })
 export class CopyleaksWebReportComponent implements OnInit, OnDestroy {

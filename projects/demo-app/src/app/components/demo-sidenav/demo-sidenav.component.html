@@ -8,10 +8,6 @@
 			<mat-icon class="item-icon" fontSet="material-icons-round">preview</mat-icon>
 			<span class="item-text">Report Previews</span>
 		</button>
-		<button (click)="navigateToComponents()" mat-menu-item>
-			<mat-icon class="item-icon" fontSet="material-icons-round">widgets</mat-icon>
-			<span class="item-text">Components</span>
-		</button>
 		<button (click)="navigateToLayouts()" mat-menu-item>
 			<mat-icon class="item-icon" fontSet="material-icons-round">dashboard</mat-icon>
 			<span class="item-text">Layouts</span>
@@ -50,21 +46,6 @@
 					">
 					<mat-icon class="item-icon" fontSet="material-icons-round">dashboard</mat-icon>
 					<span class="item-text">Layouts</span>
-				</div>
-			</mat-list-item>
-
-			<mat-list-item [routerLink]="['/components']" routerLinkActive="side-nav-actions-active" [disableRipple]="true">
-				<div
-					style="
-						display: flex;
-						flex-direction: column;
-						align-items: center;
-						width: 100%;
-						gap: 8px;
-						height: fit-content;
-					">
-					<mat-icon class="item-icon" fontSet="material-icons-round">widgets</mat-icon>
-					<span class="item-text">Components</span>
 				</div>
 			</mat-list-item>
 

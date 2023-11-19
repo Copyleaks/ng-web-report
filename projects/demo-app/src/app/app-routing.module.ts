@@ -8,11 +8,6 @@ const routes: Routes = [
 			import('./pages/demo-report-previews/demo-report-previews.module').then(mod => mod.DemoReportPreviewsModule),
 	},
 	{
-		path: 'components',
-		loadChildren: () =>
-			import('./pages/demo-components-page/demo-components-page.module').then(mod => mod.DemoComponentsPageModule),
-	},
-	{
 		path: 'layouts',
 		loadChildren: () =>
 			import('./pages/demo-layouts-page/demo-layouts-page.module').then(mod => mod.DemoLayoutsPageModule),

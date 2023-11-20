@@ -9,7 +9,10 @@
 		<div class="identical-stats">
 			<div class="title-container">
 				<span class="identical dot"></span>
-				<span class="title" [ngClass]="{ 'disabled-property': reportDataSvc.filterOptions?.showIdentical === false }">
+				<span
+					class="title"
+					[ngClass]="{ 'disabled-property': reportDataSvc.filterOptions?.showIdentical === false }"
+					i18n>
 					Identical
 				</span>
 			</div>
@@ -20,7 +23,8 @@
 				<span class="minor-changes dot"></span>
 				<span
 					class="title"
-					[ngClass]="{ 'disabled-property': reportDataSvc.filterOptions?.showMinorChanges === false }">
+					[ngClass]="{ 'disabled-property': reportDataSvc.filterOptions?.showMinorChanges === false }"
+					i18n>
 					Minor changes
 				</span>
 			</div>
@@ -29,7 +33,10 @@
 		<div class="paraphrased-stats">
 			<div class="title-container">
 				<span class="paraphrased dot"></span>
-				<span class="title" [ngClass]="{ 'disabled-property': reportDataSvc.filterOptions?.showRelated === false }">
+				<span
+					class="title"
+					[ngClass]="{ 'disabled-property': reportDataSvc.filterOptions?.showRelated === false }"
+					i18n>
 					Paraphrased
 				</span>
 			</div>
@@ -38,7 +45,7 @@
 		<div class="omitted-words-stats">
 			<div class="title-container">
 				<span class="omitted-words dot"></span>
-				<span class="title">Omitted words</span>
+				<span class="title" i18n>Omitted words</span>
 			</div>
 			<span class="percentage">
 				{{
@@ -54,14 +61,14 @@
 			<div class="ai-stats">
 				<div class="title-container">
 					<span class="ai dot"></span>
-					<span class="title">AI Content</span>
+					<span class="title" i18n>AI Content</span>
 				</div>
 				<span class="percentage">{{ scoreStats?.aiPct ?? 0 | similarity : '1.1-1' }}</span>
 			</div>
 			<div class="human-stats">
 				<div class="title-container">
 					<span class="human dot"></span>
-					<span class="title">Human text</span>
+					<span class="title" i18n>Human text</span>
 				</div>
 				<span class="percentage">{{ scoreStats?.humanPct ?? 0 | similarity : '1.1-1' }}</span>
 			</div>

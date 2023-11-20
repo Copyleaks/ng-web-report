@@ -6,28 +6,44 @@
 		fxLayoutGap="10px"
 		class="tootal-results-container">
 		<span class="tootal-results" web-report-title-font>
-			Plagiarism Results
+			<ng-container i18n>Plagiarism Results&nbsp;</ng-container>
 			<span *ngIf="!hideTotal">({{ resultsActions?.totalResults }})</span>
 		</span>
 		<ng-container *ngIf="resultsActions?.totalExcluded">
 			<mat-icon class="separate-circle-icon" fontSet="material-icons-round">circle</mat-icon>
 			<span class="tootal-excuded" web-report-title-font (click)="showFilterDialog(true)">
-				{{ resultsActions?.totalExcluded }} excluded
+				{{ resultsActions?.totalExcluded }}
+				<ng-container i18n>excluded</ng-container>
 			</span>
 		</ng-container>
 
 		<ng-container *ngIf="resultsActions?.totalFiltered">
 			<mat-icon class="separate-circle-icon" fontSet="material-icons-round">circle</mat-icon>
 			<span class="tootal-filtered" web-report-title-font (click)="showFilterDialog()">
-				{{ resultsActions?.totalFiltered }} filtered
+				{{ resultsActions?.totalFiltered }}
+				<ng-container i18n>filtered</ng-container>
 			</span>
 		</ng-container>
 	</div>
 
 	<div *ngIf="showSearchFiled" fxLayout="row" fxLayoutAlign="start center" class="input-search-container">
 		<mat-icon class="search-icon" fontSet="material-icons-round">search</mat-icon>
-		<input class="search-input" placeholder="Search Result" type="text" matInput [formControl]="searchFc" />
-		<mat-icon class="clear-icon" fontSet="material-icons-outlined" (click)="showSearch()">cancel</mat-icon>
+		<input
+			class="search-input"
+			placeholder="Search Result"
+			type="text"
+			matInput
+			[formControl]="searchFc"
+			i18n-placeholder />
+		<mat-icon
+			class="clear-icon"
+			fontSet="material-icons-outlined"
+			(click)="showSearch()"
+			matTooltip="Clear"
+			matTooltipClass="web-report-mat-tooltip"
+			i18n-matTooltip>
+			cancel
+		</mat-icon>
 	</div>
 
 	<div fxLayout="row" fxLayoutAlign="start center" fxLayoutGap="8px" class="results-search-filter-container">
@@ -36,7 +52,10 @@
 			class="open-search-icon"
 			(click)="showSearch()"
 			fontSet="material-icons-round"
-			[ngClass]="{ 'disabled-icon': !resultsActions?.totalResults || resultsActions?.totalResults === 0 }">
+			[ngClass]="{ 'disabled-icon': !resultsActions?.totalResults || resultsActions?.totalResults === 0 }"
+			matTooltip="Search Results"
+			matTooltipClass="web-report-mat-tooltip"
+			i18n-matTooltip>
 			search
 		</mat-icon>
 		<mat-icon
@@ -46,7 +65,10 @@
 			[ngClass]="{
 				'disabled-icon': !resultsActions?.totalResults || resultsActions?.totalResults === 0,
 				'selected-icon': isFilterOn || resultsActions?.totalFiltered != 0
-			}">
+			}"
+			matTooltip="Filter Results"
+			matTooltipClass="web-report-mat-tooltip"
+			i18n-matTooltip>
 			filter_list
 		</mat-icon>
 		<mat-icon

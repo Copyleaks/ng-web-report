@@ -1,7 +1,7 @@
 <div class="paginator-top-container">
 	<div class="paginator-container">
 		<div *ngIf="numberOfPages && pageIndex" class="items-per-page">
-			<div>Page {{ pageIndex }} of {{ numberOfPages }}</div>
+			<div i18n>Page {{ pageIndex }} of {{ numberOfPages }}</div>
 		</div>
 
 		<div class="buttons-container" fxLayout="row" fxLayoutAlign="center center">
@@ -10,20 +10,22 @@
 				mat-icon-button
 				(click)="previous()"
 				[disabled]="pageIndex === 1"
-				aria-label="left">
-				<mat-icon fontSet="material-icons-round" matTooltip="Previous page" matTooltipClass="web-report-mat-tooltip">
-					chevron_left
-				</mat-icon>
+				aria-label="left"
+				matTooltip="Previous page"
+				matTooltipClass="web-report-mat-tooltip"
+				i18n-matTooltip>
+				<mat-icon fontSet="material-icons-round">chevron_left</mat-icon>
 			</button>
 			<button
 				class="next-page-button"
 				mat-icon-button
 				(click)="next()"
 				[disabled]="pageIndex >= numberOfPages || !numberOfPages"
-				aria-label="right">
-				<mat-icon fontSet="material-icons-round" matTooltip="Next page" matTooltipClass="web-report-mat-tooltip">
-					chevron_right
-				</mat-icon>
+				aria-label="right"
+				matTooltip="Next page"
+				matTooltipClass="web-report-mat-tooltip"
+				i18n-matTooltip>
+				<mat-icon fontSet="material-icons-round">chevron_right</mat-icon>
 			</button>
 		</div>
 	</div>

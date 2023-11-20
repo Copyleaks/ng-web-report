@@ -11,7 +11,7 @@
 					[disableRipple]="true"
 					(click)="clickBack()">
 					<mat-icon fontSet="material-icons-round">chevron_left</mat-icon>
-					<span>Back</span>
+					<span i18n>Back</span>
 				</button>
 				<div fxLayout="row" fxLayoutAlign="start start" fxLayoutGap="8px" style="width: 100%">
 					<div class="result-logo" fxLayout="column" fxLayoutAlign="center center">
@@ -70,6 +70,7 @@
 									*ngIf="exclude"
 									matTooltip="Include result"
 									matTooltipClass="web-report-mat-tooltip"
+									i18n-matTooltip
 									fontSet="material-icons-round">
 									visibility
 								</mat-icon>
@@ -77,6 +78,7 @@
 									*ngIf="!exclude"
 									matTooltip="Exclude result"
 									matTooltipClass="web-report-mat-tooltip"
+									i18n-matTooltip
 									fontSet="material-icons-round">
 									visibility_off
 								</mat-icon>
@@ -88,11 +90,14 @@
 						<ng-container *ngIf="resultItem?.resultPreview?.url; else resultSource">
 							<a class="result-url-source" [href]="resultItem?.resultPreview?.url" target="_blank">
 								<mat-icon fontSet="material-icons-round">open_in_new</mat-icon>
-								<span [title]="resultItem?.resultPreview?.url">Source: {{ resultItem?.resultPreview?.url }}</span>
+								<span [title]="resultItem?.resultPreview?.url">
+									<ng-container i18n>Source:</ng-container>
+									{{ resultItem?.resultPreview?.url }}
+								</span>
 							</a>
 						</ng-container>
 						<ng-template #resultSource>
-							<span class="result-source">Source: {{ authorName }}</span>
+							<span class="result-source" i18n>Source: {{ authorName }}</span>
 						</ng-template>
 					</div>
 				</div>
@@ -109,7 +114,8 @@
 						fxLayout="row"
 						fxLayoutAlign="start start"
 						[matTooltip]="tag?.description ?? ''"
-						matTooltipClass="web-report-mat-tooltip">
+						matTooltipClass="web-report-mat-tooltip"
+						i18n-matTooltip>
 						<mat-chip>{{ tag?.title ?? '' }}</mat-chip>
 					</div>
 				</mat-chip-list>

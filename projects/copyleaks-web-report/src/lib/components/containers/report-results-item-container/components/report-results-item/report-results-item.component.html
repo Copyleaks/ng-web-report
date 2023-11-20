@@ -82,10 +82,26 @@
 
 				<ng-template #showExcludeResult>
 					<ng-container *ngIf="!excludedResultsClick; else showResult">
-						<mat-icon class="exclude-result" mat-icon (click)="showResultById()">visibility</mat-icon>
+						<mat-icon
+							class="exclude-result"
+							mat-icon
+							(click)="showResultById()"
+							matTooltip="Include result"
+							matTooltipClass="web-report-mat-tooltip"
+							i18n-matTooltip>
+							visibility
+						</mat-icon>
 					</ng-container>
 					<ng-template #showResult>
-						<mat-icon class="exclude-result" mat-icon (click)="hiddenResultById()">visibility_off</mat-icon>
+						<mat-icon
+							class="exclude-result"
+							mat-icon
+							(click)="hiddenResultById()"
+							matTooltip="Exclude result"
+							matTooltipClass="web-report-mat-tooltip"
+							i18n-matTooltip>
+							visibility_off
+						</mat-icon>
 					</ng-template>
 				</ng-template>
 			</ng-container>
@@ -124,14 +140,14 @@
 <mat-menu class="result-item-menu-list" #menu="matMenu" yPosition="below">
 	<button mat-menu-item (click)="hiddenResultById()">
 		<mat-icon class="mat-menu-item-icon">visibility_off</mat-icon>
-		<span class="mat-menu-item-text">Exclude result</span>
+		<span class="mat-menu-item-text" i18n>Exclude result</span>
 	</button>
 	<button *ngIf="previewResult?.url" mat-menu-item (click)="visitResultSource()">
 		<mat-icon class="mat-menu-item-icon">open_in_new</mat-icon>
-		<span class="mat-menu-item-text">Visit result source</span>
+		<span class="mat-menu-item-text" i18n>Visit result source</span>
 	</button>
 	<button mat-menu-item (click)="comapreResult()">
 		<mat-icon class="mat-menu-item-icon">compare_arrows</mat-icon>
-		<span class="mat-menu-item-text">Compare with submitted file</span>
+		<span class="mat-menu-item-text" i18n>Compare with submitted file</span>
 	</button>
 </mat-menu>

@@ -7,6 +7,7 @@ import { MatButtonModule } from '@angular/material/button';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatIconModule } from '@angular/material/icon';
 import { MatSelectModule } from '@angular/material/select';
+import { MatTooltipModule } from '@angular/material/tooltip';
 
 @NgModule({
 	declarations: [CrPaginatorComponent],
@@ -17,6 +18,7 @@ import { MatSelectModule } from '@angular/material/select';
 		MatFormFieldModule,
 		MatSelectModule,
 		MatButtonModule,
+		MatTooltipModule,
 		MatIconModule,
 	],
 	exports: [CrPaginatorComponent],

@@ -2,7 +2,7 @@
 	<div class="top-container" fxLayout="column" fxLayoutGap="32px" fxLayoutGap.lt-md="16px">
 		<div class="header-container" fxLayout="column" fxLayoutGap="8px">
 			<div class="title-container" fxLayout="row" fxLayoutAlign="space-between center" fxLayoutGap="4px">
-				<span web-report-title-font>Filter Plagiarism Results</span>
+				<span web-report-title-font i18n>Filter Plagiarism Results</span>
 				<button
 					(click)="onClearFilter()"
 					class="clear-button"
@@ -10,7 +10,7 @@
 					fxLayoutAlign="start center"
 					fxLayoutGap="4px">
 					<mat-icon>refresh</mat-icon>
-					<span>Clear filter</span>
+					<span i18n>Clear filter</span>
 				</button>
 			</div>
 			<div
@@ -21,7 +21,10 @@
 				fxLayout.lt-md="column"
 				fxLayoutAlign.lt-md="center start"
 				fxLayoutGap.lt-md="10px">
-				<span class="total-results" web-report-title-font>Plagiarism Results ({{ resultsActions.totalResults }})</span>
+				<span class="total-results" web-report-title-font>
+					<ng-container i18n>Plagiarism Results</ng-container>
+					({{ resultsActions.totalResults }})
+				</span>
 				<div fxLayout="row" fxLayoutAlign="start center" fxLayoutGap="4px">
 					<ng-container *ngIf="!!resultsActions?.totalExcluded">
 						<mat-icon
@@ -33,7 +36,8 @@
 						<span
 							class="total-excuded"
 							(click)="!!resultsActions.totalExcluded ? (data.showExcludedDailog = !data.showExcludedDailog) : ''">
-							{{ resultsActions.totalExcluded }} excluded
+							{{ resultsActions.totalExcluded }}
+							<ng-container i18n>excluded</ng-container>
 						</span>
 					</ng-container>
 
@@ -44,7 +48,10 @@
 							fontSet="material-icons-round">
 							circle
 						</mat-icon>
-						<span class="total-filtered">{{ resultsActions.totalFiltered }} filtered</span>
+						<span class="total-filtered">
+							{{ resultsActions.totalFiltered }}
+							<ng-container i18n>filtered</ng-container>
+						</span>
 					</ng-container>
 				</div>
 			</div>
@@ -60,7 +67,7 @@
 				<div class="left-side-container" fxLayout="column" fxLayoutGap="16px">
 					<!-- source type -->
 					<section class="section-container sources-type-top-container" fxLayout="column" fxLayoutGap="16px">
-						<span class="body-title" web-report-title-font>Source Type</span>
+						<span class="body-title" web-report-title-font i18n>Source Type</span>
 						<ng-container *ngIf="!loading">
 							<cr-source-type-filter-result
 								[totalSourceType]="totalSourceType"
@@ -71,7 +78,7 @@
 
 					<!-- results meta -->
 					<section class="section-container" fxLayout="column" fxLayoutGap="16px">
-						<span class="body-title" web-report-title-font>Results Meta</span>
+						<span class="body-title" web-report-title-font i18n>Results Meta</span>
 						<cr-meta-filter-result
 							[publicationDates]="publicationDates"
 							[minWordLimit]="minWordLimit"
@@ -85,7 +92,7 @@
 				<div class="right-side-conatier" fxLayout="column" fxLayoutGap="16px">
 					<!-- match type -->
 					<section class="match-type-container" fxLayout="column" fxLayoutGap="16px">
-						<span class="body-title" web-report-title-font>Match Types</span>
+						<span class="body-title" web-report-title-font i18n>Match Types</span>
 						<cr-match-type-filter-result
 							[identicalTotal]="totalIdentical"
 							[minorChangesTotal]="totalMinorChanges"
@@ -95,7 +102,7 @@
 					<mat-divider></mat-divider>
 					<!--General filters-->
 					<section class="general-filters-container" fxLayout="column" fxLayoutGap="16px">
-						<span class="body-title" web-report-title-font>General Filters</span>
+						<span class="body-title" web-report-title-font i18n>General Filters</span>
 						<cr-general-filter-result
 							class="general-filter-container"
 							[totalAlerts]="totalAlerts"
@@ -110,7 +117,7 @@
 						[ngClass]="{
 							'disabled-section': !allTagItem || allTagItem.length === 0
 						}">
-						<span class="body-title" web-report-title-font>Included Tags</span>
+						<span class="body-title" web-report-title-font i18n>Included Tags</span>
 						<cr-included-tags-filter-result
 							[allTagItem]="allTagItem"
 							class="included-tags-filter-result"></cr-included-tags-filter-result>
@@ -125,10 +132,10 @@
 				(click)="onDiscardChanges()"
 				[width]="isMobile ? '151px' : '170px'"
 				color="primary">
-				<span class="discard-changes-button">Discard changes</span>
+				<span class="discard-changes-button" i18n>Discard changes</span>
 			</cr-button>
 			<cr-button (click)="onSaveChanges()" [width]="isMobile ? '161px' : '220px'" padding="3px 24px" color="primary">
-				<span class="apply-filters-button">Apply filters</span>
+				<span class="apply-filters-button" i18n>Apply filters</span>
 			</cr-button>
 		</div>
 	</div>

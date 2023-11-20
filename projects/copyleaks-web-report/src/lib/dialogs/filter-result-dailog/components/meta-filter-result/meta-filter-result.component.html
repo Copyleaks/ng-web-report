@@ -18,7 +18,10 @@
 				class="mat-slider-container"
 				[min]="minWordLimit"
 				[max]="maxWordLimit"></mat-slider>
-			<span class="limit-result">{{ wordLimitTotalWord }} / {{ maxWordLimit }} words</span>
+			<span class="limit-result">
+				{{ wordLimitTotalWord }} / {{ maxWordLimit }}
+				<ng-container i18n>words</ng-container>
+			</span>
 		</ng-container>
 	</div>
 	<mat-divider></mat-divider>
@@ -44,12 +47,12 @@
 					[min]="0"
 					[max]="maxSliderDates"></mat-slider>
 				<div class="date-container" fxLayout="row" fxLayoutAlign="start center" fxLayoutGap="4px">
-					<span class="start-from">Starting from:</span>
+					<span class="start-from" i18n>Starting from:</span>
 					<span class="publication-date">{{ publicationDateValue }}</span>
 				</div>
 			</ng-container>
 		</div>
-		<mat-checkbox [formControlName]="eFilterResultForm.fcResultsWithNoDates" class="include-results-checkbox">
+		<mat-checkbox [formControlName]="eFilterResultForm.fcResultsWithNoDates" class="include-results-checkbox" i18n>
 			Include results with no dates
 		</mat-checkbox>
 	</div>

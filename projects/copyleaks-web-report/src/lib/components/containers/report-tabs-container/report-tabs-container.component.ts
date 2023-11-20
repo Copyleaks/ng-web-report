@@ -81,6 +81,9 @@ export class ReportTabsContainerComponent implements OnInit, OnDestroy, OnChange
 	EReportScoreTooltipPosition = EReportScoreTooltipPosition;
 	customTabsTemplateRef: TemplateRef<any>[] | undefined = undefined;
 
+	// constants
+	DISABLED: string = $localize`Disabled`;
+
 	constructor(
 		private _reportViewSvc: ReportViewService,
 		private _reportDataSvc: ReportDataService,

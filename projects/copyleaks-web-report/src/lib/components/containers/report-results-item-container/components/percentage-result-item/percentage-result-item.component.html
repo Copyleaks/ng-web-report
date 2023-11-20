@@ -97,17 +97,17 @@
 			class="match-type-title"
 			fxLayout="row"
 			fxLayoutAlign="space-between center">
-			<span>Match type</span>
+			<span i18n>Match type</span>
 			<div fxLayout="row" fxLayoutAlign="start center" fxLayoutGap="12px">
-				<span class="percentage-match">Match</span>
-				<span class="number-words-match">Words</span>
+				<span class="percentage-match" i18n>Match</span>
+				<span class="number-words-match" i18n>Words</span>
 			</div>
 		</div>
 		<!--identical-->
 		<div class="match-type-cotainer" fxLayout="row" fxLayoutAlign="space-between center">
 			<div fxLayout="row" fxLayoutGap="8px" fxLayoutAlign="start center">
 				<span class="dot identical"></span>
-				<span class="type-name">IDENTICAL</span>
+				<span class="type-name" i18n>IDENTICAL</span>
 			</div>
 			<div fxLayout="row" fxLayoutAlign="start center" fxLayoutGap="12px">
 				<span class="percentage-match type-value">{{ getMatchTypePercentage(eMatchType.Identical) | similarity }}</span>
@@ -120,7 +120,7 @@
 		<div class="match-type-cotainer" fxLayout="row" fxLayoutAlign="space-between center">
 			<div fxLayout="row" fxLayoutGap="8px" fxLayoutAlign="start center">
 				<span class="dot minorChanges"></span>
-				<span class="type-name">MINORCHANGES</span>
+				<span class="type-name" i18n>MINORCHANGES</span>
 			</div>
 			<div fxLayout="row" fxLayoutAlign="start center" fxLayoutGap="12px">
 				<span class="percentage-match type-value">
@@ -135,7 +135,7 @@
 		<div class="match-type-cotainer" fxLayout="row" fxLayoutAlign="space-between center">
 			<div fxLayout="row" fxLayoutGap="8px" fxLayoutAlign="start center">
 				<span class="dot paraphrased"></span>
-				<span class="type-name">PARAPHRASED</span>
+				<span class="type-name" i18n>PARAPHRASED</span>
 			</div>
 			<div fxLayout="row" fxLayoutAlign="start center" fxLayoutGap="12px">
 				<span class="percentage-match type-value">

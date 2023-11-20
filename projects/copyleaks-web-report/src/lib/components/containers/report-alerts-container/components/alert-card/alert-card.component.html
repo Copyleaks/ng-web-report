@@ -4,11 +4,11 @@
 			<span class="alert-card-title" web-report-title-font>{{ alert.title }}</span>
 			<div fxLayout="row" fxLayoutAlign="start center" fxLayoutGap="8px">
 				<ng-container [ngSwitch]="alert.severity">
-					<p class="alert-card-severity" *ngSwitchCase="severity.VeryLow">Very Low</p>
-					<p class="alert-card-severity" *ngSwitchCase="severity.Low">Low</p>
-					<p class="alert-card-severity" *ngSwitchCase="severity.Medium">Medium</p>
-					<p class="alert-card-severity" *ngSwitchCase="severity.High">High</p>
-					<p class="alert-card-severity" *ngSwitchCase="severity.VeryHigh">Very High</p>
+					<p class="alert-card-severity" *ngSwitchCase="severity.VeryLow" i18n>Very Low</p>
+					<p class="alert-card-severity" *ngSwitchCase="severity.Low" i18n>Low</p>
+					<p class="alert-card-severity" *ngSwitchCase="severity.Medium" i18n>Medium</p>
+					<p class="alert-card-severity" *ngSwitchCase="severity.High" i18n>High</p>
+					<p class="alert-card-severity" *ngSwitchCase="severity.VeryHigh" i18n>Very High</p>
 				</ng-container>
 
 				<ng-container *ngIf="showMatChipList">
@@ -30,14 +30,14 @@
 				(click)="toggleAlertPreview()">
 				<ng-container *ngIf="isSelected; else notSelected">
 					<mat-icon fontSet="material-icons-round">visibility_off</mat-icon>
-					<span>hide</span>
+					<span i18n>hide</span>
 				</ng-container>
 				<ng-template #notSelected>
 					<mat-icon fontSet="material-icons-round">visibility</mat-icon>
-					<span>show</span>
+					<span i18n>show</span>
 				</ng-template>
 			</button>
-			<a *ngIf="alert?.helpLink" class="disclamer" [href]="alert.helpLink" target="_blank">Disclamer</a>
+			<a *ngIf="alert?.helpLink" class="disclamer" [href]="alert.helpLink" target="_blank" i18n>Disclamer</a>
 		</div>
 	</div>
 	<span class="alert-card-message">

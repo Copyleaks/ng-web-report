@@ -247,6 +247,8 @@ export class ContentViewerContainerComponent implements OnInit, AfterViewInit, O
 
 	customTabContent: TemplateRef<any> | null;
 
+	ONLY_TEXT_VIEW_IS_AVAILABLE = $localize`Only text view is available`;
+
 	constructor(
 		private _renderer: Renderer2,
 		private _cdr: ChangeDetectorRef,

@@ -2,10 +2,7 @@ import { Renderer2, TemplateRef } from '@angular/core';
 import { combineLatest } from 'rxjs';
 import { filter } from 'rxjs/operators';
 import { ALERTS } from '../../../constants/report-alerts.constants';
-import {
-	EReportViewType,
-	EResponsiveLayoutType,
-} from '../../../enums/copyleaks-web-report.enums';
+import { EReportViewType, EResponsiveLayoutType } from '../../../enums/copyleaks-web-report.enums';
 import {
 	ICompleteResultNotificationAlert,
 	ICompleteResults,

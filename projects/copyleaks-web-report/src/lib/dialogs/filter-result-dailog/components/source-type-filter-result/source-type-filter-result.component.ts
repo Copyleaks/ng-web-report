@@ -17,6 +17,11 @@ export class SourceTypeFilterResultComponent implements OnInit {
 	};
 
 	eFilterResultForm = EFilterResultForm;
+
+	INTERNET_SOURCE = $localize`Internet Source`;
+	IINTERNAL_DATABASE = $localize`Internal Database`;
+	THIS_BACTCH = $localize`This batch`;
+
 	get repositoriesForm() {
 		return this.filterService.sourceTypeFormGroup?.get(EFilterResultForm.fgRepositories) as FormGroup;
 	}

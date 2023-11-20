@@ -7,15 +7,15 @@
 	<!-- Top result -->
 	<cr-mat-slide-filter-result
 		[formControlName]="eFilterResultForm.fcTopResult"
-		[title]="'Show only the top 100 results'"></cr-mat-slide-filter-result>
+		[title]="SHOW_ONLY_TOP"></cr-mat-slide-filter-result>
 	<!-- Alerts -->
 	<cr-mat-slide-filter-result
 		[formControlName]="eFilterResultForm.fcAlerts"
-		[title]="'Alerts'"
+		[title]="ALERTS"
 		[total]="totalAlerts"></cr-mat-slide-filter-result>
 	<!-- Author submissions -->
 	<cr-mat-slide-filter-result
 		[formControlName]="eFilterResultForm.fcAuthorSubmissions"
-		[title]="'Same author submissions'"
+		[title]="SAME_AUTH_SUB"
 		[total]="totalSameAuthor"></cr-mat-slide-filter-result>
 </div>

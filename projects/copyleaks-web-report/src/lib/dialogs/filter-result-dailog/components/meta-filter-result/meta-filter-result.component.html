@@ -11,7 +11,7 @@
 		fxLayoutAlign="start start">
 		<cr-mat-slide-filter-result
 			[formControlName]="eFilterResultForm.fcWordLimitEnabled"
-			[title]="'Result word limit:'"></cr-mat-slide-filter-result>
+			[title]="RESULT_WORD_LIMIT"></cr-mat-slide-filter-result>
 		<ng-container *ngIf="getEnabledValue(eFilterResultForm.fcWordLimitEnabled)">
 			<mat-slider
 				[formControlName]="eFilterResultForm.fcWordLimitTotalWordlimt"
@@ -34,7 +34,7 @@
 		<div class="result-publication-container" fxLayout="column" fxLayoutAlign="start start">
 			<cr-mat-slide-filter-result
 				[formControlName]="eFilterResultForm.fcPublicationEnabled"
-				[title]="'Results publication date:'"
+				[title]="RESULT_PUBLISH_DATE"
 				[total]="publicationDates.length"
 				(ngModelChange)="onPublicationEnabledChange($event)"></cr-mat-slide-filter-result>
 			<ng-container *ngIf="getEnabledValue(eFilterResultForm.fcPublicationEnabled) && !!publicationDates?.length">

@@ -14,6 +14,10 @@ export class GeneralFilterResultComponent implements OnInit {
 
 	eFilterResultForm = EFilterResultForm;
 
+	SHOW_ONLY_TOP = $localize`Show only the top 100 results`;
+	ALERTS = $localize`Alerts`;
+	SAME_AUTH_SUB = $localize`Same author submissions`;
+
 	constructor(public filterService: FilterResultDailogService) {}
 	ngOnInit() {}
 }

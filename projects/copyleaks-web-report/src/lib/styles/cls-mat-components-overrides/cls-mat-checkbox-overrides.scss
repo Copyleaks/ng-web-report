@@ -1,0 +1,44 @@
+@import '../website-colors.styles.scss';
+
+:host {
+	::ng-deep {
+		.mat-checkbox-frame,
+		.mat-option-pseudo-checkbox {
+			border-color: $color-medium-dark !important;
+		}
+
+		.mat-checkbox-frame,
+		.mat-checkbox-background {
+			border-radius: 3px !important;
+		}
+
+		.mat-checkbox-checked .mat-checkbox-background {
+			background-color: $color-primary !important;
+		}
+
+		.mat-pseudo-checkbox-checked {
+			border-color: $color-primary !important;
+		}
+
+		.mat-checkbox-inner-container {
+			margin-right: 10px;
+		}
+
+		.mat-checkbox-label {
+			font-size: 14px;
+			color: $color-black;
+			font-weight: 500;
+			line-height: normal !important;
+			font-family: haboro-soft, Almarai, sans-serif !important;
+		}
+
+		.mat-checkbox-layout {
+			white-space: normal !important;
+		}
+
+		.mat-checkbox-disabled {
+			opacity: 0.5 !important;
+			pointer-events: none !important;
+		}
+	}
+}

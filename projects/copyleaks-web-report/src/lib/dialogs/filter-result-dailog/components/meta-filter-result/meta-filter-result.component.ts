@@ -15,6 +15,9 @@ export class MetaFilterResultComponent implements OnInit {
 
 	eFilterResultForm = EFilterResultForm;
 
+	RESULT_WORD_LIMIT = $localize`Result word limit:`;
+	RESULT_PUBLISH_DATE = $localize`Results publication date:`;
+
 	constructor(public filterService: FilterResultDailogService) {}
 
 	get form(): FormGroup {

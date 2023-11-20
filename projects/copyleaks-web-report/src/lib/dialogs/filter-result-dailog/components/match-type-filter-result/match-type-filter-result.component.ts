@@ -14,6 +14,10 @@ export class MatchTypeFilterResultComponent implements OnInit {
 	@Input() paraphrasedTotal: number = 0;
 
 	eFilterResultForm = EFilterResultForm;
+
+	IDENTICAL_TEXT = $localize`Identical Text`;
+	MINOR_CHANGES = $localize`Minor Changes`;
+	PARAPHRASED = $localize`Paraphrased`;
 	constructor(public filterService: FilterResultDailogService) {}
 	ngOnInit() {}
 }

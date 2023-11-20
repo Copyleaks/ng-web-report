@@ -162,7 +162,6 @@ import { ReportDataService } from './services/report-data.service';
 		CrCustomEmptyResultsComponent,
 		CrCustomResultsComponent,
 		CrCustomResultsBoxContentComponent,
-		ReportResultsContainerComponent,
 		EmptyResultStateComponent,
 		LockResultItemComponent,
 	],

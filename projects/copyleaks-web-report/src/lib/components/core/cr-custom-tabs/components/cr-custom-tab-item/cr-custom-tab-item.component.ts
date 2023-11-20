@@ -1,6 +1,6 @@
-import { Component, HostBinding, Input, OnInit, TemplateRef, ViewChild } from '@angular/core';
-import { ReportViewService } from 'projects/copyleaks-web-report/src/lib/services/report-view.service';
-import { untilDestroy } from 'projects/copyleaks-web-report/src/lib/utils/until-destroy';
+import { Component, Input, OnInit, TemplateRef, ViewChild } from '@angular/core';
+import { ReportViewService } from '../../../../../services/report-view.service';
+import { untilDestroy } from '../../../../../utils/until-destroy';
 
 @Component({
 	selector: 'cr-custom-tab-item',

@@ -1,33 +1,33 @@
-import { ReportMatchHighlightService } from 'projects/copyleaks-web-report/src/lib/services/report-match-highlight.service';
+import { Renderer2, TemplateRef } from '@angular/core';
+import { combineLatest } from 'rxjs';
+import { filter } from 'rxjs/operators';
+import { ALERTS } from '../../../constants/report-alerts.constants';
 import {
 	EReportViewType,
 	EResponsiveLayoutType,
-} from 'projects/copyleaks-web-report/src/lib/enums/copyleaks-web-report.enums';
-import { untilDestroy } from 'projects/copyleaks-web-report/src/lib/utils/until-destroy';
-import { ReportStatisticsService } from 'projects/copyleaks-web-report/src/lib/services/report-statistics.service';
-import { ReportStatistics } from 'projects/copyleaks-web-report/src/lib/models/report-statistics.models';
-import { ALERTS } from 'projects/copyleaks-web-report/src/lib/constants/report-alerts.constants';
-import { Renderer2, TemplateRef } from '@angular/core';
+} from '../../../enums/copyleaks-web-report.enums';
 import {
-	IScanSource,
 	ICompleteResultNotificationAlert,
-	ResultPreview,
 	ICompleteResults,
+	IScanSource,
+	ResultPreview,
 } from '../../../models/report-data.models';
 import { PostMessageEvent } from '../../../models/report-iframe-events.models';
 import { Match, ResultDetailItem, SlicedMatch } from '../../../models/report-matches.models';
-import { ReportDataService } from '../../../services/report-data.service';
-import { ReportMatchesService } from '../../../services/report-matches.service';
-import { ReportViewService } from '../../../services/report-view.service';
-import { ReportLayoutBaseComponent } from './report-layout-base.component';
-import { combineLatest } from 'rxjs';
-import { IResultItem } from '../../containers/report-results-item-container/components/models/report-result-item.models';
-import { IResultsActions } from '../../containers/report-results-container/components/results-actions/models/results-actions.models';
-import { filter } from 'rxjs/operators';
 import { ICopyleaksReportOptions } from '../../../models/report-options.models';
-import { IAuthorAlertCard } from '../../containers/report-alerts-container/components/author-alert-card/models/author-alert-card.models';
+import { ReportStatistics } from '../../../models/report-statistics.models';
+import { ReportDataService } from '../../../services/report-data.service';
+import { ReportMatchHighlightService } from '../../../services/report-match-highlight.service';
+import { ReportMatchesService } from '../../../services/report-matches.service';
 import { ReportNgTemplatesService } from '../../../services/report-ng-templates.service';
+import { ReportStatisticsService } from '../../../services/report-statistics.service';
+import { ReportViewService } from '../../../services/report-view.service';
+import { untilDestroy } from '../../../utils/until-destroy';
+import { IAuthorAlertCard } from '../../containers/report-alerts-container/components/author-alert-card/models/author-alert-card.models';
+import { IResultsActions } from '../../containers/report-results-container/components/results-actions/models/results-actions.models';
+import { IResultItem } from '../../containers/report-results-item-container/components/models/report-result-item.models';
 import { ECustomResultsReportView } from '../../core/cr-custom-results/models/cr-custom-results.enums';
+import { ReportLayoutBaseComponent } from './report-layout-base.component';
 
 export abstract class OneToManyReportLayoutBaseComponent extends ReportLayoutBaseComponent {
 	hideRightSection: boolean = false;

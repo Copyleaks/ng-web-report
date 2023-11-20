@@ -3,7 +3,7 @@ import { ITagItem } from './models/included-tags-filter-result.models';
 import { FilterResultDailogService } from '../../services/filter-result-dailog.service';
 import { FormControl } from '@angular/forms';
 import { map, startWith } from 'rxjs/operators';
-import { untilDestroy } from 'projects/copyleaks-web-report/src/lib/utils/until-destroy';
+import { untilDestroy } from '../../../../utils/until-destroy';
 import { Observable } from 'rxjs';
 
 @Component({

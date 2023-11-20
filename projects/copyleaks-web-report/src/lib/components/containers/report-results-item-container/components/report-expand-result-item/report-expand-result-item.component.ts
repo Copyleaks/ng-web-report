@@ -1,9 +1,9 @@
 import { Component, EventEmitter, Input, OnChanges, OnInit, Output, SimpleChanges } from '@angular/core';
-import { EResultPreviewType } from 'projects/copyleaks-web-report/src/lib/enums/copyleaks-web-report.enums';
-import { ReportViewService } from 'projects/copyleaks-web-report/src/lib/services/report-view.service';
+import { EResultPreviewType } from '../../../../../enums/copyleaks-web-report.enums';
+import { ReportViewService } from '../../../../../services/report-view.service';
 import { IResultItem } from '../models/report-result-item.models';
 import { IPercentageResult } from '../percentage-result-item/models/percentage-result-item.models';
-import { ReportMatchHighlightService } from 'projects/copyleaks-web-report/src/lib/services/report-match-highlight.service';
+import { ReportMatchHighlightService } from '../../../../../services/report-match-highlight.service';
 
 @Component({
 	selector: 'cr-report-expand-result-item',

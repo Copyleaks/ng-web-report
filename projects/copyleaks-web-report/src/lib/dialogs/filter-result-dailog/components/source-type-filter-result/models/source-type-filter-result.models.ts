@@ -1,5 +1,5 @@
-import { EResultPreviewType } from 'projects/copyleaks-web-report/src/lib/enums/copyleaks-web-report.enums';
-import { IRepositoryResultPreview } from 'projects/copyleaks-web-report/src/lib/models/report-data.models';
+import { EResultPreviewType } from '../../../../../enums/copyleaks-web-report.enums';
+import { IRepositoryResultPreview } from '../../../../../models/report-data.models';
 
 export interface ITotalSourceType {
 	totalInternet: number;

@@ -1,11 +1,11 @@
 import { Component, OnDestroy, OnInit, Renderer2 } from '@angular/core';
 import { ReportDataService } from '../../../../services/report-data.service';
 import { ReportMatchesService } from '../../../../services/report-matches.service';
-import { ReportViewService } from 'projects/copyleaks-web-report/src/lib/services/report-view.service';
-import { ReportMatchHighlightService } from 'projects/copyleaks-web-report/src/lib/services/report-match-highlight.service';
-import { ReportStatisticsService } from 'projects/copyleaks-web-report/src/lib/services/report-statistics.service';
+import { ReportViewService } from '../../../../services/report-view.service';
+import { ReportMatchHighlightService } from '../../../../services/report-match-highlight.service';
+import { ReportStatisticsService } from '../../../../services/report-statistics.service';
 import { OneToManyReportLayoutBaseComponent } from '../../base/report-layout-one-to-many-base.component';
-import { ReportNgTemplatesService } from 'projects/copyleaks-web-report/src/lib/services/report-ng-templates.service';
+import { ReportNgTemplatesService } from '../../../../services/report-ng-templates.service';
 
 @Component({
 	selector: 'copyleaks-one-to-many-report-layout-mobile',

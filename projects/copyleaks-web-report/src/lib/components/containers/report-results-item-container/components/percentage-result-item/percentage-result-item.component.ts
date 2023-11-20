@@ -1,5 +1,5 @@
 import { Component, Input, OnChanges, OnInit, SimpleChanges } from '@angular/core';
-import { ISourceMetadataSection, IStatistics } from 'projects/copyleaks-web-report/src/lib/models/report-data.models';
+import { ISourceMetadataSection, IStatistics } from '../../../../../models/report-data.models';
 import { IResultItem } from '../models/report-result-item.models';
 import { EMatchType } from './models/percentage-result-item.enum';
 import { IPercentageResult } from './models/percentage-result-item.models';

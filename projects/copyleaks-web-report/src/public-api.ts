@@ -1,6 +1,7 @@
 /*
  * Public API Surface of copyleaks-web-report
  */
+import '@angular/localize/init';
 
 export * from './lib/copyleaks-web-report.module';
 export * from './lib/enums/copyleaks-web-report.enums';

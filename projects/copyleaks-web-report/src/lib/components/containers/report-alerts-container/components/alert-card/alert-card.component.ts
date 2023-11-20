@@ -1,10 +1,10 @@
 import { Component, Input, OnDestroy, OnInit } from '@angular/core';
-import { ALERTS } from 'projects/copyleaks-web-report/src/lib/constants/report-alerts.constants';
-import { ECompleteResultNotificationAlertSeverity } from 'projects/copyleaks-web-report/src/lib/enums/copyleaks-web-report.enums';
-import { ICompleteResultNotificationAlert } from 'projects/copyleaks-web-report/src/lib/models/report-data.models';
-import { ReportMatchHighlightService } from 'projects/copyleaks-web-report/src/lib/services/report-match-highlight.service';
-import { ReportViewService } from 'projects/copyleaks-web-report/src/lib/services/report-view.service';
-import { untilDestroy } from 'projects/copyleaks-web-report/src/lib/utils/until-destroy';
+import { ALERTS } from '../../../../../constants/report-alerts.constants';
+import { ECompleteResultNotificationAlertSeverity } from '../../../../../enums/copyleaks-web-report.enums';
+import { ICompleteResultNotificationAlert } from '../../../../../models/report-data.models';
+import { ReportMatchHighlightService } from '../../../../../services/report-match-highlight.service';
+import { ReportViewService } from '../../../../../services/report-view.service';
+import { untilDestroy } from '../../../../../utils/until-destroy';
 
 @Component({
 	selector: 'cr-alert-card',

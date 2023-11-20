@@ -1,9 +1,5 @@
-import {
-	IResultPreviewBase,
-	ISourceMetadataSection,
-	IStatistics,
-} from 'projects/copyleaks-web-report/src/lib/models/report-data.models';
-import { ResultDetailItem } from 'projects/copyleaks-web-report/src/lib/models/report-matches.models';
+import { IResultPreviewBase, ISourceMetadataSection, IStatistics } from '../../../../../models/report-data.models';
+import { ResultDetailItem } from '../../../../../models/report-matches.models';
 
 export interface IResultItem {
 	resultPreview: IResultPreviewBase;

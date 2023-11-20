@@ -10,9 +10,9 @@ import {
 	ViewChild,
 } from '@angular/core';
 import { FormControl } from '@angular/forms';
-import { IResultItem } from 'projects/copyleaks-web-report/src/lib/components/containers/report-results-item-container/components/models/report-result-item.models';
-import { ReportDataService } from 'projects/copyleaks-web-report/src/lib/services/report-data.service';
-import { untilDestroy } from 'projects/copyleaks-web-report/src/lib/utils/until-destroy';
+import { IResultItem } from '../../../../components/containers/report-results-item-container/components/models/report-result-item.models';
+import { ReportDataService } from '../../../../services/report-data.service';
+import { untilDestroy } from '../../../../utils/until-destroy';
 import { fromEvent } from 'rxjs';
 import { debounceTime, startWith } from 'rxjs/operators';
 

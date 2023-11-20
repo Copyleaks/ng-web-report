@@ -3,10 +3,10 @@ import { IResultsActions } from './models/results-actions.models';
 import { FormControl } from '@angular/forms';
 import { debounceTime } from 'rxjs/operators';
 import { MatDialog } from '@angular/material/dialog';
-import { FilterResultDailogComponent } from 'projects/copyleaks-web-report/src/lib/dialogs/filter-result-dailog/filter-result-dailog.component';
-import { ReportDataService } from 'projects/copyleaks-web-report/src/lib/services/report-data.service';
-import { IFilterResultDailogData } from 'projects/copyleaks-web-report/src/lib/dialogs/filter-result-dailog/models/filter-result-dailog.enum';
-import { ReportViewService } from 'projects/copyleaks-web-report/src/lib/services/report-view.service';
+import { FilterResultDailogComponent } from '../../../../../dialogs/filter-result-dailog/filter-result-dailog.component';
+import { ReportDataService } from '../../../../../services/report-data.service';
+import { IFilterResultDailogData } from '../../../../../dialogs/filter-result-dailog/models/filter-result-dailog.enum';
+import { ReportViewService } from '../../../../../services/report-view.service';
 
 @Component({
 	selector: 'cr-results-actions',

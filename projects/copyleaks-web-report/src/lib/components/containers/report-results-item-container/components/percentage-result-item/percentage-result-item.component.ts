@@ -58,6 +58,9 @@ export class PercentageResultItemComponent implements OnInit, OnChanges {
 				case EMatchType.SimilarWords: {
 					return this.similarWords / result;
 				}
+				case EMatchType.OmittedWords: {
+					return this.metadataSource.excluded / this.metadataSource.words;
+				}
 				default: {
 					return 0;
 				}

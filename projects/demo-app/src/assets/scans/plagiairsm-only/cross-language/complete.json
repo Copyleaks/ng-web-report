@@ -1,0 +1,258 @@
+{
+    "scannedDocument": {
+        "scanId": "0tjz373yj3xqa4a9",
+        "totalWords": 390,
+        "totalExcluded": 0,
+        "credits": 12,
+        "expectedCredits": 12,
+        "creationTime": "2023-03-12T07:53:27.769956Z",
+        "metadata": {
+            "finalUrl": null,
+            "canonicalUrl": null,
+            "author": null,
+            "organization": null,
+            "filename": "cross-language-test-english-2.txt",
+            "publishDate": null,
+            "creationDate": null,
+            "lastModificationDate": null,
+            "submissionDate": null,
+            "submittedBy": null,
+            "submitterAuthorId": null,
+            "customMetadata": null
+        },
+        "enabled": null
+    },
+    "results": {
+        "internet": [
+            {
+                "isLocked": false,
+                "url": "https://science.utah.edu/news/king-of-the-playa/",
+                "id": "55f4dd9ccd",
+                "title": "King of the Playa | College of Science",
+                "introduction": "MENU ...",
+                "matchedWords": 317,
+                "identicalWords": 0,
+                "similarWords": 0,
+                "paraphrasedWords": 0,
+                "metadata": {
+                    "finalUrl": null,
+                    "canonicalUrl": null,
+                    "author": null,
+                    "organization": null,
+                    "filename": "source",
+                    "publishDate": null,
+                    "creationDate": null,
+                    "lastModificationDate": null,
+                    "submissionDate": null,
+                    "submittedBy": null,
+                    "submitterAuthorId": null,
+                    "customMetadata": null
+                },
+                "tags": [
+                    {
+                        "code": "cross-language",
+                        "title": "Cross Language: English",
+                        "description": "Suspected cross-lingual plagiarism detected from 'English'",
+                        "helpLink": null,
+                        "data": null
+                    }
+                ]
+            },
+            {
+                "isLocked": false,
+                "url": "https://lk.linkedin.com/posts/ken-burgener-81801414_the-great-salt-lake-is-drying-up-and-turning-activity-7013579000539205632-t6TM",
+                "id": "a049c66803",
+                "title": "Ken Burgener on LinkedIn: The Great Salt Lake is drying up and turning into t...",
+                "introduction": "Skip to main content ...",
+                "matchedWords": 105,
+                "identicalWords": 0,
+                "similarWords": 0,
+                "paraphrasedWords": 0,
+                "metadata": {
+                    "finalUrl": null,
+                    "canonicalUrl": null,
+                    "author": "Ken Burgener",
+                    "organization": null,
+                    "filename": "ken-burgener-81801414_the-great-salt-lake-is-drying-up-and-turning-activity-7013579000539205632-t6TM",
+                    "publishDate": "2022-12-27T18:58:59Z",
+                    "creationDate": null,
+                    "lastModificationDate": null,
+                    "submissionDate": null,
+                    "submittedBy": null,
+                    "submitterAuthorId": null,
+                    "customMetadata": null
+                },
+                "tags": [
+                    {
+                        "code": "cross-language",
+                        "title": "Cross Language: English",
+                        "description": "Suspected cross-lingual plagiarism detected from 'English'",
+                        "helpLink": null,
+                        "data": null
+                    }
+                ]
+            },
+            {
+                "isLocked": false,
+                "url": "https://www.nbcnews.com/science/environment/salt-lake-citys-efforts-fight-pollution-face-new-challenge-toxic-dust-rcna44508",
+                "id": "f9edb34e4c",
+                "title": "Salt Lake City’s efforts to fight pollution face a new challenge: Toxic dust",
+                "introduction": "IE 11 is not supported. For an optimal experience visit our site on another browser. SKIP TO CONTENT NBC News Logo Politics U.S. N...",
+                "matchedWords": 377,
+                "identicalWords": 0,
+                "similarWords": 0,
+                "paraphrasedWords": 0,
+                "metadata": {
+                    "finalUrl": null,
+                    "canonicalUrl": null,
+                    "author": null,
+                    "organization": null,
+                    "filename": "salt-lake-citys-efforts-fight-pollution-face-new-challenge-toxic-dust-rcna44508",
+                    "publishDate": null,
+                    "creationDate": null,
+                    "lastModificationDate": null,
+                    "submissionDate": null,
+                    "submittedBy": null,
+                    "submitterAuthorId": null,
+                    "customMetadata": null
+                },
+                "tags": [
+                    {
+                        "code": "cross-language",
+                        "title": "Cross Language: English",
+                        "description": "Suspected cross-lingual plagiarism detected from 'English'",
+                        "helpLink": null,
+                        "data": null
+                    }
+                ]
+            }
+        ],
+        "database": [
+            {
+                "isLocked": false,
+                "scanId": "qwamckva0bis9i0t",
+                "id": "6c1c4bc687",
+                "title": "Repository: TEST",
+                "introduction": "No introduction available.",
+                "matchedWords": 387,
+                "identicalWords": 0,
+                "similarWords": 0,
+                "paraphrasedWords": 0,
+                "metadata": {
+                    "finalUrl": null,
+                    "canonicalUrl": null,
+                    "author": null,
+                    "organization": null,
+                    "filename": "cross-language-test-english-2.txt",
+                    "publishDate": null,
+                    "creationDate": null,
+                    "lastModificationDate": null,
+                    "submissionDate": "2023-02-07T15:19:53.210209Z",
+                    "submittedBy": "safaa@copyleaks.com",
+                    "submitterAuthorId": null,
+                    "customMetadata": null
+                },
+                "tags": null
+            },
+            {
+                "isLocked": false,
+                "scanId": "p1xn8t6jkmwgrofd",
+                "id": "f64cbdf615",
+                "title": "Repository: TEST",
+                "introduction": "No introduction available.",
+                "matchedWords": 387,
+                "identicalWords": 0,
+                "similarWords": 0,
+                "paraphrasedWords": 0,
+                "metadata": {
+                    "finalUrl": null,
+                    "canonicalUrl": null,
+                    "author": null,
+                    "organization": null,
+                    "filename": "cross-language-test-english-2.txt",
+                    "publishDate": null,
+                    "creationDate": null,
+                    "lastModificationDate": null,
+                    "submissionDate": "2023-02-07T15:20:26.964279Z",
+                    "submittedBy": "safaa@copyleaks.com",
+                    "submitterAuthorId": null,
+                    "customMetadata": null
+                },
+                "tags": null
+            }
+        ],
+        "batch": [],
+        "repositories": [
+            {
+                "isLocked": false,
+                "repositoryId": "nbzjfy2hoh0q00up",
+                "scanId": "qwamckva0bis9i0t",
+                "id": "6c1c4bc687",
+                "title": "Repository: TEST",
+                "introduction": "No introduction available.",
+                "matchedWords": 387,
+                "identicalWords": 0,
+                "similarWords": 0,
+                "paraphrasedWords": 0,
+                "metadata": {
+                    "finalUrl": null,
+                    "canonicalUrl": null,
+                    "author": null,
+                    "organization": null,
+                    "filename": "cross-language-test-english-2.txt",
+                    "publishDate": null,
+                    "creationDate": null,
+                    "lastModificationDate": null,
+                    "submissionDate": "2023-02-07T15:19:53.210209Z",
+                    "submittedBy": "safaa@copyleaks.com",
+                    "submitterAuthorId": null,
+                    "customMetadata": null
+                },
+                "tags": null
+            },
+            {
+                "isLocked": false,
+                "repositoryId": "nbzjfy2hoh0q00up",
+                "scanId": "p1xn8t6jkmwgrofd",
+                "id": "f64cbdf615",
+                "title": "Repository: TEST",
+                "introduction": "No introduction available.",
+                "matchedWords": 387,
+                "identicalWords": 0,
+                "similarWords": 0,
+                "paraphrasedWords": 0,
+                "metadata": {
+                    "finalUrl": null,
+                    "canonicalUrl": null,
+                    "author": null,
+                    "organization": null,
+                    "filename": "cross-language-test-english-2.txt",
+                    "publishDate": null,
+                    "creationDate": null,
+                    "lastModificationDate": null,
+                    "submissionDate": "2023-02-07T15:20:26.964279Z",
+                    "submittedBy": "safaa@copyleaks.com",
+                    "submitterAuthorId": null,
+                    "customMetadata": null
+                },
+                "tags": null
+            }
+        ],
+        "score": {
+            "identicalWords": 222,
+            "minorChangedWords": 165,
+            "relatedMeaningWords": 50,
+            "aggregatedScore": 1.0
+        }
+    },
+    "notifications": {
+        "alerts": []
+    },
+    "hasPdfReport": true,
+    "filters": {
+        "resultIds": []
+    },
+    "status": 0,
+    "error": null,
+    "developerPayload": ""
+}

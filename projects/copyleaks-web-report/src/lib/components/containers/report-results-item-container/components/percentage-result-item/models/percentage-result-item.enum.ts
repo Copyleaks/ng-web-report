@@ -3,4 +3,5 @@ export enum EMatchType {
 	MinorChanges,
 	Paraphrased,
 	SimilarWords,
+	OmittedWords,
 }

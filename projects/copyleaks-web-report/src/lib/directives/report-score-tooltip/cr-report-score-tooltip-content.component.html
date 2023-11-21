@@ -48,10 +48,7 @@
 				<span class="title" i18n>Omitted words</span>
 			</div>
 			<span class="percentage">
-				{{
-					1 - (scoreStats?.paraphrasedPct ?? 0) - (scoreStats?.minorChangesPct ?? 0) - (scoreStats?.identicalPct ?? 0)
-						| similarity : '1.1-1'
-				}}
+				{{ scoreStats?.omittedPct ?? 0 | similarity : '1.1-1' }}
 			</span>
 		</div>
 	</ng-container>

@@ -29,6 +29,7 @@ export interface IReportScoreTooltipModel {
 	identicalPct?: number;
 	minorChangesPct?: number;
 	paraphrasedPct?: number;
+	omittedPct?: number;
 
 	// AI score
 	aiPct?: number;

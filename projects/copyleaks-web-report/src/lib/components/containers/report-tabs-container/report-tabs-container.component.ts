@@ -48,6 +48,11 @@ export class ReportTabsContainerComponent implements OnInit, OnDestroy, OnChange
 	@Input() paraphrasedTotal: number = 0;
 
 	/**
+	 * @Input {boolean} Flag indicating whether to show the report AI tab or not.
+	 */
+	@Input() excludedTotal: number = 0;
+
+	/**
 	 * @Input {boolean} Flag indicating whether to show the report Plagiarism tab or not.
 	 */
 	@Input() plagarismScore: number = 0;

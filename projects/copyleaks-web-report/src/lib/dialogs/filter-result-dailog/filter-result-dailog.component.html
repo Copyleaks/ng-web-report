@@ -55,7 +55,12 @@
 				<div class="left-side-container" fxLayout="column" fxLayoutGap="16px">
 					<!-- source type -->
 					<section class="section-container sources-type-top-container" fxLayout="column" fxLayoutGap="16px">
-						<span class="body-title" web-report-title-font i18n>Source Type</span>
+						<div class="body-title-container">
+							<span class="body-title" web-report-title-font i18n>Source Type</span>
+							<span *ngIf="sourceTypeErrorMessage" @errorAnimation class="dialog-error-message">
+								{{ sourceTypeErrorMessage }}
+							</span>
+						</div>
 						<ng-container *ngIf="!loading">
 							<cr-source-type-filter-result
 								[totalSourceType]="totalSourceType"
@@ -80,7 +85,14 @@
 				<div class="right-side-conatier" fxLayout="column" fxLayoutGap="16px">
 					<!-- match type -->
 					<section class="match-type-container" fxLayout="column" fxLayoutGap="16px">
-						<span class="body-title" web-report-title-font i18n>Match Types</span>
+						<div class="body-title-container">
+							<span class="body-title" web-report-title-font i18n>Match Types</span>
+
+							<span *ngIf="matchTypeErrorMessage" @errorAnimation class="dialog-error-message">
+								{{ matchTypeErrorMessage }}
+							</span>
+						</div>
+
 						<cr-match-type-filter-result
 							[identicalTotal]="totalIdentical"
 							[minorChangesTotal]="totalMinorChanges"

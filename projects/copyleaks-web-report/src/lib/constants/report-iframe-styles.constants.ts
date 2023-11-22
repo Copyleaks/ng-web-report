@@ -32,6 +32,8 @@ html {
 span[exclude] {
 	font-style: italic;
 	opacity: 0.75;
+  background-color: #F6F6F6;
+  cursor: pointer;
 }
 span[exclude-partial-scan] {
 	filter: blur(6px);

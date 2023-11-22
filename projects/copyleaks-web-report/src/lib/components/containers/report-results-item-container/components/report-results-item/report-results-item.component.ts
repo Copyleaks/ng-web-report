@@ -4,11 +4,18 @@ import { IResultPreviewBase } from '../../../../../models/report-data.models';
 import { ReportViewService } from '../../../../../services/report-view.service';
 import { IResultItem } from '../models/report-result-item.models';
 import { IPercentageResult } from '../percentage-result-item/models/percentage-result-item.models';
+import { trigger, state, transition, animate, style } from '@angular/animations';
 
 @Component({
 	selector: 'cr-report-results-item',
 	templateUrl: './report-results-item.component.html',
 	styleUrls: ['./report-results-item.component.scss'],
+	animations: [
+		trigger('fadeIn', [
+			state('void', style({ opacity: 0 })),
+			transition(':enter', [animate('0.5s ease-in', style({ opacity: 1 }))]),
+		]),
+	],
 })
 export class ReportResultsItemComponent implements OnInit, OnChanges {
 	@Input() resultItem: IResultItem;

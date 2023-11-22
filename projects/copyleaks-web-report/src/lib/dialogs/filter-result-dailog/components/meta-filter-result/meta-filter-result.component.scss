@@ -1,6 +1,13 @@
 @import '../../../../styles/website-colors.styles.scss';
 @import '../../../../styles/cls-mat-components-overrides/cls-mat-checkbox-overrides.scss';
 
+:host {
+	::ng-deep {
+		.mat-checkbox-ripple {
+			display: none !important;
+		}
+	}
+}
 .results-container {
 	width: 100%;
 	.mat-divider {

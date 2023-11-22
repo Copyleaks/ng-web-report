@@ -23,6 +23,7 @@ import { ReportDataService } from '../../../services/report-data.service';
 import { ResultDetailItem } from '../../../models/report-matches.models';
 import { ICopyleaksReportOptions } from '../../../models/report-options.models';
 import { ECustomResultsReportView } from '../../core/cr-custom-results/models/cr-custom-results.enums';
+import { trigger, state, transition, animate, style } from '@angular/animations';
 
 @Component({
 	selector: 'copyleaks-report-results-container',
@@ -115,19 +116,15 @@ export class ReportResultsContainerComponent implements OnInit, OnChanges {
 	}
 
 	ngAfterViewChecked() {
-		const container: HTMLElement = this.customEmptyResultView?.nativeElement;
-		if (container && container?.childElementCount > 0)
-			setTimeout(() => {
-				this.showCustomView = true;
-			});
-		else
-			setTimeout(() => {
-				this.showCustomView = false;
-			});
+		setTimeout(() => {
+			const container: HTMLElement = this.customEmptyResultView?.nativeElement;
+			if (container && container?.childElementCount > 0) this.showCustomView = true;
+			else this.showCustomView = false;
 
-		this.detectEndOfList();
+			this.detectEndOfList();
 
-		this.checkAndApplyPadding();
+			this.checkAndApplyPadding();
+		});
 	}
 
 	ngOnInit(): void {
@@ -205,14 +202,14 @@ export class ReportResultsContainerComponent implements OnInit, OnChanges {
 	}
 
 	checkAndApplyPadding() {
-		if (!this.viewport || this.stopPaddingCheck) return;
-		const isScrollable =
-			this.viewport.elementRef.nativeElement.scrollHeight > this.viewport.elementRef.nativeElement.clientHeight;
-
 		setTimeout(() => {
+			if (!this.viewport || this.stopPaddingCheck || this.showLoadingView) return;
+			const isScrollable =
+				this.viewport.elementRef.nativeElement.scrollHeight > this.viewport.elementRef.nativeElement.clientHeight;
+
 			this.addPaddingToContainer = isScrollable;
+			this.stopPaddingCheck = true;
 		});
-		this.stopPaddingCheck = true;
 	}
 
 	hideResultItem() {

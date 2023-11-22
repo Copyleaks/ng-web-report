@@ -190,7 +190,7 @@ export class ContentViewerContainerComponent implements OnInit, AfterViewInit, O
 	 */
 	@Input() showLoadingView = true;
 
-	@Input() authorAlert: IAuthorAlertCard;
+	@Input() authorAlert: IAuthorAlertCard | null;
 
 	/**
 	 * Emits iFrame messages to the parent layout component.

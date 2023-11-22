@@ -53,9 +53,9 @@
 			width: 18px;
 			height: 18px;
 			mat-icon {
-				width: 18px;
-				height: 18px;
-				font-size: 18px;
+				width: 20px;
+				height: 20px;
+				font-size: 20px;
 				color: $color-black;
 			}
 		}
@@ -71,8 +71,8 @@
 			font-weight: 500;
 		}
 		.total-select-tags {
-			width: 21px;
-			height: 21px;
+			width: 23px;
+			height: 23px;
 			border: 2px solid;
 			padding: 3px;
 			border-color: $color-primary;
@@ -81,6 +81,7 @@
 			align-items: center;
 			justify-content: center;
 			margin-left: 4px;
+			box-sizing: border-box;
 			span {
 				display: flex;
 				align-items: center;
@@ -125,6 +126,14 @@
 						}
 					}
 				}
+			}
+		}
+	}
+
+	mat-chip-list {
+		::ng-deep {
+			.mat-chip-list-wrapper {
+				gap: 4px !important;
 			}
 		}
 	}

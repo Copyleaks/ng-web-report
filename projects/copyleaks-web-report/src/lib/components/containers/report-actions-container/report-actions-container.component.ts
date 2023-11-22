@@ -56,13 +56,17 @@ export class ReportActionsContainerComponent implements OnInit, AfterViewInit, O
 	private _initCustomActionsTemplatesRefs() {
 		// Read the report custom actions template reference if it is alredy provided.
 		if (this._reportNgTemplatesSvc.reportTemplatesRefs?.customActionsTemplate)
-			this.customActionsTemplateRef = this._reportNgTemplatesSvc.reportTemplatesRefs
-				?.customActionsTemplate as TemplateRef<any>;
+			setTimeout(() => {
+				this.customActionsTemplateRef = this._reportNgTemplatesSvc.reportTemplatesRefs
+					?.customActionsTemplate as TemplateRef<any>;
+			});
 
 		// Starts a subscription for the custom actions reference changes
 		this._reportNgTemplatesSvc.reportTemplatesSubject$.pipe(untilDestroy(this)).subscribe(refs => {
 			if (refs?.customActionsTemplate !== undefined && this.customActionsTemplateRef == undefined)
-				this.customActionsTemplateRef = refs?.customActionsTemplate as TemplateRef<any>;
+				setTimeout(() => {
+					this.customActionsTemplateRef = refs?.customActionsTemplate as TemplateRef<any>;
+				});
 		});
 	}
 

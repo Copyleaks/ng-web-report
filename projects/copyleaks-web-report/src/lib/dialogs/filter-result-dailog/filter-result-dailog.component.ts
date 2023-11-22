@@ -12,12 +12,31 @@ import { combineLatest } from 'rxjs';
 import { ALERTS } from '../../constants/report-alerts.constants';
 import { ICompleteResults } from '../../models/report-data.models';
 import { ResultDetailItem } from '../../models/report-matches.models';
+import { ICopyleaksReportOptions } from '../../models/report-options.models';
+import { trigger, transition, animate, keyframes, style } from '@angular/animations';
 
 @Component({
 	selector: 'cr-filter-result-dailog',
 	templateUrl: './filter-result-dailog.component.html',
 	styleUrls: ['./filter-result-dailog.component.scss'],
 	providers: [FilterResultDailogService],
+	animations: [
+		trigger('errorAnimation', [
+			transition(':enter', [
+				animate(
+					'0.5s ease-in',
+					keyframes([
+						style({ transform: 'translateY(-10px)', offset: 0.1 }),
+						style({ transform: 'translateY(0px)', offset: 0.2 }),
+						style({ transform: 'translateY(-10px)', offset: 0.3 }),
+						style({ transform: 'translateY(0px)', offset: 0.4 }),
+						style({ transform: 'translateY(-10px)', offset: 0.5 }),
+						style({ transform: 'translateY(0px)', offset: 1.0 }),
+					])
+				),
+			]),
+		]),
+	],
 })
 export class FilterResultDailogComponent implements OnInit {
 	allTagItem: ITagItem[] = [];
@@ -45,6 +64,8 @@ export class FilterResultDailogComponent implements OnInit {
 	totalAlerts: number = 0;
 
 	completeResults: ICompleteResults;
+	sourceTypeErrorMessage: string | null;
+	matchTypeErrorMessage: string | null;
 
 	get totalFiltered() {
 		return this.totalSourceType ? this.getTotalFilterdResult() : 0;
@@ -63,6 +84,55 @@ export class FilterResultDailogComponent implements OnInit {
 	ngOnInit() {
 		this.initResultItem();
 		this.isMobile = this.data?.isMobile;
+
+		this._filterResultsSvc.filterResultFormGroup.valueChanges.pipe(untilDestroy(this)).subscribe(vc => {
+			const formData = this.getFilterCurrentData();
+			if (
+				!formData.showInternetResults &&
+				!formData.showBatchResults &&
+				!formData.showInternalDatabaseResults &&
+				(!formData.showRepositoriesResults || formData.showRepositoriesResults.length === 0)
+			) {
+				setTimeout(() => {
+					if (this.totalSourceType.totalInternet > 0)
+						this._filterResultsSvc.filterResultFormGroup
+							?.get(EFilterResultForm.fgSourceType)
+							?.get(EFilterResultForm.fcInternet)
+							?.setValue(true, { emitEvent: false });
+					else if (this.totalSourceType.totalInternalDatabase > 0)
+						this._filterResultsSvc.filterResultFormGroup
+							?.get(EFilterResultForm.fgSourceType)
+							?.get(EFilterResultForm.fcInternalDatabase)
+							?.setValue(true, { emitEvent: false });
+					else if (this.totalSourceType.totalbatch > 0)
+						this._filterResultsSvc.filterResultFormGroup
+							?.get(EFilterResultForm.fgSourceType)
+							?.get(EFilterResultForm.fcBatch)
+							?.setValue(true, { emitEvent: false });
+				});
+
+				this.sourceTypeErrorMessage = $localize`At least one match Source type needs to be activated.`;
+			} else if (!formData.showIdentical && !formData.showMinorChanges && !formData.showRelated) {
+				setTimeout(() => {
+					if (this.totalIdentical > 0)
+						this._filterResultsSvc.filterResultFormGroup
+							?.get(EFilterResultForm.fgMatchTypes)
+							?.get(EFilterResultForm.fcIdenticalText)
+							?.setValue(true, { emitEvent: false });
+					else if (this.totalMinorChanges > 0)
+						this._filterResultsSvc.filterResultFormGroup
+							?.get(EFilterResultForm.fgMatchTypes)
+							?.get(EFilterResultForm.fcMinorChanges)
+							?.setValue(true, { emitEvent: false });
+					else if (this.totalParaphrased > 0)
+						this._filterResultsSvc.filterResultFormGroup
+							?.get(EFilterResultForm.fgMatchTypes)
+							?.get(EFilterResultForm.fcParaphrased)
+							?.setValue(true, { emitEvent: false });
+				});
+				this.matchTypeErrorMessage = $localize`At least one match type needs to be activated.`;
+			} else this.matchTypeErrorMessage = this.sourceTypeErrorMessage = null;
+		});
 	}
 
 	getTotalFilterdResult() {
@@ -239,15 +309,24 @@ export class FilterResultDailogComponent implements OnInit {
 		this._dialogRef.close();
 	}
 
-	getFilterCurrentData() {
+	getFilterCurrentData(): ICopyleaksReportOptions {
 		return {
 			// Tags
 			includedTags: this._filterResultsSvc.selectedTagItem.filter(a => a.selected).map(a => a.code) ?? [],
 
 			// Matches
-			showIdentical: this._filterResultsSvc.matchTypeFormGroup.get(EFilterResultForm.fcIdenticalText)?.value,
-			showMinorChanges: this._filterResultsSvc.matchTypeFormGroup.get(EFilterResultForm.fcMinorChanges)?.value,
-			showRelated: this._filterResultsSvc.matchTypeFormGroup.get(EFilterResultForm.fcParaphrased)?.value,
+			showIdentical:
+				this.totalIdentical === 0
+					? false
+					: this._filterResultsSvc.matchTypeFormGroup.get(EFilterResultForm.fcIdenticalText)?.value,
+			showMinorChanges:
+				this.totalMinorChanges === 0
+					? false
+					: this._filterResultsSvc.matchTypeFormGroup.get(EFilterResultForm.fcMinorChanges)?.value,
+			showRelated:
+				this.totalParaphrased === 0
+					? false
+					: this._filterResultsSvc.matchTypeFormGroup.get(EFilterResultForm.fcParaphrased)?.value,
 
 			// General
 			showAlerts: this._filterResultsSvc.generalFiltersFormGroup.get(EFilterResultForm.fcAlerts)?.value,
@@ -257,10 +336,18 @@ export class FilterResultDailogComponent implements OnInit {
 			showTop100Results: this._filterResultsSvc.generalFiltersFormGroup.get(EFilterResultForm.fcTopResult)?.value,
 
 			// Source
-			showInternetResults: this._filterResultsSvc.sourceTypeFormGroup.get(EFilterResultForm.fcInternet)?.value,
-			showInternalDatabaseResults: this._filterResultsSvc.sourceTypeFormGroup.get(EFilterResultForm.fcInternalDatabase)
-				?.value,
-			showBatchResults: this._filterResultsSvc.sourceTypeFormGroup.get(EFilterResultForm.fcBatch)?.value,
+			showInternetResults:
+				this.totalSourceType.totalInternet === 0
+					? false
+					: this._filterResultsSvc.sourceTypeFormGroup.get(EFilterResultForm.fcInternet)?.value,
+			showInternalDatabaseResults:
+				this.totalSourceType.totalInternalDatabase === 0
+					? false
+					: this._filterResultsSvc.sourceTypeFormGroup.get(EFilterResultForm.fcInternalDatabase)?.value,
+			showBatchResults:
+				this.totalSourceType.totalbatch === 0
+					? false
+					: this._filterResultsSvc.sourceTypeFormGroup.get(EFilterResultForm.fcBatch)?.value,
 			// TODO: Repos ids list
 			// showRepositoriesResults:  this._filterResultsSvc.sourceTypeFormGroup.get(EFilterResultForm.).value,
 
@@ -278,7 +365,7 @@ export class FilterResultDailogComponent implements OnInit {
 			publicationDate: this._filterResultsSvc.resultsMetaFormGroup
 				.get(EFilterResultForm.fgPublicationDate)
 				?.get(EFilterResultForm.fcPublicationStartDate)?.value,
-		};
+		} as ICopyleaksReportOptions;
 	}
 
 	ngOnDestroy() {}

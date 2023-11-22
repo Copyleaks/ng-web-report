@@ -67,11 +67,7 @@ export abstract class OneToManyReportLayoutBaseComponent extends ReportLayoutBas
 	EReportViewType = EReportViewType;
 	ECustomResultsReportView = ECustomResultsReportView;
 
-	// TODO: Remove mock data
-	authorAlert: IAuthorAlertCard = {
-		message: 'This user has potentially used AI-generated text X times already',
-		title: '3/10 Submissions',
-	};
+	authorAlert: IAuthorAlertCard | null = null;
 
 	customResultsTemplate: TemplateRef<any> | undefined = undefined;
 
@@ -216,7 +212,9 @@ export abstract class OneToManyReportLayoutBaseComponent extends ReportLayoutBas
 
 		this.templatesSvc.reportTemplatesSubject$.pipe(untilDestroy(this)).subscribe(refs => {
 			if (refs?.customResultsTemplate !== undefined && this.customResultsTemplate === undefined) {
-				this.customResultsTemplate = refs?.customResultsTemplate;
+				setTimeout(() => {
+					this.customResultsTemplate = refs?.customResultsTemplate;
+				});
 			}
 		});
 

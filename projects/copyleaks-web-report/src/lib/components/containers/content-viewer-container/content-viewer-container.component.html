@@ -142,6 +142,7 @@
 						<!--  -->
 						<i
 							*ngIf="partial.match.type === MatchType.excluded && partial.match.reason != 8"
+							exclude-match
 							[title]="partial.match.reason ? EXCLUDE_MESSAGE[partial.match.reason] : ''">
 							{{ partial.content }}
 						</i>
@@ -192,6 +193,7 @@
 						<!--  -->
 						<i
 							*ngIf="partial.match.type === MatchType.excluded && partial.match.reason != 8"
+							exclude-match
 							[title]="partial.match.reason ? EXCLUDE_MESSAGE[partial.match.reason] : ''">
 							{{ partial.content }}
 						</i>

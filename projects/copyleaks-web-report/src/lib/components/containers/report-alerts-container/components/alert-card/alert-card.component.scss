@@ -8,6 +8,13 @@
 	border-radius: 10px;
 	border: 2px solid;
 	border-color: $color-container-background;
+
+	&.selected {
+		border-radius: 10px;
+		border: 2px solid $color-primary;
+		background: $color-white;
+		transition: 0.7s;
+	}
 	.alert-card-header {
 		.alert-card-title {
 			color: $color-black;

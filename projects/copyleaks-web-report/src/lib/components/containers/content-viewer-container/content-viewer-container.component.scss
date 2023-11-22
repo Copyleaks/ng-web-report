@@ -115,7 +115,7 @@
 				background-color: $color-plagiarism-identical;
 
 				&:hover {
-					background-color: #3f9af533;
+					background-color: $color-match-selected;
 					transition: 0.2s;
 				}
 			}
@@ -124,7 +124,7 @@
 				background-color: $color-plagiarism-minor-changes;
 
 				&:hover {
-					background-color: #3f9af533;
+					background-color: $color-match-selected;
 					transition: 0.2s;
 				}
 			}
@@ -133,31 +133,42 @@
 				background-color: $color-plagiarism-paraphrased;
 
 				&:hover {
-					background-color: #3f9af533;
+					background-color: $color-match-selected;
 					transition: 0.2s;
 				}
 			}
 
 			&.cr-m-100 {
-				background: #f0f0f0;
+				background: transparent;
 				color: red;
 				text-decoration: underline;
 				font-weight: bolder;
+				&:hover {
+					background-color: #3f9af566;
+					transition: 0.2s;
+				}
+				&.cr-highlight {
+					background-color: #3f9af566 !important;
+
+					&:hover {
+						background-color: lighten(#3f9af566, 10%) !important;
+					}
+				}
 			}
 
 			&.cr-m-101 {
 				background-color: $color-ai-detected-text;
 				&:hover {
-					background-color: #3f9af533;
+					background-color: $color-match-selected;
 					transition: 0.2s;
 				}
 			}
 
 			&.cr-highlight {
-				background-color: #3f9af533;
+				background-color: $color-match-selected;
 
 				&:hover {
-					background-color: lighten(#3f9af533, 10%);
+					background-color: lighten($color-match-selected, 10%);
 				}
 			}
 		}
@@ -168,6 +179,13 @@
 			background-color: rgba(7, 17, 52, 0.1) !important;
 			display: inline-block;
 			width: 100%;
+		}
+
+		i[exclude-match] {
+			font-style: italic;
+			opacity: 0.75;
+			background-color: $color-plagiarism-omitted-words;
+			cursor: pointer;
 		}
 	}
 

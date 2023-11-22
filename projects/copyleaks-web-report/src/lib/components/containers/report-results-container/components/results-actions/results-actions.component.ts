@@ -18,6 +18,9 @@ export class ResultsActionsComponent implements OnInit, OnChanges {
 	@HostBinding('style.padding')
 	paddingProp: string;
 
+	@HostBinding('style.justify-content')
+	justifyContent = 'center';
+
 	@Input() resultsActions: IResultsActions | null;
 	@Input() searchedValue: string | null = null;
 	@Input() isMobile: boolean = false;
@@ -63,7 +66,10 @@ export class ResultsActionsComponent implements OnInit, OnChanges {
 	showSearch() {
 		this.showSearchFiled = !this.showSearchFiled;
 
-		if (!this.showSearchFiled) this.searchFc.setValue('');
+		if (!this.showSearchFiled) {
+			this.searchFc.setValue('');
+			this.justifyContent = 'center';
+		} else this.justifyContent = 'start';
 	}
 
 	expandResultsSection() {

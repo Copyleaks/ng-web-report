@@ -127,122 +127,14 @@
                 ]
             }
         ],
-        "database": [
-            {
-                "isLocked": false,
-                "scanId": "qwamckva0bis9i0t",
-                "id": "6c1c4bc687",
-                "title": "Repository: TEST",
-                "introduction": "No introduction available.",
-                "matchedWords": 387,
-                "identicalWords": 0,
-                "similarWords": 0,
-                "paraphrasedWords": 0,
-                "metadata": {
-                    "finalUrl": null,
-                    "canonicalUrl": null,
-                    "author": null,
-                    "organization": null,
-                    "filename": "cross-language-test-english-2.txt",
-                    "publishDate": null,
-                    "creationDate": null,
-                    "lastModificationDate": null,
-                    "submissionDate": "2023-02-07T15:19:53.210209Z",
-                    "submittedBy": "safaa@copyleaks.com",
-                    "submitterAuthorId": null,
-                    "customMetadata": null
-                },
-                "tags": null
-            },
-            {
-                "isLocked": false,
-                "scanId": "p1xn8t6jkmwgrofd",
-                "id": "f64cbdf615",
-                "title": "Repository: TEST",
-                "introduction": "No introduction available.",
-                "matchedWords": 387,
-                "identicalWords": 0,
-                "similarWords": 0,
-                "paraphrasedWords": 0,
-                "metadata": {
-                    "finalUrl": null,
-                    "canonicalUrl": null,
-                    "author": null,
-                    "organization": null,
-                    "filename": "cross-language-test-english-2.txt",
-                    "publishDate": null,
-                    "creationDate": null,
-                    "lastModificationDate": null,
-                    "submissionDate": "2023-02-07T15:20:26.964279Z",
-                    "submittedBy": "safaa@copyleaks.com",
-                    "submitterAuthorId": null,
-                    "customMetadata": null
-                },
-                "tags": null
-            }
-        ],
+        "database": [],
         "batch": [],
-        "repositories": [
-            {
-                "isLocked": false,
-                "repositoryId": "nbzjfy2hoh0q00up",
-                "scanId": "qwamckva0bis9i0t",
-                "id": "6c1c4bc687",
-                "title": "Repository: TEST",
-                "introduction": "No introduction available.",
-                "matchedWords": 387,
-                "identicalWords": 0,
-                "similarWords": 0,
-                "paraphrasedWords": 0,
-                "metadata": {
-                    "finalUrl": null,
-                    "canonicalUrl": null,
-                    "author": null,
-                    "organization": null,
-                    "filename": "cross-language-test-english-2.txt",
-                    "publishDate": null,
-                    "creationDate": null,
-                    "lastModificationDate": null,
-                    "submissionDate": "2023-02-07T15:19:53.210209Z",
-                    "submittedBy": "safaa@copyleaks.com",
-                    "submitterAuthorId": null,
-                    "customMetadata": null
-                },
-                "tags": null
-            },
-            {
-                "isLocked": false,
-                "repositoryId": "nbzjfy2hoh0q00up",
-                "scanId": "p1xn8t6jkmwgrofd",
-                "id": "f64cbdf615",
-                "title": "Repository: TEST",
-                "introduction": "No introduction available.",
-                "matchedWords": 387,
-                "identicalWords": 0,
-                "similarWords": 0,
-                "paraphrasedWords": 0,
-                "metadata": {
-                    "finalUrl": null,
-                    "canonicalUrl": null,
-                    "author": null,
-                    "organization": null,
-                    "filename": "cross-language-test-english-2.txt",
-                    "publishDate": null,
-                    "creationDate": null,
-                    "lastModificationDate": null,
-                    "submissionDate": "2023-02-07T15:20:26.964279Z",
-                    "submittedBy": "safaa@copyleaks.com",
-                    "submitterAuthorId": null,
-                    "customMetadata": null
-                },
-                "tags": null
-            }
-        ],
+        "repositories": [],
         "score": {
-            "identicalWords": 222,
-            "minorChangedWords": 165,
-            "relatedMeaningWords": 50,
-            "aggregatedScore": 1.0
+            "identicalWords": 0,
+            "minorChangedWords": 0,
+            "relatedMeaningWords": 377,
+            "aggregatedScore": 0.967
         }
     },
     "notifications": {

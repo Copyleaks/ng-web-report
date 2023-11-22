@@ -122,7 +122,11 @@ export class FilterResultDailogComponent implements OnInit {
 		);
 		this.resultsActions = {
 			totalExcluded: this.excludedResults.length,
-			totalFiltered: filteredResults?.length ?? 0,
+			totalFiltered:
+				filteredResults.length ===
+				(this.data.reportDataSvc.scanResultsDetails?.length ?? 0) - (excludedResultsIds?.length ?? 0)
+					? 0
+					: filteredResults.length,
 			totalResults: this.allResultsItem.length,
 			selectedResults: 0,
 		};

@@ -1,85 +1,112 @@
 <ng-container *ngIf="!showLoadingView; else loadingViewRef">
-	<div
-		*ngIf="!showSearchFiled"
-		fxLayout="row"
-		fxLayoutAlign="start center"
-		fxLayoutGap="10px"
-		class="tootal-results-container">
-		<span class="tootal-results" web-report-title-font>
-			<ng-container i18n>Plagiarism Results&nbsp;</ng-container>
-			<span *ngIf="!hideTotal">({{ resultsActions?.totalResults }})</span>
-		</span>
-		<ng-container *ngIf="resultsActions?.totalExcluded">
-			<mat-icon class="separate-circle-icon" fontSet="material-icons-round">circle</mat-icon>
-			<span class="tootal-excuded" web-report-title-font (click)="showFilterDialog(true)">
-				{{ resultsActions?.totalExcluded }}
-				<ng-container i18n>excluded</ng-container>
+	<ng-container
+		*ngIf="!resultsActions?.selectedResults || resultsActions?.selectedResults === 0; else highlightedResultsView">
+		<div *ngIf="!showSearchFiled" class="tootal-results-container">
+			<span class="tootal-results" web-report-title-font>
+				<ng-container i18n>Plagiarism Results&nbsp;</ng-container>
+				<span *ngIf="!hideTotal">({{ resultsActions?.totalResults }})</span>
 			</span>
-		</ng-container>
+			<div *ngIf="resultsActions?.totalExcluded || resultsActions?.totalFiltered" class="chips-container">
+				<ng-container *ngIf="resultsActions?.totalExcluded">
+					<mat-chip (click)="showFilterDialog(true)">
+						{{ resultsActions?.totalExcluded }}
+						<ng-container i18n>excluded</ng-container>
+					</mat-chip>
+				</ng-container>
 
-		<ng-container *ngIf="resultsActions?.totalFiltered">
-			<mat-icon class="separate-circle-icon" fontSet="material-icons-round">circle</mat-icon>
-			<span class="tootal-filtered" web-report-title-font (click)="showFilterDialog()">
-				{{ resultsActions?.totalFiltered }}
-				<ng-container i18n>filtered</ng-container>
+				<ng-container *ngIf="resultsActions?.totalFiltered">
+					<mat-chip class="filter-chip" (click)="showFilterDialog()">
+						<span>
+							{{ resultsActions?.totalFiltered }}
+							<ng-container i18n>filtered</ng-container>
+						</span>
+						<mat-icon
+							class="clear-filter-icon"
+							fontSet="material-icons-round"
+							(click)="$event.stopPropagation(); clearFilter()"
+							matTooltip="Clear Filter"
+							matTooltipClass="web-report-mat-tooltip"
+							i18n-matTooltip>
+							highlight_off
+						</mat-icon>
+					</mat-chip>
+				</ng-container>
+			</div>
+		</div>
+
+		<div *ngIf="showSearchFiled" fxLayout="row" fxLayoutAlign="start center" class="input-search-container">
+			<mat-icon class="search-icon" fontSet="material-icons-round">search</mat-icon>
+			<input
+				class="search-input"
+				placeholder="Search Result"
+				type="text"
+				matInput
+				[formControl]="searchFc"
+				i18n-placeholder />
+			<mat-icon
+				class="clear-icon"
+				fontSet="material-icons-outlined"
+				(click)="showSearch()"
+				matTooltip="Clear"
+				matTooltipClass="web-report-mat-tooltip"
+				i18n-matTooltip>
+				cancel
+			</mat-icon>
+		</div>
+
+		<div fxLayout="row" fxLayoutAlign="start center" fxLayoutGap="8px" class="results-search-filter-container">
+			<mat-icon
+				*ngIf="!showSearchFiled"
+				class="open-search-icon"
+				(click)="showSearch()"
+				fontSet="material-icons-round"
+				[ngClass]="{ 'disabled-icon': !resultsActions?.totalResults || resultsActions?.totalResults === 0 }"
+				matTooltip="Search Results"
+				matTooltipClass="web-report-mat-tooltip"
+				i18n-matTooltip>
+				search
+			</mat-icon>
+			<mat-icon
+				class="filter-search-icon"
+				(click)="showFilterDialog()"
+				fontSet="material-icons-round"
+				[ngClass]="{
+					'disabled-icon': !resultsActions?.totalResults || resultsActions?.totalResults === 0,
+					'selected-icon': isFilterOn || resultsActions?.totalFiltered != 0
+				}"
+				matTooltip="Filter plagiarism results"
+				matTooltipClass="web-report-mat-tooltip"
+				i18n-matTooltip>
+				filter_list
+			</mat-icon>
+			<mat-icon
+				*ngIf="isMobile"
+				class="expand-icon"
+				(click)="expandResultsSection()"
+				[ngClass]="{ 'expanded-section-icon': expandSection }"
+				fontSet="material-icons-round">
+				arrow_drop_down
+			</mat-icon>
+		</div>
+	</ng-container>
+
+	<ng-template #highlightedResultsView>
+		<div class="tootal-results-container">
+			<span class="tootal-results" web-report-title-font>
+				<ng-container i18n>Highlighted Results&nbsp;</ng-container>
+				<span *ngIf="!hideTotal">({{ resultsActions?.selectedResults }})</span>
 			</span>
-		</ng-container>
-	</div>
-
-	<div *ngIf="showSearchFiled" fxLayout="row" fxLayoutAlign="start center" class="input-search-container">
-		<mat-icon class="search-icon" fontSet="material-icons-round">search</mat-icon>
-		<input
-			class="search-input"
-			placeholder="Search Result"
-			type="text"
-			matInput
-			[formControl]="searchFc"
-			i18n-placeholder />
+		</div>
 		<mat-icon
-			class="clear-icon"
+			class="diselect-match-icon"
 			fontSet="material-icons-outlined"
-			(click)="showSearch()"
-			matTooltip="Clear"
+			(click)="deselectMatch()"
+			matTooltip="Deselect Match"
 			matTooltipClass="web-report-mat-tooltip"
 			i18n-matTooltip>
 			cancel
 		</mat-icon>
-	</div>
-
-	<div fxLayout="row" fxLayoutAlign="start center" fxLayoutGap="8px" class="results-search-filter-container">
-		<mat-icon
-			*ngIf="!showSearchFiled"
-			class="open-search-icon"
-			(click)="showSearch()"
-			fontSet="material-icons-round"
-			[ngClass]="{ 'disabled-icon': !resultsActions?.totalResults || resultsActions?.totalResults === 0 }"
-			matTooltip="Search Results"
-			matTooltipClass="web-report-mat-tooltip"
-			i18n-matTooltip>
-			search
-		</mat-icon>
-		<mat-icon
-			class="filter-search-icon"
-			(click)="showFilterDialog()"
-			fontSet="material-icons-round"
-			[ngClass]="{
-				'disabled-icon': !resultsActions?.totalResults || resultsActions?.totalResults === 0,
-				'selected-icon': isFilterOn || resultsActions?.totalFiltered != 0
-			}"
-			matTooltip="Filter Results"
-			matTooltipClass="web-report-mat-tooltip"
-			i18n-matTooltip>
-			filter_list
-		</mat-icon>
-		<mat-icon
-			*ngIf="isMobile"
-			class="expand-icon"
-			(click)="expandResultsSection()"
-			[ngClass]="{ 'expanded-section-icon': expandSection }"
-			fontSet="material-icons-round">
-			arrow_drop_down
-		</mat-icon>
-	</div>
+	</ng-template>
 </ng-container>
 
 <ng-template #loadingViewRef>

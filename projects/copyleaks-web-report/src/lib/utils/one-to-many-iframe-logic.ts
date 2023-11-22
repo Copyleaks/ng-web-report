@@ -75,6 +75,12 @@ function ready() {
 		if (!elem && event.index !== -1) {
 			messageParent({ type: 'match-warn' });
 		}
+		if (!elem && event.index === -1 && current) {
+			current.toggleAttribute('on', false);
+			current = null;
+			messageParent({ type: 'match-select', index: -1 });
+			return;
+		}
 		onMatchSelect(elem, true); // should not rebroadcast
 	}
 

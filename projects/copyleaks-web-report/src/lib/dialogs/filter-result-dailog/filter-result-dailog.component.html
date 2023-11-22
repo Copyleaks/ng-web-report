@@ -15,8 +15,8 @@
 			</div>
 			<div
 				class="result-container"
-				fxLayout="row"
-				fxLayoutAlign="start center"
+				fxLayout="column"
+				fxLayoutAlign="center start"
 				fxLayoutGap="4px"
 				fxLayout.lt-md="column"
 				fxLayoutAlign.lt-md="center start"
@@ -27,31 +27,19 @@
 				</span>
 				<div fxLayout="row" fxLayoutAlign="start center" fxLayoutGap="4px">
 					<ng-container *ngIf="!!resultsActions?.totalExcluded">
-						<mat-icon
-							class="separate-circle-icon"
-							[class.hide-separate-circle-icon]="isMobile"
-							fontSet="material-icons-round">
-							circle
-						</mat-icon>
-						<span
-							class="total-excuded"
+						<mat-chip
+							class=" "
 							(click)="!!resultsActions.totalExcluded ? (data.showExcludedDailog = !data.showExcludedDailog) : ''">
 							{{ resultsActions.totalExcluded }}
 							<ng-container i18n>excluded</ng-container>
-						</span>
+						</mat-chip>
 					</ng-container>
 
 					<ng-container *ngIf="!!resultsActions.totalFiltered">
-						<mat-icon
-							class="separate-circle-icon"
-							[class.hide-separate-circle-icon]="isMobile && !resultsActions.totalExcluded"
-							fontSet="material-icons-round">
-							circle
-						</mat-icon>
-						<span class="total-filtered">
+						<mat-chip class="total-filtered">
 							{{ resultsActions.totalFiltered }}
 							<ng-container i18n>filtered</ng-container>
-						</span>
+						</mat-chip>
 					</ng-container>
 				</div>
 			</div>

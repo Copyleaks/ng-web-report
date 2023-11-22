@@ -1,0 +1,29 @@
+@import '../website-colors.styles.scss';
+
+:host {
+	::ng-deep {
+		mat-chip {
+			display: flex;
+			align-items: center;
+			justify-content: center;
+			height: fit-content;
+			background-color: $color-dark-blue !important;
+			color: $color-container-background !important;
+			font-weight: 500;
+			font-size: 14px;
+			padding: 2px 8px;
+			border-radius: 16px;
+			margin: 0px;
+			border: 1px solid $color-container-background;
+			min-height: auto !important;
+
+			.mat-chip-ripple {
+				display: none;
+			}
+
+			mat-icon {
+				margin-left: 4px;
+			}
+		}
+	}
+}

@@ -2,7 +2,7 @@ import { Directive, ElementRef, OnDestroy, OnInit } from '@angular/core';
 import { distinctUntilChanged, filter, map, takeUntil, withLatestFrom } from 'rxjs/operators';
 import { ReportMatchHighlightService } from '../services/report-match-highlight.service';
 import { ReportViewService } from '../services/report-view.service';
-import { MatchJumpEvent } from '../models/report-iframe-events.models';
+import { MatchJumpEvent, MatchSelectEvent } from '../models/report-iframe-events.models';
 import { Subject } from 'rxjs';
 import { untilDestroy } from '../utils/until-destroy';
 
@@ -17,7 +17,7 @@ export class OriginalHtmlHelperComponent implements OnInit, OnDestroy {
 	) {}
 
 	ngOnInit() {
-		const { jump$ } = this._highlightSvc;
+		const { jump$, originalHtml$ } = this._highlightSvc;
 		const { reportViewMode$ } = this._reportViewSvc;
 
 		const onOneToManyHtmlJump$ = jump$.pipe(
@@ -35,6 +35,16 @@ export class OriginalHtmlHelperComponent implements OnInit, OnDestroy {
 		onOneToManyHtmlJump$.subscribe(jumpForward => {
 			this.messageFrame({ type: 'match-jump', forward: jumpForward } as MatchJumpEvent);
 		});
+
+		// handle 'Clear Match' event
+		originalHtml$
+			.pipe(
+				untilDestroy(this),
+				filter(m => m === null)
+			)
+			.subscribe(_ => {
+				this.messageFrame({ type: 'match-select', index: -1 } as MatchSelectEvent);
+			});
 	}
 
 	protected get frame() {

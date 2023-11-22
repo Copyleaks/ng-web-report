@@ -152,7 +152,6 @@ export class ReportResultsContainerComponent implements OnInit, OnChanges {
 			.pipe(untilDestroy(this))
 			.subscribe(([filterOptions, excludedResultsIds]) => {
 				if (this.showLoadingView || !filterOptions || !excludedResultsIds) return;
-
 				this._filterResults(filterOptions, excludedResultsIds);
 			});
 	}
@@ -183,9 +182,12 @@ export class ReportResultsContainerComponent implements OnInit, OnChanges {
 
 		this.resultsActions = {
 			...this.resultsActions,
+			selectedResults: 0,
 			totalExcluded: excludedResultsIds?.length,
 			totalFiltered:
-				filteredResults.length === this._reportDataSvc.scanResultsDetails?.length ? 0 : filteredResults.length,
+				filteredResults.length === (this._reportDataSvc.scanResultsDetails?.length ?? 0) - excludedResultsIds?.length
+					? 0
+					: filteredResults.length,
 			totalResults: this._reportDataSvc.scanResultsDetails?.length ?? 0,
 		};
 

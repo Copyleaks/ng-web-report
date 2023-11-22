@@ -2,6 +2,7 @@
 @import '../../styles/styles.scss';
 @import '../../styles/cls-mat-components-overrides//cls-mat-slide-toggle-overrides.scss';
 @import '../../styles/cls-mat-components-overrides/cls-scroll-bar-overrides.scss';
+@import '../../styles/cls-mat-components-overrides/cls-mat-chip-overrides.scss';
 :host {
 	font-family: haboro-soft, sans-serif !important;
 	::ng-deep {
@@ -58,7 +59,6 @@
 				font-weight: 400;
 				font-size: 14px;
 				color: $color-primary;
-				text-decoration: underline;
 			}
 			.total-filtered {
 				font-weight: 400;

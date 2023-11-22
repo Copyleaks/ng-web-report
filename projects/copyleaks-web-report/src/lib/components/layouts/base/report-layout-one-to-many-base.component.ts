@@ -291,5 +291,16 @@ export abstract class OneToManyReportLayoutBaseComponent extends ReportLayoutBas
 					},
 				} as IResultItem;
 			});
+
+		if (selectedMatch)
+			this.scanResultsActions = {
+				...this.scanResultsActions,
+				selectedResults: this.scanResultsView.length,
+			};
+		else
+			this.scanResultsActions = {
+				...this.scanResultsActions,
+				selectedResults: 0,
+			};
 	}
 }

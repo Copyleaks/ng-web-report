@@ -115,7 +115,8 @@
 				background-color: $color-plagiarism-identical;
 
 				&:hover {
-					background-color: lighten($color-plagiarism-identical, 5%);
+					background-color: #3f9af533;
+					transition: 0.2s;
 				}
 			}
 
@@ -123,7 +124,8 @@
 				background-color: $color-plagiarism-minor-changes;
 
 				&:hover {
-					background-color: lighten($color-plagiarism-minor-changes, 5%);
+					background-color: #3f9af533;
+					transition: 0.2s;
 				}
 			}
 
@@ -131,7 +133,8 @@
 				background-color: $color-plagiarism-paraphrased;
 
 				&:hover {
-					background-color: lighten($color-plagiarism-paraphrased, 5%);
+					background-color: #3f9af533;
+					transition: 0.2s;
 				}
 			}
 
@@ -145,15 +148,16 @@
 			&.cr-m-101 {
 				background-color: $color-ai-detected-text;
 				&:hover {
-					background-color: lighten($color-ai-detected-text, 10%);
+					background-color: #3f9af533;
+					transition: 0.2s;
 				}
 			}
 
 			&.cr-highlight {
-				background-color: gold;
+				background-color: #3f9af533;
 
 				&:hover {
-					background-color: lighten(gold, 10%);
+					background-color: lighten(#3f9af533, 10%);
 				}
 			}
 		}

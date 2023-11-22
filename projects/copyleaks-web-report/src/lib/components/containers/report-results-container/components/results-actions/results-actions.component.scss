@@ -1,4 +1,5 @@
 @import '../../../../../styles/website-colors.styles.scss';
+@import '../../../../../styles/cls-mat-components-overrides/cls-mat-chip-overrides.scss';
 @import '../../../../../styles/styles.scss';
 
 :host {
@@ -53,9 +54,16 @@
 }
 
 .tootal-results-container {
+	display: flex;
+	flex-direction: column;
+	align-items: flex-start;
+	justify-content: center;
+	flex-wrap: wrap;
+	gap: 4px;
 	.tootal-results {
 		font-weight: 700;
 		font-size: 14px;
+		white-space: nowrap;
 	}
 
 	.separate-circle-icon {
@@ -159,4 +167,31 @@ mat-icon:hover {
 .search-input {
 	margin: 0px !important;
 	margin-left: 8px !important;
+}
+
+.diselect-match-icon {
+	cursor: pointer;
+	color: $color-dark-blue;
+	width: 24px !important;
+	height: 24px !important;
+	font-size: 24px !important;
+}
+
+.clear-filter-icon {
+	font-size: 14px;
+	width: 14px;
+	height: 14px;
+	color: $color-container-background;
+}
+
+.chips-container {
+	display: flex;
+	flex-direction: row;
+	justify-content: flex-start;
+	align-items: center;
+	gap: 4px;
+}
+
+mat-chip {
+	cursor: pointer;
 }

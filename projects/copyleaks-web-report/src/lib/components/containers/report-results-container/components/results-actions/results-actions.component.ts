@@ -7,6 +7,7 @@ import { FilterResultDailogComponent } from '../../../../../dialogs/filter-resul
 import { ReportDataService } from '../../../../../services/report-data.service';
 import { IFilterResultDailogData } from '../../../../../dialogs/filter-result-dailog/models/filter-result-dailog.enum';
 import { ReportViewService } from '../../../../../services/report-view.service';
+import { ReportMatchHighlightService } from '../../../../../services/report-match-highlight.service';
 
 @Component({
 	selector: 'cr-results-actions',
@@ -45,7 +46,8 @@ export class ResultsActionsComponent implements OnInit, OnChanges {
 	constructor(
 		private _matDialog: MatDialog,
 		private _reportDataSvc: ReportDataService,
-		private _reportViewSvc: ReportViewService
+		private _reportViewSvc: ReportViewService,
+		private _highlightService: ReportMatchHighlightService
 	) {}
 
 	ngOnInit(): void {
@@ -84,5 +86,13 @@ export class ResultsActionsComponent implements OnInit, OnChanges {
 				isMobile: this.isMobile,
 			} as IFilterResultDailogData,
 		});
+	}
+
+	deselectMatch() {
+		this._highlightService.clearAllMatchs();
+	}
+
+	clearFilter() {
+		this._reportDataSvc.clearFilter();
 	}
 }

@@ -27,10 +27,10 @@
 			class="arrow-drop-button"
 			(click)="showMoreMenu = !showMoreMenu">
 			<ng-container *ngIf="showMoreMenu; else showLessMenuIcon">
-				<mat-icon>arrow_drop_up</mat-icon>
+				<mat-icon fontSet="material-icons-round">arrow_drop_up</mat-icon>
 			</ng-container>
 			<ng-template #showLessMenuIcon>
-				<mat-icon>arrow_drop_down</mat-icon>
+				<mat-icon fontSet="material-icons-round">arrow_drop_down</mat-icon>
 			</ng-template>
 		</button>
 		<mat-chip-list>

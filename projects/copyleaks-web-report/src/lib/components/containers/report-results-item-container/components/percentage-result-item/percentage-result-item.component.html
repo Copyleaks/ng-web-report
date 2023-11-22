@@ -40,7 +40,7 @@
 					<ng-container *ngTemplateOutlet="stackedBar"></ng-container>
 				</div>
 				<span *ngIf="!percentageResult?.title" class="similar-words-percentage">
-					{{ getMatchTypePercentage(eMatchType.SimilarWords) | similarity }}
+					{{ getMatchTypePercentage(eMatchType.SimilarWords) | similarity : '1.1-1' }}
 				</span>
 			</div>
 		</ng-template>

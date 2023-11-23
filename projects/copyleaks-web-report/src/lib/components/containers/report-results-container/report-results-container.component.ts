@@ -196,9 +196,11 @@ export class ReportResultsContainerComponent implements OnInit, OnChanges {
 	ngAfterViewInit(): void {
 		this.detectEndOfList();
 
-		this.resizeSubscription = fromEvent(window, 'resize').subscribe(() => {
-			this.checkAndApplyPadding();
-		});
+		this.resizeSubscription = fromEvent(window, 'resize')
+			.pipe(untilDestroy(this))
+			.subscribe(() => {
+				this.checkAndApplyPadding();
+			});
 	}
 
 	checkAndApplyPadding() {

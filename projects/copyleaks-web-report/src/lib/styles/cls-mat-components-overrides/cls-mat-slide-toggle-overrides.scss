@@ -26,5 +26,9 @@
 			overflow: hidden;
 			text-overflow: ellipsis;
 		}
+
+		.mat-slide-toggle-ripple {
+			display: none !important;
+		}
 	}
 }

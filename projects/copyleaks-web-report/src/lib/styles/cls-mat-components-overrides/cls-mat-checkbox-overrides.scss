@@ -40,5 +40,9 @@
 			opacity: 0.5 !important;
 			pointer-events: none !important;
 		}
+
+		.mat-checkbox-ripple {
+			display: none !important;
+		}
 	}
 }

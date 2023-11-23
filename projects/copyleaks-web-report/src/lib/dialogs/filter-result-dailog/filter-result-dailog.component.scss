@@ -3,6 +3,8 @@
 @import '../../styles/cls-mat-components-overrides//cls-mat-slide-toggle-overrides.scss';
 @import '../../styles/cls-mat-components-overrides/cls-scroll-bar-overrides.scss';
 @import '../../styles/cls-mat-components-overrides/cls-mat-chip-overrides.scss';
+@import '../../styles/cls-mat-components-overrides/cls-mat-checkbox-overrides.scss';
+
 :host {
 	font-family: haboro-soft, sans-serif !important;
 	::ng-deep {

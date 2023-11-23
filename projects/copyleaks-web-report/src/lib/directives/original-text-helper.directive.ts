@@ -65,7 +65,7 @@ export class OriginalTextHelperDirective implements AfterContentInit, OnDestroy 
 	 */
 	ngAfterContentInit() {
 		const { jump$, originalText$, textMatchClick$ } = this.highlightService;
-		originalText$.subscribe(value => (this.current = value));
+		originalText$.pipe(untilDestroy(this)).subscribe(value => (this.current = value));
 
 		const { reportViewMode$ } = this._viewService;
 

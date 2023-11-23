@@ -1,20 +1,30 @@
-import { Component, EventEmitter, HostBinding, Input, OnChanges, OnInit, Output, SimpleChanges } from '@angular/core';
+import {
+	Component,
+	EventEmitter,
+	HostBinding,
+	Input,
+	OnChanges,
+	OnDestroy,
+	OnInit,
+	Output,
+	SimpleChanges,
+} from '@angular/core';
 import { IResultsActions } from './models/results-actions.models';
 import { FormControl } from '@angular/forms';
-import { debounceTime } from 'rxjs/operators';
 import { MatDialog } from '@angular/material/dialog';
 import { FilterResultDailogComponent } from '../../../../../dialogs/filter-result-dailog/filter-result-dailog.component';
 import { ReportDataService } from '../../../../../services/report-data.service';
 import { IFilterResultDailogData } from '../../../../../dialogs/filter-result-dailog/models/filter-result-dailog.enum';
 import { ReportViewService } from '../../../../../services/report-view.service';
 import { ReportMatchHighlightService } from '../../../../../services/report-match-highlight.service';
+import { untilDestroy } from '../../../../../utils/until-destroy';
 
 @Component({
 	selector: 'cr-results-actions',
 	templateUrl: './results-actions.component.html',
 	styleUrls: ['./results-actions.component.scss'],
 })
-export class ResultsActionsComponent implements OnInit, OnChanges {
+export class ResultsActionsComponent implements OnInit, OnChanges, OnDestroy {
 	@HostBinding('style.padding')
 	paddingProp: string;
 
@@ -54,7 +64,7 @@ export class ResultsActionsComponent implements OnInit, OnChanges {
 	) {}
 
 	ngOnInit(): void {
-		this.searchFc.valueChanges.pipe(debounceTime(500)).subscribe(value => {
+		this.searchFc.valueChanges.pipe(untilDestroy(this)).subscribe(value => {
 			this.onSearch.emit(value);
 		});
 	}
@@ -101,4 +111,6 @@ export class ResultsActionsComponent implements OnInit, OnChanges {
 	clearFilter() {
 		this._reportDataSvc.clearFilter();
 	}
+
+	ngOnDestroy() {}
 }

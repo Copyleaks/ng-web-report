@@ -52,7 +52,11 @@
 				</div>
 			</ng-container>
 		</div>
-		<mat-checkbox [formControlName]="eFilterResultForm.fcResultsWithNoDates" class="include-results-checkbox" i18n>
+		<mat-checkbox
+			[formControlName]="eFilterResultForm.fcResultsWithNoDates"
+			class="include-results-checkbox"
+			disableRipple
+			i18n>
 			Include results with no dates
 		</mat-checkbox>
 	</div>

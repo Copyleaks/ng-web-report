@@ -51,24 +51,24 @@ span[ignored] {
 }
 span[match][data-type='0'] {
 	background-color: #fd7366;
+  transition: 0.2s;
 }
 span[match][data-type='0'].hover {
 	background-color: #3f9af533;
-  transition: 0.2s;
 }
 span[match][data-type='1'] {
 	background-color: #fe9391;
+  transition: 0.2s;
 }
 span[match][data-type='1'].hover {
 	background-color: #3f9af533;
-  transition: 0.2s;
 }
 span[match][data-type='2'] {
 	background-color: #fed5a9;
+  transition: 0.2s;
 }
 span[match][data-type='2'].hover {
 	background-color: #3f9af533;
-  transition: 0.2s;
 }
 span[match][on] {
 	background-color: #3F9AF533 !important;

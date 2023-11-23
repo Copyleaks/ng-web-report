@@ -82,9 +82,9 @@
 			.exclude-result {
 				cursor: pointer;
 				color: $color-dark-blue;
+				transition: 0.4s;
 				&:hover {
 					color: $color-primary;
-					transition: 0.4s;
 				}
 				align-self: flex-start;
 				padding: 2px;

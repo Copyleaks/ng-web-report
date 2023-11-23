@@ -146,7 +146,10 @@
 
 mat-icon:hover {
 	color: $color-primary !important;
-	transition: 0.4s;
+}
+
+mat-icon {
+	transition: color 0.4s;
 }
 
 .expanded-section-icon {

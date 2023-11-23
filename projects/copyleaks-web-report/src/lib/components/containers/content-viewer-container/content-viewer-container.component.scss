@@ -59,11 +59,11 @@
 				height: $icon-size;
 				cursor: pointer;
 				line-height: normal;
+				transition: 0.4s;
 			}
 
 			mat-icon:hover {
 				color: $color-primary;
-				transition: 0.4s;
 			}
 		}
 	}
@@ -113,28 +113,28 @@
 
 			&.cr-m-0 {
 				background-color: $color-plagiarism-identical;
+				transition: 0.2s;
 
 				&:hover {
 					background-color: $color-match-selected;
-					transition: 0.2s;
 				}
 			}
 
 			&.cr-m-1 {
 				background-color: $color-plagiarism-minor-changes;
+				transition: 0.2s;
 
 				&:hover {
 					background-color: $color-match-selected;
-					transition: 0.2s;
 				}
 			}
 
 			&.cr-m-2 {
 				background-color: $color-plagiarism-paraphrased;
+				transition: 0.2s;
 
 				&:hover {
 					background-color: $color-match-selected;
-					transition: 0.2s;
 				}
 			}
 
@@ -143,9 +143,9 @@
 				color: red;
 				text-decoration: underline;
 				font-weight: bolder;
+				transition: 0.2s;
 				&:hover {
 					background-color: #3f9af566;
-					transition: 0.2s;
 				}
 				&.cr-highlight {
 					background-color: #3f9af566 !important;
@@ -158,9 +158,9 @@
 
 			&.cr-m-101 {
 				background-color: $color-ai-detected-text;
+				transition: 0.2s;
 				&:hover {
 					background-color: $color-match-selected;
-					transition: 0.2s;
 				}
 			}
 

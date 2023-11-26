@@ -98,7 +98,7 @@ export class ReportDataService {
 			this._filterOptions$.value?.showInternetResults === false ||
 			this._filterOptions$.value?.showInternalDatabaseResults === false ||
 			this._filterOptions$.value?.showBatchResults === false ||
-			this._filterOptions$.value?.showTop100Results === true ||
+			this._filterOptions$.value?.showTop100Results === false ||
 			(this._filterOptions$.value?.includedTags?.length && this._filterOptions$.value?.includedTags?.length > 0) ||
 			!!this._filterOptions$.value?.publicationDate ||
 			!!this._filterOptions$.value?.wordLimit ||
@@ -133,7 +133,7 @@ export class ReportDataService {
 						general: {
 							alerts: options?.showAlerts ?? true,
 							authorSubmissions: options?.showSameAuthorSubmissions ?? true,
-							topResult: options?.showTop100Results ?? false,
+							topResult: options?.showTop100Results ?? true,
 						},
 						includedTags: options?.includedTags,
 						matchType: {
@@ -241,7 +241,7 @@ export class ReportDataService {
 						showTop100Results:
 							completeResultsRes.filters?.general?.topResult != undefined
 								? completeResultsRes.filters?.general?.topResult
-								: false,
+								: true,
 						showSameAuthorSubmissions:
 							completeResultsRes.filters?.general?.authorSubmissions != undefined
 								? completeResultsRes.filters?.general?.authorSubmissions

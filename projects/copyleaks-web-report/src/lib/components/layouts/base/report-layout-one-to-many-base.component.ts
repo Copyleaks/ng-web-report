@@ -159,7 +159,10 @@ export abstract class OneToManyReportLayoutBaseComponent extends ReportLayoutBas
 				.pipe(untilDestroy(this))
 				.subscribe(([previews, details]) => {
 					if (data?.alertCode) this.isHtmlView = false;
-					this.alerts = previews?.notifications?.alerts?.filter(a => a.code != ALERTS.SUSPECTED_AI_TEXT_DETECTED) ?? [];
+					if (this.reportDataSvc.filterOptions?.showAlerts === false) this.alerts = [];
+					else
+						this.alerts =
+							previews?.notifications?.alerts?.filter(a => a.code != ALERTS.SUSPECTED_AI_TEXT_DETECTED) ?? [];
 					this.scanResultsPreviews = previews;
 					this.scanResultsDetails = details;
 

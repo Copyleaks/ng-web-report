@@ -102,6 +102,7 @@ export class ReportResultsContainerComponent implements OnInit, OnChanges {
 		}
 		if (changes['showLoadingView']?.currentValue == false) {
 			this._handelFilterUpdates();
+			this.checkAndApplyPadding();
 		}
 
 		if ('filterOptions' in changes && changes['filterOptions'].currentValue) {
@@ -113,18 +114,6 @@ export class ReportResultsContainerComponent implements OnInit, OnChanges {
 				};
 			});
 		}
-	}
-
-	ngAfterViewChecked() {
-		setTimeout(() => {
-			const container: HTMLElement = this.customEmptyResultView?.nativeElement;
-			if (container && container?.childElementCount > 0) this.showCustomView = true;
-			else this.showCustomView = false;
-
-			this.detectEndOfList();
-
-			this.checkAndApplyPadding();
-		});
 	}
 
 	ngOnInit(): void {
@@ -151,45 +140,6 @@ export class ReportResultsContainerComponent implements OnInit, OnChanges {
 				if (this.showLoadingView || !filterOptions || !excludedResultsIds) return;
 				this._filterResults(filterOptions, excludedResultsIds);
 			});
-	}
-
-	private _filterResults(filterOptions: ICopyleaksReportOptions, excludedResultsIds: string[]) {
-		this.excludedResultsIds = excludedResultsIds;
-
-		const filteredResults = this._reportDataSvc.filterResults(
-			this.allResults.map(result => result.resultDetails) as ResultDetailItem[],
-			filterOptions,
-			excludedResultsIds
-		);
-
-		this.displayedResults = [
-			...this.allResults
-				.filter(result => !!filteredResults.find(r => r.id === result.resultDetails?.id))
-				.map(result => {
-					return {
-						...result,
-						iStatisticsResult: {
-							identical: filterOptions.showIdentical ? result.iStatisticsResult?.identical ?? 0 : 0,
-							minorChanges: filterOptions.showMinorChanges ? result.iStatisticsResult?.minorChanges ?? 0 : 0,
-							relatedMeaning: filterOptions.showRelated ? result.iStatisticsResult?.relatedMeaning ?? 0 : 0,
-						},
-					} as IResultItem;
-				}),
-		];
-
-		this.resultsActions = {
-			...this.resultsActions,
-			totalExcluded: excludedResultsIds?.length,
-			totalFiltered:
-				this.allResults.length - filteredResults.length <= 0
-					? 0
-					: this.allResults.length - filteredResults.length - excludedResultsIds?.length,
-			totalResults: this._reportDataSvc.scanResultsDetails?.length ?? 0,
-		};
-
-		this.filterIsOn = filteredResults.length !== this._reportDataSvc.scanResultsDetails?.length;
-		if (!filterOptions.showIdentical || !filterOptions.showMinorChanges || !filterOptions.showRelated)
-			this.filterIsOn = true;
 	}
 
 	ngAfterViewInit(): void {
@@ -345,6 +295,45 @@ export class ReportResultsContainerComponent implements OnInit, OnChanges {
 		const excludedResutsIds = new Set(this._reportDataSvc.excludedResultsIds);
 		excludedResutsIds.add(resultId);
 		this._reportDataSvc.excludedResultsIds$.next(Array.from(excludedResutsIds));
+	}
+
+	private _filterResults(filterOptions: ICopyleaksReportOptions, excludedResultsIds: string[]) {
+		this.excludedResultsIds = excludedResultsIds;
+
+		const filteredResults = this._reportDataSvc.filterResults(
+			this.allResults.map(result => result.resultDetails) as ResultDetailItem[],
+			filterOptions,
+			excludedResultsIds
+		);
+
+		this.displayedResults = [
+			...this.allResults
+				.filter(result => !!filteredResults.find(r => r.id === result.resultDetails?.id))
+				.map(result => {
+					return {
+						...result,
+						iStatisticsResult: {
+							identical: filterOptions.showIdentical ? result.iStatisticsResult?.identical ?? 0 : 0,
+							minorChanges: filterOptions.showMinorChanges ? result.iStatisticsResult?.minorChanges ?? 0 : 0,
+							relatedMeaning: filterOptions.showRelated ? result.iStatisticsResult?.relatedMeaning ?? 0 : 0,
+						},
+					} as IResultItem;
+				}),
+		];
+
+		this.resultsActions = {
+			...this.resultsActions,
+			totalExcluded: excludedResultsIds?.length,
+			totalFiltered:
+				this.allResults.length - filteredResults.length <= 0
+					? 0
+					: this.allResults.length - filteredResults.length - excludedResultsIds?.length,
+			totalResults: this._reportDataSvc.scanResultsDetails?.length ?? 0,
+		};
+
+		this.filterIsOn = filteredResults.length !== this._reportDataSvc.scanResultsDetails?.length;
+		if (!filterOptions.showIdentical || !filterOptions.showMinorChanges || !filterOptions.showRelated)
+			this.filterIsOn = true;
 	}
 
 	//#endregion

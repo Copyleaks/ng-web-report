@@ -2,9 +2,10 @@
 	<copyleaks-web-report
 		class="desktop-view"
 		[reportEndpointConfig]="endpointsConfig"
-		[showDisabledProducts]="showCustomResults && reportView === 1">
+		[showDisabledProducts]="showCustomResults && reportView === 1"
+		(onCompleteResultUpdate)="onCompleteResultUpdate($event)">
 		<cr-actions>
-			<div style="display: flex; flex-direction: row; margin-left: auto; gap: 8px">
+			<div style="padding:8px 0 4px; display: flex; flex-direction: row; margin-left: auto; gap: 8px">
 				<mat-icon fontSet="material-icons-round">download</mat-icon>
 				<mat-icon fontSet="material-icons-round">share</mat-icon>
 				<mat-icon fontSet="material-icons-round">info</mat-icon>

@@ -109,6 +109,10 @@ export class DemoReportPreviewsComponent implements OnInit {
 		}
 	}
 
+	onCompleteResultUpdate($event: any) {
+		console.log($event);
+	}
+
 	ngOnDestroy(): void {
 		this.paramSub.unsubscribe();
 	}

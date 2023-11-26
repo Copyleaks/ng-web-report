@@ -1,19 +1,15 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import {
-	ICompleteResults,
-	IResultDetailResponse as IResultDetailResponse,
-	IScanSource,
-} from '../models/report-data.models';
-import { BehaviorSubject, Subject, combineLatest, forkJoin, from } from 'rxjs';
+import { ICompleteResults, IResultDetailResponse, IScanSource } from '../models/report-data.models';
+import { BehaviorSubject, combineLatest, forkJoin, from } from 'rxjs';
 import { concatMap, filter } from 'rxjs/operators';
 import { AIScanResult, ResultDetailItem } from '../models/report-matches.models';
 import { IClsReportEndpointConfigModel } from '../models/report-config.models';
 import { untilDestroy } from '../utils/until-destroy';
 import { EResultPreviewType } from '../enums/copyleaks-web-report.enums';
-import { ReportViewService } from './report-view.service';
 import { ICopyleaksReportOptions } from '../models/report-options.models';
 import { ALERTS } from '../constants/report-alerts.constants';
+import * as helpers from '../utils/report-statistics-helpers';
 
 @Injectable()
 export class ReportDataService {
@@ -114,12 +110,25 @@ export class ReportDataService {
 		combineLatest([this.filterOptions$, this.excludedResultsIds$])
 			.pipe(
 				untilDestroy(this),
-				filter(options => options != undefined)
+				filter(([options, excludedResultsIds]) => options !== undefined && excludedResultsIds !== undefined)
 			)
 			.subscribe(([options, excludedResultsIds]) => {
-				if (!this.scanResultsPreviews) return;
+				if (!this.scanResultsPreviews || !options || !excludedResultsIds) return;
+
+				const filteredResults = this.filterResults(this.scanResultsDetails, options, excludedResultsIds);
+				const stats = helpers.calculateStatistics(this.scanResultsPreviews, filteredResults, options);
+
 				this._scanResultsPreviews$.next({
 					...this.scanResultsPreviews,
+					results: {
+						...this.scanResultsPreviews.results,
+						score: {
+							identicalWords: stats.identical,
+							minorChangedWords: stats.minorChanges,
+							relatedMeaningWords: stats.relatedMeaning,
+							aggregatedScore: stats.aggregatedScore ?? 0,
+						},
+					},
 					filters: {
 						general: {
 							alerts: options?.showAlerts ?? true,

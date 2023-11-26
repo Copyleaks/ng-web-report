@@ -191,14 +191,15 @@ export class FilterResultDailogComponent implements OnInit {
 			result => !!excludedResultsIds?.find(id => result.resultDetails?.id === id)
 		);
 		this.resultsActions = {
+			...this.resultsActions,
 			totalExcluded: this.excludedResults.length,
 			totalFiltered:
-				filteredResults.length ===
-				(this.data.reportDataSvc.scanResultsDetails?.length ?? 0) - (excludedResultsIds?.length ?? 0)
+				(this.data.reportDataSvc.scanResultsDetails?.length ?? 0) - filteredResults.length <= 0
 					? 0
-					: filteredResults.length,
+					: (this.data.reportDataSvc.scanResultsDetails?.length ?? 0) -
+					  filteredResults.length -
+					  (excludedResultsIds?.length ?? 0),
 			totalResults: this.allResultsItem.length,
-			selectedResults: 0,
 		};
 	}
 

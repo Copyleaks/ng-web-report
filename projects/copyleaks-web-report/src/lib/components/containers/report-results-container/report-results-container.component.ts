@@ -179,12 +179,11 @@ export class ReportResultsContainerComponent implements OnInit, OnChanges {
 
 		this.resultsActions = {
 			...this.resultsActions,
-			selectedResults: 0,
 			totalExcluded: excludedResultsIds?.length,
 			totalFiltered:
-				filteredResults.length === (this._reportDataSvc.scanResultsDetails?.length ?? 0) - excludedResultsIds?.length
+				this.allResults.length - filteredResults.length <= 0
 					? 0
-					: filteredResults.length,
+					: this.allResults.length - filteredResults.length - excludedResultsIds?.length,
 			totalResults: this._reportDataSvc.scanResultsDetails?.length ?? 0,
 		};
 

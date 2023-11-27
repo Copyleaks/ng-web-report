@@ -1,12 +1,13 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import {
+	IAPIProgress,
 	ICompleteResults,
 	IResultDetailResponse as IResultDetailResponse,
 	IScanSource,
 } from '../models/report-data.models';
 import { BehaviorSubject, Subject, combineLatest, forkJoin, from } from 'rxjs';
-import { concatMap, filter } from 'rxjs/operators';
+import { concatMap, filter, take } from 'rxjs/operators';
 import { AIScanResult, ResultDetailItem } from '../models/report-matches.models';
 import { IClsReportEndpointConfigModel } from '../models/report-config.models';
 import { untilDestroy } from '../utils/until-destroy';
@@ -183,11 +184,26 @@ export class ReportDataService {
 		// init the subject values
 		this._reportEndpointConfig$.next(endpointsConfig);
 
-		// Run the GET report crawled version & GET complete results requests in parallel
-		const crawledVersionReq = this._http.get<IScanSource>(endpointsConfig.crawledVersion);
-		const completeResultsReq = this._http.get<ICompleteResults>(endpointsConfig.completeResults);
+		if (!endpointsConfig.progress) {
+			this.initSync(endpointsConfig);
+		} else {
+			const progressResult$ = this._http.get<IAPIProgress>(endpointsConfig.progress);
+			progressResult$.pipe(take(1)).subscribe(progress => {
+				if (progress?.percents == 100) {
+					this.initSync(endpointsConfig);
+				} else {
+					this.initAsync(endpointsConfig);
+				}
+			});
+		}
+	}
 
-		forkJoin([crawledVersionReq, completeResultsReq])
+	public initSync(endpointsConfig: IClsReportEndpointConfigModel) {
+		// Run the GET report crawled version & GET complete results requests in parallel
+		const crawledVersionReq$ = this._http.get<IScanSource>(endpointsConfig.crawledVersion);
+		const completeResultsReq$ = this._http.get<ICompleteResults>(endpointsConfig.completeResults);
+
+		forkJoin([crawledVersionReq$, completeResultsReq$])
 			.pipe(untilDestroy(this))
 			.subscribe(
 				([crawledVersionRes, completeResultsRes]) => {
@@ -273,6 +289,10 @@ export class ReportDataService {
 					console.error('Error occurred:', error);
 				}
 			);
+	}
+
+	public initAsync(endpointsConfig: IClsReportEndpointConfigModel) {
+		
 	}
 
 	public loadAllReportScanResults(completeResults: ICompleteResults) {

@@ -44,10 +44,6 @@ export class DemoReportPreviewsComponent implements OnInit {
 			crawledVersion: `assets/scans/${this.type}/${this.id}/source.json`,
 			completeResults: `assets/scans/${this.type}/${this.id}/complete.json`,
 			result: `assets/scans/${this.type}/${this.id}/results/{RESULT_ID}.json`, // inside the package, we will be assignment the RESULT_ID
-			filter: {
-				get: '', // optional
-				update: '', // optional
-			},
 		};
 		this._handleCustomComponentsView(this.id, this.type);
 
@@ -66,10 +62,6 @@ export class DemoReportPreviewsComponent implements OnInit {
 				crawledVersion: `assets/scans/${this.type}/${this.id}/source.json`,
 				completeResults: `assets/scans/${this.type}/${this.id}/complete.json`,
 				result: `assets/scans/${this.type}/${this.id}/results/{RESULT_ID}.json`, // inside the package, we will be assignment the RESULT_ID
-				filter: {
-					get: '', // optional
-					update: '', // optional
-				},
 			};
 
 			this._handleCustomComponentsView(id, type);

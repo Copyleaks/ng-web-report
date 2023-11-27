@@ -36,12 +36,7 @@ export interface IClsReportEndpointConfigModel {
 	result: string;
 
 	/**
-	 * @property {object} filter - Contains endpoints related to filtering options.
-	 * @property {string} filter.get - Endpoint for getting the current filter settings.
-	 * @property {string} filter.update - Endpoint for updating the filter settings.
+	 * @property {string} progress - Endpoint for check the scan progress.
 	 */
-	filter: {
-		get: string;
-		update: string;
-	};
+	progress?: string;
 }

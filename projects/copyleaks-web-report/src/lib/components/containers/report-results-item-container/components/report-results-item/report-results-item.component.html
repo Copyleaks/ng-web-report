@@ -139,15 +139,15 @@
 </div>
 
 <mat-menu class="result-item-menu-list" #menu="matMenu" yPosition="below">
-	<button mat-menu-item (click)="hiddenResultById()">
+	<button mat-menu-item (click)="hiddenResultById()" [disableRipple]="true">
 		<mat-icon class="mat-menu-item-icon">visibility_off</mat-icon>
 		<span class="mat-menu-item-text" i18n>Exclude result</span>
 	</button>
-	<button *ngIf="previewResult?.url" mat-menu-item (click)="visitResultSource()">
+	<button *ngIf="previewResult?.url" mat-menu-item (click)="visitResultSource()" [disableRipple]="true">
 		<mat-icon class="mat-menu-item-icon">open_in_new</mat-icon>
 		<span class="mat-menu-item-text" i18n>Visit result source</span>
 	</button>
-	<button mat-menu-item (click)="comapreResult()">
+	<button mat-menu-item (click)="comapreResult()" [disableRipple]="true">
 		<mat-icon class="mat-menu-item-icon">compare_arrows</mat-icon>
 		<span class="mat-menu-item-text" i18n>Compare with submitted file</span>
 	</button>

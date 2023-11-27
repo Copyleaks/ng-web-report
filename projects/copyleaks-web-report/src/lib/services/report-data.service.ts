@@ -1,20 +1,20 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
+import { BehaviorSubject, combineLatest, forkJoin, from } from 'rxjs';
+import { concatMap, filter, take } from 'rxjs/operators';
+import { ALERTS } from '../constants/report-alerts.constants';
+import { EResultPreviewType } from '../enums/copyleaks-web-report.enums';
+import { IClsReportEndpointConfigModel } from '../models/report-config.models';
 import {
 	IAPIProgress,
 	ICompleteResults,
-	IResultDetailResponse as IResultDetailResponse,
+	IResultDetailResponse,
 	IScanSource,
 } from '../models/report-data.models';
-import { BehaviorSubject, Subject, combineLatest, forkJoin, from } from 'rxjs';
-import { concatMap, filter, take } from 'rxjs/operators';
 import { AIScanResult, ResultDetailItem } from '../models/report-matches.models';
-import { IClsReportEndpointConfigModel } from '../models/report-config.models';
-import { untilDestroy } from '../utils/until-destroy';
-import { EResultPreviewType } from '../enums/copyleaks-web-report.enums';
-import { ReportViewService } from './report-view.service';
 import { ICopyleaksReportOptions } from '../models/report-options.models';
-import { ALERTS } from '../constants/report-alerts.constants';
+import * as helpers from '../utils/report-statistics-helpers';
+import { untilDestroy } from '../utils/until-destroy';
 
 @Injectable()
 export class ReportDataService {
@@ -103,7 +103,7 @@ export class ReportDataService {
 			this._filterOptions$.value?.showInternetResults === false ||
 			this._filterOptions$.value?.showInternalDatabaseResults === false ||
 			this._filterOptions$.value?.showBatchResults === false ||
-			this._filterOptions$.value?.showTop100Results === true ||
+			this._filterOptions$.value?.showTop100Results === false ||
 			(this._filterOptions$.value?.includedTags?.length && this._filterOptions$.value?.includedTags?.length > 0) ||
 			!!this._filterOptions$.value?.publicationDate ||
 			!!this._filterOptions$.value?.wordLimit ||
@@ -115,17 +115,30 @@ export class ReportDataService {
 		combineLatest([this.filterOptions$, this.excludedResultsIds$])
 			.pipe(
 				untilDestroy(this),
-				filter(options => options != undefined)
+				filter(([options, excludedResultsIds]) => options !== undefined && excludedResultsIds !== undefined)
 			)
 			.subscribe(([options, excludedResultsIds]) => {
-				if (!this.scanResultsPreviews) return;
+				if (!this.scanResultsPreviews || !options || !excludedResultsIds) return;
+
+				const filteredResults = this.filterResults(this.scanResultsDetails, options, excludedResultsIds);
+				const stats = helpers.calculateStatistics(this.scanResultsPreviews, filteredResults, options);
+
 				this._scanResultsPreviews$.next({
 					...this.scanResultsPreviews,
+					results: {
+						...this.scanResultsPreviews.results,
+						score: {
+							identicalWords: stats.identical,
+							minorChangedWords: stats.minorChanges,
+							relatedMeaningWords: stats.relatedMeaning,
+							aggregatedScore: stats.aggregatedScore ?? 0,
+						},
+					},
 					filters: {
 						general: {
 							alerts: options?.showAlerts ?? true,
 							authorSubmissions: options?.showSameAuthorSubmissions ?? true,
-							topResult: options?.showTop100Results ?? false,
+							topResult: options?.showTop100Results ?? true,
 						},
 						includedTags: options?.includedTags,
 						matchType: {
@@ -248,7 +261,7 @@ export class ReportDataService {
 						showTop100Results:
 							completeResultsRes.filters?.general?.topResult != undefined
 								? completeResultsRes.filters?.general?.topResult
-								: false,
+								: true,
 						showSameAuthorSubmissions:
 							completeResultsRes.filters?.general?.authorSubmissions != undefined
 								? completeResultsRes.filters?.general?.authorSubmissions
@@ -292,7 +305,7 @@ export class ReportDataService {
 	}
 
 	public initAsync(endpointsConfig: IClsReportEndpointConfigModel) {
-		
+
 	}
 
 	public loadAllReportScanResults(completeResults: ICompleteResults) {

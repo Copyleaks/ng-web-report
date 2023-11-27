@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
+import { ICompleteResults } from 'copyleaks-web-report';
 import { ILockResultItem } from 'projects/copyleaks-web-report/src/lib/components/containers/report-results-item-container/components/lock-result-item/models/lock-result-item.models';
 import { ECustomResultsReportView } from 'projects/copyleaks-web-report/src/lib/components/core/cr-custom-results/models/cr-custom-results.enums';
 import { EReportLayoutType } from 'projects/copyleaks-web-report/src/lib/enums/copyleaks-web-report.enums';
@@ -101,8 +102,8 @@ export class DemoReportPreviewsComponent implements OnInit {
 		}
 	}
 
-	onCompleteResultUpdate($event: any) {
-		console.log($event);
+	onCompleteResultUpdate(event: ICompleteResults) {
+		console.log(event);
 	}
 
 	ngOnDestroy(): void {

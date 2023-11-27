@@ -13,6 +13,7 @@ import { CrTextMatchComponent } from '../components/core/cr-text-match/cr-text-m
 })
 export class OriginalTextHelperDirective implements AfterContentInit, OnDestroy {
 	@Input() public host: { contentTextMatches: any; currentPage: number };
+	private unsubscribe$ = new Subject();
 
 	private lastSelectedOriginalTextMatch: TextMatchHighlightEvent;
 
@@ -65,7 +66,7 @@ export class OriginalTextHelperDirective implements AfterContentInit, OnDestroy 
 	 */
 	ngAfterContentInit() {
 		const { jump$, originalText$, textMatchClick$ } = this.highlightService;
-		originalText$.pipe(untilDestroy(this)).subscribe(value => (this.current = value));
+		originalText$.pipe(untilDestroy(this), takeUntil(this.unsubscribe$)).subscribe(value => (this.current = value));
 
 		const { reportViewMode$ } = this._viewService;
 
@@ -76,7 +77,8 @@ export class OriginalTextHelperDirective implements AfterContentInit, OnDestroy 
 					([, viewData]) =>
 						(viewData.viewMode === 'one-to-many' || viewData.viewMode === 'only-ai') && !viewData.isHtmlView
 				),
-				untilDestroy(this)
+				untilDestroy(this),
+				takeUntil(this.unsubscribe$)
 			)
 			.subscribe(([forward]) => this.handleJump(forward));
 
@@ -90,7 +92,8 @@ export class OriginalTextHelperDirective implements AfterContentInit, OnDestroy 
 						(viewData.viewMode === 'one-to-many' || viewData.viewMode === 'only-ai') &&
 						!viewData.isHtmlView
 				),
-				untilDestroy(this)
+				untilDestroy(this),
+				takeUntil(this.unsubscribe$)
 			)
 			.subscribe(([textMatchClickEvent, ,]) => {
 				this.lastSelectedOriginalTextMatch = textMatchClickEvent;
@@ -105,7 +108,8 @@ export class OriginalTextHelperDirective implements AfterContentInit, OnDestroy 
 						(viewData.viewMode === 'one-to-many' || viewData.viewMode === 'only-ai') &&
 						!viewData.isHtmlView
 				),
-				untilDestroy(this)
+				untilDestroy(this),
+				takeUntil(this.unsubscribe$)
 			)
 			.subscribe(_ => {
 				setTimeout(() => {
@@ -113,12 +117,15 @@ export class OriginalTextHelperDirective implements AfterContentInit, OnDestroy 
 					const end = this.lastSelectedOriginalTextMatch?.elem?.match?.end;
 					const comp = this.children.find(item => item.match.start === start && item.match.end === end);
 					if (!comp) {
-						throw new Error('Match component was not found in view');
+						return;
 					}
 					this.highlightService.textMatchClicked({ elem: comp, broadcast: false, origin: 'original' });
 				}, 100);
 			});
 	}
 
-	ngOnDestroy() {}
+	ngOnDestroy() {
+		this.unsubscribe$.next();
+		this.unsubscribe$.complete();
+	}
 }

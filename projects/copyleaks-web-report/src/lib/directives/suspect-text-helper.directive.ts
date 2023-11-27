@@ -17,6 +17,8 @@ import { CrTextMatchComponent } from '../components/core/cr-text-match/cr-text-m
 export class SuspectTextHelperDirective implements AfterContentInit, OnDestroy {
 	@Input() public host: { currentPage: number };
 
+	private unsubscribe$ = new Subject();
+
 	constructor(
 		private _highlightSvc: ReportMatchHighlightService,
 		private _viewService: ReportViewService,
@@ -33,24 +35,26 @@ export class SuspectTextHelperDirective implements AfterContentInit, OnDestroy {
 	 * @param contentMode content mode of the broadcasting match
 	 */
 	handleBroadcast(match: Match, suspect: IResultDetailResponse, contentMode: ContentMode) {
-		const [, start] = helpers.findRespectiveMatch(match, suspect[contentMode].comparison, true);
-		const page = helpers.findRespectivePage(start, suspect.text.pages.startPosition);
-		if (page === this.host.currentPage) {
-			const comp = this.children.find(item => item.match.start === start);
-			if (comp === null || comp === undefined) {
-				throw new Error('Match component was not found in view');
-			}
-			this._highlightSvc.textMatchClicked({ elem: comp, broadcast: false, origin: 'suspect' });
-		} else {
-			this.children.changes.pipe(take(1)).subscribe(() => {
+		setTimeout(() => {
+			const [, start] = helpers.findRespectiveMatch(match, suspect[contentMode].comparison, true);
+			const page = helpers.findRespectivePage(start, suspect.text.pages.startPosition);
+			if (page === this.host.currentPage) {
 				const comp = this.children.find(item => item.match.start === start);
 				if (comp === null || comp === undefined) {
-					throw new Error('Match component was not found in view');
+					return;
 				}
 				this._highlightSvc.textMatchClicked({ elem: comp, broadcast: false, origin: 'suspect' });
-			});
-			this.host.currentPage = page;
-		}
+			} else {
+				this.children.changes.pipe(take(1)).subscribe(() => {
+					const comp = this.children.find(item => item.match.start === start);
+					if (comp === null || comp === undefined) {
+						return;
+					}
+					this._highlightSvc.textMatchClicked({ elem: comp, broadcast: false, origin: 'suspect' });
+				});
+				this.host.currentPage = page;
+			}
+		});
 	}
 
 	/**
@@ -64,7 +68,8 @@ export class SuspectTextHelperDirective implements AfterContentInit, OnDestroy {
 			.pipe(
 				filter(ev => ev.origin === 'source' && ev.broadcast),
 				withLatestFrom(selectedResult$),
-				untilDestroy(this)
+				untilDestroy(this),
+				takeUntil(this.unsubscribe$)
 			)
 			.subscribe(([{ elem }, suspect]) => {
 				if (elem && suspect?.result) {
@@ -79,13 +84,15 @@ export class SuspectTextHelperDirective implements AfterContentInit, OnDestroy {
 				filter(
 					([, suspect]) =>
 						suspect != null && suspect != undefined && suspect.result != undefined && !suspect.result.html.value
-				),
-				untilDestroy(this)
+				)
 			)
 			.subscribe(([match, suspect]) => {
 				if (match && suspect?.result) this.handleBroadcast(match, suspect.result, 'html');
 			});
 	}
 
-	ngOnDestroy() {}
+	ngOnDestroy() {
+		this.unsubscribe$.next();
+		this.unsubscribe$.complete();
+	}
 }

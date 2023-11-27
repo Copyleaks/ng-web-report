@@ -7,7 +7,7 @@ import { ReportViewService } from '../services/report-view.service';
 import { IResultDetailResponse, IScanSource } from '../models/report-data.models';
 import * as helpers from '../utils/highlight-helpers';
 import { ReportDataService } from '../services/report-data.service';
-import { Subject } from 'rxjs';
+import { Subject, combineLatest } from 'rxjs';
 import { untilDestroy } from '../utils/until-destroy';
 import { CrTextMatchComponent } from '../components/core/cr-text-match/cr-text-match.component';
 
@@ -15,6 +15,12 @@ import { CrTextMatchComponent } from '../components/core/cr-text-match/cr-text-m
 	selector: '[crSourceTextHelper]',
 })
 export class SourceTextHelperDirective implements AfterContentInit, OnDestroy {
+	@ContentChildren(CrTextMatchComponent)
+	private children: QueryList<CrTextMatchComponent>;
+	private current: CrTextMatchComponent | null;
+
+	private unsubscribe$ = new Subject();
+
 	@Input() public host: { currentPage: number; contentTextMatches: any };
 
 	constructor(
@@ -23,27 +29,18 @@ export class SourceTextHelperDirective implements AfterContentInit, OnDestroy {
 		private _dataSvc: ReportDataService
 	) {}
 
-	@ContentChildren(CrTextMatchComponent)
-	private children: QueryList<CrTextMatchComponent>;
-	private current: CrTextMatchComponent | null;
-
-	/**
-	 * Life-cycle method
-	 * - subscribe to text match clicks from suspect
-	 * - subscribe to jump events
-	 * - subscribe to the source text selected match
-	 */
-	ngAfterContentInit() {
+	ngAfterContentInit(): void {
 		const { textMatchClick$, jump$, sourceText$, suspectHtml$ } = this._highlightSvc;
 		const { crawledVersion$ } = this._dataSvc;
 		const { reportViewMode$, selectedResult$ } = this._viewService;
-		sourceText$.pipe(untilDestroy(this)).subscribe(value => (this.current = value));
+		sourceText$.pipe(untilDestroy(this), takeUntil(this.unsubscribe$)).subscribe(value => (this.current = value));
 		textMatchClick$
 			.pipe(
 				filter(ev => ev.origin === 'suspect' && ev.broadcast),
 				withLatestFrom(crawledVersion$, selectedResult$, reportViewMode$),
 				filter(([, , , viewData]) => !viewData.isHtmlView),
-				untilDestroy(this)
+				untilDestroy(this),
+				takeUntil(this.unsubscribe$)
 			)
 			.subscribe(([{ elem }, source, suspect]) => {
 				if (elem && source && suspect?.result) {
@@ -51,11 +48,11 @@ export class SourceTextHelperDirective implements AfterContentInit, OnDestroy {
 				}
 			});
 
-		jump$
+		combineLatest([jump$, reportViewMode$])
 			.pipe(
-				withLatestFrom(reportViewMode$),
 				filter(([, viewData]) => viewData.viewMode === 'one-to-one' && !viewData.isHtmlView),
-				untilDestroy(this)
+				untilDestroy(this),
+				takeUntil(this.unsubscribe$)
 			)
 			.subscribe(([forward]) => this.handleJump(forward));
 
@@ -63,8 +60,7 @@ export class SourceTextHelperDirective implements AfterContentInit, OnDestroy {
 			.pipe(
 				withLatestFrom(crawledVersion$, selectedResult$, reportViewMode$),
 				filter(([, , , viewData]) => viewData.isHtmlView),
-				filter(([, source]) => !source?.html || !source.html.value),
-				untilDestroy(this)
+				filter(([, source]) => !source?.html || !source.html.value)
 			)
 			.subscribe(([match, source, suspect]) => {
 				if (match && source && suspect?.result) this.handleBroadcast(match, source, suspect.result, 'html');
@@ -81,14 +77,14 @@ export class SourceTextHelperDirective implements AfterContentInit, OnDestroy {
 		if (page === this.host.currentPage) {
 			const comp = this.children.find(item => item.match.start === start);
 			if (comp === null || comp === undefined) {
-				throw new Error('Match component was not found in view');
+				return;
 			}
 			this._highlightSvc.textMatchClicked({ elem: comp, broadcast: false, origin: 'source' });
 		} else {
 			this.children.changes.pipe(take(1)).subscribe(() => {
 				const comp = this.children.find(item => item.match.start === start);
 				if (comp === null || comp === undefined) {
-					throw new Error('Match component was not found in view');
+					return;
 				}
 				this._highlightSvc.textMatchClicked({ elem: comp, broadcast: false, origin: 'source' });
 			});
@@ -101,21 +97,25 @@ export class SourceTextHelperDirective implements AfterContentInit, OnDestroy {
 	 */
 	handleJump(forward: boolean) {
 		if (this.canJumpInCurrentPage(forward)) {
-			const components = this.children.toArray();
-			const nextIndex = this.current ? components.indexOf(this.current) + (forward ? 1 : -1) : 0;
-			this._highlightSvc.textMatchClicked({ elem: components[nextIndex], broadcast: true, origin: 'source' });
+			setTimeout(() => {
+				const components = this.children.toArray();
+				const nextIndex = this.current ? components.indexOf(this.current) + (forward ? 1 : -1) : 0;
+				this._highlightSvc.textMatchClicked({ elem: components[nextIndex], broadcast: true, origin: 'source' });
+			});
 		} else {
-			const page = forward
-				? helpers.findNextPageWithMatch(this.host.contentTextMatches, this.host.currentPage)
-				: helpers.findPrevPageWithMatch(this.host.contentTextMatches, this.host.currentPage);
-			if (this.host.currentPage !== page) {
-				this._highlightSvc.textMatchClicked({ elem: this.current, broadcast: true, origin: 'source' });
-				this.children.changes.pipe(take(1)).subscribe(() => {
-					const comp = forward ? this.children.first : this.children.last;
-					this._highlightSvc.textMatchClicked({ elem: comp, broadcast: true, origin: 'source' });
-				});
-				this.host.currentPage = page;
-			}
+			setTimeout(() => {
+				const page = forward
+					? helpers.findNextPageWithMatch(this.host.contentTextMatches, this.host.currentPage)
+					: helpers.findPrevPageWithMatch(this.host.contentTextMatches, this.host.currentPage);
+				if (this.host.currentPage !== page) {
+					this._highlightSvc.textMatchClicked({ elem: this.current, broadcast: true, origin: 'source' });
+					this.children.changes.pipe(take(1)).subscribe(() => {
+						const comp = forward ? this.children.first : this.children.last;
+						this._highlightSvc.textMatchClicked({ elem: comp, broadcast: true, origin: 'source' });
+					});
+					this.host.currentPage = page;
+				}
+			});
 		}
 	}
 
@@ -131,5 +131,8 @@ export class SourceTextHelperDirective implements AfterContentInit, OnDestroy {
 		}
 	}
 
-	ngOnDestroy() {}
+	ngOnDestroy() {
+		this.unsubscribe$.next();
+		this.unsubscribe$.complete();
+	}
 }

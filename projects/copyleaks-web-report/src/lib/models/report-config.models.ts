@@ -12,6 +12,21 @@ export type ContentMode = 'text' | 'html';
 export type DirectionMode = 'rtl' | 'ltr';
 
 /**
+ * Defines the structure for the nested object containing the URL and headers.
+ */
+export interface IEndpointDetails {
+	/**
+	 * @property {string} url - The URL for the API endpoint.
+	 */
+	url: string;
+
+	/**
+	 * @property {Object} headers - The headers dictionary for API calls.
+	 */
+	headers: { [key: string]: string }; // A dictionary with string keys and string values
+}
+
+/**
  * Defines the structure for API endpoints related to Copyleaks reports data.
  */
 export interface IClsReportEndpointConfigModel {
@@ -21,22 +36,22 @@ export interface IClsReportEndpointConfigModel {
 	authToken: string;
 
 	/**
-	 * @property {string} crawledVersion - Endpoint for fetching the crawled version of scanned content.
+	 * @property {IEndpointDetails} crawledVersion - Object containing endpoint details for fetching the crawled version of scanned content.
 	 */
-	crawledVersion: string;
+	crawledVersion: IEndpointDetails;
 
 	/**
-	 * @property {string} completeResults - Endpoint for fetching complete scanning results.
+	 * @property {IEndpointDetails} completeResults - Object containing endpoint details for fetching complete scanning results.
 	 */
-	completeResults: string;
+	completeResults: IEndpointDetails;
 
 	/**
-	 * @property {string} result - Endpoint for fetching individual scan results.
+	 * @property {IEndpointDetails} result - Object containing endpoint details for fetching individual scan results.
 	 */
-	result: string;
+	result: IEndpointDetails;
 
 	/**
-	 * @property {string} progress - Endpoint for check the scan progress.
+	 * @property {IEndpointDetails} progress - Object containing endpoint details for fetching scan progress.
 	 */
-	progress?: string;
+	progress?: IEndpointDetails;
 }

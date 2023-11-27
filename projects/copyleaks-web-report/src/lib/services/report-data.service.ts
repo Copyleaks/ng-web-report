@@ -1,16 +1,11 @@
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { BehaviorSubject, combineLatest, forkJoin, from } from 'rxjs';
 import { concatMap, filter, take } from 'rxjs/operators';
 import { ALERTS } from '../constants/report-alerts.constants';
 import { EResultPreviewType } from '../enums/copyleaks-web-report.enums';
-import { IClsReportEndpointConfigModel } from '../models/report-config.models';
-import {
-	IAPIProgress,
-	ICompleteResults,
-	IResultDetailResponse,
-	IScanSource,
-} from '../models/report-data.models';
+import { IClsReportEndpointConfigModel, IEndpointDetails } from '../models/report-config.models';
+import { IAPIProgress, ICompleteResults, IResultDetailResponse, IScanSource } from '../models/report-data.models';
 import { AIScanResult, ResultDetailItem } from '../models/report-matches.models';
 import { ICopyleaksReportOptions } from '../models/report-options.models';
 import * as helpers from '../utils/report-statistics-helpers';
@@ -197,10 +192,12 @@ export class ReportDataService {
 		// init the subject values
 		this._reportEndpointConfig$.next(endpointsConfig);
 
-		if (!endpointsConfig.progress) {
+		if (!endpointsConfig.progress?.url) {
 			this.initSync(endpointsConfig);
 		} else {
-			const progressResult$ = this._http.get<IAPIProgress>(endpointsConfig.progress);
+			const progressResult$ = this._http.get<IAPIProgress>(endpointsConfig.progress.url, {
+				headers: this._createHeaders(endpointsConfig.progress, endpointsConfig.authToken),
+			});
 			progressResult$.pipe(take(1)).subscribe(progress => {
 				if (progress?.percents == 100) {
 					this.initSync(endpointsConfig);
@@ -212,9 +209,13 @@ export class ReportDataService {
 	}
 
 	public initSync(endpointsConfig: IClsReportEndpointConfigModel) {
-		// Run the GET report crawled version & GET complete results requests in parallel
-		const crawledVersionReq$ = this._http.get<IScanSource>(endpointsConfig.crawledVersion);
-		const completeResultsReq$ = this._http.get<ICompleteResults>(endpointsConfig.completeResults);
+		// Run the GET report crawled version & GET complete results requests in parallel using the created headers
+		const crawledVersionReq$ = this._http.get<IScanSource>(endpointsConfig.crawledVersion.url, {
+			headers: this._createHeaders(endpointsConfig.crawledVersion, endpointsConfig.authToken),
+		});
+		const completeResultsReq$ = this._http.get<ICompleteResults>(endpointsConfig.completeResults.url, {
+			headers: this._createHeaders(endpointsConfig.completeResults, endpointsConfig.authToken),
+		});
 
 		forkJoin([crawledVersionReq$, completeResultsReq$])
 			.pipe(untilDestroy(this))
@@ -304,9 +305,7 @@ export class ReportDataService {
 			);
 	}
 
-	public initAsync(endpointsConfig: IClsReportEndpointConfigModel) {
-
-	}
+	public initAsync(endpointsConfig: IClsReportEndpointConfigModel) {}
 
 	public loadAllReportScanResults(completeResults: ICompleteResults) {
 		const cachedResults = this._scanResultsDetails$.getValue();
@@ -364,9 +363,16 @@ export class ReportDataService {
 	public async getReportResultAsync(resultId: string) {
 		if (!this._reportEndpointConfig$?.value?.result) return;
 
-		var requestUrl = this._reportEndpointConfig$.value.result.replace('{RESULT_ID}', resultId);
+		var requestUrl = this._reportEndpointConfig$.value.result.url.replace('{RESULT_ID}', resultId);
 
-		const response = await this._http.get<IResultDetailResponse>(requestUrl).toPromise();
+		const response = await this._http
+			.get<IResultDetailResponse>(requestUrl, {
+				headers: this._createHeaders(
+					this._reportEndpointConfig$?.value.result,
+					this._reportEndpointConfig$?.value.authToken
+				),
+			})
+			.toPromise();
 
 		return {
 			id: resultId,
@@ -545,6 +551,14 @@ export class ReportDataService {
 
 			includeResultsWithoutDate: true,
 			publicationDate: undefined,
+		});
+	}
+
+	private _createHeaders(endpointDetails: IEndpointDetails, authToken: string): HttpHeaders {
+		// Create HttpHeaders using the authToken and any additional headers provided in the endpoint details
+		return new HttpHeaders({
+			Authorization: `Bearer ${authToken}`,
+			...endpointDetails.headers,
 		});
 	}
 

@@ -41,10 +41,10 @@ export class DemoReportPreviewsComponent implements OnInit {
 		this.id = this._route.snapshot.paramMap.get('id');
 		this.type = this._route.snapshot.paramMap.get('type');
 		this.endpointsConfig = {
-			authToken: '', // optional
-			crawledVersion: `assets/scans/${this.type}/${this.id}/source.json`,
-			completeResults: `assets/scans/${this.type}/${this.id}/complete.json`,
-			result: `assets/scans/${this.type}/${this.id}/results/{RESULT_ID}.json`, // inside the package, we will be assignment the RESULT_ID
+			authToken: '1234', // optional
+			crawledVersion: { url: `assets/scans/${this.type}/${this.id}/source.json`, headers: {} },
+			completeResults: { url: `assets/scans/${this.type}/${this.id}/complete.json`, headers: {} },
+			result: { url: `assets/scans/${this.type}/${this.id}/results/{RESULT_ID}.json`, headers: {} }, // inside the package, we will be assignment the RESULT_ID
 		};
 		this._handleCustomComponentsView(this.id, this.type);
 
@@ -60,9 +60,9 @@ export class DemoReportPreviewsComponent implements OnInit {
 			this.type = type;
 			this.endpointsConfig = {
 				authToken: '', // optional
-				crawledVersion: `assets/scans/${this.type}/${this.id}/source.json`,
-				completeResults: `assets/scans/${this.type}/${this.id}/complete.json`,
-				result: `assets/scans/${this.type}/${this.id}/results/{RESULT_ID}.json`, // inside the package, we will be assignment the RESULT_ID
+				crawledVersion: { url: `assets/scans/${this.type}/${this.id}/source.json`, headers: {} },
+				completeResults: { url: `assets/scans/${this.type}/${this.id}/complete.json`, headers: {} },
+				result: { url: `assets/scans/${this.type}/${this.id}/results/{RESULT_ID}.json`, headers: {} }, // inside the package, we will be assignment the RESULT_ID
 			};
 
 			this._handleCustomComponentsView(id, type);

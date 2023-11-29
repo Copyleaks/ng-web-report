@@ -25,6 +25,7 @@ import { IResultsActions } from '../../containers/report-results-container/compo
 import { IResultItem } from '../../containers/report-results-item-container/components/models/report-result-item.models';
 import { ECustomResultsReportView } from '../../core/cr-custom-results/models/cr-custom-results.enums';
 import { ReportLayoutBaseComponent } from './report-layout-base.component';
+import { ReportRealtimeResultsService } from '../../../services/report-realtime-results.service';
 
 export abstract class OneToManyReportLayoutBaseComponent extends ReportLayoutBaseComponent {
 	hideRightSection: boolean = false;
@@ -53,11 +54,13 @@ export abstract class OneToManyReportLayoutBaseComponent extends ReportLayoutBas
 		totalFiltered: 0,
 		selectedResults: 0,
 	};
+	newScanResultsView: IResultItem[];
 
 	focusedMatch: Match | null;
 
-	isLoadingScanContent: boolean = false;
-	isLoadingScanResults: boolean = false;
+	isLoadingScanContent: boolean = true;
+	isLoadingScanResults: boolean = true;
+	loadingProgressPct: number = 0;
 
 	hidePlagarismTap: boolean = false;
 	hideAiTap: boolean = false;
@@ -101,12 +104,30 @@ export abstract class OneToManyReportLayoutBaseComponent extends ReportLayoutBas
 		renderer: Renderer2,
 		highlightSvc: ReportMatchHighlightService,
 		statisticsSvc: ReportStatisticsService,
-		templatesSvc: ReportNgTemplatesService
+		templatesSvc: ReportNgTemplatesService,
+		realTimeResultsSvc: ReportRealtimeResultsService
 	) {
-		super(reportDataSvc, reportViewSvc, matchSvc, renderer, highlightSvc, statisticsSvc, templatesSvc);
+		super(
+			reportDataSvc,
+			reportViewSvc,
+			matchSvc,
+			renderer,
+			highlightSvc,
+			statisticsSvc,
+			templatesSvc,
+			realTimeResultsSvc
+		);
 	}
 
 	initOneToManyViewData(): void {
+		this.reportViewSvc.progress$.pipe(untilDestroy(this)).subscribe(progress => {
+			this.loadingProgressPct = progress;
+		});
+
+		this.realTimeResultsSvc.newResults$.pipe(untilDestroy(this)).subscribe(data => {
+			if (data) this.newScanResultsView = data;
+		});
+
 		this.reportDataSvc.crawledVersion$.pipe(untilDestroy(this)).subscribe(data => {
 			if (data) {
 				this.reportCrawledVersion = data;

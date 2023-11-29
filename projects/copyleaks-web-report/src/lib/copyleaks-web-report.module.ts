@@ -76,6 +76,7 @@ import { MatSliderModule } from '@angular/material/slider';
 import { MatCheckboxModule } from '@angular/material/checkbox';
 import { ReportViewService } from './services/report-view.service';
 import { ReportDataService } from './services/report-data.service';
+import { ReportRealtimeResultsService } from './services/report-realtime-results.service';
 
 @NgModule({
 	declarations: [
@@ -165,6 +166,12 @@ import { ReportDataService } from './services/report-data.service';
 		EmptyResultStateComponent,
 		LockResultItemComponent,
 	],
-	providers: [HttpRequestErrorInterceptorProvider, ReportErrorsService, ReportViewService, ReportDataService],
+	providers: [
+		HttpRequestErrorInterceptorProvider,
+		ReportErrorsService,
+		ReportViewService,
+		ReportDataService,
+		ReportRealtimeResultsService,
+	],
 })
 export class CopyleaksWebReportModule {}

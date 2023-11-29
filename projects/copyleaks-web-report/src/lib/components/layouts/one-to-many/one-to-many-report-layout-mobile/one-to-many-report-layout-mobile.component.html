@@ -29,7 +29,8 @@
 				[showLoadingView]="isLoadingScanContent"
 				[showDisabledProducts]="showDisabledProducts"
 				[hideAiTap]="hideAiTap"
-				[hidePlagarismTap]="hidePlagarismTap"></copyleaks-report-tabs-container>
+				[hidePlagarismTap]="hidePlagarismTap"
+				[loadingProgressPct]="loadingProgressPct"></copyleaks-report-tabs-container>
 
 			<!-- Report scan content viewer -->
 			<copyleaks-content-viewer-container
@@ -57,6 +58,7 @@
 		class="results-container"
 		[flexGrow]="15"
 		[allResults]="scanResultsView"
+		[newResults]="newScanResultsView"
 		[resultsActions]="scanResultsActions"
 		[isMobile]="true"
 		[showLoadingView]="isLoadingScanResults"

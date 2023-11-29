@@ -289,8 +289,6 @@ export class FilterResultDailogComponent implements OnInit {
 
 					this.allTagItem = this._filterResultsSvc.selectedTagItem;
 
-					// TODO: get number of same author submissions
-
 					this.loading = false;
 				}
 			});

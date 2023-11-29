@@ -17,13 +17,23 @@ export class BundleReportDemoComponent implements OnInit {
 		if (!scanId) throw 'scanId is missing';
 
 		this.reportEndPoints = {
-			authToken: '', // optional
-			crawledVersion: `assets/scans/bundle/${scanId}/source.json`,
-			completeResults: `assets/scans/bundle/${scanId}/complete.json`,
-			result: `assets/scans/bundle/${scanId}/results/{RESULT_ID}`, // inside the package, we will be assignment the RESULT_ID
-			filter: {
-				get: '', // optional
-				update: '', // optional
+			authToken:
+				'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxMjM0NTY3ODkwIiwibmFtZSI6IlVzZXJOYW1lIiwiaWF0IjoxNTE2MjM5MDIyfQ.SflKxwRJSMeKKF2QT4fwpMeJf36POk6yJV_adQssw5c', // optional
+			crawledVersion: {
+				url: `assets/scans/bundle/${scanId}/source.json`,
+				headers: { 'Content-Type': 'application/json' },
+			},
+			completeResults: {
+				url: `assets/scans/bundle/${scanId}/complete.json`,
+				headers: { 'Content-Type': 'application/json' },
+			},
+			result: {
+				url: `assets/scans/bundle/${scanId}/results/{RESULT_ID}`,
+				headers: { 'Content-Type': 'application/json' },
+			},
+			progress: {
+				url: `assets/scans/bundle/${scanId}/progress`,
+				headers: { 'Content-Type': 'application/json' },
 			},
 		};
 	}

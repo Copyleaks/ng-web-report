@@ -9,7 +9,7 @@ import {
 	TemplateRef,
 	ViewChild,
 } from '@angular/core';
-import { EReportLayoutType, EResponsiveLayoutType } from './enums/copyleaks-web-report.enums';
+import { EReportLayoutType, EResponsiveLayoutType, EResultPreviewType } from './enums/copyleaks-web-report.enums';
 import { BreakpointObserver, Breakpoints } from '@angular/cdk/layout';
 import { filter, map } from 'rxjs/operators';
 import { ReportNgTemplatesService } from './services/report-ng-templates.service';
@@ -27,6 +27,7 @@ import { ReportErrorsService } from './services/report-errors.service';
 import { ICompleteResults } from './models/report-data.models';
 import { ALERTS } from './constants/report-alerts.constants';
 import { FilterResultDailogService } from './dialogs/filter-result-dailog/services/filter-result-dailog.service';
+import { ReportRealtimeResultsService } from '../public-api';
 
 @Component({
 	selector: 'copyleaks-web-report',
@@ -40,6 +41,7 @@ import { FilterResultDailogService } from './dialogs/filter-result-dailog/servic
 		ReportMatchHighlightService,
 		ReportStatisticsService,
 		FilterResultDailogService,
+		ReportRealtimeResultsService,
 	],
 })
 export class CopyleaksWebReportComponent implements OnInit, OnDestroy {
@@ -90,7 +92,8 @@ export class CopyleaksWebReportComponent implements OnInit, OnDestroy {
 		private _reportViewSvc: ReportViewService,
 		private _reportErrorsSvc: ReportErrorsService,
 		private _router: Router
-	) {}
+	) // private _reportRealtimeSvc: ReportRealtimeResultsService
+	{}
 
 	ngOnInit(): void {
 		// Handel responsive view changes
@@ -101,6 +104,85 @@ export class CopyleaksWebReportComponent implements OnInit, OnDestroy {
 
 		// Initialize the report data
 		if (this.reportEndpointConfig) this._reportDataSvc.initReportData(this.reportEndpointConfig);
+
+		// this._reportRealtimeSvc.pushNewResults([
+		// 	{
+		// 		repositoryId: '',
+		// 		url: 'https://blog.stackademic.com/read-text-aloud-in-simple-javascript-9528a8457904?gi=6b81cd0f325a',
+		// 		id: '3b0edab479',
+		// 		type: EResultPreviewType.Internet,
+		// 		title: 'Read Text Aloud in Simple JavaScript | Stackademic',
+		// 		introduction:
+		// 			'Open in appSign up Sign In Write Sign up Sign In Read text aloud in simple JavaScript Anirudh Muni...',
+		// 		matchedWords: 32,
+		// 		metadata: {
+		// 			finalUrl: undefined,
+		// 			canonicalUrl: undefined,
+		// 			author: 'Anirudh Munipalli',
+		// 			organization: 'Stackademic',
+		// 			filename: 'read-text-aloud-in-simple-javascript-9528a8457904',
+		// 			publishDate: '2023-08-08T10:28:46Z',
+		// 			creationDate: '2023-08-08T10:28:46Z',
+		// 			lastModificationDate: '2023-08-10T12:06:52Z',
+		// 			submissionDate: undefined,
+		// 			submittedBy: undefined,
+
+		// 			customMetadata: undefined,
+		// 		},
+		// 		tags: [],
+		// 	},
+		// 	{
+		// 		repositoryId: '',
+		// 		url: 'https://medium.com/@dschoenenberger/list/b37a02e2ee0c',
+		// 		id: '5738a169ae',
+		// 		type: EResultPreviewType.Internet,
+		// 		title: 'List: angular | Curated by Dominique Schoenenberger | Medium',
+		// 		introduction: 'Open in appSign up Sign In Write Sign up Sign In Follow Nov 12 ·10 stories angular Sha...',
+		// 		matchedWords: 59,
+		// 		metadata: {
+		// 			finalUrl: undefined,
+		// 			canonicalUrl: undefined,
+		// 			author: 'Dominique Schoenenberger',
+		// 			organization: 'Medium',
+		// 			filename: 'b37a02e2ee0c',
+		// 			publishDate: undefined,
+		// 			creationDate: '2023-06-09T14:49:44Z',
+		// 			lastModificationDate: '2023-11-12T05:53:07Z',
+		// 			submissionDate: undefined,
+		// 			submittedBy: undefined,
+
+		// 			customMetadata: undefined,
+		// 		},
+		// 		tags: [],
+		// 	},
+		// 	{
+		// 		repositoryId: '',
+
+		// 		url: 'https://blog.stackademic.com/kotlin-code-smells-010-undefined-9162b60b252c',
+		// 		id: '5aebdddb2e',
+		// 		type: EResultPreviewType.Internet,
+		// 		title: 'Kotlin Code Smells 10— undefined | Stackademic',
+		// 		introduction:
+		// 			'Open in appSign up Sign In Write Sign up Sign In Kotlin Code Smells 10— undefined Yonatan Karp-Rudin ...',
+		// 		matchedWords: 32,
+
+		// 		metadata: {
+		// 			finalUrl: undefined,
+		// 			canonicalUrl: undefined,
+		// 			author: 'Yonatan Karp-Rudin',
+		// 			organization: 'Stackademic',
+		// 			filename: 'kotlin-code-smells-010-undefined-9162b60b252c',
+		// 			publishDate: '2022-12-16T05:45:04Z',
+		// 			creationDate: '2022-12-16T05:45:04Z',
+		// 			lastModificationDate: '2023-08-05T20:07:31Z',
+		// 			submissionDate: undefined,
+		// 			submittedBy: undefined,
+
+		// 			customMetadata: undefined,
+		// 		},
+		// 		tags: [],
+		// 	},
+		// ]);
 
 		// Handel report requests errors & emit it
 		this._reportErrorsSvc.reportHttpRequestError$

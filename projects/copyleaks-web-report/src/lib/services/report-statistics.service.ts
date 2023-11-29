@@ -13,6 +13,8 @@ import { ReportViewService } from './report-view.service';
 @Injectable()
 export class ReportStatisticsService implements OnDestroy {
 	private _statistics = new BehaviorSubject<ReportStatistics | undefined>(undefined);
+	public statistics$ = this._statistics.asObservable().pipe(distinct());
+
 	constructor(private _reportDataSvc: ReportDataService, private _reportViewSvc: ReportViewService) {
 		const { scanResultsPreviews$, scanResultsDetails$, excludedResultsIds$, filterOptions$ } = this._reportDataSvc;
 		const { selectedResult$, reportViewMode$ } = this._reportViewSvc;
@@ -52,7 +54,6 @@ export class ReportStatisticsService implements OnDestroy {
 			});
 	}
 
-	public statistics$ = this._statistics.asObservable().pipe(distinct());
 	/**
 	 * Retreive statistics for a one-to-one comparison using the complete result, suspect, and report options
 	 * @param completeResult The complete result - contains the count of total words and excluded words in the document

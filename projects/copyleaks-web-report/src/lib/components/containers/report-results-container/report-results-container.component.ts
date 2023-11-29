@@ -24,6 +24,7 @@ import { ResultDetailItem } from '../../../models/report-matches.models';
 import { ICopyleaksReportOptions } from '../../../models/report-options.models';
 import { ECustomResultsReportView } from '../../core/cr-custom-results/models/cr-custom-results.enums';
 import { trigger, state, transition, animate, style } from '@angular/animations';
+import { ResultPreview } from '../../../models/report-data.models';
 
 @Component({
 	selector: 'copyleaks-report-results-container',
@@ -42,6 +43,7 @@ export class ReportResultsContainerComponent implements OnInit, OnChanges {
 	@Input() flexGrow: number;
 	@Input() reportResponsive: EResponsiveLayoutType;
 	@Input() allResults: IResultItem[] = [];
+	@Input() newResults: IResultItem[];
 	@Input() resultsActions: IResultsActions;
 	@Input() isMobile: boolean;
 	@Input() filterOptions: ICopyleaksReportOptions;
@@ -103,6 +105,14 @@ export class ReportResultsContainerComponent implements OnInit, OnChanges {
 		if (changes['showLoadingView']?.currentValue == false) {
 			this._handelFilterUpdates();
 			this.checkAndApplyPadding();
+
+			setTimeout(() => {
+				const container: HTMLElement = this.customEmptyResultView?.nativeElement;
+				if (container && container?.childElementCount > 0) this.showCustomView = true;
+				else this.showCustomView = false;
+
+				this.detectEndOfList();
+			});
 		}
 
 		if ('filterOptions' in changes && changes['filterOptions'].currentValue) {
@@ -325,9 +335,9 @@ export class ReportResultsContainerComponent implements OnInit, OnChanges {
 			...this.resultsActions,
 			totalExcluded: excludedResultsIds?.length,
 			totalFiltered:
-				this.allResults.length - filteredResults.length <= 0
+				(this._reportDataSvc.scanResultsDetails?.length ?? 0) - filteredResults.length <= 0
 					? 0
-					: this.allResults.length - filteredResults.length - excludedResultsIds?.length,
+					: (this._reportDataSvc.scanResultsDetails?.length ?? 0) - filteredResults.length - excludedResultsIds?.length,
 			totalResults: this._reportDataSvc.scanResultsDetails?.length ?? 0,
 		};
 

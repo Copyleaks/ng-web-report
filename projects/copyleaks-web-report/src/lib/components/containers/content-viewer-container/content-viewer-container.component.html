@@ -1,4 +1,4 @@
-<div *ngIf="!hideTitleContainer && !customTabContent && !showLoadingView" class="title-and-actions-container">
+<div @fadeIn *ngIf="!hideTitleContainer && !customTabContent && !showLoadingView" class="title-and-actions-container">
 	<div class="title-container">
 		<span class="title" web-report-title-font>
 			<ng-container *ngIf="reportOrigin != 'suspect'" i18n>Submitted text</ng-container>
@@ -100,11 +100,13 @@
 </div>
 
 <cr-author-alert-card
+	@fadeIn
 	*ngIf="!hideTitleContainer && !customTabContent && !showLoadingView && authorAlert"
 	[authorAlert]="authorAlert"
 	[onlyAiView]="!(reportResponsive === EResponsiveLayoutType.Mobile)"></cr-author-alert-card>
 
 <div
+	@fadeIn
 	class="content-container"
 	[ngStyle]="{
 		display: showLoadingView ? 'none' : ''
@@ -250,7 +252,9 @@
 
 	<ng-container *ngTemplateOutlet="customTabContent"></ng-container>
 </div>
+
 <div
+	@fadeIn
 	*ngIf="!showLoadingView"
 	class="paginator-container"
 	[ngStyle]="{ 'justify-content': customTabContent ? 'center' : '' }">

@@ -82,6 +82,11 @@ export class ReportTabsContainerComponent implements OnInit, OnDestroy, OnChange
 	 */
 	@Input() showDisabledProducts: boolean = false;
 
+	/**
+	 * @Input {boolean} - Flag indicating whether to still show the disabled products tabs.
+	 */
+	@Input() loadingProgressPct: number = 0;
+
 	EReportViewType = EReportViewType;
 	EReportScoreTooltipPosition = EReportScoreTooltipPosition;
 	customTabsTemplateRef: TemplateRef<any>[] | undefined = undefined;
@@ -139,7 +144,8 @@ export class ReportTabsContainerComponent implements OnInit, OnDestroy, OnChange
 		if (
 			selectedTab == this.selectedTap ||
 			(selectedTab === EReportViewType.PlagiarismView && this.hidePlagarismTap && this.showDisabledProducts) ||
-			(selectedTab === EReportViewType.AIView && this.hideAiTap && this.showDisabledProducts)
+			(selectedTab === EReportViewType.AIView && this.hideAiTap && this.showDisabledProducts) ||
+			this.loadingProgressPct != 100
 		)
 			return;
 

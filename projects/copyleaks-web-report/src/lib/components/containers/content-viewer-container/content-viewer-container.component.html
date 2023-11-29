@@ -11,7 +11,7 @@
 	<div class="actions-container">
 		<ng-container *ngIf="!customTabContent">
 			<mat-icon
-				*ngIf="reportOrigin != 'suspect'"
+				*ngIf="reportOrigin != 'suspect' && !(isHtmlView && !hasHtml)"
 				fontSet="material-icons-round"
 				matTooltip="Go to previous match"
 				matTooltipClass="web-report-mat-tooltip"
@@ -20,7 +20,7 @@
 				arrow_upward
 			</mat-icon>
 			<mat-icon
-				*ngIf="reportOrigin != 'suspect'"
+				*ngIf="reportOrigin != 'suspect' && !(isHtmlView && !hasHtml)"
 				fontSet="material-icons-round"
 				matTooltip="Go to next match"
 				matTooltipClass="web-report-mat-tooltip"

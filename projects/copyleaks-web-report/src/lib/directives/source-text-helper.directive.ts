@@ -48,8 +48,9 @@ export class SourceTextHelperDirective implements AfterContentInit, OnDestroy {
 				}
 			});
 
-		combineLatest([jump$, reportViewMode$])
+		jump$
 			.pipe(
+				withLatestFrom(reportViewMode$),
 				filter(([, viewData]) => viewData.viewMode === 'one-to-one' && !viewData.isHtmlView),
 				untilDestroy(this),
 				takeUntil(this.unsubscribe$)

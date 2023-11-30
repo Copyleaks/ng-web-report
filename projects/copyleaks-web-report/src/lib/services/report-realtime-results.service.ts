@@ -34,7 +34,7 @@ export class ReportRealtimeResultsService {
 				untilDestroy(this)
 			)
 			.subscribe(_ => {
-				if (!newResults) return;
+				if (!newResults || !this._reportDataService.crawledVersion) return;
 
 				// check for only *new* results, i.e. don't add new results that exists already
 				const existingResults = this._newResults$.value || [];
@@ -77,7 +77,7 @@ export class ReportRealtimeResultsService {
 
 							// Check if this is the last batch
 							if (currentBatchIndex === totalBatches) {
-								const mappedResults = this._loadedResultsDetails$.map(resultDetail => {
+								const mappedResults = results.map(resultDetail => {
 									const foundResultDetail = newResults?.find(r => r.id === resultDetail.id);
 									return {
 										resultPreview: foundResultDetail,

@@ -141,59 +141,60 @@ export class DemoReportPreviewsComponent implements OnInit {
 					tags: [],
 				},
 			]);
-		}, 3000);
-		setTimeout(() => {
-			this._reportRealtimeSvc.pushNewResults([
-				{
-					repositoryId: '',
-					url: 'https://blog.stackademic.com/read-text-aloud-in-simple-javascript-9528a8457904?gi=6b81cd0f325a',
-					id: '3b0edab479',
-					type: EResultPreviewType.Internet,
-					title: 'Read Text Aloud in Simple JavaScript | Stackademic',
-					introduction:
-						'Open in appSign up Sign In Write Sign up Sign In Read text aloud in simple JavaScript Anirudh Muni...',
-					matchedWords: 32,
-					metadata: {
-						finalUrl: undefined,
-						canonicalUrl: undefined,
-						author: 'Anirudh Munipalli',
-						organization: 'Stackademic',
-						filename: 'read-text-aloud-in-simple-javascript-9528a8457904',
-						publishDate: '2023-08-08T10:28:46Z',
-						creationDate: '2023-08-08T10:28:46Z',
-						lastModificationDate: '2023-08-10T12:06:52Z',
-						submissionDate: undefined,
-						submittedBy: undefined,
-						customMetadata: undefined,
+
+			setTimeout(() => {
+				this._reportRealtimeSvc.pushNewResults([
+					{
+						repositoryId: '',
+						url: 'https://blog.stackademic.com/read-text-aloud-in-simple-javascript-9528a8457904?gi=6b81cd0f325a',
+						id: '3b0edab479',
+						type: EResultPreviewType.Internet,
+						title: 'Read Text Aloud in Simple JavaScript | Stackademic',
+						introduction:
+							'Open in appSign up Sign In Write Sign up Sign In Read text aloud in simple JavaScript Anirudh Muni...',
+						matchedWords: 32,
+						metadata: {
+							finalUrl: undefined,
+							canonicalUrl: undefined,
+							author: 'Anirudh Munipalli',
+							organization: 'Stackademic',
+							filename: 'read-text-aloud-in-simple-javascript-9528a8457904',
+							publishDate: '2023-08-08T10:28:46Z',
+							creationDate: '2023-08-08T10:28:46Z',
+							lastModificationDate: '2023-08-10T12:06:52Z',
+							submissionDate: undefined,
+							submittedBy: undefined,
+							customMetadata: undefined,
+						},
+						tags: [],
 					},
-					tags: [],
-				},
-				{
-					repositoryId: '',
-					url: 'https://blog.stackademic.com/kotlin-code-smells-010-undefined-9162b60b252c',
-					id: '5aebdddb2e',
-					type: EResultPreviewType.Internet,
-					title: 'Kotlin Code Smells 10— undefined | Stackademic',
-					introduction:
-						'Open in appSign up Sign In Write Sign up Sign In Kotlin Code Smells 10— undefined Yonatan Karp-Rudin ...',
-					matchedWords: 32,
-					metadata: {
-						finalUrl: undefined,
-						canonicalUrl: undefined,
-						author: 'Yonatan Karp-Rudin',
-						organization: 'Stackademic',
-						filename: 'kotlin-code-smells-010-undefined-9162b60b252c',
-						publishDate: '2022-12-16T05:45:04Z',
-						creationDate: '2022-12-16T05:45:04Z',
-						lastModificationDate: '2023-08-05T20:07:31Z',
-						submissionDate: undefined,
-						submittedBy: undefined,
-						customMetadata: undefined,
+					{
+						repositoryId: '',
+						url: 'https://blog.stackademic.com/kotlin-code-smells-010-undefined-9162b60b252c',
+						id: '5aebdddb2e',
+						type: EResultPreviewType.Internet,
+						title: 'Kotlin Code Smells 10— undefined | Stackademic',
+						introduction:
+							'Open in appSign up Sign In Write Sign up Sign In Kotlin Code Smells 10— undefined Yonatan Karp-Rudin ...',
+						matchedWords: 32,
+						metadata: {
+							finalUrl: undefined,
+							canonicalUrl: undefined,
+							author: 'Yonatan Karp-Rudin',
+							organization: 'Stackademic',
+							filename: 'kotlin-code-smells-010-undefined-9162b60b252c',
+							publishDate: '2022-12-16T05:45:04Z',
+							creationDate: '2022-12-16T05:45:04Z',
+							lastModificationDate: '2023-08-05T20:07:31Z',
+							submissionDate: undefined,
+							submittedBy: undefined,
+							customMetadata: undefined,
+						},
+						tags: [],
 					},
-					tags: [],
-				},
-			]);
-		}, 7000);
+				]);
+			}, 7000);
+		}, 10000);
 	}
 
 	onCompleteResultUpdate(event: ICompleteResults) {

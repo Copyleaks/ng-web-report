@@ -153,7 +153,7 @@ export abstract class OneToManyReportLayoutBaseComponent extends ReportLayoutBas
 				this.oneToManyRerendered = false;
 			}
 			this.reportMatches = data ?? [];
-			const updatedHtml = this._getRenderedMatches(data, this.reportCrawledVersion?.html.value);
+			const updatedHtml = this._getRenderedMatches(data, this.reportDataSvc.crawledVersion?.html?.value);
 			if (updatedHtml && data) {
 				this.iframeHtml = updatedHtml;
 				this.oneToManyRerendered = true;

@@ -1,11 +1,11 @@
 import { Injectable, OnDestroy } from '@angular/core';
 import { BehaviorSubject, combineLatest } from 'rxjs';
 import { distinct, filter } from 'rxjs/operators';
-import * as helpers from '../utils/report-statistics-helpers';
-import { ReportStatistics } from '../models/report-statistics.models';
 import { ICompleteResults } from '../models/report-data.models';
 import { ResultDetailItem } from '../models/report-matches.models';
 import { ICopyleaksReportOptions } from '../models/report-options.models';
+import { ReportStatistics } from '../models/report-statistics.models';
+import * as helpers from '../utils/report-statistics-helpers';
 import { untilDestroy } from '../utils/until-destroy';
 import { ReportDataService } from './report-data.service';
 import { ReportViewService } from './report-view.service';

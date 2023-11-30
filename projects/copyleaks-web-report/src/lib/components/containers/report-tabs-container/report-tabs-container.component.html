@@ -2,6 +2,7 @@
 	<ng-container *ngIf="!showLoadingView; else loadingViewRef">
 		<div
 			*ngIf="!hidePlagarismTap || showDisabledProducts"
+			@fadeIn
 			class="tab-plagiarism"
 			[crReportScoreTooltip]="
 				hidePlagarismTap && showDisabledProducts
@@ -50,6 +51,7 @@
 		</div>
 		<div
 			*ngIf="!hideAiTap || showDisabledProducts"
+			@fadeIn
 			class="tab-ai"
 			[crReportScoreTooltip]="
 				hideAiTap && showDisabledProducts
@@ -104,6 +106,7 @@
 <ng-template #realTimeView>
 	<div
 		class="tab-plagiarism"
+		@fadeIn
 		[style.flex-grow]="1"
 		[class.tab-selected]="selectedTap === EReportViewType.PlagiarismView && !hidePlagarismTap"
 		[class.tab-disabled]="hidePlagarismTap && showDisabledProducts"
@@ -117,31 +120,17 @@
 				{{ loadingProgressPct + '%' }}
 			</span>
 		</div>
-		<div class="grade-bar">
-			<div class="bar plagiarism" [style.width.%]="100">
-				<div class="identical real-time-view" [class.first-percentage]="true" [style.width.%]="50"></div>
-				<div class="minor-changes real-time-view" [style.width.%]="25"></div>
-				<div class="paraphrased last-percentage real-time-view" [style.width.%]="15"></div>
-			</div>
-		</div>
+		<mat-progress-bar mode="indeterminate"></mat-progress-bar>
 	</div>
 	<div
 		class="tab-ai"
 		[style.flex-grow]="1"
-		[class.tab-selected]="selectedTap === EReportViewType.AIView && !hideAiTap"
-		[class.tab-disabled]="hideAiTap && showDisabledProducts"
-		matTooltipClass="web-report-mat-tooltip"
-		(click)="selectTap(EReportViewType.AIView)">
+		[class.tab-selected]="false"
+		[class.tab-disabled]="false"
+		matTooltipClass="web-report-mat-tooltip">
 		<div class="bar-title-container">
 			<span class="bar-title" web-report-title-font i18n>AI Content</span>
-			<span class="bar-score real-time-view" web-report-title-font>
-				<ng-container i18n>Loading...</ng-container>
-				&nbsp;
-				{{ loadingProgressPct + '%' }}
-			</span>
 		</div>
-		<div class="grade-bar">
-			<div class="bar ai-content real-time-view" [style.width.%]="50"></div>
-		</div>
+		<mat-progress-bar mode="indeterminate"></mat-progress-bar>
 	</div>
 </ng-template>

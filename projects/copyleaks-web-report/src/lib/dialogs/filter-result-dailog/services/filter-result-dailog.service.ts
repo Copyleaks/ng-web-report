@@ -147,7 +147,7 @@ export class FilterResultDailogService {
 
 	public getFormControlValue(eFilterResultForm: EFilterResultForm) {
 		switch (eFilterResultForm) {
-			//Source Type
+			// Source Type
 			case EFilterResultForm.fcInternet:
 				return this._completeResults.filters?.sourceType?.internet != undefined
 					? this._completeResults.filters?.sourceType?.internet
@@ -198,7 +198,7 @@ export class FilterResultDailogService {
 			case EFilterResultForm.fcTopResult:
 				return this._completeResults.filters?.general?.topResult != undefined
 					? this._completeResults.filters?.general?.topResult
-					: false;
+					: true;
 			case EFilterResultForm.fcAlerts:
 				return this._completeResults.filters?.general?.alerts != undefined
 					? this._completeResults.filters?.general?.alerts

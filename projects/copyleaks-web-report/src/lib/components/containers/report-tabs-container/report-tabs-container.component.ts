@@ -15,11 +15,18 @@ import { ReportNgTemplatesService } from '../../../services/report-ng-templates.
 import { untilDestroy } from '../../../utils/until-destroy';
 import { ReportMatchHighlightService } from '../../../services/report-match-highlight.service';
 import { ReportDataService } from '../../../services/report-data.service';
+import { trigger, state, transition, animate, style } from '@angular/animations';
 
 @Component({
 	selector: 'copyleaks-report-tabs-container',
 	templateUrl: './report-tabs-container.component.html',
 	styleUrls: ['./report-tabs-container.component.scss'],
+	animations: [
+		trigger('fadeIn', [
+			state('void', style({ opacity: 0 })),
+			transition(':enter', [animate('0.5s ease-in', style({ opacity: 1 }))]),
+		]),
+	],
 })
 export class ReportTabsContainerComponent implements OnInit, OnDestroy, OnChanges {
 	/**
@@ -129,11 +136,12 @@ export class ReportTabsContainerComponent implements OnInit, OnDestroy, OnChange
 				this._reportViewSvc.selectedAlert$.next(null);
 				this._reportViewSvc.reportViewMode$.next({ ...this._reportViewSvc.reportViewMode, alertCode: undefined });
 			}
-			if (!this.showLoadingView && this.showDisabledProducts && this.hidePlagarismTap && !this.hideAiTap) {
+			if (!this.showLoadingView && this.hidePlagarismTap && !this.hideAiTap) {
 				this.selectedTap = EReportViewType.AIView;
 				this._reportViewSvc.selectedAlert$.next(ALERTS.SUSPECTED_AI_TEXT_DETECTED);
 				this._reportViewSvc.reportViewMode$.next({
 					...this._reportViewSvc.reportViewMode,
+					viewMode: this.showDisabledProducts ? 'one-to-many' : 'only-ai',
 					alertCode: ALERTS.SUSPECTED_AI_TEXT_DETECTED,
 				});
 			}

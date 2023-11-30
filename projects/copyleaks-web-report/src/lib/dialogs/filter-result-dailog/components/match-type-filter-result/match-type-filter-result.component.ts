@@ -1,7 +1,6 @@
 import { Component, Input, OnInit } from '@angular/core';
-import { FormGroup } from '@angular/forms';
-import { FilterResultDailogService } from '../../services/filter-result-dailog.service';
 import { EFilterResultForm } from '../../models/filter-result-dailog.enum';
+import { FilterResultDailogService } from '../../services/filter-result-dailog.service';
 
 @Component({
 	selector: 'cr-match-type-filter-result',

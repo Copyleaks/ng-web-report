@@ -19,7 +19,6 @@ import { trigger, transition, animate, keyframes, style } from '@angular/animati
 	selector: 'cr-filter-result-dailog',
 	templateUrl: './filter-result-dailog.component.html',
 	styleUrls: ['./filter-result-dailog.component.scss'],
-	providers: [FilterResultDailogService],
 	animations: [
 		trigger('errorAnimation', [
 			transition(':enter', [

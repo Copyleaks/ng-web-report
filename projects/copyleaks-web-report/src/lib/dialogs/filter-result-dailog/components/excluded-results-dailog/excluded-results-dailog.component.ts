@@ -10,11 +10,11 @@ import {
 	ViewChild,
 } from '@angular/core';
 import { FormControl } from '@angular/forms';
+import { fromEvent } from 'rxjs';
+import { debounceTime, startWith } from 'rxjs/operators';
 import { IResultItem } from '../../../../components/containers/report-results-item-container/components/models/report-result-item.models';
 import { ReportDataService } from '../../../../services/report-data.service';
 import { untilDestroy } from '../../../../utils/until-destroy';
-import { fromEvent } from 'rxjs';
-import { debounceTime, startWith } from 'rxjs/operators';
 
 @Component({
 	selector: 'cr-excluded-results-dailog',

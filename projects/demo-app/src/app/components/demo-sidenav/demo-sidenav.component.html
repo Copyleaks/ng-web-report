@@ -96,6 +96,11 @@
 		<mat-icon class="item-icon" fontSet="material-icons-round">error</mat-icon>
 		<span class="item-text">Report Unavailable</span>
 	</button>
+
+	<button mat-menu-item style="width: 200px" (click)="navigateToReportPreview('real-time/both')">
+		<mat-icon class="item-icon" fontSet="material-icons-round">visibility</mat-icon>
+		<span class="item-text">Real-time Report</span>
+	</button>
 </mat-menu>
 
 <mat-menu #bundleMenu="matMenu">

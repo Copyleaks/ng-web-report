@@ -1,12 +1,12 @@
 import { Injectable, OnDestroy } from '@angular/core';
 import { BehaviorSubject, Subject } from 'rxjs';
 import { filter, map, withLatestFrom } from 'rxjs/operators';
-import { HtmlMatchClickEvent, Match, TextMatchHighlightEvent } from '../models/report-matches.models';
-import { ContentMode, ViewMode } from '../models/report-config.models';
-import * as helpers from '../utils/highlight-helpers';
-import { ReportViewService } from './report-view.service';
-import { untilDestroy } from '../utils/until-destroy';
 import { CrTextMatchComponent } from '../components/core/cr-text-match/cr-text-match.component';
+import { ContentMode, ViewMode } from '../models/report-config.models';
+import { HtmlMatchClickEvent, Match, TextMatchHighlightEvent } from '../models/report-matches.models';
+import * as helpers from '../utils/highlight-helpers';
+import { untilDestroy } from '../utils/until-destroy';
+import { ReportViewService } from './report-view.service';
 
 @Injectable()
 export class ReportMatchHighlightService implements OnDestroy {

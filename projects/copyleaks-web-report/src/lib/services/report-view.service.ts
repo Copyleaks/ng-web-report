@@ -1,7 +1,7 @@
 import { Injectable, TemplateRef } from '@angular/core';
-import { BehaviorSubject, Subject } from 'rxjs';
-import { IReportResponsiveMode, IReportViewEvent } from '../models/report-view.models';
+import { BehaviorSubject } from 'rxjs';
 import { ResultDetailItem } from '../models/report-matches.models';
+import { IReportResponsiveMode, IReportViewEvent } from '../models/report-view.models';
 
 @Injectable()
 export class ReportViewService {

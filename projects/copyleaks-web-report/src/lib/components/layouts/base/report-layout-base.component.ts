@@ -43,7 +43,7 @@ export abstract class ReportLayoutBaseComponent {
 	 * Render list of matches in the iframe's HTML
 	 * @param matches the matches to render
 	 */
-	protected _getRenderedMatches(matches: Match[] | null, originalHtml: string) {
+	protected _getRenderedMatches(matches: Match[] | null, originalHtml?: string) {
 		if (this.rerendered == true || !matches || !originalHtml) return null;
 
 		const html = helpers.getRenderedMatches(matches, originalHtml);

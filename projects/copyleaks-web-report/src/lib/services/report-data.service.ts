@@ -1,7 +1,7 @@
-import { HttpClient, HttpHeaders } from '@angular/common/http';
+import { HttpClient, HttpErrorResponse, HttpHeaders } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { BehaviorSubject, EMPTY, combineLatest, forkJoin, from, interval } from 'rxjs';
-import { concatMap, filter, take, takeWhile, switchMapTo, switchMap } from 'rxjs/operators';
+import { BehaviorSubject, EMPTY, Subject, combineLatest, forkJoin, from, interval, throwError } from 'rxjs';
+import { concatMap, filter, take, takeUntil, catchError } from 'rxjs/operators';
 import { ALERTS } from '../constants/report-alerts.constants';
 import { EResultPreviewType } from '../enums/copyleaks-web-report.enums';
 import { IClsReportEndpointConfigModel, IEndpointDetails } from '../models/report-config.models';
@@ -11,6 +11,7 @@ import { ICopyleaksReportOptions } from '../models/report-options.models';
 import * as helpers from '../utils/report-statistics-helpers';
 import { untilDestroy } from '../utils/until-destroy';
 import { ReportViewService } from './report-view.service';
+import { ReportErrorsService } from './report-errors.service';
 
 @Injectable()
 export class ReportDataService {
@@ -107,14 +108,36 @@ export class ReportDataService {
 		);
 	}
 
-	constructor(private _http: HttpClient, private _viewSvc: ReportViewService) {
+	public get totalCompleteResults(): number {
+		let completeResults = [
+			...(this.scanResultsPreviews$.value?.results.internet ?? []),
+			...(this.scanResultsPreviews$.value?.results.batch ?? []),
+			...(this.scanResultsPreviews$.value?.results.database ?? []),
+			...(this.scanResultsPreviews$.value?.results.repositories ?? []),
+		];
+
+		return completeResults.length;
+	}
+
+	constructor(
+		private _http: HttpClient,
+		private _viewSvc: ReportViewService,
+		private _reportErrorsSvc: ReportErrorsService
+	) {
 		combineLatest([this.filterOptions$, this.excludedResultsIds$])
 			.pipe(
 				untilDestroy(this),
 				filter(([options, excludedResultsIds]) => options !== undefined && excludedResultsIds !== undefined)
 			)
 			.subscribe(([options, excludedResultsIds]) => {
-				if (!this.scanResultsPreviews || !options || !excludedResultsIds) return;
+				if (
+					!this.scanResultsPreviews ||
+					!options ||
+					!excludedResultsIds ||
+					this._viewSvc.progress$.value !== 100 ||
+					this.totalCompleteResults !== this.scanResultsDetails?.length
+				)
+					return;
 
 				const filteredResults = this.filterResults(this.scanResultsDetails, options, excludedResultsIds);
 				const stats = helpers.calculateStatistics(this.scanResultsPreviews, filteredResults, options);
@@ -199,25 +222,54 @@ export class ReportDataService {
 			const progressResult$ = this._http.get<IAPIProgress>(endpointsConfig.progress.url, {
 				headers: this._createHeaders(endpointsConfig.progress, endpointsConfig.authToken),
 			});
-			progressResult$.pipe(take(1)).subscribe(progress => {
-				if (progress?.percents == 100) this.initSync(endpointsConfig);
-				else this.initAsync();
-			});
+			progressResult$
+				.pipe(
+					catchError((error: HttpErrorResponse) => {
+						// Error handling logic
+						this._reportErrorsSvc.handleHttpError(error, 'initReportData');
+						return throwError(error);
+					}),
+					take(1),
+					untilDestroy(this)
+				)
+				.subscribe(progress => {
+					if (progress?.percents == 100) this.initSync(endpointsConfig);
+					else {
+						this._viewSvc.progress$.next(progress.percents);
+						this._checkScanProgress(progress);
+						this.initAsync();
+					}
+				});
 		}
 	}
-
 	public initSync(endpointsConfig: IClsReportEndpointConfigModel) {
-		// first emit the prgress as 100, so no real time view is rendered
+		// first emit the progress as 100, so no real-time view is rendered
 		this._viewSvc.progress$.next(100);
 
-		// Run the GET report crawled version & GET complete results requests in parallel using the created headers
-		const crawledVersionReq$ = this._http.get<IScanSource>(endpointsConfig.crawledVersion.url, {
-			headers: this._createHeaders(endpointsConfig.crawledVersion, endpointsConfig.authToken),
-		});
-		const completeResultsReq$ = this._http.get<ICompleteResults>(endpointsConfig.completeResults.url, {
-			headers: this._createHeaders(endpointsConfig.completeResults, endpointsConfig.authToken),
-		});
+		// Create observables for each request with error handling
+		const crawledVersionReq$ = this._http
+			.get<IScanSource>(endpointsConfig.crawledVersion.url, {
+				headers: this._createHeaders(endpointsConfig.crawledVersion, endpointsConfig.authToken),
+			})
+			.pipe(
+				catchError((error: HttpErrorResponse) => {
+					this._reportErrorsSvc.handleHttpError(error, 'initSync - crawledVersion');
+					return throwError(error);
+				})
+			);
 
+		const completeResultsReq$ = this._http
+			.get<ICompleteResults>(endpointsConfig.completeResults.url, {
+				headers: this._createHeaders(endpointsConfig.completeResults, endpointsConfig.authToken),
+			})
+			.pipe(
+				catchError((error: HttpErrorResponse) => {
+					this._reportErrorsSvc.handleHttpError(error, 'initSync - completeResults');
+					return throwError(error);
+				})
+			);
+
+		// Use forkJoin to handle both requests in parallel, including overall error handling
 		forkJoin([crawledVersionReq$, completeResultsReq$])
 			.pipe(untilDestroy(this))
 			.subscribe(([crawledVersionRes, completeResultsRes]) => {
@@ -226,48 +278,44 @@ export class ReportDataService {
 			});
 	}
 
-	public initAsync() {
-		const progress$ = interval(10000).pipe(
-			concatMap(() => this._getReportScanProgress()),
-			untilDestroy(this)
-		);
+	public async initAsync() {
+		//! TODO REMOVE
+		let testCounter = 0;
 
-		progress$.subscribe(progress => {
-			this._viewSvc.progress$.next(progress.percents);
+		// Set the layout view to: one-to-many plagiarism with no selected alerts
+		this._viewSvc.selectedAlert$.next(null);
+		this._viewSvc.reportViewMode$.next({
+			...this._viewSvc.reportViewMode,
+			alertCode: undefined,
+			viewMode: 'one-to-many',
 		});
 
-		const inProgress$ = progress$.pipe(
-			concatMap(() => this._getReportScanProgress()),
-			filter(progress => progress.percents < 100 && progress.percents > 36),
-			take(1),
-			switchMapTo(this._getReportCrawledVersion()),
-			untilDestroy(this)
-		);
-
-		const completed$ = progress$.pipe(
-			concatMap(() => this._getReportScanProgress()),
-			takeWhile(progress => progress.percents === 100, true),
-			untilDestroy(this)
-		);
-
-		inProgress$.subscribe(scanSource => {
-			this._crawledVersion$.next(scanSource);
-		});
-
-		completed$
+		// subscribtion to stop the 10 sec inteval when the progress is 100% and the report data is loaded
+		var _realTimeUpdateSub = new Subject();
+		interval(10000)
 			.pipe(
-				switchMap(_ => this._getReportCompleteResults()),
-				untilDestroy(this)
+				concatMap(() => this._getReportScanProgress()),
+				untilDestroy(this),
+				takeUntil(_realTimeUpdateSub)
 			)
-			.subscribe(completeResults => {
-				this._updateCompleteResults(completeResults);
+			.subscribe(async progress => {
+				//! TODO REMOVE
+				testCounter += 25;
+				progress.percents += testCounter;
+
+				if (progress.percents >= 0 && progress.percents <= 100) this._viewSvc.progress$.next(progress.percents);
+				await this._checkScanProgress(progress);
+				if (progress.percents === 100) {
+					_realTimeUpdateSub.next(null);
+					_realTimeUpdateSub.complete();
+				}
 			});
 	}
 
 	public loadAllReportScanResults(completeResults: ICompleteResults) {
 		const cachedResults = this._scanResultsDetails$.getValue();
 
-		if (cachedResults !== undefined) {
+		if (cachedResults?.length === this.totalCompleteResults) {
 			return;
 		}
 
@@ -325,19 +373,25 @@ export class ReportDataService {
 
 		var requestUrl = this._reportEndpointConfig$.value.result.url.replace('{RESULT_ID}', resultId);
 
-		const response = await this._http
-			.get<IResultDetailResponse>(requestUrl, {
-				headers: this._createHeaders(
-					this._reportEndpointConfig$?.value.result,
-					this._reportEndpointConfig$?.value.authToken
-				),
-			})
-			.toPromise();
+		try {
+			const response = await this._http
+				.get<IResultDetailResponse>(requestUrl, {
+					headers: this._createHeaders(
+						this._reportEndpointConfig$?.value.result,
+						this._reportEndpointConfig$?.value.authToken
+					),
+				})
+				.toPromise();
 
-		return {
-			id: resultId,
-			result: response,
-		} as ResultDetailItem;
+			return {
+				id: resultId,
+				result: response,
+			} as ResultDetailItem;
+		} catch (error) {
+			// Error handling logic
+			this._reportErrorsSvc.handleHttpError(error as HttpErrorResponse, 'getReportResultAsync');
+			throw error;
+		}
 	}
 
 	public filterResults(
@@ -351,7 +405,8 @@ export class ReportDataService {
 			...(this.scanResultsPreviews$.value?.results.database ?? []),
 			...(this.scanResultsPreviews$.value?.results.repositories ?? []),
 		];
-		if (!results || !completeResults || !settings) return [];
+		if (!results || !completeResults || !settings || this.totalCompleteResults !== this.scanResultsDetails?.length)
+			return [];
 
 		if (settings.showTop100Results !== undefined && settings.showTop100Results === true)
 			completeResults = completeResults.sort((a, b) => b.matchedWords - a.matchedWords).slice(0, 100);
@@ -514,7 +569,19 @@ export class ReportDataService {
 		});
 	}
 
-	private _updateCompleteResults(completeResultsRes: ICompleteResults) {
+	private async _checkScanProgress(progress: IAPIProgress) {
+		if (progress.percents < 100 && progress.percents > 36 && !this._crawledVersion$.value) {
+			const crawledVersion = await this._getReportCrawledVersion();
+			this._crawledVersion$.next(crawledVersion);
+		} else if (progress.percents === 100) {
+			const completeResults = await this._getReportCompleteResults();
+			this._updateCompleteResults(completeResults);
+		}
+	}
+
+	private _updateCompleteResults(completeResultsRes?: ICompleteResults) {
+		if (!completeResultsRes) return;
+
 		completeResultsRes.results.batch.forEach(result => {
 			result.type = EResultPreviewType.Batch;
 		});
@@ -600,34 +667,58 @@ export class ReportDataService {
 	private _getReportScanProgress() {
 		if (!this._reportEndpointConfig$.value || !this._reportEndpointConfig$.value.progress?.url) return EMPTY;
 
-		return this._http.get<IAPIProgress>(this._reportEndpointConfig$.value.progress.url, {
-			headers: this._createHeaders(
-				this._reportEndpointConfig$.value.progress,
-				this._reportEndpointConfig$.value.authToken
-			),
-		});
+		return this._http
+			.get<IAPIProgress>(this._reportEndpointConfig$.value.progress.url, {
+				headers: this._createHeaders(
+					this._reportEndpointConfig$.value.progress,
+					this._reportEndpointConfig$.value.authToken
+				),
+			})
+			.pipe(
+				catchError((error: HttpErrorResponse) => {
+					// Error handling logic here
+					this._reportErrorsSvc.handleHttpError(error, 'getReportScanProgress');
+					return throwError(error);
+				})
+			);
 	}
 
-	private _getReportCrawledVersion() {
-		if (!this._reportEndpointConfig$.value || !this._reportEndpointConfig$.value.crawledVersion?.url) return EMPTY;
+	private async _getReportCrawledVersion() {
+		if (!this._reportEndpointConfig$.value || !this._reportEndpointConfig$.value.crawledVersion?.url) return undefined;
 
-		return this._http.get<IScanSource>(this._reportEndpointConfig$.value.crawledVersion.url, {
-			headers: this._createHeaders(
-				this._reportEndpointConfig$.value.crawledVersion,
-				this._reportEndpointConfig$.value.authToken
-			),
-		});
+		try {
+			return await this._http
+				.get<IScanSource>(this._reportEndpointConfig$.value.crawledVersion.url, {
+					headers: this._createHeaders(
+						this._reportEndpointConfig$.value.crawledVersion,
+						this._reportEndpointConfig$.value.authToken
+					),
+				})
+				.toPromise();
+		} catch (error) {
+			// Error handling logic
+			this._reportErrorsSvc.handleHttpError(error as HttpErrorResponse, '_getReportCrawledVersion');
+			throw error;
+		}
 	}
 
-	private _getReportCompleteResults() {
-		if (!this._reportEndpointConfig$.value || !this._reportEndpointConfig$.value.completeResults?.url) return EMPTY;
+	private async _getReportCompleteResults() {
+		if (!this._reportEndpointConfig$.value || !this._reportEndpointConfig$.value.completeResults?.url) return undefined;
 
-		return this._http.get<ICompleteResults>(this._reportEndpointConfig$.value.completeResults.url, {
-			headers: this._createHeaders(
-				this._reportEndpointConfig$.value.completeResults,
-				this._reportEndpointConfig$.value.authToken
-			),
-		});
+		try {
+			return await this._http
+				.get<ICompleteResults>(this._reportEndpointConfig$.value.completeResults.url, {
+					headers: this._createHeaders(
+						this._reportEndpointConfig$.value.completeResults,
+						this._reportEndpointConfig$.value.authToken
+					),
+				})
+				.toPromise();
+		} catch (error) {
+			// Error handling logic
+			this._reportErrorsSvc.handleHttpError(error as HttpErrorResponse, '_getReportCompleteResults');
+			throw error;
+		}
 	}
 
 	ngOnDestroy() {}

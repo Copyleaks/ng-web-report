@@ -181,4 +181,14 @@
 			box-sizing: border-box;
 		}
 	}
+
+	.real-time-result {
+		height: 189px;
+		::ng-deep {
+			.result-item-container {
+				height: 100% !important;
+				justify-content: space-between !important;
+			}
+		}
+	}
 }

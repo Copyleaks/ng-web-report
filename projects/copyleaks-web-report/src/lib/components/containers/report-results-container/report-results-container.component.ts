@@ -23,8 +23,6 @@ import { ReportDataService } from '../../../services/report-data.service';
 import { ResultDetailItem } from '../../../models/report-matches.models';
 import { ICopyleaksReportOptions } from '../../../models/report-options.models';
 import { ECustomResultsReportView } from '../../core/cr-custom-results/models/cr-custom-results.enums';
-import { trigger, state, transition, animate, style } from '@angular/animations';
-import { ResultPreview } from '../../../models/report-data.models';
 
 @Component({
 	selector: 'copyleaks-report-results-container',

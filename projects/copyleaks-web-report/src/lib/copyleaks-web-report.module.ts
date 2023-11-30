@@ -3,7 +3,6 @@ import { HttpClientModule } from '@angular/common/http';
 import { NgModule } from '@angular/core';
 import { CrActionsComponent } from './components/core/cr-report-actions/cr-actions.component';
 import { CopyleaksWebReportComponent } from './copyleaks-web-report.component';
-import { HttpRequestErrorInterceptorProvider } from './pipes/http-request-error-pipe/http-request-error-pipe.pipe';
 import { ReportErrorsService } from './services/report-errors.service';
 import {
 	CrCustomTabItemComponent,
@@ -77,6 +76,12 @@ import { MatCheckboxModule } from '@angular/material/checkbox';
 import { ReportViewService } from './services/report-view.service';
 import { ReportDataService } from './services/report-data.service';
 import { ReportRealtimeResultsService } from './services/report-realtime-results.service';
+import { MatProgressBarModule } from '@angular/material/progress-bar';
+import { FilterResultDailogService } from './dialogs/filter-result-dailog/services/filter-result-dailog.service';
+import { ReportMatchHighlightService } from './services/report-match-highlight.service';
+import { ReportMatchesService } from './services/report-matches.service';
+import { ReportNgTemplatesService } from './services/report-ng-templates.service';
+import { ReportStatisticsService } from './services/report-statistics.service';
 
 @NgModule({
 	declarations: [
@@ -152,6 +157,7 @@ import { ReportRealtimeResultsService } from './services/report-realtime-results
 		MatDividerModule,
 		MatSliderModule,
 		MatCheckboxModule,
+		MatProgressBarModule,
 	],
 	exports: [
 		CopyleaksWebReportComponent,
@@ -167,11 +173,15 @@ import { ReportRealtimeResultsService } from './services/report-realtime-results
 		LockResultItemComponent,
 	],
 	providers: [
-		HttpRequestErrorInterceptorProvider,
 		ReportErrorsService,
 		ReportViewService,
 		ReportDataService,
 		ReportRealtimeResultsService,
+		FilterResultDailogService,
+		ReportNgTemplatesService,
+		ReportMatchesService,
+		ReportMatchHighlightService,
+		ReportStatisticsService,
 	],
 })
 export class CopyleaksWebReportModule {}

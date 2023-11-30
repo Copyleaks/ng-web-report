@@ -111,6 +111,14 @@ export abstract class OneToOneReportLayoutBaseComponent extends ReportLayoutBase
 		combineLatest([this.reportDataSvc.scanResultsPreviews$, this.reportViewSvc.selectedResult$])
 			.pipe(untilDestroy(this))
 			.subscribe(([previews, resultData]) => {
+				if (this.reportViewSvc.progress$.value != 100 && resultData) {
+					this.numberOfPagesSuspect = resultData.result?.text?.pages?.startPosition?.length ?? 1;
+					this.resultData = resultData;
+					this.resultItem =
+						this.realTimeResultsSvc.newResults?.find(r => r.resultDetails?.id === resultData.id) ?? null;
+					return;
+				}
+
 				this.isLoadingResultItem = resultData === null || previews === undefined;
 
 				if (resultData && previews) {
@@ -127,8 +135,8 @@ export abstract class OneToOneReportLayoutBaseComponent extends ReportLayoutBase
 						resultDetails: resultData,
 						iStatisticsResult: resultData?.result?.statistics,
 						metadataSource: {
-							words: previews?.scannedDocument.totalWords ?? 0,
-							excluded: previews?.scannedDocument.totalExcluded ?? 0,
+							words: this.reportDataSvc.crawledVersion?.metadata.words ?? 0,
+							excluded: this.reportDataSvc.crawledVersion?.metadata.excluded ?? 0,
 						},
 					} as IResultItem;
 				}

@@ -1,4 +1,4 @@
-import { AfterViewInit, Component, ElementRef, HostBinding, Input, OnInit, ViewChild } from '@angular/core';
+import { Component, ElementRef, HostBinding, Input, OnInit, ViewChild } from '@angular/core';
 import { ICompleteResultNotificationAlert } from '../../../models/report-data.models';
 
 @Component({

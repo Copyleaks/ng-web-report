@@ -1,13 +1,12 @@
-import { Directive, ElementRef, OnDestroy, OnInit, Renderer2 } from '@angular/core';
-import { filter, map, takeUntil, withLatestFrom } from 'rxjs/operators';
+import { Directive, ElementRef, OnDestroy, OnInit } from '@angular/core';
+import { filter, map, withLatestFrom } from 'rxjs/operators';
+import { IComparisonCollection } from '../models/report-data.models';
+import { MatchSelectEvent } from '../models/report-iframe-events.models';
 import { MatchType } from '../models/report-matches.models';
 import { ReportMatchHighlightService } from '../services/report-match-highlight.service';
 import { ReportMatchesService } from '../services/report-matches.service';
 import { ReportViewService } from '../services/report-view.service';
 import { findRespectiveStart } from '../utils/report-match-helpers';
-import { MatchSelectEvent } from '../models/report-iframe-events.models';
-import { IComparisonCollection } from '../models/report-data.models';
-import { Subject } from 'rxjs';
 import { untilDestroy } from '../utils/until-destroy';
 
 @Directive({

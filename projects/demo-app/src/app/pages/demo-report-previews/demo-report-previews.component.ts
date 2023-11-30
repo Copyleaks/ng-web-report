@@ -119,6 +119,33 @@ export class DemoReportPreviewsComponent implements OnInit {
 			this._reportRealtimeSvc.pushNewResults([
 				{
 					repositoryId: '',
+					url: 'https://medium.com/@dschoenenberger/list/b37a02e2ee0c',
+					id: '5738a169ae',
+					type: EResultPreviewType.Internet,
+					title: 'List: angular | Curated by Dominique Schoenenberger | Medium',
+					introduction: 'Open in appSign up Sign In Write Sign up Sign In Follow Nov 12 ·10 stories angular Sha...',
+					matchedWords: 59,
+					metadata: {
+						finalUrl: undefined,
+						canonicalUrl: undefined,
+						author: 'Dominique Schoenenberger',
+						organization: 'Medium',
+						filename: 'b37a02e2ee0c',
+						publishDate: undefined,
+						creationDate: '2023-06-09T14:49:44Z',
+						lastModificationDate: '2023-11-12T05:53:07Z',
+						submissionDate: undefined,
+						submittedBy: undefined,
+						customMetadata: undefined,
+					},
+					tags: [],
+				},
+			]);
+		}, 3000);
+		setTimeout(() => {
+			this._reportRealtimeSvc.pushNewResults([
+				{
+					repositoryId: '',
 					url: 'https://blog.stackademic.com/read-text-aloud-in-simple-javascript-9528a8457904?gi=6b81cd0f325a',
 					id: '3b0edab479',
 					type: EResultPreviewType.Internet,
@@ -135,29 +162,6 @@ export class DemoReportPreviewsComponent implements OnInit {
 						publishDate: '2023-08-08T10:28:46Z',
 						creationDate: '2023-08-08T10:28:46Z',
 						lastModificationDate: '2023-08-10T12:06:52Z',
-						submissionDate: undefined,
-						submittedBy: undefined,
-						customMetadata: undefined,
-					},
-					tags: [],
-				},
-				{
-					repositoryId: '',
-					url: 'https://medium.com/@dschoenenberger/list/b37a02e2ee0c',
-					id: '5738a169ae',
-					type: EResultPreviewType.Internet,
-					title: 'List: angular | Curated by Dominique Schoenenberger | Medium',
-					introduction: 'Open in appSign up Sign In Write Sign up Sign In Follow Nov 12 ·10 stories angular Sha...',
-					matchedWords: 59,
-					metadata: {
-						finalUrl: undefined,
-						canonicalUrl: undefined,
-						author: 'Dominique Schoenenberger',
-						organization: 'Medium',
-						filename: 'b37a02e2ee0c',
-						publishDate: undefined,
-						creationDate: '2023-06-09T14:49:44Z',
-						lastModificationDate: '2023-11-12T05:53:07Z',
 						submissionDate: undefined,
 						submittedBy: undefined,
 						customMetadata: undefined,
@@ -189,7 +193,7 @@ export class DemoReportPreviewsComponent implements OnInit {
 					tags: [],
 				},
 			]);
-		}, 12000);
+		}, 7000);
 	}
 
 	onCompleteResultUpdate(event: ICompleteResults) {

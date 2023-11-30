@@ -197,19 +197,6 @@ export class ReportDataService {
 	 *
 	 * @returns {void} - The function does not return anything.
 	 *
-	 * @example
-	 *
-	 * initReportData({
-	 *   "authToken": "",
-	 *   "crawledVersion": "assets/scans/bundle/default/source.json",
-	 *   "completeResults": "assets/scans/bundle/default/complete.json",
-	 *   "result": "assets/scans/bundle/default/results/{RESULT_ID}",
-	 *   "filter": {
-	 *     "get": "",
-	 *     "update": ""
-	 *   }
-	 * });
-	 *
 	 */
 	public initReportData(endpointsConfig: IClsReportEndpointConfigModel) {
 		if (!endpointsConfig) return;
@@ -280,8 +267,8 @@ export class ReportDataService {
 	}
 
 	public async initAsync() {
-		//! TODO REMOVE
-		let testCounter = 0;
+		const ENABLE_REALTIME_MOCK_TESTING = true;
+		let testCounter = 25;
 
 		// Set the layout view to: one-to-many plagiarism with no selected alerts
 		this._viewSvc.selectedAlert$.next(null);
@@ -293,16 +280,22 @@ export class ReportDataService {
 
 		// subscribtion to stop the 10 sec inteval when the progress is 100% and the report data is loaded
 		var _realTimeUpdateSub = new Subject();
-		interval(10000)
+		interval(5000)
 			.pipe(
 				concatMap(() => this._getReportScanProgress()),
 				untilDestroy(this),
 				takeUntil(_realTimeUpdateSub)
 			)
 			.subscribe(async progress => {
-				//! TODO REMOVE
-				testCounter += 25;
-				progress.percents += testCounter;
+				if (ENABLE_REALTIME_MOCK_TESTING) {
+					if (testCounter < 80) {
+						testCounter += Math.floor(Math.random() * 26);
+						progress.percents = testCounter;
+					} else {
+						testCounter = 100;
+						progress.percents = 100;
+					}
+				}
 
 				if (progress.percents >= 0 && progress.percents <= 100) this._viewSvc.progress$.next(progress.percents);
 				await this._checkScanProgress(progress);

@@ -116,6 +116,16 @@ export abstract class OneToOneReportLayoutBaseComponent extends ReportLayoutBase
 					this.resultData = resultData;
 					this.resultItem =
 						this.realTimeResultsSvc.newResults?.find(r => r.resultDetails?.id === resultData.id) ?? null;
+
+					this.matchSvc.suspectHtmlMatches$.pipe(untilDestroy(this)).subscribe(data => {
+						if (!resultData?.result?.html.value) return;
+						const rerenderedMatches = this._getRenderedMatches(data, resultData?.result?.html?.value);
+						if (rerenderedMatches && data) {
+							this.suspectIframeHtml = rerenderedMatches;
+							this.rerenderedSuspect = true;
+							this.suspectHtmlMatches = data;
+						}
+					});
 					return;
 				}
 

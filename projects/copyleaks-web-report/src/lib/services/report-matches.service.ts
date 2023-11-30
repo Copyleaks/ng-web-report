@@ -76,7 +76,7 @@ export class ReportMatchesService implements OnDestroy {
 				)
 			)
 			.subscribe(([scanSource, scanResults, viewMode, , filterOptions, excludedResultsIds]) => {
-				if (scanSource && this._reportViewSvc.progress$.value != 100) {
+				if ((scanSource && this._reportViewSvc.progress$.value != 100) || (scanSource && !scanResults)) {
 					// process the mathces according to the report view
 					if (viewMode.isHtmlView) {
 						this._processOneToManyMatchesHtml(scanResults ?? [], undefined, [], scanSource);

@@ -235,7 +235,7 @@ export class ReportDataService {
 		this._viewSvc.progress$.next(100);
 
 		// Create observables for each request with error handling
-		const crawledVersionReq$ = this._http
+		this._http
 			.get<IScanSource>(endpointsConfig.crawledVersion.url, {
 				headers: this._createHeaders(endpointsConfig.crawledVersion, endpointsConfig.authToken),
 			})
@@ -244,9 +244,12 @@ export class ReportDataService {
 					this._reportErrorsSvc.handleHttpError(error, 'initSync - crawledVersion');
 					return throwError(error);
 				})
-			);
+			)
+			.subscribe(crawledVersionRes => {
+				this._crawledVersion$.next(crawledVersionRes);
+			});
 
-		const completeResultsReq$ = this._http
+		this._http
 			.get<ICompleteResults>(endpointsConfig.completeResults.url, {
 				headers: this._createHeaders(endpointsConfig.completeResults, endpointsConfig.authToken),
 			})
@@ -255,13 +258,8 @@ export class ReportDataService {
 					this._reportErrorsSvc.handleHttpError(error, 'initSync - completeResults');
 					return throwError(error);
 				})
-			);
-
-		// Use forkJoin to handle both requests in parallel, including overall error handling
-		forkJoin([crawledVersionReq$, completeResultsReq$])
-			.pipe(untilDestroy(this))
-			.subscribe(([crawledVersionRes, completeResultsRes]) => {
-				this._crawledVersion$.next(crawledVersionRes);
+			)
+			.subscribe(completeResultsRes => {
 				this._updateCompleteResults(completeResultsRes);
 			});
 	}

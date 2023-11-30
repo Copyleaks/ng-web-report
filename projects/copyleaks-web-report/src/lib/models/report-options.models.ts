@@ -19,7 +19,7 @@ export interface ICopyleaksReportOptions {
 	/** */
 	showBatchResults?: boolean;
 	/** */
-	showRepositoriesResults?: string[];
+	hiddenRepositories?: string[];
 	/** */
 	wordLimit?: number;
 	/** */

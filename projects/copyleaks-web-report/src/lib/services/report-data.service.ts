@@ -182,7 +182,7 @@ export class ReportDataService {
 							batch: options?.showBatchResults ?? true,
 							internalDatabase: options?.showInternalDatabaseResults ?? true,
 							internet: options?.showInternetResults ?? true,
-							repositories: options?.showRepositoriesResults ?? [],
+							repositories: options?.hiddenRepositories ?? [],
 						},
 					},
 				});
@@ -433,17 +433,13 @@ export class ReportDataService {
 				completeResults.find(cr => cr.id === id && cr.type !== EResultPreviewType.Database)
 			);
 
-		if (settings.showRepositoriesResults !== undefined && settings.showRepositoriesResults.length === 0)
-			filteredResultsIds = filteredResultsIds.filter(id =>
-				completeResults.find(cr => cr.id === id && cr.type !== EResultPreviewType.Repositroy)
-			);
-		else if (settings.showRepositoriesResults !== undefined && settings.showRepositoriesResults.length > 0) {
+		if (settings.hiddenRepositories !== undefined && settings.hiddenRepositories.length > 0) {
 			filteredResultsIds = filteredResultsIds.filter(id =>
 				completeResults.find(
 					cr =>
 						cr.id === id &&
 						(cr.type !== EResultPreviewType.Repositroy ||
-							settings.showRepositoriesResults?.find(id => id === (cr as IRepositoryResultPreview)?.repositoryId))
+							!settings.hiddenRepositories?.find(id => id === (cr as IRepositoryResultPreview)?.repositoryId))
 				)
 			);
 		}
@@ -570,7 +566,7 @@ export class ReportDataService {
 			showInternetResults: true,
 			showInternalDatabaseResults: true,
 			showBatchResults: true,
-			showRepositoriesResults: [],
+			hiddenRepositories: [],
 
 			wordLimit: undefined,
 
@@ -649,7 +645,7 @@ export class ReportDataService {
 				completeResultsRes.filters?.sourceType?.batch != undefined
 					? completeResultsRes.filters?.sourceType?.batch
 					: true,
-			showRepositoriesResults: completeResultsRes.filters?.sourceType?.repositories,
+			hiddenRepositories: completeResultsRes.filters?.sourceType?.repositories,
 
 			wordLimit: completeResultsRes.filters?.resultsMetaData?.wordLimit?.wordLimitEnabled
 				? completeResultsRes.filters?.resultsMetaData?.wordLimit?.totalWordlimt

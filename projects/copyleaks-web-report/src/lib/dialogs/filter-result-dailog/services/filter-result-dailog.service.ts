@@ -255,8 +255,8 @@ export class FilterResultDailogService {
 						: !this._completeResults.filters?.sourceType?.repositories
 						? true
 						: this._completeResults.filters?.sourceType?.repositories?.find(id => id === repo.id) === undefined
-						? false
-						: true
+						? true
+						: false
 				)
 			);
 		});
@@ -271,7 +271,7 @@ export class FilterResultDailogService {
 			const control = this.repositoriesFormGroup?.controls[key];
 
 			// Check if the control's value is true
-			if (control.value === true) {
+			if (control.value === false) {
 				selectedRepoIds.push(key);
 			}
 		});

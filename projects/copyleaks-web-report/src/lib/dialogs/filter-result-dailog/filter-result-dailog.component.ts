@@ -93,7 +93,8 @@ export class FilterResultDailogComponent implements OnInit {
 				!formData.showInternetResults &&
 				!formData.showBatchResults &&
 				!formData.showInternalDatabaseResults &&
-				(!formData.showRepositoriesResults || formData.showRepositoriesResults.length === 0)
+				formData.hiddenRepositories &&
+				formData.hiddenRepositories.length === this._filterResultsSvc.reposIds.length
 			) {
 				setTimeout(() => {
 					if (this.totalSourceType.totalInternet > 0)
@@ -357,7 +358,7 @@ export class FilterResultDailogComponent implements OnInit {
 				this.totalSourceType.totalbatch === 0
 					? false
 					: this._filterResultsSvc.sourceTypeFormGroup.get(EFilterResultForm.fcBatch)?.value,
-			showRepositoriesResults: !this.totalSourceType.repository?.length
+			hiddenRepositories: !this.totalSourceType.repository?.length
 				? []
 				: this._filterResultsSvc.getSelectedRepositoryIds(),
 

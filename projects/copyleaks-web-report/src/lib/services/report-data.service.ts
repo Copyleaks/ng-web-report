@@ -5,14 +5,19 @@ import { concatMap, filter, take, takeUntil, catchError } from 'rxjs/operators';
 import { ALERTS } from '../constants/report-alerts.constants';
 import { EResultPreviewType } from '../enums/copyleaks-web-report.enums';
 import { IClsReportEndpointConfigModel, IEndpointDetails } from '../models/report-config.models';
-import { IAPIProgress, ICompleteResults, IResultDetailResponse, IScanSource } from '../models/report-data.models';
+import {
+	IAPIProgress,
+	ICompleteResults,
+	IRepositoryResultPreview,
+	IResultDetailResponse,
+	IScanSource,
+} from '../models/report-data.models';
 import { AIScanResult, ResultDetailItem } from '../models/report-matches.models';
 import { ICopyleaksReportOptions } from '../models/report-options.models';
 import * as helpers from '../utils/report-statistics-helpers';
 import { untilDestroy } from '../utils/until-destroy';
 import { ReportViewService } from './report-view.service';
 import { ReportErrorsService } from './report-errors.service';
-import { IRepositoryResultPreview } from 'copyleaks-web-report';
 
 @Injectable()
 export class ReportDataService {
@@ -510,6 +515,7 @@ export class ReportDataService {
 
 	public isPlagiarismEnabled() {
 		const completeResult = this.scanResultsPreviews;
+		if (!completeResult) return false;
 		if (completeResult) {
 			if (completeResult?.scannedDocument?.enabled?.plagiarismDetection != null)
 				return completeResult?.scannedDocument?.enabled?.plagiarismDetection;

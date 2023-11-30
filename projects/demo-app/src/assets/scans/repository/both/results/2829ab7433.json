@@ -1,0 +1,245 @@
+{
+    "statistics": {
+        "identical": 174,
+        "minorChanges": 0,
+        "relatedMeaning": 0
+    },
+    "text": {
+        "comparison": {
+            "identical": {
+                "source": {
+                    "chars": {
+                        "starts": [
+                            0,
+                            34,
+                            148,
+                            198,
+                            336,
+                            485,
+                            673,
+                            747,
+                            834,
+                            964
+                        ],
+                        "lengths": [
+                            33,
+                            113,
+                            49,
+                            137,
+                            147,
+                            186,
+                            73,
+                            86,
+                            128,
+                            86
+                        ]
+                    },
+                    "words": {
+                        "starts": [
+                            0,
+                            4,
+                            24,
+                            33,
+                            55,
+                            80,
+                            108,
+                            119,
+                            134,
+                            158
+                        ],
+                        "lengths": [
+                            3,
+                            19,
+                            8,
+                            21,
+                            24,
+                            27,
+                            10,
+                            14,
+                            23,
+                            15
+                        ]
+                    }
+                },
+                "suspected": {
+                    "chars": {
+                        "starts": [
+                            0,
+                            34,
+                            148,
+                            198,
+                            336,
+                            485,
+                            673,
+                            747,
+                            834,
+                            964
+                        ],
+                        "lengths": [
+                            33,
+                            113,
+                            49,
+                            137,
+                            147,
+                            186,
+                            73,
+                            86,
+                            128,
+                            86
+                        ]
+                    },
+                    "words": {
+                        "starts": [
+                            0,
+                            4,
+                            24,
+                            33,
+                            55,
+                            80,
+                            108,
+                            119,
+                            134,
+                            158
+                        ],
+                        "lengths": [
+                            3,
+                            19,
+                            8,
+                            21,
+                            24,
+                            27,
+                            10,
+                            14,
+                            23,
+                            15
+                        ]
+                    }
+                }
+            },
+            "minorChanges": {
+                "source": {
+                    "chars": {
+                        "starts": [],
+                        "lengths": []
+                    },
+                    "words": {
+                        "starts": [],
+                        "lengths": []
+                    }
+                },
+                "suspected": {
+                    "chars": {
+                        "starts": [],
+                        "lengths": []
+                    },
+                    "words": {
+                        "starts": [],
+                        "lengths": []
+                    }
+                }
+            },
+            "relatedMeaning": {
+                "source": {
+                    "chars": {
+                        "starts": [],
+                        "lengths": []
+                    },
+                    "words": {
+                        "starts": [],
+                        "lengths": []
+                    }
+                },
+                "suspected": {
+                    "chars": {
+                        "starts": [],
+                        "lengths": []
+                    },
+                    "words": {
+                        "starts": [],
+                        "lengths": []
+                    }
+                }
+            }
+        },
+        "value": "Plagiarism Checker for Businesses\nPlagiarism is defined as \"the practice of taking someone else's work or ideas and passing them off as one's own.\" It is unethical, illegal, and a breach of ethics. Any form of plagiarism is considered wrong, and strict actions are taken against the person plagiarising even when the act is unintended. A plagiarism checker helps you to write an original content that boosts your business and helps to improve the reputation of your business as well.\n\nEspecially for a business, plagiarism checkers are essential as they must maintain a unique original content to keep up secure communication with clients and ensure a smooth transaction.\n\nWhat makes Copyleaks unique is its user-friendly nature of the operation. It is easy to use and accessible anywhere, using either the desktop or mobile formats. Many documents can be uploaded in any form such as txt, pdf, doc, and ePUB, or even a scanned photograph of a physical document.\n\nUp to 100 different files can be scanned by our online plagiarism checker to check for potential plagiarism.",
+        "pages": {
+            "startPosition": [
+                0
+            ]
+        }
+    },
+    "html": {
+        "comparison": {
+            "identical": {
+                "groupId": [],
+                "source": {
+                    "chars": {
+                        "starts": [],
+                        "lengths": []
+                    },
+                    "words": {
+                        "starts": [],
+                        "lengths": []
+                    }
+                },
+                "suspected": {
+                    "chars": {
+                        "starts": [],
+                        "lengths": []
+                    },
+                    "words": {
+                        "starts": [],
+                        "lengths": []
+                    }
+                }
+            },
+            "minorChanges": {
+                "groupId": [],
+                "source": {
+                    "chars": {
+                        "starts": [],
+                        "lengths": []
+                    },
+                    "words": {
+                        "starts": [],
+                        "lengths": []
+                    }
+                },
+                "suspected": {
+                    "chars": {
+                        "starts": [],
+                        "lengths": []
+                    },
+                    "words": {
+                        "starts": [],
+                        "lengths": []
+                    }
+                }
+            },
+            "relatedMeaning": {
+                "groupId": [],
+                "source": {
+                    "chars": {
+                        "starts": [],
+                        "lengths": []
+                    },
+                    "words": {
+                        "starts": [],
+                        "lengths": []
+                    }
+                },
+                "suspected": {
+                    "chars": {
+                        "starts": [],
+                        "lengths": []
+                    },
+                    "words": {
+                        "starts": [],
+                        "lengths": []
+                    }
+                }
+            }
+        }
+    },
+    "version": 3
+}

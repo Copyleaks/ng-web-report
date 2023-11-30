@@ -1,0 +1,23 @@
+@import '../website-colors.styles.scss';
+
+:host {
+	::ng-deep {
+		.mat-progress-bar {
+			height: 6px;
+			border: 1px solid $color-effect-dialog-background;
+			border-radius: 10px;
+		}
+
+		.mat-progress-bar-fill::after {
+			background-color: $color-primary !important;
+		}
+
+		.mat-progress-bar-background {
+			fill: $color-white !important;
+		}
+
+		.mat-progress-bar-buffer {
+			background-color: $color-white !important;
+		}
+	}
+}

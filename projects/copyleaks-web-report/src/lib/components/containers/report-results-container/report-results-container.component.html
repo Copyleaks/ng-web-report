@@ -156,9 +156,30 @@
 					'results-item-container': !isMobile,
 					'results-item-mobile-container': isMobile
 				}">
-				<ng-container *ngFor="let _ of [1, 2, 3, 4, 5, 6, 7, 8]">
-					<cr-report-results-item [showLoader]="true" [style]="'width:100%'"></cr-report-results-item>
+				<ng-container *ngIf="!newResults || newResults.length === 0; else realTimeView">
+					<ng-container *ngFor="let _ of [1, 2, 3, 4, 5, 6, 7, 8]">
+						<cr-report-results-item [showLoader]="true" [style]="'width:100%'"></cr-report-results-item>
+					</ng-container>
 				</ng-container>
+				<ng-template #realTimeView>
+					<ng-container *ngFor="let item of newResults">
+						<cr-report-results-item
+							class="real-time-result"
+							[resultItem]="item"
+							[isMobile]="isMobile"
+							[showLoader]="false"
+							[showItemBody]="true"
+							(hiddenResultEvent)="excludeResultById($event)"
+							(showResultEvent)="includeResultById($event)"
+							style="width: 100%">
+							>
+						</cr-report-results-item>
+					</ng-container>
+
+					<ng-container *ngFor="let _ of [1, 2, 3]">
+						<cr-report-results-item [showLoader]="true" [style]="'width:100%'"></cr-report-results-item>
+					</ng-container>
+				</ng-template>
 			</div>
 		</div>
 	</div>

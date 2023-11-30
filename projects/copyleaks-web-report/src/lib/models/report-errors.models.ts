@@ -1,10 +1,12 @@
+import { HttpHeaders } from '@angular/common/http';
+
 export interface ReportHttpRequestErrorModel {
 	statusCode: number;
 	message: string;
 	endpoint: string;
 	method: string;
 	timestamp: Date;
-	headers?: Record<string, string>;
+	headers?: HttpHeaders;
 	requestData?: any;
 	responseData?: any;
 	errorType?: string;

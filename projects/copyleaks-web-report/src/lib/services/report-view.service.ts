@@ -1,7 +1,7 @@
 import { Injectable, TemplateRef } from '@angular/core';
 import { BehaviorSubject } from 'rxjs';
-import { IReportResponsiveMode, IReportViewEvent } from '../models/report-view.models';
 import { ResultDetailItem } from '../models/report-matches.models';
+import { IReportResponsiveMode, IReportViewEvent } from '../models/report-view.models';
 
 @Injectable()
 export class ReportViewService {
@@ -55,5 +55,9 @@ export class ReportViewService {
 		return this._selectedCustomTabContent$.value;
 	}
 
+	private _progress$ = new BehaviorSubject<number>(0);
+	public get progress$() {
+		return this._progress$;
+	}
 	constructor() {}
 }

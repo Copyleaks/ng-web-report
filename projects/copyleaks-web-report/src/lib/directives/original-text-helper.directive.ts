@@ -1,12 +1,12 @@
 import { AfterContentInit, ContentChildren, Directive, Input, OnDestroy, QueryList } from '@angular/core';
-import { distinctUntilChanged, filter, take, takeUntil, withLatestFrom } from 'rxjs/operators';
-import { ReportMatchHighlightService } from '../services/report-match-highlight.service';
-import * as helpers from '../utils/highlight-helpers';
-import { ReportViewService } from '../services/report-view.service';
-import { TextMatchHighlightEvent } from '../models/report-matches.models';
 import { Subject } from 'rxjs';
-import { untilDestroy } from '../utils/until-destroy';
+import { distinctUntilChanged, filter, take, takeUntil, withLatestFrom } from 'rxjs/operators';
 import { CrTextMatchComponent } from '../components/core/cr-text-match/cr-text-match.component';
+import { TextMatchHighlightEvent } from '../models/report-matches.models';
+import { ReportMatchHighlightService } from '../services/report-match-highlight.service';
+import { ReportViewService } from '../services/report-view.service';
+import * as helpers from '../utils/highlight-helpers';
+import { untilDestroy } from '../utils/until-destroy';
 
 @Directive({
 	selector: '[crOriginalTextHelper]',

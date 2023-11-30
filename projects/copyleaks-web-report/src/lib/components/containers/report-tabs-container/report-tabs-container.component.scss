@@ -1,6 +1,7 @@
 @import '../../../styles/containers.styles.scss';
 @import '../../../styles/styles.scss';
 @import '../../../styles/website-colors.styles.scss';
+@import '../../../styles/cls-mat-components-overrides/cls-progress-bar-overrides.scss';
 
 :host {
 	display: flex;
@@ -73,7 +74,8 @@
 
 	.identical,
 	.paraphrased,
-	.minor-changes {
+	.minor-changes,
+	.ai-content {
 		transition: width 0.7s;
 	}
 
@@ -156,5 +158,36 @@
 	.tab-disabled {
 		opacity: 0.5 !important;
 		cursor: not-allowed !important;
+	}
+
+	.identical.real-time-view {
+		background-color: $color-primary;
+		border: 1px solid $color-primary;
+		border-radius: 4px 0px 0px 4px;
+	}
+
+	.paraphrased.real-time-view {
+		background-color: #83bff9;
+		border: 1px solid #83bff9;
+	}
+
+	.minor-changes.real-time-view {
+		background-color: #b0d7fb;
+		border: 1px solid #b0d7fb;
+	}
+
+	.ai-content.real-time-view {
+		background-color: $color-primary;
+		border: 1px solid $color-primary;
+		border-radius: 10px;
+	}
+
+	.bar-score.real-time-view {
+		font-size: 14px !important;
+		font-style: normal !important;
+		font-weight: 500 !important;
+		line-height: normal !important;
+		display: flex;
+		align-items: center;
 	}
 }

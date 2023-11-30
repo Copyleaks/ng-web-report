@@ -1,9 +1,8 @@
 import { Directive, ElementRef, OnDestroy, OnInit } from '@angular/core';
-import { distinctUntilChanged, filter, map, takeUntil, withLatestFrom } from 'rxjs/operators';
+import { distinctUntilChanged, filter, map, withLatestFrom } from 'rxjs/operators';
+import { MatchJumpEvent, MatchSelectEvent } from '../models/report-iframe-events.models';
 import { ReportMatchHighlightService } from '../services/report-match-highlight.service';
 import { ReportViewService } from '../services/report-view.service';
-import { MatchJumpEvent, MatchSelectEvent } from '../models/report-iframe-events.models';
-import { Subject } from 'rxjs';
 import { untilDestroy } from '../utils/until-destroy';
 
 @Directive({

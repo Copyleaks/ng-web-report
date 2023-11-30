@@ -1,17 +1,15 @@
 import { Injectable, OnDestroy } from '@angular/core';
-import { BehaviorSubject, Subject, combineLatest } from 'rxjs';
-import * as helpers from '../utils/report-match-helpers';
-import { ICompleteResultNotificationAlert, ICompleteResults, IScanSource } from '../models/report-data.models';
-import { ICopyleaksReportOptions } from '../models/report-options.models';
-import { ReportDataService } from './report-data.service';
-import { filter, takeUntil } from 'rxjs/operators';
-import { SlicedMatch, Match, ResultDetailItem } from '../models/report-matches.models';
-import { ReportViewService } from './report-view.service';
-import { IReportViewEvent } from '../models/report-view.models';
+import { BehaviorSubject, combineLatest } from 'rxjs';
+import { filter } from 'rxjs/operators';
 import { ALERTS } from '../constants/report-alerts.constants';
+import { ICompleteResults, IScanSource } from '../models/report-data.models';
+import { Match, ResultDetailItem, SlicedMatch } from '../models/report-matches.models';
+import { ICopyleaksReportOptions } from '../models/report-options.models';
+import { IReportViewEvent } from '../models/report-view.models';
+import * as helpers from '../utils/report-match-helpers';
 import { untilDestroy } from '../utils/until-destroy';
-import { ReportMatchHighlightService } from './report-match-highlight.service';
-import { EResultPreviewType } from '../enums/copyleaks-web-report.enums';
+import { ReportDataService } from './report-data.service';
+import { ReportViewService } from './report-view.service';
 
 /**
  * Service that calculates the matches highlight positions with respect to the view and content mode.
@@ -78,6 +76,15 @@ export class ReportMatchesService implements OnDestroy {
 				)
 			)
 			.subscribe(([scanSource, scanResults, viewMode, , filterOptions, excludedResultsIds]) => {
+				if (scanSource && this._reportViewSvc.progress$.value != 100) {
+					// process the mathces according to the report view
+					if (viewMode.isHtmlView) {
+						this._processOneToManyMatchesHtml(scanResults ?? [], undefined, [], scanSource);
+					} else {
+						this._processOneToManyMatchesText(scanResults ?? [], undefined, [], scanSource);
+					}
+				}
+
 				if (!scanSource || !viewMode || !filterOptions || !excludedResultsIds) return;
 
 				if (!scanSource?.html?.value && viewMode.isHtmlView) {
@@ -116,6 +123,21 @@ export class ReportMatchesService implements OnDestroy {
 				)
 			)
 			.subscribe(([scanSource, selectedResult, viewMode, , filterOptions]) => {
+				if (scanSource && selectedResult && this._reportViewSvc.progress$.value != 100) {
+					if (scanSource && this._reportViewSvc.progress$.value != 100) {
+						this._processOneToOneMatches(
+							selectedResult,
+							{
+								showIdentical: true,
+								showRelated: true,
+								showMinorChanges: true,
+							},
+							scanSource,
+							viewMode
+						);
+					}
+				}
+
 				if (!scanSource || !selectedResult || !viewMode || !filterOptions) return;
 
 				this._processOneToOneMatches(selectedResult, filterOptions, scanSource, viewMode);
@@ -156,12 +178,20 @@ export class ReportMatchesService implements OnDestroy {
 	 */
 	private _processOneToManyMatchesHtml(
 		results: ResultDetailItem[] | undefined,
-		settings: ICopyleaksReportOptions,
+		settings: ICopyleaksReportOptions | undefined,
 		excludedResultsIds: string[],
 		source: IScanSource
 	) {
-		results = this._reportDataSvc.filterResults(results, settings, excludedResultsIds);
-		const html = helpers.processSourceHtml(results ?? [], settings, source);
+		if (settings) results = this._reportDataSvc.filterResults(results, settings, excludedResultsIds);
+		const html = helpers.processSourceHtml(
+			results ?? [],
+			settings ?? {
+				showIdentical: true,
+				showRelated: true,
+				showMinorChanges: true,
+			},
+			source
+		);
 		if (html) {
 			this._originalHtmlMatches.next(html);
 		}
@@ -176,12 +206,20 @@ export class ReportMatchesService implements OnDestroy {
 	 */
 	private _processOneToManyMatchesText(
 		results: ResultDetailItem[] | undefined,
-		settings: ICopyleaksReportOptions,
+		settings: ICopyleaksReportOptions | undefined,
 		excludedResultsIds: string[],
 		source: IScanSource
 	) {
-		results = this._reportDataSvc.filterResults(results, settings, excludedResultsIds);
-		const text = helpers.processSourceText(results ?? [], settings, source);
+		if (settings) results = this._reportDataSvc.filterResults(results, settings, excludedResultsIds);
+		const text = helpers.processSourceText(
+			results ?? [],
+			settings ?? {
+				showIdentical: true,
+				showRelated: true,
+				showMinorChanges: true,
+			},
+			source
+		);
 		if (text) {
 			this._originalTextMatches.next(text);
 		}

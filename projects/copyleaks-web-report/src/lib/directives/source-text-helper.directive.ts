@@ -1,15 +1,15 @@
-import { Directive, AfterContentInit, OnDestroy, Input, ContentChildren, QueryList } from '@angular/core';
-import { filter, withLatestFrom, take, takeUntil } from 'rxjs/operators';
+import { AfterContentInit, ContentChildren, Directive, Input, OnDestroy, QueryList } from '@angular/core';
+import { Subject } from 'rxjs';
+import { filter, take, takeUntil, withLatestFrom } from 'rxjs/operators';
+import { CrTextMatchComponent } from '../components/core/cr-text-match/cr-text-match.component';
 import { ContentMode } from '../models/report-config.models';
+import { IResultDetailResponse, IScanSource } from '../models/report-data.models';
 import { Match } from '../models/report-matches.models';
+import { ReportDataService } from '../services/report-data.service';
 import { ReportMatchHighlightService } from '../services/report-match-highlight.service';
 import { ReportViewService } from '../services/report-view.service';
-import { IResultDetailResponse, IScanSource } from '../models/report-data.models';
 import * as helpers from '../utils/highlight-helpers';
-import { ReportDataService } from '../services/report-data.service';
-import { Subject, combineLatest } from 'rxjs';
 import { untilDestroy } from '../utils/until-destroy';
-import { CrTextMatchComponent } from '../components/core/cr-text-match/cr-text-match.component';
 
 @Directive({
 	selector: '[crSourceTextHelper]',
@@ -48,8 +48,9 @@ export class SourceTextHelperDirective implements AfterContentInit, OnDestroy {
 				}
 			});
 
-		combineLatest([jump$, reportViewMode$])
+		jump$
 			.pipe(
+				withLatestFrom(reportViewMode$),
 				filter(([, viewData]) => viewData.viewMode === 'one-to-one' && !viewData.isHtmlView),
 				untilDestroy(this),
 				takeUntil(this.unsubscribe$)

@@ -15,7 +15,8 @@
 		[showLoadingView]="isLoadingScanContent"
 		[hideAiTap]="hideAiTap"
 		[hidePlagarismTap]="hidePlagarismTap"
-		[showDisabledProducts]="showDisabledProducts"></copyleaks-report-tabs-container>
+		[showDisabledProducts]="showDisabledProducts"
+		[loadingProgressPct]="loadingProgressPct"></copyleaks-report-tabs-container>
 
 	<!-- Report content container  -->
 	<copyleaks-content-viewer-container
@@ -59,7 +60,8 @@
 			[allResults]="scanResultsView"
 			[resultsActions]="scanResultsActions"
 			[showLoadingView]="isLoadingScanResults"
-			[filterOptions]="filterOptions"></copyleaks-report-results-container>
+			[filterOptions]="filterOptions"
+			[newResults]="newScanResultsView"></copyleaks-report-results-container>
 
 		<div class="custom-results-container" #customResultView [style.flex-grow]="'1'">
 			<ng-container *ngTemplateOutlet="customResultsTemplate ?? null"></ng-container>

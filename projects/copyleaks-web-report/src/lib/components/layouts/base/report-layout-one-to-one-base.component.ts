@@ -15,6 +15,7 @@ import { ReportLayoutBaseComponent } from './report-layout-base.component';
 import { IResultItem } from '../../containers/report-results-item-container/components/models/report-result-item.models';
 import { combineLatest } from 'rxjs';
 import { ReportNgTemplatesService } from '../../../services/report-ng-templates.service';
+import { ReportRealtimeResultsService } from '../../../services/report-realtime-results.service';
 
 export abstract class OneToOneReportLayoutBaseComponent extends ReportLayoutBaseComponent {
 	hideRightSection = false;
@@ -66,9 +67,19 @@ export abstract class OneToOneReportLayoutBaseComponent extends ReportLayoutBase
 		renderer: Renderer2,
 		highlightSvc: ReportMatchHighlightService,
 		statisticsSvc: ReportStatisticsService,
-		templatesSvc: ReportNgTemplatesService
+		templatesSvc: ReportNgTemplatesService,
+		realTimeResultsSvc: ReportRealtimeResultsService
 	) {
-		super(reportDataSvc, reportViewSvc, matchSvc, renderer, highlightSvc, statisticsSvc, templatesSvc);
+		super(
+			reportDataSvc,
+			reportViewSvc,
+			matchSvc,
+			renderer,
+			highlightSvc,
+			statisticsSvc,
+			templatesSvc,
+			realTimeResultsSvc
+		);
 		this.iframeJsScript = iframeJsScript;
 	}
 
@@ -100,6 +111,24 @@ export abstract class OneToOneReportLayoutBaseComponent extends ReportLayoutBase
 		combineLatest([this.reportDataSvc.scanResultsPreviews$, this.reportViewSvc.selectedResult$])
 			.pipe(untilDestroy(this))
 			.subscribe(([previews, resultData]) => {
+				if (this.reportViewSvc.progress$.value != 100 && resultData) {
+					this.numberOfPagesSuspect = resultData.result?.text?.pages?.startPosition?.length ?? 1;
+					this.resultData = resultData;
+					this.resultItem =
+						this.realTimeResultsSvc.newResults?.find(r => r.resultDetails?.id === resultData.id) ?? null;
+
+					this.matchSvc.suspectHtmlMatches$.pipe(untilDestroy(this)).subscribe(data => {
+						if (!resultData?.result?.html.value) return;
+						const rerenderedMatches = this._getRenderedMatches(data, resultData?.result?.html?.value);
+						if (rerenderedMatches && data) {
+							this.suspectIframeHtml = rerenderedMatches;
+							this.rerenderedSuspect = true;
+							this.suspectHtmlMatches = data;
+						}
+					});
+					return;
+				}
+
 				this.isLoadingResultItem = resultData === null || previews === undefined;
 
 				if (resultData && previews) {
@@ -116,8 +145,8 @@ export abstract class OneToOneReportLayoutBaseComponent extends ReportLayoutBase
 						resultDetails: resultData,
 						iStatisticsResult: resultData?.result?.statistics,
 						metadataSource: {
-							words: previews?.scannedDocument.totalWords ?? 0,
-							excluded: previews?.scannedDocument.totalExcluded ?? 0,
+							words: this.reportDataSvc.crawledVersion?.metadata.words ?? 0,
+							excluded: this.reportDataSvc.crawledVersion?.metadata.excluded ?? 0,
 						},
 					} as IResultItem;
 				}

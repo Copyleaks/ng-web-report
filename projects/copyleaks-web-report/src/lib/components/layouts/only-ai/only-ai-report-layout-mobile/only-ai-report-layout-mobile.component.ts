@@ -6,6 +6,7 @@ import { ReportStatisticsService } from '../../../../services/report-statistics.
 import { ReportViewService } from '../../../../services/report-view.service';
 import { OneToManyReportLayoutBaseComponent } from '../../base/report-layout-one-to-many-base.component';
 import { ReportNgTemplatesService } from '../../../../services/report-ng-templates.service';
+import { ReportRealtimeResultsService } from '../../../../services/report-realtime-results.service';
 
 @Component({
 	selector: 'copyleaks-only-ai-report-layout-mobile',
@@ -20,9 +21,19 @@ export class OnlyAiReportLayoutMobileComponent extends OneToManyReportLayoutBase
 		renderer: Renderer2,
 		highlightSvc: ReportMatchHighlightService,
 		statisticsSvc: ReportStatisticsService,
-		templatesSvc: ReportNgTemplatesService
+		templatesSvc: ReportNgTemplatesService,
+		realTimeResultsSvc: ReportRealtimeResultsService
 	) {
-		super(reportDataSvc, reportViewSvc, matchSvc, renderer, highlightSvc, statisticsSvc, templatesSvc);
+		super(
+			reportDataSvc,
+			reportViewSvc,
+			matchSvc,
+			renderer,
+			highlightSvc,
+			statisticsSvc,
+			templatesSvc,
+			realTimeResultsSvc
+		);
 	}
 
 	ngOnInit(): void {

@@ -28,11 +28,18 @@ import { ReportViewService } from '../../../services/report-view.service';
 import { untilDestroy } from '../../../utils/until-destroy';
 import { EXCLUDE_MESSAGE } from '../../../constants/report-exclude.constants';
 import { IAuthorAlertCard } from '../report-alerts-container/components/author-alert-card/models/author-alert-card.models';
+import { animate, state, style, transition, trigger } from '@angular/animations';
 
 @Component({
 	selector: 'copyleaks-content-viewer-container',
 	templateUrl: './content-viewer-container.component.html',
 	styleUrls: ['./content-viewer-container.component.scss'],
+	animations: [
+		trigger('fadeIn', [
+			state('void', style({ opacity: 0 })),
+			transition(':enter', [animate('0.5s ease-in', style({ opacity: 1 }))]),
+		]),
+	],
 })
 export class ContentViewerContainerComponent implements OnInit, AfterViewInit, OnChanges {
 	@HostBinding('style.flex-grow')

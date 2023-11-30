@@ -1,3 +1,4 @@
+import { BreakpointObserver, Breakpoints } from '@angular/cdk/layout';
 import {
 	Component,
 	EventEmitter,
@@ -9,38 +10,24 @@ import {
 	TemplateRef,
 	ViewChild,
 } from '@angular/core';
-import { EReportLayoutType, EResponsiveLayoutType } from './enums/copyleaks-web-report.enums';
-import { BreakpointObserver, Breakpoints } from '@angular/cdk/layout';
-import { filter, map } from 'rxjs/operators';
-import { ReportNgTemplatesService } from './services/report-ng-templates.service';
-import { ReportDataService } from './services/report-data.service';
-import { ReportMatchesService } from './services/report-matches.service';
-import { ReportViewService } from './services/report-view.service';
-import { IClsReportEndpointConfigModel } from './models/report-config.models';
-import { ReportMatchHighlightService } from './services/report-match-highlight.service';
 import { ActivatedRoute, Router } from '@angular/router';
-import { IReportViewEvent, IReportViewQueryParams } from './models/report-view.models';
-import { untilDestroy } from './utils/until-destroy';
-import { ReportStatisticsService } from './services/report-statistics.service';
-import { ReportHttpRequestErrorModel } from './models/report-errors.models';
-import { ReportErrorsService } from './services/report-errors.service';
-import { ICompleteResults } from './models/report-data.models';
+import { filter, map } from 'rxjs/operators';
 import { ALERTS } from './constants/report-alerts.constants';
-import { FilterResultDailogService } from './dialogs/filter-result-dailog/services/filter-result-dailog.service';
+import { EReportLayoutType, EResponsiveLayoutType } from './enums/copyleaks-web-report.enums';
+import { IClsReportEndpointConfigModel } from './models/report-config.models';
+import { ICompleteResults } from './models/report-data.models';
+import { ReportHttpRequestErrorModel } from './models/report-errors.models';
+import { IReportViewEvent, IReportViewQueryParams } from './models/report-view.models';
+import { ReportDataService } from './services/report-data.service';
+import { ReportErrorsService } from './services/report-errors.service';
+import { ReportNgTemplatesService } from './services/report-ng-templates.service';
+import { ReportViewService } from './services/report-view.service';
+import { untilDestroy } from './utils/until-destroy';
 
 @Component({
 	selector: 'copyleaks-web-report',
 	templateUrl: './copyleaks-web-report.component.html',
 	styleUrls: ['./copyleaks-web-report.component.scss'],
-	providers: [
-		ReportNgTemplatesService,
-		ReportDataService,
-		ReportMatchesService,
-		ReportViewService,
-		ReportMatchHighlightService,
-		ReportStatisticsService,
-		FilterResultDailogService,
-	],
 })
 export class CopyleaksWebReportComponent implements OnInit, OnDestroy {
 	@ViewChild('customActionsTemplate', { static: true }) customActionsTemplate: TemplateRef<any>;

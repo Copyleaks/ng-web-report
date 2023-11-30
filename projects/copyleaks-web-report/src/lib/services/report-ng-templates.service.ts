@@ -1,7 +1,7 @@
 import { Injectable, TemplateRef } from '@angular/core';
-import { BehaviorSubject, Subject } from 'rxjs';
-import { ICustomClsReportTabTemplatesRefs, ICustomClsReportTemplatesRefs } from '../models/report-ng-templates.models';
+import { BehaviorSubject } from 'rxjs';
 import { ECustomResultsReportView } from '../components/core/cr-custom-results/models/cr-custom-results.enums';
+import { ICustomClsReportTabTemplatesRefs, ICustomClsReportTemplatesRefs } from '../models/report-ng-templates.models';
 
 @Injectable()
 export class ReportNgTemplatesService {

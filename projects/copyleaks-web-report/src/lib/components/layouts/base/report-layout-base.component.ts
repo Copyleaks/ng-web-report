@@ -10,6 +10,7 @@ import * as helpers from '../../../utils/report-match-helpers';
 import { ReportMatchHighlightService } from '../../../services/report-match-highlight.service';
 import { ReportStatisticsService } from '../../../services/report-statistics.service';
 import { ReportNgTemplatesService } from '../../../services/report-ng-templates.service';
+import { ReportRealtimeResultsService } from '../../../services/report-realtime-results.service';
 
 export abstract class ReportLayoutBaseComponent {
 	iframeStyle: string = COPYLEAKS_REPORT_IFRAME_STYLES;
@@ -29,7 +30,8 @@ export abstract class ReportLayoutBaseComponent {
 		protected renderer: Renderer2,
 		protected highlightSvc: ReportMatchHighlightService,
 		protected statisticsSvc: ReportStatisticsService,
-		protected templatesSvc: ReportNgTemplatesService
+		protected templatesSvc: ReportNgTemplatesService,
+		protected realTimeResultsSvc: ReportRealtimeResultsService
 	) {}
 
 	onReportViewChange(event: IReportViewEvent) {
@@ -41,7 +43,7 @@ export abstract class ReportLayoutBaseComponent {
 	 * Render list of matches in the iframe's HTML
 	 * @param matches the matches to render
 	 */
-	protected _getRenderedMatches(matches: Match[] | null, originalHtml: string) {
+	protected _getRenderedMatches(matches: Match[] | null, originalHtml?: string) {
 		if (this.rerendered == true || !matches || !originalHtml) return null;
 
 		const html = helpers.getRenderedMatches(matches, originalHtml);

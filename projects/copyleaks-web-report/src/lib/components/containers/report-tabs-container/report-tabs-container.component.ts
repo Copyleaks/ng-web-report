@@ -15,11 +15,18 @@ import { ReportNgTemplatesService } from '../../../services/report-ng-templates.
 import { untilDestroy } from '../../../utils/until-destroy';
 import { ReportMatchHighlightService } from '../../../services/report-match-highlight.service';
 import { ReportDataService } from '../../../services/report-data.service';
+import { trigger, state, transition, animate, style } from '@angular/animations';
 
 @Component({
 	selector: 'copyleaks-report-tabs-container',
 	templateUrl: './report-tabs-container.component.html',
 	styleUrls: ['./report-tabs-container.component.scss'],
+	animations: [
+		trigger('fadeIn', [
+			state('void', style({ opacity: 0 })),
+			transition(':enter', [animate('0.5s ease-in', style({ opacity: 1 }))]),
+		]),
+	],
 })
 export class ReportTabsContainerComponent implements OnInit, OnDestroy, OnChanges {
 	/**
@@ -82,6 +89,11 @@ export class ReportTabsContainerComponent implements OnInit, OnDestroy, OnChange
 	 */
 	@Input() showDisabledProducts: boolean = false;
 
+	/**
+	 * @Input {boolean} - Flag indicating whether to still show the disabled products tabs.
+	 */
+	@Input() loadingProgressPct: number = 0;
+
 	EReportViewType = EReportViewType;
 	EReportScoreTooltipPosition = EReportScoreTooltipPosition;
 	customTabsTemplateRef: TemplateRef<any>[] | undefined = undefined;
@@ -124,11 +136,12 @@ export class ReportTabsContainerComponent implements OnInit, OnDestroy, OnChange
 				this._reportViewSvc.selectedAlert$.next(null);
 				this._reportViewSvc.reportViewMode$.next({ ...this._reportViewSvc.reportViewMode, alertCode: undefined });
 			}
-			if (!this.showLoadingView && this.showDisabledProducts && this.hidePlagarismTap && !this.hideAiTap) {
+			if (!this.showLoadingView && this.hidePlagarismTap && !this.hideAiTap) {
 				this.selectedTap = EReportViewType.AIView;
 				this._reportViewSvc.selectedAlert$.next(ALERTS.SUSPECTED_AI_TEXT_DETECTED);
 				this._reportViewSvc.reportViewMode$.next({
 					...this._reportViewSvc.reportViewMode,
+					viewMode: this.showDisabledProducts ? 'one-to-many' : 'only-ai',
 					alertCode: ALERTS.SUSPECTED_AI_TEXT_DETECTED,
 				});
 			}
@@ -139,7 +152,8 @@ export class ReportTabsContainerComponent implements OnInit, OnDestroy, OnChange
 		if (
 			selectedTab == this.selectedTap ||
 			(selectedTab === EReportViewType.PlagiarismView && this.hidePlagarismTap && this.showDisabledProducts) ||
-			(selectedTab === EReportViewType.AIView && this.hideAiTap && this.showDisabledProducts)
+			(selectedTab === EReportViewType.AIView && this.hideAiTap && this.showDisabledProducts) ||
+			this.loadingProgressPct != 100
 		)
 			return;
 

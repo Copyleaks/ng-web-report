@@ -1,0 +1,182 @@
+{
+    "scannedDocument": {
+        "scanId": "qlu4i07ta5cb90zx",
+        "totalWords": 176,
+        "totalExcluded": 0,
+        "credits": 6,
+        "expectedCredits": 6,
+        "creationTime": "2023-11-30T09:47:34.328692Z",
+        "metadata": {
+            "finalUrl": null,
+            "canonicalUrl": null,
+            "author": null,
+            "organization": null,
+            "filename": "old-export.txt",
+            "publishDate": null,
+            "creationDate": null,
+            "lastModificationDate": null,
+            "submissionDate": null,
+            "submittedBy": null,
+            "submitterAuthorId": null,
+            "customMetadata": null
+        },
+        "enabled": {
+            "plagiarismDetection": true,
+            "aiDetection": true
+        }
+    },
+    "results": {
+        "internet": [],
+        "database": [],
+        "batch": [],
+        "repositories": [
+           {
+                "isLocked": false,
+                "repositoryId": "fz2l5lh0d5636sss",
+                "scanId": "98b929d9-335a-4266-b2f9-362402122350",
+                "id": "30caaa7sss",
+                "title": "Repository: School Repo",
+                "introduction": "No introduction available.",
+                "matchedWords": 174,
+                "identicalWords": 0,
+                "similarWords": 0,
+                "paraphrasedWords": 0,
+                "metadata": {
+                    "finalUrl": null,
+                    "canonicalUrl": null,
+                    "author": null,
+                    "organization": null,
+                    "filename": "old-export.txt",
+                    "publishDate": null,
+                    "creationDate": null,
+                    "lastModificationDate": null,
+                    "submissionDate": "2023-05-24T12:18:29.23323Z",
+                    "submittedBy": "safaa@copyleaks.com",
+                    "submitterAuthorId": null,
+                    "customMetadata": null
+                },
+                "tags": []
+            },
+            {
+                "isLocked": false,
+                "repositoryId": "fz2l5lh0d5636ee2",
+                "scanId": "98b929d9-335a-4266-b2f9-362402122350",
+                "id": "2829ab7433",
+                "title": "Repository: New Repository",
+                "introduction": "No introduction available.",
+                "matchedWords": 174,
+                "identicalWords": 0,
+                "similarWords": 0,
+                "paraphrasedWords": 0,
+                "metadata": {
+                    "finalUrl": null,
+                    "canonicalUrl": null,
+                    "author": null,
+                    "organization": null,
+                    "filename": "old-export.txt",
+                    "publishDate": null,
+                    "creationDate": null,
+                    "lastModificationDate": null,
+                    "submissionDate": "2023-05-24T12:18:29.23323Z",
+                    "submittedBy": "safaa@copyleaks.com",
+                    "submitterAuthorId": null,
+                    "customMetadata": null
+                },
+                "tags": []
+            },
+            {
+                "isLocked": false,
+                "repositoryId": "fz2l5lh0d5636ee2",
+                "scanId": "a39cf64e-883d-406d-a501-84f01965b197",
+                "id": "30caaa7a2a",
+                "title": "Repository: New Repository",
+                "introduction": "No introduction available.",
+                "matchedWords": 174,
+                "identicalWords": 0,
+                "similarWords": 0,
+                "paraphrasedWords": 0,
+                "metadata": {
+                    "finalUrl": null,
+                    "canonicalUrl": null,
+                    "author": null,
+                    "organization": null,
+                    "filename": "old-export.txt",
+                    "publishDate": null,
+                    "creationDate": null,
+                    "lastModificationDate": null,
+                    "submissionDate": "2023-03-12T06:59:39.664105Z",
+                    "submittedBy": "safaa@copyleaks.com",
+                    "submitterAuthorId": null,
+                    "customMetadata": null
+                },
+                "tags": []
+            },
+            {
+                "isLocked": false,
+                "repositoryId": "fz2l5lh0d5636ee2",
+                "scanId": "2ef6044e-60b2-429c-bb0f-25f2c3ceff9c",
+                "id": "550782664f",
+                "title": "Repository: New Repository",
+                "introduction": "No introduction available.",
+                "matchedWords": 174,
+                "identicalWords": 0,
+                "similarWords": 0,
+                "paraphrasedWords": 0,
+                "metadata": {
+                    "finalUrl": null,
+                    "canonicalUrl": null,
+                    "author": null,
+                    "organization": null,
+                    "filename": "old-export.txt",
+                    "publishDate": null,
+                    "creationDate": null,
+                    "lastModificationDate": null,
+                    "submissionDate": "2023-03-12T09:56:31.102178Z",
+                    "submittedBy": "safaa@copyleaks.com",
+                    "submitterAuthorId": null,
+                    "customMetadata": null
+                },
+                "tags": []
+            }
+        ],
+        "score": {
+            "identicalWords": 174,
+            "minorChangedWords": 0,
+            "relatedMeaningWords": 0,
+            "aggregatedScore": 98.9
+        }
+    },
+    "notifications": {
+        "alerts": [
+            {
+                "additionalData": "{\"results\": [{\"classification\": 2, \"probability\": 0.6507287521627694, \"matches\": [{\"text\": {\"chars\": {\"starts\": [0], \"lengths\": [833]}, \"words\": {\"starts\": [0], \"lengths\": [134]}}}]}, {\"classification\": 1, \"probability\": 0.6111883315028324, \"matches\": [{\"text\": {\"chars\": {\"starts\": [833], \"lengths\": [239]}, \"words\": {\"starts\": [134], \"lengths\": [42]}}}]}], \"summary\": {\"human\": 0.23863636363636365, \"ai\": 0.7613636363636364}, \"translation\": null, \"modelVersion\": \"v3\", \"translationProvider\": 0}",
+                "code": "suspected-ai-text",
+                "helpLink": null,
+                "message": "We are unable to verify that the text was written by a human.",
+                "severity": 4,
+                "title": "Suspected Cheating: AI Text Detected"
+            },
+            {
+                "additionalData": "{\"repositoryId\":\"nbzjfy2hoh0q00up\",\"repositoryName\":\"nbzjfy2hoh0q00up\"}",
+                "code": "repository-scan-failed",
+                "helpLink": null,
+                "message": "You do not have permission to scan against `nbzjfy2hoh0q00up`.",
+                "severity": 2,
+                "title": "Not Able to Scan Against Repository"
+            },
+            {
+                "additionalData": "{\"repositoryId\":\"nbzjfy2hoh0q00up\",\"repositoryName\":\"nbzjfy2hoh0q00up\"}",
+                "code": "repository-index-failed",
+                "helpLink": null,
+                "message": "You do not have permission to index against `nbzjfy2hoh0q00up` or the repository does not exists.",
+                "severity": 2,
+                "title": "Not Able to Index Against Repository"
+            }
+        ]
+    },
+    "hasPdfReport": true,
+    "filters": null,
+    "status": 0,
+    "error": null,
+    "developerPayload": ""
+}

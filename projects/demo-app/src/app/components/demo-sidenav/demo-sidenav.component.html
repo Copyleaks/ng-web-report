@@ -136,6 +136,16 @@
 		<mat-icon class="item-icon" fontSet="material-icons-round">circle</mat-icon>
 		<span class="item-text">Both</span>
 	</button>
+
+	<button
+		(click)="navigateToReportPreview('repository/both')"
+		matTooltipPosition="right"
+		matTooltip="Scan With Repository Results Example"
+		mat-menu-item>
+		<mat-icon class="item-icon" fontSet="material-icons-round">storage</mat-icon>
+		<span class="item-text">Repository</span>
+	</button>
+
 	<button
 		(click)="navigateToReportPreview('bundle/default', 'suspected-character-replacement')"
 		matTooltipPosition="right"

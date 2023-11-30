@@ -1,7 +1,10 @@
 import { Component, Inject, OnInit } from '@angular/core';
 import { IResultsActions } from '../../components/containers/report-results-container/components/results-actions/models/results-actions.models';
 import { IResultItem } from '../../components/containers/report-results-item-container/components/models/report-result-item.models';
-import { ITotalSourceType } from './components/source-type-filter-result/models/source-type-filter-result.models';
+import {
+	ISourceRepositoryType,
+	ITotalSourceType,
+} from './components/source-type-filter-result/models/source-type-filter-result.models';
 import { FilterResultDailogService } from './services/filter-result-dailog.service';
 import { ITagItem } from './components/included-tags-filter-result/models/included-tags-filter-result.models';
 import { EFilterResultForm, IFilterResultDailogData } from './models/filter-result-dailog.enum';
@@ -108,6 +111,13 @@ export class FilterResultDailogComponent implements OnInit {
 							?.get(EFilterResultForm.fgSourceType)
 							?.get(EFilterResultForm.fcBatch)
 							?.setValue(true, { emitEvent: false });
+					else if (this.totalSourceType.repository && this.totalSourceType.repository?.length > 0) {
+						this._filterResultsSvc.filterResultFormGroup
+							?.get(EFilterResultForm.fgSourceType)
+							?.get(EFilterResultForm.fgRepositories)
+							?.get(this._filterResultsSvc.reposIds[0].id)
+							?.setValue(true, { emitEvent: false });
+					}
 				});
 
 				this.sourceTypeErrorMessage = $localize`At least one match Source type needs to be activated.`;
@@ -246,7 +256,7 @@ export class FilterResultDailogComponent implements OnInit {
 						totalInternet: results.internet.length,
 						totalInternalDatabase: results.database.length,
 						totalbatch: results.batch.length,
-						// TODO: Load the repos
+						repository: this._filterResultsSvc.reposIds,
 					};
 
 					const allResults = [
@@ -281,6 +291,7 @@ export class FilterResultDailogComponent implements OnInit {
 						0;
 
 					this._filterResultsSvc.initForm(completeResults);
+					this.totalSourceType.repository = this._filterResultsSvc.reposIds;
 
 					this.setExcludedResultsStats();
 					this.setResultsPublicationDate();
@@ -346,8 +357,9 @@ export class FilterResultDailogComponent implements OnInit {
 				this.totalSourceType.totalbatch === 0
 					? false
 					: this._filterResultsSvc.sourceTypeFormGroup.get(EFilterResultForm.fcBatch)?.value,
-			// TODO: Repos ids list
-			// showRepositoriesResults:  this._filterResultsSvc.sourceTypeFormGroup.get(EFilterResultForm.).value,
+			showRepositoriesResults: !this.totalSourceType.repository?.length
+				? []
+				: this._filterResultsSvc.getSelectedRepositoryIds(),
 
 			// Metadata
 			wordLimit: this._filterResultsSvc.resultsMetaFormGroup

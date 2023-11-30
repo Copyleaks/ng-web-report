@@ -12,6 +12,7 @@ import * as helpers from '../utils/report-statistics-helpers';
 import { untilDestroy } from '../utils/until-destroy';
 import { ReportViewService } from './report-view.service';
 import { ReportErrorsService } from './report-errors.service';
+import { IRepositoryResultPreview } from 'copyleaks-web-report';
 
 @Injectable()
 export class ReportDataService {
@@ -181,7 +182,7 @@ export class ReportDataService {
 							batch: options?.showBatchResults ?? true,
 							internalDatabase: options?.showInternalDatabaseResults ?? true,
 							internet: options?.showInternetResults ?? true,
-							repositories: [],
+							repositories: options?.showRepositoriesResults ?? [],
 						},
 					},
 				});
@@ -432,11 +433,20 @@ export class ReportDataService {
 				completeResults.find(cr => cr.id === id && cr.type !== EResultPreviewType.Database)
 			);
 
-		// TODO Repos
 		if (settings.showRepositoriesResults !== undefined && settings.showRepositoriesResults.length === 0)
 			filteredResultsIds = filteredResultsIds.filter(id =>
 				completeResults.find(cr => cr.id === id && cr.type !== EResultPreviewType.Repositroy)
 			);
+		else if (settings.showRepositoriesResults !== undefined && settings.showRepositoriesResults.length > 0) {
+			filteredResultsIds = filteredResultsIds.filter(id =>
+				completeResults.find(
+					cr =>
+						cr.id === id &&
+						(cr.type !== EResultPreviewType.Repositroy ||
+							settings.showRepositoriesResults?.find(id => id === (cr as IRepositoryResultPreview)?.repositoryId))
+				)
+			);
+		}
 
 		if (!!settings.wordLimit)
 			filteredResultsIds = filteredResultsIds.filter(id =>

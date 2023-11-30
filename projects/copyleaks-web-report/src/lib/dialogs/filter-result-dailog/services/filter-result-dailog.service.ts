@@ -3,6 +3,7 @@ import { FormBuilder, FormControl, FormGroup } from '@angular/forms';
 import { EFilterResultForm } from '../models/filter-result-dailog.enum';
 import { ITagItem } from '../components/included-tags-filter-result/models/included-tags-filter-result.models';
 import { ICompleteResults } from '../../../models/report-data.models';
+import { ISourceRepositoryType } from '../components/source-type-filter-result/models/source-type-filter-result.models';
 
 @Injectable()
 export class FilterResultDailogService {
@@ -35,6 +36,25 @@ export class FilterResultDailogService {
 		return this._filterResultForm?.get(EFilterResultForm.fcIncludedTags) as FormControl;
 	}
 
+	get repositoriesFormGroup() {
+		return this.sourceTypeFormGroup.get(EFilterResultForm.fgRepositories) as FormGroup;
+	}
+
+	get reposIds() {
+		if (!this._completeResults || !this._completeResults.results?.repositories) return [];
+
+		const reposMap = new Map<string, ISourceRepositoryType>();
+
+		this._completeResults.results.repositories.forEach(r => {
+			// Only add the repository if it doesn't already exist in the map
+			if (!reposMap.has(r.repositoryId)) {
+				reposMap.set(r.repositoryId, { id: r.repositoryId, title: r.title });
+			}
+		});
+
+		return Array.from(reposMap.values());
+	}
+
 	constructor(private _formBuilder: FormBuilder) {}
 
 	public initForm(completeResults: ICompleteResults) {
@@ -47,7 +67,7 @@ export class FilterResultDailogService {
 				internet: new FormControl(this.getFormControlValue(EFilterResultForm.fcInternet)),
 				internalDatabase: new FormControl(this.getFormControlValue(EFilterResultForm.fcInternalDatabase)),
 				batch: new FormControl(this.getFormControlValue(EFilterResultForm.fcBatch)),
-				repositories: this._formBuilder.group([]),
+				repositories: this._formBuilder.group({}),
 			}),
 			resultsMeta: this._formBuilder.group({
 				wordLimit: this._formBuilder.group({
@@ -72,6 +92,8 @@ export class FilterResultDailogService {
 			}),
 			includedTags: new FormControl(this.getFormControlValue(EFilterResultForm.fcIncludedTags)),
 		});
+
+		this.addRepositoriesToForm(this.reposIds);
 	}
 
 	public initTags() {
@@ -118,7 +140,7 @@ export class FilterResultDailogService {
 				internet: new FormControl(true),
 				internalDatabase: new FormControl(true),
 				batch: new FormControl(true),
-				repositories: this._formBuilder.group([]), // TODO: put repost list
+				repositories: this._formBuilder.group({}),
 			}),
 			resultsMeta: this._formBuilder.group({
 				wordLimit: this._formBuilder.group({
@@ -143,6 +165,8 @@ export class FilterResultDailogService {
 			}),
 			includedTags: new FormControl(this.selectedTagItem ?? ([] as ITagItem[])),
 		});
+
+		this.addRepositoriesToForm(this.reposIds, true);
 	}
 
 	public getFormControlValue(eFilterResultForm: EFilterResultForm) {
@@ -216,5 +240,42 @@ export class FilterResultDailogService {
 
 	public getRepositoryValueById(repoId: string) {
 		return true;
+	}
+
+	addRepositoriesToForm(repositories: ISourceRepositoryType[], clear: boolean = false): void {
+		repositories.forEach(repo => {
+			// Add a new FormControl for each repository
+			// Using the repo id as the form control name and setting the initial value to false
+
+			this.repositoriesFormGroup?.addControl(
+				repo.id,
+				new FormControl(
+					clear
+						? true
+						: !this._completeResults.filters?.sourceType?.repositories
+						? true
+						: this._completeResults.filters?.sourceType?.repositories?.find(id => id === repo.id) === undefined
+						? false
+						: true
+				)
+			);
+		});
+	}
+
+	getSelectedRepositoryIds(): string[] {
+		// This will hold the IDs of the repositories with a value of true
+		const selectedRepoIds: string[] = [];
+
+		// Iterate over the keys of the form group controls
+		Object.keys(this.repositoriesFormGroup?.controls).forEach(key => {
+			const control = this.repositoriesFormGroup?.controls[key];
+
+			// Check if the control's value is true
+			if (control.value === true) {
+				selectedRepoIds.push(key);
+			}
+		});
+
+		return selectedRepoIds;
 	}
 }

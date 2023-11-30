@@ -243,7 +243,8 @@ export class ReportDataService {
 				catchError((error: HttpErrorResponse) => {
 					this._reportErrorsSvc.handleHttpError(error, 'initSync - crawledVersion');
 					return throwError(error);
-				})
+				}),
+				untilDestroy(this)
 			)
 			.subscribe(crawledVersionRes => {
 				this._crawledVersion$.next(crawledVersionRes);
@@ -257,7 +258,8 @@ export class ReportDataService {
 				catchError((error: HttpErrorResponse) => {
 					this._reportErrorsSvc.handleHttpError(error, 'initSync - completeResults');
 					return throwError(error);
-				})
+				}),
+				untilDestroy(this)
 			)
 			.subscribe(completeResultsRes => {
 				this._updateCompleteResults(completeResultsRes);

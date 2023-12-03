@@ -246,6 +246,8 @@ export class ReportDataService {
 			})
 			.pipe(
 				catchError((error: HttpErrorResponse) => {
+					console.log('initSync - crawledVersion ' + JSON.stringify(error));
+
 					this._reportErrorsSvc.handleHttpError(error, 'initSync - crawledVersion');
 					return throwError(error);
 				}),
@@ -261,6 +263,8 @@ export class ReportDataService {
 			})
 			.pipe(
 				catchError((error: HttpErrorResponse) => {
+					console.log('initSync - completeResults '+JSON.stringify(error));
+
 					this._reportErrorsSvc.handleHttpError(error, 'initSync - completeResults');
 					return throwError(error);
 				}),

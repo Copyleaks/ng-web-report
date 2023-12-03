@@ -246,16 +246,22 @@ export class ReportDataService {
 			})
 			.pipe(
 				catchError((error: HttpErrorResponse) => {
-					console.log('initSync - crawledVersion ' + JSON.stringify(error));
+					console.log('catchError - initSync - crawledVersion ' + JSON.stringify(error));
 
 					this._reportErrorsSvc.handleHttpError(error, 'initSync - crawledVersion');
 					return throwError(error);
 				}),
 				untilDestroy(this)
 			)
-			.subscribe(crawledVersionRes => {
-				this._crawledVersion$.next(crawledVersionRes);
-			});
+			.subscribe(
+				crawledVersionRes => {
+					this._crawledVersion$.next(crawledVersionRes);
+				},
+				error => {
+					console.log('error sub - initSync - crawledVersion ' + JSON.stringify(error));
+					this._reportErrorsSvc.handleHttpError(error, 'initSync - crawledVersion');
+				}
+			);
 
 		this._http
 			.get<ICompleteResults>(endpointsConfig.completeResults.url, {
@@ -263,16 +269,22 @@ export class ReportDataService {
 			})
 			.pipe(
 				catchError((error: HttpErrorResponse) => {
-					console.log('initSync - completeResults '+JSON.stringify(error));
+					console.log('catchError - initSync - completeResults ' + JSON.stringify(error));
 
 					this._reportErrorsSvc.handleHttpError(error, 'initSync - completeResults');
 					return throwError(error);
 				}),
 				untilDestroy(this)
 			)
-			.subscribe(completeResultsRes => {
-				this._updateCompleteResults(completeResultsRes);
-			});
+			.subscribe(
+				completeResultsRes => {
+					this._updateCompleteResults(completeResultsRes);
+				},
+				error => {
+					console.log('error sub - initSync - completeResults ' + JSON.stringify(error));
+					this._reportErrorsSvc.handleHttpError(error, 'initSync - completeResults');
+				}
+			);
 	}
 
 	public async initAsync() {

@@ -225,14 +225,17 @@ export class ReportDataService {
 					take(1),
 					untilDestroy(this)
 				)
-				.subscribe(progress => {
-					if (progress?.percents == 100) this.initSync(endpointsConfig);
-					else {
-						this._viewSvc.progress$.next(progress.percents);
-						this._checkScanProgress(progress);
-						this.initAsync();
-					}
-				});
+				.subscribe(
+					progress => {
+						if (progress?.percents == 100) this.initSync(endpointsConfig);
+						else {
+							this._viewSvc.progress$.next(progress.percents);
+							this._checkScanProgress(progress);
+							this.initAsync();
+						}
+					},
+					_ => {}
+				);
 		}
 	}
 	public initSync(endpointsConfig: IClsReportEndpointConfigModel) {
@@ -257,10 +260,7 @@ export class ReportDataService {
 				crawledVersionRes => {
 					this._crawledVersion$.next(crawledVersionRes);
 				},
-				error => {
-					console.log('error sub - initSync - crawledVersion ' + JSON.stringify(error));
-					this._reportErrorsSvc.handleHttpError(error, 'initSync - crawledVersion');
-				}
+				_ => {}
 			);
 
 		this._http
@@ -269,8 +269,6 @@ export class ReportDataService {
 			})
 			.pipe(
 				catchError((error: HttpErrorResponse) => {
-					console.log('catchError - initSync - completeResults ' + JSON.stringify(error));
-
 					this._reportErrorsSvc.handleHttpError(error, 'initSync - completeResults');
 					return throwError(error);
 				}),
@@ -280,10 +278,7 @@ export class ReportDataService {
 				completeResultsRes => {
 					this._updateCompleteResults(completeResultsRes);
 				},
-				error => {
-					console.log('error sub - initSync - completeResults ' + JSON.stringify(error));
-					this._reportErrorsSvc.handleHttpError(error, 'initSync - completeResults');
-				}
+				_ => {}
 			);
 	}
 

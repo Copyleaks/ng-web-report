@@ -193,7 +193,7 @@ export abstract class OneToManyReportLayoutBaseComponent extends ReportLayoutBas
 					this.hidePlagarismTap = !this.reportDataSvc.isPlagiarismEnabled();
 
 					if (this.scanResultsPreviews && this.scanResultsDetails) {
-						this.scanResultsActions.totalResults = this.scanResultsDetails.length;
+						this.scanResultsActions.totalResults = this.reportDataSvc.totalCompleteResults;
 						const allResults = [
 							...(this.scanResultsPreviews.results?.internet ?? []),
 							...(this.scanResultsPreviews.results?.database ?? []),
@@ -292,7 +292,6 @@ export abstract class OneToManyReportLayoutBaseComponent extends ReportLayoutBas
 
 		if (this.reportDataSvc.filterOptions && this.reportDataSvc.excludedResultsIds) {
 			const filteredResults = this.reportDataSvc.filterResults(
-				this.scanResultsDetails,
 				this.reportDataSvc.filterOptions,
 				this.reportDataSvc.excludedResultsIds
 			);

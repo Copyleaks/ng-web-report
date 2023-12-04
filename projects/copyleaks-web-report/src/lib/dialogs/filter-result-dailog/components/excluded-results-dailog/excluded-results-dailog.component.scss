@@ -64,9 +64,18 @@
 		height: 500px;
 		overflow: hidden;
 		.results-container {
+			display: flex;
+			flex-direction: column;
+			gap: 8px;
 			overflow: auto;
 			padding-right: 4px;
 			height: 100%;
+
+			::ng-deep {
+				.item-container {
+					background-color: transparent !important;
+				}
+			}
 		}
 	}
 

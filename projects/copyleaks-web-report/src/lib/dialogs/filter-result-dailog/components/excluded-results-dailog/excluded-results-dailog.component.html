@@ -29,8 +29,8 @@
 	</div>
 
 	<div class="results-top-container">
-		<div #resultsContainer class="results-container" fxLayout="column" fxLayoutGap="8px">
-			<ng-container *ngFor="let item of excludedResultist">
+		<div #resultsContainer class="results-container">
+			<ng-container *ngFor="let item of filteredList">
 				<cr-report-results-item
 					[resultItem]="item"
 					[excludedResultsClick]="allIncluded"
@@ -39,12 +39,6 @@
 					[style]="'width:100%'"
 					(hiddenResultEvent)="excludeResultById($event)"
 					(showResultEvent)="includeResultById($event)"></cr-report-results-item>
-			</ng-container>
-			<ng-container *ngIf="lastItemLoading">
-				<cr-report-results-item
-					[showLoader]="true"
-					[showItemBody]="false"
-					[style]="'width:100%'"></cr-report-results-item>
 			</ng-container>
 		</div>
 	</div>

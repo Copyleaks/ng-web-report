@@ -193,23 +193,23 @@ export class FilterResultDailogComponent implements OnInit {
 	setExcludedResultsStats() {
 		const excludedResultsIds = this.data.reportDataSvc.excludedResultsIds;
 		const filteredResults = this.data.reportDataSvc.filterResults(
-			this.allResultsItem.map(result => result.resultDetails) as ResultDetailItem[],
 			this.getFilterCurrentData(),
 			excludedResultsIds ?? []
 		);
 		this.excludedResults = this.allResultsItem.filter(
-			result => !!excludedResultsIds?.find(id => result.resultDetails?.id === id)
+			result => !!excludedResultsIds?.find(id => result.resultPreview?.id === id)
 		);
+
 		this.resultsActions = {
 			...this.resultsActions,
 			totalExcluded: this.excludedResults.length,
 			totalFiltered:
-				(this.data.reportDataSvc.scanResultsDetails?.length ?? 0) - filteredResults.length <= 0
+				(this.data.reportDataSvc.totalCompleteResults ?? 0) - filteredResults.length <= 0
 					? 0
-					: (this.data.reportDataSvc.scanResultsDetails?.length ?? 0) -
+					: (this.data.reportDataSvc.totalCompleteResults ?? 0) -
 					  filteredResults.length -
 					  (excludedResultsIds?.length ?? 0),
-			totalResults: this.allResultsItem.length,
+			totalResults: this.data.reportDataSvc.totalCompleteResults,
 		};
 	}
 
@@ -274,9 +274,11 @@ export class FilterResultDailogComponent implements OnInit {
 							resultPreview: result,
 							resultDetails: resultDetail,
 							iStatisticsResult: {
-								identical: resultDetail?.result?.statistics.identical,
-								minorChanges: resultDetail?.result?.statistics.minorChanges,
-								relatedMeaning: resultDetail?.result?.statistics.relatedMeaning,
+								identical: resultDetail ? resultDetail?.result?.statistics.identical : result.identicalWords,
+								minorChanges: resultDetail ? resultDetail?.result?.statistics.minorChanges : result.similarWords,
+								relatedMeaning: resultDetail
+									? resultDetail?.result?.statistics.relatedMeaning
+									: result.paraphrasedWords,
 							},
 							metadataSource: {
 								words: completeResults?.scannedDocument.totalWords ?? 0,

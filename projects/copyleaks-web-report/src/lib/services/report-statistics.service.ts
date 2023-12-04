@@ -48,7 +48,7 @@ export class ReportStatisticsService implements OnDestroy {
 			)
 			.subscribe(([completeResult, results, , excludedResultsIds, filterOptions]) => {
 				if (completeResult && filterOptions && excludedResultsIds) {
-					const filteredResults = this._reportDataSvc.filterResults(results, filterOptions, excludedResultsIds);
+					const filteredResults = this._reportDataSvc.filterResults(filterOptions, excludedResultsIds);
 					this.retreieveOneToManyStatistics(completeResult, results ?? [], filteredResults, filterOptions);
 				}
 			});

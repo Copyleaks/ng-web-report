@@ -236,14 +236,17 @@ export class ReportDataService {
 					take(1),
 					untilDestroy(this)
 				)
-				.subscribe(progress => {
-					if (progress?.percents == 100) this.initSync(endpointsConfig);
-					else {
-						this._viewSvc.progress$.next(progress.percents);
-						this._checkScanProgress(progress);
-						this.initAsync();
-					}
-				});
+				.subscribe(
+					progress => {
+						if (progress?.percents == 100) this.initSync(endpointsConfig);
+						else {
+							this._viewSvc.progress$.next(progress.percents);
+							this._checkScanProgress(progress);
+							this.initAsync();
+						}
+					},
+					_ => {}
+				);
 		}
 	}
 	public initSync(endpointsConfig: IClsReportEndpointConfigModel) {
@@ -257,14 +260,19 @@ export class ReportDataService {
 			})
 			.pipe(
 				catchError((error: HttpErrorResponse) => {
+					console.log('catchError - initSync - crawledVersion ' + JSON.stringify(error));
+
 					this._reportErrorsSvc.handleHttpError(error, 'initSync - crawledVersion');
 					return throwError(error);
 				}),
 				untilDestroy(this)
 			)
-			.subscribe(crawledVersionRes => {
-				this._crawledVersion$.next(crawledVersionRes);
-			});
+			.subscribe(
+				crawledVersionRes => {
+					this._crawledVersion$.next(crawledVersionRes);
+				},
+				_ => {}
+			);
 
 		this._http
 			.get<ICompleteResults>(endpointsConfig.completeResults.url, {
@@ -277,9 +285,12 @@ export class ReportDataService {
 				}),
 				untilDestroy(this)
 			)
-			.subscribe(completeResultsRes => {
-				this._updateCompleteResults(completeResultsRes);
-			});
+			.subscribe(
+				completeResultsRes => {
+					this._updateCompleteResults(completeResultsRes);
+				},
+				_ => {}
+			);
 	}
 
 	public async initAsync() {

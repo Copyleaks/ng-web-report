@@ -1,5 +1,4 @@
 import { CommonModule } from '@angular/common';
-import { HttpClientModule } from '@angular/common/http';
 import { NgModule } from '@angular/core';
 import { CrActionsComponent } from './components/core/cr-report-actions/cr-actions.component';
 import { CopyleaksWebReportComponent } from './copyleaks-web-report.component';
@@ -133,7 +132,6 @@ import { ReportStatisticsService } from './services/report-statistics.service';
 	],
 	imports: [
 		CommonModule,
-		HttpClientModule,
 		MatIconModule,
 		NgxSkeletonLoaderModule,
 		FormsModule,

@@ -97,7 +97,7 @@ export class ReportResultsContainerComponent implements OnInit, OnChanges {
 		if (changes['allResults']?.currentValue) {
 			this.searchedValue = '';
 			if (!this.filterIsOn) this.displayedResults = this.allResults;
-			else if (this._reportDataSvc.filterOptions && this._reportDataSvc.excludedResultsIds)
+			if (this._reportDataSvc.filterOptions && this._reportDataSvc.excludedResultsIds)
 				this._filterResults(this._reportDataSvc.filterOptions, this._reportDataSvc.excludedResultsIds);
 		}
 		if (changes['showLoadingView']?.currentValue == false) {
@@ -308,35 +308,36 @@ export class ReportResultsContainerComponent implements OnInit, OnChanges {
 	private _filterResults(filterOptions: ICopyleaksReportOptions, excludedResultsIds: string[]) {
 		this.excludedResultsIds = excludedResultsIds;
 
-		const filteredResults = this._reportDataSvc.filterResults(
-			this.allResults.map(result => result.resultDetails) as ResultDetailItem[],
-			filterOptions,
-			excludedResultsIds
-		);
+		const filteredResults = this._reportDataSvc.filterResults(filterOptions, excludedResultsIds);
 
-		this.displayedResults = [
-			...this.allResults
-				.filter(result => !!filteredResults.find(r => r.id === result.resultDetails?.id))
-				.map(result => {
-					return {
-						...result,
-						iStatisticsResult: {
-							identical: filterOptions.showIdentical ? result.iStatisticsResult?.identical ?? 0 : 0,
-							minorChanges: filterOptions.showMinorChanges ? result.iStatisticsResult?.minorChanges ?? 0 : 0,
-							relatedMeaning: filterOptions.showRelated ? result.iStatisticsResult?.relatedMeaning ?? 0 : 0,
-						},
-					} as IResultItem;
-				}),
-		];
+		this.displayedResults = this.allResults
+			.filter(result => !!filteredResults.find(r => r.id === result.resultPreview?.id))
+			.map(result => {
+				return {
+					...result,
+					iStatisticsResult: {
+						identical: filterOptions.showIdentical ? result.iStatisticsResult?.identical ?? 0 : 0,
+						minorChanges: filterOptions.showMinorChanges ? result.iStatisticsResult?.minorChanges ?? 0 : 0,
+						relatedMeaning: filterOptions.showRelated ? result.iStatisticsResult?.relatedMeaning ?? 0 : 0,
+					},
+				} as IResultItem;
+			})
+			.sort(
+				(a, b) =>
+					b.iStatisticsResult.identical +
+					b.iStatisticsResult.minorChanges +
+					b.iStatisticsResult.relatedMeaning -
+					(a.iStatisticsResult.identical + a.iStatisticsResult.minorChanges + a.iStatisticsResult.relatedMeaning)
+			);
 
 		this.resultsActions = {
 			...this.resultsActions,
 			totalExcluded: excludedResultsIds?.length,
 			totalFiltered:
-				(this._reportDataSvc.scanResultsDetails?.length ?? 0) - filteredResults.length <= 0
+				this._reportDataSvc.totalCompleteResults - filteredResults.length <= 0
 					? 0
-					: (this._reportDataSvc.scanResultsDetails?.length ?? 0) - filteredResults.length - excludedResultsIds?.length,
-			totalResults: this._reportDataSvc.scanResultsDetails?.length ?? 0,
+					: this._reportDataSvc.totalCompleteResults - filteredResults.length - excludedResultsIds?.length,
+			totalResults: this._reportDataSvc.totalCompleteResults,
 		};
 
 		this.filterIsOn = filteredResults.length !== this._reportDataSvc.scanResultsDetails?.length;

@@ -182,7 +182,7 @@ export class ReportMatchesService implements OnDestroy {
 		excludedResultsIds: string[],
 		source: IScanSource
 	) {
-		if (settings) results = this._reportDataSvc.filterResults(results, settings, excludedResultsIds);
+		if (settings) results = this._reportDataSvc.filterResults(settings, excludedResultsIds);
 		const html = helpers.processSourceHtml(
 			results ?? [],
 			settings ?? {
@@ -210,7 +210,7 @@ export class ReportMatchesService implements OnDestroy {
 		excludedResultsIds: string[],
 		source: IScanSource
 	) {
-		if (settings) results = this._reportDataSvc.filterResults(results, settings, excludedResultsIds);
+		if (settings) results = this._reportDataSvc.filterResults(settings, excludedResultsIds);
 		const text = helpers.processSourceText(
 			results ?? [],
 			settings ?? {

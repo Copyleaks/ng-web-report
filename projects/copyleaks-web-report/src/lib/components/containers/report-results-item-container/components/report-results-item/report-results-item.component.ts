@@ -34,7 +34,7 @@ export class ReportResultsItemComponent implements OnInit, OnChanges {
 
 	@HostListener('click', ['$event'])
 	handleClick() {
-		if (!this.resultItem || this.showLoader || !this.resultItem.resultDetails) return;
+		if (!this.resultItem || this.showLoader || !this.resultItem.resultDetails || this.excludeResult) return;
 
 		this._reportViewSvc.selectedResult$.next(this.resultItem.resultDetails);
 		this._reportViewSvc.reportViewMode$.next({

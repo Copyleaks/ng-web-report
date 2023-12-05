@@ -128,7 +128,12 @@
 		</div>
 	</div>
 
-	<div class="percentage-result-item-container" fxLayout="row" fxLayoutGap="8px" fxLayoutAlign="start center">
+	<div
+		*ngIf="resultItem?.resultDetails || showLoader"
+		class="percentage-result-item-container"
+		fxLayout="row"
+		fxLayoutGap="8px"
+		fxLayoutAlign="start center">
 		<ng-container *ngIf="!showLoader; else showPercentageSkeleton">
 			<cr-percentage-result-item [percentageResult]="percentageResult"></cr-percentage-result-item>
 		</ng-container>

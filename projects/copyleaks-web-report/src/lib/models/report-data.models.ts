@@ -202,8 +202,11 @@ export interface IResultPreviewBase {
 	id: string;
 	title: string;
 	introduction: string;
-	matchedWords: number;
 	type: EResultPreviewType;
+	matchedWords: number;
+	identicalWords?: number;
+	similarWords?: number;
+	paraphrasedWords?: number;
 	scanId?: string | void;
 	url?: string | void;
 	metadata?: IResultMetaData;

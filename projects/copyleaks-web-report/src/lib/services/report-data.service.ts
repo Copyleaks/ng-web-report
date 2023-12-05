@@ -8,6 +8,8 @@ import { IClsReportEndpointConfigModel, IEndpointDetails } from '../models/repor
 import {
 	IAPIProgress,
 	ICompleteResults,
+	IDatabaseResultPreview,
+	IInternetResultPreview,
 	IRepositoryResultPreview,
 	IResultDetailResponse,
 	IScanSource,
@@ -18,9 +20,12 @@ import * as helpers from '../utils/report-statistics-helpers';
 import { untilDestroy } from '../utils/until-destroy';
 import { ReportViewService } from './report-view.service';
 import { ReportErrorsService } from './report-errors.service';
+import { PercentPipe } from '@angular/common';
 
 @Injectable()
 export class ReportDataService {
+	private _realTimeView: boolean;
+
 	private _reportEndpointConfig$ = new BehaviorSubject<IClsReportEndpointConfigModel | undefined>(undefined);
 	/**
 	 * Subject for sharing the report data endpoints.
@@ -128,7 +133,8 @@ export class ReportDataService {
 	constructor(
 		private _http: HttpClient,
 		private _viewSvc: ReportViewService,
-		private _reportErrorsSvc: ReportErrorsService
+		private _reportErrorsSvc: ReportErrorsService,
+		private _percentPipe: PercentPipe
 	) {
 		combineLatest([this.filterOptions$, this.excludedResultsIds$])
 			.pipe(
@@ -138,15 +144,20 @@ export class ReportDataService {
 			.subscribe(([options, excludedResultsIds]) => {
 				if (
 					!this.scanResultsPreviews ||
+					!this.scanResultsDetails ||
 					!options ||
 					!excludedResultsIds ||
 					this._viewSvc.progress$.value !== 100 ||
-					this.totalCompleteResults !== this.scanResultsDetails?.length
+					(this.totalCompleteResults <= 100 &&
+						this.scanResultsDetails.length != this.totalCompleteResults &&
+						this._realTimeView)
 				)
 					return;
 
-				const filteredResults = this.filterResults(this.scanResultsDetails, options, excludedResultsIds);
+				const filteredResults = this.filterResults(options, excludedResultsIds);
 				const stats = helpers.calculateStatistics(this.scanResultsPreviews, filteredResults, options);
+				// Load all the viewed results
+				if (!this._realTimeView) this.loadViewedResultsDetails();
 
 				this._scanResultsPreviews$.next({
 					...this.scanResultsPreviews,
@@ -294,6 +305,8 @@ export class ReportDataService {
 			viewMode: 'one-to-many',
 		});
 
+		this._realTimeView = true;
+
 		// subscribtion to stop the 10 sec inteval when the progress is 100% and the report data is loaded
 		var _realTimeUpdateSub = new Subject();
 		interval(5000)
@@ -322,60 +335,51 @@ export class ReportDataService {
 			});
 	}
 
-	public loadAllReportScanResults(completeResults: ICompleteResults) {
+	public loadViewedResultsDetails() {
 		const cachedResults = this._scanResultsDetails$.getValue();
 
-		if (cachedResults?.length === this.totalCompleteResults) {
+		if (cachedResults?.length === this.totalCompleteResults || !this.filterOptions || !this.excludedResultsIds) {
 			return;
 		}
 
-		if (completeResults?.results) {
-			// Put all the results IDs in one lits
-			let resultsIds = [
-				...completeResults.results.internet.map(result => result.id),
-				...completeResults.results.database.map(result => result.id),
-				...(completeResults.results.repositories?.map(result => result.id) ?? []),
-				...completeResults.results.batch?.map(result => result.id),
-			];
+		let resultsIds = this.filterPreviewedResults(this.filterOptions, this.excludedResultsIds);
+		resultsIds = resultsIds.filter(id => !this._scanResultsDetails$.value?.find(r => r.id === id));
 
-			resultsIds = resultsIds.filter(id => !this._scanResultsDetails$.value?.find(r => r.id === id));
-
-			// But the results ids in a list of batches (10 each)
-			const batchSize = 10;
-			const idBatches = [];
-			for (let i = 0; i < resultsIds.length; i += batchSize) {
-				idBatches.push(resultsIds.slice(i, i + batchSize));
-			}
-
-			// Calculate the total number of batches you'll have
-			const totalBatches = idBatches.length;
-			let currentBatchIndex = 0; // Initialize a variable to keep track of the current batch index
-
-			if (totalBatches === 0) this._scanResultsDetails$.next([]);
-
-			this._loadedResultsDetails$ = [...(this._scanResultsDetails$.value ?? [])];
-			// Send the GET results requests in batches
-			const fetchResultsBatches = from(idBatches);
-			fetchResultsBatches
-				.pipe(
-					concatMap(ids => {
-						currentBatchIndex++; // Increment the current batch index each time a new batch starts
-						return forkJoin(...ids.map(id => this.getReportResultAsync(id)));
-					}),
-					untilDestroy(this)
-				)
-				.subscribe((results: ResultDetailItem[]) => {
-					if (results) {
-						// Add the new fetched results to the Cache subject
-						this._loadedResultsDetails$ = [...this._loadedResultsDetails$, ...results] as ResultDetailItem[];
-
-						// Check if this is the last batch
-						if (currentBatchIndex === totalBatches) {
-							this._scanResultsDetails$.next(this._loadedResultsDetails$);
-						}
-					}
-				});
+		// But the results ids in a list of batches (10 each)
+		const batchSize = 10;
+		const idBatches = [];
+		for (let i = 0; i < resultsIds.length; i += batchSize) {
+			idBatches.push(resultsIds.slice(i, i + batchSize));
 		}
+
+		// Calculate the total number of batches you'll have
+		const totalBatches = idBatches.length;
+		let currentBatchIndex = 0; // Initialize a variable to keep track of the current batch index
+
+		if (totalBatches === 0 && this.totalCompleteResults === 0) this._scanResultsDetails$.next([]);
+
+		this._loadedResultsDetails$ = [...(this._scanResultsDetails$.value ?? [])];
+		// Send the GET results requests in batches
+		const fetchResultsBatches = from(idBatches);
+		fetchResultsBatches
+			.pipe(
+				concatMap(ids => {
+					currentBatchIndex++; // Increment the current batch index each time a new batch starts
+					return forkJoin(...ids.map(id => this.getReportResultAsync(id)));
+				}),
+				untilDestroy(this)
+			)
+			.subscribe((results: ResultDetailItem[]) => {
+				if (results) {
+					// Add the new fetched results to the Cache subject
+					this._loadedResultsDetails$ = [...this._loadedResultsDetails$, ...results] as ResultDetailItem[];
+
+					// Check if this is the last batch
+					if (currentBatchIndex === totalBatches) {
+						this._scanResultsDetails$.next(this._loadedResultsDetails$);
+					}
+				}
+			});
 	}
 
 	public async getReportResultAsync(resultId: string) {
@@ -404,82 +408,20 @@ export class ReportDataService {
 		}
 	}
 
-	public filterResults(
-		results: ResultDetailItem[] | undefined,
-		settings: ICopyleaksReportOptions,
-		excludedResultsIds: string[]
-	): ResultDetailItem[] {
+	public filterResults(settings: ICopyleaksReportOptions, excludedResultsIds: string[]): ResultDetailItem[] {
+		if (!this.scanResultsDetails || !this.scanResultsPreviews || !settings || !excludedResultsIds) return [];
+
 		let completeResults = [
 			...(this.scanResultsPreviews$.value?.results.internet ?? []),
 			...(this.scanResultsPreviews$.value?.results.batch ?? []),
 			...(this.scanResultsPreviews$.value?.results.database ?? []),
 			...(this.scanResultsPreviews$.value?.results.repositories ?? []),
 		];
-		if (!results || !completeResults || !settings || this.totalCompleteResults !== this.scanResultsDetails?.length)
-			return [];
 
-		if (settings.showTop100Results !== undefined && settings.showTop100Results === true)
-			completeResults = completeResults.sort((a, b) => b.matchedWords - a.matchedWords).slice(0, 100);
+		let filteredResultsIds = this._getFilteredResultsIds(settings, completeResults, excludedResultsIds);
 
-		let filteredResultsIds: string[] = completeResults
-			.filter(r => !excludedResultsIds.find(id => id === r.id))
-			.map(result => result.id);
-
-		if (filteredResultsIds && filteredResultsIds.length === 0) return [];
-
-		if (settings.showInternetResults !== undefined && settings.showInternetResults === false)
-			filteredResultsIds = filteredResultsIds.filter(id =>
-				completeResults.find(cr => cr.id === id && cr.type !== EResultPreviewType.Internet)
-			);
-
-		if (settings.showBatchResults !== undefined && settings.showBatchResults === false)
-			filteredResultsIds = filteredResultsIds.filter(id =>
-				completeResults.find(cr => cr.id === id && cr.type !== EResultPreviewType.Batch)
-			);
-
-		if (settings.showInternalDatabaseResults !== undefined && settings.showInternalDatabaseResults === false)
-			filteredResultsIds = filteredResultsIds.filter(id =>
-				completeResults.find(cr => cr.id === id && cr.type !== EResultPreviewType.Database)
-			);
-
-		if (settings.hiddenRepositories !== undefined && settings.hiddenRepositories.length > 0) {
-			filteredResultsIds = filteredResultsIds.filter(id =>
-				completeResults.find(
-					cr =>
-						cr.id === id &&
-						(cr.type !== EResultPreviewType.Repositroy ||
-							!settings.hiddenRepositories?.find(id => id === (cr as IRepositoryResultPreview)?.repositoryId))
-				)
-			);
-		}
-
-		if (!!settings.wordLimit)
-			filteredResultsIds = filteredResultsIds.filter(id =>
-				completeResults.find(cr => cr.id === id && cr.matchedWords <= (settings.wordLimit ?? 0))
-			);
-
-		if (!!settings.publicationDate)
-			filteredResultsIds = filteredResultsIds.filter(id =>
-				completeResults.find(
-					cr =>
-						cr.id === id &&
-						new Date(settings.publicationDate ?? new Date()).getTime() <=
-							new Date(cr.metadata?.publishDate ?? settings.publicationDate ?? new Date()).getTime()
-				)
-			);
-
-		if (settings.includeResultsWithoutDate != undefined && settings.includeResultsWithoutDate === false)
-			filteredResultsIds = filteredResultsIds.filter(id =>
-				completeResults.find(cr => cr.id === id && !!cr.metadata?.publishDate)
-			);
-
-		if (settings.includedTags && settings.includedTags.length > 0)
-			filteredResultsIds = filteredResultsIds.filter(id =>
-				completeResults.find(cr => cr.id === id && cr.tags?.find(t => settings.includedTags?.includes(t.code)))
-			);
-
-		// check if a match hiding will make one of the results score zero
-		let resultsUpdateStatistics = results.map(r => {
+		// check if a match hiding will make one of the results score zero, if so filter theses results out
+		let resultsUpdateStatistics = this.scanResultsDetails.map(r => {
 			return {
 				...r,
 				result: {
@@ -504,13 +446,34 @@ export class ReportDataService {
 			resultsUpdateStatistics.find(
 				cr =>
 					cr.id === id &&
-					(cr.result?.statistics?.identical != 0 ||
-						cr.result?.statistics?.minorChanges != 0 ||
-						cr.result?.statistics?.relatedMeaning != 0)
+					// check if after the percentage transform, the viewed percentage will be 0.0
+					this._percentPipe.transform(
+						((cr.result?.statistics?.relatedMeaning ?? 0) +
+							(cr.result?.statistics?.minorChanges ?? 0) +
+							(cr.result?.statistics?.identical ?? 0)) /
+							((this.scanResultsPreviews?.scannedDocument.totalWords ?? 0) +
+								(this.scanResultsPreviews?.scannedDocument.totalExcluded ?? 0)),
+						'1.1-1'
+					) !== '0.0%'
 			)
 		);
 
-		return results.filter(r => !!filteredResultsIds.find(id => r.id === id));
+		return this.scanResultsDetails.filter(r => !!filteredResultsIds.find(id => r.id === id));
+	}
+
+	public filterPreviewedResults(settings: ICopyleaksReportOptions, excludedResultsIds: string[]): string[] {
+		if (!this.scanResultsPreviews || !settings || !excludedResultsIds) return [];
+
+		let completeResults = [
+			...(this.scanResultsPreviews$.value?.results.internet ?? []),
+			...(this.scanResultsPreviews$.value?.results.batch ?? []),
+			...(this.scanResultsPreviews$.value?.results.database ?? []),
+			...(this.scanResultsPreviews$.value?.results.repositories ?? []),
+		];
+
+		let filteredResultsIds = this._getFilteredResultsIds(settings, completeResults, excludedResultsIds);
+
+		return filteredResultsIds;
 	}
 
 	public hasNonAIAlerts() {
@@ -668,8 +631,10 @@ export class ReportDataService {
 			publicationDate: completeResultsRes.filters?.resultsMetaData?.publicationDate?.startDate,
 		});
 
-		// Load all the complete scan results
-		this.loadAllReportScanResults(completeResultsRes);
+		if (this.filterOptions && this.excludedResultsIds) {
+			// Load all the complete scan results
+			this.loadViewedResultsDetails();
+		}
 	}
 
 	private _createHeaders(endpointDetails: IEndpointDetails, authToken: string): HttpHeaders {
@@ -735,6 +700,73 @@ export class ReportDataService {
 			this._reportErrorsSvc.handleHttpError(error as HttpErrorResponse, '_getReportCompleteResults');
 			throw error;
 		}
+	}
+
+	private _getFilteredResultsIds(
+		settings: ICopyleaksReportOptions,
+		completeResults: (IInternetResultPreview | IDatabaseResultPreview | IRepositoryResultPreview)[],
+		excludedResultsIds: string[]
+	) {
+		if (settings.showTop100Results !== undefined && settings.showTop100Results === true)
+			completeResults = completeResults.sort((a, b) => b.matchedWords - a.matchedWords).slice(0, 100);
+
+		let filteredResultsIds: string[] = completeResults
+			.filter(r => !excludedResultsIds.find(id => id === r.id))
+			.map(result => result.id);
+
+		if (filteredResultsIds && filteredResultsIds.length === 0) return [];
+
+		if (settings.showInternetResults !== undefined && settings.showInternetResults === false)
+			filteredResultsIds = filteredResultsIds.filter(id =>
+				completeResults.find(cr => cr.id === id && cr.type !== EResultPreviewType.Internet)
+			);
+
+		if (settings.showBatchResults !== undefined && settings.showBatchResults === false)
+			filteredResultsIds = filteredResultsIds.filter(id =>
+				completeResults.find(cr => cr.id === id && cr.type !== EResultPreviewType.Batch)
+			);
+
+		if (settings.showInternalDatabaseResults !== undefined && settings.showInternalDatabaseResults === false)
+			filteredResultsIds = filteredResultsIds.filter(id =>
+				completeResults.find(cr => cr.id === id && cr.type !== EResultPreviewType.Database)
+			);
+
+		if (settings.hiddenRepositories !== undefined && settings.hiddenRepositories.length > 0) {
+			filteredResultsIds = filteredResultsIds.filter(id =>
+				completeResults.find(
+					cr =>
+						cr.id === id &&
+						(cr.type !== EResultPreviewType.Repositroy ||
+							!settings.hiddenRepositories?.find(id => id === (cr as IRepositoryResultPreview)?.repositoryId))
+				)
+			);
+		}
+
+		if (!!settings.wordLimit)
+			filteredResultsIds = filteredResultsIds.filter(id =>
+				completeResults.find(cr => cr.id === id && cr.matchedWords <= (settings.wordLimit ?? 0))
+			);
+
+		if (!!settings.publicationDate)
+			filteredResultsIds = filteredResultsIds.filter(id =>
+				completeResults.find(
+					cr =>
+						cr.id === id &&
+						new Date(settings.publicationDate ?? new Date()).getTime() <=
+							new Date(cr.metadata?.publishDate ?? settings.publicationDate ?? new Date()).getTime()
+				)
+			);
+
+		if (settings.includeResultsWithoutDate != undefined && settings.includeResultsWithoutDate === false)
+			filteredResultsIds = filteredResultsIds.filter(id =>
+				completeResults.find(cr => cr.id === id && !!cr.metadata?.publishDate)
+			);
+
+		if (settings.includedTags && settings.includedTags.length > 0)
+			filteredResultsIds = filteredResultsIds.filter(id =>
+				completeResults.find(cr => cr.id === id && cr.tags?.find(t => settings.includedTags?.includes(t.code)))
+			);
+		return filteredResultsIds;
 	}
 
 	ngOnDestroy() {}

@@ -24,7 +24,7 @@
 			fxLayout="row"
 			fxLayoutAlign="space-between start">
 			<span>{{ percentageResult.title }}</span>
-			<span>{{ getMatchTypePercentage(eMatchType.SimilarWords) | similarity }}</span>
+			<span>{{ getMatchTypePercentage(eMatchType.SimilarWords) | similarity : '1.1-1' }}</span>
 		</div>
 		<div
 			class="plagiarism-detection-percentage-result"

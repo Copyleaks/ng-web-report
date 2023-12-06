@@ -192,7 +192,7 @@
   "error": null,
   "developerPayload": null,
   "filters": {
-    "resultIds": [
+    "execludedResultIds": [
       "048473d8a7",
       "cca2f0a7b3",
       "b031b941a1",

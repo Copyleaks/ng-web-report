@@ -211,7 +211,7 @@ export class ReportDataService {
 							internet: options?.showInternetResults ?? true,
 							repositories: options?.hiddenRepositories ?? [],
 						},
-						resultIds: excludedResultsIds ?? [],
+						execludedResultIds: excludedResultsIds ?? [],
 						filteredResultIds: filteredOutResultsIds ?? [],
 					},
 				});
@@ -589,7 +589,7 @@ export class ReportDataService {
 		this._scanResultsPreviews$.next(completeResultsRes);
 
 		// Load the excluded results Ids
-		this.excludedResultsIds$.next(completeResultsRes.filters?.resultIds ?? []);
+		this.excludedResultsIds$.next(completeResultsRes.filters?.execludedResultIds ?? []);
 
 		// Load the filter options from the complete results response
 		this.filterOptions$.next({

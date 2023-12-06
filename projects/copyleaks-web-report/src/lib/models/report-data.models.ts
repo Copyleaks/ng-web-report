@@ -129,7 +129,7 @@ export interface IResultPreviews {
  * A results filters for report view
  */
 export interface ICompleteResultsFilters {
-	resultIds: string[];
+	execludedResultIds?: string[];
 	filteredResultIds?: string[];
 	general?: IGeneralFilters;
 	sourceType?: ISourceTypeFilters;

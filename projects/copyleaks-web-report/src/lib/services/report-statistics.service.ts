@@ -101,7 +101,7 @@ export class ReportStatisticsService implements OnDestroy {
 		const missingAggregated = totalResults !== 0 && completeResult.results.score.aggregatedScore === 0;
 		let stats: ReportStatistics;
 		if (
-			(!completeResult.filters || !completeResult.filters.resultIds || !completeResult.filters.resultIds.length) &&
+			(!completeResult.filters || !completeResult.filters.execludedResultIds || !completeResult.filters.execludedResultIds.length) &&
 			(results.length !== totalResults || (totalResults === filteredResults.length && showAll && !missingAggregated))
 		) {
 			// * if results are still loading  or no results are fitlered while all match types are visible

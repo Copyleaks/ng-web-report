@@ -12,6 +12,7 @@ import {
 } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { filter, map } from 'rxjs/operators';
+import { IResultItem } from './components/containers/report-results-item-container/components/models/report-result-item.models';
 import { ALERTS } from './constants/report-alerts.constants';
 import { EReportLayoutType, EResponsiveLayoutType } from './enums/copyleaks-web-report.enums';
 import { IClsReportEndpointConfigModel } from './models/report-config.models';
@@ -20,15 +21,26 @@ import { ReportHttpRequestErrorModel } from './models/report-errors.models';
 import { IReportViewEvent, IReportViewQueryParams } from './models/report-view.models';
 import { ReportDataService } from './services/report-data.service';
 import { ReportErrorsService } from './services/report-errors.service';
+import { ReportMatchHighlightService } from './services/report-match-highlight.service';
+import { ReportMatchesService } from './services/report-matches.service';
 import { ReportNgTemplatesService } from './services/report-ng-templates.service';
+import { ReportStatisticsService } from './services/report-statistics.service';
 import { ReportViewService } from './services/report-view.service';
 import { untilDestroy } from './utils/until-destroy';
-import { IResultItem } from './components/containers/report-results-item-container/components/models/report-result-item.models';
 
 @Component({
 	selector: 'copyleaks-web-report',
 	templateUrl: './copyleaks-web-report.component.html',
 	styleUrls: ['./copyleaks-web-report.component.scss'],
+	providers: [
+		ReportErrorsService,
+		ReportViewService,
+		ReportDataService,
+		ReportNgTemplatesService,
+		ReportMatchesService,
+		ReportMatchHighlightService,
+		ReportStatisticsService,
+	],
 })
 export class CopyleaksWebReportComponent implements OnInit, OnDestroy {
 	@ViewChild('customActionsTemplate', { static: true }) customActionsTemplate: TemplateRef<any>;

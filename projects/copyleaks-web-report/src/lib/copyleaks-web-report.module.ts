@@ -72,14 +72,7 @@ import { SourceTextHelperDirective } from './directives/source-text-helper.direc
 import { SuspectHtmlHelperComponent } from './directives/suspect-html-helper.directive';
 import { SuspectTextHelperDirective } from './directives/suspect-text-helper.directive';
 import { SimilarityPipeModule } from './pipes/similarity-pipe/similarity-pipe.module';
-import { ReportDataService } from './services/report-data.service';
-import { ReportErrorsService } from './services/report-errors.service';
-import { ReportMatchHighlightService } from './services/report-match-highlight.service';
-import { ReportMatchesService } from './services/report-matches.service';
-import { ReportNgTemplatesService } from './services/report-ng-templates.service';
 import { ReportRealtimeResultsService } from './services/report-realtime-results.service';
-import { ReportStatisticsService } from './services/report-statistics.service';
-import { ReportViewService } from './services/report-view.service';
 
 @NgModule({
 	declarations: [
@@ -167,16 +160,6 @@ import { ReportViewService } from './services/report-view.service';
 		CrCustomResultsBoxContentComponent,
 		EmptyResultStateComponent,
 	],
-	providers: [
-		ReportErrorsService,
-		ReportViewService,
-		ReportDataService,
-		ReportRealtimeResultsService,
-		FilterResultDailogService,
-		ReportNgTemplatesService,
-		ReportMatchesService,
-		ReportMatchHighlightService,
-		ReportStatisticsService,
-	],
+	providers: [ReportRealtimeResultsService, FilterResultDailogService],
 })
 export class CopyleaksWebReportModule {}

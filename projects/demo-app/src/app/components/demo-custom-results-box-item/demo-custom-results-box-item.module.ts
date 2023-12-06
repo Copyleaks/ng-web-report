@@ -10,11 +10,13 @@ import { MatTooltipModule } from '@angular/material/tooltip';
 import { RouterModule } from '@angular/router';
 import { CrButtonModule } from 'projects/copyleaks-web-report/src/lib/components/core/cr-button/cr-button.module';
 import { DemoCustomResultsBoxItemComponent } from './demo-custom-results-box-item.component';
+import { FlexLayoutModule } from '@angular/flex-layout';
 
 @NgModule({
 	declarations: [DemoCustomResultsBoxItemComponent],
 	imports: [
 		CommonModule,
+		FlexLayoutModule,
 		MatSidenavModule,
 		MatToolbarModule,
 		MatButtonModule,

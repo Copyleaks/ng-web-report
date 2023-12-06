@@ -6,9 +6,11 @@
 	border: 2px solid;
 	border-radius: 10px;
 	border-color: $color-primary;
+	box-sizing: border-box;
 	.header-container {
 		width: 100%;
 		padding: 4px 8px;
+		box-sizing: border-box;
 		mat-icon {
 			font-size: 24px;
 			width: 24px;
@@ -22,6 +24,7 @@
 		}
 	}
 	.body-container {
+		box-sizing: border-box;
 		width: 100%;
 		padding: 8px;
 		.description-container {

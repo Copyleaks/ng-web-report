@@ -190,8 +190,8 @@ export class FilterResultDailogService {
 					? this._completeResults.filters?.resultsMetaData?.wordLimit?.wordLimitEnabled
 					: false;
 			case EFilterResultForm.fcWordLimitTotalWordlimt:
-				return this._completeResults.filters?.resultsMetaData?.wordLimit?.totalWordlimit != undefined
-					? this._completeResults.filters?.resultsMetaData?.wordLimit?.totalWordlimit
+				return this._completeResults.filters?.resultsMetaData?.wordLimit?.totalWordLimit != undefined
+					? this._completeResults.filters?.resultsMetaData?.wordLimit?.totalWordLimit
 					: 0;
 			case EFilterResultForm.fcPublicationEnabled:
 				return this._completeResults.filters?.resultsMetaData?.publicationDate?.publicationEnabled != undefined

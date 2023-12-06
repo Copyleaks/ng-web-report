@@ -164,7 +164,7 @@ export interface IResultsMetaDataFilters {
 
 export interface IWordLimitFilter {
 	wordLimitEnabled: boolean;
-	totalWordlimit?: number;
+	totalWordLimit?: number;
 }
 
 export interface IPublicationDateFilter {

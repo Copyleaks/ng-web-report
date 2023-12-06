@@ -202,7 +202,7 @@ export class ReportDataService {
 							},
 							wordLimit: {
 								wordLimitEnabled: !!options?.wordLimit,
-								totalWordlimit: options?.wordLimit,
+								totalWordLimit: options?.wordLimit,
 							},
 						},
 						sourceType: {
@@ -348,7 +348,7 @@ export class ReportDataService {
 			});
 	}
 
-	public loadViewedResultsDetails() {
+	public loadViewedResultsDetails(firstLoad: boolean = false) {
 		const cachedResults = this._scanResultsDetails$.getValue();
 
 		if (cachedResults?.length === this.totalCompleteResults || !this.filterOptions || !this.excludedResultsIds) {
@@ -369,7 +369,7 @@ export class ReportDataService {
 		const totalBatches = idBatches.length;
 		let currentBatchIndex = 0; // Initialize a variable to keep track of the current batch index
 
-		if (totalBatches === 0 && this.totalCompleteResults === 0) this._scanResultsDetails$.next([]);
+		if (totalBatches === 0 && (this.totalCompleteResults === 0 || firstLoad)) this._scanResultsDetails$.next([]);
 
 		this._loadedResultsDetails$ = [...(this._scanResultsDetails$.value ?? [])];
 		// Send the GET results requests in batches
@@ -634,7 +634,7 @@ export class ReportDataService {
 			hiddenRepositories: completeResultsRes.filters?.sourceType?.repositories,
 
 			wordLimit: completeResultsRes.filters?.resultsMetaData?.wordLimit?.wordLimitEnabled
-				? completeResultsRes.filters?.resultsMetaData?.wordLimit?.totalWordlimit
+				? completeResultsRes.filters?.resultsMetaData?.wordLimit?.totalWordLimit
 				: undefined,
 
 			includeResultsWithoutDate:
@@ -646,7 +646,7 @@ export class ReportDataService {
 
 		if (this.filterOptions && this.excludedResultsIds) {
 			// Load all the complete scan results
-			this.loadViewedResultsDetails();
+			this.loadViewedResultsDetails(true);
 		}
 	}
 

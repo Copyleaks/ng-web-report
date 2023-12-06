@@ -114,8 +114,7 @@ export abstract class OneToOneReportLayoutBaseComponent extends ReportLayoutBase
 				if (this.reportViewSvc.progress$.value != 100 && resultData) {
 					this.numberOfPagesSuspect = resultData.result?.text?.pages?.startPosition?.length ?? 1;
 					this.resultData = resultData;
-					this.resultItem =
-						this.realTimeResultsSvc.newResults?.find(r => r.resultDetails?.id === resultData.id) ?? null;
+					this.resultItem = this.reportDataSvc.newResults?.find(r => r.resultDetails?.id === resultData.id) ?? null;
 
 					this.matchSvc.suspectHtmlMatches$.pipe(untilDestroy(this)).subscribe(data => {
 						if (!resultData?.result?.html.value) return;

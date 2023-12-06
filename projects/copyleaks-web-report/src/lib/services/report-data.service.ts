@@ -1,7 +1,9 @@
+import { PercentPipe } from '@angular/common';
 import { HttpClient, HttpErrorResponse, HttpHeaders } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { BehaviorSubject, EMPTY, Subject, combineLatest, forkJoin, from, interval, throwError } from 'rxjs';
-import { concatMap, filter, take, takeUntil, catchError } from 'rxjs/operators';
+import { catchError, concatMap, filter, take, takeUntil } from 'rxjs/operators';
+import { IResultItem } from '../components/containers/report-results-item-container/components/models/report-result-item.models';
 import { ALERTS } from '../constants/report-alerts.constants';
 import { EResultPreviewType } from '../enums/copyleaks-web-report.enums';
 import { IClsReportEndpointConfigModel, IEndpointDetails } from '../models/report-config.models';
@@ -13,14 +15,14 @@ import {
 	IRepositoryResultPreview,
 	IResultDetailResponse,
 	IScanSource,
+	ResultPreview,
 } from '../models/report-data.models';
 import { AIScanResult, ResultDetailItem } from '../models/report-matches.models';
 import { ICopyleaksReportOptions } from '../models/report-options.models';
 import * as helpers from '../utils/report-statistics-helpers';
 import { untilDestroy } from '../utils/until-destroy';
-import { ReportViewService } from './report-view.service';
 import { ReportErrorsService } from './report-errors.service';
-import { PercentPipe } from '@angular/common';
+import { ReportViewService } from './report-view.service';
 
 @Injectable()
 export class ReportDataService {
@@ -128,6 +130,15 @@ export class ReportDataService {
 		];
 
 		return completeResults.length;
+	}
+
+	private _newResults$ = new BehaviorSubject<IResultItem[] | undefined>([]);
+	/** Emits matches that are relevant to source html one-to-many mode */
+	public get newResults$() {
+		return this._newResults$;
+	}
+	public get newResults() {
+		return this._newResults$.value;
 	}
 
 	constructor(
@@ -509,6 +520,7 @@ export class ReportDataService {
 		}
 		return true;
 	}
+
 	public isAiDetectionEnabled() {
 		const completeResult = this.scanResultsPreviews;
 		if (completeResult) {
@@ -521,6 +533,7 @@ export class ReportDataService {
 		}
 		return false;
 	}
+
 	public getAiScore() {
 		if (this.isAiDetectionEnabled()) {
 			const completeResult = this.scanResultsPreviews;
@@ -536,6 +549,7 @@ export class ReportDataService {
 		}
 		return null;
 	}
+
 	public clearFilter() {
 		// Load the filter options from the complete results response
 		this.filterOptions$.next({
@@ -780,6 +794,71 @@ export class ReportDataService {
 				completeResults.find(cr => cr.id === id && cr.tags?.find(t => settings.includedTags?.includes(t.code)))
 			);
 		return filteredResultsIds;
+	}
+
+	pushNewResults(newResults: ResultPreview[]) {
+		if (!this.reportEndpointConfig || !newResults || !this.crawledVersion) return;
+
+		// check for only *new* results, i.e. don't add new results that exists already
+		const existingResults = this._newResults$.value || [];
+		const uniqueNewResults = newResults.filter(
+			newResult => !existingResults.some(existingResult => existingResult.resultPreview.id === newResult.id)
+		);
+
+		// Put all the results IDs in one lits
+		const resultsIds = [...uniqueNewResults.map(result => result.id)];
+
+		// But the results ids in a list of batches (10 each)
+		const batchSize = 10;
+		const idBatches = [];
+		for (let i = 0; i < resultsIds.length; i += batchSize) {
+			idBatches.push(resultsIds.slice(i, i + batchSize));
+		}
+
+		// Calculate the total number of batches you'll have
+		const totalBatches = idBatches.length;
+		let currentBatchIndex = 0; // Initialize a variable to keep track of the current batch index
+
+		if (totalBatches === 0) this._newResults$.next([]);
+
+		// Send the GET results requests in batches
+		const fetchResultsBatches = from(idBatches);
+		fetchResultsBatches
+			.pipe(
+				concatMap(ids => {
+					currentBatchIndex++; // Increment the current batch index each time a new batch starts
+					return forkJoin(...ids.map(id => this.getReportResultAsync(id)));
+				}),
+				untilDestroy(this)
+			)
+			.subscribe((results: ResultDetailItem[]) => {
+				if (results) {
+					// Add the new fetched results to the Cache subject
+					this._loadedResultsDetails$ = [...this._loadedResultsDetails$, ...results] as ResultDetailItem[];
+
+					this.scanResultsDetails$.next(this._loadedResultsDetails$);
+
+					// Check if this is the last batch
+					if (currentBatchIndex === totalBatches) {
+						const mappedResults = results.map(resultDetail => {
+							const foundResultDetail = newResults?.find(r => r.id === resultDetail.id);
+							return {
+								resultPreview: foundResultDetail,
+								resultDetails: resultDetail,
+								iStatisticsResult: resultDetail?.result?.statistics,
+								metadataSource: {
+									words: this.crawledVersion?.metadata.words ?? 0,
+									excluded: this.crawledVersion?.metadata.excluded ?? 0,
+								},
+							} as IResultItem;
+						});
+						const allNewResults = [...existingResults, ...mappedResults].sort(
+							(a, b) => b.resultPreview.matchedWords - a.resultPreview.matchedWords
+						);
+						this._newResults$.next(allNewResults);
+					}
+				}
+			});
 	}
 
 	ngOnDestroy() {}

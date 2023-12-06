@@ -27,6 +27,7 @@ import { ReportNgTemplatesService } from './services/report-ng-templates.service
 import { ReportStatisticsService } from './services/report-statistics.service';
 import { ReportViewService } from './services/report-view.service';
 import { untilDestroy } from './utils/until-destroy';
+import { ReportRealtimeResultsService } from './services/report-realtime-results.service';
 
 @Component({
 	selector: 'copyleaks-web-report',
@@ -91,6 +92,7 @@ export class CopyleaksWebReportComponent implements OnInit, OnDestroy {
 		private _breakpointObserver: BreakpointObserver,
 		private _reportNgTemplatesSvc: ReportNgTemplatesService,
 		private _reportDataSvc: ReportDataService,
+		private _reportRealtimeResultsSvc: ReportRealtimeResultsService,
 		private _activatedRoute: ActivatedRoute,
 		private _reportViewSvc: ReportViewService,
 		private _reportErrorsSvc: ReportErrorsService,
@@ -137,6 +139,10 @@ export class CopyleaksWebReportComponent implements OnInit, OnDestroy {
 				}
 				this.onCompleteResultUpdate.emit(scanResultsPreviews);
 			});
+
+		this._reportRealtimeResultsSvc.onNewResults$.pipe(untilDestroy(this)).subscribe(data => {
+			this._reportDataSvc.pushNewResults(data);
+		});
 	}
 
 	ngAfterViewInit() {

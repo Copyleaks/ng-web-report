@@ -124,7 +124,7 @@ export abstract class OneToManyReportLayoutBaseComponent extends ReportLayoutBas
 			this.loadingProgressPct = progress;
 		});
 
-		this.realTimeResultsSvc.newResults$.pipe(untilDestroy(this)).subscribe(data => {
+		this.reportDataSvc.newResults$.pipe(untilDestroy(this)).subscribe(data => {
 			if (data) this.newScanResultsView = data;
 		});
 

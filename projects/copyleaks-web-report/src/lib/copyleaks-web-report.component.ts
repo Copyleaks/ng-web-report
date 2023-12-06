@@ -136,6 +136,13 @@ export class CopyleaksWebReportComponent implements OnInit, OnDestroy {
 		if ('reportEndpointConfig' in changes && !changes['reportEndpointConfig'].firstChange) {
 			this._reportDataSvc.initReportData(this.reportEndpointConfig);
 		}
+
+		if ('showDisabledProducts' in changes) {
+			this._reportViewSvc.reportViewMode$.next({
+				...this._reportViewSvc.reportViewMode,
+				showDisabledProducts: this.showDisabledProducts,
+			} as IReportViewEvent);
+		}
 	}
 
 	/**

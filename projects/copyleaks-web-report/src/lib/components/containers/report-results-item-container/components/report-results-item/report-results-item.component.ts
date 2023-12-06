@@ -17,7 +17,7 @@ import { IResultItem } from '../models/report-result-item.models';
 import { IPercentageResult } from '../percentage-result-item/models/percentage-result-item.models';
 import { trigger, state, transition, animate, style } from '@angular/animations';
 import { ReportNgTemplatesService } from '../../../../../services/report-ng-templates.service';
-import { untilDestroy } from 'projects/copyleaks-web-report/src/lib/utils/until-destroy';
+import { untilDestroy } from '../../../../../utils/until-destroy';
 
 @Component({
 	selector: 'cr-report-results-item',

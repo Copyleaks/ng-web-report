@@ -202,7 +202,7 @@ export class ReportDataService {
 							},
 							wordLimit: {
 								wordLimitEnabled: !!options?.wordLimit,
-								totalWordlimt: options?.wordLimit,
+								totalWordlimit: options?.wordLimit,
 							},
 						},
 						sourceType: {
@@ -634,7 +634,7 @@ export class ReportDataService {
 			hiddenRepositories: completeResultsRes.filters?.sourceType?.repositories,
 
 			wordLimit: completeResultsRes.filters?.resultsMetaData?.wordLimit?.wordLimitEnabled
-				? completeResultsRes.filters?.resultsMetaData?.wordLimit?.totalWordlimt
+				? completeResultsRes.filters?.resultsMetaData?.wordLimit?.totalWordlimit
 				: undefined,
 
 			includeResultsWithoutDate:

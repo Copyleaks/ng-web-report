@@ -156,6 +156,18 @@ export class ReportDataService {
 
 				const filteredResults = this.filterResults(options, excludedResultsIds);
 				const stats = helpers.calculateStatistics(this.scanResultsPreviews, filteredResults, options);
+
+				const filteredOutResultsIds = [
+					...(this.scanResultsPreviews$.value?.results.internet ?? []),
+					...(this.scanResultsPreviews$.value?.results.batch ?? []),
+					...(this.scanResultsPreviews$.value?.results.database ?? []),
+					...(this.scanResultsPreviews$.value?.results.repositories ?? []),
+				]
+					.filter(
+						result => !filteredResults.find(r => result.id === r.id) && !excludedResultsIds.find(id => result.id === id)
+					)
+					.map(result => result.id);
+
 				// Load all the viewed results
 				if (!this._realTimeView) this.loadViewedResultsDetails();
 
@@ -193,13 +205,14 @@ export class ReportDataService {
 								totalWordlimt: options?.wordLimit,
 							},
 						},
-						resultIds: excludedResultsIds ?? [],
 						sourceType: {
 							batch: options?.showBatchResults ?? true,
 							internalDatabase: options?.showInternalDatabaseResults ?? true,
 							internet: options?.showInternetResults ?? true,
 							repositories: options?.hiddenRepositories ?? [],
 						},
+						resultIds: excludedResultsIds ?? [],
+						filteredResultIds: filteredOutResultsIds ?? [],
 					},
 				});
 			});

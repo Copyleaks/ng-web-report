@@ -130,6 +130,7 @@ export interface IResultPreviews {
  */
 export interface ICompleteResultsFilters {
 	resultIds: string[];
+	filteredResultIds?: string[];
 	general?: IGeneralFilters;
 	sourceType?: ISourceTypeFilters;
 	matchType?: IMatchTypeFilters;

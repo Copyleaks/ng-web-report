@@ -9,7 +9,12 @@
 		</div>
 		<div class="button-container" fxLayout="column" fxLayoutAlign="start center" fxLayoutGap="4px">
 			<span class="button-description">{{ lockResultItem.buttonDescription }}:</span>
-			<cr-button class="upgrade-btn" [icon]="lockResultItem.buttonIcon" width="100%" padding="4px 24px">
+			<cr-button
+				class="upgrade-btn"
+				[icon]="lockResultItem.buttonIcon"
+				width="100%"
+				padding="4px 24px"
+				(click)="OnButtonClick && OnButtonClick.emit()">
 				{{ lockResultItem.buttonText }}
 			</cr-button>
 		</div>

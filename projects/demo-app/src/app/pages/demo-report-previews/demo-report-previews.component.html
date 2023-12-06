@@ -97,14 +97,15 @@
 					</div>
 				</cr-custom-tab-item-title>
 				<cr-custom-tab-item-content>
-					<cr-lock-result-item [lockResultItem]="lockResultItem"></cr-lock-result-item>
+					<demo-custom-results-box-item [lockResultItem]="lockResultItem"></demo-custom-results-box-item>
 				</cr-custom-tab-item-content>
 			</cr-custom-tab-item>
 		</cr-custom-tabs>
 
+		<!-- custom results -->
 		<cr-custom-results *ngIf="showCustomResults" [reportView]="reportView">
 			<cr-custom-results-box-content>
-				<cr-lock-result-item [lockResultItem]="lockResultItem"></cr-lock-result-item>
+				<demo-custom-results-box-item [lockResultItem]="lockResultItem"></demo-custom-results-box-item>
 			</cr-custom-results-box-content>
 		</cr-custom-results>
 	</copyleaks-web-report>

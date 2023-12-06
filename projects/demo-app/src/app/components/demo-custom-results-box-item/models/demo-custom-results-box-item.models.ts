@@ -1,4 +1,4 @@
-export interface ILockResultItem {
+export interface IDemoCustomResultsBoxItem {
 	title: string;
 	titleIcon: string;
 	description: string;

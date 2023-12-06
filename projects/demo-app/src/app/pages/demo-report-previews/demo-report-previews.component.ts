@@ -1,14 +1,17 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
-import { EResultPreviewType, ICompleteResults } from 'copyleaks-web-report';
-import { ILockResultItem } from 'projects/copyleaks-web-report/src/lib/components/containers/report-results-item-container/components/lock-result-item/models/lock-result-item.models';
 import { ECustomResultsReportView } from 'projects/copyleaks-web-report/src/lib/components/core/cr-custom-results/models/cr-custom-results.enums';
-import { EReportLayoutType } from 'projects/copyleaks-web-report/src/lib/enums/copyleaks-web-report.enums';
+import {
+	EReportLayoutType,
+	EResultPreviewType,
+} from 'projects/copyleaks-web-report/src/lib/enums/copyleaks-web-report.enums';
 import { IClsReportEndpointConfigModel } from 'projects/copyleaks-web-report/src/lib/models/report-config.models';
 import {
+	ICompleteResults,
 	ReportHttpRequestErrorModel,
 	ReportRealtimeResultsService,
 } from 'projects/copyleaks-web-report/src/public-api';
+import { IDemoCustomResultsBoxItem } from '../../components/demo-custom-results-box-item/models/demo-custom-results-box-item.models';
 
 @Component({
 	selector: 'app-demo-report-previews',
@@ -20,7 +23,7 @@ export class DemoReportPreviewsComponent implements OnInit {
 	endpointsConfig: IClsReportEndpointConfigModel;
 	paramSub: any;
 
-	lockResultItem: ILockResultItem = {
+	lockResultItem: IDemoCustomResultsBoxItem = {
 		title: 'This is a partial report',
 		titleIcon: 'lock',
 		description: "You don't have enough credits to complete the scan.",

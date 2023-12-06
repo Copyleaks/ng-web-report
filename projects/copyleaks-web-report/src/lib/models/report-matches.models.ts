@@ -10,7 +10,6 @@ import { IResultDetailResponse } from './report-data.models';
 export interface ResultDetailItem {
 	id: string;
 	result?: IResultDetailResponse;
-	disabled?: boolean;
 }
 
 /** Simple range type */

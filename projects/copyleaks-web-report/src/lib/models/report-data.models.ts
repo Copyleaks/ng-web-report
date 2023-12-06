@@ -200,6 +200,7 @@ export interface IScore {
 
 /** Base type for a result preview  */
 export interface IResultPreviewBase {
+	isLocked?: boolean;
 	id: string;
 	title: string;
 	introduction: string;

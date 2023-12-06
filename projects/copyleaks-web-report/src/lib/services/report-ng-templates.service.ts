@@ -2,6 +2,7 @@ import { Injectable, TemplateRef } from '@angular/core';
 import { BehaviorSubject } from 'rxjs';
 import { ECustomResultsReportView } from '../components/core/cr-custom-results/models/cr-custom-results.enums';
 import { ICustomClsReportTabTemplatesRefs, ICustomClsReportTemplatesRefs } from '../models/report-ng-templates.models';
+import { IResultItem } from '../components/containers/report-results-item-container/components/models/report-result-item.models';
 
 @Injectable()
 export class ReportNgTemplatesService {
@@ -64,6 +65,16 @@ export class ReportNgTemplatesService {
 		this._reportTemplatesRefs$.next({
 			...this._reportTemplatesRefs$.value,
 			customResultsTemplate: template,
+		} as ICustomClsReportTemplatesRefs);
+	}
+
+	/**
+	 * Setter for the custom report results section template reference.
+	 */
+	public setLockedResultItemTemplateRef(template: TemplateRef<IResultItem>) {
+		this._reportTemplatesRefs$.next({
+			...this._reportTemplatesRefs$.value,
+			lockedResultItemTemplateRef: template,
 		} as ICustomClsReportTemplatesRefs);
 	}
 }

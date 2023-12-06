@@ -1,10 +1,12 @@
 <ng-container *ngIf="endpointsConfig">
 	<copyleaks-web-report
 		class="desktop-view"
+		[lockedResultTemplateRef]="lockedResultTemplateRef"
 		[reportEndpointConfig]="endpointsConfig"
 		[showDisabledProducts]="showCustomResults && reportView === 1"
 		(onCompleteResultUpdate)="onCompleteResultUpdate($event)"
 		(onReportRequestError)="onReportRequestError($event)">
+		<!-- Custom Actions -->
 		<cr-actions>
 			<div style="padding: 8px 0 4px; display: flex; flex-direction: row; margin-left: auto; gap: 8px">
 				<mat-icon fontSet="material-icons-round">download</mat-icon>
@@ -110,3 +112,17 @@
 		</cr-custom-results>
 	</copyleaks-web-report>
 </ng-container>
+
+<!-- Custom locked results template ref -->
+<ng-template #lockedResultTemplateRef let-result="result">
+	<div class="locked-result-container">
+		<div class="locked-result-container-header">
+			<mat-icon>lock</mat-icon>
+			<span>Locked Result</span>
+		</div>
+		<div class="locked-result-container-body">Locked results are only viewable after report has been saved.</div>
+		<div class="locked-result-container-actions">
+			<cr-button (click)="lockedResultClick(result)">Save Report</cr-button>
+		</div>
+	</div>
+</ng-template>

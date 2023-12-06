@@ -58,7 +58,7 @@
                 "tags": []
             },
             {
-                "isLocked": false,
+                "isLocked": true,
                 "repositoryId": "fz2l5lh0d5636ee2",
                 "scanId": "98b929d9-335a-4266-b2f9-362402122350",
                 "id": "2829ab7433",
@@ -85,7 +85,7 @@
                 "tags": []
             },
             {
-                "isLocked": false,
+                "isLocked": true,
                 "repositoryId": "fz2l5lh0d5636ee2",
                 "scanId": "a39cf64e-883d-406d-a501-84f01965b197",
                 "id": "30caaa7a2a",
@@ -112,7 +112,7 @@
                 "tags": []
             },
             {
-                "isLocked": false,
+                "isLocked": true,
                 "repositoryId": "fz2l5lh0d5636ee2",
                 "scanId": "2ef6044e-60b2-429c-bb0f-25f2c3ceff9c",
                 "id": "550782664f",

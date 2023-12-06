@@ -1,10 +1,23 @@
-import { Component, EventEmitter, HostListener, Input, OnChanges, OnInit, Output, SimpleChanges } from '@angular/core';
+import {
+	Component,
+	EventEmitter,
+	HostListener,
+	Input,
+	OnChanges,
+	OnDestroy,
+	OnInit,
+	Output,
+	SimpleChanges,
+	TemplateRef,
+} from '@angular/core';
 import { EResultPreviewType } from '../../../../../enums/copyleaks-web-report.enums';
 import { IResultPreviewBase } from '../../../../../models/report-data.models';
 import { ReportViewService } from '../../../../../services/report-view.service';
 import { IResultItem } from '../models/report-result-item.models';
 import { IPercentageResult } from '../percentage-result-item/models/percentage-result-item.models';
 import { trigger, state, transition, animate, style } from '@angular/animations';
+import { ReportNgTemplatesService } from '../../../../../services/report-ng-templates.service';
+import { untilDestroy } from 'projects/copyleaks-web-report/src/lib/utils/until-destroy';
 
 @Component({
 	selector: 'cr-report-results-item',
@@ -17,7 +30,7 @@ import { trigger, state, transition, animate, style } from '@angular/animations'
 		]),
 	],
 })
-export class ReportResultsItemComponent implements OnInit, OnChanges {
+export class ReportResultsItemComponent implements OnInit, OnChanges, OnDestroy {
 	@Input() resultItem: IResultItem;
 	@Input() showLoader: boolean = false;
 	@Input() showItemBody: boolean = true;
@@ -31,10 +44,12 @@ export class ReportResultsItemComponent implements OnInit, OnChanges {
 	percentageResult: IPercentageResult;
 	previewResult: IResultPreviewBase;
 	eResultPreviewType = EResultPreviewType;
+	lockedResultItemTemplateRef: TemplateRef<IResultItem> | undefined;
 
 	@HostListener('click', ['$event'])
 	handleClick() {
-		if (!this.resultItem || this.showLoader || !this.resultItem.resultDetails || this.excludeResult) return;
+		if (!this.resultItem || this.showLoader || !this.resultItem.resultDetails || this.excludeResult || this.isLocked)
+			return;
 
 		this._reportViewSvc.selectedResult$.next(this.resultItem.resultDetails);
 		this._reportViewSvc.reportViewMode$.next({
@@ -65,7 +80,12 @@ export class ReportResultsItemComponent implements OnInit, OnChanges {
 		}
 		return '';
 	}
-	constructor(private _reportViewSvc: ReportViewService) {}
+
+	get isLocked(): boolean {
+		return !this.showLoader && (this.resultItem?.resultPreview?.isLocked ?? false);
+	}
+
+	constructor(private _reportViewSvc: ReportViewService, private _reportNgTemplatesSvc: ReportNgTemplatesService) {}
 
 	ngOnInit(): void {
 		if (this.resultItem) {
@@ -74,6 +94,16 @@ export class ReportResultsItemComponent implements OnInit, OnChanges {
 				resultItem: this.resultItem,
 				showTooltip: true,
 			};
+		}
+
+		if (this.resultItem?.resultPreview?.isLocked) {
+			// check if custom locked result template was passed
+			this._reportNgTemplatesSvc.reportTemplatesSubject$.pipe(untilDestroy(this)).subscribe(refs => {
+				if (refs?.lockedResultItemTemplateRef !== undefined)
+					setTimeout(() => {
+						this.lockedResultItemTemplateRef = refs?.lockedResultItemTemplateRef;
+					});
+			});
 		}
 	}
 
@@ -112,4 +142,6 @@ export class ReportResultsItemComponent implements OnInit, OnChanges {
 		if (!this.previewResult.url) return;
 		window.open(this.previewResult.url, '_blank');
 	}
+
+	ngOnDestroy(): void {}
 }

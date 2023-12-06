@@ -1,3 +1,5 @@
+@import '../../../../../copyleaks-web-report/src/lib/styles/website-colors.styles.scss';
+
 :host {
 	width: 100%;
 	display: flex;
@@ -42,6 +44,46 @@
 			font-style: normal;
 			font-weight: 500;
 			line-height: normal;
+		}
+	}
+
+	.locked-result-container {
+		display: flex;
+		flex-direction: column;
+		height: 100%;
+		padding: 10px;
+		.locked-result-container-header {
+			display: flex;
+			justify-content: center;
+			align-items: center;
+			gap: 4px;
+			color: $color-black;
+			mat-icon {
+				color: $color-black !important;
+				font-size: 18px;
+				line-height: 18px;
+				width: 18px;
+				height: 18px;
+			}
+			span {
+				font-size: 18px;
+				font-weight: 600;
+			}
+		}
+		.locked-result-container-body {
+			flex: 1;
+			height: 100%;
+			display: flex;
+			justify-content: center;
+			align-items: center;
+			text-align: center;
+			color: $color-black;
+		}
+		.locked-result-container-actions {
+			display: flex;
+			justify-content: center;
+			cr-button {
+			}
 		}
 	}
 }

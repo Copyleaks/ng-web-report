@@ -12,6 +12,7 @@ import {
 	ReportRealtimeResultsService,
 } from 'projects/copyleaks-web-report/src/public-api';
 import { IDemoCustomResultsBoxItem } from '../../components/demo-custom-results-box-item/models/demo-custom-results-box-item.models';
+import { IResultItem } from 'projects/copyleaks-web-report/src/lib/components/containers/report-results-item-container/components/models/report-result-item.models';
 
 @Component({
 	selector: 'app-demo-report-previews',
@@ -207,6 +208,15 @@ export class DemoReportPreviewsComponent implements OnInit {
 	onReportRequestError(event: ReportHttpRequestErrorModel) {
 		console.log('error:', event);
 	}
+
+	lockedResultClick(result: IResultItem) {
+		console.log(`----locked-result----`);
+		console.log(result);
+		console.log(`---------------------`);
+
+		alert(`The 'Save Report' button was clicked for the result with the ID '${result.resultPreview.id}'.`);
+	}
+
 	ngOnDestroy(): void {
 		this.paramSub.unsubscribe();
 	}

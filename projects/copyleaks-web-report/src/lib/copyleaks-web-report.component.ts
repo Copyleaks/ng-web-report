@@ -23,6 +23,7 @@ import { ReportErrorsService } from './services/report-errors.service';
 import { ReportNgTemplatesService } from './services/report-ng-templates.service';
 import { ReportViewService } from './services/report-view.service';
 import { untilDestroy } from './utils/until-destroy';
+import { IResultItem } from './components/containers/report-results-item-container/components/models/report-result-item.models';
 
 @Component({
 	selector: 'copyleaks-web-report',
@@ -54,6 +55,11 @@ export class CopyleaksWebReportComponent implements OnInit, OnDestroy {
 	 * @Input {boolean} - Flag indicating whether to still show the disabled products tabs.
 	 */
 	@Input() showDisabledProducts: boolean = false;
+
+	/**
+	 * @Input {TemplateRef<IResultItem>} - Custom locked result template ref.
+	 */
+	@Input() lockedResultTemplateRef: TemplateRef<IResultItem>;
 
 	/**
 	 * @Output {ReportHttpRequestErrorModel} - Emits HTTP request data, when any request to update & fetch report data fails.
@@ -147,6 +153,9 @@ export class CopyleaksWebReportComponent implements OnInit, OnDestroy {
 		// Read the report custom results template reference.
 		if (this.customResultsTemplate)
 			this._reportNgTemplatesSvc.setReportCustomResultsTemplateRef(this.customResultsTemplate);
+
+		if (this.lockedResultTemplateRef)
+			this._reportNgTemplatesSvc.setLockedResultItemTemplateRef(this.lockedResultTemplateRef);
 	}
 
 	/**

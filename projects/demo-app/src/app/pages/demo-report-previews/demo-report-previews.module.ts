@@ -6,6 +6,7 @@ import { CopyleaksWebReportModule } from 'projects/copyleaks-web-report/src/lib/
 import { DemoCustomResultsBoxItemModule } from '../../components/demo-custom-results-box-item/demo-custom-results-box-item.module';
 import { DemoReportPreviewsRoutingModule } from './demo-report-previews-routing.module';
 import { DemoReportPreviewsComponent } from './demo-report-previews.component';
+import { CrButtonModule } from 'projects/copyleaks-web-report/src/lib/components/core/cr-button/cr-button.module';
 
 @NgModule({
 	declarations: [DemoReportPreviewsComponent],
@@ -13,6 +14,7 @@ import { DemoReportPreviewsComponent } from './demo-report-previews.component';
 		CommonModule,
 		DemoReportPreviewsRoutingModule,
 		CopyleaksWebReportModule,
+		CrButtonModule,
 		MatIconModule,
 		DemoCustomResultsBoxItemModule,
 	],

@@ -1,18 +1,23 @@
 @import '../../../../../styles/website-colors.styles.scss';
 
 :host {
-	cursor: pointer;
 	line-height: normal !important;
 }
 
 .result-item-hover-container {
 	&:hover {
+		cursor: pointer;
 		border-color: $color-primary;
 		.percentage-result-item-container {
 			background-color: $color-light-primary;
 		}
 	}
 }
+
+.locked-result-item-container {
+	border: 3px solid $color-primary !important;
+}
+
 .result-item-hover-container {
 	transition: 0.7s;
 }
@@ -136,6 +141,7 @@
 			}
 		}
 	}
+
 	.percentage-result-item-container {
 		height: 24px;
 		padding: 4px 8px;
@@ -150,6 +156,7 @@
 			}
 		}
 	}
+
 	.skeleton {
 		height: 19px;
 		::ng-deep .loader {
@@ -158,6 +165,25 @@
 			background-color: $color-medium-dark;
 			opacity: 0.2;
 			margin: 0px;
+		}
+	}
+
+	.locked-result-container {
+		display: flex;
+		justify-content: center;
+		align-items: center;
+		height: 100%;
+		gap: 4px;
+		color: $color-black;
+		mat-icon {
+			font-size: 18px;
+			line-height: 18px;
+			width: 18px;
+			height: 18px;
+		}
+		span {
+			font-size: 18px;
+			font-weight: 600;
 		}
 	}
 }

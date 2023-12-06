@@ -136,7 +136,7 @@ export class ReportDataService {
 		private _reportErrorsSvc: ReportErrorsService,
 		private _percentPipe: PercentPipe
 	) {
-		combineLatest([this.filterOptions$, this.excludedResultsIds$])
+		combineLatest([this.filterOptions$, this.excludedResultsIds$, this.scanResultsDetails$])
 			.pipe(
 				untilDestroy(this),
 				filter(([options, excludedResultsIds]) => options !== undefined && excludedResultsIds !== undefined)

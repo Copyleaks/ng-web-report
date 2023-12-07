@@ -838,7 +838,7 @@ export class ReportDataService {
 					// Add the new fetched results to the Cache subject
 					this._loadedResultsDetails$ = [...this._loadedResultsDetails$, ...results] as ResultDetailItem[];
 
-					this.scanResultsDetails$.next(this._loadedResultsDetails$);
+					this.scanResultsDetails$.next([...(this.scanResultsDetails ?? []), ...this._loadedResultsDetails$]);
 
 					// Check if this is the last batch
 					if (currentBatchIndex === totalBatches) {

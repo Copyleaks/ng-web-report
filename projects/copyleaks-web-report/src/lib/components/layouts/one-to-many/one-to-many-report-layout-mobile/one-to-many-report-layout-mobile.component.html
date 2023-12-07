@@ -26,7 +26,7 @@
 				[minorChangesTotal]="reportStatistics?.minorChanges ?? 0"
 				[paraphrasedTotal]="reportStatistics?.relatedMeaning ?? 0"
 				[excludedTotal]="reportStatistics?.omittedWords ?? 0"
-				[showLoadingView]="isLoadingScanContent"
+				[showLoadingView]="isLoadingScanContent || isLoadingScanResults"
 				[showDisabledProducts]="showDisabledProducts"
 				[hideAiTap]="hideAiTap"
 				[hidePlagarismTap]="hidePlagarismTap"

@@ -39,6 +39,9 @@
 								#resultitem
 								[resultItem]="item"
 								[isMobile]="isMobile"
+								[reportViewSvc]="reportViewSvc"
+								[reportDataSvc]="reportDataSvc"
+								[reportNgTemplatesSvc]="reportNgTemplatesSvc"
 								(hiddenResultEvent)="excludeResultById($event)"
 								(showResultEvent)="includeResultById($event)"
 								style="width: 100%"></cr-report-results-item>
@@ -61,6 +64,9 @@
 								#resultitem
 								[resultItem]="item"
 								[isMobile]="isMobile"
+								[reportViewSvc]="reportViewSvc"
+								[reportDataSvc]="reportDataSvc"
+								[reportNgTemplatesSvc]="reportNgTemplatesSvc"
 								(hiddenResultEvent)="excludeResultById($event)"
 								(showResultEvent)="includeResultById($event)"
 								style="width: 100%"></cr-report-results-item>
@@ -81,7 +87,12 @@
 				</ng-template>
 
 				<ng-container *ngIf="lastItemLoading">
-					<cr-report-results-item [showLoader]="true" [style]="'width:100%'"></cr-report-results-item>
+					<cr-report-results-item
+						[reportViewSvc]="reportViewSvc"
+						[reportNgTemplatesSvc]="reportNgTemplatesSvc"
+						[reportDataSvc]="reportDataSvc"
+						[showLoader]="true"
+						[style]="'width:100%'"></cr-report-results-item>
 				</ng-container>
 			</ng-container>
 		</div>
@@ -158,13 +169,21 @@
 				}">
 				<ng-container *ngIf="!newResults || newResults.length === 0; else realTimeView">
 					<ng-container *ngFor="let _ of [1, 2, 3, 4, 5, 6, 7, 8]">
-						<cr-report-results-item [showLoader]="true" [style]="'width:100%'"></cr-report-results-item>
+						<cr-report-results-item
+							[reportViewSvc]="reportViewSvc"
+							[reportNgTemplatesSvc]="reportNgTemplatesSvc"
+							[reportDataSvc]="reportDataSvc"
+							[showLoader]="true"
+							[style]="'width:100%'"></cr-report-results-item>
 					</ng-container>
 				</ng-container>
 				<ng-template #realTimeView>
 					<ng-container *ngFor="let item of newResults">
 						<cr-report-results-item
 							class="real-time-result"
+							[reportViewSvc]="reportViewSvc"
+							[reportNgTemplatesSvc]="reportNgTemplatesSvc"
+							[reportDataSvc]="reportDataSvc"
 							[resultItem]="item"
 							[isMobile]="isMobile"
 							[showLoader]="false"
@@ -177,7 +196,12 @@
 					</ng-container>
 
 					<ng-container *ngFor="let _ of [1, 2, 3]">
-						<cr-report-results-item [showLoader]="true" [style]="'width:100%'"></cr-report-results-item>
+						<cr-report-results-item
+							[reportViewSvc]="reportViewSvc"
+							[reportNgTemplatesSvc]="reportNgTemplatesSvc"
+							[reportDataSvc]="reportDataSvc"
+							[showLoader]="true"
+							[style]="'width:100%'"></cr-report-results-item>
 					</ng-container>
 				</ng-template>
 			</div>

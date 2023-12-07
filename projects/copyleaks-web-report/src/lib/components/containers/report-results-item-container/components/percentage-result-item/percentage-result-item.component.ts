@@ -2,6 +2,7 @@ import { Component, Input, OnChanges, OnInit, SimpleChanges } from '@angular/cor
 import { ISourceMetadataSection, IStatistics } from '../../../../../models/report-data.models';
 import { EMatchType } from './models/percentage-result-item.enum';
 import { IPercentageResult } from './models/percentage-result-item.models';
+import { ReportDataService } from '../../../../../services/report-data.service';
 
 @Component({
 	selector: 'cr-percentage-result-item',
@@ -10,6 +11,8 @@ import { IPercentageResult } from './models/percentage-result-item.models';
 })
 export class PercentageResultItemComponent implements OnInit, OnChanges {
 	@Input() percentageResult: IPercentageResult;
+	@Input() reportDataSvc: ReportDataService;
+	@Input() excludeResult: boolean = false;
 
 	showPlagiarismPercentages: boolean = false;
 	metadataSource: ISourceMetadataSection;

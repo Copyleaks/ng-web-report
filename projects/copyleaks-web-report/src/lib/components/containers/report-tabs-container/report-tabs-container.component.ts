@@ -103,7 +103,7 @@ export class ReportTabsContainerComponent implements OnInit, OnDestroy, OnChange
 
 	constructor(
 		private _reportViewSvc: ReportViewService,
-		private _reportDataSvc: ReportDataService,
+		public reportDataSvc: ReportDataService,
 		private _reportNgTemplatesSvc: ReportNgTemplatesService,
 		private cdr: ChangeDetectorRef,
 		private _matchSvc: ReportMatchHighlightService
@@ -164,8 +164,7 @@ export class ReportTabsContainerComponent implements OnInit, OnDestroy, OnChange
 			case EReportViewType.AIView:
 				this._reportViewSvc.reportViewMode$.next({
 					...this._reportViewSvc.reportViewMode,
-					viewMode:
-						!this._reportDataSvc.isPlagiarismEnabled() && !this.showDisabledProducts ? 'only-ai' : 'one-to-many',
+					viewMode: !this.reportDataSvc.isPlagiarismEnabled() && !this.showDisabledProducts ? 'only-ai' : 'one-to-many',
 					isHtmlView: false,
 					alertCode: ALERTS.SUSPECTED_AI_TEXT_DETECTED,
 					sourcePageIndex: 1,

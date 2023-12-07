@@ -6,10 +6,19 @@
 	[crReportScoreTooltip]="
 		percentageResult && percentageResult.showTooltip
 			? {
-					identicalPct: getMatchTypePercentage(eMatchType.Identical),
-					minorChangesPct: getMatchTypePercentage(eMatchType.MinorChanges),
-					paraphrasedPct: getMatchTypePercentage(eMatchType.Paraphrased),
-					omittedPct: getMatchTypePercentage(eMatchType.OmittedWords)
+					identicalPct: {
+						percentage: getMatchTypePercentage(eMatchType.Identical),
+						disabled: excludeResult ? false : reportDataSvc.filterOptions?.showIdentical === false
+					},
+					minorChangesPct: {
+						percentage: getMatchTypePercentage(eMatchType.MinorChanges),
+						disabled: excludeResult ? false : reportDataSvc.filterOptions?.showMinorChanges === false
+					},
+					paraphrasedPct: {
+						percentage: getMatchTypePercentage(eMatchType.Paraphrased),
+						disabled: excludeResult ? false : reportDataSvc.filterOptions?.showRelated === false
+					},
+					omittedPct: { percentage: getMatchTypePercentage(eMatchType.OmittedWords), disabled: false }
 			  }
 			: null
 	">

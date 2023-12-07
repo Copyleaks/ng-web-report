@@ -24,14 +24,36 @@ export interface IReportResponsiveMode {
 	mode: EResponsiveLayoutType;
 }
 
+/**
+ * Represents the tooltip model for report scores.
+ */
 export interface IReportScoreTooltipModel {
-	// Plagarism score
-	identicalPct?: number;
-	minorChangesPct?: number;
-	paraphrasedPct?: number;
-	omittedPct?: number;
+	/** Plagiarism score for identical text. */
+	identicalPct?: IPercentageModel;
 
-	// AI score
-	aiPct?: number;
-	humanPct?: number;
+	/** Plagiarism score for text with minor changes. */
+	minorChangesPct?: IPercentageModel;
+
+	/** Plagiarism score for paraphrased text. */
+	paraphrasedPct?: IPercentageModel;
+
+	/** Plagiarism score for omitted text. */
+	omittedPct?: IPercentageModel;
+
+	/** AI-assessed plagiarism score. */
+	aiPct?: IPercentageModel;
+
+	/** Human-assessed plagiarism score. */
+	humanPct?: IPercentageModel;
+}
+
+/**
+ * Represents a model for percentage values with an enabled/disabled state.
+ */
+export interface IPercentageModel {
+	/** The percentage value. */
+	percentage?: number;
+
+	/** Indicates whether this percentage is enabled or disabled. */
+	disabled: boolean;
 }

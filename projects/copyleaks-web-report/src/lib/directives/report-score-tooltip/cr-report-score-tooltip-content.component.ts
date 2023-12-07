@@ -16,7 +16,7 @@ export class CrReportScoreTooltipContentComponent implements OnInit {
 
 	EReportScoreTooltipPosition = EReportScoreTooltipPosition;
 
-	constructor(public reportDataSvc: ReportDataService) {}
+	constructor() {}
 
 	ngOnInit(): void {}
 }

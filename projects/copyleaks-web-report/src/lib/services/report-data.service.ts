@@ -821,6 +821,8 @@ export class ReportDataService {
 
 		if (totalBatches === 0) this._newResults$.next([]);
 
+		this._loadedResultsDetails$ = [];
+
 		// Send the GET results requests in batches
 		const fetchResultsBatches = from(idBatches);
 		fetchResultsBatches
@@ -840,7 +842,7 @@ export class ReportDataService {
 
 					// Check if this is the last batch
 					if (currentBatchIndex === totalBatches) {
-						const mappedResults = results.map(resultDetail => {
+						const mappedResults = this._loadedResultsDetails$.map(resultDetail => {
 							const foundResultDetail = newResults?.find(r => r.id === resultDetail.id);
 							return {
 								resultPreview: foundResultDetail,

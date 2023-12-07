@@ -305,15 +305,6 @@ export class ReportDataService {
 			.pipe(
 				catchError((error: HttpErrorResponse) => {
 					this._reportErrorsSvc.handleHttpError(error, 'initSync - completeResults');
-					return throwError(error);
-				}),
-				untilDestroy(this)
-			)
-			.subscribe(
-				completeResultsRes => {
-					this._updateCompleteResults(completeResultsRes);
-				},
-				_ => {
 					this.scanResultsDetails$.next([]);
 					this.scanResultsPreviews$.next({
 						results: {
@@ -338,10 +329,17 @@ export class ReportDataService {
 								plagiarismDetection: false,
 							},
 						},
-
 						status: EScanStatus.Error,
 					});
-				}
+					return throwError(error);
+				}),
+				untilDestroy(this)
+			)
+			.subscribe(
+				completeResultsRes => {
+					this._updateCompleteResults(completeResultsRes);
+				},
+				_ => {}
 			);
 	}
 

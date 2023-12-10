@@ -14,7 +14,7 @@ const routes: Routes = [
 	},
 	{
 		path: '**',
-		redirectTo: 'previews/bundle/both',
+		redirectTo: 'previews/bundle/sample-report',
 	},
 ];
 

@@ -23,7 +23,7 @@ export class PercentageResultItemComponent implements OnInit, OnChanges {
 	constructor() {}
 
 	get stackedBarHeight() {
-		return this.percentageResult?.stackedBarHeight || '4px';
+		return this.percentageResult?.stackedBarHeight || '8px';
 	}
 
 	get stackedBarBackgroundColor() {

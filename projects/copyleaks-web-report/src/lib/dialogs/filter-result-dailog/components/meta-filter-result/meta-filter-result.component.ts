@@ -40,6 +40,10 @@ export class MetaFilterResultComponent implements OnInit {
 		return this.wordLimitform.get(EFilterResultForm.fcWordLimitTotalWordlimt)?.value;
 	}
 
+	get wordLimitTotalWordFc() {
+		return this.wordLimitform.get(EFilterResultForm.fcWordLimitTotalWordlimt) as FormControl;
+	}
+
 	get maxSliderDates() {
 		return this.publicationDates?.length > 1 ? this.publicationDates?.length - 1 : 1;
 	}
@@ -88,5 +92,9 @@ export class MetaFilterResultComponent implements OnInit {
 	onPublicationEnabledChange(enabled: boolean) {
 		if (!enabled) this.publicationDate?.setValue(null);
 		else this.publicationDate?.setValue(new Date(this.publicationDates[0]));
+	}
+
+	onSliderChange(event: any) {
+		this.wordLimitTotalWordFc.setValue(Number(event.value));
 	}
 }

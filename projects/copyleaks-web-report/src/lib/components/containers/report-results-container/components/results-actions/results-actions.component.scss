@@ -169,6 +169,11 @@ mat-icon {
 	background-color: $color-white;
 	border-radius: 50%;
 	padding: 4px;
+	cursor: auto !important;
+}
+
+.search-icon:hover {
+	color: $color-black !important;
 }
 
 .clear-icon {

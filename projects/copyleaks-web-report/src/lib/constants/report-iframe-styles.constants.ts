@@ -57,7 +57,7 @@ span[match][data-type='0'].hover {
 	background-color: #3f9af533;
 }
 span[match][data-type='1'] {
-	background-color: #fe9391;
+	background-color: #FFB1B1;
   transition: 0.2s;
 }
 span[match][data-type='1'].hover {

@@ -214,6 +214,17 @@
       "d6c375a62f",
       "ce00fecc89"
     ],
+    "resultsMetaData": {
+            "wordLimit": {
+                "wordLimitEnabled": true,
+                "totalWordLimit": 243
+            },
+            "publicationDate": {
+                "publicationEnabled": false,
+                "startDate": null,
+                "resultsWithNoDates": true
+            }
+        },
     "matchType": {
       "identicalText": false,
       "minorChanges": true,

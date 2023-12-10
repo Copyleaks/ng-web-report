@@ -14,6 +14,7 @@ import { fromEvent } from 'rxjs';
 import { debounceTime, startWith } from 'rxjs/operators';
 import { IResultItem } from '../../../../components/containers/report-results-item-container/components/models/report-result-item.models';
 import { ReportDataService } from '../../../../services/report-data.service';
+import { ReportViewService } from '../../../../services/report-view.service';
 import { untilDestroy } from '../../../../utils/until-destroy';
 
 @Component({
@@ -24,6 +25,7 @@ import { untilDestroy } from '../../../../utils/until-destroy';
 export class ExcludedResultsDailogComponent implements OnInit, AfterViewInit {
 	@Input() allResultsItem: IResultItem[] = [];
 	@Input() reportDataSvc: ReportDataService;
+	@Input() reportViewSvc: ReportViewService;
 	@Output() closeDailogEvent = new EventEmitter<boolean>();
 
 	filteredList: IResultItem[];

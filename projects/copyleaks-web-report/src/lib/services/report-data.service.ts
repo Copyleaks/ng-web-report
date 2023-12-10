@@ -5,7 +5,7 @@ import { BehaviorSubject, EMPTY, Subject, combineLatest, forkJoin, from, interva
 import { catchError, concatMap, filter, take, takeUntil } from 'rxjs/operators';
 import { IResultItem } from '../components/containers/report-results-item-container/components/models/report-result-item.models';
 import { ALERTS } from '../constants/report-alerts.constants';
-import { EResultPreviewType } from '../enums/copyleaks-web-report.enums';
+import { EResultPreviewType, EScanStatus } from '../enums/copyleaks-web-report.enums';
 import { IClsReportEndpointConfigModel, IEndpointDetails } from '../models/report-config.models';
 import {
 	IAPIProgress,
@@ -305,6 +305,32 @@ export class ReportDataService {
 			.pipe(
 				catchError((error: HttpErrorResponse) => {
 					this._reportErrorsSvc.handleHttpError(error, 'initSync - completeResults');
+					this.scanResultsDetails$.next([]);
+					this.scanResultsPreviews$.next({
+						results: {
+							batch: [],
+							internet: [],
+							database: [],
+							score: {
+								aggregatedScore: 0,
+								identicalWords: 0,
+								minorChangedWords: 0,
+								relatedMeaningWords: 0,
+							},
+						},
+						scannedDocument: {
+							credits: 0,
+							scanId: '',
+							totalWords: 0,
+							totalExcluded: 0,
+							creationTime: '',
+							enabled: {
+								aiDetection: false,
+								plagiarismDetection: false,
+							},
+						},
+						status: EScanStatus.Error,
+					});
 					return throwError(error);
 				}),
 				untilDestroy(this)
@@ -821,6 +847,8 @@ export class ReportDataService {
 
 		if (totalBatches === 0) this._newResults$.next([]);
 
+		this._loadedResultsDetails$ = [];
+
 		// Send the GET results requests in batches
 		const fetchResultsBatches = from(idBatches);
 		fetchResultsBatches
@@ -836,11 +864,11 @@ export class ReportDataService {
 					// Add the new fetched results to the Cache subject
 					this._loadedResultsDetails$ = [...this._loadedResultsDetails$, ...results] as ResultDetailItem[];
 
-					this.scanResultsDetails$.next(this._loadedResultsDetails$);
+					this.scanResultsDetails$.next([...(this.scanResultsDetails ?? []), ...this._loadedResultsDetails$]);
 
 					// Check if this is the last batch
 					if (currentBatchIndex === totalBatches) {
-						const mappedResults = results.map(resultDetail => {
+						const mappedResults = this._loadedResultsDetails$.map(resultDetail => {
 							const foundResultDetail = newResults?.find(r => r.id === resultDetail.id);
 							return {
 								resultPreview: foundResultDetail,

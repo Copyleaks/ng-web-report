@@ -42,15 +42,15 @@ export class CrCustomResultsComponent implements OnInit, OnChanges, AfterViewIni
 
 	constructor(
 		private _reportTemplatesSvc: ReportNgTemplatesService,
-		private _reportViewSvc: ReportViewService,
+		public reportViewSvc: ReportViewService,
 		private _el: ElementRef
 	) {}
 
 	ngOnInit(): void {
 		setTimeout(() => {
 			this._reportTemplatesSvc.reportTemplatesMode$.next(this.reportView);
-			this.responsiveMode = this._reportViewSvc.reportResponsiveMode$.value?.mode ?? EResponsiveLayoutType.Desktop;
-			this._reportViewSvc.reportResponsiveMode$.pipe(untilDestroy(this)).subscribe(data => {
+			this.responsiveMode = this.reportViewSvc.reportResponsiveMode$.value?.mode ?? EResponsiveLayoutType.Desktop;
+			this.reportViewSvc.reportResponsiveMode$.pipe(untilDestroy(this)).subscribe(data => {
 				if (!data) return;
 				this.responsiveMode = data.mode;
 			});

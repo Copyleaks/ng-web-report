@@ -10,7 +10,10 @@
 		<ng-content select="cr-custom-results-box-content"></ng-content>
 	</div>
 	<ng-container *ngIf="responsiveMode !== EResponsiveLayoutType.Mobile">
-		<cr-report-results-item *ngFor="let i of listOfLoadingResults" [showLoader]="true"></cr-report-results-item>
+		<cr-report-results-item
+			*ngFor="let i of listOfLoadingResults"
+			[reportViewSvc]="reportViewSvc"
+			[showLoader]="true"></cr-report-results-item>
 	</ng-container>
 
 	<div *ngIf="responsiveMode !== EResponsiveLayoutType.Mobile" class="results-loader-container"></div>

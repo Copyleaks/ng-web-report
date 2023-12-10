@@ -18,6 +18,7 @@ import { IPercentageResult } from '../percentage-result-item/models/percentage-r
 import { trigger, state, transition, animate, style } from '@angular/animations';
 import { ReportNgTemplatesService } from '../../../../../services/report-ng-templates.service';
 import { untilDestroy } from '../../../../../utils/until-destroy';
+import { ReportDataService } from '../../../../../services/report-data.service';
 
 @Component({
 	selector: 'cr-report-results-item',
@@ -37,6 +38,9 @@ export class ReportResultsItemComponent implements OnInit, OnChanges, OnDestroy 
 	@Input() excludeResult: boolean = false;
 	@Input() isMobile: boolean = false;
 	@Input() excludedResultsClick: boolean = false;
+	@Input() reportViewSvc: ReportViewService;
+	@Input() reportDataSvc: ReportDataService;
+	@Input() reportNgTemplatesSvc: ReportNgTemplatesService;
 
 	@Output() hiddenResultEvent = new EventEmitter<string>();
 	@Output() showResultEvent = new EventEmitter<string>();
@@ -51,16 +55,16 @@ export class ReportResultsItemComponent implements OnInit, OnChanges, OnDestroy 
 		if (!this.resultItem || this.showLoader || !this.resultItem.resultDetails || this.excludeResult || this.isLocked)
 			return;
 
-		this._reportViewSvc.selectedResult$.next(this.resultItem.resultDetails);
-		this._reportViewSvc.reportViewMode$.next({
-			...this._reportViewSvc.reportViewMode,
+		this.reportViewSvc?.selectedResult$.next(this.resultItem.resultDetails);
+		this.reportViewSvc?.reportViewMode$.next({
+			...this.reportViewSvc?.reportViewMode,
 			viewMode: 'one-to-one',
 			suspectId: this.resultItem.resultPreview.id,
 			sourcePageIndex: 1,
 			suspectPageIndex: 1,
 			alertCode: undefined,
 		});
-		this._reportViewSvc.selectedAlert$.next(null);
+		this.reportViewSvc?.selectedAlert$.next(null);
 	}
 
 	get authorName() {
@@ -85,7 +89,7 @@ export class ReportResultsItemComponent implements OnInit, OnChanges, OnDestroy 
 		return !this.showLoader && (this.resultItem?.resultPreview?.isLocked ?? false);
 	}
 
-	constructor(private _reportViewSvc: ReportViewService, private _reportNgTemplatesSvc: ReportNgTemplatesService) {}
+	constructor() {}
 
 	ngOnInit(): void {
 		if (this.resultItem) {
@@ -98,7 +102,7 @@ export class ReportResultsItemComponent implements OnInit, OnChanges, OnDestroy 
 
 		if (this.resultItem?.resultPreview?.isLocked) {
 			// check if custom locked result template was passed
-			this._reportNgTemplatesSvc.reportTemplatesSubject$.pipe(untilDestroy(this)).subscribe(refs => {
+			this.reportNgTemplatesSvc?.reportTemplatesSubject$.pipe(untilDestroy(this)).subscribe(refs => {
 				if (refs?.lockedResultItemTemplateRef !== undefined)
 					setTimeout(() => {
 						this.lockedResultItemTemplateRef = refs?.lockedResultItemTemplateRef;
@@ -129,8 +133,8 @@ export class ReportResultsItemComponent implements OnInit, OnChanges, OnDestroy 
 	}
 
 	comapreResult() {
-		this._reportViewSvc.reportViewMode$.next({
-			...this._reportViewSvc.reportViewMode,
+		this.reportViewSvc?.reportViewMode$.next({
+			...this.reportViewSvc?.reportViewMode,
 			viewMode: 'one-to-one',
 			sourcePageIndex: 1,
 			suspectPageIndex: 1,

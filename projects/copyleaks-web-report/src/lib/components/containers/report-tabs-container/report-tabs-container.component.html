@@ -8,10 +8,19 @@
 				hidePlagarismTap && showDisabledProducts
 					? null
 					: {
-							identicalPct: identicalTotal / wordsTotal,
-							minorChangesPct: minorChangesTotal / wordsTotal,
-							paraphrasedPct: paraphrasedTotal / wordsTotal,
-							omittedPct: excludedTotal / wordsTotal
+							identicalPct: {
+								percentage: identicalTotal / wordsTotal,
+								disabled: reportDataSvc.filterOptions?.showIdentical === false
+							},
+							minorChangesPct: {
+								percentage: minorChangesTotal / wordsTotal,
+								disabled: reportDataSvc.filterOptions?.showMinorChanges === false
+							},
+							paraphrasedPct: {
+								percentage: paraphrasedTotal / wordsTotal,
+								disabled: reportDataSvc.filterOptions?.showRelated === false
+							},
+							omittedPct: { percentage: excludedTotal / wordsTotal, disabled: false }
 					  }
 			"
 			[crReportScoreTooltipPosition]="EReportScoreTooltipPosition.BELOW"
@@ -57,8 +66,8 @@
 				hideAiTap && showDisabledProducts
 					? null
 					: {
-							aiPct: aiScore,
-							humanPct: 1 - aiScore
+							aiPct: { percentage: aiScore, disabled: false },
+							humanPct: { percentage: 1 - aiScore, disabled: false }
 					  }
 			"
 			[crReportScoreTooltipPosition]="EReportScoreTooltipPosition.BELOW"

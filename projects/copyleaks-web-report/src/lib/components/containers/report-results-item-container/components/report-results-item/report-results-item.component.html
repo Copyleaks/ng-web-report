@@ -141,7 +141,10 @@
 			fxLayoutGap="8px"
 			fxLayoutAlign="start center">
 			<ng-container *ngIf="!showLoader; else showPercentageSkeleton">
-				<cr-percentage-result-item [percentageResult]="percentageResult"></cr-percentage-result-item>
+				<cr-percentage-result-item
+					[percentageResult]="percentageResult"
+					[excludeResult]="excludeResult"
+					[reportDataSvc]="reportDataSvc"></cr-percentage-result-item>
 			</ng-container>
 			<ng-template #showPercentageSkeleton>
 				<ngx-skeleton-loader

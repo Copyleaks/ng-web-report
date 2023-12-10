@@ -23,6 +23,7 @@ import { ReportDataService } from '../../../services/report-data.service';
 import { ResultDetailItem } from '../../../models/report-matches.models';
 import { ICopyleaksReportOptions } from '../../../models/report-options.models';
 import { ECustomResultsReportView } from '../../core/cr-custom-results/models/cr-custom-results.enums';
+import { ReportViewService } from '../../../services/report-view.service';
 
 @Component({
 	selector: 'copyleaks-report-results-container',
@@ -88,17 +89,18 @@ export class ReportResultsContainerComponent implements OnInit, OnChanges {
 	}
 
 	constructor(
-		private _reportNgTemplatesSvc: ReportNgTemplatesService,
-		private cdr: ChangeDetectorRef,
-		private _reportDataSvc: ReportDataService
+		private _cdr: ChangeDetectorRef,
+		public reportDataSvc: ReportDataService,
+		public reportNgTemplatesSvc: ReportNgTemplatesService,
+		public reportViewSvc: ReportViewService
 	) {}
 
 	ngOnChanges(changes: SimpleChanges) {
 		if (changes['allResults']?.currentValue) {
 			this.searchedValue = '';
 			if (!this.filterIsOn) this.displayedResults = this.allResults;
-			if (this._reportDataSvc.filterOptions && this._reportDataSvc.excludedResultsIds)
-				this._filterResults(this._reportDataSvc.filterOptions, this._reportDataSvc.excludedResultsIds);
+			if (this.reportDataSvc.filterOptions && this.reportDataSvc.excludedResultsIds)
+				this._filterResults(this.reportDataSvc.filterOptions, this.reportDataSvc.excludedResultsIds);
 		}
 		if (changes['showLoadingView']?.currentValue == false) {
 			this._handelFilterUpdates();
@@ -130,19 +132,19 @@ export class ReportResultsContainerComponent implements OnInit, OnChanges {
 		}
 		this.navigateMobileButton = EnumNavigateMobileButton.FirstButton;
 
-		this._reportNgTemplatesSvc.reportTemplatesSubject$.pipe(untilDestroy(this)).subscribe(refs => {
+		this.reportNgTemplatesSvc.reportTemplatesSubject$.pipe(untilDestroy(this)).subscribe(refs => {
 			if (refs?.customEmptyResultsTemplate !== undefined && this.customEmptyResultsTemplate === undefined) {
 				this.customEmptyResultsTemplate = refs?.customEmptyResultsTemplate;
-				this.cdr.detectChanges();
+				this._cdr.detectChanges();
 			}
 		});
 	}
 
 	private _handelFilterUpdates() {
-		if (this._reportDataSvc.filterOptions && this._reportDataSvc.excludedResultsIds)
-			this._filterResults(this._reportDataSvc.filterOptions, this._reportDataSvc.excludedResultsIds);
+		if (this.reportDataSvc.filterOptions && this.reportDataSvc.excludedResultsIds)
+			this._filterResults(this.reportDataSvc.filterOptions, this.reportDataSvc.excludedResultsIds);
 
-		combineLatest([this._reportDataSvc.filterOptions$, this._reportDataSvc.excludedResultsIds$])
+		combineLatest([this.reportDataSvc.filterOptions$, this.reportDataSvc.excludedResultsIds$])
 			.pipe(untilDestroy(this))
 			.subscribe(([filterOptions, excludedResultsIds]) => {
 				if (this.showLoadingView || !filterOptions || !excludedResultsIds) return;
@@ -180,8 +182,8 @@ export class ReportResultsContainerComponent implements OnInit, OnChanges {
 	onSearch(value: string): void {
 		this.searchedValue = value;
 
-		if (this._reportDataSvc.filterOptions && this._reportDataSvc.excludedResultsIds)
-			this._filterResults(this._reportDataSvc.filterOptions, this._reportDataSvc.excludedResultsIds);
+		if (this.reportDataSvc.filterOptions && this.reportDataSvc.excludedResultsIds)
+			this._filterResults(this.reportDataSvc.filterOptions, this.reportDataSvc.excludedResultsIds);
 
 		if (!value || value === '') {
 			return;
@@ -295,20 +297,20 @@ export class ReportResultsContainerComponent implements OnInit, OnChanges {
 	}
 
 	includeResultById(resultId: string) {
-		const excludedResutsIds = this._reportDataSvc.excludedResultsIds ?? [];
-		this._reportDataSvc.excludedResultsIds$.next(excludedResutsIds.filter(id => id != resultId));
+		const excludedResutsIds = this.reportDataSvc.excludedResultsIds ?? [];
+		this.reportDataSvc.excludedResultsIds$.next(excludedResutsIds.filter(id => id != resultId));
 	}
 
 	excludeResultById(resultId: string) {
-		const excludedResutsIds = new Set(this._reportDataSvc.excludedResultsIds);
+		const excludedResutsIds = new Set(this.reportDataSvc.excludedResultsIds);
 		excludedResutsIds.add(resultId);
-		this._reportDataSvc.excludedResultsIds$.next(Array.from(excludedResutsIds));
+		this.reportDataSvc.excludedResultsIds$.next(Array.from(excludedResutsIds));
 	}
 
 	private _filterResults(filterOptions: ICopyleaksReportOptions, excludedResultsIds: string[]) {
 		this.excludedResultsIds = excludedResultsIds;
 
-		const filteredResults = this._reportDataSvc.filterResults(filterOptions, excludedResultsIds);
+		const filteredResults = this.reportDataSvc.filterResults(filterOptions, excludedResultsIds);
 
 		this.displayedResults = this.allResults
 			.filter(result => !!filteredResults.find(r => r.id === result.resultPreview?.id))
@@ -334,13 +336,13 @@ export class ReportResultsContainerComponent implements OnInit, OnChanges {
 			...this.resultsActions,
 			totalExcluded: excludedResultsIds?.length,
 			totalFiltered:
-				this._reportDataSvc.totalCompleteResults - filteredResults.length <= 0
+				this.reportDataSvc.totalCompleteResults - filteredResults.length <= 0
 					? 0
-					: this._reportDataSvc.totalCompleteResults - filteredResults.length - excludedResultsIds?.length,
-			totalResults: this._reportDataSvc.totalCompleteResults,
+					: this.reportDataSvc.totalCompleteResults - filteredResults.length - excludedResultsIds?.length,
+			totalResults: this.reportDataSvc.totalCompleteResults,
 		};
 
-		this.filterIsOn = filteredResults.length !== this._reportDataSvc.scanResultsDetails?.length;
+		this.filterIsOn = filteredResults.length !== this.reportDataSvc.scanResultsDetails?.length;
 		if (!filterOptions.showIdentical || !filterOptions.showMinorChanges || !filterOptions.showRelated)
 			this.filterIsOn = true;
 	}

@@ -170,7 +170,6 @@ export class ReportResultsContainerComponent implements OnInit, OnChanges {
 				this.viewport.elementRef.nativeElement.scrollHeight > this.viewport.elementRef.nativeElement.clientHeight;
 
 			this.addPaddingToContainer = isScrollable;
-			console.log(isScrollable);
 		});
 	}
 

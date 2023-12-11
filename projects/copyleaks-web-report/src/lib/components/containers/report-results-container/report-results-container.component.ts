@@ -73,7 +73,6 @@ export class ReportResultsContainerComponent implements OnInit, OnChanges {
 	scrollSub: any;
 	resizeSubscription: any;
 	addPaddingToContainer: boolean;
-	stopPaddingCheck: boolean;
 	filterIsOn: boolean;
 	filterIndicatorOn: boolean = false;
 
@@ -166,12 +165,12 @@ export class ReportResultsContainerComponent implements OnInit, OnChanges {
 
 	checkAndApplyPadding() {
 		setTimeout(() => {
-			if (!this.viewport || this.stopPaddingCheck || this.showLoadingView) return;
+			if (!this.viewport || this.showLoadingView) return;
 			const isScrollable =
 				this.viewport.elementRef.nativeElement.scrollHeight > this.viewport.elementRef.nativeElement.clientHeight;
 
 			this.addPaddingToContainer = isScrollable;
-			this.stopPaddingCheck = true;
+			console.log(isScrollable);
 		});
 	}
 
@@ -347,6 +346,10 @@ export class ReportResultsContainerComponent implements OnInit, OnChanges {
 		this.filterIsOn = filteredResults.length !== this.reportDataSvc.scanResultsDetails?.length;
 		if (!filterOptions.showIdentical || !filterOptions.showMinorChanges || !filterOptions.showRelated)
 			this.filterIsOn = true;
+
+		setTimeout(() => {
+			this.checkAndApplyPadding();
+		});
 	}
 
 	//#endregion

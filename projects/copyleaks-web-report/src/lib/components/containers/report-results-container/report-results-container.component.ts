@@ -75,6 +75,7 @@ export class ReportResultsContainerComponent implements OnInit, OnChanges {
 	addPaddingToContainer: boolean;
 	stopPaddingCheck: boolean;
 	filterIsOn: boolean;
+	filterIndicatorOn: boolean = false;
 
 	excludedResultsIds: string[];
 
@@ -148,6 +149,7 @@ export class ReportResultsContainerComponent implements OnInit, OnChanges {
 			.pipe(untilDestroy(this))
 			.subscribe(([filterOptions, excludedResultsIds]) => {
 				if (this.showLoadingView || !filterOptions || !excludedResultsIds) return;
+				this.filterIndicatorOn = this.reportDataSvc.isFilterOn;
 				this._filterResults(filterOptions, excludedResultsIds);
 			});
 	}

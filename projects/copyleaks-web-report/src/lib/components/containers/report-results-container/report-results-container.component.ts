@@ -73,8 +73,8 @@ export class ReportResultsContainerComponent implements OnInit, OnChanges {
 	scrollSub: any;
 	resizeSubscription: any;
 	addPaddingToContainer: boolean;
-	stopPaddingCheck: boolean;
 	filterIsOn: boolean;
+	filterIndicatorOn: boolean = false;
 
 	excludedResultsIds: string[];
 
@@ -148,6 +148,7 @@ export class ReportResultsContainerComponent implements OnInit, OnChanges {
 			.pipe(untilDestroy(this))
 			.subscribe(([filterOptions, excludedResultsIds]) => {
 				if (this.showLoadingView || !filterOptions || !excludedResultsIds) return;
+				this.filterIndicatorOn = this.reportDataSvc.isFilterOn;
 				this._filterResults(filterOptions, excludedResultsIds);
 			});
 	}
@@ -164,12 +165,11 @@ export class ReportResultsContainerComponent implements OnInit, OnChanges {
 
 	checkAndApplyPadding() {
 		setTimeout(() => {
-			if (!this.viewport || this.stopPaddingCheck || this.showLoadingView) return;
+			if (!this.viewport || this.showLoadingView) return;
 			const isScrollable =
 				this.viewport.elementRef.nativeElement.scrollHeight > this.viewport.elementRef.nativeElement.clientHeight;
 
 			this.addPaddingToContainer = isScrollable;
-			this.stopPaddingCheck = true;
 		});
 	}
 
@@ -345,6 +345,10 @@ export class ReportResultsContainerComponent implements OnInit, OnChanges {
 		this.filterIsOn = filteredResults.length !== this.reportDataSvc.scanResultsDetails?.length;
 		if (!filterOptions.showIdentical || !filterOptions.showMinorChanges || !filterOptions.showRelated)
 			this.filterIsOn = true;
+
+		setTimeout(() => {
+			this.checkAndApplyPadding();
+		});
 	}
 
 	//#endregion

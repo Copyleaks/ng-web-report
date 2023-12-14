@@ -104,16 +104,29 @@ export class ReportDataService {
 	}
 
 	public get isFilterOn(): boolean {
+		let totalIdentical = 0,
+			totalMinorChanges = 0,
+			totalParaphrased = 0;
+		this.scanResultsDetails?.forEach(result => {
+			if (result.result?.statistics.identical && result.result?.statistics.identical > 0) totalIdentical++;
+			if (result.result?.statistics.minorChanges && result.result?.statistics.minorChanges > 0) totalMinorChanges++;
+			if (result.result?.statistics.relatedMeaning && result.result?.statistics.relatedMeaning > 0) totalParaphrased++;
+		});
+
 		return (
-			this._filterOptions$.value?.showIdentical === false ||
-			this._filterOptions$.value?.showMinorChanges === false ||
-			this._filterOptions$.value?.showRelated === false ||
+			(totalIdentical > 0 && this._filterOptions$.value?.showIdentical === false) ||
+			(totalMinorChanges > 0 && this._filterOptions$.value?.showMinorChanges === false) ||
+			(totalParaphrased > 0 && this._filterOptions$.value?.showRelated === false) ||
 			this._filterOptions$.value?.showAlerts === false ||
 			this._filterOptions$.value?.showSameAuthorSubmissions === false ||
-			this._filterOptions$.value?.showInternetResults === false ||
-			this._filterOptions$.value?.showInternalDatabaseResults === false ||
-			this._filterOptions$.value?.showBatchResults === false ||
-			this._filterOptions$.value?.showTop100Results === false ||
+			(this.scanResultsPreviews?.results.internet.length &&
+				this._filterOptions$.value?.showInternetResults === false) ||
+			(this.scanResultsPreviews?.results.database.length &&
+				this._filterOptions$.value?.showInternalDatabaseResults === false) ||
+			(this.scanResultsPreviews?.results.batch.length && this._filterOptions$.value?.showBatchResults === false) ||
+			(!!this.scanResultsPreviews?.results.repositories?.length &&
+				!!this._filterOptions$.value?.hiddenRepositories?.length) ||
+			(this._filterOptions$.value?.showTop100Results === true && this.totalCompleteResults > 100) ||
 			(this._filterOptions$.value?.includedTags?.length && this._filterOptions$.value?.includedTags?.length > 0) ||
 			!!this._filterOptions$.value?.publicationDate ||
 			!!this._filterOptions$.value?.wordLimit ||

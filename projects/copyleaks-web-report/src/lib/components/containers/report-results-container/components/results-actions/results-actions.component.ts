@@ -35,6 +35,7 @@ export class ResultsActionsComponent implements OnInit, OnChanges, OnDestroy {
 	@Input() searchedValue: string | null = null;
 	@Input() isMobile: boolean = false;
 	@Input() hideTotal: boolean = false;
+	@Input() isFilterOn: boolean = false;
 
 	/**
 	 * @Input {boolean} Flag indicating whether to show the loading view or not.
@@ -51,10 +52,6 @@ export class ResultsActionsComponent implements OnInit, OnChanges, OnDestroy {
 
 	searchFc = new FormControl('');
 	showSearchFiled: boolean = false;
-
-	get isFilterOn(): boolean {
-		return this._reportDataSvc.isFilterOn;
-	}
 
 	constructor(
 		private _matDialog: MatDialog,

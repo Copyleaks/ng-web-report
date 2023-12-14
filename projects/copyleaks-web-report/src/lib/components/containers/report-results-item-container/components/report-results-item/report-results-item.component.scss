@@ -15,7 +15,7 @@
 }
 
 .locked-result-item-container {
-	border: 3px solid $color-primary !important;
+	border: 2px solid $color-primary !important;
 }
 
 .result-item-hover-container {
@@ -228,4 +228,9 @@
 	line-height: 1.5em;
 	max-height: 3em;
 	white-space: normal;
+}
+
+.internet-result-icon {
+	width: 22px;
+	height: 22px;
 }

@@ -14,10 +14,13 @@
 			[title]="RESULT_WORD_LIMIT"></cr-mat-slide-filter-result>
 		<ng-container *ngIf="getEnabledValue(eFilterResultForm.fcWordLimitEnabled)">
 			<mat-slider
-				[formControlName]="eFilterResultForm.fcWordLimitTotalWordlimt"
+				showTickMarks
 				class="mat-slider-container"
+				[formControlName]="eFilterResultForm.fcWordLimitTotalWordlimt"
 				[min]="minWordLimit"
-				[max]="maxWordLimit"></mat-slider>
+				[max]="maxWordLimit"
+				[step]="10"
+				(input)="onSliderChange($event)"></mat-slider>
 			<span class="limit-result">
 				{{ wordLimitTotalWord }} / {{ maxWordLimit }}
 				<ng-container i18n>words</ng-container>

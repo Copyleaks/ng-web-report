@@ -63,7 +63,7 @@ export class ReportScoreTooltipDirective {
 				}
 				case EReportScoreTooltipPosition.ABOVE: {
 					this.componentRef.instance.left = Math.round((right - left) / 2 + left);
-					this.componentRef.instance.top = Math.round(top);
+					this.componentRef.instance.top = Math.round(top - 10);
 					break;
 				}
 				case EReportScoreTooltipPosition.RIGHT: {

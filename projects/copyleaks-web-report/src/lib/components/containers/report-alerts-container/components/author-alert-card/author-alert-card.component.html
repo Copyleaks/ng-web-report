@@ -13,7 +13,7 @@
 	<ng-container *ngIf="!onlyAiView; else onlyAiViewRef">
 		<div fxLayout="column" fxLayoutAlign="start start" fxLayoutGap="4px">
 			<div fxLayout="row" fxLayoutAlign="start center" fxLayoutGap="4px" class="author-alert-card-title">
-				<mat-chip-list>
+				<mat-chip-list role="listbox">
 					<mat-chip>{{ authorAlert.title }}</mat-chip>
 				</mat-chip-list>
 				<mat-icon fontSet="material-icons-outlined">info</mat-icon>

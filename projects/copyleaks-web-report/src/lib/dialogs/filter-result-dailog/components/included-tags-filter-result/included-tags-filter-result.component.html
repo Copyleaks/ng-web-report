@@ -33,7 +33,7 @@
 				<mat-icon fontSet="material-icons-round">arrow_drop_down</mat-icon>
 			</ng-template>
 		</button>
-		<mat-chip-list>
+		<mat-chip-list role="listbox">
 			<ng-container *ngFor="let tag of selectedList; let idx = index">
 				<mat-chip class="selected-tag-mat-chip" *ngIf="idx < 2">
 					{{ tag }}

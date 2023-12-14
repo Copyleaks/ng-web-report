@@ -2,6 +2,7 @@
 	<ng-container *ngIf="!showLoadingView; else loadingViewRef">
 		<div
 			*ngIf="!hidePlagarismTap || showDisabledProducts"
+			tabindex="0"
 			@fadeIn
 			class="tab-plagiarism"
 			[crReportScoreTooltip]="
@@ -62,6 +63,7 @@
 			*ngIf="!hideAiTap || showDisabledProducts"
 			@fadeIn
 			class="tab-ai"
+			tabindex="0"
 			[crReportScoreTooltip]="
 				hideAiTap && showDisabledProducts
 					? null

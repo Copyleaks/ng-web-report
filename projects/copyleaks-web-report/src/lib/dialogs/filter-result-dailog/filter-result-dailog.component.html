@@ -28,7 +28,7 @@
 				<div fxLayout="row" fxLayoutAlign="start center" fxLayoutGap="4px">
 					<ng-container *ngIf="!!resultsActions?.totalExcluded">
 						<mat-chip
-							class=" "
+							role="button"
 							(click)="!!resultsActions.totalExcluded ? (data.showExcludedDailog = !data.showExcludedDailog) : ''">
 							{{ resultsActions.totalExcluded }}
 							<ng-container i18n>excluded</ng-container>
@@ -36,7 +36,7 @@
 					</ng-container>
 
 					<ng-container *ngIf="!!resultsActions.totalFiltered">
-						<mat-chip class="total-filtered">
+						<mat-chip class="total-filtered" role="contentinfo">
 							{{ resultsActions.totalFiltered }}
 							<ng-container i18n>filtered</ng-container>
 						</mat-chip>

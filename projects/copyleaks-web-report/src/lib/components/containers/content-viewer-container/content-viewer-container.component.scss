@@ -159,9 +159,7 @@
 			&.cr-m-101 {
 				background-color: $color-ai-detected-text;
 				transition: 0.2s;
-				&:hover {
-					background-color: $color-match-selected;
-				}
+				cursor: auto !important;
 			}
 
 			&.cr-highlight {

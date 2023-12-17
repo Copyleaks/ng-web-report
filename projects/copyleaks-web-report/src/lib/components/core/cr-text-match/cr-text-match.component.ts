@@ -1,5 +1,5 @@
 import { AfterContentInit, Component, ElementRef, HostBinding, HostListener, Input, Renderer2 } from '@angular/core';
-import { Match, ReportOrigin } from '../../../models/report-matches.models';
+import { Match, MatchType, ReportOrigin } from '../../../models/report-matches.models';
 import scrollIntoView from 'scroll-into-view-if-needed';
 import { ReportMatchHighlightService } from '../../../services/report-match-highlight.service';
 
@@ -44,6 +44,7 @@ export class CrTextMatchComponent implements AfterContentInit {
 	 */
 	@HostListener('click')
 	public click() {
+		if (this.match.type === MatchType.aiText) return;
 		this._highlightService.textMatchClicked({ elem: this, broadcast: true, origin: this.origin });
 	}
 

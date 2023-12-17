@@ -10,7 +10,7 @@ import {
 	ChangeDetectorRef,
 	TemplateRef,
 } from '@angular/core';
-import { EResponsiveLayoutType } from '../../../enums/copyleaks-web-report.enums';
+import { EResponsiveLayoutType, EResultPreviewType } from '../../../enums/copyleaks-web-report.enums';
 import { EnumNavigateMobileButton } from '../report-results-item-container/components/models/report-result-item.enum';
 import { IResultItem } from '../report-results-item-container/components/models/report-result-item.models';
 import { IResultsActions } from './components/results-actions/models/results-actions.models';
@@ -177,8 +177,6 @@ export class ReportResultsContainerComponent implements OnInit, OnChanges {
 		this.displayProp = 'none';
 	}
 
-	//#region navigate mobile button
-
 	onSearch(value: string): void {
 		this.searchedValue = value;
 
@@ -195,9 +193,31 @@ export class ReportResultsContainerComponent implements OnInit, OnChanges {
 			r =>
 				r.resultPreview.introduction.toLowerCase().includes(value) ||
 				r.resultPreview.title.toLowerCase().includes(value) ||
-				(r.resultPreview.url && r.resultPreview.url.toLowerCase().includes(value))
+				(r.resultPreview.url && r.resultPreview.url.toLowerCase().includes(value)) ||
+				this.isSearchByType(value, r)
 		);
 	}
+
+	isSearchByType(value: string, r: IResultItem): boolean {
+		if (!value) return false;
+
+		value = value.toLowerCase();
+		// check if the searched value is the result type name
+		switch (value) {
+			case 'internet':
+				return r.resultPreview.type === EResultPreviewType.Internet;
+			case 'internal database':
+				return r.resultPreview.type === EResultPreviewType.Database;
+			case 'repository':
+				return r.resultPreview.type === EResultPreviewType.Repositroy;
+			case 'batch':
+				return r.resultPreview.type === EResultPreviewType.Batch;
+			default:
+				return false;
+		}
+	}
+
+	//#region navigate mobile button
 
 	onScroll(index: number) {
 		this.currentViewedIndex = index;

@@ -138,17 +138,15 @@
 						gap: 4px !important;
 					}
 				}
-				.mat-chip-container {
-					mat-chip {
-						background-color: $color-dark-blue;
-						color: $color-container-background;
-						min-height: 22px;
-						font-weight: 500;
-						font-size: 14px;
-						padding: 2px 8px;
-						border-radius: 16px;
-						margin: 0px;
-					}
+				mat-chip {
+					background-color: $color-dark-blue;
+					color: $color-container-background;
+					min-height: 22px;
+					font-weight: 500;
+					font-size: 14px;
+					padding: 2px 8px;
+					border-radius: 16px;
+					margin: 0px;
 				}
 			}
 		}

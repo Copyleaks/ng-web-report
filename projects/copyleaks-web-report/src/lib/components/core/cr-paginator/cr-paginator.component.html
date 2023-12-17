@@ -11,6 +11,7 @@
 				(click)="previous()"
 				[disabled]="pageIndex === 1"
 				aria-label="left"
+				i18n-aria-label
 				matTooltip="Previous page"
 				matTooltipClass="web-report-mat-tooltip"
 				i18n-matTooltip>
@@ -22,6 +23,7 @@
 				(click)="next()"
 				[disabled]="pageIndex >= numberOfPages || !numberOfPages"
 				aria-label="right"
+				i18n-aria-label
 				matTooltip="Next page"
 				matTooltipClass="web-report-mat-tooltip"
 				i18n-matTooltip>

@@ -16,8 +16,8 @@
 					<p class="alert-card-severity" *ngSwitchCase="severity.VeryHigh" i18n>Very High</p>
 				</ng-container>
 
-				<ng-container *ngIf="showMatChipList">
-					<mat-chip-list class="my-chip-list">
+				<ng-container *ngIf="showMatChipList && matChipList && matChipList.length > 0">
+					<mat-chip-list class="my-chip-list" role="listbox">
 						<div fxLayout="row" fxLayoutGap="8px">
 							<mat-chip class="mat-chip-severity" *ngFor="let item of matChipList">{{ item }}</mat-chip>
 						</div>

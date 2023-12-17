@@ -106,12 +106,15 @@
 		fxLayoutGap="8px">
 		<mat-chip
 			*ngIf="allResultsItemLength > 5 && currentViewedIndex > 2"
+			role="button"
 			(click)="scrollToIndex(0)"
 			class="mat-chip-navigate">
 			{{ currentViewedIndex < allResultsItemLength - 3 ? currentViewedIndex - 2 : allResultsItemLength - 5 }}
 		</mat-chip>
 		<button
 			class="navigate-mobie-button"
+			aria-label="This is a result navigation button."
+			i18n-aria-label
 			[ngClass]="{
 				'navigate-mobie-button-select ': navigateMobileButton == enumNavigateMobileButton.FirstButton
 			}"
@@ -119,6 +122,8 @@
 		<button
 			*ngIf="allResultsItemLength > 1"
 			class="navigate-mobie-button"
+			aria-label="This is a result navigation button."
+			i18n-aria-label
 			[ngClass]="{
 				'navigate-mobie-button-select ': navigateMobileButton == enumNavigateMobileButton.SecondButton
 			}"
@@ -126,6 +131,8 @@
 		<button
 			*ngIf="allResultsItemLength > 2"
 			class="navigate-mobie-button"
+			aria-label="This is a result navigation button."
+			i18n-aria-label
 			[ngClass]="{
 				'navigate-mobie-button-select ': navigateMobileButton == enumNavigateMobileButton.ThirdButton
 			}"
@@ -133,6 +140,8 @@
 		<button
 			*ngIf="allResultsItemLength > 3"
 			class="navigate-mobie-button"
+			aria-label="This is a result navigation button."
+			i18n-aria-label
 			[ngClass]="{
 				'navigate-mobie-button-select ': navigateMobileButton == enumNavigateMobileButton.FourthButton
 			}"
@@ -140,6 +149,8 @@
 		<button
 			*ngIf="allResultsItemLength > 4"
 			class="navigate-mobie-button"
+			aria-label="This is a result navigation button."
+			i18n-aria-label
 			[ngClass]="{
 				'navigate-mobie-button-select ': navigateMobileButton == enumNavigateMobileButton.FifthButton
 			}"
@@ -147,6 +158,7 @@
 
 		<mat-chip
 			*ngIf="allResultsItemLength > 5 && currentViewedIndex < allResultsItemLength - 3"
+			role="button"
 			(click)="scrollToIndex(allResultsItemLength - 1)"
 			class="mat-chip-navigate">
 			{{ currentViewedIndex > 2 ? allResultsItemLength - currentViewedIndex - 3 : allResultsItemLength - 5 }}

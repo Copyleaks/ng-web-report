@@ -7,5 +7,7 @@
 	<mat-slide-toggle
 		[checked]="value && !disabledSlide"
 		(change)="chanegValue($event)"
+		aria-label="'This is a slide toggle to enable the given filter option."
+		i18n-aria-label
 		[disabled]="disabledSlide"></mat-slide-toggle>
 </div>

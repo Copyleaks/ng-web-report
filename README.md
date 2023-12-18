@@ -108,7 +108,7 @@ This model is used for configuring the API endpoints for the plagiarism report d
 
 - **`crawledVersion`**: Endpoint details for fetching the crawled version of scanned content.
 - **`completeResults`**: Endpoint details for fetching complete scanning results.
-- **`result`**: Endpoint details for fetching individual scan results.
+- **`result`**: This specifies the endpoint for retrieving individual scan results. It's important to include `{RESULT_ID}` within the endpoint URL, which acts as a placeholder for the unique identifier of each result and ensures that the correct result is fetched based on its specific ID.
 
 #### IEndpointDetails
 
@@ -117,9 +117,45 @@ A nested interface in `IClsReportEndpointConfigModel` that defines the structure
 - **`url`**: The URL of the API endpoint.
 - **`headers`**: A dictionary of headers for the API call.
 
-Example Usage:
+**Example Usage:**
 
-// TODO
+```typescript
+import { IClsReportEndpointConfigModel, IEndpointDetails } from '@copyleaks/web-report';
+
+// Example endpoint details
+const crawledVersionEndpoint: IEndpointDetails = {
+	url: 'https://api.yourservice.com/crawled-version',
+	headers: {
+		Authorization: 'Bearer your-auth-token',
+		'Content-Type': 'application/json',
+	},
+};
+
+const completeResultsEndpoint: IEndpointDetails = {
+	url: 'https://api.yourservice.com/complete-results',
+	headers: {
+		Authorization: 'Bearer your-auth-token',
+		'Content-Type': 'application/json',
+	},
+};
+
+const resultEndpoint: IEndpointDetails = {
+	url: 'https://api.yourservice.com/result/{RESULT_ID}',
+	headers: {
+		Authorization: 'Bearer your-auth-token',
+		'Content-Type': 'application/json',
+	},
+};
+
+// Configuring the IClsReportEndpointConfigModel
+const reportEndpointConfig: IClsReportEndpointConfigModel = {
+	crawledVersion: crawledVersionEndpoint,
+	completeResults: completeResultsEndpoint,
+	result: resultEndpoint,
+};
+
+// Use `reportEndpointConfig` in your application where needed
+```
 
 ## Event Handling
 
@@ -258,3 +294,7 @@ export class YourComponent {
   }
 }
 ```
+
+## Accessibility
+
+The [VPAT report (PDF)](https://copyleaks.com/accessibility/) can be downloaded from Copyleaks Commitment to Accessibility page

@@ -4,7 +4,7 @@
 			*ngIf="!resultsActions?.selectedResults || resultsActions?.selectedResults === 0; else highlightedResultsView">
 			<div *ngIf="!showSearchFiled" class="tootal-results-container">
 				<span class="tootal-results" web-report-title-font>
-					<ng-container i18n>Plagiarism Results&nbsp;</ng-container>
+					<ng-container i18n>Matching Results&nbsp;</ng-container>
 					<span *ngIf="!hideTotal">({{ resultsActions?.totalResults }})</span>
 				</span>
 			</div>
@@ -36,7 +36,7 @@
 					(click)="showSearch()"
 					fontSet="material-icons-round"
 					[ngClass]="{ 'disabled-icon': !resultsActions?.totalResults || resultsActions?.totalResults === 0 }"
-					matTooltip="Search Results"
+					matTooltip="Search matching text results"
 					matTooltipClass="web-report-mat-tooltip"
 					i18n-matTooltip>
 					search
@@ -49,7 +49,7 @@
 						'disabled-icon': !resultsActions?.totalResults || resultsActions?.totalResults === 0,
 						'selected-icon': isFilterOn || resultsActions?.totalFiltered != 0
 					}"
-					matTooltip="Filter plagiarism results"
+					matTooltip="Filter matching text results"
 					matTooltipClass="web-report-mat-tooltip"
 					i18n-matTooltip>
 					filter_list

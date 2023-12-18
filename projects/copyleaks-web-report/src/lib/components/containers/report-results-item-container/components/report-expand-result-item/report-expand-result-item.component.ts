@@ -50,7 +50,7 @@ export class ReportExpandResultItemComponent implements OnInit, OnChanges {
 		if ('resultItem' in changes && changes['resultItem'].currentValue) {
 			this.percentageResult = {
 				resultItem: changes['resultItem'].currentValue,
-				title: $localize`Plagiarism Detection`,
+				title: $localize`Matched Text Detection`,
 				showArrowButton: true,
 				stackedBarHeight: '8px',
 				stackedBarBackgroundColor: '#EBF3F5',

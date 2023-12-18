@@ -49,7 +49,6 @@ export class DemoReportPreviewsComponent implements OnInit {
 		this.id = this._route.snapshot.paramMap.get('id');
 		this.type = this._route.snapshot.paramMap.get('type');
 		this.endpointsConfig = {
-			authToken: '1234', // optional
 			crawledVersion: { url: `assets/scans/${this.type}/${this.id}/source.json`, headers: {} },
 			completeResults: { url: `assets/scans/${this.type}/${this.id}/complete.json`, headers: {} },
 			result: { url: `assets/scans/${this.type}/${this.id}/results/{RESULT_ID}.json`, headers: {} },
@@ -67,7 +66,6 @@ export class DemoReportPreviewsComponent implements OnInit {
 			this.id = id;
 			this.type = type;
 			this.endpointsConfig = {
-				authToken: '', // optional
 				crawledVersion: { url: `assets/scans/${this.type}/${this.id}/source.json`, headers: {} },
 				completeResults: { url: `assets/scans/${this.type}/${this.id}/complete.json`, headers: {} },
 				result: { url: `assets/scans/${this.type}/${this.id}/results/{RESULT_ID}.json`, headers: {} },

@@ -261,7 +261,7 @@ export class ReportDataService {
 			this.initSync(endpointsConfig);
 		} else {
 			const progressResult$ = this._http.get<IAPIProgress>(endpointsConfig.progress.url, {
-				headers: this._createHeaders(endpointsConfig.progress, endpointsConfig.authToken),
+				headers: this._createHeaders(endpointsConfig.progress),
 			});
 			progressResult$
 				.pipe(
@@ -293,7 +293,7 @@ export class ReportDataService {
 		// Create observables for each request with error handling
 		this._http
 			.get<IScanSource>(endpointsConfig.crawledVersion.url, {
-				headers: this._createHeaders(endpointsConfig.crawledVersion, endpointsConfig.authToken),
+				headers: this._createHeaders(endpointsConfig.crawledVersion),
 			})
 			.pipe(
 				catchError((error: HttpErrorResponse) => {
@@ -313,7 +313,7 @@ export class ReportDataService {
 
 		this._http
 			.get<ICompleteResults>(endpointsConfig.completeResults.url, {
-				headers: this._createHeaders(endpointsConfig.completeResults, endpointsConfig.authToken),
+				headers: this._createHeaders(endpointsConfig.completeResults),
 			})
 			.pipe(
 				catchError((error: HttpErrorResponse) => {
@@ -453,10 +453,7 @@ export class ReportDataService {
 		try {
 			const response = await this._http
 				.get<IResultDetailResponse>(requestUrl, {
-					headers: this._createHeaders(
-						this._reportEndpointConfig$?.value.result,
-						this._reportEndpointConfig$?.value.authToken
-					),
+					headers: this._createHeaders(this._reportEndpointConfig$?.value.result),
 				})
 				.toPromise();
 
@@ -703,10 +700,9 @@ export class ReportDataService {
 		}
 	}
 
-	private _createHeaders(endpointDetails: IEndpointDetails, authToken: string): HttpHeaders {
+	private _createHeaders(endpointDetails: IEndpointDetails): HttpHeaders {
 		// Create HttpHeaders using the authToken and any additional headers provided in the endpoint details
 		return new HttpHeaders({
-			Authorization: `Bearer ${authToken}`,
 			...endpointDetails.headers,
 		});
 	}
@@ -716,10 +712,7 @@ export class ReportDataService {
 
 		return this._http
 			.get<IAPIProgress>(this._reportEndpointConfig$.value.progress.url, {
-				headers: this._createHeaders(
-					this._reportEndpointConfig$.value.progress,
-					this._reportEndpointConfig$.value.authToken
-				),
+				headers: this._createHeaders(this._reportEndpointConfig$.value.progress),
 			})
 			.pipe(
 				catchError((error: HttpErrorResponse) => {
@@ -736,10 +729,7 @@ export class ReportDataService {
 		try {
 			return await this._http
 				.get<IScanSource>(this._reportEndpointConfig$.value.crawledVersion.url, {
-					headers: this._createHeaders(
-						this._reportEndpointConfig$.value.crawledVersion,
-						this._reportEndpointConfig$.value.authToken
-					),
+					headers: this._createHeaders(this._reportEndpointConfig$.value.crawledVersion),
 				})
 				.toPromise();
 		} catch (error) {
@@ -755,10 +745,7 @@ export class ReportDataService {
 		try {
 			return await this._http
 				.get<ICompleteResults>(this._reportEndpointConfig$.value.completeResults.url, {
-					headers: this._createHeaders(
-						this._reportEndpointConfig$.value.completeResults,
-						this._reportEndpointConfig$.value.authToken
-					),
+					headers: this._createHeaders(this._reportEndpointConfig$.value.completeResults),
 				})
 				.toPromise();
 		} catch (error) {

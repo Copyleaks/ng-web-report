@@ -137,7 +137,8 @@ export class CopyleaksWebReportComponent implements OnInit, OnDestroy {
 					});
 					this._reportViewSvc.selectedAlert$.next(ALERTS.SUSPECTED_AI_TEXT_DETECTED);
 				}
-				this.onCompleteResultUpdate.emit(scanResultsPreviews);
+
+				if (this._reportDataSvc.scanResultsDetails) this.onCompleteResultUpdate.emit(scanResultsPreviews);
 			});
 
 		this._reportRealtimeResultsSvc.onNewResults$.pipe(untilDestroy(this)).subscribe(data => {

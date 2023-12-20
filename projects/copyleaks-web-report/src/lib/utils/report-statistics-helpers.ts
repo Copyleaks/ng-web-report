@@ -149,14 +149,14 @@ export const mergeWords = (matches: Match[]): Match[] => {
 export const calculateStatistics = (
 	completeResult: ICompleteResults,
 	results: ResultDetailItem[],
-	options: ICopyleaksReportOptions
+	options?: ICopyleaksReportOptions
 ): ReportStatistics => {
 	const { totalWords, totalExcluded } = completeResult.scannedDocument;
-	const identical = options.showIdentical ? results.flatMap(createWordIntervalsFrom('identical', 'source')) : [];
-	const minorChanges = options.showMinorChanges
+	const identical = options?.showIdentical ? results.flatMap(createWordIntervalsFrom('identical', 'source')) : [];
+	const minorChanges = options?.showMinorChanges
 		? results.flatMap(createWordIntervalsFrom('minorChanges', 'source'))
 		: [];
-	const relatedMeaning = options.showRelated
+	const relatedMeaning = options?.showRelated
 		? results.flatMap(createWordIntervalsFrom('relatedMeaning', 'source'))
 		: [];
 	const withOutoverlaps = mergeWords([...relatedMeaning, ...minorChanges, ...identical]);

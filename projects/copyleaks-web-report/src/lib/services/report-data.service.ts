@@ -474,7 +474,7 @@ export class ReportDataService {
 		}
 	}
 
-	public filterResults(settings: ICopyleaksReportOptions, excludedResultsIds: string[]): ResultDetailItem[] {
+	public filterResults(settings?: ICopyleaksReportOptions, excludedResultsIds?: string[]): ResultDetailItem[] {
 		if (!this.scanResultsDetails || !this.scanResultsPreviews || !settings || !excludedResultsIds) return [];
 
 		let completeResults = [
@@ -644,7 +644,6 @@ export class ReportDataService {
 		completeResultsRes.results?.repositories?.forEach(result => {
 			result.type = EResultPreviewType.Repositroy;
 		});
-		this._scanResultsPreviews$.next(completeResultsRes);
 
 		// Load the excluded results Ids
 		this.excludedResultsIds$.next(completeResultsRes.filters?.execludedResultIds ?? []);
@@ -700,6 +699,54 @@ export class ReportDataService {
 					? completeResultsRes.filters?.resultsMetaData?.publicationDate?.resultsWithNoDates
 					: true,
 			publicationDate: completeResultsRes.filters?.resultsMetaData?.publicationDate?.startDate,
+		});
+
+		const filteredResults = this.filterResults(this.filterOptions, this.excludedResultsIds);
+		const stats = helpers.calculateStatistics(completeResultsRes, filteredResults, this.filterOptions);
+
+		this._scanResultsPreviews$.next({
+			...completeResultsRes,
+			results: {
+				...completeResultsRes.results,
+				score: {
+					identicalWords: stats.identical,
+					minorChangedWords: stats.minorChanges,
+					relatedMeaningWords: stats.relatedMeaning,
+					aggregatedScore: stats.aggregatedScore ?? 0,
+				},
+			},
+			filters: {
+				general: {
+					alerts: this.filterOptions?.showAlerts ?? true,
+					authorSubmissions: this.filterOptions?.showSameAuthorSubmissions ?? true,
+					topResult: this.filterOptions?.showTop100Results ?? true,
+				},
+				includedTags: this.filterOptions?.includedTags,
+				matchType: {
+					identicalText: this.filterOptions?.showIdentical ?? true,
+					minorChanges: this.filterOptions?.showMinorChanges ?? true,
+					paraphrased: this.filterOptions?.showRelated ?? true,
+				},
+				resultsMetaData: {
+					publicationDate: {
+						publicationEnabled: !!this.filterOptions?.publicationDate,
+						resultsWithNoDates: this.filterOptions?.includeResultsWithoutDate ?? true,
+						startDate: this.filterOptions?.publicationDate,
+					},
+					wordLimit: {
+						wordLimitEnabled: !!this.filterOptions?.wordLimit,
+						totalWordLimit: this.filterOptions?.wordLimit,
+					},
+				},
+				sourceType: {
+					batch: this.filterOptions?.showBatchResults ?? true,
+					internalDatabase: this.filterOptions?.showInternalDatabaseResults ?? true,
+					internet: this.filterOptions?.showInternetResults ?? true,
+					repositories: this.filterOptions?.hiddenRepositories ?? [],
+				},
+				execludedResultIds: this.excludedResultsIds ?? [],
+				filteredResultIds: [],
+			},
 		});
 
 		if (this.filterOptions && this.excludedResultsIds) {

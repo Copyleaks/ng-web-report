@@ -307,6 +307,12 @@ export class ReportDataService {
 			.subscribe(
 				crawledVersionRes => {
 					this._crawledVersion$.next(crawledVersionRes);
+
+					if (!crawledVersionRes.html.value && this._viewSvc.reportViewMode.isHtmlView)
+						this._viewSvc.reportViewMode$.next({
+							...this._viewSvc.reportViewMode,
+							isHtmlView: false,
+						});
 				},
 				_ => {}
 			);
@@ -549,6 +555,7 @@ export class ReportDataService {
 
 	public isPlagiarismEnabled() {
 		const completeResult = this.scanResultsPreviews;
+		if (this._viewSvc.progress$.value != 100) return true;
 		if (!completeResult) return false;
 		if (completeResult) {
 			if (completeResult?.scannedDocument?.enabled?.plagiarismDetection != null)
@@ -559,6 +566,7 @@ export class ReportDataService {
 
 	public isAiDetectionEnabled() {
 		const completeResult = this.scanResultsPreviews;
+		if (this._viewSvc.progress$.value != 100) return true;
 		if (completeResult) {
 			if (completeResult?.scannedDocument?.enabled?.aiDetection) return true;
 			return (

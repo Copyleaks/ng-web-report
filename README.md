@@ -1,10 +1,10 @@
 # Copyleaks Web Report
 
 <p align="center">
-  <img src="./images/one-to-many-match-view.png" alt="Web Report View" width="600"/>	
+  <img src="./images/one-to-many-match-view.png" alt="Web Report View" width="600"/>
 </p>
 
-**Copyleaks Web Report** is an advanced Angular module designed for seamless integration of plagiarism and AI detection reporting. This module, developed by Copyleaks, offers a user-friendly, engaging, and flexible interface for presenting plagiarism and AI content reports, it is designed to showcase the authenticity and uniqueness of submitted files or text
+**Copyleaks Web Report** is an advanced Angular module designed to integrate plagiarism and AI detection reporting seamlessly. This module, developed by Copyleaks, offers a user-friendly, engaging, and flexible interface for presenting plagiarism and AI content reports; it is designed to showcase the authenticity and uniqueness of submitted files or text.
 
 ## Key Features
 
@@ -72,23 +72,23 @@ Add the component in your HTML templates:
 ### Inputs
 
 - **`reportEndpointConfig` - Required**: (`IClsReportEndpointConfigModel`) Configures the data endpoints for fetching the report data, including URLs and headers.
-- **`showDisabledProducts` - Optional**: (`boolean`) A flag that deterimnate whether to show disabled products in the report interface or not, the default value is `false`.
+- **`showDisabledProducts` - Optional**: (`boolean`) A flag determining whether to show disabled products in the report interface. The default value is `false`.
 
 ### Outputs
 
 - **`onReportRequestError`**: (`EventEmitter<ReportHttpRequestErrorModel>`) Emits an event with HTTP request data when any request to update or fetch report data fails, allowing for custom error handling.
-- **`onCompleteResultUpdate`**: (`EventEmitter<ICompleteResults>`) Emits an event when the complete report results data is successfully retrieved, and also when there is an update in the filter options (which are part of the complete results model). This ensures users are properly informed about both the availability of complete results and any changes in the filter dialog data.
+- **`onCompleteResultUpdate`**: (`EventEmitter<ICompleteResults>`) Emits an event when the complete report results data is successfully retrieved and also when there is an update in the filter options (which are part of the complete results model). This ensures users are appropriately informed about the availability of complete results and any changes in the filter dialog data.
 
 ### Note on Report View Parameters
 
 The Copyleaks Web Report Module interprets several query parameters to tailor the report view:
 
-- **`contentMode`** (string): Determines the content view type, it accepts `'text'` or `'html'` which will accordingly change the content view mode **only** **if the selected mode is available**.
+- **`contentMode`** (string): Determines the content view type. It accepts 'text' or 'html', which will only change the content view mode **if the selected mode is available**
 - **`sourcePage`** & **`suspectPage`** (number): Represent the page number in text view pagination, starting from 1.
 - **`suspectId`** (string): The identifier of the selected matching result.
 - **`alertCode`** (string): The code of the selected alert.
 
-These parameters allow for dynamic and contextual presentation of the plagiarism report, adapting to user specific requirements.
+These parameters allow for the dynamic and contextual presentation of the plagiarism report, adapting to user-specific requirements.
 
 ---
 
@@ -193,7 +193,7 @@ Utilize Angular's powerful templating capabilities to create custom layouts and 
   This feature allows for a high degree of customization, enabling users to tailor the report actions to their specific needs.
 
 - **Adding Custom Tabs with `<cr-custom-tabs>`**:
-  Enhance your plagiarism report with additional information and features using custom tabs. The `<cr-custom-tabs>` component allows for the integration of custom tabs alongside the standard AI and plagiarism tabs. Each tab is represented by a `<cr-custom-tab-item>`, which includes a title and content area defined by `<cr-custom-tab-item-title>` and `<cr-custom-tab-item-content>`. This setup enables you to present additional, tailored content within the report's interface.
+  Enhance your plagiarism report with additional information and features using custom tabs. The `<cr-custom-tabs>` component allows for the integration of custom tabs alongside the standard AI and plagiarism tabs. Each tab is represented by a `<cr-custom-tab-item>`, which includes a title and content area defined by `<cr-custom-tab-item-title>` and `<cr-custom-tab-item-content>`. This setup lets you present additional, tailored content within the report's interface.
 
   Example Usage:
 
@@ -212,7 +212,7 @@ Utilize Angular's powerful templating capabilities to create custom layouts and 
   **`[flexGrow]`**: A numeric value that defines the proportion of the available space inside the flex container that the tab should take up. For example, setting `[flexGrow]="0.3"` on a custom tab and `0.5` on each of the Plagiarism and AI tabs means the custom tab will take up 30% of the available space.
 
 - **Adding Custom Results Section with `<cr-custom-results>`**:
-  The `<cr-custom-results>` component allows for extensive customization of the results section in the Copyleaks plagiarism report. It can either complement the existing results or replace them entirely, depending on the use case.
+  The `<cr-custom-results>` component allows extensive customization of the results section in the Copyleaks plagiarism report. Depending on the use case, it can either complement the existing results or replace them entirely.
 
   Example Usage:
 
@@ -229,9 +229,9 @@ Utilize Angular's powerful templating capabilities to create custom layouts and 
   The `reportView` input, tied to the `ECustomResultsReportView` enum, dictates the display mode of the custom results section:
 
   - **`ECustomResultsReportView.Partial` (value `0`)**: When set to `Partial`, the custom results component appears beneath the standard report results.
-  - **`ECustomResultsReportView.Full` (value `1`)**: When set to `Full`, the custom results component replaces the entire standard results section.
+  - **`ECustomResultsReportView.Full` (value `1`)**: When set to `Full`, the custom results component replaces the entire standard results section
 
-  The `cr-custom-results-box-content` is used to define the content of the custom results section. Regardless if the `cr-custom-results-box-content` is added ot not this custom results component is displayed with a background animation, making it visually distinct and engaging.
+  The `cr-custom-results-box-content` is used to define the content of the custom results section. Regardless if the `cr-custom-results-box-content` is added, this custom results component is displayed with a background animation, making it visually distinct and engaging.
 
 - **Customizing Empty Results with `<cr-custom-empty-results>`**:
   The `<cr-custom-empty-results>` component is designed to provide a custom view for cases where no results are found in the Copyleaks plagiarism report. This allows for a more tailored user experience, particularly when you want to provide specific information or guidance in the event of an empty result set.
@@ -245,12 +245,11 @@ Utilize Angular's powerful templating capabilities to create custom layouts and 
   ```
 
 - **Customizing Locked Results with `lockedResultTemplateRef`**:
-  The `lockedResultTemplateRef` input of the `copyleaks-web-report` component enables the customization of locked result presentations within the plagiarism report. This feature is particularly useful for providing a tailored user experience for results that are not immediately accessible or require specific actions to unlock.
-  Note that if the template reference isn't passed to the web report component, the default locked result view will be shown.
+  The `lockedResultTemplateRef` input of the `copyleaks-web-report` component enables the customization of locked result presentations within the plagiarism report. This feature is particularly useful for providing a tailored user experience for results that are not immediately accessible or require specific actions to unlock. Note that the default locked result view will be shown if the template reference isn't passed to the web report component.
 
   ##### **Usage**:
 
-  The `lockedResultTemplateRef` is a template reference variable that you can define in your Angular templates using the `ng-template` directive. You can then pass this template to the `copyleaks-web-report` component to customize how locked results are displayed.
+  The `lockedResultTemplateRef` is a template reference variable you can define in your Angular templates. You can then pass this template to the `copyleaks-web-report` component to customize how locked results are displayed.
 
   Example Usage:
 

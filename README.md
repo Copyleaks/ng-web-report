@@ -263,7 +263,7 @@ Utilize Angular's powerful templating capabilities to create custom layouts and 
 
 ### Adding Real-Time Results
 
-The `CopyleaksWebReportModule` includes the `ReportRealtimeResultsService`, a powerful feature that enables the addition of new results to the real-time view of the plagiarism report. This capability is especially useful for applications where plagiarism check results are received incrementally and need to be displayed to the user as they arrive.
+The `CopyleaksWebReportModule` includes the `ReportRealtimeResultsService`, a powerful feature that enables the addition of new results to the real-time view of the plagiarism report. This capability benefits applications where plagiarism check results are received incrementally and must be displayed to the user as they arrive**.**
 
 ##### **Usage**:
 

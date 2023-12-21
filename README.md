@@ -1,8 +1,8 @@
 # Copyleaks Web Report
 
-<p align="center">
-  <img src="./images/one-to-many-match-view.png" alt="Web Report View" width="600"/>
-</p>
+<img align="center" src="./images/demo.gif" alt="Web Report Demo" width="600"/>
+<br>
+<br>
 
 **Copyleaks Web Report** is an advanced Angular module designed to integrate plagiarism and AI detection reporting seamlessly. This module, developed by Copyleaks, offers a user-friendly, engaging, and flexible interface for presenting plagiarism and AI content reports; it is designed to showcase the authenticity and uniqueness of submitted files or text.
 

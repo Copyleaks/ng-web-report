@@ -1,15 +1,7 @@
-<p align="center">
-  <img src="https://copyleaks.com/wp-content/uploads/2023/01/logo.svg" alt="Copyleaks Logo" width="200"/>
-</p>
-
 # Copyleaks Web Report
 
-## Introduction
-
 <p align="center">
-      	<img src="./images/one-to-many-match-view.png" alt="Web Report View" width="600"/>
-	<img src="./images/one-to-one-view.png" alt="Web Report View" width="600"/>
-	<img src="./images/one-to-many-ai-view.png" alt="Web Report View" width="600"/>
+  <img src="./images/one-to-many-match-view.png" alt="Web Report View" width="600"/>	
 </p>
 
 **Copyleaks Web Report** is an advanced Angular module designed for seamless integration of plagiarism and AI detection reporting. This module, developed by Copyleaks, offers a user-friendly, engaging, and flexible interface for presenting plagiarism and AI content reports, it is designed to showcase the authenticity and uniqueness of submitted files or text

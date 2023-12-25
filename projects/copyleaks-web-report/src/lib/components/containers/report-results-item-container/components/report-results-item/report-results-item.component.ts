@@ -50,6 +50,9 @@ export class ReportResultsItemComponent implements OnInit, OnChanges, OnDestroy 
 	eResultPreviewType = EResultPreviewType;
 	lockedResultItemTemplateRef: TemplateRef<IResultItem> | undefined;
 
+	faviconExists: boolean = true;
+	faviconURL: string;
+
 	@HostListener('click', ['$event'])
 	handleClick() {
 		if (!this.resultItem || this.showLoader || !this.resultItem.resultDetails || this.excludeResult || this.isLocked)
@@ -119,7 +122,20 @@ export class ReportResultsItemComponent implements OnInit, OnChanges, OnDestroy 
 					resultItem: this.resultItem,
 					showTooltip: true,
 				};
+
+				if (this.resultItem.resultPreview.type === EResultPreviewType.Internet && this.resultItem?.resultPreview?.url) {
+					const url = new URL(this.resultItem.resultPreview.url);
+					this.faviconURL = url.host;
+				}
 			}
+	}
+
+	onFaviconError() {
+		this.faviconExists = false;
+	}
+
+	onFaviconLoad() {
+		this.faviconExists = true;
 	}
 
 	showResultById() {

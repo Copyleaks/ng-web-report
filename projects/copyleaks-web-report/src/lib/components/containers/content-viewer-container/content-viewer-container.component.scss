@@ -26,7 +26,8 @@
 		box-sizing: border-box;
 		flex-wrap: wrap;
 		gap: 8px;
-		padding-bottom: 12px;
+		padding-bottom: 8px;
+		border-bottom: 1px solid $color-container-background;
 
 		.title-container {
 			display: flex;
@@ -73,6 +74,7 @@
 		height: 80%;
 		overflow-y: auto;
 		display: flex;
+		padding-top: 4px;
 
 		iframe {
 			width: 100%;

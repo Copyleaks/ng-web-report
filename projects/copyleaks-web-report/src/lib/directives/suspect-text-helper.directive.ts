@@ -88,6 +88,8 @@ export class SuspectTextHelperDirective implements AfterContentInit, OnDestroy {
 			)
 			.subscribe(([match, suspect]) => {
 				if (match && suspect?.result) this.handleBroadcast(match, suspect.result, 'html');
+				if (!match && suspect?.result)
+					this._highlightSvc.textMatchClicked({ elem: null, broadcast: false, origin: 'suspect' });
 			});
 	}
 

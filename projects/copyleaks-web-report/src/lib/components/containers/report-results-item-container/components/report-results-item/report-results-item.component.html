@@ -139,12 +139,7 @@
 			<!--  -->
 			<div class="item-body" *ngIf="showItemBody">
 				<ng-container *ngIf="!showLoader; else showItemBodySkeleton">
-					<a
-						class="item-url"
-						*ngIf="previewResult?.url"
-						[href]="previewResult.url"
-						target="_blank"
-						(click)="$event.stopPropagation()">
+					<a class="item-url" *ngIf="previewResult?.url" [href]="previewResult.url" (click)="$event.preventDefault()">
 						{{ previewResult.url }}
 					</a>
 					<div *ngIf="previewResult.introduction" class="item-introduction" [ngClass]="{ 'mobile-text': isMobile }">

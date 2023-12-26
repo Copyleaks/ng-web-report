@@ -2,7 +2,7 @@
 	<div class="top-container" fxLayout="column" fxLayoutGap="32px" fxLayoutGap.lt-md="16px">
 		<div class="header-container" fxLayout="column" fxLayoutGap="8px">
 			<div class="title-container" fxLayout="row" fxLayoutAlign="space-between center" fxLayoutGap="4px">
-				<span web-report-title-font i18n>Filter Plagiarism Results</span>
+				<span web-report-title-font i18n>Filter Matching Results</span>
 				<button
 					(click)="onClearFilter()"
 					class="clear-button"
@@ -22,7 +22,7 @@
 				fxLayoutAlign.lt-md="center start"
 				fxLayoutGap.lt-md="10px">
 				<span class="total-results" web-report-title-font>
-					<ng-container i18n>Plagiarism Results</ng-container>
+					<ng-container i18n>Matching Results</ng-container>
 					({{ resultsActions.totalResults }})
 				</span>
 				<div fxLayout="row" fxLayoutAlign="start center" fxLayoutGap="4px">

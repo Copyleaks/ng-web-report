@@ -4,7 +4,7 @@
 			*ngIf="!resultsActions?.selectedResults || resultsActions?.selectedResults === 0; else highlightedResultsView">
 			<div *ngIf="!showSearchFiled" class="tootal-results-container">
 				<span class="tootal-results" web-report-title-font>
-					<ng-container i18n>Matching Results&nbsp;</ng-container>
+					<ng-container i18n>Matching Text Results&nbsp;</ng-container>
 					<span *ngIf="!hideTotal">({{ resultsActions?.totalResults }})</span>
 				</span>
 			</div>

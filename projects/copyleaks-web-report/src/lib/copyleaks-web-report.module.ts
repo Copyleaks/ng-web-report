@@ -73,6 +73,7 @@ import { SuspectHtmlHelperComponent } from './directives/suspect-html-helper.dir
 import { SuspectTextHelperDirective } from './directives/suspect-text-helper.directive';
 import { SimilarityPipeModule } from './pipes/similarity-pipe/similarity-pipe.module';
 import { ReportRealtimeResultsService } from './services/report-realtime-results.service';
+import { RemoveResultConfirmationDialogComponent } from './dialogs/remove-result-confirmation-dialog/remove-result-confirmation-dialog.component';
 
 @NgModule({
 	declarations: [
@@ -112,6 +113,7 @@ import { ReportRealtimeResultsService } from './services/report-realtime-results
 		OnlyAiReportLayoutDesktopComponent,
 		OnlyAiReportLayoutMobileComponent,
 		FilterResultDailogComponent,
+		RemoveResultConfirmationDialogComponent,
 		SourceTypeFilterResultComponent,
 		MatchTypeFilterResultComponent,
 		GeneralFilterResultComponent,

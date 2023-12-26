@@ -111,22 +111,24 @@
 					</ng-container>
 
 					<ng-template #showExcludeResult>
-						<ng-container *ngIf="!excludedResultsClick; else showResult">
+						<ng-container *ngIf="!excludedResultsClick; else showResultRef">
 							<mat-icon
 								class="exclude-result"
 								mat-icon
-								(click)="showResultById()"
+								fontSet="material-icons-round"
+								(click)="showResult()"
 								matTooltip="Include result"
 								matTooltipClass="web-report-mat-tooltip"
 								i18n-matTooltip>
 								visibility
 							</mat-icon>
 						</ng-container>
-						<ng-template #showResult>
+						<ng-template #showResultRef>
 							<mat-icon
 								class="exclude-result"
 								mat-icon
-								(click)="hiddenResultById()"
+								fontSet="material-icons-round"
+								(click)="hideResult()"
 								matTooltip="Exclude result"
 								matTooltipClass="web-report-mat-tooltip"
 								i18n-matTooltip>
@@ -191,16 +193,24 @@
 </div>
 
 <mat-menu class="result-item-menu-list" #menu="matMenu" yPosition="below">
-	<button mat-menu-item (click)="hiddenResultById()" [disableRipple]="true">
-		<mat-icon class="mat-menu-item-icon">visibility_off</mat-icon>
+	<button mat-menu-item (click)="hideResult()" [disableRipple]="true">
+		<mat-icon class="mat-menu-item-icon" fontSet="material-icons-round">visibility_off</mat-icon>
 		<span class="mat-menu-item-text" i18n>Exclude result</span>
 	</button>
+	<button
+		*ngIf="reportDataSvc?.reportEndpointConfig?.deleteResult"
+		mat-menu-item
+		(click)="deleteResult()"
+		[disableRipple]="true">
+		<mat-icon class="mat-menu-item-icon" fontSet="material-icons-round">delete</mat-icon>
+		<span class="mat-menu-item-text" i18n>Delete result</span>
+	</button>
 	<button *ngIf="previewResult?.url" mat-menu-item (click)="visitResultSource()" [disableRipple]="true">
-		<mat-icon class="mat-menu-item-icon">open_in_new</mat-icon>
+		<mat-icon class="mat-menu-item-icon" fontSet="material-icons-round">open_in_new</mat-icon>
 		<span class="mat-menu-item-text" i18n>Visit result source</span>
 	</button>
 	<button mat-menu-item (click)="comapreResult()" [disableRipple]="true">
-		<mat-icon class="mat-menu-item-icon">compare_arrows</mat-icon>
+		<mat-icon class="mat-menu-item-icon" fontSet="material-icons-round">compare_arrows</mat-icon>
 		<span class="mat-menu-item-text" i18n>Compare with submitted file</span>
 	</button>
 </mat-menu>

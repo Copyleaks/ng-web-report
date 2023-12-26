@@ -19,6 +19,9 @@ import { trigger, state, transition, animate, style } from '@angular/animations'
 import { ReportNgTemplatesService } from '../../../../../services/report-ng-templates.service';
 import { untilDestroy } from '../../../../../utils/until-destroy';
 import { ReportDataService } from '../../../../../services/report-data.service';
+import { MatDialog } from '@angular/material/dialog';
+import { RemoveResultConfirmationDialogComponent } from '../../../../../dialogs/remove-result-confirmation-dialog/remove-result-confirmation-dialog.component';
+import { IRemoveResultConfirmationDialogData } from 'projects/copyleaks-web-report/src/lib/dialogs/remove-result-confirmation-dialog/models/remove-result-confirmation-dialog.models';
 
 @Component({
 	selector: 'cr-report-results-item',
@@ -92,7 +95,7 @@ export class ReportResultsItemComponent implements OnInit, OnChanges, OnDestroy 
 		return !this.showLoader && (this.resultItem?.resultPreview?.isLocked ?? false);
 	}
 
-	constructor() {}
+	constructor(private _matDialog: MatDialog) {}
 
 	ngOnInit(): void {
 		if (this.resultItem) {
@@ -138,14 +141,31 @@ export class ReportResultsItemComponent implements OnInit, OnChanges, OnDestroy 
 		this.faviconExists = true;
 	}
 
-	showResultById() {
+	showResult() {
 		this.showResultEvent.emit(this.previewResult.id);
 		this.excludedResultsClick = true;
 	}
 
-	hiddenResultById() {
+	hideResult() {
 		this.hiddenResultEvent.emit(this.previewResult.id);
 		this.excludedResultsClick = false;
+	}
+
+	deleteResult() {
+		this._matDialog.open(RemoveResultConfirmationDialogComponent, {
+			maxWidth: '95%',
+			minWidth: this.isMobile ? '95%' : '',
+			width: this.isMobile ? '' : '670px',
+			panelClass: 'filter-result-dailog',
+			ariaLabel: $localize`Report Filter Options`,
+			autoFocus: false,
+			data: {
+				isMobile: this.isMobile,
+				reportDataSvc: this.reportDataSvc,
+				deleteEndpoint: this.reportDataSvc?.reportEndpointConfig?.deleteResult,
+				resultId: this.resultItem.resultDetails?.id,
+			} as IRemoveResultConfirmationDialogData,
+		});
 	}
 
 	comapreResult() {

@@ -23,6 +23,7 @@ import * as helpers from '../utils/report-statistics-helpers';
 import { untilDestroy } from '../utils/until-destroy';
 import { ReportErrorsService } from './report-errors.service';
 import { ReportViewService } from './report-view.service';
+import { IResultPreviewBase } from 'copyleaks-web-report';
 
 @Injectable()
 export class ReportDataService {
@@ -617,6 +618,47 @@ export class ReportDataService {
 			includeResultsWithoutDate: true,
 			publicationDate: undefined,
 		});
+	}
+
+	public async deleteResultById(resultId: string): Promise<void> {
+		if (!this._reportEndpointConfig$.value || !this._reportEndpointConfig$.value.deleteResult?.url || !resultId) return;
+
+		try {
+			var requestUrl = this._reportEndpointConfig$.value.deleteResult.url.replace('{RESULT_ID}', resultId);
+			await this._http
+				.delete(requestUrl, {
+					headers: this._createHeaders(this._reportEndpointConfig$.value.deleteResult),
+				})
+				.toPromise();
+
+			// Function to find and remove an result by ID from a the give results list
+			const removeResultById = (results: IResultPreviewBase[]) => {
+				const index = results.findIndex(result => result.id === resultId);
+				if (index !== -1) {
+					results.splice(index, 1);
+					this.scanResultsPreviews$.next(this.scanResultsPreviews);
+				}
+			};
+
+			// Remove the result *if found* from the complete results
+			if (this.scanResultsPreviews?.results?.internet) removeResultById(this.scanResultsPreviews.results.internet);
+			if (this.scanResultsPreviews?.results?.database) removeResultById(this.scanResultsPreviews?.results?.database);
+			if (this.scanResultsPreviews?.results?.batch) removeResultById(this.scanResultsPreviews?.results?.batch);
+			if (this.scanResultsPreviews?.results?.repositories)
+				removeResultById(this.scanResultsPreviews?.results?.repositories);
+
+			// Remove the result *if found* from the results details list
+			if (this.scanResultsDetails) {
+				const index = this.scanResultsDetails.findIndex(result => result.id === resultId);
+				if (index !== -1) {
+					this.scanResultsDetails.splice(index, 1);
+					this.scanResultsDetails$.next(this.scanResultsDetails);
+				}
+			}
+		} catch (error) {
+			this._reportErrorsSvc.handleHttpError(error as HttpErrorResponse, 'deleteResultById');
+			throw error;
+		}
 	}
 
 	private async _checkScanProgress(progress: IAPIProgress) {

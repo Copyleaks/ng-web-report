@@ -1,0 +1,21 @@
+<h2 class="title" web-report-title-font i18n>Are you sure you want to delete the selected result?</h2>
+
+<div class="confirmation-message">
+	This action will permanently delete all traces of your submission from the Copyleaks server, including the internal
+	database. This will take up to 24 hours.
+</div>
+
+<div class="btns-container">
+	<cr-button
+		[outlined]="true"
+		[padding]="'4px 24px'"
+		(click)="onCancel()"
+		[width]="'132px'"
+		color="primary"
+		[disabled]="deleting">
+		<span class="discard-changes-button" i18n>NO</span>
+	</cr-button>
+	<cr-button (click)="onConfirmAsync()" [width]="'132px'" padding="3px 24px" color="primary" [showSpinner]="deleting">
+		<span class="apply-filters-button" i18n>YES</span>
+	</cr-button>
+</div>

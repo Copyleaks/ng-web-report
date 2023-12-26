@@ -76,7 +76,10 @@ export class ReportMatchesService implements OnDestroy {
 				)
 			)
 			.subscribe(([scanSource, scanResults, viewMode, , filterOptions, excludedResultsIds]) => {
-				if ((scanSource && this._reportViewSvc.progress$.value != 100) || (scanSource && !scanResults)) {
+				if (
+					(scanSource && this._reportViewSvc.progress$.value != 100) ||
+					(scanSource && (!scanResults || scanResults.length === 0))
+				) {
 					// process the mathces according to the report view
 					if (viewMode.isHtmlView) {
 						this._processOneToManyMatchesHtml(scanResults ?? [], undefined, [], scanSource);
@@ -154,18 +157,18 @@ export class ReportMatchesService implements OnDestroy {
 			.pipe(
 				untilDestroy(this),
 				filter(
-					([scanSource, selectedAlert, , filterOptions]) =>
-						scanSource != null &&
-						scanSource != undefined &&
-						selectedAlert != null &&
-						selectedAlert != undefined &&
-						filterOptions != undefined
+					([scanSource, selectedAlert, ,]) =>
+						scanSource != null && scanSource != undefined && selectedAlert != null && selectedAlert != undefined
 				)
 			)
 			.subscribe(([scanSource, selectedAlert, completeResults, filterOptions]) => {
+				if ((scanSource && this._reportViewSvc.progress$.value != 100) || (scanSource && selectedAlert)) {
+					this._processAlertMatches(scanSource, selectedAlert, filterOptions, completeResults);
+				}
+
 				if (!scanSource || !selectedAlert || !completeResults || !filterOptions) return;
 
-				this._processAlertMatches(filterOptions, scanSource, completeResults, selectedAlert);
+				this._processAlertMatches(scanSource, selectedAlert, filterOptions, completeResults);
 			});
 	}
 
@@ -279,15 +282,15 @@ export class ReportMatchesService implements OnDestroy {
 	 * @param source  the scan source
 	 */
 	private _processAlertMatches(
-		settings: ICopyleaksReportOptions,
 		source: IScanSource,
-		completeResults: ICompleteResults,
-		selectedAlertCode: string
+		selectedAlertCode: string | null,
+		settings?: ICopyleaksReportOptions,
+		completeResults?: ICompleteResults
 	) {
 		let text: SlicedMatch[][];
 
 		// check if the selected alert code is valid
-		const selectedAlert = completeResults.notifications?.alerts.find(alert => alert.code === selectedAlertCode);
+		const selectedAlert = completeResults?.notifications?.alerts.find(alert => alert.code === selectedAlertCode);
 		if (selectedAlert) {
 			switch (selectedAlertCode) {
 				case ALERTS.SUSPECTED_AI_TEXT_DETECTED:
@@ -302,11 +305,28 @@ export class ReportMatchesService implements OnDestroy {
 			}
 		}
 		// otherwise, update the text view with zero results
-		else text = helpers.processSourceText([], settings, source);
+		else
+			text = helpers.processSourceText(
+				[],
+				settings ?? {
+					showIdentical: true,
+					showRelated: true,
+					showMinorChanges: true,
+				},
+				source
+			);
 		if (text) this._originalTextMatches.next(text);
 
 		// update the html view with zero results
-		const html = helpers.processSourceHtml([], settings, source);
+		const html = helpers.processSourceHtml(
+			[],
+			settings ?? {
+				showIdentical: true,
+				showRelated: true,
+				showMinorChanges: true,
+			},
+			source
+		);
 		if (html) this._originalHtmlMatches.next(html);
 	}
 

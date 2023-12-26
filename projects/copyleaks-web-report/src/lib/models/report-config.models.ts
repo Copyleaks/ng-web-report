@@ -31,11 +31,6 @@ export interface IEndpointDetails {
  */
 export interface IClsReportEndpointConfigModel {
 	/**
-	 * @property {string} authToken - The authorization token needed for API calls.
-	 */
-	authToken: string;
-
-	/**
 	 * @property {IEndpointDetails} crawledVersion - Object containing endpoint details for fetching the crawled version of scanned content.
 	 */
 	crawledVersion: IEndpointDetails;

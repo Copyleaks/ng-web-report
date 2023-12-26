@@ -261,7 +261,7 @@ export class ReportDataService {
 			this.initSync(endpointsConfig);
 		} else {
 			const progressResult$ = this._http.get<IAPIProgress>(endpointsConfig.progress.url, {
-				headers: this._createHeaders(endpointsConfig.progress, endpointsConfig.authToken),
+				headers: this._createHeaders(endpointsConfig.progress),
 			});
 			progressResult$
 				.pipe(
@@ -293,7 +293,7 @@ export class ReportDataService {
 		// Create observables for each request with error handling
 		this._http
 			.get<IScanSource>(endpointsConfig.crawledVersion.url, {
-				headers: this._createHeaders(endpointsConfig.crawledVersion, endpointsConfig.authToken),
+				headers: this._createHeaders(endpointsConfig.crawledVersion),
 			})
 			.pipe(
 				catchError((error: HttpErrorResponse) => {
@@ -307,13 +307,19 @@ export class ReportDataService {
 			.subscribe(
 				crawledVersionRes => {
 					this._crawledVersion$.next(crawledVersionRes);
+
+					if (!crawledVersionRes.html.value && this._viewSvc.reportViewMode.isHtmlView)
+						this._viewSvc.reportViewMode$.next({
+							...this._viewSvc.reportViewMode,
+							isHtmlView: false,
+						});
 				},
 				_ => {}
 			);
 
 		this._http
 			.get<ICompleteResults>(endpointsConfig.completeResults.url, {
-				headers: this._createHeaders(endpointsConfig.completeResults, endpointsConfig.authToken),
+				headers: this._createHeaders(endpointsConfig.completeResults),
 			})
 			.pipe(
 				catchError((error: HttpErrorResponse) => {
@@ -453,10 +459,7 @@ export class ReportDataService {
 		try {
 			const response = await this._http
 				.get<IResultDetailResponse>(requestUrl, {
-					headers: this._createHeaders(
-						this._reportEndpointConfig$?.value.result,
-						this._reportEndpointConfig$?.value.authToken
-					),
+					headers: this._createHeaders(this._reportEndpointConfig$?.value.result),
 				})
 				.toPromise();
 
@@ -471,7 +474,7 @@ export class ReportDataService {
 		}
 	}
 
-	public filterResults(settings: ICopyleaksReportOptions, excludedResultsIds: string[]): ResultDetailItem[] {
+	public filterResults(settings?: ICopyleaksReportOptions, excludedResultsIds?: string[]): ResultDetailItem[] {
 		if (!this.scanResultsDetails || !this.scanResultsPreviews || !settings || !excludedResultsIds) return [];
 
 		let completeResults = [
@@ -552,6 +555,7 @@ export class ReportDataService {
 
 	public isPlagiarismEnabled() {
 		const completeResult = this.scanResultsPreviews;
+		if (this._viewSvc.progress$.value != 100) return true;
 		if (!completeResult) return false;
 		if (completeResult) {
 			if (completeResult?.scannedDocument?.enabled?.plagiarismDetection != null)
@@ -562,6 +566,7 @@ export class ReportDataService {
 
 	public isAiDetectionEnabled() {
 		const completeResult = this.scanResultsPreviews;
+		if (this._viewSvc.progress$.value != 100) return true;
 		if (completeResult) {
 			if (completeResult?.scannedDocument?.enabled?.aiDetection) return true;
 			return (
@@ -639,7 +644,6 @@ export class ReportDataService {
 		completeResultsRes.results?.repositories?.forEach(result => {
 			result.type = EResultPreviewType.Repositroy;
 		});
-		this._scanResultsPreviews$.next(completeResultsRes);
 
 		// Load the excluded results Ids
 		this.excludedResultsIds$.next(completeResultsRes.filters?.execludedResultIds ?? []);
@@ -697,16 +701,63 @@ export class ReportDataService {
 			publicationDate: completeResultsRes.filters?.resultsMetaData?.publicationDate?.startDate,
 		});
 
+		const filteredResults = this.filterResults(this.filterOptions, this.excludedResultsIds);
+		const stats = helpers.calculateStatistics(completeResultsRes, filteredResults, this.filterOptions);
+
+		this._scanResultsPreviews$.next({
+			...completeResultsRes,
+			results: {
+				...completeResultsRes.results,
+				score: {
+					identicalWords: stats.identical,
+					minorChangedWords: stats.minorChanges,
+					relatedMeaningWords: stats.relatedMeaning,
+					aggregatedScore: stats.aggregatedScore ?? 0,
+				},
+			},
+			filters: {
+				general: {
+					alerts: this.filterOptions?.showAlerts ?? true,
+					authorSubmissions: this.filterOptions?.showSameAuthorSubmissions ?? true,
+					topResult: this.filterOptions?.showTop100Results ?? true,
+				},
+				includedTags: this.filterOptions?.includedTags,
+				matchType: {
+					identicalText: this.filterOptions?.showIdentical ?? true,
+					minorChanges: this.filterOptions?.showMinorChanges ?? true,
+					paraphrased: this.filterOptions?.showRelated ?? true,
+				},
+				resultsMetaData: {
+					publicationDate: {
+						publicationEnabled: !!this.filterOptions?.publicationDate,
+						resultsWithNoDates: this.filterOptions?.includeResultsWithoutDate ?? true,
+						startDate: this.filterOptions?.publicationDate,
+					},
+					wordLimit: {
+						wordLimitEnabled: !!this.filterOptions?.wordLimit,
+						totalWordLimit: this.filterOptions?.wordLimit,
+					},
+				},
+				sourceType: {
+					batch: this.filterOptions?.showBatchResults ?? true,
+					internalDatabase: this.filterOptions?.showInternalDatabaseResults ?? true,
+					internet: this.filterOptions?.showInternetResults ?? true,
+					repositories: this.filterOptions?.hiddenRepositories ?? [],
+				},
+				execludedResultIds: this.excludedResultsIds ?? [],
+				filteredResultIds: [],
+			},
+		});
+
 		if (this.filterOptions && this.excludedResultsIds) {
 			// Load all the complete scan results
 			this.loadViewedResultsDetails(true);
 		}
 	}
 
-	private _createHeaders(endpointDetails: IEndpointDetails, authToken: string): HttpHeaders {
+	private _createHeaders(endpointDetails: IEndpointDetails): HttpHeaders {
 		// Create HttpHeaders using the authToken and any additional headers provided in the endpoint details
 		return new HttpHeaders({
-			Authorization: `Bearer ${authToken}`,
 			...endpointDetails.headers,
 		});
 	}
@@ -716,10 +767,7 @@ export class ReportDataService {
 
 		return this._http
 			.get<IAPIProgress>(this._reportEndpointConfig$.value.progress.url, {
-				headers: this._createHeaders(
-					this._reportEndpointConfig$.value.progress,
-					this._reportEndpointConfig$.value.authToken
-				),
+				headers: this._createHeaders(this._reportEndpointConfig$.value.progress),
 			})
 			.pipe(
 				catchError((error: HttpErrorResponse) => {
@@ -736,10 +784,7 @@ export class ReportDataService {
 		try {
 			return await this._http
 				.get<IScanSource>(this._reportEndpointConfig$.value.crawledVersion.url, {
-					headers: this._createHeaders(
-						this._reportEndpointConfig$.value.crawledVersion,
-						this._reportEndpointConfig$.value.authToken
-					),
+					headers: this._createHeaders(this._reportEndpointConfig$.value.crawledVersion),
 				})
 				.toPromise();
 		} catch (error) {
@@ -755,10 +800,7 @@ export class ReportDataService {
 		try {
 			return await this._http
 				.get<ICompleteResults>(this._reportEndpointConfig$.value.completeResults.url, {
-					headers: this._createHeaders(
-						this._reportEndpointConfig$.value.completeResults,
-						this._reportEndpointConfig$.value.authToken
-					),
+					headers: this._createHeaders(this._reportEndpointConfig$.value.completeResults),
 				})
 				.toPromise();
 		} catch (error) {

@@ -1,0 +1,36 @@
+@import '../../styles/website-colors.styles.scss';
+@import '../../styles/styles.scss';
+
+:host {
+	padding: 0px 16px 16px 16px;
+	display: flex;
+	flex-direction: column;
+}
+
+.title {
+	color: $color-black;
+	font-size: 20px;
+	font-style: normal;
+	font-weight: 700;
+	line-height: normal;
+	text-transform: capitalize;
+}
+
+.confirmation-message {
+	color: $color-black;
+	font-size: 16px;
+	font-style: normal;
+	font-weight: 500;
+	line-height: normal;
+	font-family: haboro-soft, sans-serif !important;
+	margin-bottom: 32px;
+}
+
+.btns-container {
+	width: 100%;
+	display: flex;
+	flex-direction: row;
+	gap: 16px;
+	align-items: center;
+	justify-content: center;
+}

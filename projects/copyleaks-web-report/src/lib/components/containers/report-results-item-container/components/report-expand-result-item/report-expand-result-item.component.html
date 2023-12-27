@@ -33,7 +33,17 @@
 								</svg>
 							</ng-container>
 							<ng-container *ngSwitchCase="eResultPreviewType.Internet">
-								<mat-icon fontSet="material-icons-round">language</mat-icon>
+								<ng-container *ngIf="faviconExists; else defaultInternetIcon">
+									<img
+										class="internet-result-favicon"
+										role="presentation"
+										[src]="'https://www.google.com/s2/favicons?domain=' + faviconURL"
+										(error)="onFaviconError()"
+										(load)="onFaviconLoad()" />
+								</ng-container>
+								<ng-template #defaultInternetIcon>
+									<mat-icon fontSet="material-icons-round">language</mat-icon>
+								</ng-template>
 							</ng-container>
 							<ng-container *ngSwitchCase="eResultPreviewType.Database">
 								<svg

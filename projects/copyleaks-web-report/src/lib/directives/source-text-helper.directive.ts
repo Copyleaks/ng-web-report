@@ -65,6 +65,8 @@ export class SourceTextHelperDirective implements AfterContentInit, OnDestroy {
 			)
 			.subscribe(([match, source, suspect]) => {
 				if (match && source && suspect?.result) this.handleBroadcast(match, source, suspect.result, 'html');
+				if (!match && source && suspect?.result)
+					this._highlightSvc.textMatchClicked({ elem: null, broadcast: false, origin: 'source' });
 			});
 	}
 	/**

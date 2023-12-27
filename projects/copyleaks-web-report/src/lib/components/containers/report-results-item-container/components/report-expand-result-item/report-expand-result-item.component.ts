@@ -24,6 +24,9 @@ export class ReportExpandResultItemComponent implements OnInit, OnChanges {
 	eResultPreviewType = EResultPreviewType;
 	exclude: boolean = false;
 
+	faviconExists: boolean = true;
+	faviconURL: string;
+
 	get authorName() {
 		if (this.resultItem?.resultPreview) {
 			switch (this.resultItem?.resultPreview.type) {
@@ -55,6 +58,14 @@ export class ReportExpandResultItemComponent implements OnInit, OnChanges {
 				stackedBarHeight: '8px',
 				stackedBarBackgroundColor: '#EBF3F5',
 			};
+
+			if (
+				changes['resultItem'].currentValue.resultPreview?.type === EResultPreviewType.Internet &&
+				changes['resultItem'].currentValue.resultPreview?.url
+			) {
+				const url = new URL(changes['resultItem'].currentValue.resultPreview.url);
+				this.faviconURL = url.host;
+			}
 		}
 	}
 
@@ -76,5 +87,13 @@ export class ReportExpandResultItemComponent implements OnInit, OnChanges {
 	excludeResult() {
 		this.exclude = !this.exclude;
 		this.excludeResultEvent.emit(this.resultItem?.resultPreview.id);
+	}
+
+	onFaviconError() {
+		this.faviconExists = false;
+	}
+
+	onFaviconLoad() {
+		this.faviconExists = true;
 	}
 }

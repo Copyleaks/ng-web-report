@@ -202,3 +202,8 @@ svg {
 .disabled-property {
 	text-decoration: line-through;
 }
+
+.omitted-words.dot,
+.human.dot {
+	border: 0.5px solid $grayed-out-disabled;
+}

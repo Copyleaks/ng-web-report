@@ -133,40 +133,40 @@ export class FilterResultDailogService {
 	}
 
 	clearForm() {
-		this.selectedTagItem?.forEach(t => (t.selected = false));
+		this.initTags();
 
-		this._filterResultForm = this._formBuilder.group({
-			sourceType: this._formBuilder.group({
-				internet: new FormControl(true),
-				internalDatabase: new FormControl(true),
-				batch: new FormControl(true),
-				repositories: this._formBuilder.group({}),
-			}),
-			resultsMeta: this._formBuilder.group({
-				wordLimit: this._formBuilder.group({
-					wordLimitEnabled: new FormControl(false),
-					totalWordlimt: new FormControl(0),
-				}),
-				publicationDate: this._formBuilder.group({
-					publicationEnabled: new FormControl(false),
-					startDate: new FormControl(null),
-					resultsWithNoDates: new FormControl(true),
-				}),
-			}),
-			matchTypes: this._formBuilder.group({
-				identicalText: new FormControl(true),
-				minorChanges: new FormControl(true),
-				paraphrased: new FormControl(true),
-			}),
-			generalFilters: this._formBuilder.group({
-				topResult: new FormControl(false),
-				alerts: new FormControl(true),
-				authorSubmissions: new FormControl(true),
-			}),
-			includedTags: new FormControl(this.selectedTagItem ?? ([] as ITagItem[])),
+		this._filterResultForm.patchValue({
+			sourceType: {
+				internet: true,
+				internalDatabase: true,
+				batch: true,
+				repositories: {}, // Update with actual values if needed
+			},
+			resultsMeta: {
+				wordLimit: {
+					wordLimitEnabled: false,
+					totalWordlimt: 0,
+				},
+				publicationDate: {
+					publicationEnabled: false,
+					startDate: null,
+					resultsWithNoDates: true,
+				},
+			},
+			matchTypes: {
+				identicalText: true,
+				minorChanges: true,
+				paraphrased: true,
+			},
+			generalFilters: {
+				topResult: false,
+				alerts: true,
+				authorSubmissions: true,
+			},
+			includedTags: this.selectedTagItem ?? ([] as ITagItem[]),
 		});
 
-		this.addRepositoriesToForm(this.reposIds, true);
+		this.initFormRepositories();
 	}
 
 	public getFormControlValue(eFilterResultForm: EFilterResultForm) {
@@ -277,5 +277,13 @@ export class FilterResultDailogService {
 		});
 
 		return selectedRepoIds;
+	}
+
+	initFormRepositories(): void {
+		// Iterate over the keys of the form group controls
+		Object.keys(this.repositoriesFormGroup?.controls).forEach(key => {
+			const control = this.repositoriesFormGroup?.controls[key];
+			control?.setValue(true);
+		});
 	}
 }

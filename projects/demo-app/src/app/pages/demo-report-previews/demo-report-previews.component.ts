@@ -52,7 +52,7 @@ export class DemoReportPreviewsComponent implements OnInit {
 			crawledVersion: { url: `assets/scans/${this.type}/${this.id}/source.json`, headers: {} },
 			completeResults: { url: `assets/scans/${this.type}/${this.id}/complete.json`, headers: {} },
 			result: { url: `assets/scans/${this.type}/${this.id}/results/{RESULT_ID}.json`, headers: {} },
-			deleteResult: { url: `assets/delete/delete.json`, headers: {} },
+			deleteResult: { url: `assets/delete/delete.json`, headers: {} }, // this is just to show the delete result option (WILL NOT ACTUALY WORK!)
 		};
 		this._handleCustomComponentsView(this.id, this.type);
 
@@ -70,7 +70,7 @@ export class DemoReportPreviewsComponent implements OnInit {
 				crawledVersion: { url: `assets/scans/${this.type}/${this.id}/source.json`, headers: {} },
 				completeResults: { url: `assets/scans/${this.type}/${this.id}/complete.json`, headers: {} },
 				result: { url: `assets/scans/${this.type}/${this.id}/results/{RESULT_ID}.json`, headers: {} },
-				deleteResult: { url: `assets/delete/delete.json`, headers: {} },
+				deleteResult: { url: `assets/delete/delete.json`, headers: {} }, // this is just to show the delete result option (WILL NOT ACTUALY WORK!)
 			};
 
 			this._handleCustomComponentsView(id, type);

@@ -11,6 +11,7 @@ import {
 	IAPIProgress,
 	ICompleteResults,
 	IDatabaseResultPreview,
+	IDeleteScanResultModel,
 	IInternetResultPreview,
 	IRepositoryResultPreview,
 	IResultDetailResponse,
@@ -620,20 +621,44 @@ export class ReportDataService {
 		});
 	}
 
-	public async deleteResultById(resultId: string): Promise<void> {
-		if (!this._reportEndpointConfig$.value || !this._reportEndpointConfig$.value.deleteResult?.url || !resultId) return;
+	public async deleteResultById(resultInfo: IResultItem): Promise<void> {
+		if (
+			!this._reportEndpointConfig$.value ||
+			!this._reportEndpointConfig$.value.deleteResult?.url ||
+			!this.scanResultsPreviews ||
+			!resultInfo ||
+			!resultInfo.resultDetails
+		)
+			return;
 
 		try {
-			var requestUrl = this._reportEndpointConfig$.value.deleteResult.url.replace('{RESULT_ID}', resultId);
+			// Build the request model & URL
+			var requestUrl = this._reportEndpointConfig$.value.deleteResult.url.replace(
+				'{RESULT_ID}',
+				resultInfo.resultDetails.id
+			);
+			var requestModel: IDeleteScanResultModel = {
+				resultId: resultInfo.resultDetails.id,
+				/** */
+				totalWords: this.scanResultsPreviews.scannedDocument.totalWords,
+				totalExcluded: this.scanResultsPreviews.scannedDocument.totalExcluded,
+				/** */
+				aggregatedScore: this.scanResultsPreviews.results.score.aggregatedScore,
+				identicalWords: this.scanResultsPreviews.results.score.identicalWords,
+				minorChangedWords: this.scanResultsPreviews.results.score.minorChangedWords,
+				relatedMeaningWords: this.scanResultsPreviews.results.score.relatedMeaningWords,
+			};
+
+			// Send the delete request & update UI accordingly if the request was successful
 			await this._http
-				.delete(requestUrl, {
+				.patch(requestUrl, requestModel, {
 					headers: this._createHeaders(this._reportEndpointConfig$.value.deleteResult),
 				})
 				.toPromise();
 
 			// Function to find and remove an result by ID from a the give results list
 			const removeResultById = (results: IResultPreviewBase[]) => {
-				const index = results.findIndex(result => result.id === resultId);
+				const index = results.findIndex(result => result.id === resultInfo.resultDetails?.id);
 				if (index !== -1) {
 					results.splice(index, 1);
 					this.scanResultsPreviews$.next(this.scanResultsPreviews);
@@ -649,7 +674,7 @@ export class ReportDataService {
 
 			// Remove the result *if found* from the results details list
 			if (this.scanResultsDetails) {
-				const index = this.scanResultsDetails.findIndex(result => result.id === resultId);
+				const index = this.scanResultsDetails.findIndex(result => result.id === resultInfo.resultDetails?.id);
 				if (index !== -1) {
 					this.scanResultsDetails.splice(index, 1);
 					this.scanResultsDetails$.next(this.scanResultsDetails);

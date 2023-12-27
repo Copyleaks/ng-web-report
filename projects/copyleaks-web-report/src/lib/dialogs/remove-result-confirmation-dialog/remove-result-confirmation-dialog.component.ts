@@ -28,7 +28,7 @@ export class RemoveResultConfirmationDialogComponent implements OnInit {
 			this._dialogRef.disableClose = true;
 
 			// send the delete request and close dialog if sucess
-			await this.data.reportDataSvc.deleteResultById(this.data.resultId);
+			await this.data.reportDataSvc.deleteResultById(this.data.resultInfo);
 			this._dialogRef.close();
 		} catch (error) {
 		} finally {

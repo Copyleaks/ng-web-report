@@ -21,7 +21,7 @@ import { untilDestroy } from '../../../../../utils/until-destroy';
 import { ReportDataService } from '../../../../../services/report-data.service';
 import { MatDialog } from '@angular/material/dialog';
 import { RemoveResultConfirmationDialogComponent } from '../../../../../dialogs/remove-result-confirmation-dialog/remove-result-confirmation-dialog.component';
-import { IRemoveResultConfirmationDialogData } from 'projects/copyleaks-web-report/src/lib/dialogs/remove-result-confirmation-dialog/models/remove-result-confirmation-dialog.models';
+import { IRemoveResultConfirmationDialogData } from '../../../../../dialogs/remove-result-confirmation-dialog/models/remove-result-confirmation-dialog.models';
 
 @Component({
 	selector: 'cr-report-results-item',
@@ -163,7 +163,7 @@ export class ReportResultsItemComponent implements OnInit, OnChanges, OnDestroy 
 				isMobile: this.isMobile,
 				reportDataSvc: this.reportDataSvc,
 				deleteEndpoint: this.reportDataSvc?.reportEndpointConfig?.deleteResult,
-				resultId: this.resultItem.resultDetails?.id,
+				resultInfo: this.resultItem,
 			} as IRemoveResultConfirmationDialogData,
 		});
 	}

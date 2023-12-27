@@ -304,6 +304,17 @@ export interface IResultTextSection extends IResultBase {
 	};
 }
 
+/** Request model for deleting a specific result */
+export interface IDeleteScanResultModel {
+	resultId: string;
+	totalWords: number;
+	totalExcluded: number;
+	identicalWords: number;
+	minorChangedWords: number;
+	relatedMeaningWords: number;
+	aggregatedScore: number;
+}
+
 /** Base type of a comparison */
 interface IComparisonBase {
 	source: IComparisonData;

@@ -15,6 +15,7 @@ import {
 	IInternetResultPreview,
 	IRepositoryResultPreview,
 	IResultDetailResponse,
+	IResultPreviewBase,
 	IScanSource,
 	ResultPreview,
 } from '../models/report-data.models';
@@ -24,7 +25,6 @@ import * as helpers from '../utils/report-statistics-helpers';
 import { untilDestroy } from '../utils/until-destroy';
 import { ReportErrorsService } from './report-errors.service';
 import { ReportViewService } from './report-view.service';
-import { IResultPreviewBase } from 'copyleaks-web-report';
 
 @Injectable()
 export class ReportDataService {

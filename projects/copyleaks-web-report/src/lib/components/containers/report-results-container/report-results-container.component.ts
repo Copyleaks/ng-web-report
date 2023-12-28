@@ -73,6 +73,7 @@ export class ReportResultsContainerComponent implements OnInit, OnChanges {
 	scrollSub: any;
 	resizeSubscription: any;
 	addPaddingToContainer: boolean;
+
 	filterIsOn: boolean;
 	filterIndicatorOn: boolean = false;
 
@@ -350,10 +351,12 @@ export class ReportResultsContainerComponent implements OnInit, OnChanges {
 			})
 			.sort(
 				(a, b) =>
-					b.iStatisticsResult.identical +
-					b.iStatisticsResult.minorChanges +
-					b.iStatisticsResult.relatedMeaning -
-					(a.iStatisticsResult.identical + a.iStatisticsResult.minorChanges + a.iStatisticsResult.relatedMeaning)
+					(b.resultPreview.isLocked
+						? 0
+						: b.iStatisticsResult.identical + b.iStatisticsResult.minorChanges + b.iStatisticsResult.relatedMeaning) -
+					(a.resultPreview.isLocked
+						? 0
+						: a.iStatisticsResult.identical + a.iStatisticsResult.minorChanges + a.iStatisticsResult.relatedMeaning)
 			);
 
 		this.resultsActions = {

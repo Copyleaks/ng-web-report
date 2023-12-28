@@ -513,7 +513,7 @@ export const getRenderedMatches = (matches: Match[] | null, originalHtml: string
 		let slice = originalHtml?.substring(curr.start, curr.end);
 		switch (curr.type) {
 			case MatchType.excluded:
-				var reason = curr.reason ? EXCLUDE_MESSAGE[curr.reason] : null;
+				var reason = curr.reason != undefined && curr.reason != null ? EXCLUDE_MESSAGE[curr.reason] : null;
 				if (curr.reason === EExcludeReason.PartialScan) {
 					slice = `<span exclude-partial-scan data-type="${curr.type}" data-index="${i}" title="${reason}">${slice}</span>`;
 				} else {

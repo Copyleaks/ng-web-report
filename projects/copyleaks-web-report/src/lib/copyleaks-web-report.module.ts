@@ -74,6 +74,7 @@ import { SuspectTextHelperDirective } from './directives/suspect-text-helper.dir
 import { SimilarityPipeModule } from './pipes/similarity-pipe/similarity-pipe.module';
 import { ReportRealtimeResultsService } from './services/report-realtime-results.service';
 import { RemoveResultConfirmationDialogComponent } from './dialogs/remove-result-confirmation-dialog/remove-result-confirmation-dialog.component';
+import { CrSpinnerModule } from './components/core/cr-spinner/cr-spinner.module';
 
 @NgModule({
 	declarations: [
@@ -149,6 +150,7 @@ import { RemoveResultConfirmationDialogComponent } from './dialogs/remove-result
 		MatSliderModule,
 		MatCheckboxModule,
 		MatProgressBarModule,
+		CrSpinnerModule,
 	],
 	exports: [
 		CopyleaksWebReportComponent,

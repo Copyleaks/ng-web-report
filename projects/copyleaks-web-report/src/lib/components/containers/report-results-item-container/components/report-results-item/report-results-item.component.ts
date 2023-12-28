@@ -106,15 +106,13 @@ export class ReportResultsItemComponent implements OnInit, OnChanges, OnDestroy 
 			};
 		}
 
-		if (this.resultItem?.resultPreview?.isLocked) {
-			// check if custom locked result template was passed
-			this.reportNgTemplatesSvc?.reportTemplatesSubject$.pipe(untilDestroy(this)).subscribe(refs => {
-				if (refs?.lockedResultItemTemplateRef !== undefined)
-					setTimeout(() => {
-						this.lockedResultItemTemplateRef = refs?.lockedResultItemTemplateRef;
-					});
-			});
-		}
+		// check if custom locked result template was passed
+		this.reportNgTemplatesSvc?.reportTemplatesSubject$.pipe(untilDestroy(this)).subscribe(refs => {
+			if (refs?.lockedResultItemTemplateRef !== undefined)
+				setTimeout(() => {
+					this.lockedResultItemTemplateRef = refs?.lockedResultItemTemplateRef;
+				});
+		});
 	}
 
 	ngOnChanges(changes: SimpleChanges): void {

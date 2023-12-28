@@ -105,6 +105,15 @@ export class ReportDataService {
 		return this._excludedResultsIds$.value;
 	}
 
+	private _loadingMoreResults$ = new BehaviorSubject<boolean>(false);
+	/** Emits matches that are relevant to source html one-to-many mode */
+	public get loadingMoreResults$() {
+		return this._loadingMoreResults$;
+	}
+	public get loadingMoreResults() {
+		return this._loadingMoreResults$.value;
+	}
+
 	public get isFilterOn(): boolean {
 		let totalIdentical = 0,
 			totalMinorChanges = 0,
@@ -410,8 +419,11 @@ export class ReportDataService {
 		const cachedResults = this._scanResultsDetails$.getValue();
 
 		if (cachedResults?.length === this.totalCompleteResults || !this.filterOptions || !this.excludedResultsIds) {
+			this._loadingMoreResults$.next(false);
 			return;
 		}
+
+		this._loadingMoreResults$.next(true);
 
 		let resultsIds = this.filterPreviewedResults(this.filterOptions, this.excludedResultsIds);
 		resultsIds = resultsIds.filter(id => !this._scanResultsDetails$.value?.find(r => r.id === id));
@@ -427,7 +439,10 @@ export class ReportDataService {
 		const totalBatches = idBatches.length;
 		let currentBatchIndex = 0; // Initialize a variable to keep track of the current batch index
 
-		if (totalBatches === 0 && (this.totalCompleteResults === 0 || firstLoad)) this._scanResultsDetails$.next([]);
+		if (totalBatches === 0) {
+			if (this.totalCompleteResults === 0 || firstLoad) this._scanResultsDetails$.next([]);
+			this._loadingMoreResults$.next(false);
+		}
 
 		this._loadedResultsDetails$ = [...(this._scanResultsDetails$.value ?? [])];
 		// Send the GET results requests in batches
@@ -448,6 +463,7 @@ export class ReportDataService {
 					// Check if this is the last batch
 					if (currentBatchIndex === totalBatches) {
 						this._scanResultsDetails$.next(this._loadedResultsDetails$);
+						this._loadingMoreResults$.next(false);
 					}
 				}
 			});

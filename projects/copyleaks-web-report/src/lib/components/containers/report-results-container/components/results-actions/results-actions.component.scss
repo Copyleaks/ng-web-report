@@ -212,3 +212,12 @@ mat-icon {
 mat-chip {
 	cursor: pointer;
 }
+
+cr-spinner {
+	margin-left: 5px;
+}
+
+.filter-chip.disabled {
+	opacity: 0.5;
+	pointer-events: none;
+}

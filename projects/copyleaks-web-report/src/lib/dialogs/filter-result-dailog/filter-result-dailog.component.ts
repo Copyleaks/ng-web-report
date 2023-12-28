@@ -17,6 +17,7 @@ import { ICompleteResults } from '../../models/report-data.models';
 import { ResultDetailItem } from '../../models/report-matches.models';
 import { ICopyleaksReportOptions } from '../../models/report-options.models';
 import { trigger, transition, animate, keyframes, style } from '@angular/animations';
+import { filter } from 'rxjs/operators';
 
 @Component({
 	selector: 'cr-filter-result-dailog',
@@ -68,6 +69,7 @@ export class FilterResultDailogComponent implements OnInit {
 	completeResults: ICompleteResults;
 	sourceTypeErrorMessage: string | null;
 	matchTypeErrorMessage: string | null;
+	initFormData: boolean = false;
 
 	get totalFiltered() {
 		return this.totalSourceType ? this.getTotalFilterdResult() : 0;
@@ -293,7 +295,8 @@ export class FilterResultDailogComponent implements OnInit {
 						completeResults?.notifications?.alerts?.filter(a => a.code != ALERTS.SUSPECTED_AI_TEXT_DETECTED)?.length ??
 						0;
 
-					this._filterResultsSvc.initForm(completeResults);
+					if (this.initFormData === false) this._filterResultsSvc.initForm(completeResults);
+
 					this.totalSourceType.repository = this._filterResultsSvc.reposIds;
 
 					this.setExcludedResultsStats();
@@ -303,6 +306,7 @@ export class FilterResultDailogComponent implements OnInit {
 					this.allTagItem = this._filterResultsSvc.selectedTagItem;
 
 					this.loading = false;
+					this.initFormData = true;
 				}
 			});
 	}

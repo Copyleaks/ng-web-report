@@ -100,16 +100,16 @@
 	</div>
 	<div
 		class="navigate-mobie-button-contaienr"
-		*ngIf="isMobile && allResultsItemLength > 1"
+		*ngIf="isMobile && displayedResultsLength > 1"
 		fxLayout="row"
 		fxLayoutAlign="start center"
 		fxLayoutGap="8px">
 		<mat-chip
-			*ngIf="allResultsItemLength > 5 && currentViewedIndex > 2"
+			*ngIf="displayedResultsLength > 5 && currentViewedIndex > 2"
 			role="button"
 			(click)="scrollToIndex(0)"
 			class="mat-chip-navigate">
-			{{ currentViewedIndex < allResultsItemLength - 3 ? currentViewedIndex - 2 : allResultsItemLength - 5 }}
+			{{ currentViewedIndex < displayedResultsLength - 3 ? currentViewedIndex - 2 : displayedResultsLength - 5 }}
 		</mat-chip>
 		<button
 			class="navigate-mobie-button"
@@ -120,7 +120,7 @@
 			}"
 			(click)="onDotNavigate(enumNavigateMobileButton.FirstButton)"></button>
 		<button
-			*ngIf="allResultsItemLength > 1"
+			*ngIf="displayedResultsLength > 1"
 			class="navigate-mobie-button"
 			aria-label="This is a result navigation button."
 			i18n-aria-label
@@ -129,7 +129,7 @@
 			}"
 			(click)="onDotNavigate(enumNavigateMobileButton.SecondButton)"></button>
 		<button
-			*ngIf="allResultsItemLength > 2"
+			*ngIf="displayedResultsLength > 2"
 			class="navigate-mobie-button"
 			aria-label="This is a result navigation button."
 			i18n-aria-label
@@ -138,7 +138,7 @@
 			}"
 			(click)="onDotNavigate(enumNavigateMobileButton.ThirdButton)"></button>
 		<button
-			*ngIf="allResultsItemLength > 3"
+			*ngIf="displayedResultsLength > 3"
 			class="navigate-mobie-button"
 			aria-label="This is a result navigation button."
 			i18n-aria-label
@@ -147,7 +147,7 @@
 			}"
 			(click)="onDotNavigate(enumNavigateMobileButton.FourthButton)"></button>
 		<button
-			*ngIf="allResultsItemLength > 4"
+			*ngIf="displayedResultsLength > 4"
 			class="navigate-mobie-button"
 			aria-label="This is a result navigation button."
 			i18n-aria-label
@@ -157,11 +157,11 @@
 			(click)="onDotNavigate(enumNavigateMobileButton.FifthButton)"></button>
 
 		<mat-chip
-			*ngIf="allResultsItemLength > 5 && currentViewedIndex < allResultsItemLength - 3"
+			*ngIf="displayedResultsLength > 5 && currentViewedIndex < displayedResultsLength - 3"
 			role="button"
-			(click)="scrollToIndex(allResultsItemLength - 1)"
+			(click)="scrollToIndex(displayedResultsLength - 1)"
 			class="mat-chip-navigate">
-			{{ currentViewedIndex > 2 ? allResultsItemLength - currentViewedIndex - 3 : allResultsItemLength - 5 }}
+			{{ currentViewedIndex > 2 ? displayedResultsLength - currentViewedIndex - 3 : displayedResultsLength - 5 }}
 		</mat-chip>
 	</div>
 </div>

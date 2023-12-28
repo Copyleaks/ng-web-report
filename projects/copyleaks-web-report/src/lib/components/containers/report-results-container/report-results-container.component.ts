@@ -84,6 +84,10 @@ export class ReportResultsContainerComponent implements OnInit, OnChanges {
 		return this.allResults?.length;
 	}
 
+	get displayedResultsLength() {
+		return this.displayedResults?.length;
+	}
+
 	get showCustomResults() {
 		return this.reportViewMode === ECustomResultsReportView.Full;
 	}
@@ -241,41 +245,41 @@ export class ReportResultsContainerComponent implements OnInit, OnChanges {
 	onDotNavigate(dot: EnumNavigateMobileButton) {
 		switch (dot) {
 			case EnumNavigateMobileButton.FirstButton: {
-				if (this.allResultsItemLength > 5 && this.currentViewedIndex >= this.allResultsItemLength - 3)
-					this.scrollToIndex(this.allResultsItemLength - 5);
-				else if (this.allResultsItemLength > 5 && this.currentViewedIndex >= 3)
+				if (this.displayedResultsLength > 5 && this.currentViewedIndex >= this.displayedResultsLength - 3)
+					this.scrollToIndex(this.displayedResultsLength - 5);
+				else if (this.displayedResultsLength > 5 && this.currentViewedIndex >= 3)
 					this.scrollToIndex(this.currentViewedIndex - 2);
 				else this.scrollToIndex(0);
 				break;
 			}
 			case EnumNavigateMobileButton.SecondButton: {
-				if (this.allResultsItemLength > 5 && this.currentViewedIndex >= this.allResultsItemLength - 3)
-					this.scrollToIndex(this.allResultsItemLength - 4);
-				else if (this.allResultsItemLength > 5 && this.currentViewedIndex >= 3)
+				if (this.displayedResultsLength > 5 && this.currentViewedIndex >= this.displayedResultsLength - 3)
+					this.scrollToIndex(this.displayedResultsLength - 4);
+				else if (this.displayedResultsLength > 5 && this.currentViewedIndex >= 3)
 					this.scrollToIndex(this.currentViewedIndex - 1);
 				else this.scrollToIndex(1);
 				break;
 			}
 			case EnumNavigateMobileButton.ThirdButton: {
-				if (this.allResultsItemLength > 5 && this.currentViewedIndex >= this.allResultsItemLength - 3)
-					this.scrollToIndex(this.allResultsItemLength - 3);
-				else if (this.allResultsItemLength > 5 && this.currentViewedIndex >= 3)
+				if (this.displayedResultsLength > 5 && this.currentViewedIndex >= this.displayedResultsLength - 3)
+					this.scrollToIndex(this.displayedResultsLength - 3);
+				else if (this.displayedResultsLength > 5 && this.currentViewedIndex >= 3)
 					this.scrollToIndex(this.currentViewedIndex);
 				else this.scrollToIndex(2);
 				break;
 			}
 			case EnumNavigateMobileButton.FourthButton: {
-				if (this.allResultsItemLength > 5 && this.currentViewedIndex >= this.allResultsItemLength - 3)
-					this.scrollToIndex(this.allResultsItemLength - 2);
-				else if (this.allResultsItemLength > 5 && this.currentViewedIndex >= 3)
+				if (this.displayedResultsLength > 5 && this.currentViewedIndex >= this.displayedResultsLength - 3)
+					this.scrollToIndex(this.displayedResultsLength - 2);
+				else if (this.displayedResultsLength > 5 && this.currentViewedIndex >= 3)
 					this.scrollToIndex(this.currentViewedIndex + 1);
 				else this.scrollToIndex(3);
 				break;
 			}
 			case EnumNavigateMobileButton.FifthButton: {
-				if (this.allResultsItemLength > 5 && this.currentViewedIndex >= this.allResultsItemLength - 3)
-					this.scrollToIndex(this.allResultsItemLength - 1);
-				else if (this.allResultsItemLength > 5 && this.currentViewedIndex >= 3)
+				if (this.displayedResultsLength > 5 && this.currentViewedIndex >= this.displayedResultsLength - 3)
+					this.scrollToIndex(this.displayedResultsLength - 1);
+				else if (this.displayedResultsLength > 5 && this.currentViewedIndex >= 3)
 					this.scrollToIndex(this.currentViewedIndex + 2);
 				else this.scrollToIndex(4);
 				break;

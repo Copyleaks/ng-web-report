@@ -90,37 +90,28 @@ export class ReportStatisticsService implements OnDestroy {
 		filteredResults: ResultDetailItem[],
 		options: ICopyleaksReportOptions
 	) {
-		const totalResults =
-			(completeResult.results.repositories && completeResult.results.repositories.length
-				? completeResult.results.repositories.length
-				: 0) +
-			completeResult.results.batch.length +
-			completeResult.results.internet.length +
-			completeResult.results.database.length;
 		const showAll = options.showIdentical && options.showMinorChanges && options.showRelated;
-		const missingAggregated = totalResults !== 0 && completeResult.results.score.aggregatedScore === 0;
+		const missingAggregated =
+			this._reportDataSvc.totalCompleteResults !== 0 && completeResult.results.score.aggregatedScore === 0;
 		let stats: ReportStatistics;
-		if (
-			(!completeResult.filters ||
-				!completeResult.filters.execludedResultIds ||
-				!completeResult.filters.execludedResultIds.length) &&
-			(results.length !== totalResults || (totalResults === filteredResults.length && showAll && !missingAggregated))
-		) {
+		if (this._reportDataSvc.totalCompleteResults != filteredResults.length || !showAll || missingAggregated) {
+			stats = helpers.calculateStatistics(completeResult, filteredResults, options);
+		} else {
 			// * if results are still loading  or no results are fitlered while all match types are visible
 			// * we can use the complete result stats without heavy calculations
 			const aiStatistics = helpers.getAiStatistics(completeResult);
 			stats = {
-				identical: completeResult.results.score.identicalWords,
-				relatedMeaning: completeResult.results.score.relatedMeaningWords,
-				minorChanges: completeResult.results.score.minorChangedWords,
-				omittedWords: completeResult.scannedDocument.totalExcluded,
-				total: completeResult.scannedDocument.totalWords,
+				aggregatedScore: this._reportDataSvc.completeResultsSnapshot?.results?.score?.aggregatedScore ?? 0,
+				identical: this._reportDataSvc.completeResultsSnapshot?.results?.score?.identicalWords ?? 0,
+				relatedMeaning: this._reportDataSvc.completeResultsSnapshot?.results?.score?.relatedMeaningWords ?? 0,
+				minorChanges: this._reportDataSvc.completeResultsSnapshot?.results?.score?.minorChangedWords ?? 0,
+				omittedWords: this._reportDataSvc.completeResultsSnapshot?.scannedDocument?.totalExcluded ?? 0,
+				total: this._reportDataSvc.completeResultsSnapshot?.scannedDocument?.totalWords,
 				aiScore: aiStatistics?.ai ?? 0,
 				humanScore: aiStatistics?.human ?? 0,
 			};
-		} else {
-			stats = helpers.calculateStatistics(completeResult, filteredResults, options);
 		}
+
 		this._statistics.next(stats);
 	}
 

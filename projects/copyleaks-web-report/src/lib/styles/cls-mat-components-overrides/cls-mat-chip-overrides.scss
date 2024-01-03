@@ -29,5 +29,21 @@
 		.mat-chip-list-wrapper {
 			margin-left: 0px !important;
 		}
+
+		.plus-chip {
+			border-radius: 16px !important;
+			border: 1px solid $color-primary !important;
+			color: $color-primary !important;
+			background: $color-white !important;
+			display: flex !important;
+			padding: 2px 3px !important;
+			align-items: center !important;
+			gap: 10px !important;
+			font-size: 14px !important;
+			font-style: normal !important;
+			font-weight: 500 !important;
+			line-height: normal !important;
+			box-sizing: border-box;
+		}
 	}
 }

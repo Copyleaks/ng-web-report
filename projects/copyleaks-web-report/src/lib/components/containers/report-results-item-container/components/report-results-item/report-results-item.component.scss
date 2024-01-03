@@ -1,4 +1,5 @@
 @import '../../../../../styles/website-colors.styles.scss';
+@import '../../../../../styles/cls-mat-components-overrides/cls-mat-chip-overrides.scss';
 
 :host {
 	line-height: normal !important;
@@ -37,7 +38,7 @@
 			padding: 2px;
 			.item-header {
 				padding: 4px 0px 0px 4px;
-				width: 100%;
+				width: calc(100% - 28px);
 				.item-logo {
 					border: 2px solid;
 					border-radius: 50%;
@@ -55,7 +56,7 @@
 					}
 				}
 				.title-author-container {
-					width: 100%;
+					width: calc(100% - 42px);
 					.item-title {
 						font-size: 16px;
 						font-weight: 500;
@@ -74,6 +75,38 @@
 						font-size: 14px;
 						font-weight: 500;
 						color: $color-medium-dark;
+						display: flex;
+						flex-direction: row;
+						align-items: center;
+						justify-content: flex-start;
+						gap: 4px;
+						width: 100%;
+
+						span {
+							text-wrap: nowrap;
+						}
+
+						.chips-container {
+							display: flex;
+							align-items: center;
+							flex-direction: row;
+							gap: 4px;
+							flex-wrap: nowrap;
+							overflow: hidden;
+							white-space: nowrap;
+							flex-grow: 1;
+							.first-tag {
+								display: block !important;
+								white-space: nowrap;
+								overflow: hidden;
+								text-overflow: ellipsis;
+								max-width: calc(100% - 30px);
+							}
+
+							.plus-chip {
+								cursor: pointer;
+							}
+						}
 					}
 					.author-name-skeleton {
 						width: 40%;

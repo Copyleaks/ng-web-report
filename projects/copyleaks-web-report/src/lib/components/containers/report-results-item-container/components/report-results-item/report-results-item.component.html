@@ -95,7 +95,35 @@
 					<div class="title-author-container" fxLayout="column" fxLayoutAlign="start" fxLayoutGap="2px">
 						<ng-container *ngIf="!showLoader; else showTitleSkeleton">
 							<span class="item-title" [ngClass]="{ 'mobile-text': isMobile }">{{ previewResult.title }}</span>
-							<span class="author-name">{{ authorName }}</span>
+							<div class="author-name">
+								<span>{{ authorName }}</span>
+								<svg
+									*ngIf="resultItem?.resultPreview?.tags && resultItem?.resultPreview?.tags?.length"
+									xmlns="http://www.w3.org/2000/svg"
+									width="5"
+									height="5"
+									viewBox="0 0 5 5"
+									fill="none">
+									<ellipse cx="2.07075" cy="2.83008" rx="2.07075" ry="2" fill="#9DA9BF" />
+								</svg>
+								<div
+									class="chips-container"
+									aria-label="This is a list of tags the are associated with the given results"
+									i18n-aria-label>
+									<mat-chip
+										*ngIf="firstTag"
+										class="first-tag"
+										[matTooltip]="firstTag.description"
+										matTooltipClass="web-report-mat-tooltip"
+										i18n-matTooltip>
+										{{ firstTag.title }}
+									</mat-chip>
+
+									<mat-chip *ngIf="numberOfTags > 1" class="plus-chip">
+										{{ '+' + (numberOfTags - 1) }}
+									</mat-chip>
+								</div>
+							</div>
 						</ng-container>
 						<ng-template #showTitleSkeleton>
 							<ngx-skeleton-loader class="title-skeleton skeleton" [appearance]="'line'"></ngx-skeleton-loader>

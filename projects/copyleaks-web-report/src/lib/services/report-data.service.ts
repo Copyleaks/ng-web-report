@@ -25,6 +25,7 @@ import * as helpers from '../utils/report-statistics-helpers';
 import { untilDestroy } from '../utils/until-destroy';
 import { ReportErrorsService } from './report-errors.service';
 import { ReportViewService } from './report-view.service';
+import { ReportStatistics } from '../models/report-statistics.models';
 
 @Injectable()
 export class ReportDataService {
@@ -59,6 +60,7 @@ export class ReportDataService {
 		return this._scanResultsDetails$.value;
 	}
 
+	public completeResultsSnapshot: ICompleteResults | undefined;
 	private _scanResultsPreviews$ = new BehaviorSubject<ICompleteResults | undefined>(undefined);
 	/**
 	 * Subject for sharing the report complete results.
@@ -103,6 +105,15 @@ export class ReportDataService {
 	}
 	public get excludedResultsIds() {
 		return this._excludedResultsIds$.value;
+	}
+
+	private _loadingMoreResults$ = new BehaviorSubject<boolean>(false);
+	/** Emits matches that are relevant to source html one-to-many mode */
+	public get loadingMoreResults$() {
+		return this._loadingMoreResults$;
+	}
+	public get loadingMoreResults() {
+		return this._loadingMoreResults$.value;
 	}
 
 	public get isFilterOn(): boolean {
@@ -181,8 +192,7 @@ export class ReportDataService {
 					return;
 
 				const filteredResults = this.filterResults(options, excludedResultsIds);
-				const stats = helpers.calculateStatistics(this.scanResultsPreviews, filteredResults, options);
-
+				const stats: ReportStatistics = this._getReportStats(filteredResults, this.scanResultsPreviews);
 				const filteredOutResultsIds = [
 					...(this.scanResultsPreviews$.value?.results.internet ?? []),
 					...(this.scanResultsPreviews$.value?.results.batch ?? []),
@@ -410,8 +420,11 @@ export class ReportDataService {
 		const cachedResults = this._scanResultsDetails$.getValue();
 
 		if (cachedResults?.length === this.totalCompleteResults || !this.filterOptions || !this.excludedResultsIds) {
+			this._loadingMoreResults$.next(false);
 			return;
 		}
+
+		this._loadingMoreResults$.next(true);
 
 		let resultsIds = this.filterPreviewedResults(this.filterOptions, this.excludedResultsIds);
 		resultsIds = resultsIds.filter(id => !this._scanResultsDetails$.value?.find(r => r.id === id));
@@ -427,7 +440,10 @@ export class ReportDataService {
 		const totalBatches = idBatches.length;
 		let currentBatchIndex = 0; // Initialize a variable to keep track of the current batch index
 
-		if (totalBatches === 0 && (this.totalCompleteResults === 0 || firstLoad)) this._scanResultsDetails$.next([]);
+		if (totalBatches === 0) {
+			if (this.totalCompleteResults === 0 || firstLoad) this._scanResultsDetails$.next([]);
+			this._loadingMoreResults$.next(false);
+		}
 
 		this._loadedResultsDetails$ = [...(this._scanResultsDetails$.value ?? [])];
 		// Send the GET results requests in batches
@@ -448,6 +464,7 @@ export class ReportDataService {
 					// Check if this is the last batch
 					if (currentBatchIndex === totalBatches) {
 						this._scanResultsDetails$.next(this._loadedResultsDetails$);
+						this._loadingMoreResults$.next(false);
 					}
 				}
 			});
@@ -768,8 +785,10 @@ export class ReportDataService {
 			publicationDate: completeResultsRes.filters?.resultsMetaData?.publicationDate?.startDate,
 		});
 
+		this.completeResultsSnapshot = completeResultsRes;
+
 		const filteredResults = this.filterResults(this.filterOptions, this.excludedResultsIds);
-		const stats = helpers.calculateStatistics(completeResultsRes, filteredResults, this.filterOptions);
+		const stats: ReportStatistics = this._getReportStats(filteredResults, completeResultsRes);
 
 		this._scanResultsPreviews$.next({
 			...completeResultsRes,
@@ -820,6 +839,37 @@ export class ReportDataService {
 			// Load all the complete scan results
 			this.loadViewedResultsDetails(true);
 		}
+	}
+
+	private _getReportStats(filteredResults: ResultDetailItem[], completeResultsRes: ICompleteResults) {
+		const showAll =
+			this.filterOptions?.showIdentical && this.filterOptions?.showMinorChanges && this.filterOptions?.showRelated;
+		const missingAggregated =
+			this.totalCompleteResults !== 0 && this.scanResultsPreviews?.results.score.aggregatedScore === 0;
+		let stats: ReportStatistics;
+		if (
+			this.totalCompleteResults != filteredResults.length ||
+			!showAll ||
+			missingAggregated ||
+			!this.completeResultsSnapshot
+		) {
+			stats = helpers.calculateStatistics(completeResultsRes, filteredResults, this.filterOptions);
+		} else {
+			// * if results are still loading  or no results are fitlered while all match types are visible
+			// * we can use the complete result stats without heavy calculations
+			const aiStatistics = helpers.getAiStatistics(completeResultsRes);
+			stats = {
+				aggregatedScore: this.completeResultsSnapshot.results.score.aggregatedScore,
+				identical: this.completeResultsSnapshot.results.score.identicalWords,
+				relatedMeaning: this.completeResultsSnapshot.results.score.relatedMeaningWords,
+				minorChanges: this.completeResultsSnapshot.results.score.minorChangedWords,
+				omittedWords: this.completeResultsSnapshot.scannedDocument.totalExcluded,
+				total: this.completeResultsSnapshot.scannedDocument.totalWords,
+				aiScore: aiStatistics?.ai ?? 0,
+				humanScore: aiStatistics?.human ?? 0,
+			};
+		}
+		return stats;
 	}
 
 	private _createHeaders(endpointDetails: IEndpointDetails): HttpHeaders {

@@ -93,20 +93,25 @@
 		</ng-container>
 
 		<ng-container *ngIf="resultsActions?.totalFiltered">
-			<mat-chip class="filter-chip" (click)="showFilterDialog()">
+			<mat-chip class="filter-chip" [class.disabled]="loadingResults" (click)="showFilterDialog()">
 				<span>
 					{{ resultsActions?.totalFiltered }}
 					<ng-container i18n>filtered</ng-container>
 				</span>
-				<mat-icon
-					class="clear-filter-icon"
-					fontSet="material-icons-round"
-					(click)="$event.stopPropagation(); clearFilter()"
-					matTooltip="Clear Filter"
-					matTooltipClass="web-report-mat-tooltip"
-					i18n-matTooltip>
-					highlight_off
-				</mat-icon>
+				<ng-container *ngIf="!loadingResults; else loadingResultsViewRef">
+					<mat-icon
+						class="clear-filter-icon"
+						fontSet="material-icons-round"
+						(click)="$event.stopPropagation(); clearFilter()"
+						matTooltip="Clear Filter"
+						matTooltipClass="web-report-mat-tooltip"
+						i18n-matTooltip>
+						highlight_off
+					</mat-icon>
+				</ng-container>
+				<ng-template #loadingResultsViewRef>
+					<cr-spinner size="14px"></cr-spinner>
+				</ng-template>
 			</mat-chip>
 		</ng-container>
 	</div>

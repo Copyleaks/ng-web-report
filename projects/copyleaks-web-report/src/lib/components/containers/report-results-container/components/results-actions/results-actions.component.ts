@@ -52,6 +52,7 @@ export class ResultsActionsComponent implements OnInit, OnChanges, OnDestroy {
 
 	searchFc = new FormControl('');
 	showSearchFiled: boolean = false;
+	loadingResults: boolean;
 
 	constructor(
 		private _matDialog: MatDialog,
@@ -63,6 +64,10 @@ export class ResultsActionsComponent implements OnInit, OnChanges, OnDestroy {
 	ngOnInit(): void {
 		this.searchFc.valueChanges.pipe(untilDestroy(this)).subscribe(value => {
 			this.onSearch.emit(value);
+		});
+
+		this._reportDataSvc.loadingMoreResults$.pipe(untilDestroy(this)).subscribe(value => {
+			this.loadingResults = value;
 		});
 	}
 

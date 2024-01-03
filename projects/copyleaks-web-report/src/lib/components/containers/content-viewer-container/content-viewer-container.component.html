@@ -146,14 +146,22 @@
 						<i
 							*ngIf="partial.match.type === MatchType.excluded && partial.match.reason != 8"
 							exclude-match
-							[title]="partial.match.reason ? EXCLUDE_MESSAGE[partial.match.reason] : ''">
+							[title]="
+								partial.match.reason != undefined && partial.match.reason != null
+									? EXCLUDE_MESSAGE[partial.match.reason]
+									: ''
+							">
 							{{ partial.content }}
 						</i>
 						<!--  -->
 						<span
 							*ngIf="partial.match.type === MatchType.excluded && partial.match.reason == 8"
 							exclude-partial-scan
-							[title]="partial.match.reason ? EXCLUDE_MESSAGE[partial.match.reason] : ''">
+							[title]="
+								partial.match.reason != undefined && partial.match.reason != null
+									? EXCLUDE_MESSAGE[partial.match.reason]
+									: ''
+							">
 							{{ partial.content }}
 						</span>
 					</ng-container>
@@ -197,7 +205,11 @@
 						<i
 							*ngIf="partial.match.type === MatchType.excluded && partial.match.reason != 8"
 							exclude-match
-							[title]="partial.match.reason ? EXCLUDE_MESSAGE[partial.match.reason] : ''">
+							[title]="
+								partial.match.reason != undefined && partial.match.reason != null
+									? EXCLUDE_MESSAGE[partial.match.reason]
+									: ''
+							">
 							{{ partial.content }}
 						</i>
 						<!--  -->

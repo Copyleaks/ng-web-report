@@ -9,6 +9,7 @@ import {
 	SimpleChanges,
 	ChangeDetectorRef,
 	TemplateRef,
+	HostListener,
 } from '@angular/core';
 import { EResponsiveLayoutType, EResultPreviewType } from '../../../enums/copyleaks-web-report.enums';
 import { EnumNavigateMobileButton } from '../report-results-item-container/components/models/report-result-item.enum';
@@ -18,7 +19,7 @@ import { ReportNgTemplatesService } from '../../../services/report-ng-templates.
 import { untilDestroy } from '../../../utils/until-destroy';
 import { CdkVirtualScrollViewport } from '@angular/cdk/scrolling';
 import { Observable, combineLatest, fromEvent } from 'rxjs';
-import { map, pairwise, filter, distinctUntilChanged } from 'rxjs/operators';
+import { map, pairwise, filter, distinctUntilChanged, debounceTime, takeUntil } from 'rxjs/operators';
 import { ReportDataService } from '../../../services/report-data.service';
 import { ResultDetailItem } from '../../../models/report-matches.models';
 import { ICopyleaksReportOptions } from '../../../models/report-options.models';
@@ -36,6 +37,7 @@ export class ReportResultsContainerComponent implements OnInit, OnChanges {
 
 	@HostBinding('style.flex-grow')
 	flexGrowProp: number;
+
 	/**
 	 * @Input {number} Flex grow property - flex-grow
 	 */
@@ -81,6 +83,8 @@ export class ReportResultsContainerComponent implements OnInit, OnChanges {
 
 	ECustomResultsReportView = ECustomResultsReportView;
 
+	private _resizeObserver: ResizeObserver;
+
 	get allResultsItemLength() {
 		return this.allResults?.length;
 	}
@@ -95,6 +99,7 @@ export class ReportResultsContainerComponent implements OnInit, OnChanges {
 
 	constructor(
 		private _cdr: ChangeDetectorRef,
+		private _elementRef: ElementRef,
 		public reportDataSvc: ReportDataService,
 		public reportNgTemplatesSvc: ReportNgTemplatesService,
 		public reportViewSvc: ReportViewService
@@ -143,6 +148,10 @@ export class ReportResultsContainerComponent implements OnInit, OnChanges {
 				this._cdr.detectChanges();
 			}
 		});
+
+		this._resizeObserver = new ResizeObserver(_ => {
+			this.viewport?.checkViewportSize();
+		});
 	}
 
 	private _handelFilterUpdates() {
@@ -166,6 +175,8 @@ export class ReportResultsContainerComponent implements OnInit, OnChanges {
 			.subscribe(() => {
 				this.checkAndApplyPadding();
 			});
+
+		this._resizeObserver.observe(this._elementRef.nativeElement);
 	}
 
 	checkAndApplyPadding() {
@@ -379,5 +390,8 @@ export class ReportResultsContainerComponent implements OnInit, OnChanges {
 	}
 
 	//#endregion
-	ngOnDestroy() {}
+
+	ngOnDestroy() {
+		this._resizeObserver.disconnect();
+	}
 }

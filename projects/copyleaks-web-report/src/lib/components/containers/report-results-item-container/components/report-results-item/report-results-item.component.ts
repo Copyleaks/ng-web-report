@@ -75,6 +75,7 @@ export class ReportResultsItemComponent implements OnInit, OnChanges, OnDestroy 
 
 	get authorName() {
 		if (this.previewResult) {
+			if (this.previewResult.metadata?.author) return this.previewResult.metadata?.author;
 			switch (this.previewResult.type) {
 				case EResultPreviewType.Internet:
 					return 'Internet Result';
@@ -93,6 +94,16 @@ export class ReportResultsItemComponent implements OnInit, OnChanges, OnDestroy 
 
 	get isLocked(): boolean {
 		return !this.showLoader && (this.resultItem?.resultPreview?.isLocked ?? false);
+	}
+
+	get firstTag() {
+		if (this.resultItem?.resultPreview?.tags && this.resultItem?.resultPreview?.tags.length > 0)
+			return this.resultItem.resultPreview.tags[0];
+		return null;
+	}
+
+	get numberOfTags() {
+		return this.resultItem?.resultPreview?.tags?.length ?? 0;
 	}
 
 	constructor(private _matDialog: MatDialog) {}

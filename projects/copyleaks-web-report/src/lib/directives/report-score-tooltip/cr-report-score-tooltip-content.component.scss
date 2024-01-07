@@ -160,6 +160,7 @@
 
 		&.omitted-words {
 			background-color: $color-plagiarism-omitted-words;
+			color: $color-black !important;
 		}
 
 		&.ai {

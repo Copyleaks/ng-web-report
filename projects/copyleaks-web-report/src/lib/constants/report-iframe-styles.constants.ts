@@ -32,6 +32,7 @@ span[exclude] {
 	font-style: italic;
 	opacity: 0.75;
   background-color: #F6F6F6;
+  color: #0b163e !important;
   cursor: pointer;
 }
 span[exclude-partial-scan] {

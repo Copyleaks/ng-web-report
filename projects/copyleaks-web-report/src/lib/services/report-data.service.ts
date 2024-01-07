@@ -707,9 +707,26 @@ export class ReportDataService {
 		if (progress.percents < 100 && progress.percents > 36 && !this._crawledVersion$.value) {
 			const crawledVersion = await this._getReportCrawledVersion();
 			this._crawledVersion$.next(crawledVersion);
+
+			if (!crawledVersion?.html.value)
+				this._viewSvc.reportViewMode$.next({
+					...this._viewSvc.reportViewMode,
+					isHtmlView: false,
+				});
 		} else if (progress.percents === 100) {
 			const completeResults = await this._getReportCompleteResults();
 			this._updateCompleteResults(completeResults);
+
+			if (!this._crawledVersion$.value) {
+				const crawledVersion = await this._getReportCrawledVersion();
+				this._crawledVersion$.next(crawledVersion);
+
+				if (!crawledVersion?.html.value)
+					this._viewSvc.reportViewMode$.next({
+						...this._viewSvc.reportViewMode,
+						isHtmlView: false,
+					});
+			}
 		}
 	}
 

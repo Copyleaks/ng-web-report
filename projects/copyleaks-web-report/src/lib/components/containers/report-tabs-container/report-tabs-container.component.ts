@@ -141,7 +141,7 @@ export class ReportTabsContainerComponent implements OnInit, OnDestroy, OnChange
 				this._reportViewSvc.selectedAlert$.next(ALERTS.SUSPECTED_AI_TEXT_DETECTED);
 				this._reportViewSvc.reportViewMode$.next({
 					...this._reportViewSvc.reportViewMode,
-					viewMode: this.showDisabledProducts ? 'one-to-many' : 'only-ai',
+					viewMode: 'only-ai',
 					alertCode: ALERTS.SUSPECTED_AI_TEXT_DETECTED,
 				});
 			}

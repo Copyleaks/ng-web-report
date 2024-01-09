@@ -730,10 +730,10 @@ export class ReportDataService {
 		});
 
 		// Load the excluded results Ids
-		this.excludedResultsIds$.next(completeResultsRes.filters?.execludedResultIds ?? []);
+		this._excludedResultsIds$.next(completeResultsRes.filters?.execludedResultIds ?? []);
 
 		// Load the filter options from the complete results response
-		this.filterOptions$.next({
+		this._filterOptions$.next({
 			showIdentical:
 				completeResultsRes.filters?.matchType?.identicalText != undefined
 					? completeResultsRes.filters?.matchType?.identicalText

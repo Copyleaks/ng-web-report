@@ -13,7 +13,7 @@
 					Identical
 				</span>
 			</div>
-			<span class="percentage">{{ scoreStats?.identicalPct?.percentage ?? 0 | similarity : '1.1-1' }}</span>
+			<span class="percentage">{{ scoreStats?.identicalPct?.percentage ?? 0 | similarity : '1.0-1' }}</span>
 		</div>
 		<div class="minor-changes-stats">
 			<div class="title-container">
@@ -22,7 +22,7 @@
 					Minor changes
 				</span>
 			</div>
-			<span class="percentage">{{ scoreStats?.minorChangesPct?.percentage ?? 0 | similarity : '1.1-1' }}</span>
+			<span class="percentage">{{ scoreStats?.minorChangesPct?.percentage ?? 0 | similarity : '1.0-1' }}</span>
 		</div>
 		<div class="paraphrased-stats">
 			<div class="title-container">
@@ -31,15 +31,15 @@
 					Paraphrased
 				</span>
 			</div>
-			<span class="percentage">{{ scoreStats?.paraphrasedPct?.percentage ?? 0 | similarity : '1.1-1' }}</span>
+			<span class="percentage">{{ scoreStats?.paraphrasedPct?.percentage ?? 0 | similarity : '1.0-1' }}</span>
 		</div>
-		<div class="omitted-words-stats">
+		<div *ngIf="!!scoreStats?.omittedPct?.percentage" class="omitted-words-stats">
 			<div class="title-container">
 				<span class="omitted-words dot"></span>
 				<span class="title" i18n>Omitted words</span>
 			</div>
 			<span class="percentage">
-				{{ scoreStats?.omittedPct?.percentage ?? 0 | similarity : '1.1-1' }}
+				{{ scoreStats?.omittedPct?.percentage ?? 0 | similarity : '1.0-1' }}
 			</span>
 		</div>
 	</ng-container>
@@ -51,14 +51,14 @@
 					<span class="ai dot"></span>
 					<span class="title" i18n>AI Content</span>
 				</div>
-				<span class="percentage">{{ scoreStats?.aiPct?.percentage ?? 0 | similarity : '1.1-1' }}</span>
+				<span class="percentage">{{ scoreStats?.aiPct?.percentage ?? 0 | similarity : '1.0-1' }}</span>
 			</div>
 			<div class="human-stats">
 				<div class="title-container">
 					<span class="human dot"></span>
 					<span class="title" i18n>Human text</span>
 				</div>
-				<span class="percentage">{{ scoreStats?.humanPct?.percentage ?? 0 | similarity : '1.1-1' }}</span>
+				<span class="percentage">{{ scoreStats?.humanPct?.percentage ?? 0 | similarity : '1.0-1' }}</span>
 			</div>
 		</ng-container>
 	</ng-template>

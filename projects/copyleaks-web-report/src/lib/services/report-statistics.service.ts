@@ -107,7 +107,7 @@ export class ReportStatisticsService implements OnDestroy {
 			// * we can use the complete result stats without heavy calculations
 			const aiStatistics = helpers.getAiStatistics(completeResult);
 			stats = {
-				aggregatedScore: this._reportDataSvc.completeResultsSnapshot?.results?.score?.aggregatedScore ?? 0,
+				aggregatedScore: (this._reportDataSvc.completeResultsSnapshot?.results?.score?.aggregatedScore ?? 0) / 100,
 				identical: this._reportDataSvc.completeResultsSnapshot?.results?.score?.identicalWords ?? 0,
 				relatedMeaning: this._reportDataSvc.completeResultsSnapshot?.results?.score?.relatedMeaningWords ?? 0,
 				minorChanges: this._reportDataSvc.completeResultsSnapshot?.results?.score?.minorChangedWords ?? 0,

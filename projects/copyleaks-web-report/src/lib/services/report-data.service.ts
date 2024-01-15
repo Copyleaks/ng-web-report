@@ -375,7 +375,7 @@ export class ReportDataService {
 	}
 
 	public async initAsync() {
-		const ENABLE_REALTIME_MOCK_TESTING = false;
+		const ENABLE_REALTIME_MOCK_TESTING = true;
 		let testCounter = 25;
 
 		// Set the layout view to: one-to-many plagiarism with no selected alerts
@@ -530,16 +530,24 @@ export class ReportDataService {
 		filteredResultsIds = filteredResultsIds.filter(id =>
 			resultsUpdateStatistics.find(
 				cr =>
-					cr.id === id &&
-					// check if after the percentage transform, the viewed percentage will be 0.0
-					this._percentPipe.transform(
-						((cr.result?.statistics?.relatedMeaning ?? 0) +
+					(cr.id === id &&
+						// check if after the percentage transform, the viewed percentage will be 0.0
+						this._percentPipe.transform(
+							((cr.result?.statistics?.relatedMeaning ?? 0) +
+								(cr.result?.statistics?.minorChanges ?? 0) +
+								(cr.result?.statistics?.identical ?? 0)) /
+								((this.scanResultsPreviews?.scannedDocument.totalWords ?? 0) +
+									(this.scanResultsPreviews?.scannedDocument.totalExcluded ?? 0)),
+							'1.1-1'
+						) !== '0.0%') ||
+					// for compare scan situation: check if the filter match options are on, then don't hide the results with zero matches
+					(settings.showIdentical &&
+						settings.showRelated &&
+						settings.showMinorChanges &&
+						(cr.result?.statistics?.relatedMeaning ?? 0) +
 							(cr.result?.statistics?.minorChanges ?? 0) +
-							(cr.result?.statistics?.identical ?? 0)) /
-							((this.scanResultsPreviews?.scannedDocument.totalWords ?? 0) +
-								(this.scanResultsPreviews?.scannedDocument.totalExcluded ?? 0)),
-						'1.1-1'
-					) !== '0.0%'
+							(cr.result?.statistics?.identical ?? 0) ===
+							0)
 			)
 		);
 
@@ -876,7 +884,7 @@ export class ReportDataService {
 			// * we can use the complete result stats without heavy calculations
 			const aiStatistics = helpers.getAiStatistics(completeResultsRes);
 			stats = {
-				aggregatedScore: this.completeResultsSnapshot.results.score.aggregatedScore,
+				aggregatedScore: (this.completeResultsSnapshot.results?.score?.aggregatedScore ?? 0) / 100,
 				identical: this.completeResultsSnapshot.results.score.identicalWords,
 				relatedMeaning: this.completeResultsSnapshot.results.score.relatedMeaningWords,
 				minorChanges: this.completeResultsSnapshot.results.score.minorChangedWords,

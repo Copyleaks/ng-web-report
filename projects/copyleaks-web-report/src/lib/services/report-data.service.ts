@@ -205,7 +205,14 @@ export class ReportDataService {
 					.map(result => result.id);
 
 				// Load all the viewed results
-				if (!this.realTimeView) this.loadViewedResultsDetails();
+				if (
+					!this.realTimeView ||
+					(this.realTimeView &&
+						this.totalCompleteResults > 100 &&
+						this.scanResultsDetails.length != this.totalCompleteResults &&
+						!options.showTop100Results)
+				)
+					this.loadViewedResultsDetails();
 
 				this._scanResultsPreviews$.next({
 					...this.scanResultsPreviews,
@@ -375,7 +382,7 @@ export class ReportDataService {
 	}
 
 	public async initAsync() {
-		const ENABLE_REALTIME_MOCK_TESTING = false;
+		const ENABLE_REALTIME_MOCK_TESTING = true;
 		let testCounter = 25;
 
 		// Set the layout view to: one-to-many plagiarism with no selected alerts

@@ -1,8 +1,12 @@
 @import '../../../../styles/website-colors.styles.scss';
+@import '../../../../styles/styles.scss';
 @import '../../../../styles/cls-mat-components-overrides/cls-scroll-bar-overrides.scss';
 
-.container {
+:host {
 	background-color: $color-white;
+	display: flex;
+	flex-direction: column;
+	gap: 8px;
 	.header-container {
 		width: 100%;
 		.header {
@@ -88,5 +92,22 @@
 		font-size: 14px;
 		font-weight: 500;
 		text-decoration-line: underline;
+	}
+
+	.mat-dialog-content,
+	.mat-dialog-title,
+	.mat-dialog-actions {
+		margin: 0px !important;
+		padding: 0px !important;
+	}
+
+	.mat-dialog-content {
+		display: flex;
+		flex-direction: column;
+		gap: 8px;
+	}
+
+	.mat-dialog-actions {
+		min-height: auto !important;
 	}
 }

@@ -1,12 +1,12 @@
-<div class="container" fxLayout="column" fxLayoutAlign="start start" fxLayoutGap="8px">
-	<div class="header-container" fxLayout="row" fxLayoutAlign="space-between center">
-		<div fxLayoutAlign="start center" fxLayoutGap="8px">
-			<span class="header" i18n>Excluded Matching Results</span>
-			<span class="total-excluded">({{ allResultsItemLength }})</span>
-		</div>
-		<mat-icon class="close-icon" (click)="closeDailog()">close</mat-icon>
+<div mat-dialog-title class="header-container" fxLayout="row" fxLayoutAlign="space-between center">
+	<div fxLayoutAlign="start center" fxLayoutGap="8px">
+		<span class="header" web-report-title-font i18n>Excluded Matching Results</span>
+		<span class="total-excluded">({{ allResultsItemLength }})</span>
 	</div>
+	<mat-icon class="close-icon" (click)="closeDailog()">close</mat-icon>
+</div>
 
+<div mat-dialog-content>
 	<div class="search-container" fxLayout="row" fxLayoutAlign="start center" fxLayoutGap="8px">
 		<div
 			class="search-icon-contaier"
@@ -44,6 +44,8 @@
 			</ng-container>
 		</div>
 	</div>
+</div>
 
+<div mat-dialog-actions>
 	<button class="include-all-button" (click)="includeAllButton()" i18n>Include all</button>
 </div>

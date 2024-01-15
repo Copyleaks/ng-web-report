@@ -29,7 +29,7 @@ import { ReportStatistics } from '../models/report-statistics.models';
 
 @Injectable()
 export class ReportDataService {
-	private _realTimeView: boolean;
+	public realTimeView: boolean;
 
 	private _reportEndpointConfig$ = new BehaviorSubject<IClsReportEndpointConfigModel | undefined>(undefined);
 	/**
@@ -187,7 +187,7 @@ export class ReportDataService {
 					this._viewSvc.progress$.value !== 100 ||
 					(this.totalCompleteResults <= 100 &&
 						this.scanResultsDetails.length != this.totalCompleteResults &&
-						this._realTimeView)
+						this.realTimeView)
 				)
 					return;
 
@@ -205,7 +205,7 @@ export class ReportDataService {
 					.map(result => result.id);
 
 				// Load all the viewed results
-				if (!this._realTimeView) this.loadViewedResultsDetails();
+				if (!this.realTimeView) this.loadViewedResultsDetails();
 
 				this._scanResultsPreviews$.next({
 					...this.scanResultsPreviews,
@@ -386,7 +386,7 @@ export class ReportDataService {
 			viewMode: 'one-to-many',
 		});
 
-		this._realTimeView = true;
+		this.realTimeView = true;
 
 		// subscribtion to stop the 10 sec inteval when the progress is 100% and the report data is loaded
 		var _realTimeUpdateSub = new Subject();
@@ -530,16 +530,24 @@ export class ReportDataService {
 		filteredResultsIds = filteredResultsIds.filter(id =>
 			resultsUpdateStatistics.find(
 				cr =>
-					cr.id === id &&
-					// check if after the percentage transform, the viewed percentage will be 0.0
-					this._percentPipe.transform(
-						((cr.result?.statistics?.relatedMeaning ?? 0) +
+					(cr.id === id &&
+						// check if after the percentage transform, the viewed percentage will be 0.0
+						this._percentPipe.transform(
+							((cr.result?.statistics?.relatedMeaning ?? 0) +
+								(cr.result?.statistics?.minorChanges ?? 0) +
+								(cr.result?.statistics?.identical ?? 0)) /
+								((this.scanResultsPreviews?.scannedDocument.totalWords ?? 0) +
+									(this.scanResultsPreviews?.scannedDocument.totalExcluded ?? 0)),
+							'1.1-1'
+						) !== '0.0%') ||
+					// for compare scan situation: check if the filter match options are on, then don't hide the results with zero matches
+					(settings.showIdentical &&
+						settings.showRelated &&
+						settings.showMinorChanges &&
+						(cr.result?.statistics?.relatedMeaning ?? 0) +
 							(cr.result?.statistics?.minorChanges ?? 0) +
-							(cr.result?.statistics?.identical ?? 0)) /
-							((this.scanResultsPreviews?.scannedDocument.totalWords ?? 0) +
-								(this.scanResultsPreviews?.scannedDocument.totalExcluded ?? 0)),
-						'1.1-1'
-					) !== '0.0%'
+							(cr.result?.statistics?.identical ?? 0) ===
+							0)
 			)
 		);
 
@@ -876,7 +884,7 @@ export class ReportDataService {
 			// * we can use the complete result stats without heavy calculations
 			const aiStatistics = helpers.getAiStatistics(completeResultsRes);
 			stats = {
-				aggregatedScore: this.completeResultsSnapshot.results.score.aggregatedScore,
+				aggregatedScore: (this.completeResultsSnapshot.results?.score?.aggregatedScore ?? 0) / 100,
 				identical: this.completeResultsSnapshot.results.score.identicalWords,
 				relatedMeaning: this.completeResultsSnapshot.results.score.relatedMeaningWords,
 				minorChanges: this.completeResultsSnapshot.results.score.minorChangedWords,

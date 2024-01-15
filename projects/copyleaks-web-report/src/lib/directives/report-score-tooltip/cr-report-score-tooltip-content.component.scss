@@ -145,6 +145,7 @@
 		border-radius: 50%;
 		width: 10px;
 		height: 10px;
+		border: 0.5px solid $grayed-out-disabled;
 
 		&.identical {
 			background-color: $color-plagiarism-identical;
@@ -202,9 +203,4 @@ svg {
 
 .disabled-property {
 	text-decoration: line-through;
-}
-
-.omitted-words.dot,
-.human.dot {
-	border: 0.5px solid $grayed-out-disabled;
 }

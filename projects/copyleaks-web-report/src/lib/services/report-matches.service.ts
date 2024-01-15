@@ -98,10 +98,25 @@ export class ReportMatchesService implements OnDestroy {
 					return;
 				}
 				// process the mathces according to the report view
+				const isRealtimeInitView =
+					this._reportDataSvc.realTimeView &&
+					!this._reportDataSvc.isFilterOn &&
+					(!this._reportDataSvc.excludedResultsIds || this._reportDataSvc.excludedResultsIds.length === 0);
+
 				if (viewMode.isHtmlView) {
-					this._processOneToManyMatchesHtml(scanResults, filterOptions, excludedResultsIds, scanSource);
+					this._processOneToManyMatchesHtml(
+						scanResults,
+						isRealtimeInitView ? undefined : filterOptions,
+						excludedResultsIds,
+						scanSource
+					);
 				} else {
-					this._processOneToManyMatchesText(scanResults, filterOptions, excludedResultsIds, scanSource);
+					this._processOneToManyMatchesText(
+						scanResults,
+						isRealtimeInitView ? undefined : filterOptions,
+						excludedResultsIds,
+						scanSource
+					);
 				}
 			});
 	}

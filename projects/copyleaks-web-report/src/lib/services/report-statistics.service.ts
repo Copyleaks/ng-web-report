@@ -48,7 +48,13 @@ export class ReportStatisticsService implements OnDestroy {
 			)
 			.subscribe(([completeResult, results, , excludedResultsIds, filterOptions]) => {
 				if (completeResult && filterOptions && excludedResultsIds) {
+					const isRealtimeInitView =
+						this._reportDataSvc.realTimeView &&
+						!this._reportDataSvc.isFilterOn &&
+						(!this._reportDataSvc.excludedResultsIds || this._reportDataSvc.excludedResultsIds.length === 0);
+
 					const filteredResults = this._reportDataSvc.filterResults(filterOptions, excludedResultsIds);
+					if (isRealtimeInitView && this._reportDataSvc.totalCompleteResults != filteredResults.length) return;
 					this.retreieveOneToManyStatistics(completeResult, results ?? [], filteredResults, filterOptions);
 				}
 			});

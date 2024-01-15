@@ -29,7 +29,7 @@ import { ReportStatistics } from '../models/report-statistics.models';
 
 @Injectable()
 export class ReportDataService {
-	private _realTimeView: boolean;
+	public realTimeView: boolean;
 
 	private _reportEndpointConfig$ = new BehaviorSubject<IClsReportEndpointConfigModel | undefined>(undefined);
 	/**
@@ -187,7 +187,7 @@ export class ReportDataService {
 					this._viewSvc.progress$.value !== 100 ||
 					(this.totalCompleteResults <= 100 &&
 						this.scanResultsDetails.length != this.totalCompleteResults &&
-						this._realTimeView)
+						this.realTimeView)
 				)
 					return;
 
@@ -205,7 +205,7 @@ export class ReportDataService {
 					.map(result => result.id);
 
 				// Load all the viewed results
-				if (!this._realTimeView) this.loadViewedResultsDetails();
+				if (!this.realTimeView) this.loadViewedResultsDetails();
 
 				this._scanResultsPreviews$.next({
 					...this.scanResultsPreviews,
@@ -386,7 +386,7 @@ export class ReportDataService {
 			viewMode: 'one-to-many',
 		});
 
-		this._realTimeView = true;
+		this.realTimeView = true;
 
 		// subscribtion to stop the 10 sec inteval when the progress is 100% and the report data is loaded
 		var _realTimeUpdateSub = new Subject();

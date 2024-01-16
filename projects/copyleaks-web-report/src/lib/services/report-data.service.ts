@@ -558,7 +558,20 @@ export class ReportDataService {
 			)
 		);
 
-		return this.scanResultsDetails.filter(r => !!filteredResultsIds.find(id => r.id === id));
+		var result = this.scanResultsDetails.filter(r => !!filteredResultsIds.find(id => r.id === id));
+		return this._removeDuplicates(result, 'id');
+	}
+
+	private _removeDuplicates(array: ResultDetailItem[], property: string) {
+		const seen = new Set();
+		return array.filter((obj: any) => {
+			const value = obj[property];
+			if (!seen.has(value)) {
+				seen.add(value);
+				return true;
+			}
+			return false;
+		});
 	}
 
 	public filterPreviewedResults(settings: ICopyleaksReportOptions, excludedResultsIds: string[]): string[] {

@@ -73,6 +73,10 @@ export class ReportResultsItemComponent implements OnInit, OnChanges, OnDestroy 
 		this.reportViewSvc?.selectedAlert$.next(null);
 	}
 
+	get isOwner(): boolean {
+		return !!this.previewResult?.scanId;
+	}
+
 	get authorName() {
 		if (this.previewResult) {
 			if (this.previewResult.metadata?.author) return this.previewResult.metadata?.author;

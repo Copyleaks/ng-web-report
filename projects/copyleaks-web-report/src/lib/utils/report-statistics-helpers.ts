@@ -191,7 +191,7 @@ export const calculateStatistics = (
 };
 
 export const getAiStatistics = (completeResult: ICompleteResults): AIScanResultSummary | null => {
-	const aiAlert = completeResult.notifications?.alerts.find(a => a.code === ALERTS.SUSPECTED_AI_TEXT_DETECTED);
+	const aiAlert = completeResult.notifications?.alerts?.find(a => a.code === ALERTS.SUSPECTED_AI_TEXT_DETECTED);
 	if (aiAlert) {
 		const aiData: AIScanResult = JSON.parse(aiAlert.additionalData);
 		return aiData.summary;

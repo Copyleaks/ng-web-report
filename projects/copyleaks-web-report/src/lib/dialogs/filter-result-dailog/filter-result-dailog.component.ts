@@ -96,7 +96,12 @@ export class FilterResultDailogComponent implements OnInit {
 				!formData.showBatchResults &&
 				!formData.showInternalDatabaseResults &&
 				formData.hiddenRepositories &&
-				formData.hiddenRepositories.length === this._filterResultsSvc.reposIds.length
+				formData.hiddenRepositories.length === this._filterResultsSvc.reposIds.length &&
+				!(
+					this.totalSourceType.totalInternet === 0 &&
+					this.totalSourceType.totalInternalDatabase === 0 &&
+					this.totalSourceType.totalbatch === 0
+				)
 			) {
 				setTimeout(() => {
 					if (this.totalSourceType.totalInternet > 0)
@@ -124,7 +129,12 @@ export class FilterResultDailogComponent implements OnInit {
 				});
 
 				this.sourceTypeErrorMessage = $localize`At least one match Source type needs to be activated.`;
-			} else if (!formData.showIdentical && !formData.showMinorChanges && !formData.showRelated) {
+			} else if (
+				!formData.showIdentical &&
+				!formData.showMinorChanges &&
+				!formData.showRelated &&
+				!(this.totalParaphrased === 0 && this.totalMinorChanges === 0 && this.totalIdentical === 0)
+			) {
 				setTimeout(() => {
 					if (this.totalIdentical > 0)
 						this._filterResultsSvc.filterResultFormGroup
@@ -328,7 +338,7 @@ export class FilterResultDailogComponent implements OnInit {
 	getFilterCurrentData(): ICopyleaksReportOptions {
 		return {
 			// Tags
-			includedTags: this._filterResultsSvc.selectedTagItem.filter(a => a.selected).map(a => a.code) ?? [],
+			includedTags: this._filterResultsSvc.selectedTagItem.filter(a => a.selected).map(a => a.title) ?? [],
 
 			// Matches
 			showIdentical:

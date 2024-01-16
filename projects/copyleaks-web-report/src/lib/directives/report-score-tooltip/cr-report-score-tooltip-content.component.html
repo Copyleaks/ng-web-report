@@ -33,7 +33,7 @@
 			</div>
 			<span class="percentage">{{ scoreStats?.paraphrasedPct?.percentage ?? 0 | similarity : '1.0-1' }}</span>
 		</div>
-		<div *ngIf="!!scoreStats?.omittedPct?.percentage" class="omitted-words-stats">
+		<div *ngIf="scoreStats?.omittedPct?.percentage != undefined" class="omitted-words-stats">
 			<div class="title-container">
 				<span class="omitted-words dot"></span>
 				<span class="title" i18n>Omitted words</span>

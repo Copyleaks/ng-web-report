@@ -125,15 +125,19 @@ export class FilterResultDailogService {
 		// Select all tags that are provided in the filter options in the complete results response
 		const filteredTags = this._completeResults.filters?.includedTags;
 		if (filteredTags && filteredTags.length > 0) {
-			filteredTags.forEach(tagCode => {
-				const foundTag = this.selectedTagItem.find(t => tagCode === t.code);
-				if (foundTag) foundTag.selected = true;
+			filteredTags.forEach(tagTitle => {
+				this.selectedTagItem.forEach(tag => {
+					if (tag.title === tagTitle) tag.selected = true;
+				});
 			});
 		}
 	}
 
 	clearForm() {
 		this.initTags();
+		this.selectedTagItem?.forEach(tag => {
+			tag.selected = false;
+		});
 
 		this._filterResultForm.patchValue({
 			sourceType: {

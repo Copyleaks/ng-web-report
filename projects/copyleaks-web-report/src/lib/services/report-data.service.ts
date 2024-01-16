@@ -1021,7 +1021,7 @@ export class ReportDataService {
 
 		if (settings.includedTags && settings.includedTags.length > 0)
 			filteredResultsIds = filteredResultsIds.filter(id =>
-				completeResults.find(cr => cr.id === id && cr.tags?.find(t => settings.includedTags?.includes(t.code)))
+				completeResults.find(cr => cr.id === id && cr.tags?.find(t => settings.includedTags?.includes(t.title)))
 			);
 		return filteredResultsIds;
 	}

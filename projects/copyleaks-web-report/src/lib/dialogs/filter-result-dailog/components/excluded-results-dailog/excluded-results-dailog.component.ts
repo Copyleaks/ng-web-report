@@ -119,15 +119,22 @@ export class ExcludedResultsDailogComponent implements OnInit, AfterViewInit {
 		this.allIncluded = true;
 	}
 
+	isResultIncluded(id?: string): boolean {
+		return this.reportDataSvc.excludedResultsIds?.find(resultId => resultId === id) != undefined;
+	}
+
 	includeResultById(resultId: string) {
 		const excludedResutsIds = this.reportDataSvc.excludedResultsIds ?? [];
 		this.reportDataSvc.excludedResultsIds$.next(excludedResutsIds.filter(id => id != resultId));
+
+		// if (this.reportDataSvc.excludedResultsIds?.length === 0) this.allIncluded = true;
 	}
 
 	excludeResultById(resultId: string) {
 		const excludedResutsIds = new Set(this.reportDataSvc.excludedResultsIds);
 		excludedResutsIds.add(resultId);
 		this.reportDataSvc.excludedResultsIds$.next(Array.from(excludedResutsIds));
+		// this.allIncluded = false;
 	}
 
 	ngOnDestroy() {}

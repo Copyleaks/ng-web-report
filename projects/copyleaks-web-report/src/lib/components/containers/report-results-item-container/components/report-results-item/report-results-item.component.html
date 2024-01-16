@@ -226,7 +226,7 @@
 		<span class="mat-menu-item-text" i18n>Exclude result</span>
 	</button>
 	<button
-		*ngIf="reportDataSvc?.reportEndpointConfig?.deleteResult"
+		*ngIf="reportDataSvc?.reportEndpointConfig?.deleteResult && previewResult?.type != eResultPreviewType.Internet"
 		mat-menu-item
 		(click)="deleteResult()"
 		[disableRipple]="true">

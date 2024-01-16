@@ -382,7 +382,7 @@ export class ReportDataService {
 	}
 
 	public async initAsync() {
-		const ENABLE_REALTIME_MOCK_TESTING = true;
+		const ENABLE_REALTIME_MOCK_TESTING = false;
 		let testCounter = 25;
 
 		// Set the layout view to: one-to-many plagiarism with no selected alerts

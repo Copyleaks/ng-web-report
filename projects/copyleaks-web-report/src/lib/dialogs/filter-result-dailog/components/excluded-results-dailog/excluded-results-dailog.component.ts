@@ -30,7 +30,6 @@ export class ExcludedResultsDailogComponent implements OnInit, AfterViewInit {
 
 	filteredList: IResultItem[];
 	searchControl = new FormControl('');
-	allIncluded: boolean;
 
 	private _startingIndex: number = 0;
 	private _pageSize: number = 10;
@@ -115,26 +114,24 @@ export class ExcludedResultsDailogComponent implements OnInit, AfterViewInit {
 	}
 
 	includeAllButton() {
+		// if all the results are already excluded, then don't do anything
+		if (this.reportDataSvc.excludedResultsIds?.length === 0) return;
 		this.reportDataSvc.excludedResultsIds$.next([]);
-		this.allIncluded = true;
 	}
 
-	isResultIncluded(id?: string): boolean {
+	isResultExcluded(id?: string): boolean {
 		return this.reportDataSvc.excludedResultsIds?.find(resultId => resultId === id) != undefined;
 	}
 
 	includeResultById(resultId: string) {
 		const excludedResutsIds = this.reportDataSvc.excludedResultsIds ?? [];
 		this.reportDataSvc.excludedResultsIds$.next(excludedResutsIds.filter(id => id != resultId));
-
-		// if (this.reportDataSvc.excludedResultsIds?.length === 0) this.allIncluded = true;
 	}
 
 	excludeResultById(resultId: string) {
 		const excludedResutsIds = new Set(this.reportDataSvc.excludedResultsIds);
 		excludedResutsIds.add(resultId);
 		this.reportDataSvc.excludedResultsIds$.next(Array.from(excludedResutsIds));
-		// this.allIncluded = false;
 	}
 
 	ngOnDestroy() {}

@@ -551,10 +551,14 @@ export class ReportDataService {
 					(settings.showIdentical &&
 						settings.showRelated &&
 						settings.showMinorChanges &&
-						(cr.result?.statistics?.relatedMeaning ?? 0) +
-							(cr.result?.statistics?.minorChanges ?? 0) +
-							(cr.result?.statistics?.identical ?? 0) ===
-							0)
+						this._percentPipe.transform(
+							((cr.result?.statistics?.relatedMeaning ?? 0) +
+								(cr.result?.statistics?.minorChanges ?? 0) +
+								(cr.result?.statistics?.identical ?? 0)) /
+								((this.scanResultsPreviews?.scannedDocument.totalWords ?? 0) -
+									(this.scanResultsPreviews?.scannedDocument.totalExcluded ?? 0)),
+							'1.0-1'
+						) === '0%')
 			)
 		);
 

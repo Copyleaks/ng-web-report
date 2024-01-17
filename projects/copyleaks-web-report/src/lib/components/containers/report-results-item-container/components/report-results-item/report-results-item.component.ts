@@ -38,9 +38,9 @@ export class ReportResultsItemComponent implements OnInit, OnChanges, OnDestroy 
 	@Input() resultItem: IResultItem;
 	@Input() showLoader: boolean = false;
 	@Input() showItemBody: boolean = true;
-	@Input() excludeResult: boolean = false;
+	@Input() excludeView: boolean = false;
+	@Input() isResultExcluded: boolean = false;
 	@Input() isMobile: boolean = false;
-	@Input() excludedResultsClick: boolean = false;
 	@Input() reportViewSvc: ReportViewService;
 	@Input() reportDataSvc: ReportDataService;
 	@Input() reportNgTemplatesSvc: ReportNgTemplatesService;
@@ -58,7 +58,7 @@ export class ReportResultsItemComponent implements OnInit, OnChanges, OnDestroy 
 
 	@HostListener('click', ['$event'])
 	handleClick() {
-		if (!this.resultItem || this.showLoader || !this.resultItem.resultDetails || this.excludeResult || this.isLocked)
+		if (!this.resultItem || this.showLoader || !this.resultItem.resultDetails || this.excludeView || this.isLocked)
 			return;
 
 		this.reportViewSvc?.selectedResult$.next(this.resultItem.resultDetails);
@@ -152,12 +152,12 @@ export class ReportResultsItemComponent implements OnInit, OnChanges, OnDestroy 
 
 	showResult() {
 		this.showResultEvent.emit(this.previewResult.id);
-		this.excludedResultsClick = true;
+		this.isResultExcluded = false;
 	}
 
 	hideResult() {
 		this.hiddenResultEvent.emit(this.previewResult.id);
-		this.excludedResultsClick = false;
+		this.isResultExcluded = true;
 	}
 
 	deleteResult() {

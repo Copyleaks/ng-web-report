@@ -1,10 +1,7 @@
 import { Component, Inject, OnInit } from '@angular/core';
 import { IResultsActions } from '../../components/containers/report-results-container/components/results-actions/models/results-actions.models';
 import { IResultItem } from '../../components/containers/report-results-item-container/components/models/report-result-item.models';
-import {
-	ISourceRepositoryType,
-	ITotalSourceType,
-} from './components/source-type-filter-result/models/source-type-filter-result.models';
+import { ITotalSourceType } from './components/source-type-filter-result/models/source-type-filter-result.models';
 import { FilterResultDailogService } from './services/filter-result-dailog.service';
 import { ITagItem } from './components/included-tags-filter-result/models/included-tags-filter-result.models';
 import { EFilterResultForm, IFilterResultDailogData } from './models/filter-result-dailog.enum';
@@ -14,10 +11,8 @@ import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
 import { combineLatest } from 'rxjs';
 import { ALERTS } from '../../constants/report-alerts.constants';
 import { ICompleteResults } from '../../models/report-data.models';
-import { ResultDetailItem } from '../../models/report-matches.models';
 import { ICopyleaksReportOptions } from '../../models/report-options.models';
 import { trigger, transition, animate, keyframes, style } from '@angular/animations';
-import { filter } from 'rxjs/operators';
 
 @Component({
 	selector: 'cr-filter-result-dailog',

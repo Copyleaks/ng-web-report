@@ -132,14 +132,14 @@
 					</div>
 				</div>
 				<ng-container *ngIf="!showLoader">
-					<ng-container *ngIf="!excludeResult; else showExcludeResult">
+					<ng-container *ngIf="!excludeView; else showExcludeResult">
 						<mat-icon class="item-menu" mat-icon [matMenuTriggerFor]="menu" (click)="$event.stopPropagation()">
 							more_vert
 						</mat-icon>
 					</ng-container>
 
 					<ng-template #showExcludeResult>
-						<ng-container *ngIf="!excludedResultsClick; else showResultRef">
+						<ng-container *ngIf="isResultExcluded; else showResultRef">
 							<mat-icon
 								class="exclude-result"
 								mat-icon
@@ -192,7 +192,7 @@
 			<ng-container *ngIf="!showLoader; else showPercentageSkeleton">
 				<cr-percentage-result-item
 					[percentageResult]="percentageResult"
-					[excludeResult]="excludeResult"
+					[excludeResult]="excludeView"
 					[reportDataSvc]="reportDataSvc"></cr-percentage-result-item>
 			</ng-container>
 			<ng-template #showPercentageSkeleton>

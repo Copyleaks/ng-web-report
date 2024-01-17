@@ -70,6 +70,11 @@
 			color: $color-container-background;
 			font-size: 14px;
 			font-weight: 500;
+			white-space: nowrap;
+			overflow: hidden;
+			text-overflow: ellipsis;
+			max-width: 110px;
+			display: block;
 		}
 		.total-select-tags {
 			width: 23px;
@@ -135,6 +140,7 @@
 		::ng-deep {
 			.mat-chip-list-wrapper {
 				gap: 4px !important;
+				flex-wrap: nowrap;
 			}
 		}
 	}

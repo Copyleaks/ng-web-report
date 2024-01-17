@@ -205,7 +205,14 @@ export class ReportDataService {
 					.map(result => result.id);
 
 				// Load all the viewed results
-				if (!this.realTimeView) this.loadViewedResultsDetails();
+				if (
+					!this.realTimeView ||
+					(this.realTimeView &&
+						this.totalCompleteResults > 100 &&
+						this.scanResultsDetails.length != this.totalCompleteResults &&
+						!options.showTop100Results)
+				)
+					this.loadViewedResultsDetails();
 
 				this._scanResultsPreviews$.next({
 					...this.scanResultsPreviews,
@@ -536,18 +543,22 @@ export class ReportDataService {
 							((cr.result?.statistics?.relatedMeaning ?? 0) +
 								(cr.result?.statistics?.minorChanges ?? 0) +
 								(cr.result?.statistics?.identical ?? 0)) /
-								((this.scanResultsPreviews?.scannedDocument.totalWords ?? 0) +
+								((this.scanResultsPreviews?.scannedDocument.totalWords ?? 0) -
 									(this.scanResultsPreviews?.scannedDocument.totalExcluded ?? 0)),
-							'1.1-1'
-						) !== '0.0%') ||
+							'1.0-1'
+						) !== '0%') ||
 					// for compare scan situation: check if the filter match options are on, then don't hide the results with zero matches
 					(settings.showIdentical &&
 						settings.showRelated &&
 						settings.showMinorChanges &&
-						(cr.result?.statistics?.relatedMeaning ?? 0) +
-							(cr.result?.statistics?.minorChanges ?? 0) +
-							(cr.result?.statistics?.identical ?? 0) ===
-							0)
+						this._percentPipe.transform(
+							((cr.result?.statistics?.relatedMeaning ?? 0) +
+								(cr.result?.statistics?.minorChanges ?? 0) +
+								(cr.result?.statistics?.identical ?? 0)) /
+								((this.scanResultsPreviews?.scannedDocument.totalWords ?? 0) -
+									(this.scanResultsPreviews?.scannedDocument.totalExcluded ?? 0)),
+							'1.0-1'
+						) === '0%')
 			)
 		);
 
@@ -1027,7 +1038,7 @@ export class ReportDataService {
 
 		if (settings.includedTags && settings.includedTags.length > 0)
 			filteredResultsIds = filteredResultsIds.filter(id =>
-				completeResults.find(cr => cr.id === id && cr.tags?.find(t => settings.includedTags?.includes(t.code)))
+				completeResults.find(cr => cr.id === id && cr.tags?.find(t => settings.includedTags?.includes(t.title)))
 			);
 		return filteredResultsIds;
 	}

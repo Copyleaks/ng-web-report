@@ -174,6 +174,31 @@ export class DemoReportPreviewsComponent implements OnInit {
 					},
 					{
 						repositoryId: '',
+						url: 'https://blog.stackademic.com/read-text-aloud-in-simple-javascript-9528a8457904?gi=6b81cd0f325a',
+						id: '3b0edab479',
+						type: EResultPreviewType.Internet,
+						title: 'Read Text Aloud in Simple JavaScript | Stackademic',
+						introduction:
+							'Open in appSign up Sign In Write Sign up Sign In Read text aloud in simple JavaScript Anirudh Muni...',
+						matchedWords: 32,
+						metadata: {
+							finalUrl: undefined,
+							canonicalUrl: undefined,
+							author: 'Anirudh Munipalli',
+							organization: 'Stackademic',
+							filename: 'read-text-aloud-in-simple-javascript-9528a8457904',
+							publishDate: '2023-08-08T10:28:46Z',
+							creationDate: '2023-08-08T10:28:46Z',
+							lastModificationDate: '2023-08-10T12:06:52Z',
+							submissionDate: undefined,
+							submittedBy: undefined,
+							customMetadata: undefined,
+						},
+						tags: [],
+					},
+
+					{
+						repositoryId: '',
 						url: 'https://blog.stackademic.com/kotlin-code-smells-010-undefined-9162b60b252c',
 						id: '5aebdddb2e',
 						type: EResultPreviewType.Internet,

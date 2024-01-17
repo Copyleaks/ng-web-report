@@ -1,10 +1,7 @@
 import { Component, Inject, OnInit } from '@angular/core';
 import { IResultsActions } from '../../components/containers/report-results-container/components/results-actions/models/results-actions.models';
 import { IResultItem } from '../../components/containers/report-results-item-container/components/models/report-result-item.models';
-import {
-	ISourceRepositoryType,
-	ITotalSourceType,
-} from './components/source-type-filter-result/models/source-type-filter-result.models';
+import { ITotalSourceType } from './components/source-type-filter-result/models/source-type-filter-result.models';
 import { FilterResultDailogService } from './services/filter-result-dailog.service';
 import { ITagItem } from './components/included-tags-filter-result/models/included-tags-filter-result.models';
 import { EFilterResultForm, IFilterResultDailogData } from './models/filter-result-dailog.enum';
@@ -14,10 +11,8 @@ import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
 import { combineLatest } from 'rxjs';
 import { ALERTS } from '../../constants/report-alerts.constants';
 import { ICompleteResults } from '../../models/report-data.models';
-import { ResultDetailItem } from '../../models/report-matches.models';
 import { ICopyleaksReportOptions } from '../../models/report-options.models';
 import { trigger, transition, animate, keyframes, style } from '@angular/animations';
-import { filter } from 'rxjs/operators';
 
 @Component({
 	selector: 'cr-filter-result-dailog',
@@ -96,7 +91,12 @@ export class FilterResultDailogComponent implements OnInit {
 				!formData.showBatchResults &&
 				!formData.showInternalDatabaseResults &&
 				formData.hiddenRepositories &&
-				formData.hiddenRepositories.length === this._filterResultsSvc.reposIds.length
+				formData.hiddenRepositories.length === this._filterResultsSvc.reposIds.length &&
+				!(
+					this.totalSourceType.totalInternet === 0 &&
+					this.totalSourceType.totalInternalDatabase === 0 &&
+					this.totalSourceType.totalbatch === 0
+				)
 			) {
 				setTimeout(() => {
 					if (this.totalSourceType.totalInternet > 0)
@@ -124,7 +124,12 @@ export class FilterResultDailogComponent implements OnInit {
 				});
 
 				this.sourceTypeErrorMessage = $localize`At least one match Source type needs to be activated.`;
-			} else if (!formData.showIdentical && !formData.showMinorChanges && !formData.showRelated) {
+			} else if (
+				!formData.showIdentical &&
+				!formData.showMinorChanges &&
+				!formData.showRelated &&
+				!(this.totalParaphrased === 0 && this.totalMinorChanges === 0 && this.totalIdentical === 0)
+			) {
 				setTimeout(() => {
 					if (this.totalIdentical > 0)
 						this._filterResultsSvc.filterResultFormGroup
@@ -328,7 +333,7 @@ export class FilterResultDailogComponent implements OnInit {
 	getFilterCurrentData(): ICopyleaksReportOptions {
 		return {
 			// Tags
-			includedTags: this._filterResultsSvc.selectedTagItem.filter(a => a.selected).map(a => a.code) ?? [],
+			includedTags: this._filterResultsSvc.selectedTagItem.filter(a => a.selected).map(a => a.title) ?? [],
 
 			// Matches
 			showIdentical:

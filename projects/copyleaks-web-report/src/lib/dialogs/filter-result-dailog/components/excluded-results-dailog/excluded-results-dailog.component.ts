@@ -30,7 +30,6 @@ export class ExcludedResultsDailogComponent implements OnInit, AfterViewInit {
 
 	filteredList: IResultItem[];
 	searchControl = new FormControl('');
-	allIncluded: boolean;
 
 	private _startingIndex: number = 0;
 	private _pageSize: number = 10;
@@ -68,6 +67,10 @@ export class ExcludedResultsDailogComponent implements OnInit, AfterViewInit {
 		} else {
 			return true;
 		}
+	}
+
+	get allResultsIncluded(): boolean {
+		return this.reportDataSvc.excludedResultsIds?.length === 0;
 	}
 
 	constructor(private _renderer: Renderer2) {}
@@ -114,9 +117,15 @@ export class ExcludedResultsDailogComponent implements OnInit, AfterViewInit {
 		this.searchControl.setValue('');
 	}
 
-	includeAllButton() {
-		this.reportDataSvc.excludedResultsIds$.next([]);
-		this.allIncluded = true;
+	includeAllButtonToggle() {
+		// if all the results are already excluded, then don't do anything
+		if (this.allResultsIncluded)
+			this.reportDataSvc.excludedResultsIds$.next(this.filteredList?.map(result => result?.resultPreview?.id) ?? []);
+		else this.reportDataSvc.excludedResultsIds$.next([]);
+	}
+
+	isResultExcluded(id?: string): boolean {
+		return this.reportDataSvc.excludedResultsIds?.find(resultId => resultId === id) != undefined;
 	}
 
 	includeResultById(resultId: string) {

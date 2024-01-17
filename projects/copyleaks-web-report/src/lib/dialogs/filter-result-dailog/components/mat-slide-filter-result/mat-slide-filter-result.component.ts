@@ -17,6 +17,7 @@ import { MatSlideToggleChange } from '@angular/material/slide-toggle';
 export class MatSlideFilterResultComponent implements OnInit, ControlValueAccessor {
 	@Input() title: string;
 	@Input() total: number;
+	@Input() disabled: boolean = false;
 
 	value: boolean;
 

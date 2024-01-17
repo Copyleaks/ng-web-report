@@ -47,5 +47,8 @@
 </div>
 
 <div mat-dialog-actions>
-	<button class="include-all-button" (click)="includeAllButton()" i18n>Include all</button>
+	<button class="include-all-button" (click)="includeAllButtonToggle()" i18n>
+		<ng-container *ngIf="!allResultsIncluded; else ExcludeResultBtnTxtRef">Include all</ng-container>
+		<ng-template #ExcludeResultBtnTxtRef>Exclude all</ng-template>
+	</button>
 </div>

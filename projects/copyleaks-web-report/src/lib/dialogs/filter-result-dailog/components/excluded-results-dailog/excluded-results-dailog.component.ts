@@ -69,6 +69,10 @@ export class ExcludedResultsDailogComponent implements OnInit, AfterViewInit {
 		}
 	}
 
+	get allResultsIncluded(): boolean {
+		return this.reportDataSvc.excludedResultsIds?.length === 0;
+	}
+
 	constructor(private _renderer: Renderer2) {}
 
 	ngOnInit() {
@@ -113,10 +117,11 @@ export class ExcludedResultsDailogComponent implements OnInit, AfterViewInit {
 		this.searchControl.setValue('');
 	}
 
-	includeAllButton() {
+	includeAllButtonToggle() {
 		// if all the results are already excluded, then don't do anything
-		if (this.reportDataSvc.excludedResultsIds?.length === 0) return;
-		this.reportDataSvc.excludedResultsIds$.next([]);
+		if (this.allResultsIncluded)
+			this.reportDataSvc.excludedResultsIds$.next(this.filteredList?.map(result => result?.resultPreview?.id) ?? []);
+		else this.reportDataSvc.excludedResultsIds$.next([]);
 	}
 
 	isResultExcluded(id?: string): boolean {

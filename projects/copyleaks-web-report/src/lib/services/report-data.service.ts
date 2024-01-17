@@ -543,10 +543,10 @@ export class ReportDataService {
 							((cr.result?.statistics?.relatedMeaning ?? 0) +
 								(cr.result?.statistics?.minorChanges ?? 0) +
 								(cr.result?.statistics?.identical ?? 0)) /
-								((this.scanResultsPreviews?.scannedDocument.totalWords ?? 0) +
+								((this.scanResultsPreviews?.scannedDocument.totalWords ?? 0) -
 									(this.scanResultsPreviews?.scannedDocument.totalExcluded ?? 0)),
-							'1.1-1'
-						) !== '0.0%') ||
+							'1.0-1'
+						) !== '0%') ||
 					// for compare scan situation: check if the filter match options are on, then don't hide the results with zero matches
 					(settings.showIdentical &&
 						settings.showRelated &&

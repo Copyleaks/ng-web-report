@@ -121,10 +121,12 @@
 		[style.flex-grow]="1"
 		[class.tab-selected]="selectedTap === EReportViewType.PlagiarismView && !hidePlagarismTap"
 		[class.tab-disabled]="hidePlagarismTap && showDisabledProducts"
-		matTooltipClass="web-report-mat-tooltip"
-		(click)="selectTap(EReportViewType.PlagiarismView)">
+		matTooltipClass="web-report-mat-tooltip">
 		<div class="bar-title-container">
-			<span class="bar-title" web-report-title-font i18n>Matched Text</span>
+			<ngx-skeleton-loader
+				class="skeleton real-time-view"
+				[appearance]="'line'"
+				style="width: 20%"></ngx-skeleton-loader>
 			<span class="bar-score real-time-view" web-report-title-font>
 				<ng-container i18n>Loading...</ng-container>
 				&nbsp;
@@ -133,7 +135,7 @@
 		</div>
 		<mat-progress-bar mode="indeterminate"></mat-progress-bar>
 	</div>
-	<div
+	<!-- <div
 		class="tab-ai"
 		[style.flex-grow]="1"
 		[class.tab-selected]="false"
@@ -143,5 +145,5 @@
 			<span class="bar-title" web-report-title-font i18n>AI Content</span>
 		</div>
 		<mat-progress-bar mode="indeterminate"></mat-progress-bar>
-	</div>
+	</div> -->
 </ng-template>

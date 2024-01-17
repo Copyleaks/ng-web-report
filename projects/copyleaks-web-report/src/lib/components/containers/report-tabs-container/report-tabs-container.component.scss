@@ -138,6 +138,12 @@
 		}
 	}
 
+	.skeleton.real-time-view {
+		::ng-deep .loader {
+			height: 14px !important;
+		}
+	}
+
 	.loading-tab {
 		flex-grow: 1;
 		gap: 4px;

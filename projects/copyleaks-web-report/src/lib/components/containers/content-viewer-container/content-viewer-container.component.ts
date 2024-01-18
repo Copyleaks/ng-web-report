@@ -275,6 +275,17 @@ export class ContentViewerContainerComponent implements OnInit, AfterViewInit, O
 	ngAfterViewInit() {
 		if (this.contentHtml) this._renderer.setAttribute(this.contentIFrame.nativeElement, 'srcdoc', this.contentHtml);
 		this.iFrameWindow = this.contentIFrame?.nativeElement?.contentWindow;
+
+		this.contentIFrame.nativeElement.addEventListener(
+			'load',
+			() => {
+				if (this.contentHtml) {
+					this.iframeLoaded = true;
+					this.showLoadingView = false;
+				}
+			},
+			false
+		);
 	}
 
 	ngOnChanges(changes: SimpleChanges): void {
@@ -369,13 +380,6 @@ export class ContentViewerContainerComponent implements OnInit, AfterViewInit, O
 	 */
 	onJumpToNextMatchClick(next: boolean = true) {
 		this._highlightService.jump(next);
-	}
-
-	onIFrameLoad() {
-		if (this.contentHtml) {
-			this.iframeLoaded = true;
-			this.showLoadingView = false;
-		}
 	}
 
 	ngOnDestroy(): void {}

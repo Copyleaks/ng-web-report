@@ -1,0 +1,205 @@
+{
+    "scannedDocument": {
+        "scanId": "jump",
+        "totalWords": 353,
+        "totalExcluded": 0,
+        "credits": 2,
+        "expectedCredits": 2,
+        "creationTime": "2024-01-18T06:51:57.938675Z",
+        "metadata": {
+            "finalUrl": null,
+            "canonicalUrl": null,
+            "author": null,
+            "organization": null,
+            "filename": "index.pdf",
+            "publishDate": null,
+            "creationDate": null,
+            "lastModificationDate": null,
+            "submissionDate": null,
+            "submittedBy": null,
+            "submitterAuthorId": null,
+            "customMetadata": null
+        },
+        "enabled": {
+            "plagiarismDetection": true,
+            "aiDetection": true
+        }
+    },
+    "results": {
+        "internet": [
+            {
+                "isLocked": false,
+                "url": "https://atlas-medical.com/upload/productFiles/28/pdf%20test.pdf",
+                "id": "1e6e669755",
+                "title": "Prince 8",
+                "introduction": "Blue-sky printing with Prince 8 There are many reasons for using Prince 8. We will show you 8. one: JavaScript two: More JavaScript Th...",
+                "matchedWords": 285,
+                "identicalWords": 268,
+                "similarWords": 8,
+                "paraphrasedWords": 9,
+                "metadata": {
+                    "finalUrl": null,
+                    "canonicalUrl": null,
+                    "author": null,
+                    "organization": null,
+                    "filename": "pdf%20test.pdf",
+                    "publishDate": null,
+                    "creationDate": null,
+                    "lastModificationDate": null,
+                    "submissionDate": null,
+                    "submittedBy": null,
+                    "submitterAuthorId": null,
+                    "customMetadata": null
+                },
+                "tags": []
+            },
+            {
+                "isLocked": false,
+                "url": "https://www.princexml.com/howcome/2012/magic/prince8.html",
+                "id": "3bad717978",
+                "title": "Prince 8",
+                "introduction": "This document is designed to showcase new features in Prince 8.1. Prince creates a beautiful PDF document from the humble HTML elements...",
+                "matchedWords": 261,
+                "identicalWords": 249,
+                "similarWords": 12,
+                "paraphrasedWords": 0,
+                "metadata": {
+                    "finalUrl": null,
+                    "canonicalUrl": null,
+                    "author": null,
+                    "organization": null,
+                    "filename": "prince8.html",
+                    "publishDate": null,
+                    "creationDate": null,
+                    "lastModificationDate": null,
+                    "submissionDate": null,
+                    "submittedBy": null,
+                    "submitterAuthorId": null,
+                    "customMetadata": null
+                },
+                "tags": []
+            },
+            {
+                "isLocked": false,
+                "url": "https://www.yumpu.com/en/document/view/62733136/index",
+                "id": "3e5ba3895d",
+                "title": "index",
+                "introduction": "...",
+                "matchedWords": 197,
+                "identicalWords": 185,
+                "similarWords": 12,
+                "paraphrasedWords": 0,
+                "metadata": {
+                    "finalUrl": null,
+                    "canonicalUrl": null,
+                    "author": null,
+                    "organization": null,
+                    "filename": "index",
+                    "publishDate": null,
+                    "creationDate": null,
+                    "lastModificationDate": null,
+                    "submissionDate": null,
+                    "submittedBy": null,
+                    "submitterAuthorId": null,
+                    "customMetadata": null
+                },
+                "tags": []
+            },
+            {
+                "isLocked": false,
+                "url": "https://www.princexml.com/howcome/2016/samples/magic8/index.html",
+                "id": "8f83303ed1",
+                "title": "Prince",
+                "introduction": "This document is designed to showcase features in Prince. Prince creates a beautiful PDF documents from humble HTML elements by way of ...",
+                "matchedWords": 306,
+                "identicalWords": 306,
+                "similarWords": 0,
+                "paraphrasedWords": 0,
+                "metadata": {
+                    "finalUrl": null,
+                    "canonicalUrl": null,
+                    "author": null,
+                    "organization": null,
+                    "filename": "index.html",
+                    "publishDate": null,
+                    "creationDate": null,
+                    "lastModificationDate": null,
+                    "submissionDate": null,
+                    "submittedBy": null,
+                    "submitterAuthorId": null,
+                    "customMetadata": null
+                },
+                "tags": []
+            },
+            {
+                "isLocked": false,
+                "url": "https://anyflip.com/epft/ejgx/basic",
+                "id": "a1deb367ed",
+                "title": "Ejemplo Brochure 6 Páginas - Flip eBook Pages 1-7 | AnyFlip",
+                "introduction": "Quick Upload Explore Features Example Support Contact Us FAQ Help Document Prici...",
+                "matchedWords": 265,
+                "identicalWords": 208,
+                "similarWords": 47,
+                "paraphrasedWords": 10,
+                "metadata": {
+                    "finalUrl": null,
+                    "canonicalUrl": null,
+                    "author": "libacuno",
+                    "organization": "libacuno",
+                    "filename": "basic",
+                    "publishDate": "2016-07-14T00:00:00Z",
+                    "creationDate": null,
+                    "lastModificationDate": "2016-07-14T00:00:00Z",
+                    "submissionDate": null,
+                    "submittedBy": null,
+                    "submitterAuthorId": null,
+                    "customMetadata": null
+                },
+                "tags": []
+            },
+            {
+                "isLocked": false,
+                "url": "https://www.princexml.com/howcome/2016/samples/magic8/index.pdf",
+                "id": "ff442fe750",
+                "title": "Prince",
+                "introduction": "Blue-sky printing There are many reasons for using Prince. We will show you 8. one: JavaScript three: CSS3 columns Prince supports Jav...",
+                "matchedWords": 333,
+                "identicalWords": 333,
+                "similarWords": 0,
+                "paraphrasedWords": 0,
+                "metadata": {
+                    "finalUrl": null,
+                    "canonicalUrl": null,
+                    "author": null,
+                    "organization": null,
+                    "filename": "index.pdf",
+                    "publishDate": null,
+                    "creationDate": null,
+                    "lastModificationDate": null,
+                    "submissionDate": null,
+                    "submittedBy": null,
+                    "submitterAuthorId": null,
+                    "customMetadata": null
+                },
+                "tags": []
+            }
+        ],
+        "database": [],
+        "batch": [],
+        "repositories": [],
+        "score": {
+            "identicalWords": 337,
+            "minorChangedWords": 0,
+            "relatedMeaningWords": 0,
+            "aggregatedScore": 95.5
+        }
+    },
+    "notifications": {
+        "alerts": []
+    },
+    "hasPdfReport": true,
+    "filters": null,
+    "status": 0,
+    "error": null,
+    "developerPayload": ""
+}

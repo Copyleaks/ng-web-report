@@ -318,6 +318,7 @@ export class FilterResultDailogComponent implements OnInit {
 
 	onClearFilter() {
 		this._filterResultsSvc.clearForm();
+		this.allTagItem = this._filterResultsSvc.selectedTagItem;
 	}
 
 	onDiscardChanges() {

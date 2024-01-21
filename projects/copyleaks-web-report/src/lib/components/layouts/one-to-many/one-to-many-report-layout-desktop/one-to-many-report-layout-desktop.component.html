@@ -44,7 +44,13 @@
 	<div class="results-alerts-container" [style.overflow]="isLoadingScanResults ? 'hidden' : ''">
 		<!-- Report alerts container -->
 		<copyleaks-report-alerts-container
-			*ngIf="alerts && alerts.length > 0 && !isLoadingScanResults && reportViewMode !== ECustomResultsReportView.Full"
+			*ngIf="
+				alerts &&
+				alerts.length > 0 &&
+				!isLoadingScanResults &&
+				reportViewMode !== ECustomResultsReportView.Full &&
+				reportViewMode !== ECustomResultsReportView.Partial
+			"
 			[class.container-with-custom-results]="reportViewMode != undefined"
 			[alerts]="alerts"
 			[flexGrow]="25"></copyleaks-report-alerts-container>

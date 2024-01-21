@@ -1,8 +1,8 @@
 import { PercentPipe } from '@angular/common';
 import { HttpClient, HttpErrorResponse, HttpHeaders } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { BehaviorSubject, EMPTY, Subject, combineLatest, forkJoin, from, interval, throwError } from 'rxjs';
-import { catchError, concatMap, filter, take, takeUntil } from 'rxjs/operators';
+import { BehaviorSubject, EMPTY, Subject, combineLatest, forkJoin, from, interval } from 'rxjs';
+import { concatMap, filter, take, takeUntil } from 'rxjs/operators';
 import { IResultItem } from '../components/containers/report-results-item-container/components/models/report-result-item.models';
 import { ALERTS } from '../constants/report-alerts.constants';
 import { EResultPreviewType, EScanStatus } from '../enums/copyleaks-web-report.enums';
@@ -293,27 +293,24 @@ export class ReportDataService {
 			const progressResult$ = this._http.get<IAPIProgress>(endpointsConfig.progress.url, {
 				headers: this._createHeaders(endpointsConfig.progress),
 			});
-			progressResult$
-				.pipe(
-					catchError((error: HttpErrorResponse) => {
-						// Error handling logic
-						this._reportErrorsSvc.handleHttpError(error, 'initReportData');
-						return throwError(error);
-					}),
-					take(1),
-					untilDestroy(this)
-				)
-				.subscribe(
-					progress => {
-						if (progress?.percents == 100) this.initSync(endpointsConfig);
-						else {
-							this._viewSvc.progress$.next(progress.percents);
+			progressResult$.pipe(take(1), untilDestroy(this)).subscribe(
+				progress => {
+					if (progress?.percents == 100) this.initSync(endpointsConfig);
+					else {
+						this._viewSvc.progress$.next(progress.percents);
+						try {
 							this._checkScanProgress(progress);
-							this.initAsync();
+						} catch (error) {
+							this._reportErrorsSvc.handleHttpError(error as HttpErrorResponse, 'initReportData');
 						}
-					},
-					_ => {}
-				);
+						this.initAsync();
+					}
+				},
+				(error: HttpErrorResponse) => {
+					// Error handling logic
+					this._reportErrorsSvc.handleHttpError(error, 'initReportData');
+				}
+			);
 		}
 	}
 	public initSync(endpointsConfig: IClsReportEndpointConfigModel) {
@@ -325,15 +322,7 @@ export class ReportDataService {
 			.get<IScanSource>(endpointsConfig.crawledVersion.url, {
 				headers: this._createHeaders(endpointsConfig.crawledVersion),
 			})
-			.pipe(
-				catchError((error: HttpErrorResponse) => {
-					console.log('catchError - initSync - crawledVersion ' + JSON.stringify(error));
-
-					this._reportErrorsSvc.handleHttpError(error, 'initSync - crawledVersion');
-					return throwError(error);
-				}),
-				untilDestroy(this)
-			)
+			.pipe(untilDestroy(this))
 			.subscribe(
 				crawledVersionRes => {
 					this._crawledVersion$.next(crawledVersionRes);
@@ -344,15 +333,22 @@ export class ReportDataService {
 							isHtmlView: false,
 						});
 				},
-				_ => {}
+				(error: HttpErrorResponse) => {
+					this._reportErrorsSvc.handleHttpError(error, 'initSync - crawledVersion');
+				}
 			);
 
 		this._http
 			.get<ICompleteResults>(endpointsConfig.completeResults.url, {
 				headers: this._createHeaders(endpointsConfig.completeResults),
 			})
-			.pipe(
-				catchError((error: HttpErrorResponse) => {
+			.pipe(untilDestroy(this))
+			.subscribe(
+				completeResultsRes => {
+					this.completeResultsSnapshot = JSON.parse(JSON.stringify(completeResultsRes));
+					this._updateCompleteResults(completeResultsRes);
+				},
+				(error: HttpErrorResponse) => {
 					this._reportErrorsSvc.handleHttpError(error, 'initSync - completeResults');
 					this.scanResultsDetails$.next([]);
 					this.scanResultsPreviews$.next({
@@ -380,16 +376,7 @@ export class ReportDataService {
 						},
 						status: EScanStatus.Error,
 					});
-					return throwError(error);
-				}),
-				untilDestroy(this)
-			)
-			.subscribe(
-				completeResultsRes => {
-					this.completeResultsSnapshot = JSON.parse(JSON.stringify(completeResultsRes));
-					this._updateCompleteResults(completeResultsRes);
-				},
-				_ => {}
+				}
 			);
 	}
 
@@ -415,24 +402,38 @@ export class ReportDataService {
 				untilDestroy(this),
 				takeUntil(_realTimeUpdateSub)
 			)
-			.subscribe(async progress => {
-				if (ENABLE_REALTIME_MOCK_TESTING) {
-					if (testCounter < 80) {
-						testCounter += Math.floor(Math.random() * 26);
-						progress.percents = testCounter;
-					} else {
-						testCounter = 100;
-						progress.percents = 100;
+			.subscribe(
+				async progress => {
+					if (ENABLE_REALTIME_MOCK_TESTING) {
+						if (testCounter < 80) {
+							testCounter += Math.floor(Math.random() * 26);
+							progress.percents = testCounter;
+						} else {
+							testCounter = 100;
+							progress.percents = 100;
+						}
 					}
-				}
 
-				if (progress.percents >= 0 && progress.percents <= 100) this._viewSvc.progress$.next(progress.percents);
-				await this._checkScanProgress(progress);
-				if (progress.percents === 100) {
+					if (progress.percents >= 0 && progress.percents <= 100) this._viewSvc.progress$.next(progress.percents);
+					try {
+						await this._checkScanProgress(progress);
+					} catch (error) {
+						this._reportErrorsSvc.handleHttpError(error as HttpErrorResponse, '_checkScanProgress');
+						_realTimeUpdateSub.next(null);
+						_realTimeUpdateSub.complete();
+					}
+					if (progress.percents === 100) {
+						_realTimeUpdateSub.next(null);
+						_realTimeUpdateSub.complete();
+					}
+				},
+				(error: HttpErrorResponse) => {
+					// Error handling logic here
+					this._reportErrorsSvc.handleHttpError(error, 'getReportScanProgress');
 					_realTimeUpdateSub.next(null);
 					_realTimeUpdateSub.complete();
 				}
-			});
+			);
 	}
 
 	public loadViewedResultsDetails(firstLoad: boolean = false) {
@@ -508,7 +509,6 @@ export class ReportDataService {
 		} catch (error) {
 			// Error handling logic
 			this._reportErrorsSvc.handleHttpError(error as HttpErrorResponse, 'getReportResultAsync');
-			throw error;
 		}
 	}
 
@@ -759,7 +759,6 @@ export class ReportDataService {
 			}
 		} catch (error) {
 			this._reportErrorsSvc.handleHttpError(error as HttpErrorResponse, 'deleteResultById');
-			throw error;
 		}
 	}
 
@@ -960,49 +959,29 @@ export class ReportDataService {
 	private _getReportScanProgress() {
 		if (!this._reportEndpointConfig$.value || !this._reportEndpointConfig$.value.progress?.url) return EMPTY;
 
-		return this._http
-			.get<IAPIProgress>(this._reportEndpointConfig$.value.progress.url, {
-				headers: this._createHeaders(this._reportEndpointConfig$.value.progress),
-			})
-			.pipe(
-				catchError((error: HttpErrorResponse) => {
-					// Error handling logic here
-					this._reportErrorsSvc.handleHttpError(error, 'getReportScanProgress');
-					return throwError(error);
-				})
-			);
+		return this._http.get<IAPIProgress>(this._reportEndpointConfig$.value.progress.url, {
+			headers: this._createHeaders(this._reportEndpointConfig$.value.progress),
+		});
 	}
 
 	private async _getReportCrawledVersion() {
 		if (!this._reportEndpointConfig$.value || !this._reportEndpointConfig$.value.crawledVersion?.url) return undefined;
 
-		try {
-			return await this._http
-				.get<IScanSource>(this._reportEndpointConfig$.value.crawledVersion.url, {
-					headers: this._createHeaders(this._reportEndpointConfig$.value.crawledVersion),
-				})
-				.toPromise();
-		} catch (error) {
-			// Error handling logic
-			this._reportErrorsSvc.handleHttpError(error as HttpErrorResponse, '_getReportCrawledVersion');
-			throw error;
-		}
+		return await this._http
+			.get<IScanSource>(this._reportEndpointConfig$.value.crawledVersion.url, {
+				headers: this._createHeaders(this._reportEndpointConfig$.value.crawledVersion),
+			})
+			.toPromise();
 	}
 
 	private async _getReportCompleteResults() {
 		if (!this._reportEndpointConfig$.value || !this._reportEndpointConfig$.value.completeResults?.url) return undefined;
 
-		try {
-			return await this._http
-				.get<ICompleteResults>(this._reportEndpointConfig$.value.completeResults.url, {
-					headers: this._createHeaders(this._reportEndpointConfig$.value.completeResults),
-				})
-				.toPromise();
-		} catch (error) {
-			// Error handling logic
-			this._reportErrorsSvc.handleHttpError(error as HttpErrorResponse, '_getReportCompleteResults');
-			throw error;
-		}
+		return await this._http
+			.get<ICompleteResults>(this._reportEndpointConfig$.value.completeResults.url, {
+				headers: this._createHeaders(this._reportEndpointConfig$.value.completeResults),
+			})
+			.toPromise();
 	}
 
 	private _getFilteredResultsIds(

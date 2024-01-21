@@ -158,6 +158,17 @@ export class ReportDataService {
 		return completeResults.length;
 	}
 
+	public get totalOriginalCompleteResults(): number {
+		let completeResults = [
+			...(this.completeResultsSnapshot?.results.internet ?? []),
+			...(this.completeResultsSnapshot?.results.batch ?? []),
+			...(this.completeResultsSnapshot?.results.database ?? []),
+			...(this.completeResultsSnapshot?.results.repositories ?? []),
+		];
+
+		return completeResults.length;
+	}
+
 	private _newResults$ = new BehaviorSubject<IResultItem[] | undefined>([]);
 	/** Emits matches that are relevant to source html one-to-many mode */
 	public get newResults$() {
@@ -375,6 +386,7 @@ export class ReportDataService {
 			)
 			.subscribe(
 				completeResultsRes => {
+					this.completeResultsSnapshot = JSON.parse(JSON.stringify(completeResultsRes));
 					this._updateCompleteResults(completeResultsRes);
 				},
 				_ => {}
@@ -681,6 +693,10 @@ export class ReportDataService {
 			return;
 
 		try {
+			let filteredResults = this.filterResults(this.filterOptions, this.excludedResultsIds);
+			filteredResults = filteredResults.filter(result => result.id != resultInfo.resultPreview?.id);
+			const stats = helpers.calculateStatistics(this.scanResultsPreviews, filteredResults, this.filterOptions);
+
 			// Build the request model & URL
 			var requestUrl = this._reportEndpointConfig$.value.deleteResult.url.replace(
 				'{RESULT_ID}',
@@ -692,10 +708,10 @@ export class ReportDataService {
 				totalWords: this.scanResultsPreviews.scannedDocument.totalWords,
 				totalExcluded: this.scanResultsPreviews.scannedDocument.totalExcluded,
 				/** */
-				aggregatedScore: this.scanResultsPreviews.results.score.aggregatedScore,
-				identicalWords: this.scanResultsPreviews.results.score.identicalWords,
-				minorChangedWords: this.scanResultsPreviews.results.score.minorChangedWords,
-				relatedMeaningWords: this.scanResultsPreviews.results.score.relatedMeaningWords,
+				aggregatedScore: stats.aggregatedScore ?? 0,
+				identicalWords: stats.identical ?? 0,
+				minorChangedWords: stats.minorChanges ?? 0,
+				relatedMeaningWords: stats.relatedMeaning ?? 0,
 			};
 
 			// Send the delete request & update UI accordingly if the request was successful
@@ -710,11 +726,23 @@ export class ReportDataService {
 				const index = results.findIndex(result => result.id === resultInfo.resultDetails?.id);
 				if (index !== -1) {
 					results.splice(index, 1);
-					this.scanResultsPreviews$.next(this.scanResultsPreviews);
+					if (!this.scanResultsPreviews) return;
+					this.scanResultsPreviews$.next({
+						...this.scanResultsPreviews,
+						results: {
+							...this.scanResultsPreviews.results,
+							score: {
+								aggregatedScore: stats.aggregatedScore ?? 0,
+								identicalWords: stats.identical ?? 0,
+								minorChangedWords: stats.minorChanges ?? 0,
+								relatedMeaningWords: stats.relatedMeaning ?? 0,
+							},
+						},
+					});
 				}
 			};
 
-			// Remove the result *if found* from the complete results
+			// Remove the result *if found* from the complete results & update the score
 			if (this.scanResultsPreviews?.results?.internet) removeResultById(this.scanResultsPreviews.results.internet);
 			if (this.scanResultsPreviews?.results?.database) removeResultById(this.scanResultsPreviews?.results?.database);
 			if (this.scanResultsPreviews?.results?.batch) removeResultById(this.scanResultsPreviews?.results?.batch);
@@ -747,6 +775,7 @@ export class ReportDataService {
 				});
 		} else if (progress.percents === 100) {
 			const completeResults = await this._getReportCompleteResults();
+			this.completeResultsSnapshot = JSON.parse(JSON.stringify(completeResults));
 			this._updateCompleteResults(completeResults);
 
 			if (!this._crawledVersion$.value) {
@@ -834,8 +863,6 @@ export class ReportDataService {
 			publicationDate: completeResultsRes.filters?.resultsMetaData?.publicationDate?.startDate,
 		});
 
-		this.completeResultsSnapshot = completeResultsRes;
-
 		const filteredResults = this.filterResults(this.filterOptions, this.excludedResultsIds);
 		const stats: ReportStatistics = this._getReportStats(filteredResults, completeResultsRes);
 
@@ -895,12 +922,14 @@ export class ReportDataService {
 			this.filterOptions?.showIdentical && this.filterOptions?.showMinorChanges && this.filterOptions?.showRelated;
 		const missingAggregated =
 			this.totalCompleteResults !== 0 && this.scanResultsPreviews?.results.score.aggregatedScore === 0;
+		const numberOfOriginalResults = this.totalOriginalCompleteResults;
 		let stats: ReportStatistics;
 		if (
 			this.totalCompleteResults != filteredResults.length ||
 			!showAll ||
 			missingAggregated ||
-			!this.completeResultsSnapshot
+			!this.completeResultsSnapshot ||
+			numberOfOriginalResults != this.totalCompleteResults
 		) {
 			stats = helpers.calculateStatistics(completeResultsRes, filteredResults, this.filterOptions);
 		} else {

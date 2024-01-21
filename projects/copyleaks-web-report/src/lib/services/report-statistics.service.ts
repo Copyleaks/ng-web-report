@@ -99,8 +99,15 @@ export class ReportStatisticsService implements OnDestroy {
 		const showAll = options.showIdentical && options.showMinorChanges && options.showRelated;
 		const missingAggregated =
 			this._reportDataSvc.totalCompleteResults !== 0 && completeResult.results.score.aggregatedScore === 0;
+		const numberOfOriginalResults = this._reportDataSvc.totalOriginalCompleteResults;
 		let stats: ReportStatistics;
-		if (this._reportDataSvc.totalCompleteResults != filteredResults.length || !showAll || missingAggregated) {
+		if (
+			this._reportDataSvc.totalCompleteResults != filteredResults.length ||
+			!showAll ||
+			missingAggregated ||
+			!this._reportDataSvc.completeResultsSnapshot ||
+			numberOfOriginalResults != this._reportDataSvc.totalCompleteResults
+		) {
 			stats = helpers.calculateStatistics(completeResult, filteredResults, options);
 		} else {
 			// * if results are still loading  or no results are fitlered while all match types are visible

@@ -2,21 +2,19 @@ import {
 	AfterViewInit,
 	Component,
 	ElementRef,
-	EventEmitter,
 	HostListener,
 	Input,
 	OnChanges,
 	OnDestroy,
 	OnInit,
-	Output,
 	SimpleChanges,
 } from '@angular/core';
-import { ECustomResultsReportView } from './models/cr-custom-results.enums';
+import { EResponsiveLayoutType } from '../../../enums/copyleaks-web-report.enums';
 import { ReportNgTemplatesService } from '../../../services/report-ng-templates.service';
-import { IResultsActions } from '../../containers/report-results-container/components/results-actions/models/results-actions.models';
 import { ReportViewService } from '../../../services/report-view.service';
 import { untilDestroy } from '../../../utils/until-destroy';
-import { EResponsiveLayoutType } from '../../../enums/copyleaks-web-report.enums';
+import { IResultsActions } from '../../containers/report-results-container/components/results-actions/models/results-actions.models';
+import { ECustomResultsReportView } from './models/cr-custom-results.enums';
 
 @Component({
 	selector: 'cr-custom-results',

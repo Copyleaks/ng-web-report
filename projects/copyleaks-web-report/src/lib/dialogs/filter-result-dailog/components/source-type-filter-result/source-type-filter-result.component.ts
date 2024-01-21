@@ -42,6 +42,6 @@ export class SourceTypeFilterResultComponent implements OnInit {
 
 	addRepositoryControl(repoId: string) {
 		const repositories = this.repositoriesForm;
-		repositories.addControl(repoId, new FormControl(this.filterService.getRepositoryValueById(repoId)));
+		repositories.addControl(repoId, new FormControl(this.filterService.getRepositoryValueById()));
 	}
 }

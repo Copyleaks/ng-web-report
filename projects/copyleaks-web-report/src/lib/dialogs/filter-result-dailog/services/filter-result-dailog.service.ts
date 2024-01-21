@@ -242,7 +242,7 @@ export class FilterResultDailogService {
 		}
 	}
 
-	public getRepositoryValueById(repoId: string) {
+	public getRepositoryValueById() {
 		return true;
 	}
 

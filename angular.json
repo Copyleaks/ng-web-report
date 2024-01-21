@@ -17,6 +17,7 @@
 					"configurations": {
 						"production": {
 							"tsConfig": "projects/copyleaks-web-report/tsconfig.lib.prod.json"
+							
 						},
 						"development": {
 							"tsConfig": "projects/copyleaks-web-report/tsconfig.lib.json"

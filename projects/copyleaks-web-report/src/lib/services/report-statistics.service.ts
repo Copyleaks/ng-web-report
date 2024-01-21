@@ -46,7 +46,7 @@ export class ReportStatisticsService implements OnDestroy {
 						filterOptions != undefined
 				)
 			)
-			.subscribe(([completeResult, results, , excludedResultsIds, filterOptions]) => {
+			.subscribe(([completeResult, , , excludedResultsIds, filterOptions]) => {
 				if (completeResult && filterOptions && excludedResultsIds) {
 					const isRealtimeInitView =
 						this._reportDataSvc.realTimeView &&
@@ -55,7 +55,7 @@ export class ReportStatisticsService implements OnDestroy {
 
 					const filteredResults = this._reportDataSvc.filterResults(filterOptions, excludedResultsIds);
 					if (isRealtimeInitView && this._reportDataSvc.totalCompleteResults != filteredResults.length) return;
-					this.retreieveOneToManyStatistics(completeResult, results ?? [], filteredResults, filterOptions);
+					this.retreieveOneToManyStatistics(completeResult, filteredResults, filterOptions);
 				}
 			});
 	}
@@ -92,7 +92,6 @@ export class ReportStatisticsService implements OnDestroy {
 	 */
 	retreieveOneToManyStatistics(
 		completeResult: ICompleteResults,
-		results: ResultDetailItem[],
 		filteredResults: ResultDetailItem[],
 		options: ICopyleaksReportOptions
 	) {

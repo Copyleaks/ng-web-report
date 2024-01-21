@@ -1,15 +1,23 @@
 /* To learn more about this file see: https://angular.io/config/tsconfig. */
 {
-  "extends": "../../tsconfig.json",
-  "compilerOptions": {
-    "outDir": "../../out-tsc/lib",
-    "declaration": true,
-    "declarationMap": true,
-    "inlineSources": true,
-    "types": []
-  },
-  "exclude": [
-    "src/test.ts",
-    "**/*.spec.ts"
-  ]
+	"extends": "../../tsconfig.json",
+	"compilerOptions": {
+		"outDir": "../../out-tsc/lib",
+		"declarationMap": true,
+		"target": "es2015",
+		"declaration": true,
+		"inlineSources": true,
+		"types": ["jest", "node"],
+		"lib": ["dom", "es2019"]
+	},
+	"angularCompilerOptions": {
+		"annotateClosureCompiler": false,
+		"compilationMode": "partial",
+		"skipTemplateCodegen": true,
+		"strictMetadataEmit": true,
+		"fullTemplateTypeCheck": true,
+		"strictInjectionParameters": true,
+		"enableResourceInlining": true
+	},
+	"exclude": ["dist/**/*.*", "src/test.ts", "**/*.spec.ts"]
 }

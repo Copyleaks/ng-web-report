@@ -1,30 +1,28 @@
+import { CdkVirtualScrollViewport } from '@angular/cdk/scrolling';
 import {
+	ChangeDetectorRef,
 	Component,
 	ElementRef,
 	HostBinding,
 	Input,
 	OnChanges,
 	OnInit,
-	ViewChild,
 	SimpleChanges,
-	ChangeDetectorRef,
 	TemplateRef,
-	HostListener,
+	ViewChild,
 } from '@angular/core';
+import { Observable, combineLatest, fromEvent } from 'rxjs';
+import { distinctUntilChanged, filter, map, pairwise } from 'rxjs/operators';
 import { EResponsiveLayoutType, EResultPreviewType } from '../../../enums/copyleaks-web-report.enums';
+import { ICopyleaksReportOptions } from '../../../models/report-options.models';
+import { ReportDataService } from '../../../services/report-data.service';
+import { ReportNgTemplatesService } from '../../../services/report-ng-templates.service';
+import { ReportViewService } from '../../../services/report-view.service';
+import { untilDestroy } from '../../../utils/until-destroy';
+import { ECustomResultsReportView } from '../../core/cr-custom-results/models/cr-custom-results.enums';
 import { EnumNavigateMobileButton } from '../report-results-item-container/components/models/report-result-item.enum';
 import { IResultItem } from '../report-results-item-container/components/models/report-result-item.models';
 import { IResultsActions } from './components/results-actions/models/results-actions.models';
-import { ReportNgTemplatesService } from '../../../services/report-ng-templates.service';
-import { untilDestroy } from '../../../utils/until-destroy';
-import { CdkVirtualScrollViewport } from '@angular/cdk/scrolling';
-import { Observable, combineLatest, fromEvent } from 'rxjs';
-import { map, pairwise, filter, distinctUntilChanged, debounceTime, takeUntil } from 'rxjs/operators';
-import { ReportDataService } from '../../../services/report-data.service';
-import { ResultDetailItem } from '../../../models/report-matches.models';
-import { ICopyleaksReportOptions } from '../../../models/report-options.models';
-import { ECustomResultsReportView } from '../../core/cr-custom-results/models/cr-custom-results.enums';
-import { ReportViewService } from '../../../services/report-view.service';
 
 @Component({
 	selector: 'copyleaks-report-results-container',

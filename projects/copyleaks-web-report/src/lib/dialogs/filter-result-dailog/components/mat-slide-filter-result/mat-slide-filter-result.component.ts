@@ -41,8 +41,8 @@ export class MatSlideFilterResultComponent implements OnInit, ControlValueAccess
 		this.updateParentControllerValue(this.value);
 	}
 
-	registerOnTouched(fn: any): void {}
-	onInputChange(value: string) {}
+	registerOnTouched(): void {}
+	onInputChange() {}
 }
 
 @Component({

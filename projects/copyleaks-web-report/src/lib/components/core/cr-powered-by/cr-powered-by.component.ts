@@ -7,7 +7,7 @@ import { Component, HostListener, OnInit } from '@angular/core';
 })
 export class CrPoweredByComponent implements OnInit {
 	@HostListener('click', ['$event'])
-	handleClick(event: Event) {
+	handleClick() {
 		window.open('https://copyleaks.com', '_blank');
 	}
 

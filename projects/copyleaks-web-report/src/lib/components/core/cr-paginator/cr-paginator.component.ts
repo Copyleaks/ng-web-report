@@ -1,4 +1,4 @@
-import { ChangeDetectorRef, Component, EventEmitter, Input, OnInit, Output, SimpleChanges } from '@angular/core';
+import { Component, EventEmitter, Input, OnInit, Output, SimpleChanges } from '@angular/core';
 import { IPaginateData, PageEvent } from './models/cr-paginator.models';
 
 /**
@@ -33,7 +33,7 @@ export class CrPaginatorComponent implements OnInit {
 	offSet: number = 0; // how many entities have been loaded
 	showPageSizeOptions = true; // flag for showing the page size options
 
-	constructor(private _cdr: ChangeDetectorRef) {}
+	constructor() {}
 
 	ngOnInit() {}
 

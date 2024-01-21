@@ -5,7 +5,6 @@ import { CrTextMatchComponent } from '../components/core/cr-text-match/cr-text-m
 import { ContentMode } from '../models/report-config.models';
 import { IResultDetailResponse } from '../models/report-data.models';
 import { Match } from '../models/report-matches.models';
-import { ReportDataService } from '../services/report-data.service';
 import { ReportMatchHighlightService } from '../services/report-match-highlight.service';
 import { ReportViewService } from '../services/report-view.service';
 import * as helpers from '../utils/highlight-helpers';
@@ -19,11 +18,7 @@ export class SuspectTextHelperDirective implements AfterContentInit, OnDestroy {
 
 	private unsubscribe$ = new Subject();
 
-	constructor(
-		private _highlightSvc: ReportMatchHighlightService,
-		private _viewService: ReportViewService,
-		private _dataSvc: ReportDataService
-	) {}
+	constructor(private _highlightSvc: ReportMatchHighlightService, private _viewService: ReportViewService) {}
 
 	@ContentChildren(CrTextMatchComponent)
 	private children: QueryList<CrTextMatchComponent>;

@@ -84,7 +84,7 @@ export class FilterResultDailogComponent implements OnInit {
 		this.initResultItem();
 		this.isMobile = this.data?.isMobile;
 
-		this._filterResultsSvc.filterResultFormGroup.valueChanges.pipe(untilDestroy(this)).subscribe(vc => {
+		this._filterResultsSvc.filterResultFormGroup.valueChanges.pipe(untilDestroy(this)).subscribe(_ => {
 			const formData = this.getFilterCurrentData();
 			if (
 				!formData.showInternetResults &&

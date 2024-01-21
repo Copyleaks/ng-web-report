@@ -199,10 +199,10 @@ export class FilterResultDailogComponent implements OnInit {
 
 	setExcludedResultsStats() {
 		const excludedResultsIds = this.data.reportDataSvc.excludedResultsIds;
-		const filteredResults = this.data.reportDataSvc.filterResults(
-			this.getFilterCurrentData(),
-			excludedResultsIds ?? []
-		);
+		let filterData = this.getFilterCurrentData();
+		if (!filterData.showIdentical && !filterData.showMinorChanges && !filterData.showRelated)
+			filterData.showIdentical = filterData.showMinorChanges = filterData.showRelated = true;
+		const filteredResults = this.data.reportDataSvc.filterResults(filterData, excludedResultsIds ?? []);
 		this.excludedResults = this.allResultsItem.filter(
 			result => !!excludedResultsIds?.find(id => result.resultPreview?.id === id)
 		);

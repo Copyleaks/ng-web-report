@@ -7,7 +7,13 @@
 	<div class="middle-section">
 		<!-- Report alerts -->
 		<copyleaks-report-alerts-container
-			*ngIf="alerts && alerts.length > 0 && !isLoadingScanResults"
+			*ngIf="
+				alerts &&
+				alerts.length > 0 &&
+				!isLoadingScanResults &&
+				reportViewMode !== ECustomResultsReportView.Full &&
+				reportViewMode !== ECustomResultsReportView.Partial
+			"
 			[alerts]="alerts"
 			[isMobile]="true"
 			[flexGrow]="20"></copyleaks-report-alerts-container>

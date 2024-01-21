@@ -31,6 +31,10 @@ function ready() {
 		Array.from(document.links).forEach(x => {
 			x.href = 'javascript:void(0)';
 			x.title = 'disable link';
+			var dataDestAttr = x.getAttribute('data-dest-detail');
+			if (dataDestAttr) {
+				x.setAttribute('data-dest-detail', '');
+			}
 		}); // disable links
 		matches = Array.from(document.querySelectorAll('span[match]'));
 		matches.forEach(elem => {

@@ -179,7 +179,9 @@ export abstract class OneToManyReportLayoutBaseComponent extends ReportLayoutBas
 			combineLatest([this.reportDataSvc.scanResultsPreviews$, this.reportDataSvc.scanResultsDetails$])
 				.pipe(untilDestroy(this))
 				.subscribe(([previews, details]) => {
-					if (data?.alertCode) this.isHtmlView = false;
+					if (data?.alertCode && this.selectedTap === EReportViewType.AIView) {
+						this.isHtmlView = false;
+					}
 					if (this.reportDataSvc.filterOptions?.showAlerts === false) this.alerts = [];
 					else
 						this.alerts =

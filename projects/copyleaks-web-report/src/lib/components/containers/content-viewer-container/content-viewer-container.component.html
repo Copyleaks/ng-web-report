@@ -110,18 +110,19 @@
 	class="content-container"
 	tabindex="0"
 	[ngStyle]="{
-		display: showLoadingView ? 'none' : ''
+		visibility: showLoadingView ? 'hidden' : '',
+		height: showLoadingView ? '0' : '',
+		flexGrow: showLoadingView ? '0' : ''
 	}">
 	<ng-container [ngSwitch]="reportOrigin">
 		<ng-container *ngSwitchCase="'original'">
 			<iframe
-				[ngStyle]="{
-					display: !isHtmlView || !hasHtml || isAlertsView || customTabContent || showLoadingView ? 'none' : ''
+				[ngClass]="{
+					'hide-iframe': !isHtmlView || !hasHtml || isAlertsView || customTabContent || showLoadingView
 				}"
 				#contentIFrame
 				sandbox="allow-scripts"
-				crOriginalHtmlHelper
-				(load)="onIFrameLoad()"></iframe>
+				crOriginalHtmlHelper></iframe>
 			<div
 				class="text-container"
 				[ngStyle]="{
@@ -174,13 +175,12 @@
 
 		<ng-container *ngSwitchCase="'source'">
 			<iframe
-				[ngStyle]="{
-					display: !isHtmlView || !hasHtml || isAlertsView || customTabContent || showLoadingView ? 'none' : ''
+				[ngClass]="{
+					'hide-iframe': !isHtmlView || !hasHtml || isAlertsView || customTabContent || showLoadingView
 				}"
 				#contentIFrame
 				sandbox="allow-scripts"
-				crSourceHtmlHelper
-				(load)="onIFrameLoad()"></iframe>
+				crSourceHtmlHelper></iframe>
 			<div
 				class="text-container"
 				[ngStyle]="{
@@ -229,13 +229,12 @@
 
 		<ng-container *ngSwitchCase="'suspect'">
 			<iframe
-				[ngStyle]="{
-					display: !isHtmlView || !hasHtml || isAlertsView || customTabContent || showLoadingView ? 'none' : ''
+				[ngClass]="{
+					'hide-iframe': !isHtmlView || !hasHtml || isAlertsView || customTabContent || showLoadingView
 				}"
 				#contentIFrame
 				sandbox="allow-scripts"
-				crSuspectHtmlHelper
-				(load)="onIFrameLoad()"></iframe>
+				crSuspectHtmlHelper></iframe>
 			<div
 				class="text-container"
 				crSuspectTextHelper

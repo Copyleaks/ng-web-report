@@ -100,6 +100,7 @@
 		align-items: center;
 		justify-content: center;
 	}
+
 	.text-container {
 		width: 100%;
 		white-space: pre-line;
@@ -273,5 +274,11 @@
 			flex-direction: column;
 			gap: 8px;
 		}
+	}
+
+	.hide-iframe {
+		visibility: hidden;
+		height: 0 !important;
+		width: 0 !important;
 	}
 }

@@ -1,4 +1,4 @@
-import { Directive, ElementRef, OnDestroy, OnInit } from '@angular/core';
+import { Directive, ElementRef, HostBinding, OnDestroy, OnInit } from '@angular/core';
 import { distinctUntilChanged, filter, map, withLatestFrom } from 'rxjs/operators';
 import { MatchJumpEvent, MatchSelectEvent } from '../models/report-iframe-events.models';
 import { ReportMatchHighlightService } from '../services/report-match-highlight.service';
@@ -9,6 +9,9 @@ import { untilDestroy } from '../utils/until-destroy';
 	selector: '[crOriginalHtmlHelper]',
 })
 export class OriginalHtmlHelperComponent implements OnInit, OnDestroy {
+	/** sets the seamsless attribute to the iframe */
+	@HostBinding('attr.seamless') readonly seamless = true;
+
 	constructor(
 		private _reportViewSvc: ReportViewService,
 		private _highlightSvc: ReportMatchHighlightService,

@@ -1,4 +1,4 @@
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, Input, OnChanges, OnInit, SimpleChanges } from '@angular/core';
 import { ITagItem } from './models/included-tags-filter-result.models';
 import { FilterResultDailogService } from '../../services/filter-result-dailog.service';
 import { FormControl } from '@angular/forms';
@@ -11,7 +11,7 @@ import { Observable } from 'rxjs';
 	templateUrl: './included-tags-filter-result.component.html',
 	styleUrls: ['./included-tags-filter-result.component.scss'],
 })
-export class IncludedTagsFilterResultComponent implements OnInit {
+export class IncludedTagsFilterResultComponent implements OnInit, OnChanges {
 	@Input() allTagItem: ITagItem[];
 
 	includedTagsForm: FormControl;
@@ -32,6 +32,7 @@ export class IncludedTagsFilterResultComponent implements OnInit {
 	}
 
 	constructor(private filterService: FilterResultDailogService) {}
+
 	ngOnInit(): void {
 		this.includedTagsForm = this.filterService.includedTagsFormControl;
 
@@ -40,6 +41,15 @@ export class IncludedTagsFilterResultComponent implements OnInit {
 			startWith(''),
 			map(value => this._filterTags(value || ''))
 		);
+	}
+
+	ngOnChanges(changes: SimpleChanges): void {
+		if (changes['allTagItem'])
+			this.filteredTagList = this.searchTagControl.valueChanges.pipe(
+				untilDestroy(this),
+				startWith(''),
+				map(value => this._filterTags(value || ''))
+			);
 	}
 
 	selectTag() {

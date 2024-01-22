@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { Subject, throwError } from 'rxjs';
+import { Subject } from 'rxjs';
 import { ReportHttpRequestErrorModel } from '../models/report-errors.models';
 import { HttpErrorResponse } from '@angular/common/http';
 
@@ -16,8 +16,6 @@ export class ReportErrorsService {
 	constructor() {}
 
 	public handleHttpError(error: HttpErrorResponse, methodName: string) {
-		if (!error) throwError(error);
-
 		const httpError: ReportHttpRequestErrorModel = {
 			statusCode: error.status,
 			message: error.message,

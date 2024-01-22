@@ -298,12 +298,14 @@ export class ReportDataService {
 					if (progress?.percents == 100) this.initSync(endpointsConfig);
 					else {
 						this._viewSvc.progress$.next(progress.percents);
-						try {
-							this._checkScanProgress(progress);
-						} catch (error) {
-							this._reportErrorsSvc.handleHttpError(error as HttpErrorResponse, 'initReportData');
-						}
-						this.initAsync();
+						this._checkScanProgress(progress).then(
+							_ => {
+								this.initAsync();
+							},
+							error => {
+								this._reportErrorsSvc.handleHttpError(error as HttpErrorResponse, 'initReportData');
+							}
+						);
 					}
 				},
 				(error: HttpErrorResponse) => {
@@ -403,7 +405,7 @@ export class ReportDataService {
 				takeUntil(_realTimeUpdateSub)
 			)
 			.subscribe(
-				async progress => {
+				progress => {
 					if (ENABLE_REALTIME_MOCK_TESTING) {
 						if (testCounter < 80) {
 							testCounter += Math.floor(Math.random() * 26);
@@ -414,18 +416,22 @@ export class ReportDataService {
 						}
 					}
 
-					if (progress.percents >= 0 && progress.percents <= 100) this._viewSvc.progress$.next(progress.percents);
-					try {
-						await this._checkScanProgress(progress);
-					} catch (error) {
-						this._reportErrorsSvc.handleHttpError(error as HttpErrorResponse, '_checkScanProgress');
-						_realTimeUpdateSub.next(null);
-						_realTimeUpdateSub.complete();
+					if (progress.percents >= 0 && progress.percents <= 100) {
+						this._viewSvc.progress$.next(progress.percents);
 					}
-					if (progress.percents === 100) {
-						_realTimeUpdateSub.next(null);
-						_realTimeUpdateSub.complete();
-					}
+
+					this._checkScanProgress(progress)
+						.catch(error => {
+							this._reportErrorsSvc.handleHttpError(error as HttpErrorResponse, '_checkScanProgress');
+							_realTimeUpdateSub.next(null);
+							_realTimeUpdateSub.complete();
+						})
+						.finally(() => {
+							if (progress.percents === 100) {
+								_realTimeUpdateSub.next(null);
+								_realTimeUpdateSub.complete();
+							}
+						});
 				},
 				(error: HttpErrorResponse) => {
 					// Error handling logic here

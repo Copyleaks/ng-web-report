@@ -1,0 +1,714 @@
+{
+    "statistics": {
+        "identical": 168,
+        "minorChanges": 159,
+        "relatedMeaning": 0
+    },
+    "text": {
+        "comparison": {
+            "identical": {
+                "source": {
+                    "chars": {
+                        "starts": [
+                            223,
+                            242,
+                            283,
+                            302,
+                            370,
+                            374,
+                            434,
+                            439,
+                            499,
+                            503,
+                            567,
+                            634,
+                            638,
+                            869,
+                            1572,
+                            1662,
+                            1752,
+                            1856,
+                            2075,
+                            2123,
+                            2277
+                        ],
+                        "lengths": [
+                            18,
+                            40,
+                            18,
+                            67,
+                            3,
+                            59,
+                            4,
+                            59,
+                            3,
+                            63,
+                            66,
+                            3,
+                            61,
+                            103,
+                            89,
+                            89,
+                            102,
+                            83,
+                            47,
+                            153,
+                            78
+                        ]
+                    },
+                    "words": {
+                        "starts": [
+                            0,
+                            4,
+                            12,
+                            15,
+                            19,
+                            20,
+                            24,
+                            25,
+                            28,
+                            29,
+                            32,
+                            36,
+                            37,
+                            69,
+                            193,
+                            205,
+                            220,
+                            238,
+                            274,
+                            284,
+                            314
+                        ],
+                        "lengths": [
+                            3,
+                            7,
+                            2,
+                            3,
+                            0,
+                            3,
+                            0,
+                            2,
+                            0,
+                            2,
+                            3,
+                            0,
+                            2,
+                            16,
+                            11,
+                            14,
+                            17,
+                            12,
+                            9,
+                            29,
+                            12
+                        ]
+                    }
+                },
+                "suspected": {
+                    "chars": {
+                        "starts": [
+                            110,
+                            129,
+                            171,
+                            190,
+                            259,
+                            263,
+                            324,
+                            329,
+                            390,
+                            394,
+                            459,
+                            527,
+                            531,
+                            763,
+                            1443,
+                            1533,
+                            1623,
+                            1727,
+                            1942,
+                            1991,
+                            2145
+                        ],
+                        "lengths": [
+                            18,
+                            40,
+                            18,
+                            67,
+                            3,
+                            59,
+                            4,
+                            59,
+                            3,
+                            63,
+                            66,
+                            3,
+                            61,
+                            102,
+                            89,
+                            89,
+                            102,
+                            83,
+                            47,
+                            152,
+                            78
+                        ]
+                    },
+                    "words": {
+                        "starts": [
+                            19,
+                            23,
+                            31,
+                            34,
+                            38,
+                            39,
+                            43,
+                            44,
+                            47,
+                            48,
+                            51,
+                            55,
+                            56,
+                            87,
+                            205,
+                            217,
+                            232,
+                            250,
+                            284,
+                            294,
+                            324
+                        ],
+                        "lengths": [
+                            3,
+                            7,
+                            2,
+                            3,
+                            0,
+                            3,
+                            0,
+                            2,
+                            0,
+                            2,
+                            3,
+                            0,
+                            2,
+                            16,
+                            11,
+                            14,
+                            17,
+                            12,
+                            9,
+                            29,
+                            12
+                        ]
+                    }
+                }
+            },
+            "minorChanges": {
+                "source": {
+                    "chars": {
+                        "starts": [
+                            700,
+                            973,
+                            1186,
+                            1442,
+                            1940
+                        ],
+                        "lengths": [
+                            168,
+                            211,
+                            255,
+                            129,
+                            134
+                        ]
+                    },
+                    "words": {
+                        "starts": [
+                            40,
+                            86,
+                            124,
+                            168,
+                            251
+                        ],
+                        "lengths": [
+                            28,
+                            37,
+                            43,
+                            24,
+                            22
+                        ]
+                    }
+                },
+                "suspected": {
+                    "chars": {
+                        "starts": [
+                            595,
+                            867,
+                            1074,
+                            1327,
+                            1811
+                        ],
+                        "lengths": [
+                            166,
+                            205,
+                            251,
+                            115,
+                            130
+                        ]
+                    },
+                    "words": {
+                        "starts": [
+                            59,
+                            104,
+                            141,
+                            183,
+                            263
+                        ],
+                        "lengths": [
+                            27,
+                            36,
+                            41,
+                            21,
+                            20
+                        ]
+                    }
+                }
+            },
+            "relatedMeaning": {
+                "source": {
+                    "chars": {
+                        "starts": [],
+                        "lengths": []
+                    },
+                    "words": {
+                        "starts": [],
+                        "lengths": []
+                    }
+                },
+                "suspected": {
+                    "chars": {
+                        "starts": [],
+                        "lengths": []
+                    },
+                    "words": {
+                        "starts": [],
+                        "lengths": []
+                    }
+                }
+            }
+        },
+        "value": "title: ‘You can take me:’ NBA stars joke about Kylian Mbappé’s reported salary offer from Saudi club Al Hilal\nBy Ben Church, CNN\nPublished 5:57 AM EDT, Tue July 25, 2023\n\nTable Of Contents:\nI. Introduction ................................................. 1\n\nII. Literature Review ....................................... 3\n\nIII. Methodology ............................................. 6\n\nIV. Results ..................................................... 9\n\nV. Discussion ................................................. 12\n\nVI. Conclusion ............................................... 15\n\n\nMbappé, who has yet to directly address the new offer or speak about the transfer rumors surrounding him publicly, reacted to the post with 13 crying laughing emojis.\n\nTwo-time NBA MVP Antetokounmpo wasn’t the only NBA star taken aback by the eye-watering money at play.\n\nBasketball icon LeBron James also took to Twitter to share a joke, posting a video of Forest Gump running with the caption: “Me headed to Saudi when they call @RichPaul4 & @mavcarter for that 1 year deal!”\n\nIn 2022, James signed a new contract with the Los Angeles Lakers which took the 37-year-old to $532 million in guaranteed career earnings, making him the highest paid player in terms of salary in NBA history, surpassing Phoenix Suns star Kevin Durant.\n\nSoccer Football - Ligue 1 - Paris St Germain v Olympique Lyonnais - Parc des Princes, Paris, France - April 2, 2023\nParis St Germain's Kylian Mbappe looks dejected after the match REUTERS/Sarah Meyssonnier\nKylian Mbappé: What next for French superstar as questions over his PSG future rumble on?\nIt’s a figure dwarfed by the earnings that Mbappé would reportedly receive for one season at Al Hilal.\n\nPortland Trail Blazer guard Damian Lillard got involved and tweeted, “1 year 776mm? Wtf lol ...” while Golden State Warriors forward Draymond Green also chimed in on Twitter: “They got basketball leagues too right? Don’t the ink on my contract has dried up yet.”\n\nMbappé has been left out of PSG’s squad for its preseason tour of Japan, with the club having issued him an ultimatum to sign a new contract or be sold.\n\nCNN has reached out to PSG, Al Hilal and Mbappé’s representatives for comment.",
+        "pages": {
+            "startPosition": [
+                0
+            ]
+        }
+    },
+    "html": {
+        "comparison": {
+            "identical": {
+                "groupId": [
+                    0,
+                    1,
+                    2,
+                    3,
+                    4,
+                    5,
+                    6,
+                    7,
+                    8,
+                    9,
+                    10,
+                    11,
+                    12,
+                    13,
+                    13,
+                    14,
+                    15,
+                    16,
+                    17,
+                    18,
+                    19,
+                    19,
+                    20
+                ],
+                "source": {
+                    "chars": {
+                        "starts": [
+                            342428,
+                            342505,
+                            342604,
+                            342681,
+                            342807,
+                            342811,
+                            342929,
+                            342934,
+                            343052,
+                            343056,
+                            343178,
+                            343303,
+                            343307,
+                            343712,
+                            343864,
+                            344933,
+                            345081,
+                            345229,
+                            345391,
+                            345726,
+                            345832,
+                            345996,
+                            346102
+                        ],
+                        "lengths": [
+                            18,
+                            40,
+                            18,
+                            67,
+                            3,
+                            59,
+                            4,
+                            59,
+                            3,
+                            63,
+                            66,
+                            3,
+                            61,
+                            97,
+                            5,
+                            89,
+                            89,
+                            102,
+                            83,
+                            47,
+                            105,
+                            47,
+                            78
+                        ]
+                    },
+                    "words": {
+                        "starts": [
+                            0,
+                            4,
+                            12,
+                            15,
+                            19,
+                            20,
+                            24,
+                            25,
+                            28,
+                            29,
+                            32,
+                            36,
+                            37,
+                            69,
+                            69,
+                            193,
+                            205,
+                            220,
+                            238,
+                            274,
+                            284,
+                            284,
+                            314
+                        ],
+                        "lengths": [
+                            3,
+                            7,
+                            2,
+                            3,
+                            0,
+                            3,
+                            0,
+                            2,
+                            0,
+                            2,
+                            3,
+                            0,
+                            2,
+                            16,
+                            16,
+                            11,
+                            14,
+                            17,
+                            12,
+                            9,
+                            29,
+                            29,
+                            12
+                        ]
+                    }
+                },
+                "suspected": {
+                    "chars": {
+                        "starts": [
+                            110,
+                            129,
+                            171,
+                            190,
+                            259,
+                            263,
+                            324,
+                            329,
+                            390,
+                            394,
+                            459,
+                            527,
+                            531,
+                            763,
+                            763,
+                            1443,
+                            1533,
+                            1623,
+                            1727,
+                            1942,
+                            1991,
+                            1991,
+                            2145
+                        ],
+                        "lengths": [
+                            18,
+                            40,
+                            18,
+                            67,
+                            3,
+                            59,
+                            4,
+                            59,
+                            3,
+                            63,
+                            66,
+                            3,
+                            61,
+                            102,
+                            102,
+                            89,
+                            89,
+                            102,
+                            83,
+                            47,
+                            152,
+                            152,
+                            78
+                        ]
+                    },
+                    "words": {
+                        "starts": [
+                            19,
+                            23,
+                            31,
+                            34,
+                            38,
+                            39,
+                            43,
+                            44,
+                            47,
+                            48,
+                            51,
+                            55,
+                            56,
+                            87,
+                            87,
+                            205,
+                            217,
+                            232,
+                            250,
+                            284,
+                            294,
+                            294,
+                            324
+                        ],
+                        "lengths": [
+                            3,
+                            7,
+                            2,
+                            3,
+                            0,
+                            3,
+                            0,
+                            2,
+                            0,
+                            2,
+                            3,
+                            0,
+                            2,
+                            16,
+                            16,
+                            11,
+                            14,
+                            17,
+                            12,
+                            9,
+                            29,
+                            29,
+                            12
+                        ]
+                    }
+                }
+            },
+            "minorChanges": {
+                "groupId": [
+                    21,
+                    21,
+                    22,
+                    22,
+                    23,
+                    23,
+                    23,
+                    24,
+                    24,
+                    25,
+                    25,
+                    25
+                ],
+                "source": {
+                    "chars": {
+                        "starts": [
+                            343427,
+                            343590,
+                            343928,
+                            344092,
+                            344257,
+                            344420,
+                            344587,
+                            344687,
+                            344851,
+                            345475,
+                            345557,
+                            345720
+                        ],
+                        "lengths": [
+                            104,
+                            63,
+                            105,
+                            105,
+                            104,
+                            108,
+                            41,
+                            105,
+                            23,
+                            23,
+                            104,
+                            5
+                        ]
+                    },
+                    "words": {
+                        "starts": [
+                            40,
+                            40,
+                            86,
+                            86,
+                            124,
+                            124,
+                            124,
+                            168,
+                            168,
+                            251,
+                            251,
+                            251
+                        ],
+                        "lengths": [
+                            28,
+                            28,
+                            37,
+                            37,
+                            43,
+                            43,
+                            43,
+                            24,
+                            24,
+                            22,
+                            22,
+                            22
+                        ]
+                    }
+                },
+                "suspected": {
+                    "chars": {
+                        "starts": [
+                            595,
+                            595,
+                            867,
+                            867,
+                            1074,
+                            1074,
+                            1074,
+                            1327,
+                            1327,
+                            1811,
+                            1811,
+                            1811
+                        ],
+                        "lengths": [
+                            166,
+                            166,
+                            205,
+                            205,
+                            251,
+                            251,
+                            251,
+                            115,
+                            115,
+                            130,
+                            130,
+                            130
+                        ]
+                    },
+                    "words": {
+                        "starts": [
+                            59,
+                            59,
+                            104,
+                            104,
+                            141,
+                            141,
+                            141,
+                            183,
+                            183,
+                            263,
+                            263,
+                            263
+                        ],
+                        "lengths": [
+                            27,
+                            27,
+                            36,
+                            36,
+                            41,
+                            41,
+                            41,
+                            21,
+                            21,
+                            20,
+                            20,
+                            20
+                        ]
+                    }
+                }
+            },
+            "relatedMeaning": {
+                "groupId": [],
+                "source": {
+                    "chars": {
+                        "starts": [],
+                        "lengths": []
+                    },
+                    "words": {
+                        "starts": [],
+                        "lengths": []
+                    }
+                },
+                "suspected": {
+                    "chars": {
+                        "starts": [],
+                        "lengths": []
+                    },
+                    "words": {
+                        "starts": [],
+                        "lengths": []
+                    }
+                }
+            }
+        }
+    },
+    "version": 3
+}

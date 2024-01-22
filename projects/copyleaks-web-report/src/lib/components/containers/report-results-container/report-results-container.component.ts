@@ -71,7 +71,6 @@ export class ReportResultsContainerComponent implements OnInit, OnChanges {
 	showCustomView: boolean;
 	currentViewedIndex: number = 0;
 	scrollSub: any;
-	resizeSubscription: any;
 	addPaddingToContainer: boolean;
 
 	filterIsOn: boolean;
@@ -104,34 +103,36 @@ export class ReportResultsContainerComponent implements OnInit, OnChanges {
 	) {}
 
 	ngOnChanges(changes: SimpleChanges) {
-		if (changes['allResults']?.currentValue) {
-			this.searchedValue = '';
-			if (!this.filterIsOn) this.displayedResults = this.allResults;
-			if (this.reportDataSvc.filterOptions && this.reportDataSvc.excludedResultsIds)
-				this._filterResults(this.reportDataSvc.filterOptions, this.reportDataSvc.excludedResultsIds);
-		}
-		if (changes['showLoadingView']?.currentValue == false) {
-			this._handelFilterUpdates();
-			this.checkAndApplyPadding();
+		setTimeout(() => {
+			if (changes['allResults']?.currentValue) {
+				this.searchedValue = '';
+				if (!this.filterIsOn) this.displayedResults = this.allResults;
+				if (this.reportDataSvc.filterOptions && this.reportDataSvc.excludedResultsIds)
+					this._filterResults(this.reportDataSvc.filterOptions, this.reportDataSvc.excludedResultsIds);
+			}
+			if (changes['showLoadingView']?.currentValue == false) {
+				this._handelFilterUpdates();
+				this.checkAndApplyPadding();
 
-			setTimeout(() => {
-				const container: HTMLElement = this.customEmptyResultView?.nativeElement;
-				if (container && container?.childElementCount > 0) this.showCustomView = true;
-				else this.showCustomView = false;
+				setTimeout(() => {
+					const container: HTMLElement = this.customEmptyResultView?.nativeElement;
+					if (container && container?.childElementCount > 0) this.showCustomView = true;
+					else this.showCustomView = false;
 
-				this.detectEndOfList();
-			});
-		}
+					this.detectEndOfList();
+				});
+			}
 
-		if ('filterOptions' in changes && changes['filterOptions'].currentValue) {
-			this.displayedResults?.forEach(result => {
-				result.iStatisticsResult = {
-					identical: this.filterOptions.showIdentical ? result.iStatisticsResult?.identical ?? 0 : 0,
-					minorChanges: this.filterOptions.showMinorChanges ? result.iStatisticsResult?.minorChanges ?? 0 : 0,
-					relatedMeaning: this.filterOptions.showRelated ? result.iStatisticsResult?.relatedMeaning ?? 0 : 0,
-				};
-			});
-		}
+			if ('filterOptions' in changes && changes['filterOptions'].currentValue) {
+				this.displayedResults?.forEach(result => {
+					result.iStatisticsResult = {
+						identical: this.filterOptions.showIdentical ? result.iStatisticsResult?.identical ?? 0 : 0,
+						minorChanges: this.filterOptions.showMinorChanges ? result.iStatisticsResult?.minorChanges ?? 0 : 0,
+						relatedMeaning: this.filterOptions.showRelated ? result.iStatisticsResult?.relatedMeaning ?? 0 : 0,
+					};
+				});
+			}
+		});
 	}
 
 	ngOnInit(): void {
@@ -168,7 +169,7 @@ export class ReportResultsContainerComponent implements OnInit, OnChanges {
 	ngAfterViewInit(): void {
 		this.detectEndOfList();
 
-		this.resizeSubscription = fromEvent(window, 'resize')
+		fromEvent(window, 'resize')
 			.pipe(untilDestroy(this))
 			.subscribe(() => {
 				this.checkAndApplyPadding();

@@ -1,5 +1,11 @@
 /** Type representing an event that fired inside of an iframe containing a scan html content */
-export type PostMessageEvent = MatchClickEvent | MatchJumpEvent | MatchSelectEvent | MatchWarnEvent | UpgradePlanEvent;
+export type PostMessageEvent =
+	| MatchClickEvent
+	| MatchJumpEvent
+	| MatchSelectEvent
+	| MatchWarnEvent
+	| UpgradePlanEvent
+	| ZoomEvent;
 
 /** base type of post message event */
 interface BasePostMessageEvent {
@@ -36,4 +42,9 @@ export interface MatchWarnEvent extends BasePostMessageEvent {
 }
 export interface UpgradePlanEvent extends BasePostMessageEvent {
 	type: 'upgrade-plan';
+}
+
+export interface ZoomEvent extends BasePostMessageEvent {
+	type: 'zoom';
+	currentZoom: number;
 }

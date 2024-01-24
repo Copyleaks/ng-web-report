@@ -15,7 +15,7 @@ import {
 	TemplateRef,
 	ViewChild,
 } from '@angular/core';
-import { PostMessageEvent } from '../../../models/report-iframe-events.models';
+import { PostMessageEvent, ZoomEvent } from '../../../models/report-iframe-events.models';
 import { IReportViewEvent } from '../../../models/report-view.models';
 import { MatchType, ReportOrigin, ResultDetailItem, SlicedMatch } from '../../../models/report-matches.models';
 import { DirectionMode as ReportContentDirectionMode, ViewMode } from '../../../models/report-config.models';
@@ -256,6 +256,8 @@ export class ContentViewerContainerComponent implements OnInit, AfterViewInit, O
 
 	ONLY_TEXT_VIEW_IS_AVAILABLE = $localize`Only text view is available`;
 
+	private currentZoom = 1;
+
 	constructor(
 		private _renderer: Renderer2,
 		private _cdr: ChangeDetectorRef,
@@ -345,16 +347,22 @@ export class ContentViewerContainerComponent implements OnInit, AfterViewInit, O
 	 * updates the font size of the suspect text.
 	 * @param amount a decimal number between 0.5 and 4
 	 */
-	decreaseFontSize(amount: number = TEXT_FONT_SIZE_UNIT) {
-		this.contentZoom = Math.max(this.contentZoom - amount, MIN_TEXT_ZOOM);
+	zoomOut(amount: number = TEXT_FONT_SIZE_UNIT) {
+		if (this.isHtmlView) {
+			this.currentZoom = Math.max(0.1, this.currentZoom - 0.1); // Prevent scale from going below 0.1
+			this._adjustZoom();
+		} else this.contentZoom = Math.max(this.contentZoom - amount, MIN_TEXT_ZOOM);
 	}
 
 	/**
 	 * updates the font size of the suspect text.
 	 * @param amount a decimal number between 0.5 and 4
 	 */
-	increaseFontSize(amount: number = TEXT_FONT_SIZE_UNIT) {
-		this.contentZoom = Math.min(this.contentZoom + amount, MAX_TEXT_ZOOM);
+	zoomIn(amount: number = TEXT_FONT_SIZE_UNIT) {
+		if (this.isHtmlView) {
+			this.currentZoom += 0.1;
+			this._adjustZoom();
+		} else this.contentZoom = Math.min(this.contentZoom + amount, MAX_TEXT_ZOOM);
 	}
 
 	onPaginationEvent(event: PageEvent) {
@@ -380,6 +388,13 @@ export class ContentViewerContainerComponent implements OnInit, AfterViewInit, O
 	 */
 	onJumpToNextMatchClick(next: boolean = true) {
 		this._highlightService.jump(next);
+	}
+
+	private _adjustZoom() {
+		this.contentIFrame.nativeElement.contentWindow.postMessage(
+			{ type: 'zoom', currentZoom: this.currentZoom } as ZoomEvent,
+			'*'
+		);
 	}
 
 	ngOnDestroy(): void {}

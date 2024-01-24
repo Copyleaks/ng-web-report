@@ -65,6 +65,9 @@ function ready() {
 			case 'match-jump':
 				onMatchJump(event);
 				break;
+			case 'zoom':
+				document.body.style.setProperty('zoom', String(event.currentZoom));
+				break;
 			default:
 				console.error('unknown event in frame', nativeEvent);
 		}

@@ -47,21 +47,14 @@
 				format_align_right
 			</mat-icon>
 			<mat-icon
-				*ngIf="!isHtmlView || !hasHtml || isAlertsView"
 				fontSet="material-icons-round"
-				(click)="increaseFontSize()"
+				(click)="zoomIn()"
 				matTooltip="Zoom in"
 				matTooltipClass="web-report-mat-tooltip"
 				i18n-matTooltip>
 				zoom_in
 			</mat-icon>
-			<mat-icon
-				*ngIf="!isHtmlView || !hasHtml || isAlertsView"
-				fontSet="material-icons-round"
-				(click)="decreaseFontSize()"
-				matTooltip="Zoom out"
-				matTooltipClass="web-report-mat-tooltip"
-				i18n-matTooltip>
+			<mat-icon (click)="zoomOut()" matTooltip="Zoom out" matTooltipClass="web-report-mat-tooltip" i18n-matTooltip>
 				zoom_out
 			</mat-icon>
 			<span

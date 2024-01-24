@@ -1,0 +1,1107 @@
+{
+    "scannedDocument": {
+        "scanId": "q8qad1xm13s0u15i",
+        "totalWords": 431,
+        "totalExcluded": 0,
+        "credits": 2,
+        "expectedCredits": 2,
+        "creationTime": "2024-01-22T06:06:15.193998Z",
+        "metadata": {
+            "finalUrl": null,
+            "canonicalUrl": null,
+            "author": null,
+            "organization": null,
+            "filename": "file%20to%20scan%20all%20settings1.pdf",
+            "publishDate": null,
+            "creationDate": "2023-07-25T11:33:19Z",
+            "lastModificationDate": "2023-07-25T11:33:19Z",
+            "submissionDate": null,
+            "submittedBy": null,
+            "submitterAuthorId": null,
+            "customMetadata": null
+        },
+        "enabled": {
+            "plagiarismDetection": true,
+            "aiDetection": true
+        }
+    },
+    "results": {
+        "internet": [
+            {
+                "isLocked": false,
+                "url": "https://sportsdigest.in/al-hilals-offer-kylian-mbappe-could-earn-%E2%82%B91-2-lakhs-in-1-minute/90549/",
+                "id": "06e50ba912",
+                "title": "Al-Hilal’s offer: Kylian Mbappe could earn ₹1.2 lakhs in 1 minute",
+                "introduction": "Likes Followers Followers Subscribers Monday, January 22, 2024 हिंदी ...",
+                "matchedWords": 35,
+                "identicalWords": 33,
+                "similarWords": 2,
+                "paraphrasedWords": 0,
+                "metadata": {
+                    "finalUrl": null,
+                    "canonicalUrl": null,
+                    "author": null,
+                    "organization": null,
+                    "filename": null,
+                    "publishDate": null,
+                    "creationDate": null,
+                    "lastModificationDate": null,
+                    "submissionDate": null,
+                    "submittedBy": null,
+                    "submitterAuthorId": null,
+                    "customMetadata": null
+                },
+                "tags": []
+            },
+            {
+                "isLocked": false,
+                "url": "https://www.the-sun.com/sport/8680605/kylian-mbappe-al-hilal-transfer-giannis-antetokounmpo/",
+                "id": "105d6d6aaf",
+                "title": "Kylian Mbappe breaks silence over £259m Al-Hilal transfer after NBA star Gian...",
+                "introduction": "Jump directly to the content US Edition UK Edition Scottish Sun Irish Sun Search My Account Sign in News Sport Lifestyle...",
+                "matchedWords": 61,
+                "identicalWords": 15,
+                "similarWords": 10,
+                "paraphrasedWords": 36,
+                "metadata": {
+                    "finalUrl": null,
+                    "canonicalUrl": null,
+                    "author": "Etienne Fermie",
+                    "organization": "The US Sun",
+                    "filename": null,
+                    "publishDate": "2023-07-25T05:02:57Z",
+                    "creationDate": null,
+                    "lastModificationDate": "2023-07-25T05:02:57Z",
+                    "submissionDate": null,
+                    "submittedBy": null,
+                    "submitterAuthorId": null,
+                    "customMetadata": null
+                },
+                "tags": []
+            },
+            {
+                "isLocked": false,
+                "url": "https://kesq.com/sports/national-sports/cnn-sports/2023/07/25/you-can-take-me-nba-stars-joke-about-kylian-mbappes-reported-salary-offer-from-saudi-club-al-hilal/",
+                "id": "1944e3c318",
+                "title": "‘You can take me:’ NBA stars joke about Kylian Mbappé’s reported salary offer...",
+                "introduction": "circle-arrow Play Button ...",
+                "matchedWords": 235,
+                "identicalWords": 88,
+                "similarWords": 147,
+                "paraphrasedWords": 0,
+                "metadata": {
+                    "finalUrl": null,
+                    "canonicalUrl": null,
+                    "author": null,
+                    "organization": null,
+                    "filename": null,
+                    "publishDate": null,
+                    "creationDate": null,
+                    "lastModificationDate": null,
+                    "submissionDate": null,
+                    "submittedBy": null,
+                    "submitterAuthorId": null,
+                    "customMetadata": null
+                },
+                "tags": []
+            },
+            {
+                "isLocked": false,
+                "url": "https://www.aol.com/nba-stars-joke-kylian-mbapp-095716002.html",
+                "id": "1bef2d4a8a",
+                "title": "‘You can take me:’ NBA stars joke about Kylian Mbappé’s reported salary offer...",
+                "introduction": "Skip to main content Advertisement Sign inMail 24/7 HelpFor premium support please call: 800-290-4726more ways to reach ...",
+                "matchedWords": 235,
+                "identicalWords": 88,
+                "similarWords": 147,
+                "paraphrasedWords": 0,
+                "metadata": {
+                    "finalUrl": null,
+                    "canonicalUrl": null,
+                    "author": "CNN Sports",
+                    "organization": "AOL",
+                    "filename": "nba-stars-joke-kylian-mbapp-095716002.html",
+                    "publishDate": "2023-07-25T16:01:29Z",
+                    "creationDate": null,
+                    "lastModificationDate": "2023-07-25T16:01:29Z",
+                    "submissionDate": null,
+                    "submittedBy": null,
+                    "submitterAuthorId": null,
+                    "customMetadata": null
+                },
+                "tags": []
+            },
+            {
+                "isLocked": false,
+                "url": "https://krdo.com/news/2023/07/25/you-can-take-me-nba-stars-joke-about-kylian-mbappes-reported-salary-offer-from-saudi-club-al-hilal/",
+                "id": "21b6630309",
+                "title": "‘You can take me:’ NBA stars joke about Kylian Mbappé’s reported salary offer...",
+                "introduction": "circle-arrow Play Button ...",
+                "matchedWords": 235,
+                "identicalWords": 88,
+                "similarWords": 147,
+                "paraphrasedWords": 0,
+                "metadata": {
+                    "finalUrl": null,
+                    "canonicalUrl": null,
+                    "author": null,
+                    "organization": null,
+                    "filename": null,
+                    "publishDate": null,
+                    "creationDate": null,
+                    "lastModificationDate": null,
+                    "submissionDate": null,
+                    "submittedBy": null,
+                    "submitterAuthorId": null,
+                    "customMetadata": null
+                },
+                "tags": []
+            },
+            {
+                "isLocked": false,
+                "url": "https://www.cnn.com/2023/07/26/football/mbappe-offer-al-hilal-intl/index.html",
+                "id": "2f9e5daee6",
+                "title": "Kylian Mbappé refuses meeting with Saudi club Al Hilal, per reports | CNN",
+                "introduction": "...",
+                "matchedWords": 43,
+                "identicalWords": 30,
+                "similarWords": 0,
+                "paraphrasedWords": 13,
+                "metadata": {
+                    "finalUrl": null,
+                    "canonicalUrl": null,
+                    "author": "David Close",
+                    "organization": "CNN",
+                    "filename": "index.html",
+                    "publishDate": "2023-07-26T21:46:43Z",
+                    "creationDate": null,
+                    "lastModificationDate": "2023-07-26T22:03:43Z",
+                    "submissionDate": null,
+                    "submittedBy": null,
+                    "submitterAuthorId": null,
+                    "customMetadata": null
+                },
+                "tags": []
+            },
+            {
+                "isLocked": false,
+                "url": "https://www.espn.com/soccer/story/_/id/38066913/paris-saint-germains-kylian-mbappe-loves-nba-stars-react-al-hilal-bid",
+                "id": "4c7d5ffa38",
+                "title": "PSG's Mbappe loves it as NBA stars react to Al Hilal's bid - ESPN",
+                "introduction": "Skip to main content Skip to ...",
+                "matchedWords": 25,
+                "identicalWords": 25,
+                "similarWords": 0,
+                "paraphrasedWords": 0,
+                "metadata": {
+                    "finalUrl": null,
+                    "canonicalUrl": null,
+                    "author": "Chris Wright",
+                    "organization": "ESPN",
+                    "filename": "paris-saint-germains-kylian-mbappe-loves-nba-stars-react-al-hilal-bid",
+                    "publishDate": "2023-07-25T11:30:00Z",
+                    "creationDate": null,
+                    "lastModificationDate": "2023-07-25T11:30:00Z",
+                    "submissionDate": null,
+                    "submittedBy": null,
+                    "submitterAuthorId": null,
+                    "customMetadata": null
+                },
+                "tags": []
+            },
+            {
+                "isLocked": false,
+                "url": "https://abc7news.com/lebron-james-lakers-contract-signs-extension/12137645/",
+                "id": "510c17fc9d",
+                "title": "LeBron James agrees to 2-year, $97.1 million extension with Los Angeles Laker...",
+                "introduction": "ABC7 Bay Area 24/7 live stream Watch Now Watch ABC7 newscasts on demand Full Story How safe is your neighborhood...",
+                "matchedWords": 15,
+                "identicalWords": 15,
+                "similarWords": 0,
+                "paraphrasedWords": 0,
+                "metadata": {
+                    "finalUrl": null,
+                    "canonicalUrl": null,
+                    "author": null,
+                    "organization": null,
+                    "filename": null,
+                    "publishDate": null,
+                    "creationDate": null,
+                    "lastModificationDate": null,
+                    "submissionDate": null,
+                    "submittedBy": null,
+                    "submitterAuthorId": null,
+                    "customMetadata": null
+                },
+                "tags": []
+            },
+            {
+                "isLocked": false,
+                "url": "https://en.as.com/soccer/nba-stars-react-to-al-hilals-mega-offer-and-mbappe-responds-n/",
+                "id": "5746a3219a",
+                "title": "NBA stars react to Al-Hilal’s mega offer... and Mbappé responds! - AS USA",
+                "introduction": "AS USA Live ScoresSoccerNFLNBAMLBNCAAOther SportsRacingLatest NewsEntertainmentMeriStationStories Log inNewslettersSign in to commentLog ...",
+                "matchedWords": 48,
+                "identicalWords": 0,
+                "similarWords": 10,
+                "paraphrasedWords": 38,
+                "metadata": {
+                    "finalUrl": null,
+                    "canonicalUrl": null,
+                    "author": null,
+                    "organization": null,
+                    "filename": null,
+                    "publishDate": null,
+                    "creationDate": null,
+                    "lastModificationDate": null,
+                    "submissionDate": null,
+                    "submittedBy": null,
+                    "submitterAuthorId": null,
+                    "customMetadata": null
+                },
+                "tags": []
+            },
+            {
+                "isLocked": false,
+                "url": "https://www.sportinglad.com/news/nba-stars-joke-about-kylian-mbappe-reported-salary-offer/",
+                "id": "6379497c30",
+                "title": "NBA stars joke about Kylian Mbappe reported salary offer | sportinglad",
+                "introduction": "Skip to content Home News Net Worth Cricket NFL Tennis Australian O...",
+                "matchedWords": 199,
+                "identicalWords": 25,
+                "similarWords": 23,
+                "paraphrasedWords": 151,
+                "metadata": {
+                    "finalUrl": null,
+                    "canonicalUrl": null,
+                    "author": null,
+                    "organization": null,
+                    "filename": null,
+                    "publishDate": null,
+                    "creationDate": null,
+                    "lastModificationDate": null,
+                    "submissionDate": null,
+                    "submittedBy": null,
+                    "submitterAuthorId": null,
+                    "customMetadata": null
+                },
+                "tags": []
+            },
+            {
+                "isLocked": false,
+                "url": "https://sports.yahoo.com/nba-stars-joke-kylian-mbapp-095716842.html?src=rss",
+                "id": "63f3e007e1",
+                "title": "‘You can take me:’ NBA stars joke about Kylian Mbappé’s reported salary offer...",
+                "introduction": "Skip to Navigation Skip to Main Content Skip to Related Content News Today's news US Politics ...",
+                "matchedWords": 235,
+                "identicalWords": 88,
+                "similarWords": 147,
+                "paraphrasedWords": 0,
+                "metadata": {
+                    "finalUrl": null,
+                    "canonicalUrl": null,
+                    "author": "CNN Sports",
+                    "organization": "Yahoo Sports",
+                    "filename": "nba-stars-joke-kylian-mbapp-095716842.html",
+                    "publishDate": "2023-07-25T16:01:29Z",
+                    "creationDate": null,
+                    "lastModificationDate": "2023-07-25T16:01:29Z",
+                    "submissionDate": null,
+                    "submittedBy": null,
+                    "submitterAuthorId": null,
+                    "customMetadata": null
+                },
+                "tags": []
+            },
+            {
+                "isLocked": false,
+                "url": "https://www.cnn.com/2023/07/24/sport/kylian-mbappe-saudi-arabia-psg-alhilal-spt-intl/index.html",
+                "id": "7abf94b899",
+                "title": "Kylian Mbappé: Saudi Arabian club submits world record $332M bid for supersta...",
+                "introduction": "...",
+                "matchedWords": 43,
+                "identicalWords": 0,
+                "similarWords": 43,
+                "paraphrasedWords": 0,
+                "metadata": {
+                    "finalUrl": null,
+                    "canonicalUrl": null,
+                    "author": "Ben Church",
+                    "organization": "CNN",
+                    "filename": "index.html",
+                    "publishDate": "2023-07-24T15:54:38Z",
+                    "creationDate": null,
+                    "lastModificationDate": "2023-07-25T15:55:23Z",
+                    "submissionDate": null,
+                    "submittedBy": null,
+                    "submitterAuthorId": null,
+                    "customMetadata": null
+                },
+                "tags": []
+            },
+            {
+                "isLocked": false,
+                "url": "https://www.sportstiger.com/news/you-can-take-me-giannis-lebron-and-other-nba-stars-react-on-al-hilal-300m-bid-for-kylian-mbappe",
+                "id": "a46970d316",
+                "title": "You can take me: Giannis, LeBron, and other NBA stars react on Al Hilal's €30...",
+                "introduction": "Live Live Scores Cricket Live Scores ICC U19 World cup BBL 2023 SA20 Football Live Scores Kabaddi Live Score PKL 10 2023 Schedul...",
+                "matchedWords": 79,
+                "identicalWords": 0,
+                "similarWords": 10,
+                "paraphrasedWords": 69,
+                "metadata": {
+                    "finalUrl": null,
+                    "canonicalUrl": null,
+                    "author": "Tanishq Sharma",
+                    "organization": "Sports Tiger",
+                    "filename": "you-can-take-me-giannis-lebron-and-other-nba-stars-react-on-al-hilal-300m-bid-for-kylian-mbappe",
+                    "publishDate": "2023-07-25T00:00:00Z",
+                    "creationDate": null,
+                    "lastModificationDate": "2023-07-25T00:00:00Z",
+                    "submissionDate": null,
+                    "submittedBy": null,
+                    "submitterAuthorId": null,
+                    "customMetadata": null
+                },
+                "tags": []
+            },
+            {
+                "isLocked": false,
+                "url": "https://nypost.com/2023/07/25/lebron-james-damian-lillard-have-jokes-after-kylian-mbappes-al-nasir-offer/",
+                "id": "a47a057ca0",
+                "title": "LeBron James, Damian Lillard have jokes after Kylian Mbappe's Al Nasir offer",
+                "introduction": "Primary Menu Sections News Politics Metro Page Six Sports NFL MLB N...",
+                "matchedWords": 28,
+                "identicalWords": 28,
+                "similarWords": 0,
+                "paraphrasedWords": 0,
+                "metadata": {
+                    "finalUrl": null,
+                    "canonicalUrl": null,
+                    "author": "Erich Richter",
+                    "organization": "New York Post",
+                    "filename": null,
+                    "publishDate": "2023-07-25T20:29:52Z",
+                    "creationDate": "2023-07-25T20:29:52Z",
+                    "lastModificationDate": null,
+                    "submissionDate": null,
+                    "submittedBy": null,
+                    "submitterAuthorId": null,
+                    "customMetadata": null
+                },
+                "tags": []
+            },
+            {
+                "isLocked": false,
+                "url": "https://talksport.com/football/1510247/kylian-mbappe-al-hilal-giannis-antetokounmpo-twitter/",
+                "id": "a73e7096ef",
+                "title": "Kylian Mbappe in hysterics as NBA star Giannis Antetokounmpo cracks joke abou...",
+                "introduction": "Jump directly to the content talkSPORT US Edition UK Edition Scottish Sun Irish Sun Search My Account Home Listen live S...",
+                "matchedWords": 15,
+                "identicalWords": 15,
+                "similarWords": 0,
+                "paraphrasedWords": 0,
+                "metadata": {
+                    "finalUrl": null,
+                    "canonicalUrl": null,
+                    "author": "Phil Spencer",
+                    "organization": "talkSPORT",
+                    "filename": null,
+                    "publishDate": "2023-07-25T07:18:00Z",
+                    "creationDate": null,
+                    "lastModificationDate": "2023-07-25T08:49:04Z",
+                    "submissionDate": null,
+                    "submittedBy": null,
+                    "submitterAuthorId": null,
+                    "customMetadata": null
+                },
+                "tags": []
+            },
+            {
+                "isLocked": false,
+                "url": "https://www.footballreporting.com/clubs/barcelona/kylian-mbappe-breaks-silence-over-259m-al-hilal-transfer-after-nba-star-giannis-antetokounmpos-cheeky-tweet/",
+                "id": "b5452beffa",
+                "title": "Kylian Mbappe breaks silence over £259m Al-Hilal transfer after NBA star Gian...",
+                "introduction": "Clubs AC Milan Arsenal Barcelona Bayern Munich Borussia Dortmund Ch...",
+                "matchedWords": 61,
+                "identicalWords": 15,
+                "similarWords": 10,
+                "paraphrasedWords": 36,
+                "metadata": {
+                    "finalUrl": null,
+                    "canonicalUrl": null,
+                    "author": null,
+                    "organization": null,
+                    "filename": null,
+                    "publishDate": null,
+                    "creationDate": null,
+                    "lastModificationDate": null,
+                    "submissionDate": null,
+                    "submittedBy": null,
+                    "submitterAuthorId": null,
+                    "customMetadata": null
+                },
+                "tags": []
+            },
+            {
+                "isLocked": false,
+                "url": "https://news.yahoo.com/nba-stars-joke-kylian-mbapp-160129300.html",
+                "id": "bad55042fe",
+                "title": "‘You can take me:’ NBA stars joke about Kylian Mbappé’s reported salary offer...",
+                "introduction": "News Today's news US Politics World Tech Tech Reviews and Deals Audio Computi...",
+                "matchedWords": 235,
+                "identicalWords": 88,
+                "similarWords": 147,
+                "paraphrasedWords": 0,
+                "metadata": {
+                    "finalUrl": null,
+                    "canonicalUrl": null,
+                    "author": "CNN",
+                    "organization": "Yahoo News",
+                    "filename": "nba-stars-joke-kylian-mbapp-160129300.html",
+                    "publishDate": "2023-07-25T16:01:29Z",
+                    "creationDate": null,
+                    "lastModificationDate": "2023-07-25T16:01:29Z",
+                    "submissionDate": null,
+                    "submittedBy": null,
+                    "submitterAuthorId": null,
+                    "customMetadata": null
+                },
+                "tags": []
+            },
+            {
+                "isLocked": false,
+                "url": "https://www.cnn.com/2023/07/25/sport/kylian-mbappe-al-hilal-nba-reaction-spt-intl/index.html",
+                "id": "c2a9eec25a",
+                "title": "Kylian Mbappé: NBA stars joke about superstar’s reported salary offer from Sa...",
+                "introduction": "...",
+                "matchedWords": 275,
+                "identicalWords": 103,
+                "similarWords": 172,
+                "paraphrasedWords": 0,
+                "metadata": {
+                    "finalUrl": null,
+                    "canonicalUrl": null,
+                    "author": "Ben Church",
+                    "organization": "CNN",
+                    "filename": "index.html",
+                    "publishDate": "2023-07-25T09:57:16Z",
+                    "creationDate": null,
+                    "lastModificationDate": "2023-07-25T16:01:29Z",
+                    "submissionDate": null,
+                    "submittedBy": null,
+                    "submitterAuthorId": null,
+                    "customMetadata": null
+                },
+                "tags": []
+            },
+            {
+                "isLocked": false,
+                "url": "https://www.ktbs.com/sports/national/you-can-take-me-nba-stars-joke-about-kylian-mbapp-s-reported-salary-offer-from/article_77048802-d6e5-5f9a-b4c9-93046f371769.html",
+                "id": "e4408a32ac",
+                "title": "‘You can take me:’ NBA stars joke about Kylian Mbappé’s reported salary offer...",
+                "introduction": "Skip to main content You ...",
+                "matchedWords": 235,
+                "identicalWords": 101,
+                "similarWords": 134,
+                "paraphrasedWords": 0,
+                "metadata": {
+                    "finalUrl": null,
+                    "canonicalUrl": null,
+                    "author": null,
+                    "organization": null,
+                    "filename": "article_77048802-d6e5-5f9a-b4c9-93046f371769.html",
+                    "publishDate": null,
+                    "creationDate": null,
+                    "lastModificationDate": null,
+                    "submissionDate": null,
+                    "submittedBy": null,
+                    "submitterAuthorId": null,
+                    "customMetadata": null
+                },
+                "tags": []
+            },
+            {
+                "isLocked": false,
+                "url": "https://sports.yahoo.com/nba-stars-joke-kylian-mbapp-095716842.html",
+                "id": "ec76fae2ac",
+                "title": "‘You can take me:’ NBA stars joke about Kylian Mbappé’s reported salary offer...",
+                "introduction": "Skip to Navigation Skip to Main Content Skip to Related Content News Today's news US Politics ...",
+                "matchedWords": 235,
+                "identicalWords": 88,
+                "similarWords": 147,
+                "paraphrasedWords": 0,
+                "metadata": {
+                    "finalUrl": null,
+                    "canonicalUrl": null,
+                    "author": "CNN Sports",
+                    "organization": "Yahoo Sports",
+                    "filename": "nba-stars-joke-kylian-mbapp-095716842.html",
+                    "publishDate": "2023-07-25T16:01:29Z",
+                    "creationDate": null,
+                    "lastModificationDate": "2023-07-25T16:01:29Z",
+                    "submissionDate": null,
+                    "submittedBy": null,
+                    "submitterAuthorId": null,
+                    "customMetadata": null
+                },
+                "tags": []
+            },
+            {
+                "isLocked": false,
+                "url": "https://localnews8.com/sports/cnn-sports/2023/07/25/you-can-take-me-nba-stars-joke-about-kylian-mbappes-reported-salary-offer-from-saudi-club-al-hilal/",
+                "id": "fcd7896657",
+                "title": "‘You can take me:’ NBA stars joke about Kylian Mbappé’s reported salary offer...",
+                "introduction": "circle-arrow Play Button ...",
+                "matchedWords": 235,
+                "identicalWords": 88,
+                "similarWords": 147,
+                "paraphrasedWords": 0,
+                "metadata": {
+                    "finalUrl": null,
+                    "canonicalUrl": null,
+                    "author": null,
+                    "organization": null,
+                    "filename": null,
+                    "publishDate": null,
+                    "creationDate": null,
+                    "lastModificationDate": null,
+                    "submissionDate": null,
+                    "submittedBy": null,
+                    "submitterAuthorId": null,
+                    "customMetadata": null
+                },
+                "tags": []
+            }
+        ],
+        "database": [
+            {
+                "isLocked": false,
+                "scanId": "duo8oz88yuaszgig-3268-t:12--101-c8f8",
+                "id": "172a1d9a85",
+                "title": "Copyleaks Internal Database",
+                "introduction": "No introduction available.",
+                "matchedWords": 426,
+                "identicalWords": 426,
+                "similarWords": 0,
+                "paraphrasedWords": 0,
+                "metadata": {
+                    "finalUrl": null,
+                    "canonicalUrl": null,
+                    "author": null,
+                    "organization": null,
+                    "filename": "file_to_scan_all_settings1..pdf",
+                    "publishDate": null,
+                    "creationDate": "2023-07-25T11:33:19Z",
+                    "lastModificationDate": "2023-07-25T11:33:19Z",
+                    "submissionDate": "2023-08-23T09:29:00.997702Z",
+                    "submittedBy": null,
+                    "submitterAuthorId": "c9-350f-4abb-88b7-18bb3cc8c8f8-8f-2d38-4d92-82c1-6e04c61e3268",
+                    "customMetadata": [
+                        {
+                            "key": "userId",
+                            "value": "https://qa23-mysql8.nightly.sakaiproject.org/user/0555568f-2d38-4d92-82c1-6e04c61e3268"
+                        },
+                        {
+                            "key": "platformId",
+                            "value": "30787e97-71df-47e8-94cd-983df29daee9"
+                        },
+                        {
+                            "key": "toolId",
+                            "value": "content:12"
+                        },
+                        {
+                            "key": "assignmentName",
+                            "value": "daniel scan 1"
+                        },
+                        {
+                            "key": "courseId",
+                            "value": "DAC-EDUCATION-DEPT1-SUBJ1-101"
+                        },
+                        {
+                            "key": "courseName",
+                            "value": "DAC-EDUCATION-DEPT1-SUBJ1-101"
+                        }
+                    ]
+                },
+                "tags": []
+            },
+            {
+                "isLocked": false,
+                "scanId": "txt-client444",
+                "id": "26986220eb",
+                "title": "Copyleaks Internal Database",
+                "introduction": "No introduction available.",
+                "matchedWords": 344,
+                "identicalWords": 344,
+                "similarWords": 0,
+                "paraphrasedWords": 0,
+                "metadata": {
+                    "finalUrl": null,
+                    "canonicalUrl": null,
+                    "author": null,
+                    "organization": null,
+                    "filename": "file.pdf",
+                    "publishDate": null,
+                    "creationDate": "2023-07-25T11:33:19Z",
+                    "lastModificationDate": "2023-07-25T11:33:19Z",
+                    "submissionDate": "2023-07-25T13:31:44.43732Z",
+                    "submittedBy": null,
+                    "submitterAuthorId": "Author id",
+                    "customMetadata": []
+                },
+                "tags": []
+            },
+            {
+                "isLocked": false,
+                "scanId": "ythduzm0z1n5gm29",
+                "id": "2af23f887b",
+                "title": "Copyleaks Internal Database",
+                "introduction": "No introduction available.",
+                "matchedWords": 426,
+                "identicalWords": 418,
+                "similarWords": 8,
+                "paraphrasedWords": 0,
+                "metadata": {
+                    "finalUrl": null,
+                    "canonicalUrl": null,
+                    "author": null,
+                    "organization": null,
+                    "filename": "file%20to%20scan%20all%20settings1%20.docx",
+                    "publishDate": null,
+                    "creationDate": null,
+                    "lastModificationDate": null,
+                    "submissionDate": "2023-12-24T14:38:34.86274Z",
+                    "submittedBy": null,
+                    "submitterAuthorId": null,
+                    "customMetadata": []
+                },
+                "tags": []
+            },
+            {
+                "isLocked": false,
+                "scanId": "v215ofsckkf5eqr2-3268-t:12--101-c8f8",
+                "id": "384deb1930",
+                "title": "Copyleaks Internal Database",
+                "introduction": "No introduction available.",
+                "matchedWords": 426,
+                "identicalWords": 418,
+                "similarWords": 8,
+                "paraphrasedWords": 0,
+                "metadata": {
+                    "finalUrl": null,
+                    "canonicalUrl": null,
+                    "author": null,
+                    "organization": null,
+                    "filename": "file_to_scan_all_settings1_..docx",
+                    "publishDate": null,
+                    "creationDate": null,
+                    "lastModificationDate": null,
+                    "submissionDate": "2023-08-23T09:29:37.640308Z",
+                    "submittedBy": null,
+                    "submitterAuthorId": "c9-350f-4abb-88b7-18bb3cc8c8f8-8f-2d38-4d92-82c1-6e04c61e3268",
+                    "customMetadata": [
+                        {
+                            "key": "userId",
+                            "value": "https://qa23-mysql8.nightly.sakaiproject.org/user/0555568f-2d38-4d92-82c1-6e04c61e3268"
+                        },
+                        {
+                            "key": "platformId",
+                            "value": "30787e97-71df-47e8-94cd-983df29daee9"
+                        },
+                        {
+                            "key": "toolId",
+                            "value": "content:12"
+                        },
+                        {
+                            "key": "assignmentName",
+                            "value": "daniel scan 1"
+                        },
+                        {
+                            "key": "courseId",
+                            "value": "DAC-EDUCATION-DEPT1-SUBJ1-101"
+                        },
+                        {
+                            "key": "courseName",
+                            "value": "DAC-EDUCATION-DEPT1-SUBJ1-101"
+                        }
+                    ]
+                },
+                "tags": []
+            },
+            {
+                "isLocked": false,
+                "scanId": "txt-client433",
+                "id": "741516e088",
+                "title": "Copyleaks Internal Database",
+                "introduction": "No introduction available.",
+                "matchedWords": 327,
+                "identicalWords": 168,
+                "similarWords": 159,
+                "paraphrasedWords": 0,
+                "metadata": {
+                    "finalUrl": null,
+                    "canonicalUrl": null,
+                    "author": null,
+                    "organization": null,
+                    "filename": "file.txt",
+                    "publishDate": null,
+                    "creationDate": null,
+                    "lastModificationDate": null,
+                    "submissionDate": "2023-07-25T11:20:45.987333Z",
+                    "submittedBy": null,
+                    "submitterAuthorId": "Author id",
+                    "customMetadata": []
+                },
+                "tags": []
+            },
+            {
+                "isLocked": false,
+                "scanId": "pj4mx8jinaqasn79",
+                "id": "7b7b3743b0",
+                "title": "Copyleaks Internal Database",
+                "introduction": "No introduction available.",
+                "matchedWords": 426,
+                "identicalWords": 426,
+                "similarWords": 0,
+                "paraphrasedWords": 0,
+                "metadata": {
+                    "finalUrl": null,
+                    "canonicalUrl": null,
+                    "author": null,
+                    "organization": null,
+                    "filename": "file%20to%20scan%20all%20settings1.pdf",
+                    "publishDate": null,
+                    "creationDate": "2023-07-25T11:33:19Z",
+                    "lastModificationDate": "2023-07-25T11:33:19Z",
+                    "submissionDate": "2023-08-03T13:45:52.937039Z",
+                    "submittedBy": null,
+                    "submitterAuthorId": null,
+                    "customMetadata": []
+                },
+                "tags": []
+            },
+            {
+                "isLocked": false,
+                "scanId": "txt-client432",
+                "id": "8a473eddf0",
+                "title": "Copyleaks Internal Database",
+                "introduction": "No introduction available.",
+                "matchedWords": 327,
+                "identicalWords": 168,
+                "similarWords": 159,
+                "paraphrasedWords": 0,
+                "metadata": {
+                    "finalUrl": null,
+                    "canonicalUrl": null,
+                    "author": null,
+                    "organization": null,
+                    "filename": "file.txt",
+                    "publishDate": null,
+                    "creationDate": null,
+                    "lastModificationDate": null,
+                    "submissionDate": "2023-07-25T11:17:22.853477Z",
+                    "submittedBy": null,
+                    "submitterAuthorId": "Author id",
+                    "customMetadata": []
+                },
+                "tags": []
+            },
+            {
+                "isLocked": false,
+                "scanId": "txt-client443",
+                "id": "d4d7e7284f",
+                "title": "Copyleaks Internal Database",
+                "introduction": "No introduction available.",
+                "matchedWords": 344,
+                "identicalWords": 344,
+                "similarWords": 0,
+                "paraphrasedWords": 0,
+                "metadata": {
+                    "finalUrl": null,
+                    "canonicalUrl": null,
+                    "author": null,
+                    "organization": null,
+                    "filename": "file.pdf",
+                    "publishDate": null,
+                    "creationDate": "2023-07-25T11:33:19Z",
+                    "lastModificationDate": "2023-07-25T11:33:19Z",
+                    "submissionDate": "2023-07-25T13:21:07.880897Z",
+                    "submittedBy": null,
+                    "submitterAuthorId": "Author id",
+                    "customMetadata": []
+                },
+                "tags": []
+            },
+            {
+                "isLocked": false,
+                "scanId": "txt-client446",
+                "id": "d619be6cee",
+                "title": "Copyleaks Internal Database",
+                "introduction": "No introduction available.",
+                "matchedWords": 344,
+                "identicalWords": 344,
+                "similarWords": 0,
+                "paraphrasedWords": 0,
+                "metadata": {
+                    "finalUrl": null,
+                    "canonicalUrl": null,
+                    "author": null,
+                    "organization": null,
+                    "filename": "file.pdf",
+                    "publishDate": null,
+                    "creationDate": "2023-07-25T11:33:19Z",
+                    "lastModificationDate": "2023-07-25T11:33:19Z",
+                    "submissionDate": "2023-07-25T13:35:26.568087Z",
+                    "submittedBy": null,
+                    "submitterAuthorId": "Author id",
+                    "customMetadata": []
+                },
+                "tags": []
+            },
+            {
+                "isLocked": false,
+                "scanId": "2chqxvw9a5z5jjzn-3268-t:10--101-c8f8",
+                "id": "d62599f53a",
+                "title": "Copyleaks Internal Database",
+                "introduction": "No introduction available.",
+                "matchedWords": 327,
+                "identicalWords": 168,
+                "similarWords": 159,
+                "paraphrasedWords": 0,
+                "metadata": {
+                    "finalUrl": null,
+                    "canonicalUrl": null,
+                    "author": null,
+                    "organization": null,
+                    "filename": "New_Text_Document_3_..txt",
+                    "publishDate": null,
+                    "creationDate": null,
+                    "lastModificationDate": null,
+                    "submissionDate": "2023-08-23T09:08:43.297111Z",
+                    "submittedBy": null,
+                    "submitterAuthorId": "c9-350f-4abb-88b7-18bb3cc8c8f8-8f-2d38-4d92-82c1-6e04c61e3268",
+                    "customMetadata": [
+                        {
+                            "key": "userId",
+                            "value": "https://qa23-mysql8.nightly.sakaiproject.org/user/0555568f-2d38-4d92-82c1-6e04c61e3268"
+                        },
+                        {
+                            "key": "platformId",
+                            "value": "30787e97-71df-47e8-94cd-983df29daee9"
+                        },
+                        {
+                            "key": "toolId",
+                            "value": "content:10"
+                        },
+                        {
+                            "key": "assignmentName",
+                            "value": "daniel test 4"
+                        },
+                        {
+                            "key": "courseId",
+                            "value": "DAC-EDUCATION-DEPT1-SUBJ1-101"
+                        },
+                        {
+                            "key": "courseName",
+                            "value": "DAC-EDUCATION-DEPT1-SUBJ1-101"
+                        }
+                    ]
+                },
+                "tags": []
+            },
+            {
+                "isLocked": false,
+                "scanId": "gh7f0u6lhii0z30e-dmin-nt:3--101-0807",
+                "id": "e367aaa459",
+                "title": "Copyleaks Internal Database",
+                "introduction": "No introduction available.",
+                "matchedWords": 426,
+                "identicalWords": 426,
+                "similarWords": 0,
+                "paraphrasedWords": 0,
+                "metadata": {
+                    "finalUrl": null,
+                    "canonicalUrl": null,
+                    "author": null,
+                    "organization": null,
+                    "filename": "file_to_scan_all_settings1..pdf",
+                    "publishDate": null,
+                    "creationDate": "2023-07-25T11:33:19Z",
+                    "lastModificationDate": "2023-07-25T11:33:19Z",
+                    "submissionDate": "2023-08-22T14:08:59.159668Z",
+                    "submittedBy": null,
+                    "submitterAuthorId": "8a-86b3-451e-8bef-c2e7c8f00807-ly.sakaiproject.org/user/admin",
+                    "customMetadata": []
+                },
+                "tags": []
+            },
+            {
+                "isLocked": false,
+                "scanId": "eqx15v32h8i0vluh-4a1f-3558-3897-cbc5",
+                "id": "fa2d521583",
+                "title": "Copyleaks Internal Database",
+                "introduction": "No introduction available.",
+                "matchedWords": 426,
+                "identicalWords": 426,
+                "similarWords": 0,
+                "paraphrasedWords": 0,
+                "metadata": {
+                    "finalUrl": null,
+                    "canonicalUrl": null,
+                    "author": null,
+                    "organization": null,
+                    "filename": "file_to_scan_all_settings1..pdf",
+                    "publishDate": null,
+                    "creationDate": "2023-07-25T11:33:19Z",
+                    "lastModificationDate": "2023-07-25T11:33:19Z",
+                    "submissionDate": "2023-08-23T07:37:36.290241Z",
+                    "submittedBy": null,
+                    "submitterAuthorId": "7a-90c2-494b-9b4a-28ecbe35cbc5-9b46ac5f685d4bc424e83f85aa4a1f",
+                    "customMetadata": [
+                        {
+                            "key": "userFullName",
+                            "value": "Mark Milar"
+                        },
+                        {
+                            "key": "userEmail",
+                            "value": "bayana+student@copyleaks.com"
+                        },
+                        {
+                            "key": "userId",
+                            "value": "104473990::859b46ac5f685d4bc424e83f85aa4a1f"
+                        },
+                        {
+                            "key": "platformId",
+                            "value": "5a1d70e4-aac9-4b50-9c76-14fd08ba2e1a"
+                        },
+                        {
+                            "key": "toolId",
+                            "value": "6866073558"
+                        },
+                        {
+                            "key": "assignmentName",
+                            "value": "daniel scan 2"
+                        },
+                        {
+                            "key": "courseId",
+                            "value": "6855503897"
+                        },
+                        {
+                            "key": "courseName",
+                            "value": "Demonstration: Section 1"
+                        }
+                    ]
+                },
+                "tags": []
+            }
+        ],
+        "batch": [],
+        "repositories": [
+            {
+                "isLocked": false,
+                "repositoryId": "e06e3fe729d74",
+                "scanId": "k15vvx9puz6s6bks",
+                "id": "0bf534a613",
+                "title": "Repository: General - Repo",
+                "introduction": "No introduction available.",
+                "matchedWords": 431,
+                "identicalWords": 431,
+                "similarWords": 0,
+                "paraphrasedWords": 0,
+                "metadata": {
+                    "finalUrl": null,
+                    "canonicalUrl": null,
+                    "author": null,
+                    "organization": null,
+                    "filename": "file%20to%20scan%20all%20settings1.pdf",
+                    "publishDate": null,
+                    "creationDate": "2023-07-25T11:33:19Z",
+                    "lastModificationDate": "2023-07-25T11:33:19Z",
+                    "submissionDate": "2024-01-17T12:21:47.677093Z",
+                    "submittedBy": "danieln@copyleaks.com",
+                    "submitterAuthorId": null,
+                    "customMetadata": []
+                },
+                "tags": []
+            },
+            {
+                "isLocked": false,
+                "repositoryId": "e06e3fe729d74",
+                "scanId": "gg9m2qjl02xvg66p",
+                "id": "5bf0c1f417",
+                "title": "Repository: General - Repo",
+                "introduction": "No introduction available.",
+                "matchedWords": 431,
+                "identicalWords": 431,
+                "similarWords": 0,
+                "paraphrasedWords": 0,
+                "metadata": {
+                    "finalUrl": null,
+                    "canonicalUrl": null,
+                    "author": null,
+                    "organization": null,
+                    "filename": "file%20to%20scan%20all%20settings1.pdf",
+                    "publishDate": null,
+                    "creationDate": "2023-07-25T11:33:19Z",
+                    "lastModificationDate": "2023-07-25T11:33:19Z",
+                    "submissionDate": "2024-01-17T08:45:01.152292Z",
+                    "submittedBy": "danieln@copyleaks.com",
+                    "submitterAuthorId": null,
+                    "customMetadata": []
+                },
+                "tags": []
+            },
+            {
+                "isLocked": false,
+                "repositoryId": "e06e3fe729d74",
+                "scanId": "frt3671kmquwuigm",
+                "id": "d33fdd1c37",
+                "title": "Repository: General - Repo",
+                "introduction": "No introduction available.",
+                "matchedWords": 419,
+                "identicalWords": 419,
+                "similarWords": 0,
+                "paraphrasedWords": 0,
+                "metadata": {
+                    "finalUrl": null,
+                    "canonicalUrl": null,
+                    "author": null,
+                    "organization": null,
+                    "filename": "file%20to%20scan%20all%20settings1.pdf",
+                    "publishDate": null,
+                    "creationDate": "2023-07-25T11:33:19Z",
+                    "lastModificationDate": "2023-07-25T11:33:19Z",
+                    "submissionDate": "2024-01-17T13:44:47.444852Z",
+                    "submittedBy": "danieln@copyleaks.com",
+                    "submitterAuthorId": null,
+                    "customMetadata": []
+                },
+                "tags": []
+            }
+        ],
+        "score": {
+            "identicalWords": 431,
+            "minorChangedWords": 0,
+            "relatedMeaningWords": 0,
+            "aggregatedScore": 100.0
+        }
+    },
+    "notifications": {
+        "alerts": [
+            {
+                "additionalData": "{\"results\": [{\"classification\": 2, \"probability\": 0.6771100494474898, \"matches\": [{\"text\": {\"chars\": {\"starts\": [0], \"lengths\": [3246], \"groupIds\": null}, \"words\": {\"starts\": [0], \"lengths\": [431], \"groupIds\": null}}, \"html\": {\"chars\": {\"starts\": [336229, 336248, 336267, 336274, 336282, 336309, 336435, 336487, 336494, 336546, 336553, 336605, 336612, 336664, 336672, 336724, 336731, 336783, 336790, 336842, 336850, 336902, 336909, 336961, 336969, 337021, 337028, 337080, 337088, 337140, 337147, 337199, 337207, 337259, 337266, 337318, 337326, 337379, 337386, 337439, 337447, 337500, 337508, 337561, 337568, 337621, 337629, 337682, 337689, 337742, 337750, 337803, 337810, 337863, 337871, 337924, 337931, 337984, 337992, 338045, 338052, 338106, 338113, 338167, 338174, 338228, 338235, 338288, 338296, 338350, 338357, 338410, 338418, 338471, 338491, 338499, 338506, 338559, 338567, 338621, 338628, 338682, 338689, 338743, 338750, 338804, 338811, 338865, 338872, 338926, 338933, 338986, 338993, 339047, 339054, 339108, 339115, 339169, 339176, 339230, 339237, 339290, 339297, 339350, 339357, 339409, 339416, 339469, 339476, 339528, 339535, 339588, 339595, 339648, 339655, 339707, 339714, 339766, 339773, 339825, 339832, 339884, 339891, 339943, 339950, 340002, 340009, 340061, 340068, 340120, 340127, 340179, 340186, 340239, 340246, 340299, 340306, 340360, 340367, 340421, 340428, 340482, 340489, 340543, 340550, 340603, 340610, 340664, 340671, 340725, 340732, 340786, 340793, 340847, 340854, 340908, 340915, 340969, 340976, 341030, 341037, 341091, 341098, 341152, 341159, 341213, 341220, 341274, 341281, 341335, 341342, 341396, 341403, 341457, 341464, 341518, 341525, 341579, 341586, 341640, 341647, 341700, 341707, 341761, 341768, 341822, 341829, 341883, 341890, 341943, 341950, 342003, 342010, 342063, 342070, 342123, 342130, 342184, 342191, 342244, 342251, 342305, 342312, 342366, 342373, 342427, 342452, 342505, 342551, 342604, 342628, 342681, 342754, 342807, 342876, 342929, 342999, 343052, 343125, 343178, 343250, 343303, 343374, 343427, 343537, 343590, 343659, 343712, 343815, 343864, 343875, 343928, 344039, 344092, 344204, 344257, 344367, 344420, 344534, 344587, 344634, 344687, 344798, 344851, 344880, 344933, 345028, 345081, 345176, 345229, 345338, 345391, 345504, 345557, 345667, 345720, 345779, 345832, 345943, 345996, 346049, 346102, 346186, 346239, 346307, 346360, 346439, 346488, 346504, 346557, 346591, 346644, 346691, 346744, 346779, 346832, 346905, 346958, 346974, 347027, 347089, 347142, 347207, 347260, 347329, 347382, 347419, 347468, 347491, 347540, 347567, 347620, 347648, 347697, 347799, 347848, 347875, 347928, 347969, 348022, 348029, 348082, 348089, 348142, 348149, 348203, 348210, 348264, 348331, 348385, 348466, 348485, 348493], \"lengths\": [1, 1, 1, 2, 2, 1, 1, 1, 1, 1, 1, 1, 1, 2, 1, 1, 1, 1, 1, 2, 1, 1, 1, 2, 1, 1, 1, 2, 1, 1, 1, 2, 1, 1, 1, 2, 1, 1, 1, 2, 1, 2, 1, 1, 1, 2, 1, 1, 1, 2, 1, 1, 1, 2, 1, 1, 1, 2, 1, 1, 1, 1, 1, 1, 1, 1, 1, 2, 1, 1, 1, 2, 1, 1, 1, 1, 1, 2, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 19, 1, 40, 1, 18, 1, 67, 1, 63, 1, 64, 1, 67, 1, 66, 1, 65, 1, 104, 1, 63, 1, 97, 1, 5, 1, 105, 1, 106, 1, 104, 1, 108, 1, 41, 1, 105, 1, 23, 1, 89, 1, 89, 1, 103, 1, 107, 1, 104, 1, 53, 1, 105, 1, 47, 1, 78, 1, 62, 1, 73, 1, 10, 1, 28, 1, 41, 1, 29, 1, 67, 1, 10, 1, 56, 1, 59, 1, 63, 1, 31, 1, 17, 1, 21, 1, 22, 1, 96, 1, 21, 1, 35, 1, 1, 1, 1, 1, 1, 1, 1, 1, 61, 1, 59, 1, 1, 0], \"groupIds\": [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]}, \"words\": {\"starts\": [336229, 336248, 336267, 336274, 336282, 336309, 336435, 336487, 336494, 336546, 336553, 336605, 336612, 336664, 336672, 336724, 336731, 336783, 336790, 336842, 336850, 336902, 336909, 336961, 336969, 337021, 337028, 337080, 337088, 337140, 337147, 337199, 337207, 337259, 337266, 337318, 337326, 337379, 337386, 337439, 337447, 337500, 337508, 337561, 337568, 337621, 337629, 337682, 337689, 337742, 337750, 337803, 337810, 337863, 337871, 337924, 337931, 337984, 337992, 338045, 338052, 338106, 338113, 338167, 338174, 338228, 338235, 338288, 338296, 338350, 338357, 338410, 338418, 338471, 338491, 338499, 338506, 338559, 338567, 338621, 338628, 338682, 338689, 338743, 338750, 338804, 338811, 338865, 338872, 338926, 338933, 338986, 338993, 339047, 339054, 339108, 339115, 339169, 339176, 339230, 339237, 339290, 339297, 339350, 339357, 339409, 339416, 339469, 339476, 339528, 339535, 339588, 339595, 339648, 339655, 339707, 339714, 339766, 339773, 339825, 339832, 339884, 339891, 339943, 339950, 340002, 340009, 340061, 340068, 340120, 340127, 340179, 340186, 340239, 340246, 340299, 340306, 340360, 340367, 340421, 340428, 340482, 340489, 340543, 340550, 340603, 340610, 340664, 340671, 340725, 340732, 340786, 340793, 340847, 340854, 340908, 340915, 340969, 340976, 341030, 341037, 341091, 341098, 341152, 341159, 341213, 341220, 341274, 341281, 341335, 341342, 341396, 341403, 341457, 341464, 341518, 341525, 341579, 341586, 341640, 341647, 341700, 341707, 341761, 341768, 341822, 341829, 341883, 341890, 341943, 341950, 342003, 342010, 342063, 342070, 342123, 342130, 342184, 342191, 342244, 342251, 342305, 342312, 342366, 342373, 342427, 342452, 342505, 342551, 342604, 342628, 342681, 342754, 342807], \"lengths\": [1, 1, 1, 2, 2, 1, 1, 1, 1, 1, 1, 1, 1, 2, 1, 1, 1, 1, 1, 2, 1, 1, 1, 2, 1, 1, 1, 2, 1, 1, 1, 2, 1, 1, 1, 2, 1, 1, 1, 2, 1, 2, 1, 1, 1, 2, 1, 1, 1, 2, 1, 1, 1, 2, 1, 1, 1, 2, 1, 1, 1, 1, 1, 1, 1, 1, 1, 2, 1, 1, 1, 2, 1, 1, 1, 1, 1, 2, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 19, 1, 40, 1, 18, 1, 67, 1, 61], \"groupIds\": [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]}}}]}], \"summary\": {\"human\": 0.0, \"ai\": 1.0}, \"translation\": null, \"modelVersion\": \"v3\", \"translationProvider\": 0}",
+                "code": "suspected-ai-text",
+                "helpLink": null,
+                "message": "We are unable to verify that the text was written by a human.",
+                "severity": 4,
+                "title": "Suspected Cheating: AI Text Detected"
+            }
+        ]
+    },
+    "hasPdfReport": true,
+    "filters": null,
+    "status": 0,
+    "error": null,
+    "developerPayload": ""
+}

@@ -70,9 +70,10 @@
 
 				<!-- results meta -->
 				<section class="section-container" fxLayout="column" fxLayoutGap="16px">
-					<span class="body-title" web-report-title-font i18n>Results Meta</span>
+					<span class="body-title" web-report-title-font i18n>Advanced Filter Settings</span>
 					<cr-meta-filter-result
 						[publicationDates]="publicationDates"
+						[totalResultsWithoutDate]="totalResultsWithoutDate"
 						[minWordLimit]="minWordLimit"
 						[maxWordLimit]="maxWordLimit"
 						class="meta-filter-container"></cr-meta-filter-result>
@@ -116,7 +117,10 @@
 					[ngClass]="{
 						'disabled-section': !allTagItem || allTagItem.length === 0
 					}">
-					<span class="body-title" web-report-title-font i18n>Included Tags</span>
+					<span class="body-title included-tags-container" web-report-title-font i18n>
+						<span>Included Tags</span>
+						<span *ngIf="allTagItem && allTagItem.length > 0" class="total-stat">({{ allTagItem.length }})</span>
+					</span>
 					<cr-included-tags-filter-result
 						[allTagItem]="allTagItem"
 						class="included-tags-filter-result"></cr-included-tags-filter-result>

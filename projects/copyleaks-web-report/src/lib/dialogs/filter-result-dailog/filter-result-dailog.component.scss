@@ -210,3 +210,18 @@
 .mat-dialog-content.mobile-body-top-container {
 	padding: 16px 0px !important;
 }
+
+.total-stat {
+	font-family: haboro-soft, sans-serif !important;
+	color: $color-black;
+	font-size: 12px;
+	font-weight: 700 !important;
+}
+
+.included-tags-container {
+	display: flex;
+	flex-direction: row;
+	gap: 8px;
+	align-items: center;
+	justify-content: flex-start;
+}

@@ -94,6 +94,7 @@
 							flex-wrap: nowrap;
 							overflow: hidden;
 							white-space: nowrap;
+							cursor: pointer;
 							flex-grow: 1;
 							.first-tag {
 								display: block !important;
@@ -103,8 +104,8 @@
 								max-width: calc(100% - 30px);
 							}
 
-							.plus-chip {
-								cursor: pointer;
+							mat-chip {
+								pointer-events: none;
 							}
 						}
 					}

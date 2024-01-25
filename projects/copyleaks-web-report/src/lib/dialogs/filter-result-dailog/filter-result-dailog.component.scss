@@ -163,8 +163,8 @@
 	display: flex;
 	justify-content: flex-end;
 	gap: 16px;
-	width: 100%;
 	padding: 0px !important;
+	padding-right: 10px !important;
 	margin: 0px !important;
 	min-height: auto !important;
 	button {
@@ -200,11 +200,13 @@
 .mat-dialog-content {
 	margin: 0px !important;
 	padding: 32px 0px !important;
+	padding-right: 10px !important;
 }
 
 .mat-dialog-title {
 	margin: 0px !important;
 	padding: 0px !important;
+	padding-right: 10px !important;
 }
 
 .mat-dialog-content.mobile-body-top-container {
@@ -224,4 +226,8 @@
 	gap: 8px;
 	align-items: center;
 	justify-content: flex-start;
+}
+
+cr-excluded-results-dailog {
+	padding-right: 10px !important;
 }

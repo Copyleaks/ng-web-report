@@ -163,8 +163,8 @@
 	display: flex;
 	justify-content: flex-end;
 	gap: 16px;
-	width: 100%;
 	padding: 0px !important;
+	padding-right: 10px !important;
 	margin: 0px !important;
 	min-height: auto !important;
 	button {
@@ -200,13 +200,34 @@
 .mat-dialog-content {
 	margin: 0px !important;
 	padding: 32px 0px !important;
+	padding-right: 10px !important;
 }
 
 .mat-dialog-title {
 	margin: 0px !important;
 	padding: 0px !important;
+	padding-right: 10px !important;
 }
 
 .mat-dialog-content.mobile-body-top-container {
 	padding: 16px 0px !important;
+}
+
+.total-stat {
+	font-family: haboro-soft, sans-serif !important;
+	color: $color-black;
+	font-size: 12px;
+	font-weight: 700 !important;
+}
+
+.included-tags-container {
+	display: flex;
+	flex-direction: row;
+	gap: 8px;
+	align-items: center;
+	justify-content: flex-start;
+}
+
+cr-excluded-results-dailog {
+	padding-right: 10px !important;
 }

@@ -12,11 +12,12 @@ export class MetaFilterResultComponent implements OnInit {
 	@Input() minWordLimit: number;
 	@Input() maxWordLimit: number;
 	@Input() publicationDates: string[];
+	@Input() totalResultsWithoutDate: number;
 
 	eFilterResultForm = EFilterResultForm;
 
-	RESULT_WORD_LIMIT = $localize`Result word limit:`;
-	RESULT_PUBLISH_DATE = $localize`Results publication date:`;
+	RESULT_WORD_LIMIT = $localize`Minimum words per result:`;
+	RESULT_PUBLISH_DATE = $localize`Publication date:`;
 
 	constructor(public filterService: FilterResultDailogService) {}
 

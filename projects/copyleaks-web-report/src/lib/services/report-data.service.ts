@@ -496,7 +496,7 @@ export class ReportDataService {
 			});
 	}
 
-	public async getReportResultAsync(resultId: string) {
+	public async getReportResultAsync(resultId: string, throwError: boolean = false) {
 		if (!this._reportEndpointConfig$?.value?.result) return;
 
 		var requestUrl = this._reportEndpointConfig$.value.result.url.replace('{RESULT_ID}', resultId);
@@ -515,6 +515,7 @@ export class ReportDataService {
 		} catch (error) {
 			// Error handling logic
 			this._reportErrorsSvc.handleHttpError(error as HttpErrorResponse, 'getReportResultAsync');
+			if (throwError) throw error;
 		}
 	}
 
@@ -1090,7 +1091,7 @@ export class ReportDataService {
 			.pipe(
 				concatMap(ids => {
 					currentBatchIndex++; // Increment the current batch index each time a new batch starts
-					return forkJoin(...ids.map(id => this.getReportResultAsync(id)));
+					return forkJoin(...ids.map(id => this.getReportResultAsync(id, true)));
 				}),
 				untilDestroy(this)
 			)

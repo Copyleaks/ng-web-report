@@ -65,6 +65,7 @@ export class FilterResultDailogComponent implements OnInit {
 	sourceTypeErrorMessage: string | null;
 	matchTypeErrorMessage: string | null;
 	initFormData: boolean = false;
+	totalResultsWithoutDate: number;
 
 	get totalFiltered() {
 		return this.totalSourceType ? this.getTotalFilterdResult() : 0;
@@ -232,6 +233,9 @@ export class FilterResultDailogComponent implements OnInit {
 			}
 		});
 		this.publicationDates = [...dates];
+		this.totalResultsWithoutDate = this.allResultsItem.filter(
+			result => !result.resultPreview?.metadata?.publishDate
+		).length;
 		if (this.publicationDates.length === 0)
 			this._filterResultsSvc.resultsMetaFormGroup
 				.get(EFilterResultForm.fgPublicationDate)

@@ -24,9 +24,10 @@
 				<ng-container i18n>Matching Results</ng-container>
 				({{ resultsActions.totalResults }})
 			</span>
-			<div fxLayout="row" fxLayoutAlign="start center" fxLayoutGap="4px">
+			<div class="chips-stats-container">
 				<ng-container *ngIf="!!resultsActions?.totalExcluded">
 					<mat-chip
+						class="total-excluded"
 						role="button"
 						(click)="!!resultsActions.totalExcluded ? (data.showExcludedDailog = !data.showExcludedDailog) : ''">
 						{{ resultsActions.totalExcluded }}

@@ -36,6 +36,8 @@ export class ReportActionsContainerComponent implements OnInit, AfterViewInit, O
 	 */
 	@Input() showLoadingView = false;
 
+	@Input() companyLogo: string = null;
+
 	customActionsTemplateRef: TemplateRef<any>;
 	customTemplateRefSub: any;
 

@@ -75,6 +75,11 @@ export class CopyleaksWebReportComponent implements OnInit, OnDestroy {
 	@Input() lockedResultTemplateRef: TemplateRef<IResultItem>;
 
 	/**
+	 * @Input {string} - Custom company logo which will be shown in the tabs sections.
+	 */
+	@Input() companyLogo: string = null;
+
+	/**
 	 * @Output {ReportHttpRequestErrorModel} - Emits HTTP request data, when any request to update & fetch report data fails.
 	 */
 	@Output() onReportRequestError = new EventEmitter<ReportHttpRequestErrorModel>();

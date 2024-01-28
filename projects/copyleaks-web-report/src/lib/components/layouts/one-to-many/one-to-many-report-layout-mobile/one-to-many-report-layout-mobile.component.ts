@@ -1,4 +1,4 @@
-import { Component, OnDestroy, OnInit, Renderer2 } from '@angular/core';
+import { Component, Input, OnDestroy, OnInit, Renderer2 } from '@angular/core';
 import { ReportDataService } from '../../../../services/report-data.service';
 import { ReportMatchesService } from '../../../../services/report-matches.service';
 import { ReportViewService } from '../../../../services/report-view.service';
@@ -17,6 +17,8 @@ export class OneToManyReportLayoutMobileComponent
 	extends OneToManyReportLayoutBaseComponent
 	implements OnInit, OnDestroy
 {
+	@Input() companyLogo: string = null;
+
 	constructor(
 		reportDataSvc: ReportDataService,
 		reportViewSvc: ReportViewService,

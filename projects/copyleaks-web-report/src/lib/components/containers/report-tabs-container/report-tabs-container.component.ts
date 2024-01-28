@@ -94,6 +94,8 @@ export class ReportTabsContainerComponent implements OnInit, OnDestroy, OnChange
 	 */
 	@Input() loadingProgressPct: number = 0;
 
+	@Input() companyLogo: string = null;
+
 	EReportViewType = EReportViewType;
 	EReportScoreTooltipPosition = EReportScoreTooltipPosition;
 	customTabsTemplateRef: TemplateRef<any>[] | undefined = undefined;

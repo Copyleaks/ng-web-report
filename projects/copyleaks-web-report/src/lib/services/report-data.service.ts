@@ -192,7 +192,9 @@ export class ReportDataService {
 			.subscribe(([options, excludedResultsIds]) => {
 				if (
 					!this.scanResultsPreviews ||
+					this.scanResultsPreviews === undefined ||
 					!this.scanResultsDetails ||
+					!this.scanResultsDetails === undefined ||
 					!options ||
 					!excludedResultsIds ||
 					this._viewSvc.progress$.value !== 100 ||
@@ -348,6 +350,7 @@ export class ReportDataService {
 			.subscribe(
 				completeResultsRes => {
 					this.completeResultsSnapshot = JSON.parse(JSON.stringify(completeResultsRes));
+					this._scanResultsPreviews$.next(completeResultsRes);
 					this._updateCompleteResults(completeResultsRes);
 				},
 				(error: HttpErrorResponse) => {
@@ -782,6 +785,7 @@ export class ReportDataService {
 		} else if (progress.percents === 100) {
 			const completeResults = await this._getReportCompleteResults();
 			this.completeResultsSnapshot = JSON.parse(JSON.stringify(completeResults));
+			this._scanResultsPreviews$.next(completeResults);
 			this._updateCompleteResults(completeResults);
 
 			if (!this._crawledVersion$.value) {
@@ -919,7 +923,7 @@ export class ReportDataService {
 
 		if (this.filterOptions && this.excludedResultsIds) {
 			// Load all the complete scan results
-			this.loadViewedResultsDetails(true);
+			this.loadViewedResultsDetails(this.realTimeView ? false : true);
 		}
 	}
 
@@ -1060,6 +1064,17 @@ export class ReportDataService {
 
 	pushNewResults(newResults: ResultPreview[]) {
 		if (!this.reportEndpointConfig || !newResults || !this.crawledVersion) return;
+
+		// Remove duplicates from newResults based on the id
+		const uniqueIds = new Set();
+		const filteredNewResults = newResults.filter(result => {
+			if (!uniqueIds.has(result.id)) {
+				uniqueIds.add(result.id);
+				return true;
+			}
+			return false;
+		});
+		newResults = filteredNewResults;
 
 		// check for only *new* results, i.e. don't add new results that exists already
 		const existingResults = this._newResults$.value || [];

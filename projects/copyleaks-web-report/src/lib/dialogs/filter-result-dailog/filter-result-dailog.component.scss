@@ -104,7 +104,8 @@
 	}
 
 	.left-side-container {
-		width: 100%;
+		width: 50%;
+		max-width: 50%;
 		flex: 1;
 		mat-divider {
 			width: 100%;
@@ -126,7 +127,8 @@
 	}
 
 	.right-side-conatier {
-		width: 100%;
+		width: 50%;
+		max-width: 50%;
 		flex: 1;
 		mat-divider {
 			width: 100%;
@@ -230,4 +232,18 @@
 
 cr-excluded-results-dailog {
 	padding-right: 10px !important;
+}
+.left-side-container {
+	width: 50%;
+	max-width: 50%;
+}
+
+.right-side-conatier.mobile {
+	width: 100% !important;
+	max-width: 100% !important;
+}
+
+.left-side-container.mobile {
+	width: 100% !important;
+	max-width: 100% !important;
 }

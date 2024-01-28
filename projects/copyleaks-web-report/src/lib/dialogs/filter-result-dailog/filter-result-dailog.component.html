@@ -51,7 +51,7 @@
 			fxLayoutGap="32px"
 			fxLayout.lt-md="column"
 			fxLayoutGap.lt-md="16px">
-			<div class="left-side-container" fxLayout="column" fxLayoutGap="16px">
+			<div class="left-side-container" [class.mobile]="isMobile" fxLayout="column" fxLayoutGap="16px">
 				<!-- source type -->
 				<section class="section-container sources-type-top-container" fxLayout="column" fxLayoutGap="16px">
 					<div class="body-title-container">
@@ -82,7 +82,7 @@
 
 			<mat-divider [vertical]="!isMobile" class="vertical-divider"></mat-divider>
 
-			<div class="right-side-conatier" fxLayout="column" fxLayoutGap="16px">
+			<div class="right-side-conatier" [class.mobile]="isMobile" fxLayout="column" fxLayoutGap="16px">
 				<!-- match type -->
 				<section class="match-type-container" fxLayout="column" fxLayoutGap="16px">
 					<div class="body-title-container">

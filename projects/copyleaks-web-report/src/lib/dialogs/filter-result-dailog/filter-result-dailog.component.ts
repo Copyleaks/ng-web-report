@@ -13,6 +13,7 @@ import { ALERTS } from '../../constants/report-alerts.constants';
 import { ICompleteResults } from '../../models/report-data.models';
 import { ICopyleaksReportOptions } from '../../models/report-options.models';
 import { trigger, transition, animate, keyframes, style } from '@angular/animations';
+import { EResponsiveLayoutType } from '../../enums/copyleaks-web-report.enums';
 
 @Component({
 	selector: 'cr-filter-result-dailog',
@@ -83,7 +84,10 @@ export class FilterResultDailogComponent implements OnInit {
 
 	ngOnInit() {
 		this.initResultItem();
-		this.isMobile = this.data?.isMobile;
+
+		this.data.reportViewSvc?.reportResponsiveMode$.pipe(untilDestroy(this)).subscribe(view => {
+			this.isMobile = view.mode === EResponsiveLayoutType.Mobile;
+		});
 
 		this._filterResultsSvc.filterResultFormGroup.valueChanges.pipe(untilDestroy(this)).subscribe(_ => {
 			const formData = this.getFilterCurrentData();

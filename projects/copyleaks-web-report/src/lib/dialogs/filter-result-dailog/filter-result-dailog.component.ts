@@ -194,6 +194,7 @@ export class FilterResultDailogComponent implements OnInit {
 	}
 
 	setTotalMatchTypesStatistics() {
+		this.totalParaphrased = this.totalMinorChanges = this.totalIdentical = 0;
 		this.allResultsItem.forEach(result => {
 			if (result.iStatisticsResult.identical && result.iStatisticsResult.identical > 0) this.totalIdentical++;
 			if (result.iStatisticsResult.minorChanges && result.iStatisticsResult.minorChanges > 0) this.totalMinorChanges++;

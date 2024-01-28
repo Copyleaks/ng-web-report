@@ -1033,7 +1033,7 @@ export class ReportDataService {
 
 		if (!!settings.wordLimit)
 			filteredResultsIds = filteredResultsIds.filter(id =>
-				completeResults.find(cr => cr.id === id && cr.matchedWords <= (settings.wordLimit ?? 0))
+				completeResults.find(cr => cr.id === id && cr.matchedWords >= (settings.wordLimit ?? 0))
 			);
 
 		if (!!settings.publicationDate)

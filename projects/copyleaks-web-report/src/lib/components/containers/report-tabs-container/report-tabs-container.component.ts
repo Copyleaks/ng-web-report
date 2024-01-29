@@ -103,6 +103,10 @@ export class ReportTabsContainerComponent implements OnInit, OnDestroy, OnChange
 	// constants
 	DISABLED: string = $localize`Disabled`;
 
+	get totalAiWords(): number {
+		return Math.ceil(this.aiScore * this.wordsTotal ?? 0);
+	}
+
 	constructor(
 		private _reportViewSvc: ReportViewService,
 		public reportDataSvc: ReportDataService,

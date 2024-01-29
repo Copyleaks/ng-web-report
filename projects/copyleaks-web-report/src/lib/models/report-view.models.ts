@@ -54,6 +54,9 @@ export interface IPercentageModel {
 	/** The percentage value. */
 	percentage?: number;
 
+	/** The percentage value. */
+	totalWords?: number;
+
 	/** Indicates whether this percentage is enabled or disabled. */
 	disabled: boolean;
 }

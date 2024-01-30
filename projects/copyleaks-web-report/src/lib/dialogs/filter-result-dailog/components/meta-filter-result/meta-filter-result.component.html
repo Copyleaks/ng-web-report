@@ -27,7 +27,7 @@
 				(input)="onSliderChange($event)"></mat-slider>
 			<span class="limit-result">
 				{{ wordLimitTotalWord }} / {{ maxWordLimit }}
-				<ng-container i18n>words</ng-container>
+				<ng-container i18n>WORDS</ng-container>
 			</span>
 		</ng-container>
 	</div>
@@ -66,7 +66,8 @@
 			class="include-results-checkbox"
 			disableRipple
 			i18n>
-			Include results with no dates
+			Include results with no date
+			<span *ngIf="totalResultsWithoutDate > 0" class="total-stat">({{ totalResultsWithoutDate }})</span>
 		</mat-checkbox>
 	</div>
 </div>

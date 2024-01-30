@@ -94,12 +94,18 @@ export class ReportTabsContainerComponent implements OnInit, OnDestroy, OnChange
 	 */
 	@Input() loadingProgressPct: number = 0;
 
+	@Input() companyLogo: string = null;
+
 	EReportViewType = EReportViewType;
 	EReportScoreTooltipPosition = EReportScoreTooltipPosition;
 	customTabsTemplateRef: TemplateRef<any>[] | undefined = undefined;
 
 	// constants
 	DISABLED: string = $localize`Disabled`;
+
+	get totalAiWords(): number {
+		return Math.ceil(this.aiScore * this.wordsTotal ?? 0);
+	}
 
 	constructor(
 		private _reportViewSvc: ReportViewService,

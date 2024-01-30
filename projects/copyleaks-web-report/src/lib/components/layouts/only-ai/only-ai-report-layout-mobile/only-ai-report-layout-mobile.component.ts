@@ -1,4 +1,4 @@
-import { Component, OnDestroy, OnInit, Renderer2 } from '@angular/core';
+import { Component, Input, OnDestroy, OnInit, Renderer2 } from '@angular/core';
 import { ReportDataService } from '../../../../services/report-data.service';
 import { ReportMatchHighlightService } from '../../../../services/report-match-highlight.service';
 import { ReportMatchesService } from '../../../../services/report-matches.service';
@@ -14,6 +14,8 @@ import { ReportRealtimeResultsService } from '../../../../services/report-realti
 	styleUrls: ['./only-ai-report-layout-mobile.component.scss'],
 })
 export class OnlyAiReportLayoutMobileComponent extends OneToManyReportLayoutBaseComponent implements OnInit, OnDestroy {
+	@Input() companyLogo: string = null;
+
 	constructor(
 		reportDataSvc: ReportDataService,
 		reportViewSvc: ReportViewService,

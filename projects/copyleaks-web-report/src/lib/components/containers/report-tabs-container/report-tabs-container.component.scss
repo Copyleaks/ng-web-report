@@ -197,3 +197,21 @@
 		align-items: center;
 	}
 }
+
+.custom-company-logo-cotainer {
+	display: flex;
+	flex-direction: row;
+	align-items: center;
+	justify-content: center;
+	padding: 0px 12px;
+	height: 100%;
+	background-color: $color-white;
+	.custom-company-logo {
+		width: 40px;
+	}
+}
+
+.tab-ai.with-company-logo,
+.tab-plagiarism.with-company-logo {
+	border-top-left-radius: 0px !important;
+}

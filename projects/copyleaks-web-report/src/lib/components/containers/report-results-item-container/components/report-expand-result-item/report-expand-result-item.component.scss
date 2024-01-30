@@ -147,6 +147,11 @@
 					padding: 2px 8px;
 					border-radius: 16px;
 					margin: 0px;
+					max-width: 100%;
+					white-space: nowrap;
+					overflow: hidden;
+					text-overflow: ellipsis;
+					display: block;
 				}
 			}
 		}

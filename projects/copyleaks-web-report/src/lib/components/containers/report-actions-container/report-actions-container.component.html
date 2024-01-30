@@ -1,7 +1,10 @@
 <div
 	class="actions-container"
 	#actionsContainer
-	[style.display]="showReportActions && !showLoadingView ? 'block' : 'none'">
+	[style.display]="showReportActions && !showLoadingView ? 'flex' : 'none'">
+	<ng-container *ngIf="companyLogo">
+		<img class="custom-company-logo" [src]="companyLogo" alt="Company Logo" i18n-alt />
+	</ng-container>
 	<ng-container *ngTemplateOutlet="customActionsTemplateRef"></ng-container>
 </div>
 

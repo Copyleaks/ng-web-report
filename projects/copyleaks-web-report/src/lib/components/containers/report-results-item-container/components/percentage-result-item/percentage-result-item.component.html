@@ -8,14 +8,17 @@
 			? {
 					identicalPct: {
 						percentage: getMatchTypePercentage(eMatchType.Identical),
+						totalWords: iStatisticsResult?.identical ?? 0,
 						disabled: excludeResult ? false : reportDataSvc.filterOptions?.showIdentical === false
 					},
 					minorChangesPct: {
 						percentage: getMatchTypePercentage(eMatchType.MinorChanges),
+						totalWords: iStatisticsResult?.minorChanges ?? 0,
 						disabled: excludeResult ? false : reportDataSvc.filterOptions?.showMinorChanges === false
 					},
 					paraphrasedPct: {
 						percentage: getMatchTypePercentage(eMatchType.Paraphrased),
+						totalWords: iStatisticsResult?.relatedMeaning ?? 0,
 						disabled: excludeResult ? false : reportDataSvc.filterOptions?.showRelated === false
 					},
 					omittedPct: undefined

@@ -1,5 +1,11 @@
 <ng-container *ngIf="loadingProgressPct === 100; else realTimeView">
 	<ng-container *ngIf="!showLoadingView; else loadingViewRef">
+		<ng-container *ngIf="companyLogo">
+			<div @fadeIn class="custom-company-logo-cotainer">
+				<img class="custom-company-logo" [src]="companyLogo" alt="Company Logo" i18n-alt />
+			</div>
+		</ng-container>
+
 		<div
 			*ngIf="!hidePlagarismTap || showDisabledProducts"
 			tabindex="0"
@@ -11,23 +17,27 @@
 					: {
 							identicalPct: {
 								percentage: identicalTotal / wordsTotal,
+								totalWords: identicalTotal ?? 0,
 								disabled: reportDataSvc.filterOptions?.showIdentical === false
 							},
 							minorChangesPct: {
 								percentage: minorChangesTotal / wordsTotal,
+								totalWords: minorChangesTotal ?? 0,
 								disabled: reportDataSvc.filterOptions?.showMinorChanges === false
 							},
 							paraphrasedPct: {
 								percentage: paraphrasedTotal / wordsTotal,
+								totalWords: paraphrasedTotal ?? 0,
 								disabled: reportDataSvc.filterOptions?.showRelated === false
 							},
-							omittedPct: { percentage: excludedTotal / wordsTotal, disabled: false }
+							omittedPct: { percentage: excludedTotal / wordsTotal, disabled: false, totalWords: excludedTotal ?? 0 }
 					  }
 			"
 			[crReportScoreTooltipPosition]="EReportScoreTooltipPosition.BELOW"
 			[style.flex-grow]="1"
 			[class.tab-selected]="selectedTap === EReportViewType.PlagiarismView && !hidePlagarismTap"
 			[class.tab-disabled]="hidePlagarismTap && showDisabledProducts"
+			[class.with-company-logo]="selectedTap === EReportViewType.PlagiarismView && !hidePlagarismTap && companyLogo"
 			[matTooltip]="hidePlagarismTap && showDisabledProducts ? DISABLED : ''"
 			matTooltipClass="web-report-mat-tooltip"
 			(click)="selectTap(EReportViewType.PlagiarismView)">
@@ -68,14 +78,17 @@
 				hideAiTap && showDisabledProducts
 					? null
 					: {
-							aiPct: { percentage: aiScore, disabled: false },
-							humanPct: { percentage: 1 - aiScore, disabled: false }
+							aiPct: { percentage: aiScore, disabled: false, totalWords: totalAiWords },
+							humanPct: { percentage: 1 - aiScore, disabled: false, totalWords: wordsTotal - totalAiWords ?? 0 }
 					  }
 			"
 			[crReportScoreTooltipPosition]="EReportScoreTooltipPosition.BELOW"
 			[style.flex-grow]="1"
 			[class.tab-selected]="selectedTap === EReportViewType.AIView && !hideAiTap"
 			[class.tab-disabled]="hideAiTap && showDisabledProducts"
+			[class.with-company-logo]="
+				selectedTap === EReportViewType.AIView && !hideAiTap && hidePlagarismTap && companyLogo
+			"
 			[matTooltip]="hideAiTap && showDisabledProducts ? DISABLED : ''"
 			matTooltipClass="web-report-mat-tooltip"
 			(click)="selectTap(EReportViewType.AIView)">

@@ -104,7 +104,8 @@
 	}
 
 	.left-side-container {
-		width: 100%;
+		width: 50%;
+		max-width: 50%;
 		flex: 1;
 		mat-divider {
 			width: 100%;
@@ -126,7 +127,8 @@
 	}
 
 	.right-side-conatier {
-		width: 100%;
+		width: 50%;
+		max-width: 50%;
 		flex: 1;
 		mat-divider {
 			width: 100%;
@@ -163,8 +165,8 @@
 	display: flex;
 	justify-content: flex-end;
 	gap: 16px;
-	width: 100%;
 	padding: 0px !important;
+	padding-right: 10px !important;
 	margin: 0px !important;
 	min-height: auto !important;
 	button {
@@ -200,13 +202,66 @@
 .mat-dialog-content {
 	margin: 0px !important;
 	padding: 32px 0px !important;
+	padding-right: 10px !important;
 }
 
 .mat-dialog-title {
 	margin: 0px !important;
 	padding: 0px !important;
+	padding-right: 10px !important;
 }
 
 .mat-dialog-content.mobile-body-top-container {
 	padding: 16px 0px !important;
+}
+
+.total-stat {
+	font-family: haboro-soft, sans-serif !important;
+	color: $color-black;
+	font-size: 12px;
+	font-weight: 700 !important;
+}
+
+.included-tags-container {
+	display: flex;
+	flex-direction: row;
+	gap: 8px;
+	align-items: center;
+	justify-content: flex-start;
+}
+
+cr-excluded-results-dailog {
+	padding-right: 10px !important;
+}
+.left-side-container {
+	width: 50%;
+	max-width: 50%;
+}
+
+.right-side-conatier.mobile {
+	width: 100% !important;
+	max-width: 100% !important;
+}
+
+.left-side-container.mobile {
+	width: 100% !important;
+	max-width: 100% !important;
+}
+.chips-stats-container {
+	display: flex;
+	flex-direction: row;
+	gap: 4px;
+	align-items: center;
+	justify-content: flex-start;
+	mat-chip {
+		font-size: 14px !important;
+		font-style: normal !important;
+		font-weight: 500 !important;
+		line-height: normal !important;
+		font-family: haboro-soft, sans-serif !important;
+	}
+
+	.total-excluded {
+		cursor: pointer !important;
+	}
 }

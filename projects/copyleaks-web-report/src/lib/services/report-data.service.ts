@@ -192,7 +192,9 @@ export class ReportDataService {
 			.subscribe(([options, excludedResultsIds]) => {
 				if (
 					!this.scanResultsPreviews ||
+					this.scanResultsPreviews === undefined ||
 					!this.scanResultsDetails ||
+					!this.scanResultsDetails === undefined ||
 					!options ||
 					!excludedResultsIds ||
 					this._viewSvc.progress$.value !== 100 ||
@@ -348,6 +350,7 @@ export class ReportDataService {
 			.subscribe(
 				completeResultsRes => {
 					this.completeResultsSnapshot = JSON.parse(JSON.stringify(completeResultsRes));
+					this._scanResultsPreviews$.next(completeResultsRes);
 					this._updateCompleteResults(completeResultsRes);
 				},
 				(error: HttpErrorResponse) => {
@@ -496,7 +499,7 @@ export class ReportDataService {
 			});
 	}
 
-	public async getReportResultAsync(resultId: string) {
+	public async getReportResultAsync(resultId: string, throwError: boolean = false) {
 		if (!this._reportEndpointConfig$?.value?.result) return;
 
 		var requestUrl = this._reportEndpointConfig$.value.result.url.replace('{RESULT_ID}', resultId);
@@ -515,6 +518,7 @@ export class ReportDataService {
 		} catch (error) {
 			// Error handling logic
 			this._reportErrorsSvc.handleHttpError(error as HttpErrorResponse, 'getReportResultAsync');
+			if (throwError) throw error;
 		}
 	}
 
@@ -781,6 +785,7 @@ export class ReportDataService {
 		} else if (progress.percents === 100) {
 			const completeResults = await this._getReportCompleteResults();
 			this.completeResultsSnapshot = JSON.parse(JSON.stringify(completeResults));
+			this._scanResultsPreviews$.next(completeResults);
 			this._updateCompleteResults(completeResults);
 
 			if (!this._crawledVersion$.value) {
@@ -918,7 +923,7 @@ export class ReportDataService {
 
 		if (this.filterOptions && this.excludedResultsIds) {
 			// Load all the complete scan results
-			this.loadViewedResultsDetails(true);
+			this.loadViewedResultsDetails(this.realTimeView ? false : true);
 		}
 	}
 
@@ -1032,7 +1037,7 @@ export class ReportDataService {
 
 		if (!!settings.wordLimit)
 			filteredResultsIds = filteredResultsIds.filter(id =>
-				completeResults.find(cr => cr.id === id && cr.matchedWords <= (settings.wordLimit ?? 0))
+				completeResults.find(cr => cr.id === id && cr.matchedWords >= (settings.wordLimit ?? 0))
 			);
 
 		if (!!settings.publicationDate)
@@ -1059,6 +1064,17 @@ export class ReportDataService {
 
 	pushNewResults(newResults: ResultPreview[]) {
 		if (!this.reportEndpointConfig || !newResults || !this.crawledVersion) return;
+
+		// Remove duplicates from newResults based on the id
+		const uniqueIds = new Set();
+		const filteredNewResults = newResults.filter(result => {
+			if (!uniqueIds.has(result.id)) {
+				uniqueIds.add(result.id);
+				return true;
+			}
+			return false;
+		});
+		newResults = filteredNewResults;
 
 		// check for only *new* results, i.e. don't add new results that exists already
 		const existingResults = this._newResults$.value || [];
@@ -1090,7 +1106,7 @@ export class ReportDataService {
 			.pipe(
 				concatMap(ids => {
 					currentBatchIndex++; // Increment the current batch index each time a new batch starts
-					return forkJoin(...ids.map(id => this.getReportResultAsync(id)));
+					return forkJoin(...ids.map(id => this.getReportResultAsync(id, true)));
 				}),
 				untilDestroy(this)
 			)

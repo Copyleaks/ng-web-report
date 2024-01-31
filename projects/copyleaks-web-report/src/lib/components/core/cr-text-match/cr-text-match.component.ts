@@ -42,10 +42,18 @@ export class CrTextMatchComponent implements AfterContentInit {
 	/**
 	 * emits the element through the match click event
 	 */
-	@HostListener('click')
-	public click() {
+	@HostListener('click', ['$event'])
+	public click(event) {
 		if (this.match.type === MatchType.aiText) return;
-		this._highlightService.textMatchClicked({ elem: this, broadcast: true, origin: this.origin });
+
+		// If the match isn't AI, then trigger the match click event
+		// also update the selection type according to the user click (with or without the shift for multi selection)
+		this._highlightService.textMatchClicked({
+			elem: this,
+			broadcast: true,
+			origin: this.origin,
+			multiSelect: event && event.shiftKey,
+		});
 	}
 
 	/**

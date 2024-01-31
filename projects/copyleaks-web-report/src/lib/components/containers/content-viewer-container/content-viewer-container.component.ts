@@ -197,6 +197,11 @@ export class ContentViewerContainerComponent implements OnInit, AfterViewInit, O
 	 */
 	@Input() showLoadingView = true;
 
+	/**
+	 * @Input {boolean} Flag indicating whether the match selection is multiple or not.
+	 */
+	@Input() isMultiSelection = false;
+
 	@Input() authorAlert: IAuthorAlertCard | null;
 
 	/**
@@ -334,6 +339,7 @@ export class ContentViewerContainerComponent implements OnInit, AfterViewInit, O
 			sourcePageIndex: this.currentPage,
 		});
 		this._highlightService.clear();
+		this._highlightService.clearAllMatchs();
 		this._cdr.detectChanges();
 	}
 

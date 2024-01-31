@@ -1,5 +1,11 @@
 /** Type representing an event that fired inside of an iframe containing a scan html content */
-export type PostMessageEvent = MatchClickEvent | MatchJumpEvent | MatchSelectEvent | MatchWarnEvent | UpgradePlanEvent;
+export type PostMessageEvent =
+	| MatchClickEvent
+	| MatchJumpEvent
+	| MatchSelectEvent
+	| MultiMatchSelectEvent
+	| MatchWarnEvent
+	| UpgradePlanEvent;
 
 /** base type of post message event */
 interface BasePostMessageEvent {
@@ -12,6 +18,13 @@ export interface MatchSelectEvent extends BasePostMessageEvent {
 	type: 'match-select';
 	/** the index of the match that was selected */
 	index: number;
+}
+
+/** Event type indicating a multiple matches were selected */
+export interface MultiMatchSelectEvent extends BasePostMessageEvent {
+	type: 'multi-match-select';
+	/** the indexes of all the matches that were selected */
+	indexes: number[];
 }
 
 /** Event type indicating a match was clicked */

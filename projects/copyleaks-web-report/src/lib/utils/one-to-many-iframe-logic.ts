@@ -84,6 +84,8 @@ function ready() {
 			messageParent({ type: 'match-warn' });
 		}
 		if (!elem && event.index === -1 && current) {
+			currentMulti.forEach(e => e?.toggleAttribute('on', false));
+			currentMulti = [];
 			current?.toggleAttribute('on', false);
 			current = null;
 			messageParent({ type: 'match-select', index: -1 });

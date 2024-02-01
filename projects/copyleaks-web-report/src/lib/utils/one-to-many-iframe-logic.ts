@@ -68,6 +68,7 @@ function ready() {
 				break;
 			case 'zoom':
 				document.body.style.setProperty('zoom', String(event.currentZoom));
+				break;
 			case 'multi-match-select':
 				// do nothing
 				break;

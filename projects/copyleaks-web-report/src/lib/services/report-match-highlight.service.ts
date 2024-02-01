@@ -11,6 +11,7 @@ import { ReportViewService } from './report-view.service';
 @Injectable()
 export class ReportMatchHighlightService implements OnDestroy {
 	private readonly _originalText = new BehaviorSubject<CrTextMatchComponent | null>(null);
+	private readonly _multiOriginalText = new BehaviorSubject<CrTextMatchComponent[]>([]);
 	private readonly _sourceText = new BehaviorSubject<CrTextMatchComponent | null>(null);
 	private readonly _suspectText = new BehaviorSubject<CrTextMatchComponent | null>(null);
 	private readonly _originalHtml = new BehaviorSubject<Match | null>(null);
@@ -25,7 +26,7 @@ export class ReportMatchHighlightService implements OnDestroy {
 		this.textMatchClick$.pipe(untilDestroy(this)).subscribe(event => {
 			switch (event.origin) {
 				case 'original':
-					this.setOriginalTextMatch(event?.elem);
+					this.setOriginalTextMatch(event?.elem, event?.multiSelect);
 					break;
 				case 'source':
 					this.setSourceTextMatch(event?.elem);
@@ -71,6 +72,9 @@ export class ReportMatchHighlightService implements OnDestroy {
 
 	public get originalText$() {
 		return this._originalText.asObservable();
+	}
+	public get multiOriginalText$() {
+		return this._multiOriginalText.asObservable();
 	}
 	public get sourceText$() {
 		return this._sourceText.asObservable();
@@ -129,10 +133,46 @@ export class ReportMatchHighlightService implements OnDestroy {
 	 * This will mark/unmark the text match in the original component while in `one-to-many` view mode
 	 * @param match The match to mark/unmark
 	 */
-	public setOriginalTextMatch(next: CrTextMatchComponent | null) {
+	public setOriginalTextMatch(next: CrTextMatchComponent | null, multiSelect: boolean = false) {
+		// check if the shift key is pressed (multi selection)
+		if (multiSelect) {
+			if (!next) {
+				this._multiOriginalText.value.forEach(match => {
+					setTimeout(() => {
+						if (match) match.focused = false;
+					});
+				});
+				this._multiOriginalText.next([]);
+				return;
+			}
+			const foundSelection = this._multiOriginalText.value.find(match => match === next);
+			if (foundSelection) {
+				setTimeout(() => {
+					foundSelection.focused = false;
+				});
+				this._multiOriginalText.next([...this._multiOriginalText.value.filter(match => match != next)]);
+			} else {
+				setTimeout(() => {
+					next.focused = true;
+				});
+				this._multiOriginalText.next([...this._multiOriginalText.value, next]);
+			}
+			return;
+		}
+
+		this._multiOriginalText.value.forEach(match => {
+			setTimeout(() => {
+				if (match) match.focused = false;
+			});
+		});
+
 		const prev = this._originalText.value;
 		if (prev === next) {
 			next = null;
+			this._multiOriginalText.next([]);
+		} else {
+			if (next) this._multiOriginalText.next([next]);
+			else this._multiOriginalText.next([]);
 		}
 		setTimeout(() => {
 			helpers.onTextMatchChange([prev, next]);

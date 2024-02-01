@@ -19,6 +19,7 @@ function onDocumentReady(fn: any) {
  */
 function ready() {
 	let current: HTMLSpanElement | null;
+	let currentMulti: HTMLSpanElement[] = [];
 	let matches: HTMLSpanElement[];
 	let isPdf = document.querySelector('meta[content="pdf2htmlEX"]') !== null;
 	(window as any).addEventListener('message', onMessageFromParent);
@@ -67,6 +68,8 @@ function ready() {
 				break;
 			case 'zoom':
 				document.body.style.setProperty('zoom', String(event.currentZoom));
+			case 'multi-match-select':
+				// do nothing
 				break;
 			default:
 				console.error('unknown event in frame', nativeEvent);
@@ -83,7 +86,9 @@ function ready() {
 			messageParent({ type: 'match-warn' });
 		}
 		if (!elem && event.index === -1 && current) {
-			current.toggleAttribute('on', false);
+			currentMulti.forEach(e => e?.toggleAttribute('on', false));
+			currentMulti = [];
+			current?.toggleAttribute('on', false);
 			current = null;
 			messageParent({ type: 'match-select', index: -1 });
 			return;
@@ -126,7 +131,12 @@ function ready() {
 	 */
 	function onMatchClick(event: MouseEvent) {
 		const elem = event.target as HTMLSpanElement;
-		onMatchSelect(elem);
+		// check if the shift key is pressed (multi selection)
+		if (event.shiftKey) {
+			onMatchMultiSelect(elem);
+		} else {
+			onMatchSelect(elem);
+		}
 	}
 
 	/**
@@ -137,21 +147,54 @@ function ready() {
 	 */
 	function onMatchSelect(elem: HTMLSpanElement, broadcast: boolean = false): void {
 		if (!broadcast && current === elem) {
-			current.toggleAttribute('on', false);
+			current?.toggleAttribute('on', false);
 			current = null;
+			currentMulti.forEach(e => e?.toggleAttribute('on', false));
+			currentMulti = [];
 			messageParent({ type: 'match-select', index: -1 });
 			return;
 		}
 		if (!broadcast && current) {
-			current.toggleAttribute('on', false);
+			current?.toggleAttribute('on', false);
 		}
 		current = elem;
-		current.toggleAttribute('on', true);
+		currentMulti.forEach(e => e?.toggleAttribute('on', false));
+		if (current) currentMulti = [current];
+		else currentMulti = [];
+		current?.toggleAttribute('on', true);
 		if (isPdf) {
 			elem?.closest('.pc')?.classList?.add('opened');
 		}
-		current.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
-		messageParent({ type: 'match-select', index: +(current?.dataset?.['index'] ?? '') });
+		current?.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+		messageParent({
+			type: 'match-select',
+			index: !!current?.dataset?.['index'] ? +(current?.dataset?.['index'] ?? '') : -1,
+		});
+	}
+
+	/**
+	 * Execute the logic of a match selection.
+	 * - highlight `elem` and message the parent window about it
+	 * - if an element is allready highlighted turn it off and highlight `elem`
+	 * @param elem the selected element
+	 */
+	function onMatchMultiSelect(elem: HTMLSpanElement, broadcast: boolean = false): void {
+		const foundSelection = currentMulti.find(e => elem === e);
+		if (!broadcast && foundSelection) {
+			foundSelection?.toggleAttribute('on', false);
+			currentMulti = currentMulti.filter(e => e != elem);
+			const indexes = currentMulti.map(e => +e?.dataset?.['index']);
+			messageParent({ type: 'multi-match-select', indexes });
+			return;
+		}
+		currentMulti.push(elem);
+		elem?.toggleAttribute('on', true);
+		if (isPdf) {
+			elem?.closest('.pc')?.classList?.add('opened');
+		}
+		elem?.scrollIntoView({ behavior: 'smooth', block: 'nearest' }); // ??
+		const indexes = currentMulti.map(e => (!!e?.dataset?.['index'] ? +(e?.dataset?.['index'] ?? '') : -1));
+		messageParent({ type: 'multi-match-select', indexes });
 	}
 
 	/**

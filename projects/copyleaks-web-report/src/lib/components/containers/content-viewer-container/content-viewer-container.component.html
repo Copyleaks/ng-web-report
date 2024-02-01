@@ -10,24 +10,44 @@
 	</div>
 	<div class="actions-container">
 		<ng-container *ngIf="!customTabContent">
-			<mat-icon
-				*ngIf="reportOrigin != 'suspect' && !(isHtmlView && !hasHtml) && !isMultiSelection"
-				fontSet="material-icons-round"
-				matTooltip="Go to previous match"
+			<span
+				*ngIf="reportOrigin != 'suspect' && !(isHtmlView && !hasHtml)"
+				class="icon-tooltip-wrapper"
+				[matTooltip]="isMultiSelection ? MULTISELECT_IS_ON : ''"
 				matTooltipClass="web-report-mat-tooltip"
-				i18n-matTooltip
-				(click)="onJumpToNextMatchClick(false)">
-				arrow_upward
-			</mat-icon>
-			<mat-icon
-				*ngIf="reportOrigin != 'suspect' && !(isHtmlView && !hasHtml) && !isMultiSelection"
-				fontSet="material-icons-round"
-				matTooltip="Go to next match"
+				i18n-matTooltip>
+				<mat-icon
+					[ngClass]="{
+						'disabled-icon': isMultiSelection
+					}"
+					fontSet="material-icons-round"
+					matTooltip="Go to previous match"
+					matTooltipClass="web-report-mat-tooltip"
+					i18n-matTooltip
+					(click)="onJumpToNextMatchClick(false)">
+					arrow_upward
+				</mat-icon>
+			</span>
+
+			<span
+				*ngIf="reportOrigin != 'suspect' && !(isHtmlView && !hasHtml)"
+				class="icon-tooltip-wrapper"
+				[matTooltip]="isMultiSelection ? MULTISELECT_IS_ON : ''"
 				matTooltipClass="web-report-mat-tooltip"
-				i18n-matTooltip
-				(click)="onJumpToNextMatchClick()">
-				arrow_downward
-			</mat-icon>
+				i18n-matTooltip>
+				<mat-icon
+					[ngClass]="{
+						'disabled-icon': isMultiSelection
+					}"
+					fontSet="material-icons-round"
+					matTooltip="Go to next match"
+					matTooltipClass="web-report-mat-tooltip"
+					i18n-matTooltip
+					(click)="onJumpToNextMatchClick()">
+					arrow_downward
+				</mat-icon>
+			</span>
+
 			<mat-icon
 				*ngIf="!isHtmlView || !hasHtml || isAlertsView"
 				fontSet="material-icons-round"

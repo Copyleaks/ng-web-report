@@ -260,6 +260,7 @@ export class ContentViewerContainerComponent implements OnInit, AfterViewInit, O
 	customTabContent: TemplateRef<any> | null;
 
 	ONLY_TEXT_VIEW_IS_AVAILABLE = $localize`Only text view is available`;
+	MULTISELECT_IS_ON = $localize`Can't navigate between matches when multiple matches are selected`;
 
 	constructor(
 		private _renderer: Renderer2,

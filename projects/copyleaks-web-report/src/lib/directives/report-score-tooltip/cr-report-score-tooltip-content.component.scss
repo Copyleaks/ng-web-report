@@ -4,14 +4,15 @@
 	position: relative;
 }
 .tooltip {
-	min-width: 170px;
+	min-width: 220px;
 	position: fixed;
 	display: flex;
 	padding: 4px 8px;
-	flex-direction: column;
-	align-items: flex-start;
-	gap: 6px;
+	flex-direction: row;
+	justify-content: space-between;
+	align-items: center;
 	background-color: $color-white;
+	gap: 12px;
 	box-shadow: 2px 2px 4px 0px rgba(0, 0, 0, 0.25) !important;
 	border-radius: 4px;
 	color: #ffffff;
@@ -132,6 +133,7 @@
 	display: flex;
 	align-items: center;
 	gap: 8px;
+	height: 15px;
 	.title,
 	.percentage {
 		color: $color-black;
@@ -174,6 +176,17 @@
 	}
 }
 
+.match-type-container {
+	color: $color-black;
+	font-family: haboro-soft, Almarai, sans-serif !important;
+	font-size: 10px;
+	font-style: normal;
+	font-weight: 500;
+	line-height: normal;
+	text-transform: uppercase;
+}
+
+.match-type-container,
 .identical-stats,
 .minor-changes-stats,
 .paraphrased-stats,
@@ -195,6 +208,14 @@
 	font-weight: 700;
 	line-height: normal;
 	text-transform: uppercase;
+	display: flex;
+	justify-content: space-between;
+	align-items: center;
+	height: 15px;
+
+	.num-of-words-stat {
+		text-align: start;
+	}
 }
 
 svg {
@@ -203,4 +224,24 @@ svg {
 
 .disabled-property {
 	text-decoration: line-through;
+}
+
+.num-of-words-stat,
+.percentage-stat {
+	font-family: Almarai, haboro-soft, sans-serif !important;
+	font-weight: 800 !important;
+}
+
+.first-column-container,
+.second-column-container,
+.third-column-container {
+	display: flex;
+	flex-direction: column;
+	gap: 6px;
+}
+
+.right-section-container {
+	display: flex;
+	flex-direction: row;
+	gap: 12px;
 }

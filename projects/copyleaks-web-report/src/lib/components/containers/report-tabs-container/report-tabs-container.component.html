@@ -17,17 +17,20 @@
 					: {
 							identicalPct: {
 								percentage: identicalTotal / wordsTotal,
+								totalWords: identicalTotal ?? 0,
 								disabled: reportDataSvc.filterOptions?.showIdentical === false
 							},
 							minorChangesPct: {
 								percentage: minorChangesTotal / wordsTotal,
+								totalWords: minorChangesTotal ?? 0,
 								disabled: reportDataSvc.filterOptions?.showMinorChanges === false
 							},
 							paraphrasedPct: {
 								percentage: paraphrasedTotal / wordsTotal,
+								totalWords: paraphrasedTotal ?? 0,
 								disabled: reportDataSvc.filterOptions?.showRelated === false
 							},
-							omittedPct: { percentage: excludedTotal / wordsTotal, disabled: false }
+							omittedPct: { percentage: excludedTotal / wordsTotal, disabled: false, totalWords: excludedTotal ?? 0 }
 					  }
 			"
 			[crReportScoreTooltipPosition]="EReportScoreTooltipPosition.BELOW"
@@ -75,8 +78,8 @@
 				hideAiTap && showDisabledProducts
 					? null
 					: {
-							aiPct: { percentage: aiScore, disabled: false },
-							humanPct: { percentage: 1 - aiScore, disabled: false }
+							aiPct: { percentage: aiScore, disabled: false, totalWords: totalAiWords },
+							humanPct: { percentage: 1 - aiScore, disabled: false, totalWords: wordsTotal - totalAiWords ?? 0 }
 					  }
 			"
 			[crReportScoreTooltipPosition]="EReportScoreTooltipPosition.BELOW"

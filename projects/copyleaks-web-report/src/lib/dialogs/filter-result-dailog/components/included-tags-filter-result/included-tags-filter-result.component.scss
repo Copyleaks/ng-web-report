@@ -13,6 +13,7 @@
 			font-size: 16px;
 			outline: none;
 			border: 0;
+			margin: 0px !important;
 			background-color: $color-container-background;
 		}
 		.included-tags-input::placeholder {
@@ -22,8 +23,6 @@
 		}
 
 		.search-icon {
-			width: 32px;
-			height: 32px;
 			border-radius: 50%;
 			background-color: $color-white;
 			cursor: pointer;
@@ -35,9 +34,10 @@
 			}
 			mat-icon {
 				color: $color-black;
-				font-size: 17px;
-				width: 17px;
-				height: 17px;
+				font-size: 24px;
+				width: 24px;
+				height: 24px;
+				padding: 4px;
 			}
 		}
 	}
@@ -131,6 +131,14 @@
 							border-color: $color-medium-dark;
 						}
 					}
+				}
+
+				::ng-deep .mat-checkbox-label {
+					max-width: 100%;
+					white-space: nowrap;
+					overflow: hidden;
+					text-overflow: ellipsis;
+					display: block;
 				}
 			}
 		}

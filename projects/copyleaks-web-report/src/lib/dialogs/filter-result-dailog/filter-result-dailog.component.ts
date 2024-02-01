@@ -13,6 +13,7 @@ import { ALERTS } from '../../constants/report-alerts.constants';
 import { ICompleteResults } from '../../models/report-data.models';
 import { ICopyleaksReportOptions } from '../../models/report-options.models';
 import { trigger, transition, animate, keyframes, style } from '@angular/animations';
+import { EResponsiveLayoutType } from '../../enums/copyleaks-web-report.enums';
 
 @Component({
 	selector: 'cr-filter-result-dailog',
@@ -83,7 +84,10 @@ export class FilterResultDailogComponent implements OnInit {
 
 	ngOnInit() {
 		this.initResultItem();
-		this.isMobile = this.data?.isMobile;
+
+		this.data.reportViewSvc?.reportResponsiveMode$.pipe(untilDestroy(this)).subscribe(view => {
+			this.isMobile = view.mode === EResponsiveLayoutType.Mobile;
+		});
 
 		this._filterResultsSvc.filterResultFormGroup.valueChanges.pipe(untilDestroy(this)).subscribe(_ => {
 			const formData = this.getFilterCurrentData();
@@ -190,6 +194,7 @@ export class FilterResultDailogComponent implements OnInit {
 	}
 
 	setTotalMatchTypesStatistics() {
+		this.totalParaphrased = this.totalMinorChanges = this.totalIdentical = 0;
 		this.allResultsItem.forEach(result => {
 			if (result.iStatisticsResult.identical && result.iStatisticsResult.identical > 0) this.totalIdentical++;
 			if (result.iStatisticsResult.minorChanges && result.iStatisticsResult.minorChanges > 0) this.totalMinorChanges++;

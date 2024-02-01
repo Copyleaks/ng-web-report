@@ -103,9 +103,7 @@ export class ReportTabsContainerComponent implements OnInit, OnDestroy, OnChange
 	// constants
 	DISABLED: string = $localize`Disabled`;
 
-	get totalAiWords(): number {
-		return Math.ceil(this.aiScore * this.wordsTotal ?? 0);
-	}
+	totalAiWords = 0;
 
 	constructor(
 		private _reportViewSvc: ReportViewService,
@@ -152,6 +150,7 @@ export class ReportTabsContainerComponent implements OnInit, OnDestroy, OnChange
 				});
 			}
 		}
+		this.totalAiWords = Math.ceil(this.aiScore * this.wordsTotal ?? 0);
 	}
 
 	selectTap(selectedTab: EReportViewType) {

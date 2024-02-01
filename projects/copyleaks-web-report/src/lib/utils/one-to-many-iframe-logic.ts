@@ -21,8 +21,25 @@ function ready() {
 	let current: HTMLSpanElement | null;
 	let currentMulti: HTMLSpanElement[] = [];
 	let matches: HTMLSpanElement[];
+	let currentZoom: number = 1;
+
+	(window as any).addEventListener(
+		'wheel',
+		function (event) {
+			if (event && event.ctrlKey) {
+				event.preventDefault(); // Prevent the default zoom action
+
+				// Check if the scroll is up or down & update the zoom property accordingly
+				if (event.deltaY < 0) zoomIn();
+				else if (event.deltaY > 0) zoomOut();
+			}
+		},
+		{ passive: false }
+	);
+
 	let isPdf = document.querySelector('meta[content="pdf2htmlEX"]') !== null;
 	(window as any).addEventListener('message', onMessageFromParent);
+
 	init();
 
 	/**
@@ -67,7 +84,8 @@ function ready() {
 				onMatchJump(event);
 				break;
 			case 'zoom':
-				document.body.style.setProperty('zoom', String(event.currentZoom));
+				if (event.zoomIn) zoomIn();
+				else zoomOut();
 				break;
 			case 'multi-match-select':
 				// do nothing
@@ -205,6 +223,16 @@ function ready() {
 	function onMatchHover(event: MouseEvent): void {
 		const elem = event?.target as HTMLSpanElement;
 		elem?.classList?.toggle('hover');
+	}
+
+	function zoomIn() {
+		currentZoom += 0.1;
+		document.body.style.setProperty('zoom', String(currentZoom));
+	}
+
+	function zoomOut() {
+		currentZoom = Math.max(0.1, currentZoom - 0.1);
+		document.body.style.setProperty('zoom', String(currentZoom));
 	}
 }
 

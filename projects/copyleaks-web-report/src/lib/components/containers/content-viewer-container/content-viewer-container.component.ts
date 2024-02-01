@@ -262,7 +262,7 @@ export class ContentViewerContainerComponent implements OnInit, AfterViewInit, O
 	ONLY_TEXT_VIEW_IS_AVAILABLE = $localize`Only text view is available`;
 	MULTISELECT_IS_ON = $localize`Can't navigate between matches when multiple matches are selected`;
 
-	private currentZoom = 1;
+	private _zoomIn: boolean;
 
 	constructor(
 		private _renderer: Renderer2,
@@ -356,7 +356,7 @@ export class ContentViewerContainerComponent implements OnInit, AfterViewInit, O
 	 */
 	zoomOut(amount: number = TEXT_FONT_SIZE_UNIT) {
 		if (this.isHtmlView) {
-			this.currentZoom = Math.max(0.1, this.currentZoom - 0.1); // Prevent scale from going below 0.1
+			this._zoomIn = false;
 			this._adjustZoom();
 		} else this.contentZoom = Math.max(this.contentZoom - amount, MIN_TEXT_ZOOM);
 	}
@@ -367,7 +367,7 @@ export class ContentViewerContainerComponent implements OnInit, AfterViewInit, O
 	 */
 	zoomIn(amount: number = TEXT_FONT_SIZE_UNIT) {
 		if (this.isHtmlView) {
-			this.currentZoom += 0.1;
+			this._zoomIn = true;
 			this._adjustZoom();
 		} else this.contentZoom = Math.min(this.contentZoom + amount, MAX_TEXT_ZOOM);
 	}
@@ -399,7 +399,7 @@ export class ContentViewerContainerComponent implements OnInit, AfterViewInit, O
 
 	private _adjustZoom() {
 		this.contentIFrame.nativeElement.contentWindow.postMessage(
-			{ type: 'zoom', currentZoom: this.currentZoom } as ZoomEvent,
+			{ type: 'zoom', zoomIn: this._zoomIn } as ZoomEvent,
 			'*'
 		);
 	}

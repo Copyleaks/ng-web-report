@@ -54,5 +54,5 @@ export interface UpgradePlanEvent extends BasePostMessageEvent {
 
 export interface ZoomEvent extends BasePostMessageEvent {
 	type: 'zoom';
-	currentZoom: number;
+	zoomIn: boolean;
 }

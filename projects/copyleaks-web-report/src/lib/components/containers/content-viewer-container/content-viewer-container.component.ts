@@ -280,8 +280,6 @@ export class ContentViewerContainerComponent implements OnInit, AfterViewInit, O
 		this._viewSvc.selectedCustomTabContent$.pipe(untilDestroy(this)).subscribe(content => {
 			if (this.viewMode !== 'one-to-one') this.customTabContent = content;
 		});
-
-		// this.document.addEventListener('wheel', this._handleScroll, { passive: false });
 	}
 
 	ngAfterViewInit() {

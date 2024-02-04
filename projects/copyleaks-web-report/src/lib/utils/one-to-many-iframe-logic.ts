@@ -191,9 +191,8 @@ function ready() {
 	}
 
 	/**
-	 * Execute the logic of a match selection.
-	 * - highlight `elem` and message the parent window about it
-	 * - if an element is allready highlighted turn it off and highlight `elem`
+	 * Execute the logic of a multi match selection.
+	 * - highlight and add the `elem` to the highlighted matches
 	 * @param elem the selected element
 	 */
 	function onMatchMultiSelect(elem: HTMLSpanElement, broadcast: boolean = false): void {

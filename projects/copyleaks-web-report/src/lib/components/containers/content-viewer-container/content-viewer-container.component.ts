@@ -6,6 +6,7 @@ import {
 	EventEmitter,
 	HostBinding,
 	HostListener,
+	Inject,
 	Input,
 	OnChanges,
 	OnInit,
@@ -29,6 +30,7 @@ import { untilDestroy } from '../../../utils/until-destroy';
 import { EXCLUDE_MESSAGE } from '../../../constants/report-exclude.constants';
 import { IAuthorAlertCard } from '../report-alerts-container/components/author-alert-card/models/author-alert-card.models';
 import { animate, state, style, transition, trigger } from '@angular/animations';
+import { DOCUMENT } from '@angular/common';
 
 @Component({
 	selector: 'copyleaks-content-viewer-container',
@@ -268,7 +270,8 @@ export class ContentViewerContainerComponent implements OnInit, AfterViewInit, O
 		private _renderer: Renderer2,
 		private _cdr: ChangeDetectorRef,
 		private _highlightService: ReportMatchHighlightService,
-		private _viewSvc: ReportViewService
+		private _viewSvc: ReportViewService,
+		@Inject(DOCUMENT) private document: Document
 	) {}
 
 	ngOnInit(): void {
@@ -278,6 +281,8 @@ export class ContentViewerContainerComponent implements OnInit, AfterViewInit, O
 		this._viewSvc.selectedCustomTabContent$.pipe(untilDestroy(this)).subscribe(content => {
 			if (this.viewMode !== 'one-to-one') this.customTabContent = content;
 		});
+
+		this.document.addEventListener('wheel', this._handleScroll, { passive: false });
 	}
 
 	ngAfterViewInit() {
@@ -404,5 +409,20 @@ export class ContentViewerContainerComponent implements OnInit, AfterViewInit, O
 		);
 	}
 
-	ngOnDestroy(): void {}
+	/**
+	 * Handels the Ctrl key and scroll events, by updating the content zoom view accordingly only for text view
+	 * @param event The wheel event
+	 */
+	private _handleScroll = (event: WheelEvent): void => {
+		if (event && event.ctrlKey && !this.isHtmlView) {
+			event.preventDefault();
+			// Check if the scroll is up or down & update the zoom property accordingly
+			if (event.deltaY < 0) this.zoomIn();
+			else if (event.deltaY > 0) this.zoomOut();
+		}
+	};
+
+	ngOnDestroy(): void {
+		this.document.removeEventListener('wheel', this._handleScroll);
+	}
 }

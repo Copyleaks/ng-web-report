@@ -113,11 +113,11 @@
 									<mat-chip
 										*ngIf="firstTag"
 										class="first-tag"
-										[matTooltip]="firstTag.description"
+										[matTooltip]="firstTag.description | decodeUri"
 										matTooltipClass="web-report-mat-tooltip"
 										i18n-matTooltip
 										(click)="handleClick()">
-										{{ firstTag.title }}
+										{{ firstTag.title | decodeUri }}
 									</mat-chip>
 
 									<mat-chip *ngIf="numberOfTags > 1" class="plus-chip" (click)="handleClick()">

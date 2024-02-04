@@ -28,7 +28,6 @@ function ready() {
 		function (event) {
 			if (event && event.ctrlKey) {
 				event.preventDefault(); // Prevent the default zoom action
-
 				// Check if the scroll is up or down & update the zoom property accordingly
 				if (event.deltaY < 0) zoomIn();
 				else if (event.deltaY > 0) zoomOut();
@@ -227,12 +226,36 @@ function ready() {
 
 	function zoomIn() {
 		currentZoom += 0.1;
-		document.body.style.setProperty('zoom', String(currentZoom));
+		updateIframeZoomView();
 	}
 
 	function zoomOut() {
 		currentZoom = Math.max(0.1, currentZoom - 0.1);
-		document.body.style.setProperty('zoom', String(currentZoom));
+		updateIframeZoomView();
+	}
+
+	function updateIframeZoomView() {
+		// document.body.style.setProperty('zoom', String(currentZoom));
+		if (isPdf) {
+			// for pdf the scale doesn't work for the html or body elements, because the divs in the pdf are all with absolute positioning
+			let pageContainer = document.querySelector('#page-container') as HTMLElement;
+			let sidebar = document.querySelector('#sidebar') as HTMLElement;
+			if (pageContainer) {
+				// Apply the transformations and update width and height using percentages
+				pageContainer.style.setProperty('transform', `scale(${currentZoom})`);
+				pageContainer.style.setProperty('transform-origin', '0 0');
+				pageContainer.style.setProperty('height', `fit-content`);
+				pageContainer.style.setProperty('overflow', `hidden`);
+			} else {
+				document.body.style.setProperty('transform', `scale(${currentZoom})`);
+				document.body.style.setProperty('transform-origin', '0 0');
+			}
+
+			if (sidebar) sidebar.style.setProperty('display', 'none');
+		} else {
+			document.body.style.setProperty('transform', `scale(${currentZoom})`);
+			document.body.style.setProperty('transform-origin', '0 0');
+		}
 	}
 }
 

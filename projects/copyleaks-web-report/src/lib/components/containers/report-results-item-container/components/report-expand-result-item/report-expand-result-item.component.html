@@ -127,7 +127,7 @@
 						[matTooltip]="tag?.description ?? ''"
 						matTooltipClass="web-report-mat-tooltip"
 						i18n-matTooltip>
-						{{ tag?.title ?? '' }}
+						{{ tag?.title ?? '' | decodeUri }}
 					</mat-chip>
 				</mat-chip-list>
 			</div>

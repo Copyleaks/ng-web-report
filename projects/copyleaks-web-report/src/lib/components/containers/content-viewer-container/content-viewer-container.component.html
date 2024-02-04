@@ -138,6 +138,7 @@
 				crOriginalHtmlHelper></iframe>
 			<div
 				class="text-container"
+				#contentText
 				[ngStyle]="{
 					display: !(!isHtmlView || !hasHtml || isAlertsView) || customTabContent || showLoadingView ? 'none' : '',
 					'font-size': contentZoom + 'em'
@@ -196,6 +197,7 @@
 				crSourceHtmlHelper></iframe>
 			<div
 				class="text-container"
+				#contentText
 				[ngStyle]="{
 					display: !(!isHtmlView || !hasHtml || isAlertsView) || customTabContent || showLoadingView ? 'none' : '',
 					'font-size': contentZoom + 'em'
@@ -250,6 +252,7 @@
 				crSuspectHtmlHelper></iframe>
 			<div
 				class="text-container"
+				#contentText
 				crSuspectTextHelper
 				[host]="this"
 				text-container

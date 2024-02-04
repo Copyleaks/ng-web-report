@@ -6,7 +6,6 @@ import {
 	EventEmitter,
 	HostBinding,
 	HostListener,
-	Inject,
 	Input,
 	OnChanges,
 	OnInit,
@@ -30,7 +29,6 @@ import { untilDestroy } from '../../../utils/until-destroy';
 import { EXCLUDE_MESSAGE } from '../../../constants/report-exclude.constants';
 import { IAuthorAlertCard } from '../report-alerts-container/components/author-alert-card/models/author-alert-card.models';
 import { animate, state, style, transition, trigger } from '@angular/animations';
-import { DOCUMENT } from '@angular/common';
 
 @Component({
 	selector: 'copyleaks-content-viewer-container',
@@ -48,6 +46,8 @@ export class ContentViewerContainerComponent implements OnInit, AfterViewInit, O
 	flexGrowProp: number;
 
 	@ViewChild('contentIFrame', { static: false }) contentIFrame: ElementRef<HTMLIFrameElement>;
+
+	@ViewChild('contentText', { static: false }) contentText: ElementRef;
 
 	/**
 	 * @Input Determines if the view should be rendered as HTML.
@@ -270,8 +270,7 @@ export class ContentViewerContainerComponent implements OnInit, AfterViewInit, O
 		private _renderer: Renderer2,
 		private _cdr: ChangeDetectorRef,
 		private _highlightService: ReportMatchHighlightService,
-		private _viewSvc: ReportViewService,
-		@Inject(DOCUMENT) private document: Document
+		private _viewSvc: ReportViewService
 	) {}
 
 	ngOnInit(): void {
@@ -282,7 +281,7 @@ export class ContentViewerContainerComponent implements OnInit, AfterViewInit, O
 			if (this.viewMode !== 'one-to-one') this.customTabContent = content;
 		});
 
-		this.document.addEventListener('wheel', this._handleScroll, { passive: false });
+		// this.document.addEventListener('wheel', this._handleScroll, { passive: false });
 	}
 
 	ngAfterViewInit() {
@@ -299,6 +298,8 @@ export class ContentViewerContainerComponent implements OnInit, AfterViewInit, O
 			},
 			false
 		);
+
+		this.contentText.nativeElement.addEventListener('wheel', this._handleScroll, { passive: false });
 	}
 
 	ngOnChanges(changes: SimpleChanges): void {
@@ -422,7 +423,5 @@ export class ContentViewerContainerComponent implements OnInit, AfterViewInit, O
 		}
 	};
 
-	ngOnDestroy(): void {
-		this.document.removeEventListener('wheel', this._handleScroll);
-	}
+	ngOnDestroy(): void {}
 }

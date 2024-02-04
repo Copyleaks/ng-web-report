@@ -241,7 +241,6 @@ function ready() {
 			let pageContainer = document.querySelector('#page-container') as HTMLElement;
 			let sidebar = document.querySelector('#sidebar') as HTMLElement;
 			if (pageContainer) {
-				// Apply the transformations and update width and height using percentages
 				pageContainer.style.setProperty('transform', `scale(${currentZoom})`);
 				pageContainer.style.setProperty('transform-origin', '0 0');
 				pageContainer.style.setProperty('height', `fit-content`);

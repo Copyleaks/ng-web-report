@@ -359,7 +359,7 @@ export class ContentViewerContainerComponent implements OnInit, AfterViewInit, O
 	 * @param amount a decimal number between 0.5 and 4
 	 */
 	zoomOut(amount: number = TEXT_FONT_SIZE_UNIT) {
-		if (this.isHtmlView) {
+		if (this.isHtmlView && this.hasHtml) {
 			this._zoomIn = false;
 			this._adjustZoom();
 		} else this.contentZoom = Math.max(this.contentZoom - amount, MIN_TEXT_ZOOM);
@@ -370,7 +370,7 @@ export class ContentViewerContainerComponent implements OnInit, AfterViewInit, O
 	 * @param amount a decimal number between 0.5 and 4
 	 */
 	zoomIn(amount: number = TEXT_FONT_SIZE_UNIT) {
-		if (this.isHtmlView) {
+		if (this.isHtmlView && this.hasHtml) {
 			this._zoomIn = true;
 			this._adjustZoom();
 		} else this.contentZoom = Math.min(this.contentZoom + amount, MAX_TEXT_ZOOM);
@@ -413,7 +413,7 @@ export class ContentViewerContainerComponent implements OnInit, AfterViewInit, O
 	 * @param event The wheel event
 	 */
 	private _handleScroll = (event: WheelEvent): void => {
-		if (event && event.ctrlKey && !this.isHtmlView) {
+		if (event && event.ctrlKey && (!this.isHtmlView || !this.hasHtml)) {
 			event.preventDefault();
 			// Check if the scroll is up or down & update the zoom property accordingly
 			if (event.deltaY < 0) this.zoomIn();

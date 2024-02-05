@@ -79,7 +79,11 @@ export class ReportResultsItemComponent implements OnInit, OnChanges, OnDestroy 
 
 	get authorName() {
 		if (this.previewResult) {
-			if (this.previewResult.metadata?.author) return this.previewResult.metadata?.author;
+			if (
+				this.previewResult.metadata?.author &&
+				!(this.previewResult.scanId && this.resultItem.resultPreview.type === EResultPreviewType.Database)
+			)
+				return this.previewResult.metadata?.author;
 			switch (this.previewResult.type) {
 				case EResultPreviewType.Internet:
 					return 'Internet Result';
@@ -115,6 +119,8 @@ export class ReportResultsItemComponent implements OnInit, OnChanges, OnDestroy 
 	ngOnInit(): void {
 		if (this.resultItem) {
 			this.previewResult = this.resultItem.resultPreview;
+			if (this.resultItem.resultPreview.scanId && this.resultItem.resultPreview.type === EResultPreviewType.Database)
+				this.previewResult.title = $localize`Your File`;
 			this.percentageResult = {
 				resultItem: this.resultItem,
 				showTooltip: true,
@@ -134,6 +140,8 @@ export class ReportResultsItemComponent implements OnInit, OnChanges, OnDestroy 
 		if ('resultItem' in changes)
 			if (this.resultItem) {
 				this.previewResult = this.resultItem.resultPreview;
+				if (this.resultItem.resultPreview.scanId && this.resultItem.resultPreview.type === EResultPreviewType.Database)
+					this.previewResult.title = $localize`Your File`;
 				this.percentageResult = {
 					resultItem: this.resultItem,
 					showTooltip: true,

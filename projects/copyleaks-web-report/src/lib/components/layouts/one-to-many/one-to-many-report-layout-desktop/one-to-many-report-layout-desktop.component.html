@@ -61,7 +61,11 @@
 		<copyleaks-report-results-container
 			*ngIf="
 				reportViewMode !== ECustomResultsReportView.Full &&
-				!(reportViewMode === 0 && (!scanResultsView || scanResultsView?.length === 0) && !isLoadingScanResults)
+				!(
+					reportViewMode === ECustomResultsReportView.Partial &&
+					(!scanResultsView || scanResultsView?.length === 0) &&
+					!isLoadingScanResults
+				)
 			"
 			[class.container-with-custom-results]="reportViewMode != undefined"
 			[flexGrow]="65"

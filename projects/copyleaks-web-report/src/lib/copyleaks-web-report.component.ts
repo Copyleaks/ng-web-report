@@ -28,6 +28,7 @@ import { ReportStatisticsService } from './services/report-statistics.service';
 import { ReportViewService } from './services/report-view.service';
 import { untilDestroy } from './utils/until-destroy';
 import { ReportRealtimeResultsService } from './services/report-realtime-results.service';
+import { ECustomResultsReportView } from './components/core/cr-custom-results/models/cr-custom-results.enums';
 
 @Component({
 	selector: 'copyleaks-web-report',
@@ -133,7 +134,9 @@ export class CopyleaksWebReportComponent implements OnInit, OnDestroy {
 				if (
 					!this._reportDataSvc.isPlagiarismEnabled() &&
 					this.reportLayoutType != EReportLayoutType.OnlyAi &&
-					!this.showDisabledProducts
+					!this.showDisabledProducts &&
+					this._reportNgTemplatesSvc.reportTemplatesMode$.value != ECustomResultsReportView.Full &&
+					this._reportNgTemplatesSvc.reportTemplatesMode$.value != ECustomResultsReportView.Partial
 				) {
 					this._reportViewSvc.reportViewMode$.next({
 						...this._reportViewSvc.reportViewMode,

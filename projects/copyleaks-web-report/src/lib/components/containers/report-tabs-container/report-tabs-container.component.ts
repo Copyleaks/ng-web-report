@@ -16,6 +16,7 @@ import { untilDestroy } from '../../../utils/until-destroy';
 import { ReportMatchHighlightService } from '../../../services/report-match-highlight.service';
 import { ReportDataService } from '../../../services/report-data.service';
 import { trigger, state, transition, animate, style } from '@angular/animations';
+import { ECustomResultsReportView } from '../../core/cr-custom-results/models/cr-custom-results.enums';
 
 @Component({
 	selector: 'copyleaks-report-tabs-container',
@@ -145,7 +146,11 @@ export class ReportTabsContainerComponent implements OnInit, OnDestroy, OnChange
 				this._reportViewSvc.selectedAlert$.next(ALERTS.SUSPECTED_AI_TEXT_DETECTED);
 				this._reportViewSvc.reportViewMode$.next({
 					...this._reportViewSvc.reportViewMode,
-					viewMode: 'only-ai',
+					viewMode:
+						this._reportNgTemplatesSvc.reportTemplatesMode$.value != ECustomResultsReportView.Full &&
+						this._reportNgTemplatesSvc.reportTemplatesMode$.value != ECustomResultsReportView.Partial
+							? 'only-ai'
+							: 'one-to-many',
 					alertCode: ALERTS.SUSPECTED_AI_TEXT_DETECTED,
 				});
 			}
@@ -169,7 +174,13 @@ export class ReportTabsContainerComponent implements OnInit, OnDestroy, OnChange
 			case EReportViewType.AIView:
 				this._reportViewSvc.reportViewMode$.next({
 					...this._reportViewSvc.reportViewMode,
-					viewMode: !this.reportDataSvc.isPlagiarismEnabled() && !this.showDisabledProducts ? 'only-ai' : 'one-to-many',
+					viewMode:
+						!this.reportDataSvc.isPlagiarismEnabled() &&
+						!this.showDisabledProducts &&
+						this._reportNgTemplatesSvc.reportTemplatesMode$.value != ECustomResultsReportView.Full &&
+						this._reportNgTemplatesSvc.reportTemplatesMode$.value != ECustomResultsReportView.Partial
+							? 'only-ai'
+							: 'one-to-many',
 					isHtmlView: false,
 					alertCode: ALERTS.SUSPECTED_AI_TEXT_DETECTED,
 					sourcePageIndex: 1,

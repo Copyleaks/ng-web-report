@@ -56,7 +56,7 @@
 				[(ngModel)]="item.selected"
 				(change)="selectTag()"
 				class="mat-checkbox-tag">
-				{{ item.title }}
+				{{ item.title | decodeUri }}
 			</mat-checkbox>
 		</div>
 	</div>

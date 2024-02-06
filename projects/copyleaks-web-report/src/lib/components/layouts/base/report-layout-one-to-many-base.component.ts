@@ -342,7 +342,7 @@ export abstract class OneToManyReportLayoutBaseComponent extends ReportLayoutBas
 	}
 
 	private showResultsForMultiSelection(selctions: Match[]) {
-		if (selctions?.length === 1) this.isMultiSelection = false;
+		if (selctions?.length <= 1) this.isMultiSelection = false;
 		else this.isMultiSelection = true;
 
 		let viewedResults: ResultPreview[] = [];

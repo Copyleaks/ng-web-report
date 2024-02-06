@@ -201,6 +201,8 @@ function ready() {
 			foundSelection?.toggleAttribute('on', false);
 			currentMulti = currentMulti.filter(e => e != elem);
 			const indexes = currentMulti.map(e => +e?.dataset?.['index']);
+			if (currentMulti.length === 1) current = currentMulti[0];
+			else current = null;
 			messageParent({ type: 'multi-match-select', indexes });
 			return;
 		}
@@ -209,7 +211,10 @@ function ready() {
 		if (isPdf) {
 			elem?.closest('.pc')?.classList?.add('opened');
 		}
-		elem?.scrollIntoView({ behavior: 'smooth', block: 'nearest' }); // ??
+		elem?.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+
+		if (currentMulti.length === 1) current = currentMulti[0];
+		else current = null;
 		const indexes = currentMulti.map(e => (!!e?.dataset?.['index'] ? +(e?.dataset?.['index'] ?? '') : -1));
 		messageParent({ type: 'multi-match-select', indexes });
 	}

@@ -245,7 +245,8 @@
 			showLoadingView ||
 			!(!displayedResults || displayedResults.length === 0) ||
 			!showResultsSection ||
-			(customResultsTemplate && reportViewMode === ECustomResultsReportView.Full)
+			(customResultsTemplate &&
+				(reportViewMode === ECustomResultsReportView.Full || reportViewMode === ECustomResultsReportView.Partial))
 				? 'none'
 				: 'flex'
 	}">
@@ -256,22 +257,13 @@
 	class="custom-results-container"
 	[ngStyle]="{
 		display:
-			customResultsTemplate && reportViewMode === ECustomResultsReportView.Full && showResultsSection ? 'flex' : 'none'
-	}">
-	<ng-container *ngTemplateOutlet="customResultsTemplate ?? null"></ng-container>
-</div>
-
-<div
-	class="custom-results-container"
-	#customEmptyResultView
-	[ngStyle]="{
-		display:
-			!showLoadingView &&
-			customResultsTemplate &&
-			isMobile &&
-			reportViewMode === ECustomResultsReportView.Partial &&
-			showResultsSection &&
-			(!displayedResults || displayedResults.length === 0)
+			(customResultsTemplate && reportViewMode === ECustomResultsReportView.Full && showResultsSection) ||
+			(!showLoadingView &&
+				customResultsTemplate &&
+				isMobile &&
+				reportViewMode === ECustomResultsReportView.Partial &&
+				showResultsSection &&
+				(!displayedResults || displayedResults.length === 0))
 				? 'flex'
 				: 'none'
 	}">

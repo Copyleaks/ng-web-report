@@ -63,7 +63,11 @@
 <div style="display: flex; flex-direction: column; flex-shrink: 0; gap: 8px">
 	<!-- Report results -->
 	<copyleaks-report-results-container
-		*ngIf="selectedTap !== EReportViewType.AIView"
+		*ngIf="
+			selectedTap !== EReportViewType.AIView ||
+			reportViewMode === ECustomResultsReportView.Partial ||
+			reportViewMode === ECustomResultsReportView.Full
+		"
 		class="results-container"
 		[flexGrow]="15"
 		[allResults]="scanResultsView"

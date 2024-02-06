@@ -3,9 +3,10 @@ export type PostMessageEvent =
 	| MatchClickEvent
 	| MatchJumpEvent
 	| MatchSelectEvent
-	| MultiMatchSelectEvent
 	| MatchWarnEvent
-	| UpgradePlanEvent;
+	| UpgradePlanEvent
+	| ZoomEvent
+	| MultiMatchSelectEvent;
 
 /** base type of post message event */
 interface BasePostMessageEvent {
@@ -49,4 +50,9 @@ export interface MatchWarnEvent extends BasePostMessageEvent {
 }
 export interface UpgradePlanEvent extends BasePostMessageEvent {
 	type: 'upgrade-plan';
+}
+
+export interface ZoomEvent extends BasePostMessageEvent {
+	type: 'zoom';
+	zoomIn: boolean;
 }

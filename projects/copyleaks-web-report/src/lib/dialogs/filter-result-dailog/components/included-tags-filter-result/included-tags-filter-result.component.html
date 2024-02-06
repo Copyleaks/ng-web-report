@@ -36,7 +36,7 @@
 		<mat-chip-list role="listbox">
 			<ng-container *ngFor="let tag of selectedList; let idx = index">
 				<mat-chip class="selected-tag-mat-chip" *ngIf="idx < 2">
-					{{ tag }}
+					{{ tag | decodeUri }}
 				</mat-chip>
 			</ng-container>
 		</mat-chip-list>
@@ -56,7 +56,7 @@
 				[(ngModel)]="item.selected"
 				(change)="selectTag()"
 				class="mat-checkbox-tag">
-				{{ item.title }}
+				{{ item.title | decodeUri }}
 			</mat-checkbox>
 		</div>
 	</div>

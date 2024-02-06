@@ -19,6 +19,21 @@ function ready() {
 	let matches: HTMLSpanElement[];
 	let groups: { [gid: string]: HTMLSpanElement[] };
 	let isPdf = document.querySelector('meta[content="pdf2htmlEX"]') !== null;
+	let currentZoom: number = 1;
+
+	(window as any).addEventListener(
+		'wheel',
+		function (event) {
+			if (event && event.ctrlKey) {
+				event.preventDefault(); // Prevent the default zoom action
+				// Check if the scroll is up or down & update the zoom property accordingly
+				if (event.deltaY < 0) zoomIn();
+				else if (event.deltaY > 0) zoomOut();
+			}
+		},
+		{ passive: false }
+	);
+
 	(window as any).addEventListener('message', handleMessageFromParent);
 	init();
 
@@ -56,6 +71,10 @@ function ready() {
 				break;
 			case 'match-jump':
 				handleMatchJump(event);
+				break;
+			case 'zoom':
+				if (event.zoomIn) zoomIn();
+				else zoomOut();
 				break;
 			default:
 				console.error('unknown event in source frame', nativeEvent);
@@ -163,6 +182,39 @@ function ready() {
 	function onMatchHover(event: MouseEvent) {
 		const elem = event?.target as HTMLSpanElement;
 		groups[elem?.dataset['gid'] as keyof HTMLSpanElement]?.forEach(el => el?.classList?.toggle('hover'));
+	}
+
+	function zoomIn() {
+		currentZoom += 0.1;
+		updateIframeZoomView();
+	}
+
+	function zoomOut() {
+		currentZoom = Math.max(0.1, currentZoom - 0.1);
+		updateIframeZoomView();
+	}
+
+	function updateIframeZoomView() {
+		document.body.style.setProperty('zoom', String(currentZoom));
+		if (isPdf) {
+			// for pdf the scale doesn't work for the html or body elements, because the divs in the pdf are all with absolute positioning
+			let pageContainer = document.querySelector('#page-container') as HTMLElement;
+			let sidebar = document.querySelector('#sidebar') as HTMLElement;
+			if (pageContainer) {
+				pageContainer.style.setProperty('transform', `scale(${currentZoom})`);
+				pageContainer.style.setProperty('transform-origin', '0 0');
+				pageContainer.style.setProperty('height', `fit-content`);
+				pageContainer.style.setProperty('overflow', `hidden`);
+			} else {
+				document.body.style.setProperty('transform', `scale(${currentZoom})`);
+				document.body.style.setProperty('transform-origin', '0 0');
+			}
+
+			if (sidebar) sidebar.style.setProperty('display', 'none');
+		} else {
+			document.body.style.setProperty('transform', `scale(${currentZoom})`);
+			document.body.style.setProperty('transform-origin', '0 0');
+		}
 	}
 }
 

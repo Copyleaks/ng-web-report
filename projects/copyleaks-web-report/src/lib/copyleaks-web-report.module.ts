@@ -75,6 +75,7 @@ import { SimilarityPipeModule } from './pipes/similarity-pipe/similarity-pipe.mo
 import { ReportRealtimeResultsService } from './services/report-realtime-results.service';
 import { RemoveResultConfirmationDialogComponent } from './dialogs/remove-result-confirmation-dialog/remove-result-confirmation-dialog.component';
 import { CrSpinnerModule } from './components/core/cr-spinner/cr-spinner.module';
+import { DecodeUriPipeModule } from './pipes/decode-uri/decode-uri.module';
 
 @NgModule({
 	declarations: [
@@ -144,6 +145,7 @@ import { CrSpinnerModule } from './components/core/cr-spinner/cr-spinner.module'
 		CrPoweredByModule,
 		MatExpansionModule,
 		SimilarityPipeModule,
+		DecodeUriPipeModule,
 		CrReportScoreTooltipModule,
 		MatSlideToggleModule,
 		MatDividerModule,

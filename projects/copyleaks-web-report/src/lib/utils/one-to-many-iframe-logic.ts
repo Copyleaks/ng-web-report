@@ -21,8 +21,24 @@ function ready() {
 	let current: HTMLSpanElement | null;
 	let currentMulti: HTMLSpanElement[] = [];
 	let matches: HTMLSpanElement[];
+	let currentZoom: number = 1;
+
+	(window as any).addEventListener(
+		'wheel',
+		function (event) {
+			if (event && event.ctrlKey) {
+				event.preventDefault(); // Prevent the default zoom action
+				// Check if the scroll is up or down & update the zoom property accordingly
+				if (event.deltaY < 0) zoomIn();
+				else if (event.deltaY > 0) zoomOut();
+			}
+		},
+		{ passive: false }
+	);
+
 	let isPdf = document.querySelector('meta[content="pdf2htmlEX"]') !== null;
 	(window as any).addEventListener('message', onMessageFromParent);
+
 	init();
 
 	/**
@@ -65,6 +81,10 @@ function ready() {
 				break;
 			case 'match-jump':
 				onMatchJump(event);
+				break;
+			case 'zoom':
+				if (event.zoomIn) zoomIn();
+				else zoomOut();
 				break;
 			case 'multi-match-select':
 				// do nothing
@@ -171,9 +191,8 @@ function ready() {
 	}
 
 	/**
-	 * Execute the logic of a match selection.
-	 * - highlight `elem` and message the parent window about it
-	 * - if an element is allready highlighted turn it off and highlight `elem`
+	 * Execute the logic of a multi match selection.
+	 * - highlight and add the `elem` to the highlighted matches
 	 * @param elem the selected element
 	 */
 	function onMatchMultiSelect(elem: HTMLSpanElement, broadcast: boolean = false): void {
@@ -202,6 +221,39 @@ function ready() {
 	function onMatchHover(event: MouseEvent): void {
 		const elem = event?.target as HTMLSpanElement;
 		elem?.classList?.toggle('hover');
+	}
+
+	function zoomIn() {
+		currentZoom += 0.1;
+		updateIframeZoomView();
+	}
+
+	function zoomOut() {
+		currentZoom = Math.max(0.1, currentZoom - 0.1);
+		updateIframeZoomView();
+	}
+
+	function updateIframeZoomView() {
+		document.body.style.setProperty('zoom', String(currentZoom));
+		if (isPdf) {
+			// for pdf the scale doesn't work for the html or body elements, because the divs in the pdf are all with absolute positioning
+			let pageContainer = document.querySelector('#page-container') as HTMLElement;
+			let sidebar = document.querySelector('#sidebar') as HTMLElement;
+			if (pageContainer) {
+				pageContainer.style.setProperty('transform', `scale(${currentZoom})`);
+				pageContainer.style.setProperty('transform-origin', '0 0');
+				pageContainer.style.setProperty('height', `fit-content`);
+				pageContainer.style.setProperty('overflow', `hidden`);
+			} else {
+				document.body.style.setProperty('transform', `scale(${currentZoom})`);
+				document.body.style.setProperty('transform-origin', '0 0');
+			}
+
+			if (sidebar) sidebar.style.setProperty('display', 'none');
+		} else {
+			document.body.style.setProperty('transform', `scale(${currentZoom})`);
+			document.body.style.setProperty('transform-origin', '0 0');
+		}
 	}
 }
 

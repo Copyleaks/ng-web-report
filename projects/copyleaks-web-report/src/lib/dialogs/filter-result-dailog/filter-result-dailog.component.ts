@@ -100,7 +100,8 @@ export class FilterResultDailogComponent implements OnInit {
 				!(
 					this.totalSourceType.totalInternet === 0 &&
 					this.totalSourceType.totalInternalDatabase === 0 &&
-					this.totalSourceType.totalbatch === 0
+					this.totalSourceType.totalbatch === 0 &&
+					!(this.totalSourceType.repository && this.totalSourceType.repository?.length > 0)
 				)
 			) {
 				setTimeout(() => {

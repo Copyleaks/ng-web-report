@@ -66,6 +66,7 @@ export abstract class OneToManyReportLayoutBaseComponent extends ReportLayoutBas
 	hideAiTap: boolean = false;
 	showDisabledProducts: boolean = false;
 	reportViewMode: ECustomResultsReportView;
+	isMultiSelection: boolean = false;
 
 	EReportViewType = EReportViewType;
 	ECustomResultsReportView = ECustomResultsReportView;
@@ -225,15 +226,20 @@ export abstract class OneToManyReportLayoutBaseComponent extends ReportLayoutBas
 			if (data) this.reportStatistics = data;
 		});
 
-		const { originalText$, originalHtml$ } = this.highlightSvc;
-		combineLatest([originalText$, originalHtml$, this.reportViewSvc.reportViewMode$])
+		const { originalText$, originalHtml$, multiOriginalText$ } = this.highlightSvc;
+		combineLatest([originalText$, originalHtml$, multiOriginalText$, this.reportViewSvc.reportViewMode$])
 			.pipe(
 				untilDestroy(this),
-				filter(([, , content]) => !content.alertCode)
+				filter(([, , , content]) => !content.alertCode)
 			)
-			.subscribe(([text, html, content]) => {
-				this.focusedMatch = !content.isHtmlView ? text && text.match : html;
-				this.showResultsForSelectedMatch(this.focusedMatch);
+			.subscribe(([text, html, multiText, content]) => {
+				if (multiText && multiText.length > 0) {
+					const selectedMatches = multiText.map(c => c.match);
+					this.showResultsForMultiSelection(selectedMatches);
+				} else {
+					this.focusedMatch = !content.isHtmlView ? text && text.match : html;
+					this.showResultsForSelectedMatch(this.focusedMatch);
+				}
 			});
 
 		this.templatesSvc.reportTemplatesSubject$.pipe(untilDestroy(this)).subscribe(refs => {
@@ -256,6 +262,13 @@ export abstract class OneToManyReportLayoutBaseComponent extends ReportLayoutBas
 				const selectedMatch = message.index !== -1 ? this.reportMatches[message.index] : null;
 				this.showResultsForSelectedMatch(selectedMatch);
 				break;
+			case 'multi-match-select':
+				let selectedMatches: Match[] = [];
+				message.indexes.forEach(i => {
+					selectedMatches.push(this.reportMatches[i]);
+				});
+				this.showResultsForMultiSelection(selectedMatches);
+				break;
 			case 'upgrade-plan':
 				console.log(message);
 				break;
@@ -268,6 +281,7 @@ export abstract class OneToManyReportLayoutBaseComponent extends ReportLayoutBas
 	}
 
 	private showResultsForSelectedMatch(selectedMatch: Match | null) {
+		this.isMultiSelection = false;
 		let viewedResults: ResultPreview[] = [];
 		if (selectedMatch)
 			viewedResults = [
@@ -316,6 +330,69 @@ export abstract class OneToManyReportLayoutBaseComponent extends ReportLayoutBas
 			});
 
 		if (selectedMatch)
+			this.scanResultsActions = {
+				...this.scanResultsActions,
+				selectedResults: this.scanResultsView.length,
+			};
+		else
+			this.scanResultsActions = {
+				...this.scanResultsActions,
+				selectedResults: 0,
+			};
+	}
+
+	private showResultsForMultiSelection(selctions: Match[]) {
+		if (selctions?.length === 1) this.isMultiSelection = false;
+		else this.isMultiSelection = true;
+
+		let viewedResults: ResultPreview[] = [];
+		if (selctions && selctions.length > 0)
+			viewedResults = [
+				...(this.reportDataSvc.scanResultsPreviews?.results?.internet?.filter(
+					item => !!selctions.find(match => match?.ids?.includes(item.id))
+				) ?? []),
+				...(this.reportDataSvc.scanResultsPreviews?.results?.batch?.filter(
+					item => !!selctions.find(match => match?.ids?.includes(item.id))
+				) ?? []),
+				...(this.reportDataSvc.scanResultsPreviews?.results?.database?.filter(
+					item => !!selctions.find(match => match?.ids?.includes(item.id))
+				) ?? []),
+				...(this.reportDataSvc.scanResultsPreviews?.results?.repositories?.filter(
+					item => !!selctions.find(match => match?.ids?.includes(item.id))
+				) ?? []),
+			];
+		else
+			viewedResults = [
+				...(this.reportDataSvc.scanResultsPreviews?.results?.internet ?? []),
+				...(this.reportDataSvc.scanResultsPreviews?.results?.batch ?? []),
+				...(this.reportDataSvc.scanResultsPreviews?.results?.database ?? []),
+				...(this.reportDataSvc.scanResultsPreviews?.results?.repositories ?? []),
+			];
+
+		if (this.reportDataSvc.filterOptions && this.reportDataSvc.excludedResultsIds) {
+			const filteredResults = this.reportDataSvc.filterResults(
+				this.reportDataSvc.filterOptions,
+				this.reportDataSvc.excludedResultsIds
+			);
+			viewedResults = viewedResults.filter(r => filteredResults.find(fr => fr.id === r.id));
+		}
+
+		this.scanResultsView = viewedResults
+			.sort((a, b) => (b.isLocked ? 0 : b.matchedWords) - (a.isLocked ? 0 : a.matchedWords))
+			.map(result => {
+				const foundResultDetail = this.scanResultsDetails?.find(r => r.id === result.id);
+				return {
+					resultPreview: result,
+					resultDetails: foundResultDetail,
+					iStatisticsResult: foundResultDetail?.result?.statistics,
+					metadataSource: {
+						words: this.scanResultsPreviews?.scannedDocument.totalWords ?? 0,
+						excluded: this.scanResultsPreviews?.scannedDocument.totalExcluded ?? 0,
+					},
+				} as IResultItem;
+			});
+
+		if (selctions && selctions.length > 0)
 			this.scanResultsActions = {
 				...this.scanResultsActions,
 				selectedResults: this.scanResultsView.length,

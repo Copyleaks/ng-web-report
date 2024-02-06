@@ -148,6 +148,7 @@ export interface TextMatchHighlightEvent {
 	elem: CrTextMatchComponent | null;
 	origin: ReportOrigin;
 	broadcast: boolean;
+	multiSelect?: boolean;
 }
 
 export interface HtmlMatchClickEvent {

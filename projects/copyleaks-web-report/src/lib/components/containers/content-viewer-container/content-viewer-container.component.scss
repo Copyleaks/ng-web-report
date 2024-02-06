@@ -75,6 +75,8 @@
 		overflow-y: auto;
 		display: flex;
 		padding-top: 4px;
+		outline: none !important;
+		border: 0 !important;
 
 		iframe {
 			width: 100%;
@@ -101,12 +103,20 @@
 		justify-content: center;
 	}
 
+	.content-container:focus {
+		outline: none !important;
+		border: 0 !important;
+	}
 	.text-container {
 		width: 100%;
+		outline: none !important;
+		border: 0 !important;
 		white-space: pre-line;
 		word-break: break-word;
 		padding: 4px;
 		line-height: normal;
+		user-select: none;
+
 		i {
 			opacity: 0.7;
 		}

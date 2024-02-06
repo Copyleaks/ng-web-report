@@ -197,6 +197,11 @@ export class ContentViewerContainerComponent implements OnInit, AfterViewInit, O
 	 */
 	@Input() showLoadingView = true;
 
+	/**
+	 * @Input {boolean} Flag indicating whether the match selection is multiple or not.
+	 */
+	@Input() isMultiSelection = false;
+
 	@Input() authorAlert: IAuthorAlertCard | null;
 
 	/**
@@ -255,6 +260,7 @@ export class ContentViewerContainerComponent implements OnInit, AfterViewInit, O
 	customTabContent: TemplateRef<any> | null;
 
 	ONLY_TEXT_VIEW_IS_AVAILABLE = $localize`Only text view is available`;
+	MULTISELECT_IS_ON = $localize`Can't navigate between matches when multiple matches are selected`;
 
 	constructor(
 		private _renderer: Renderer2,
@@ -334,6 +340,7 @@ export class ContentViewerContainerComponent implements OnInit, AfterViewInit, O
 			sourcePageIndex: this.currentPage,
 		});
 		this._highlightService.clear();
+		this._highlightService.clearAllMatchs();
 		this._cdr.detectChanges();
 	}
 

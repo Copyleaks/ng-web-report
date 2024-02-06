@@ -1,6 +1,7 @@
 export const COPYLEAKS_REPORT_IFRAME_STYLES: string = `
 html {
 	padding: 4px;
+  user-select: none;
 }
 ::-webkit-scrollbar {
 	width: 8px;

@@ -228,7 +228,10 @@
 		!showCustomView &&
 		showResultsSection &&
 		(!displayedResults || displayedResults.length === 0) &&
-		!(customResultsTemplate && reportViewMode === ECustomResultsReportView.Full)
+		!(
+			customResultsTemplate &&
+			(reportViewMode === ECustomResultsReportView.Full || reportViewMode === ECustomResultsReportView.Partial)
+		)
 	">
 	>
 </cr-empty-result-state>
@@ -254,6 +257,23 @@
 	[ngStyle]="{
 		display:
 			customResultsTemplate && reportViewMode === ECustomResultsReportView.Full && showResultsSection ? 'flex' : 'none'
+	}">
+	<ng-container *ngTemplateOutlet="customResultsTemplate ?? null"></ng-container>
+</div>
+
+<div
+	class="custom-results-container"
+	#customEmptyResultView
+	[ngStyle]="{
+		display:
+			!showLoadingView &&
+			customResultsTemplate &&
+			isMobile &&
+			reportViewMode === ECustomResultsReportView.Partial &&
+			showResultsSection &&
+			(!displayedResults || displayedResults.length === 0)
+				? 'flex'
+				: 'none'
 	}">
 	<ng-container *ngTemplateOutlet="customResultsTemplate ?? null"></ng-container>
 </div>

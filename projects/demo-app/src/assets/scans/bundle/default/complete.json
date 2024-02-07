@@ -281,18 +281,21 @@
     "database": [
       {
         "id": "0d580af5ea",
+        "scanId":"mock123",
         "title": "Copyleaks internal database",
         "introduction": "No introduction available.",
         "matchedWords": 154
       },
       {
         "id": "25d1647cf6",
+        "scanId":"mock1234",
         "title": "Copyleaks internal database",
         "introduction": "No introduction available.",
         "matchedWords": 153
       },
       {
         "id": "47b99949c0",
+        "scanId":"mock1235",
         "title": "Copyleaks internal database",
         "introduction": "No introduction available.",
         "matchedWords": 153

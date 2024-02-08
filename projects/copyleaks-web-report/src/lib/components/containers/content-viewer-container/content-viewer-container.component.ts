@@ -45,6 +45,12 @@ export class ContentViewerContainerComponent implements OnInit, AfterViewInit, O
 	@HostBinding('style.flex-grow')
 	flexGrowProp: number;
 
+	@HostListener('click', ['$event'])
+	handleClick(event: MouseEvent): void {
+		if (event.shiftKey) this.isShiftClicked = true;
+		else this.isShiftClicked = false;
+	}
+
 	@ViewChild('contentIFrame', { static: false }) contentIFrame: ElementRef<HTMLIFrameElement>;
 
 	@ViewChild('contentText', { static: false }) contentText: ElementRef;
@@ -235,6 +241,8 @@ export class ContentViewerContainerComponent implements OnInit, AfterViewInit, O
 	 * @see IReportViewEvent
 	 */
 	@Output() viewChangeEvent = new EventEmitter<IReportViewEvent>();
+
+	isShiftClicked: boolean;
 	iframeLoaded: boolean;
 
 	EXCLUDE_MESSAGE = EXCLUDE_MESSAGE;

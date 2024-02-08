@@ -36,6 +36,11 @@ function ready() {
 		{ passive: false }
 	);
 
+	(window as any).addEventListener('click', function (event) {
+		if (event.shiftKey) document.body.style.userSelect = 'none';
+		else document.body.style.userSelect = 'auto';
+	});
+
 	let isPdf = document.querySelector('meta[content="pdf2htmlEX"]') !== null;
 	(window as any).addEventListener('message', onMessageFromParent);
 

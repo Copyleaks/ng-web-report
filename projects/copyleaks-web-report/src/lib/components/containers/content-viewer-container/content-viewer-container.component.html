@@ -143,6 +143,7 @@
 					display: !(!isHtmlView || !hasHtml || isAlertsView) || customTabContent || showLoadingView ? 'none' : '',
 					'font-size': contentZoom + 'em'
 				}"
+				[class.with-shift-selected]="isShiftClicked"
 				[dir]="contentDirection"
 				crOriginalTextHelper
 				[host]="this"
@@ -197,6 +198,7 @@
 				crSourceHtmlHelper></iframe>
 			<div
 				class="text-container"
+				[class.with-shift-selected]="isShiftClicked"
 				#contentText
 				[ngStyle]="{
 					display: !(!isHtmlView || !hasHtml || isAlertsView) || customTabContent || showLoadingView ? 'none' : '',
@@ -252,6 +254,7 @@
 				crSuspectHtmlHelper></iframe>
 			<div
 				class="text-container"
+				[class.with-shift-selected]="isShiftClicked"
 				#contentText
 				crSuspectTextHelper
 				[host]="this"

@@ -284,12 +284,12 @@ export class ContentViewerContainerComponent implements OnInit, AfterViewInit, O
 
 	ngAfterViewInit() {
 		if (this.contentHtml) this._renderer.setAttribute(this.contentIFrame.nativeElement, 'srcdoc', this.contentHtml);
-		this.iFrameWindow = this.contentIFrame?.nativeElement?.contentWindow;
 
 		this.contentIFrame.nativeElement.addEventListener(
 			'load',
 			() => {
 				if (this.contentHtml) {
+					this.iFrameWindow = this.contentIFrame?.nativeElement?.contentWindow;
 					this.iframeLoaded = true;
 					this.showLoadingView = false;
 				}
@@ -332,9 +332,7 @@ export class ContentViewerContainerComponent implements OnInit, AfterViewInit, O
 		if (source !== this.iFrameWindow) {
 			return;
 		}
-
-		const iframeEvent = data as PostMessageEvent;
-		this.iFrameMessageEvent.emit(iframeEvent);
+		this.iFrameMessageEvent.emit(data as PostMessageEvent);
 	}
 
 	onViewChange() {

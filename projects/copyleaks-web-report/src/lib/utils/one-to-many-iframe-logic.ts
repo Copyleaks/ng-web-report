@@ -36,6 +36,11 @@ function ready() {
 		{ passive: false }
 	);
 
+	(window as any).addEventListener('click', function (event) {
+		if (event.shiftKey) document.body.style.userSelect = 'none';
+		else document.body.style.userSelect = 'auto';
+	});
+
 	let isPdf = document.querySelector('meta[content="pdf2htmlEX"]') !== null;
 	(window as any).addEventListener('message', onMessageFromParent);
 
@@ -239,7 +244,6 @@ function ready() {
 	}
 
 	function updateIframeZoomView() {
-		document.body.style.setProperty('zoom', String(currentZoom));
 		if (isPdf) {
 			// for pdf the scale doesn't work for the html or body elements, because the divs in the pdf are all with absolute positioning
 			let pageContainer = document.querySelector('#page-container') as HTMLElement;

@@ -107,6 +107,10 @@
 		outline: none !important;
 		border: 0 !important;
 	}
+
+	.text-container.with-shift-selected {
+		user-select: none;
+	}
 	.text-container {
 		width: 100%;
 		outline: none !important;
@@ -115,8 +119,6 @@
 		word-break: break-word;
 		padding: 4px;
 		line-height: normal;
-		user-select: none;
-
 		i {
 			opacity: 0.7;
 		}

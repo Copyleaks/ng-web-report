@@ -19,7 +19,7 @@
 ## Installation
 
 To install, run:
-`npm install @copyleaks/web-report --save`
+`npm install @copyleaks/ng-web-report --save`
 
 ---
 
@@ -46,7 +46,7 @@ Ensure these dependencies are present in your project to guarantee optimal funct
 Import the module in your Angular app:
 
 ```typescript
-import { CopyleaksWebReportModule } from '@copyleaks/web-report';
+import { CopyleaksWebReportModule } from '@copyleaks/ng-web-report';
 
 @NgModule({
 	imports: [
@@ -112,7 +112,7 @@ A nested interface in `IClsReportEndpointConfigModel` that defines the structure
 **Example Usage:**
 
 ```typescript
-import { IClsReportEndpointConfigModel, IEndpointDetails } from '@copyleaks/web-report';
+import { IClsReportEndpointConfigModel, IEndpointDetails } from '@copyleaks/ng-web-report';
 
 // Example endpoint details
 const crawledVersionEndpoint: IEndpointDetails = {
@@ -154,7 +154,7 @@ const reportEndpointConfig: IClsReportEndpointConfigModel = {
 Implement the following event handling methods in your Angular component:
 
 ```typescript
-import { ICompleteResults, ReportHttpRequestErrorModel } from '@copyleaks/web-report';
+import { ICompleteResults, ReportHttpRequestErrorModel } from '@copyleaks/ng-web-report';
 
 ...
 
@@ -274,7 +274,7 @@ The key function in this service is `pushNewResults`, which takes an array of `R
 Example Usage:
 
 ```typescript
-import { ReportRealtimeResultsService, ResultPreview } from '@copyleaks/web-report';
+import { ReportRealtimeResultsService, ResultPreview } from '@copyleaks/ng-web-report';
 
 @Component({...})
 export class YourComponent {

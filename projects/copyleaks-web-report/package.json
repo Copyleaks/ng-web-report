@@ -1,6 +1,13 @@
 {
   "name": "@copyleaks/ng-web-report",
   "version": "1.0.0",
+	"repository": {
+		"type": "git",
+		"url": "https://github.com/Copyleaks/ng-web-report.git"
+	},
+	"license": "SEE LICENSE IN LICENSE.md",
+	"homepage": "https://api.copyleaks.com",
+  "private": false,
   "peerDependencies": {
     "@angular/common": "^13.0.0",
     "@angular/core": "^13.0.0",
@@ -12,5 +19,8 @@
   },
   "dependencies": {
     "tslib": "^2.3.0"
+  },
+	"publishConfig": {
+    "access": "public"
   }
 }

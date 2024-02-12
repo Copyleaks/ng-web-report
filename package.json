@@ -1,6 +1,7 @@
 {
   "name": "copyleaks-web-report",
-  "version": "1.0.0",
+  "version": "0.0.0",
+	"private": false,
   "scripts": {
     "ng": "ng",
     "start": "ng serve demo-app",
@@ -18,8 +19,7 @@
     "script:extract-version": "node scripts/extract-version.js",
     "package": "npm run lib:prettier && npm run lib:version && npm run script:extract-version && npm run lib:build && npm run lib:publish",
     "firebase-deploy": "npm run build && firebase deploy"
-  },
-  "private": true,
+  },  
   "dependencies": {
     "@angular/animations": "~13.3.0",
     "@angular/cdk": "^13.3.9",
@@ -28,11 +28,11 @@
     "@angular/core": "~13.3.0",
     "@angular/flex-layout": "^13.0.0-beta.36",
     "@angular/forms": "~13.3.0",
+    "@angular/localize": "^13.3.12",
     "@angular/material": "^13.3.9",
     "@angular/platform-browser": "~13.3.0",
     "@angular/platform-browser-dynamic": "~13.3.0",
     "@angular/router": "~13.3.0",
-    "@angular/localize": "^13.3.12",
     "@ncstate/sat-popover": "^4.0.0",
     "ngx-skeleton-loader": "^5.0.0",
     "rxjs": "~6.6.7",
@@ -45,18 +45,21 @@
     "@angular/cli": "~13.3.0",
     "@angular/compiler-cli": "~13.3.0",
     "@angular/localize": "^13.3.12",
-    "@types/jasmine": "~3.10.0",
-    "@types/node": "^12.11.1",
     "@types/d3-scale": "^4.0.2",
     "@types/d3-selection": "^3.0.2",
+    "@types/jasmine": "~3.10.0",
     "@types/jest": "^24.9.1",
+    "@types/node": "^12.11.1",
     "codelyzer": "^6.0.0",
     "jest": "^24.9.0",
     "ng-packagr": "^13.1.2",
-    "prettier": "^2.6.2",
+    "prettier": "^2.8.8",
     "protractor": "~7.0.0",
     "serialize-javascript": "^3.1.0",
     "ts-node": "~7.0.0",
     "typescript": "~4.4.4"
+  },
+	"publishConfig": {
+    "access": "public"
   }
 }

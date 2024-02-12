@@ -1,6 +1,6 @@
 {
   "name": "@copyleaks/ng-web-report",
-  "version": "0.0.34",
+  "version": "1.0.0",
   "peerDependencies": {
     "@angular/common": "^13.0.0",
     "@angular/core": "^13.0.0",

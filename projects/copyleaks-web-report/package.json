@@ -1,13 +1,33 @@
 {
   "name": "@copyleaks/ng-web-report",
-  "version": "1.0.0",
-	"repository": {
-		"type": "git",
-		"url": "https://github.com/Copyleaks/ng-web-report.git"
-	},
-	"license": "SEE LICENSE IN LICENSE.md",
-	"homepage": "https://api.copyleaks.com",
-  "private": false,
+  "version": "1.0.1",
+  "description": "Copyleaks Web Report is an advanced Angular module designed to integrate plagiarism and AI detection reporting seamlessly. This module, developed by Copyleaks, offers a user-friendly, engaging, and flexible interface for presenting plagiarism and AI content reports; it is designed to showcase the authenticity and uniqueness of submitted files or text.",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/Copyleaks/ng-web-report.git"
+  },
+  "bugs": {
+    "url": "https://github.com/Copyleaks/ng-web-report/issues"
+  },
+  "keywords": [
+    "angular",
+    "javascript",
+    "typescript",
+    "html",
+    "scss",
+    "angular-material",
+    "plagiarism",
+    "ai",
+    "detection",
+    "copyleaks",
+    "content",
+    "check",
+    "originality",
+    "report"
+  ],
+  "author": "Copyleaks Technologies Ltd",
+  "license": "MIT",
+  "homepage": "https://copyleaks.com",
   "peerDependencies": {
     "@angular/common": "^13.0.0",
     "@angular/core": "^13.0.0",
@@ -19,8 +39,5 @@
   },
   "dependencies": {
     "tslib": "^2.3.0"
-  },
-	"publishConfig": {
-    "access": "public"
   }
 }

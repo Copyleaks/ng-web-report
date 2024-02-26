@@ -1,0 +1,23 @@
+<mat-accordion #expansionPanel>
+	<mat-expansion-panel [expanded]="false">
+		<mat-expansion-panel-header [ngClass]="{ 'mobile-results-panel-header': isMobile }">
+			<mat-panel-title>
+				<div class="container-title">
+					<span class="title" i18n>{{ getCorrectionTypeTitle(stats?.type) }}</span>
+				</div>
+			</mat-panel-title>
+
+			<mat-panel-description>
+				<span class="description" i18n>{{ totalCorrections }} CORRECTIONS</span>
+
+				<mat-icon class="hide-alerts-icon" fontSet="material-icons-round">keyboard_arrow_down</mat-icon>
+			</mat-panel-description>
+		</mat-expansion-panel-header>
+
+		<div class="categories-container">
+			<mat-chip *ngFor="let stat of stats?.categories">
+				{{ getCorrectionCategoryTitle(stat?.type) }} ({{ stat?.totalIssues }})
+			</mat-chip>
+		</div>
+	</mat-expansion-panel>
+</mat-accordion>

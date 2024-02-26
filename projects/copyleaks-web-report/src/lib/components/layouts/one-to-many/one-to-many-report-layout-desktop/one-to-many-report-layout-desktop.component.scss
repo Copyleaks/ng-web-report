@@ -77,3 +77,28 @@ copyleaks-report-alerts-container {
 	flex-shrink: 0 !important;
 	height: auto !important;
 }
+
+cr-readability-score {
+	max-height: 50% !important;
+	flex-grow: 0 !important;
+}
+
+.cr-correction-container {
+	height: 95%;
+	flex-grow: 95;
+	overflow-y: auto;
+}
+
+.corrections-types-container {
+	display: flex;
+	flex-direction: column;
+	gap: 8px;
+}
+
+.categorized-summery {
+	color: $color-grayed-out;
+	font-size: 14px;
+	font-style: normal;
+	font-weight: 500;
+	line-height: normal;
+}

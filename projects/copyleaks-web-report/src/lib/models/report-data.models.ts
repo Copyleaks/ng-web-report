@@ -3,6 +3,8 @@ import {
 	EExcludeReason,
 	EResultPreviewType,
 	EScanStatus,
+	EWritingFeedbackCategories,
+	EWritingFeedbackTypes,
 } from '../enums/copyleaks-web-report.enums';
 
 //#region Crawled version related models
@@ -94,6 +96,7 @@ export interface ICompleteResults extends IBasicResponse {
 	results: IResultPreviews;
 	filters?: ICompleteResultsFilters;
 	notifications?: ICompleteResultNotification;
+	writingFeedback?: ICompleteResultWritingFeedback;
 }
 
 /**
@@ -188,6 +191,9 @@ export interface IScannedDocument {
 export interface IScanEnabledSettings {
 	aiDetection: boolean;
 	plagiarismDetection: boolean;
+	writingFeedback: boolean;
+	pdfReport: boolean;
+	cheatDetection: boolean;
 }
 
 /** Type representing a summary of the reuslts of a scanned document */
@@ -350,3 +356,97 @@ export interface IComparisonRange {
 	lengths: number[];
 }
 //#endregion
+
+//#region Grammar Feedback related models
+export interface IWritingFeedback {
+	score: IWritingFeedbackScore;
+	corrections: IWritingFeedbackScanScource;
+	scannedDocument: IScannedDocument;
+	scanType: string;
+}
+
+export interface IWritingFeedbackRange {
+	starts: number[];
+	lengths: number[];
+	types: EWritingFeedbackCategories[];
+	operationTexts: string[];
+}
+
+export interface IHtmlWritingFeedbackRange extends IWritingFeedbackRange {
+	groupIds: number[];
+}
+
+export interface IWritingFeedbackScore {
+	readability: IReadabilityScore;
+	statistics: IWritingFeedbackStatistics;
+	corrections: IWritingFeedbackCorrections;
+}
+
+export interface IReadabilityScore {
+	score: number;
+	readabilityLevel: number;
+	readabilityLevelText: string;
+	readabilityLevelDescription: string;
+}
+
+export interface IWritingFeedbackStatistics {
+	sentenceCount: number;
+	averageSentenceLength: number;
+	averageWordLength: number;
+	readingTimeSeconds: number;
+	speakingTimeSeconds: number;
+}
+
+export interface IWritingFeedbackCorrections {
+	grammarCorrectionsCount: number;
+	grammarCorrectionsScore: number;
+	grammarScoreWeight: number;
+	mechanicsCorrectionsCount: number;
+	mechanicsCorrectionsScore: number;
+	mechanicsScoreWeight: number;
+	sentenceStructureCorrectionsCount: number;
+	sentenceStructureCorrectionsScore: number;
+	sentenceStructureScoreWeight: number;
+	wordChoiceCorrectionsCount: number;
+	wordChoiceCorrectionsScore: number;
+	wordChoiceScoreWeight: number;
+	overallScore: number;
+}
+
+export interface IWritingFeedbackTypeStatistics {
+	type: EWritingFeedbackTypes;
+	categories: IWritingFeedbackCategoryStatistics[];
+}
+
+export interface IWritingFeedbackCategoryStatistics {
+	type: EWritingFeedbackCategories;
+	totalIssues: number;
+}
+
+export interface IWritingFeedbackScanScource {
+	text: IWritingFeedbackTextSection;
+	html: IWritingFeedbackHtmlSection;
+}
+
+export interface IWritingFeedbackTextSection {
+	chars: IWritingFeedbackRange;
+}
+
+export interface IWritingFeedbackHtmlSection {
+	chars: IHtmlWritingFeedbackRange;
+}
+
+export interface ICompleteResultWritingFeedback {
+	score: IWritingFeedbackCorrections;
+	textStatistics: IWritingFeedbackStatistics;
+	readability: IReadabilityScore;
+}
+
+export interface IWritingFeedbackCorrectionViewModel {
+	wrongText: string;
+	correctionText: string;
+	type: EWritingFeedbackCategories;
+	start: number;
+	end: number;
+}
+//#region

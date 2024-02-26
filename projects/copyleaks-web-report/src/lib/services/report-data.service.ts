@@ -17,6 +17,7 @@ import {
 	IResultDetailResponse,
 	IResultPreviewBase,
 	IScanSource,
+	IWritingFeedback,
 	ResultPreview,
 } from '../models/report-data.models';
 import { AIScanResult, ResultDetailItem } from '../models/report-matches.models';
@@ -87,6 +88,20 @@ export class ReportDataService {
 	 */
 	public get crawledVersion() {
 		return this._crawledVersion$.value;
+	}
+
+	private _writingFeedback$ = new BehaviorSubject<IWritingFeedback | undefined>(undefined);
+	/**
+	 * Subject for sharing the report writing feedback details.
+	 */
+	public get writingFeedback$() {
+		return this._writingFeedback$;
+	}
+	/**
+	 * Getter for the report writing feedback details.
+	 */
+	public get writingFeedback() {
+		return this._writingFeedback$.value;
 	}
 
 	private _filterOptions$ = new BehaviorSubject<ICopyleaksReportOptions | undefined>(undefined);
@@ -321,7 +336,6 @@ export class ReportDataService {
 		// first emit the progress as 100, so no real-time view is rendered
 		this._viewSvc.progress$.next(100);
 
-		// Create observables for each request with error handling
 		this._http
 			.get<IScanSource>(endpointsConfig.crawledVersion.url, {
 				headers: this._createHeaders(endpointsConfig.crawledVersion),
@@ -331,7 +345,7 @@ export class ReportDataService {
 				crawledVersionRes => {
 					this._crawledVersion$.next(crawledVersionRes);
 
-					if (!crawledVersionRes.html.value && this._viewSvc.reportViewMode.isHtmlView)
+					if (!crawledVersionRes.html?.value && this._viewSvc.reportViewMode.isHtmlView)
 						this._viewSvc.reportViewMode$.next({
 							...this._viewSvc.reportViewMode,
 							isHtmlView: false,
@@ -341,6 +355,21 @@ export class ReportDataService {
 					this._reportErrorsSvc.handleHttpError(error, 'initSync - crawledVersion');
 				}
 			);
+
+		if (endpointsConfig.writingFeedback && endpointsConfig.writingFeedback.url)
+			this._http
+				.get<IWritingFeedback>(endpointsConfig.writingFeedback?.url, {
+					headers: this._createHeaders(endpointsConfig.writingFeedback),
+				})
+				.pipe(untilDestroy(this))
+				.subscribe(
+					writingFeedbackVersionRes => {
+						this._writingFeedback$.next(writingFeedbackVersionRes);
+					},
+					(error: HttpErrorResponse) => {
+						this._reportErrorsSvc.handleHttpError(error, 'initSync - writingFeedback');
+					}
+				);
 
 		this._http
 			.get<ICompleteResults>(endpointsConfig.completeResults.url, {
@@ -377,6 +406,9 @@ export class ReportDataService {
 							enabled: {
 								aiDetection: false,
 								plagiarismDetection: false,
+								cheatDetection: false,
+								pdfReport: false,
+								writingFeedback: false,
 							},
 						},
 						status: EScanStatus.Error,
@@ -651,6 +683,15 @@ export class ReportDataService {
 		return false;
 	}
 
+	public isWritingFeedbackEnabled() {
+		const completeResult = this.scanResultsPreviews;
+		if (this._viewSvc.progress$.value != 100) return true;
+		if (!completeResult) return false;
+		if (completeResult?.scannedDocument?.enabled?.writingFeedback != null)
+			return completeResult?.scannedDocument?.enabled?.writingFeedback;
+		return false;
+	}
+
 	public getAiScore() {
 		if (this.isAiDetectionEnabled()) {
 			const completeResult = this.scanResultsPreviews;
@@ -663,6 +704,15 @@ export class ReportDataService {
 				return aiData.summary.ai;
 			}
 			return 0;
+		}
+		return null;
+	}
+
+	public getWritingFeedbackScore() {
+		if (this.isWritingFeedbackEnabled()) {
+			const completeResult = this.scanResultsPreviews;
+			if (completeResult === undefined || !completeResult.writingFeedback) return null;
+			return completeResult.writingFeedback.score.overallScore;
 		}
 		return null;
 	}
@@ -955,6 +1005,12 @@ export class ReportDataService {
 				total: this.completeResultsSnapshot.scannedDocument.totalWords,
 				aiScore: aiStatistics?.ai ?? 0,
 				humanScore: aiStatistics?.human ?? 0,
+				writingFeedbackScore: this.completeResultsSnapshot?.writingFeedback?.score?.overallScore ?? null,
+				totalWritingFeedbackIssues:
+					(this.completeResultsSnapshot?.writingFeedback?.score?.wordChoiceCorrectionsCount ?? 0) +
+					(this.completeResultsSnapshot?.writingFeedback?.score?.sentenceStructureCorrectionsCount ?? 0) +
+					(this.completeResultsSnapshot?.writingFeedback?.score?.mechanicsCorrectionsCount ?? 0) +
+					(this.completeResultsSnapshot?.writingFeedback?.score?.grammarCorrectionsCount ?? 0),
 			};
 		}
 		return stats;

@@ -28,7 +28,7 @@ export class OriginalHtmlHelperComponent implements OnInit, OnDestroy {
 			filter(
 				([jumpForward, viewModeData]) =>
 					(jumpForward === true || jumpForward === false) &&
-					viewModeData.viewMode === 'one-to-many' &&
+					(viewModeData.viewMode === 'one-to-many' || viewModeData.viewMode === 'writing-feedback') &&
 					viewModeData.isHtmlView
 			),
 			map(([jumpForward]) => jumpForward),

@@ -75,7 +75,10 @@ export class OriginalTextHelperDirective implements AfterContentInit, OnDestroy 
 				withLatestFrom(reportViewMode$),
 				filter(
 					([, viewData]) =>
-						(viewData.viewMode === 'one-to-many' || viewData.viewMode === 'only-ai') && !viewData.isHtmlView
+						(viewData.viewMode === 'one-to-many' ||
+							viewData.viewMode === 'only-ai' ||
+							viewData.viewMode === 'writing-feedback') &&
+						!viewData.isHtmlView
 				),
 				untilDestroy(this),
 				takeUntil(this.unsubscribe$)
@@ -89,7 +92,9 @@ export class OriginalTextHelperDirective implements AfterContentInit, OnDestroy 
 				filter(
 					([textMatchClickEvent, viewData]) =>
 						textMatchClickEvent &&
-						(viewData.viewMode === 'one-to-many' || viewData.viewMode === 'only-ai') &&
+						(viewData.viewMode === 'one-to-many' ||
+							viewData.viewMode === 'only-ai' ||
+							viewData.viewMode === 'writing-feedback') &&
 						!viewData.isHtmlView
 				),
 				untilDestroy(this),
@@ -105,7 +110,9 @@ export class OriginalTextHelperDirective implements AfterContentInit, OnDestroy 
 				filter(
 					viewData =>
 						this.lastSelectedOriginalTextMatch &&
-						(viewData.viewMode === 'one-to-many' || viewData.viewMode === 'only-ai') &&
+						(viewData.viewMode === 'one-to-many' ||
+							viewData.viewMode === 'only-ai' ||
+							viewData.viewMode === 'writing-feedback') &&
 						!viewData.isHtmlView
 				),
 				untilDestroy(this),

@@ -11,6 +11,7 @@
 
 	.tab-ai,
 	.tab-plagiarism,
+	.tab-grammar,
 	::ng-deep .custom-tab,
 	.loading-tab {
 		padding: 16px;
@@ -98,6 +99,12 @@
 	.ai-content {
 		background-color: $color-ai-detected-text;
 		border: 1px solid $color-ai-detected-text;
+		border-radius: 10px;
+	}
+
+	.grammar-check {
+		background-color: $color-grammar-dark;
+		border: 1px solid $color-grammar-dark;
 		border-radius: 10px;
 	}
 
@@ -212,6 +219,7 @@
 }
 
 .tab-ai.with-company-logo,
+.tab-grammar.with-company-logo,
 .tab-plagiarism.with-company-logo {
 	border-top-left-radius: 0px !important;
 }

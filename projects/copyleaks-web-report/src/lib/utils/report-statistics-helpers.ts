@@ -187,6 +187,12 @@ export const calculateStatistics = (
 		total: totalWords,
 		aiScore: aiStatistics?.ai ?? 0,
 		humanScore: aiStatistics?.human ?? 0,
+		writingFeedbackScore: (completeResult.writingFeedback?.score?.overallScore ?? 0) / 100,
+		totalWritingFeedbackIssues:
+			(completeResult.writingFeedback?.score?.wordChoiceCorrectionsCount ?? 0) +
+			(completeResult.writingFeedback?.score?.sentenceStructureCorrectionsCount ?? 0) +
+			(completeResult.writingFeedback?.score?.mechanicsCorrectionsCount ?? 0) +
+			(completeResult.writingFeedback?.score?.grammarCorrectionsCount ?? 0),
 	};
 };
 

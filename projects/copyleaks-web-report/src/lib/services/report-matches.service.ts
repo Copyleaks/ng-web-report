@@ -2,7 +2,7 @@ import { Injectable, OnDestroy } from '@angular/core';
 import { BehaviorSubject, combineLatest } from 'rxjs';
 import { filter } from 'rxjs/operators';
 import { ALERTS } from '../constants/report-alerts.constants';
-import { ICompleteResults, IScanSource } from '../models/report-data.models';
+import { ICompleteResults, IScanSource, IWritingFeedback } from '../models/report-data.models';
 import { Match, ResultDetailItem, SlicedMatch } from '../models/report-matches.models';
 import { ICopyleaksReportOptions } from '../models/report-options.models';
 import { IReportViewEvent } from '../models/report-view.models';
@@ -57,6 +57,7 @@ export class ReportMatchesService implements OnDestroy {
 		this._initOneToManyMatchesHandler();
 		this._initOneToOneMatchesHandler();
 		this._initAlertMatchesHandler();
+		this._initWritingFeedbackCorrectionsHandler();
 	}
 
 	private _initOneToManyMatchesHandler() {
@@ -187,6 +188,31 @@ export class ReportMatchesService implements OnDestroy {
 			});
 	}
 
+	private _initWritingFeedbackCorrectionsHandler() {
+		combineLatest([
+			this._reportDataSvc.crawledVersion$,
+			this._reportViewSvc.selectedAlert$,
+			this._reportDataSvc.writingFeedback$,
+			this._reportViewSvc.reportViewMode$,
+		])
+			.pipe(
+				untilDestroy(this),
+				filter(
+					([scanSource, selectedAlert, writingFeedback, viewMode]) =>
+						scanSource != null &&
+						scanSource != undefined &&
+						!selectedAlert &&
+						writingFeedback != null &&
+						writingFeedback != undefined &&
+						viewMode.viewMode === 'writing-feedback'
+				)
+			)
+			.subscribe(([scanSource, , writingFeedback, viewMode]) => {
+				if (!scanSource || !writingFeedback || !viewMode) return;
+				this._processHtmlWritingFeedbackCorrections(scanSource, writingFeedback);
+				this._processTextWritingFeedbackCorrections(scanSource, writingFeedback);
+			});
+	}
 	/**
 	 * Process matches on the `one-to-many` view mode
 	 * will calculate the matches when showing `text` or `html` for the first time
@@ -343,6 +369,28 @@ export class ReportMatchesService implements OnDestroy {
 			source
 		);
 		if (html) this._originalHtmlMatches.next(html);
+	}
+
+	/**
+	 * Process matches on the `suspected-character-replacement` view mode
+	 * will calculate the matches when showing `text` or `html` for the first time
+	 * @param settings the report settings
+	 * @param source  the scan source
+	 */
+	private _processHtmlWritingFeedbackCorrections(source: IScanSource, writingFeedback: IWritingFeedback) {
+		const html = helpers.processCorrectionsHtml(writingFeedback.corrections, 'html', source);
+		if (html) this._originalHtmlMatches.next(html);
+	}
+
+	/**
+	 * Process matches on the `suspected-character-replacement` view mode
+	 * will calculate the matches when showing `text` or `html` for the first time
+	 * @param settings the report settings
+	 * @param source  the scan source
+	 */
+	private _processTextWritingFeedbackCorrections(source: IScanSource, writingFeedback: IWritingFeedback) {
+		const text = helpers.processCorrectionsText(writingFeedback.corrections, 'text', source);
+		if (text) this._originalTextMatches.next(text);
 	}
 
 	/**

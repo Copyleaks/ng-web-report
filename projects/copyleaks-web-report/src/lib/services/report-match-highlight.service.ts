@@ -57,7 +57,7 @@ export class ReportMatchHighlightService implements OnDestroy {
 	public get oneToManyHtmlMatchClick$() {
 		return this._htmlMatchClick.asObservable().pipe(
 			withLatestFrom(this._reportViewService.reportViewMode$),
-			filter(([, data]) => data.viewMode === 'one-to-many'),
+			filter(([, data]) => data.viewMode === 'one-to-many' || data.viewMode === 'writing-feedback'),
 			map(([event]) => event)
 		);
 	}

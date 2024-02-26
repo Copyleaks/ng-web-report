@@ -81,6 +81,11 @@ export class CopyleaksWebReportComponent implements OnInit, OnDestroy {
 	@Input() companyLogo: string = null;
 
 	/**
+	 * @Input {boolean} - Flag indicating whether to show the Grammar tab and content in the report.
+	 */
+	@Input() hideWritingFeedback: boolean = false;
+
+	/**
 	 * @Output {ReportHttpRequestErrorModel} - Emits HTTP request data, when any request to update & fetch report data fails.
 	 */
 	@Output() onReportRequestError = new EventEmitter<ReportHttpRequestErrorModel>();
@@ -133,6 +138,8 @@ export class CopyleaksWebReportComponent implements OnInit, OnDestroy {
 			.subscribe(scanResultsPreviews => {
 				if (
 					!this._reportDataSvc.isPlagiarismEnabled() &&
+					!this._reportDataSvc.isWritingFeedbackEnabled() &&
+					this._reportDataSvc.isAiDetectionEnabled() &&
 					this.reportLayoutType != EReportLayoutType.OnlyAi &&
 					!this.showDisabledProducts &&
 					this._reportNgTemplatesSvc.reportTemplatesMode$.value != ECustomResultsReportView.Full &&
@@ -262,13 +269,13 @@ export class CopyleaksWebReportComponent implements OnInit, OnDestroy {
 		const alertCode = params['alertCode'];
 
 		this.reportLayoutType = viewMode ?? 'one-to-many';
-
-		// Add the suspect Id if available
-		if (suspectId) this.reportLayoutType = EReportLayoutType.OneToOne;
-		else this.reportLayoutType = EReportLayoutType.OneToMany;
+		if (viewMode === 'writing-feedback') this.reportLayoutType = EReportLayoutType.OneToMany;
+		if (suspectId)
+			// Add the suspect Id if available
+			this.reportLayoutType = EReportLayoutType.OneToOne;
 
 		this._reportViewSvc.reportViewMode$.next({
-			viewMode: this.reportLayoutType === EReportLayoutType.OneToOne ? 'one-to-one' : 'one-to-many',
+			viewMode: viewMode === 'writing-feedback' ? EReportLayoutType.WritingFeedback : this.reportLayoutType,
 			isHtmlView: (!contentMode || contentMode == 'html') && !alertCode,
 			sourcePageIndex: sourcePage ? Number(sourcePage) ?? 1 : 1,
 			suspectId: suspectId,
@@ -290,7 +297,8 @@ export class CopyleaksWebReportComponent implements OnInit, OnDestroy {
 				alertCode: data.alertCode,
 			};
 
-			if (data.viewMode == 'one-to-many') this.reportLayoutType = EReportLayoutType.OneToMany;
+			if (data.viewMode == 'one-to-many' || data.viewMode == 'writing-feedback')
+				this.reportLayoutType = EReportLayoutType.OneToMany;
 			else if (data.viewMode == 'one-to-one') this.reportLayoutType = EReportLayoutType.OneToOne;
 			else this.reportLayoutType = EReportLayoutType.OnlyAi;
 

@@ -16,17 +16,17 @@
 					? null
 					: {
 							identicalPct: {
-								percentage: identicalTotal / wordsTotal,
+								percentage: identicalTotal / (wordsTotal - excludedTotal),
 								totalWords: identicalTotal ?? 0,
 								disabled: reportDataSvc.filterOptions?.showIdentical === false
 							},
 							minorChangesPct: {
-								percentage: minorChangesTotal / wordsTotal,
+								percentage: minorChangesTotal / (wordsTotal - excludedTotal),
 								totalWords: minorChangesTotal ?? 0,
 								disabled: reportDataSvc.filterOptions?.showMinorChanges === false
 							},
 							paraphrasedPct: {
-								percentage: paraphrasedTotal / wordsTotal,
+								percentage: paraphrasedTotal / (wordsTotal - excludedTotal),
 								totalWords: paraphrasedTotal ?? 0,
 								disabled: reportDataSvc.filterOptions?.showRelated === false
 							},
@@ -100,6 +100,43 @@
 			</div>
 			<div class="grade-bar">
 				<div class="bar ai-content" [style.width.%]="aiScore * 100" [style.border]="!aiScore ? 'none' : ''"></div>
+			</div>
+		</div>
+
+		<div
+			*ngIf="!hideWritingFeedbackTap || showDisabledProducts"
+			@fadeIn
+			class="tab-grammar"
+			tabindex="0"
+			[style.flex-grow]="1"
+			[class.tab-selected]="selectedTap === EReportViewType.WritingFeedbackTabView && !hideWritingFeedbackTap"
+			[class.tab-disabled]="hideWritingFeedbackTap && showDisabledProducts"
+			[class.with-company-logo]="
+				selectedTap === EReportViewType.WritingFeedbackTabView &&
+				!hideWritingFeedbackTap &&
+				hideAiTap &&
+				hidePlagarismTap &&
+				companyLogo
+			"
+			[matTooltip]="hideWritingFeedbackTap && showDisabledProducts ? DISABLED : ''"
+			matTooltipClass="web-report-mat-tooltip"
+			(click)="selectTap(EReportViewType.WritingFeedbackTabView)">
+			<div class="bar-title-container">
+				<span class="bar-title" web-report-title-font i18n>Writing Assistance</span>
+				<span class="bar-score" web-report-title-font>
+					<ng-container *ngIf="showWritingFeedbackIssues; else pctRef" i18n>
+						{{ totalWritingFeedbackIssues }}
+					</ng-container>
+					<ng-template #pctRef>
+						{{ hideWritingFeedbackTap && showDisabledProducts ? 'N/A' : (writingFeedbackScore | percent : '1.0-1') }}
+					</ng-template>
+				</span>
+			</div>
+			<div class="grade-bar" [style.visibility]="showWritingFeedbackIssues ? 'hidden' : 'auto'">
+				<div
+					class="bar grammar-check"
+					[style.width.%]="writingFeedbackScore * 100"
+					[style.border]="!writingFeedbackScore ? 'none' : ''"></div>
 			</div>
 		</div>
 

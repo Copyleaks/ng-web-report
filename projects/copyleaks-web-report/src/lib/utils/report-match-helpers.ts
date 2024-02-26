@@ -12,7 +12,12 @@ import {
 	SlicedMatch,
 	SubjectResultKey,
 } from '../models/report-matches.models';
-import { Comparison, ICompleteResultNotificationAlert, IScanSource } from '../models/report-data.models';
+import {
+	Comparison,
+	ICompleteResultNotificationAlert,
+	IScanSource,
+	IWritingFeedbackScanScource,
+} from '../models/report-data.models';
 
 import { ICopyleaksReportOptions } from '../models/report-options.models';
 import { EExcludeReason, EMatchClassification } from '../enums/copyleaks-web-report.enums';
@@ -136,6 +141,9 @@ const mergeMatchesInNest = (matches: Match[]): Match[] => {
 						ids: participatingIds,
 						gid,
 						reason,
+						writingFeedbackType:
+							uniqueMatches.find(um => um.start === start && um.type === MatchType.writingFeedback)
+								?.writingFeedbackType ?? undefined,
 					});
 				}
 			}
@@ -155,6 +163,9 @@ const mergeMatchesInNest = (matches: Match[]): Match[] => {
 					ids: participatingIds,
 					gid,
 					reason,
+					writingFeedbackType:
+						uniqueMatches.find(um => um.start === start && um.type === MatchType.writingFeedback)
+							?.writingFeedbackType ?? undefined,
 				});
 			}
 			ids?.forEach(id => (idMap[id] = (idMap[id] || 0) - 1));
@@ -327,6 +338,56 @@ export const findRespectiveStart = (index: number, comparison: Comparison, fromS
 	const [from, to] = fromSource ? [source, suspected] : [suspected, source];
 	const found = from.chars.starts.findIndex((s, i) => s <= index && index <= s + source.chars.lengths[i]);
 	return [to.chars.starts[found], from.chars.starts[found]];
+};
+
+export const processCorrectionsText = (
+	corrections: IWritingFeedbackScanScource,
+	content: ContentKey,
+	source: IScanSource
+) => {
+	if (!corrections || !corrections[content]) return [];
+
+	const gids = content === 'html' ? corrections[content].chars.groupIds : [];
+	const { starts, lengths, types } = corrections[content].chars;
+	const extractedCorrections = starts.map(
+		(start, i): Match => ({
+			start,
+			end: start + lengths[i],
+			type: MatchType.writingFeedback,
+			gid: gids[i],
+			writingFeedbackType: types[i],
+		})
+	);
+
+	const excluded = sourceTextExcluded(source);
+	const grouped = mergeMatches([...extractedCorrections, ...excluded]);
+	const filled = fillMissingGaps(grouped, source.text.value.length);
+	return paginateMatches(source.text.value, source.text.pages.startPosition, filled);
+};
+
+export const processCorrectionsHtml = (
+	corrections: IWritingFeedbackScanScource,
+	content: ContentKey,
+	source: IScanSource
+) => {
+	if (!corrections || !corrections[content]) return [];
+	const gids = content === 'html' ? corrections[content].chars.groupIds : [];
+	const { starts, lengths, types } = corrections[content].chars;
+	const extractedCorrections = starts.map(
+		(start, i): Match => ({
+			start,
+			end: start + lengths[i],
+			type: MatchType.writingFeedback,
+			gid: gids[i],
+			writingFeedbackType: types[i],
+			ids: [],
+		})
+	);
+	const excluded = sourceHtmlExcluded(source);
+	const grouped = mergeMatches([...extractedCorrections, ...excluded]);
+	const filled = fillMissingGaps(grouped, source.html?.value?.length);
+
+	return filled;
 };
 
 /**

@@ -1,0 +1,12 @@
+<cr-corrections-actions [totalWritingFeedbackIssues]="totalWritingFeedbackIssues"></cr-corrections-actions>
+
+<div class="corrections-types-container">
+	<span class="categorized-summery" i18n>Categorized Summery</span>
+	<cr-correction-type-panel
+		*ngFor="let correctionTypeStats of writingFeedbackStats"
+		[stats]="correctionTypeStats"></cr-correction-type-panel>
+</div>
+
+<div class="cr-correction-container">
+	<cr-correction *ngFor="let correction of displayedScanCorrectionsView" [correction]="correction"></cr-correction>
+</div>

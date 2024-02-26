@@ -61,14 +61,24 @@ export class ReportTabsContainerComponent implements OnInit, OnDestroy, OnChange
 	@Input() excludedTotal: number = 0;
 
 	/**
-	 * @Input {boolean} Flag indicating whether to show the report Plagiarism tab or not.
+	 * @Input {number} The report plagiarism score.
 	 */
 	@Input() plagarismScore: number = 0;
 
 	/**
-	 * @Input {boolean} Flag indicating whether to show the report AI tab or not.
+	 * @Input {number} The report AI score.
 	 */
 	@Input() aiScore: number = 0;
+
+	/**
+	 * @Input {number} The report Writing Feedback score.
+	 */
+	@Input() writingFeedbackScore: number = 0;
+
+	/**
+	 * @Input {number} The report Writing Feedback total issues.
+	 */
+	@Input() totalWritingFeedbackIssues: number = 0;
 
 	/**
 	 * @Input {boolean} Flag indicating whether to show the report Plagiarism tab or not.
@@ -81,6 +91,11 @@ export class ReportTabsContainerComponent implements OnInit, OnDestroy, OnChange
 	@Input() hideAiTap = false;
 
 	/**
+	 * @Input {boolean} Flag indicating whether to show the report Writing Feedback tab or not.
+	 */
+	@Input() hideWritingFeedbackTap = false;
+
+	/**
 	 * @Input {boolean} Flag indicating whether to show the loading view or not.
 	 */
 	@Input() showLoadingView = false;
@@ -91,11 +106,19 @@ export class ReportTabsContainerComponent implements OnInit, OnDestroy, OnChange
 	@Input() showDisabledProducts: boolean = false;
 
 	/**
-	 * @Input {boolean} - Flag indicating whether to still show the disabled products tabs.
+	 * @Input {number} - The current scan progress percentage.
 	 */
 	@Input() loadingProgressPct: number = 0;
 
+	/**
+	 * @Input {string} - Link for the company logo image to display in the tabs panel.
+	 */
 	@Input() companyLogo: string = null;
+
+	/**
+	 * @Input {string} - Flag indicating whether to show the Writing Feedback tab with total number of issues or not (with score percentage).
+	 */
+	@Input() showWritingFeedbackIssues: boolean = true;
 
 	EReportViewType = EReportViewType;
 	EReportScoreTooltipPosition = EReportScoreTooltipPosition;
@@ -134,6 +157,7 @@ export class ReportTabsContainerComponent implements OnInit, OnDestroy, OnChange
 			'showDisabledProducts' in changes ||
 			'hidePlagarismTap' in changes ||
 			'hideAiTap' in changes ||
+			'hideWritingFeedbackTap' in changes ||
 			('showLoadingView' in changes && changes['showLoadingView'].currentValue === false)
 		) {
 			if (!this.showLoadingView && this.showDisabledProducts && this.hideAiTap) {
@@ -141,7 +165,7 @@ export class ReportTabsContainerComponent implements OnInit, OnDestroy, OnChange
 				this._reportViewSvc.selectedAlert$.next(null);
 				this._reportViewSvc.reportViewMode$.next({ ...this._reportViewSvc.reportViewMode, alertCode: undefined });
 			}
-			if (!this.showLoadingView && this.hidePlagarismTap && !this.hideAiTap) {
+			if (!this.showLoadingView && this.hidePlagarismTap && this.hideWritingFeedbackTap && !this.hideAiTap) {
 				this.selectedTap = EReportViewType.AIView;
 				this._reportViewSvc.selectedAlert$.next(ALERTS.SUSPECTED_AI_TEXT_DETECTED);
 				this._reportViewSvc.reportViewMode$.next({
@@ -176,6 +200,7 @@ export class ReportTabsContainerComponent implements OnInit, OnDestroy, OnChange
 					...this._reportViewSvc.reportViewMode,
 					viewMode:
 						!this.reportDataSvc.isPlagiarismEnabled() &&
+						!this.reportDataSvc.isWritingFeedbackEnabled() &&
 						!this.showDisabledProducts &&
 						this._reportNgTemplatesSvc.reportTemplatesMode$.value != ECustomResultsReportView.Full &&
 						this._reportNgTemplatesSvc.reportTemplatesMode$.value != ECustomResultsReportView.Partial
@@ -194,6 +219,17 @@ export class ReportTabsContainerComponent implements OnInit, OnDestroy, OnChange
 				this._reportViewSvc.reportViewMode$.next({
 					...this._reportViewSvc.reportViewMode,
 					viewMode: 'one-to-many',
+					alertCode: undefined,
+					sourcePageIndex: 1,
+					suspectPageIndex: 1,
+				});
+				this._reportViewSvc.selectedAlert$.next(null);
+				this._reportViewSvc.selectedCustomTabContent$.next(null);
+				break;
+			case EReportViewType.WritingFeedbackTabView:
+				this._reportViewSvc.reportViewMode$.next({
+					...this._reportViewSvc.reportViewMode,
+					viewMode: 'writing-feedback',
 					alertCode: undefined,
 					sourcePageIndex: 1,
 					suspectPageIndex: 1,

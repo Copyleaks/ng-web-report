@@ -41,7 +41,9 @@ export class ReportStatisticsService implements OnDestroy {
 				untilDestroy(this),
 				filter(
 					([, , viewModeData, excludedResultsIds, filterOptions]) =>
-						(viewModeData?.viewMode === 'one-to-many' || viewModeData?.viewMode === 'only-ai') &&
+						(viewModeData?.viewMode === 'one-to-many' ||
+							viewModeData?.viewMode === 'only-ai' ||
+							viewModeData?.viewMode === 'writing-feedback') &&
 						excludedResultsIds != undefined &&
 						filterOptions != undefined
 				)
@@ -121,6 +123,14 @@ export class ReportStatisticsService implements OnDestroy {
 				total: this._reportDataSvc.completeResultsSnapshot?.scannedDocument?.totalWords,
 				aiScore: aiStatistics?.ai ?? 0,
 				humanScore: aiStatistics?.human ?? 0,
+				writingFeedbackScore:
+					(this._reportDataSvc.completeResultsSnapshot?.writingFeedback?.score?.overallScore ?? 0) / 100,
+				totalWritingFeedbackIssues:
+					(this._reportDataSvc.completeResultsSnapshot?.writingFeedback?.score?.wordChoiceCorrectionsCount ?? 0) +
+					(this._reportDataSvc.completeResultsSnapshot?.writingFeedback?.score?.sentenceStructureCorrectionsCount ??
+						0) +
+					(this._reportDataSvc.completeResultsSnapshot?.writingFeedback?.score?.mechanicsCorrectionsCount ?? 0) +
+					(this._reportDataSvc.completeResultsSnapshot?.writingFeedback?.score?.grammarCorrectionsCount ?? 0),
 			};
 		}
 

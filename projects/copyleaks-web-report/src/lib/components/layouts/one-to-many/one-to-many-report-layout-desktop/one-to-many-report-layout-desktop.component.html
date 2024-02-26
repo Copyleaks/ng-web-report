@@ -4,9 +4,12 @@
 	<copyleaks-report-tabs-container
 		[hideAiTap]="hideAiTap"
 		[hidePlagarismTap]="hidePlagarismTap"
+		[hideWritingFeedbackTap]="hideWritingFeedbackTap"
 		[selectedTap]="selectedTap"
 		[plagarismScore]="plagiarismScore"
 		[aiScore]="reportStatistics?.aiScore ?? 0"
+		[writingFeedbackScore]="reportStatistics?.writingFeedbackScore"
+		[totalWritingFeedbackIssues]="reportStatistics?.totalWritingFeedbackIssues"
 		[wordsTotal]="reportStatistics?.total ?? 0"
 		[identicalTotal]="reportStatistics?.identical ?? 0"
 		[minorChangesTotal]="reportStatistics?.minorChanges ?? 0"
@@ -31,7 +34,7 @@
 		[currentPage]="currentPageSource"
 		[reportResponsive]="EResponsiveLayoutType.Desktop"
 		[isMultiSelection]="isMultiSelection"
-		viewMode="one-to-many"
+		[viewMode]="viewMode"
 		reportOrigin="original"
 		(iFrameMessageEvent)="onIFrameMessage($event)"
 		(viewChangeEvent)="onReportViewChange($event)"></copyleaks-content-viewer-container>
@@ -50,30 +53,53 @@
 				alerts &&
 				alerts.length > 0 &&
 				!isLoadingScanResults &&
-				reportViewMode !== ECustomResultsReportView.Full &&
-				reportViewMode !== ECustomResultsReportView.Partial
+				reportTemplateMode !== ECustomResultsReportView.Full &&
+				reportTemplateMode !== ECustomResultsReportView.Partial &&
+				viewMode === 'one-to-many'
 			"
-			[class.container-with-custom-results]="reportViewMode != undefined"
+			[class.container-with-custom-results]="reportTemplateMode != undefined"
 			[alerts]="alerts"
 			[flexGrow]="25"></copyleaks-report-alerts-container>
 
 		<!-- Report results container -->
 		<copyleaks-report-results-container
 			*ngIf="
-				reportViewMode !== ECustomResultsReportView.Full &&
+				reportTemplateMode !== ECustomResultsReportView.Full &&
 				!(
-					reportViewMode === ECustomResultsReportView.Partial &&
+					reportTemplateMode === ECustomResultsReportView.Partial &&
 					(!scanResultsView || scanResultsView?.length === 0) &&
 					!isLoadingScanResults
-				)
+				) &&
+				viewMode === 'one-to-many'
 			"
-			[class.container-with-custom-results]="reportViewMode != undefined"
+			[class.container-with-custom-results]="reportTemplateMode != undefined"
 			[flexGrow]="65"
 			[allResults]="scanResultsView"
 			[resultsActions]="scanResultsActions"
 			[showLoadingView]="isLoadingScanResults"
 			[filterOptions]="filterOptions"
 			[newResults]="newScanResultsView"></copyleaks-report-results-container>
+
+		<ng-container *ngIf="viewMode === 'writing-feedback'">
+			<cr-readability-score
+				[statisticsInfo]="writingFeedback?.score?.statistics"
+				[readabilityInfo]="writingFeedback?.score?.readability"></cr-readability-score>
+
+			<cr-corrections-actions
+				[totalWritingFeedbackIssues]="reportStatistics?.totalWritingFeedbackIssues"></cr-corrections-actions>
+
+			<div class="corrections-types-container">
+				<span class="categorized-summery" i18n>Categorized Summery</span>
+				<cr-correction-type-panel
+					*ngFor="let correctionTypeStats of writingFeedbackStats"
+					[stats]="correctionTypeStats"></cr-correction-type-panel>
+			</div>
+			<div class="cr-correction-container">
+				<cr-correction
+					*ngFor="let correction of displayedScanCorrectionsView"
+					[correction]="correction"></cr-correction>
+			</div>
+		</ng-container>
 
 		<div class="custom-results-container" #customResultView [style.flex-grow]="'1'">
 			<ng-container *ngTemplateOutlet="customResultsTemplate ?? null"></ng-container>

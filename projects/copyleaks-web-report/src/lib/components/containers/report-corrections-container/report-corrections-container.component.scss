@@ -1,0 +1,23 @@
+@import '../../../styles/containers.styles.scss';
+@import '../../../styles/styles.scss';
+@import '../../../styles/website-colors.styles.scss';
+@import '../../../styles/cls-mat-components-overrides/cls-progress-bar-overrides.scss';
+
+:host {
+	display: flex;
+	flex-direction: column;
+	gap: 10px;
+	.corrections-types-container {
+		display: flex;
+		flex-direction: column;
+		gap: 8px;
+	}
+
+	.categorized-summery {
+		color: $color-grayed-out;
+		font-size: 14px;
+		font-style: normal;
+		font-weight: 500;
+		line-height: normal;
+	}
+}

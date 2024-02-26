@@ -1,0 +1,30 @@
+<div class="correction-container">
+	<div class="correction-info-container">
+		<div class="correction-description-container">
+			<span class="wrong-text">{{ correction.wrongText }}</span>
+			<mat-icon class="arrow-icon" fontSet="material-icons-round">east</mat-icon>
+			<span class="correction-text">{{ correction.correctionText }}</span>
+		</div>
+		<mat-chip *ngIf="!hideDescription" class="correction-type">{{ correctionType }}</mat-chip>
+	</div>
+	<mat-icon *ngIf="isExcludeView; else excludedIconRef" class="options-icon" fontSet="material-icons-round">
+		{{ isExcluded ? 'visibility' : 'visibility_off' }}
+	</mat-icon>
+	<ng-template #excludedIconRef>
+		<mat-icon class="options-icon" fontSet="material-icons-round" [matMenuTriggerFor]="menu">more_vert</mat-icon>
+	</ng-template>
+</div>
+<span *ngIf="!hideDescription" class="correction-type-description" i18n>
+	{{ correctionDescription }}
+</span>
+
+<mat-menu class="result-item-menu-list" #menu="matMenu" yPosition="below">
+	<button mat-menu-item [disableRipple]="true">
+		<mat-icon class="mat-menu-item-icon" fontSet="material-icons-round">help_outline</mat-icon>
+		<span class="mat-menu-item-text" i18n>Learn about correction</span>
+	</button>
+	<button mat-menu-item [disableRipple]="true">
+		<mat-icon class="mat-menu-item-icon" fontSet="material-icons-round">visibility_off</mat-icon>
+		<span class="mat-menu-item-text" i18n>Ignore Correction</span>
+	</button>
+</mat-menu>

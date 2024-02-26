@@ -1,0 +1,28 @@
+@import '../../../styles/styles.scss';
+@import '../../../styles/website-colors.styles.scss';
+
+:host {
+	display: flex;
+	flex-direction: row;
+	justify-content: space-between;
+	gap: 10px;
+	border-bottom: 1px solid $color-container-background;
+	padding-bottom: 4px;
+	padding-right: 8px;
+	.corrections-total {
+		color: $color-black;
+		font-size: 14px;
+		font-style: normal;
+		font-weight: 700;
+		line-height: normal;
+	}
+
+	.filter-icon {
+		color: $color-dark-blue;
+		cursor: pointer;
+		&.on,
+		&:hover {
+			color: $color-primary;
+		}
+	}
+}

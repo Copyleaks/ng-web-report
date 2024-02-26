@@ -12,8 +12,8 @@
 				alerts &&
 				alerts.length > 0 &&
 				!isLoadingScanResults &&
-				reportViewMode !== ECustomResultsReportView.Full &&
-				reportViewMode !== ECustomResultsReportView.Partial
+				reportTemplateMode !== ECustomResultsReportView.Full &&
+				reportTemplateMode !== ECustomResultsReportView.Partial
 			"
 			[alerts]="alerts"
 			[isMobile]="true"
@@ -25,6 +25,8 @@
 			<copyleaks-report-tabs-container
 				[hideAiTap]="hideAiTap"
 				[hidePlagarismTap]="hidePlagarismTap"
+				[hideWritingFeedbackTap]="hideWritingFeedbackTap"
+				[writingFeedbackScore]="reportStatistics?.writingFeedbackScore"
 				[selectedTap]="selectedTap"
 				[plagarismScore]="plagiarismScore"
 				[aiScore]="reportStatistics?.aiScore ?? 0"
@@ -35,8 +37,6 @@
 				[excludedTotal]="reportStatistics?.omittedWords ?? 0"
 				[showLoadingView]="isLoadingScanContent || isLoadingScanResults"
 				[showDisabledProducts]="showDisabledProducts"
-				[hideAiTap]="hideAiTap"
-				[hidePlagarismTap]="hidePlagarismTap"
 				[loadingProgressPct]="loadingProgressPct"></copyleaks-report-tabs-container>
 
 			<!-- Report scan content viewer -->
@@ -52,7 +52,7 @@
 				[reportResponsive]="EResponsiveLayoutType.Mobile"
 				[hidePoweredBy]="true"
 				[isMultiSelection]="isMultiSelection"
-				viewMode="one-to-many"
+				[viewMode]="viewMode"
 				reportOrigin="original"
 				(iFrameMessageEvent)="onIFrameMessage($event)"
 				(viewChangeEvent)="onReportViewChange($event)"></copyleaks-content-viewer-container>
@@ -65,8 +65,8 @@
 	<copyleaks-report-results-container
 		*ngIf="
 			selectedTap !== EReportViewType.AIView ||
-			reportViewMode === ECustomResultsReportView.Partial ||
-			reportViewMode === ECustomResultsReportView.Full
+			reportTemplateMode === ECustomResultsReportView.Partial ||
+			reportTemplateMode === ECustomResultsReportView.Full
 		"
 		class="results-container"
 		[flexGrow]="15"
@@ -76,7 +76,7 @@
 		[isMobile]="true"
 		[showLoadingView]="isLoadingScanResults"
 		[filterOptions]="filterOptions"
-		[reportViewMode]="reportViewMode"
+		[reportViewMode]="reportTemplateMode"
 		[customResultsTemplate]="customResultsTemplate"></copyleaks-report-results-container>
 
 	<!-- Powered by Copyleaks image section -->

@@ -53,6 +53,17 @@
 				height: calc(100% - 48px) !important;
 			}
 		}
+
+		cr-readability-score {
+			max-height: 50% !important;
+			flex-grow: 0 !important;
+		}
+
+		copyleaks-report-corrections-container {
+			height: 95%;
+			flex-grow: 95;
+			overflow-y: auto;
+		}
 	}
 }
 
@@ -76,11 +87,6 @@ copyleaks-report-alerts-container {
 	flex-grow: 0 !important;
 	flex-shrink: 0 !important;
 	height: auto !important;
-}
-
-cr-readability-score {
-	max-height: 50% !important;
-	flex-grow: 0 !important;
 }
 
 .cr-correction-container {

@@ -2,7 +2,12 @@ import { Injectable, OnDestroy } from '@angular/core';
 import { BehaviorSubject, combineLatest } from 'rxjs';
 import { filter } from 'rxjs/operators';
 import { ALERTS } from '../constants/report-alerts.constants';
-import { ICompleteResults, IScanSource, IWritingFeedback } from '../models/report-data.models';
+import {
+	ICompleteResults,
+	IScanSource,
+	IWritingFeedback,
+	IWritingFeedbackCorrectionViewModel,
+} from '../models/report-data.models';
 import { Match, ResultDetailItem, SlicedMatch } from '../models/report-matches.models';
 import { ICopyleaksReportOptions } from '../models/report-options.models';
 import { IReportViewEvent } from '../models/report-view.models';
@@ -194,6 +199,8 @@ export class ReportMatchesService implements OnDestroy {
 			this._reportViewSvc.selectedAlert$,
 			this._reportDataSvc.writingFeedback$,
 			this._reportViewSvc.reportViewMode$,
+			this._reportDataSvc.filterOptions$,
+			this._reportDataSvc.excludedCorrections$,
 		])
 			.pipe(
 				untilDestroy(this),
@@ -207,10 +214,10 @@ export class ReportMatchesService implements OnDestroy {
 						viewMode.viewMode === 'writing-feedback'
 				)
 			)
-			.subscribe(([scanSource, , writingFeedback, viewMode]) => {
+			.subscribe(([scanSource, , writingFeedback, viewMode, filterOptions, excludedCorrections]) => {
 				if (!scanSource || !writingFeedback || !viewMode) return;
-				this._processHtmlWritingFeedbackCorrections(scanSource, writingFeedback);
-				this._processTextWritingFeedbackCorrections(scanSource, writingFeedback);
+				this._processHtmlWritingFeedbackCorrections(scanSource, writingFeedback, filterOptions, excludedCorrections);
+				this._processTextWritingFeedbackCorrections(scanSource, writingFeedback, filterOptions, excludedCorrections);
 			});
 	}
 	/**
@@ -377,8 +384,19 @@ export class ReportMatchesService implements OnDestroy {
 	 * @param settings the report settings
 	 * @param source  the scan source
 	 */
-	private _processHtmlWritingFeedbackCorrections(source: IScanSource, writingFeedback: IWritingFeedback) {
-		const html = helpers.processCorrectionsHtml(writingFeedback.corrections, 'html', source);
+	private _processHtmlWritingFeedbackCorrections(
+		source: IScanSource,
+		writingFeedback: IWritingFeedback,
+		filterOptions: ICopyleaksReportOptions,
+		excludedCorrections: IWritingFeedbackCorrectionViewModel[]
+	) {
+		const filteredCorrections = this._reportDataSvc.filterCorrections(
+			JSON.parse(JSON.stringify(writingFeedback.corrections)),
+			filterOptions,
+			excludedCorrections
+		);
+
+		const html = helpers.processCorrectionsHtml(filteredCorrections, 'html', source);
 		if (html) this._originalHtmlMatches.next(html);
 	}
 
@@ -388,8 +406,19 @@ export class ReportMatchesService implements OnDestroy {
 	 * @param settings the report settings
 	 * @param source  the scan source
 	 */
-	private _processTextWritingFeedbackCorrections(source: IScanSource, writingFeedback: IWritingFeedback) {
-		const text = helpers.processCorrectionsText(writingFeedback.corrections, 'text', source);
+	private _processTextWritingFeedbackCorrections(
+		source: IScanSource,
+		writingFeedback: IWritingFeedback,
+		filterOptions: ICopyleaksReportOptions,
+		excludedCorrections: IWritingFeedbackCorrectionViewModel[]
+	) {
+		const filteredCorrections = this._reportDataSvc.filterCorrections(
+			JSON.parse(JSON.stringify(writingFeedback.corrections)),
+			filterOptions,
+			excludedCorrections
+		);
+
+		const text = helpers.processCorrectionsText(filteredCorrections, 'text', source);
 		if (text) this._originalTextMatches.next(text);
 	}
 

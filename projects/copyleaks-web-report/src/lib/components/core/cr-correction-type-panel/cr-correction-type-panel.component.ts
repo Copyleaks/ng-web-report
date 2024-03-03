@@ -1,4 +1,4 @@
-import { Component, Input, OnChanges, OnInit, SimpleChanges } from '@angular/core';
+import { Component, EventEmitter, HostBinding, Input, OnChanges, OnInit, Output, SimpleChanges } from '@angular/core';
 import { IWritingFeedbackTypeStatistics } from '../../../models/report-data.models';
 import { getCorrectionCategoryTitle, getCorrectionTypeTitle } from '../../../utils/enums-helpers';
 import { EWritingFeedbackCategories, EWritingFeedbackTypes } from '../../../enums/copyleaks-web-report.enums';
@@ -9,6 +9,9 @@ import { EWritingFeedbackCategories, EWritingFeedbackTypes } from '../../../enum
 	styleUrls: ['./cr-correction-type-panel.component.scss'],
 })
 export class CrCorrectionTypePanelComponent implements OnInit, OnChanges {
+	@HostBinding('style.display')
+	displayProp: string;
+
 	/**
 	 * @Input {boolean} Flag indicating whether the view is a mobile or not.
 	 */
@@ -16,15 +19,9 @@ export class CrCorrectionTypePanelComponent implements OnInit, OnChanges {
 
 	@Input() stats: IWritingFeedbackTypeStatistics;
 
+	@Output() selectCategory = new EventEmitter<EWritingFeedbackCategories>();
+
 	totalCorrections: number = 0;
-
-	getCorrectionCategoryTitle(type: EWritingFeedbackCategories): string {
-		return getCorrectionCategoryTitle(type);
-	}
-
-	getCorrectionTypeTitle(type: EWritingFeedbackTypes): string {
-		return getCorrectionTypeTitle(type);
-	}
 
 	constructor() {}
 
@@ -34,8 +31,22 @@ export class CrCorrectionTypePanelComponent implements OnInit, OnChanges {
 			this.stats.categories.forEach(c => {
 				this.totalCorrections += c?.totalIssues ?? 0;
 			});
+			if (this.totalCorrections === 0) this.displayProp = 'none';
+			else this.displayProp = 'flex';
 		}
 	}
 
 	ngOnInit(): void {}
+
+	getCorrectionCategoryTitle(type: EWritingFeedbackCategories): string {
+		return getCorrectionCategoryTitle(type);
+	}
+
+	getCorrectionTypeTitle(type: EWritingFeedbackTypes): string {
+		return getCorrectionTypeTitle(type);
+	}
+
+	onSelectCategory(type: EWritingFeedbackCategories): void {
+		this.selectCategory.emit(type);
+	}
 }

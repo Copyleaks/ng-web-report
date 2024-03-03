@@ -1,5 +1,33 @@
-<div class="corrections-total" web-report-title-font i18n>Corrections ({{ totalWritingFeedbackIssues }})</div>
+<div class="corrections-total" web-report-title-font>
+	<span class="corrections-total-title">Corrections ({{ totalWritingFeedbackIssues }})</span>
+	<div class="stats-chips-container">
+		<mat-chip *ngIf="totalIgnoredWritingFeedbackIssues" (click)="openFilterDialog(true)">
+			{{ totalIgnoredWritingFeedbackIssues }}
+			<ng-container i18n>excluded</ng-container>
+		</mat-chip>
+		<mat-chip *ngIf="totalFilteredWritingFeedbackIssues" class="filter-chip" (click)="openFilterDialog()">
+			<span>
+				{{ totalFilteredWritingFeedbackIssues }}
+				<ng-container i18n>filtered</ng-container>
+			</span>
+			<mat-icon
+				class="clear-filter-icon"
+				fontSet="material-icons-round"
+				(click)="$event.stopPropagation(); clearFilter()"
+				matTooltip="Clear Filter"
+				matTooltipClass="web-report-mat-tooltip"
+				i18n-matTooltip>
+				highlight_off
+			</mat-icon>
+		</mat-chip>
+	</div>
+</div>
 
-<mat-icon class="filter-icon" [class.off]="!isFilterOn" [class.on]="isFilterOn" fontSet="material-icons-round">
+<mat-icon
+	class="filter-icon"
+	[class.off]="!isFilterOn"
+	[class.on]="isFilterOn"
+	fontSet="material-icons-round"
+	(click)="openFilterDialog()">
 	filter_list
 </mat-icon>

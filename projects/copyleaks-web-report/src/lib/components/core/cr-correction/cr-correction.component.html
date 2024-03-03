@@ -7,7 +7,14 @@
 		</div>
 		<mat-chip *ngIf="!hideDescription" class="correction-type">{{ correctionType }}</mat-chip>
 	</div>
-	<mat-icon *ngIf="isExcludeView; else excludedIconRef" class="options-icon" fontSet="material-icons-round">
+	<mat-icon
+		*ngIf="isExcludeView; else excludedIconRef"
+		class="options-icon"
+		fontSet="material-icons-round"
+		[matTooltip]="excludedTooltipText"
+		matTooltipClass="web-report-mat-tooltip"
+		i18n-matTooltip
+		(click)="excludeToggle()">
 		{{ isExcluded ? 'visibility' : 'visibility_off' }}
 	</mat-icon>
 	<ng-template #excludedIconRef>
@@ -23,7 +30,7 @@
 		<mat-icon class="mat-menu-item-icon" fontSet="material-icons-round">help_outline</mat-icon>
 		<span class="mat-menu-item-text" i18n>Learn about correction</span>
 	</button>
-	<button mat-menu-item [disableRipple]="true">
+	<button mat-menu-item [disableRipple]="true" (click)="ignoreCorrection()">
 		<mat-icon class="mat-menu-item-icon" fontSet="material-icons-round">visibility_off</mat-icon>
 		<span class="mat-menu-item-text" i18n>Ignore Correction</span>
 	</button>

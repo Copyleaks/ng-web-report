@@ -1,4 +1,5 @@
 import { EWritingFeedbackCategories, EWritingFeedbackTypes } from '../enums/copyleaks-web-report.enums';
+import { IWritingFeedbackCategoryStatistics, IWritingFeedbackTypeStatistics } from '../models/report-data.models';
 
 export function getCorrectionTypeTitle(type: EWritingFeedbackTypes): string {
 	switch (type) {
@@ -167,5 +168,132 @@ export function getCorrectionCategoryDescription(type: EWritingFeedbackCategorie
 			return $localize`Highlights deviations in accents, promoting uniform language usage.`;
 		default:
 			return $localize`Unknown feedback type.`;
+	}
+}
+
+export function getSelectedCategoryType(type: EWritingFeedbackCategories): EWritingFeedbackTypes {
+	switch (type) {
+		case EWritingFeedbackCategories.General:
+			return EWritingFeedbackTypes.General;
+
+		case EWritingFeedbackCategories.SubjectVerbDisagreement:
+		case EWritingFeedbackCategories.NounForm:
+		case EWritingFeedbackCategories.VerbForm:
+		case EWritingFeedbackCategories.Article:
+		case EWritingFeedbackCategories.Preposition:
+		case EWritingFeedbackCategories.Pronoun:
+		case EWritingFeedbackCategories.PartOfSpeech:
+		case EWritingFeedbackCategories.Conjunction:
+			return EWritingFeedbackTypes.Grammar;
+
+		case EWritingFeedbackCategories.MisusedWord:
+		case EWritingFeedbackCategories.Homophone:
+			return EWritingFeedbackTypes.WordChoice;
+
+		case EWritingFeedbackCategories.Capitalization:
+		case EWritingFeedbackCategories.Hyphen:
+		case EWritingFeedbackCategories.Punctuation:
+		case EWritingFeedbackCategories.Comma:
+		case EWritingFeedbackCategories.Apostrophe:
+		case EWritingFeedbackCategories.Space:
+		case EWritingFeedbackCategories.Spelling:
+			return EWritingFeedbackTypes.Mechanics;
+
+		case EWritingFeedbackCategories.FusedSentence:
+		case EWritingFeedbackCategories.CommaSplice:
+		case EWritingFeedbackCategories.SentenceFragments:
+		case EWritingFeedbackCategories.IneffectiveConstruction:
+		case EWritingFeedbackCategories.ExtraWords:
+		case EWritingFeedbackCategories.MissingWords:
+			return EWritingFeedbackTypes.SentenceStructure;
+
+		case EWritingFeedbackCategories.AdjectiveGenderAgreement:
+		case EWritingFeedbackCategories.AdjectiveNumberAgreement:
+			return EWritingFeedbackTypes.MismatchInGenderBetweenAdjectives;
+
+		case EWritingFeedbackCategories.ArticleGenderAgreement:
+		case EWritingFeedbackCategories.ArticleNumberAgreement:
+			return EWritingFeedbackTypes.IncorrectNumberAgreementBetweenArticles;
+
+		case EWritingFeedbackCategories.NounGenderAgreement:
+		case EWritingFeedbackCategories.SubjunctiveMood:
+		case EWritingFeedbackCategories.CompoundWordError:
+		case EWritingFeedbackCategories.MoodInconsistency:
+		case EWritingFeedbackCategories.AccentError:
+			return EWritingFeedbackTypes.IncorrectNumberAgreementBetweenNouns;
+		default:
+			break;
+	}
+}
+export function getSelectedCategoryStats(
+	type: EWritingFeedbackCategories,
+	writingFeedbackStats: IWritingFeedbackTypeStatistics[]
+): IWritingFeedbackCategoryStatistics {
+	switch (type) {
+		case EWritingFeedbackCategories.General:
+			return writingFeedbackStats[EWritingFeedbackTypes.General].categories[0];
+
+		case EWritingFeedbackCategories.SubjectVerbDisagreement:
+		case EWritingFeedbackCategories.NounForm:
+		case EWritingFeedbackCategories.VerbForm:
+		case EWritingFeedbackCategories.Article:
+		case EWritingFeedbackCategories.Preposition:
+		case EWritingFeedbackCategories.Pronoun:
+		case EWritingFeedbackCategories.PartOfSpeech:
+		case EWritingFeedbackCategories.Conjunction:
+			return writingFeedbackStats[EWritingFeedbackTypes.Grammar].categories[
+				type - EWritingFeedbackCategories.SubjectVerbDisagreement
+			];
+
+		case EWritingFeedbackCategories.MisusedWord:
+		case EWritingFeedbackCategories.Homophone:
+			return writingFeedbackStats[EWritingFeedbackTypes.WordChoice].categories[
+				type - EWritingFeedbackCategories.MisusedWord
+			];
+
+		case EWritingFeedbackCategories.Capitalization:
+		case EWritingFeedbackCategories.Hyphen:
+		case EWritingFeedbackCategories.Punctuation:
+		case EWritingFeedbackCategories.Comma:
+		case EWritingFeedbackCategories.Apostrophe:
+		case EWritingFeedbackCategories.Space:
+		case EWritingFeedbackCategories.Spelling:
+			return writingFeedbackStats[EWritingFeedbackTypes.Mechanics].categories[
+				type - EWritingFeedbackCategories.Capitalization
+			];
+
+		case EWritingFeedbackCategories.FusedSentence:
+		case EWritingFeedbackCategories.CommaSplice:
+		case EWritingFeedbackCategories.SentenceFragments:
+		case EWritingFeedbackCategories.IneffectiveConstruction:
+		case EWritingFeedbackCategories.ExtraWords:
+		case EWritingFeedbackCategories.MissingWords:
+			return writingFeedbackStats[EWritingFeedbackTypes.SentenceStructure].categories[
+				type - EWritingFeedbackCategories.FusedSentence
+			];
+
+		case EWritingFeedbackCategories.AdjectiveGenderAgreement:
+		case EWritingFeedbackCategories.AdjectiveNumberAgreement:
+			return writingFeedbackStats[EWritingFeedbackTypes.MismatchInGenderBetweenAdjectives].categories[
+				type - EWritingFeedbackCategories.AdjectiveGenderAgreement
+			];
+
+		case EWritingFeedbackCategories.ArticleGenderAgreement:
+		case EWritingFeedbackCategories.ArticleNumberAgreement:
+			return writingFeedbackStats[EWritingFeedbackTypes.IncorrectNumberAgreementBetweenArticles].categories[
+				type - EWritingFeedbackCategories.ArticleGenderAgreement
+			];
+
+		case EWritingFeedbackCategories.NounGenderAgreement:
+		case EWritingFeedbackCategories.SubjunctiveMood:
+		case EWritingFeedbackCategories.CompoundWordError:
+		case EWritingFeedbackCategories.MoodInconsistency:
+		case EWritingFeedbackCategories.AccentError:
+			return writingFeedbackStats[EWritingFeedbackTypes.IncorrectNumberAgreementBetweenNouns].categories[
+				type - EWritingFeedbackCategories.NounGenderAgreement
+			];
+
+		default:
+			return null;
 	}
 }

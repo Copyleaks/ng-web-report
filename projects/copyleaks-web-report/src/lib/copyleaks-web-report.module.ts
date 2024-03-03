@@ -81,6 +81,8 @@ import { CrCorrectionComponent } from './components/core/cr-correction/cr-correc
 import { CrReadabilityScoreComponent } from './components/core/cr-readability-score/cr-readability-score.component';
 import { CrCorrectionTypePanelComponent } from './components/core/cr-correction-type-panel/cr-correction-type-panel.component';
 import { CrCorrectionsActionsComponent } from './components/core/cr-corrections-actions/cr-corrections-actions.component';
+import { FilterCorrectionsDialogComponent } from './dialogs/filter-corrections-dialog/filter-corrections-dialog.component';
+import { FilterCorrectionsDialogService } from './dialogs/filter-corrections-dialog/services/filter-corrections-dialog.service';
 
 @NgModule({
 	declarations: [
@@ -133,7 +135,8 @@ import { CrCorrectionsActionsComponent } from './components/core/cr-corrections-
 		CrCorrectionComponent,
 		CrReadabilityScoreComponent,
 		CrCorrectionTypePanelComponent,
-  CrCorrectionsActionsComponent,
+		CrCorrectionsActionsComponent,
+		FilterCorrectionsDialogComponent,
 	],
 	imports: [
 		CommonModule,
@@ -176,6 +179,6 @@ import { CrCorrectionsActionsComponent } from './components/core/cr-corrections-
 		CrCustomResultsBoxContentComponent,
 		EmptyResultStateComponent,
 	],
-	providers: [ReportRealtimeResultsService, FilterResultDailogService],
+	providers: [ReportRealtimeResultsService, FilterResultDailogService, FilterCorrectionsDialogService],
 })
 export class CopyleaksWebReportModule {}

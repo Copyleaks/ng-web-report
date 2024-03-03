@@ -16,17 +16,17 @@
 					? null
 					: {
 							identicalPct: {
-								percentage: identicalTotal / (wordsTotal - excludedTotal),
+								percentage: wordsTotal - excludedTotal === 0 ? 0 : identicalTotal / (wordsTotal - excludedTotal),
 								totalWords: identicalTotal ?? 0,
 								disabled: reportDataSvc.filterOptions?.showIdentical === false
 							},
 							minorChangesPct: {
-								percentage: minorChangesTotal / (wordsTotal - excludedTotal),
+								percentage: wordsTotal - excludedTotal === 0 ? 0 : minorChangesTotal / (wordsTotal - excludedTotal),
 								totalWords: minorChangesTotal ?? 0,
 								disabled: reportDataSvc.filterOptions?.showMinorChanges === false
 							},
 							paraphrasedPct: {
-								percentage: paraphrasedTotal / (wordsTotal - excludedTotal),
+								percentage: wordsTotal - excludedTotal === 0 ? 0 : paraphrasedTotal / (wordsTotal - excludedTotal),
 								totalWords: paraphrasedTotal ?? 0,
 								disabled: reportDataSvc.filterOptions?.showRelated === false
 							},

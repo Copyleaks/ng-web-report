@@ -144,7 +144,7 @@ export class FilterResultDailogService {
 				internet: true,
 				internalDatabase: true,
 				batch: true,
-				repositories: {}, // Update with actual values if needed
+				repositories: {},
 			},
 			resultsMeta: {
 				wordLimit: {

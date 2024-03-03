@@ -139,6 +139,7 @@ export interface ICompleteResultsFilters {
 	matchType?: IMatchTypeFilters;
 	resultsMetaData?: IResultsMetaDataFilters;
 	includedTags?: string[];
+	writingFeedback?: IWritingFeedbackFilter;
 }
 
 export interface IGeneralFilters {
@@ -174,6 +175,19 @@ export interface IPublicationDateFilter {
 	publicationEnabled: boolean;
 	startDate?: Date;
 	resultsWithNoDates: boolean;
+}
+
+export interface IWritingFeedbackFilter {
+	hiddenCategories?: EWritingFeedbackCategories[];
+	excludedCorrections?: IExcludedCorrection[];
+}
+
+export interface IExcludedCorrection {
+	wrongText: string;
+	correctionText: string;
+	type: EWritingFeedbackCategories;
+	start: number;
+	end: number;
 }
 
 /** Type representing a summary of the scanned document from Copyleaks api */

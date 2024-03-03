@@ -641,6 +641,20 @@
             "readabilityLevelDescription": "Easy to read"
         }
     },
+    "filters": {
+      "writingFeedback": {
+        "hiddenCategories": [0,1,2,3,4,5,6,7,8,9],
+        "excludedCorrections": [
+          {
+            "correctionText": "X. \n\n\n\n\n",
+            "type": 19,
+            "wrongText": "X.\n    \n\n\n    \n            ",
+            "start": 26074,
+            "end": 26101
+          }
+        ]
+      }
+    },
     "status": 0,
     "developerPayload": ""
 }

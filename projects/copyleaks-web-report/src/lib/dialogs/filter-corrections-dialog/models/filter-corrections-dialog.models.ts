@@ -1,0 +1,12 @@
+import { IWritingFeedbackTypeStatistics } from '../../../models/report-data.models';
+import { ReportDataService } from '../../../services/report-data.service';
+import { ReportViewService } from '../../../services/report-view.service';
+import { EFilterCorrectionsDialogView } from '../enums/filter-corrections-dialog.enums';
+
+export interface IFilterCorrectionsDialogData {
+	reportDataSvc: ReportDataService;
+	reportViewSvc: ReportViewService;
+	selectedView: EFilterCorrectionsDialogView;
+	totalCorrections: number;
+	writingFeedbackStats: IWritingFeedbackTypeStatistics[];
+}

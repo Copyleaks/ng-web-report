@@ -1,5 +1,6 @@
 @import '../../../styles/styles.scss';
 @import '../../../styles/website-colors.styles.scss';
+@import '../../../styles/cls-mat-components-overrides/cls-mat-chip-overrides.scss';
 
 :host {
 	display: flex;
@@ -10,11 +11,21 @@
 	padding-bottom: 4px;
 	padding-right: 8px;
 	.corrections-total {
-		color: $color-black;
-		font-size: 14px;
-		font-style: normal;
-		font-weight: 700;
-		line-height: normal;
+		display: flex;
+		flex-direction: column;
+		gap: 4px;
+		.corrections-total-title {
+			color: $color-black;
+			font-size: 14px;
+			font-style: normal;
+			font-weight: 700;
+			line-height: normal;
+		}
+		.stats-chips-container {
+			display: flex;
+			flex-direction: row;
+			gap: 4px;
+		}
 	}
 
 	.filter-icon {
@@ -24,5 +35,31 @@
 		&:hover {
 			color: $color-primary;
 		}
+	}
+
+	.clear-filter-icon {
+		font-size: 14px;
+		width: 14px;
+		height: 14px;
+		color: $color-container-background;
+		line-height: normal !important;
+		&:hover {
+			color: $color-primary;
+		}
+	}
+
+	mat-chip {
+		cursor: pointer;
+		display: flex;
+		flex-direction: row;
+		align-items: center;
+	}
+}
+
+::ng-deep {
+	.filter-corrections-dailog .mat-dialog-container {
+		background-color: $color-white !important;
+		padding: 16px !important;
+		border-radius: 10px !important;
 	}
 }

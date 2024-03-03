@@ -1,0 +1,172 @@
+@import '../website-colors.styles.scss';
+
+:host {
+	::ng-deep {
+		.mat-form-field {
+			font-size: 16px !important;
+			line-height: normal !important;
+			.mat-form-field-infix {
+				border-top: none;
+			}
+
+			.mat-form-field-flex {
+				background-color: $color-white !important;
+				border: 1px solid transparent;
+				border-radius: 10px !important;
+				transition: 0.4s;
+			}
+
+			.mat-form-field-underline {
+				display: none;
+			}
+
+			.mat-icon-button .mat-button-wrapper > * {
+				line-height: normal;
+				font-size: 20px;
+				width: 20px;
+				height: 20px;
+				color: $color-black;
+			}
+
+			.mat-icon-button.mat-button-disabled .mat-button-wrapper > * {
+				color: rgba(0, 0, 0, 0.26);
+			}
+
+			.mat-icon-button .mat-button-wrapper:hover {
+				* {
+					color: $color-primary !important;
+				}
+			}
+
+			.mat-icon-button {
+				width: 20px !important;
+				height: 20px !important;
+				line-height: normal !important;
+			}
+
+			.mat-error {
+				font-weight: 600;
+			}
+		}
+
+		.mat-form-field-appearance-fill .mat-form-field-flex {
+			background-color: $color-container-background !important;
+		}
+
+		.mat-form-field-appearance-fill .mat-form-field-infix {
+			padding: 0 0 0.75em 0 !important;
+		}
+
+		// focus mode border
+		.mat-form-field.mat-focused {
+			.mat-form-field-flex {
+				border: 1px solid $color-primary !important;
+			}
+		}
+
+		.mat-form-field-appearance-outline .mat-form-field-flex,
+		.mat-form-field-appearance-fill .mat-form-field-flex {
+			margin-top: 0 !important;
+		}
+
+		.mat-form-field-appearance-fill .mat-form-field-flex {
+			padding-top: 0px !important;
+		}
+
+		.mat-form-field.mat-form-field-invalid {
+			margin-bottom: 1em;
+			.mat-form-field-flex {
+				border: 1px solid $color-error !important;
+			}
+		}
+
+		.mat-form-field-appearance-fill .mat-form-field-fill {
+			color: transparent !important;
+			background: $color-error !important;
+			border-radius: 10px !important;
+		}
+
+		.mat-form-field-appearance-outline .mat-form-field-outline {
+			color: transparent !important;
+			border-radius: 10px !important;
+			background: transparent !important;
+		}
+
+		.mat-form-field-appearance-outline .mat-form-field-infix,
+		.mat-form-field-appearance-fill .mat-form-field-infix {
+			padding: 0.75em 0 0.75em 0 !important;
+		}
+
+		.mat-form-field-appearance-outline .mat-form-field-prefix,
+		.mat-form-field-appearance-outline .mat-form-field-suffix,
+		.mat-form-field-appearance-fill .mat-form-field-prefix,
+		.mat-form-field-appearance-fill .mat-form-field-suffix {
+			top: 0 !important;
+		}
+
+		.mat-form-field-appearance-outline .mat-form-field-suffix,
+		.mat-form-field-appearance-outline .mat-form-field-prefix,
+		.mat-form-field-appearance-fill .mat-form-field-suffix,
+		.mat-form-field-appearance-fill .mat-form-field-prefix {
+			align-self: center !important;
+		}
+
+		.mat-form-field:not(.mat-form-field-appearance-legacy) .mat-form-field-prefix .mat-icon,
+		.mat-form-field:not(.mat-form-field-appearance-legacy) .mat-form-field-suffix .mat-icon {
+			font-size: 20px;
+			width: 20px;
+			height: 20px;
+			background-color: $color-white;
+			color: $color-black;
+			border-radius: 50%;
+			padding: 6px;
+			border: 1px solid transparent !important;
+		}
+
+		.mat-form-field-flex {
+			align-items: flex-start;
+		}
+
+		.mat-form-field-appearance-outline .mat-form-field-wrapper,
+		.mat-form-field-appearance-fill .mat-form-field-wrapper {
+			margin: 0 !important;
+		}
+
+		.mat-form-field-infix {
+			display: flex !important;
+			justify-content: flex-start !important;
+		}
+
+		.mat-input-element,
+		.mat-form-field-prefix,
+		.mat-form-field-suffix {
+			color: $color-black !important;
+		}
+
+		.mat-form-field-disabled {
+			opacity: 0.5 !important;
+		}
+
+		.mat-input-element {
+			line-height: normal !important;
+		}
+
+		.mat-input-no-bottom-padding {
+			.mat-form-field-wrapper {
+				padding-bottom: 0px !important;
+			}
+		}
+
+		input.mat-input-element {
+			margin-top: 0px;
+		}
+
+		.mat-form-field-subscript-wrapper {
+			margin-top: 4px !important;
+		}
+	}
+}
+
+::ng-deep .mat-form-field.form-field-dialog .mat-form-field-flex {
+	background-color: $color-container-background !important;
+}

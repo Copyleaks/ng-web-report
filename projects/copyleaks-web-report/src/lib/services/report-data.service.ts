@@ -12,12 +12,17 @@ import {
 	ICompleteResults,
 	IDatabaseResultPreview,
 	IDeleteScanResultModel,
+	IExcludedCorrection,
+	IHtmlWritingFeedbackRange,
 	IInternetResultPreview,
 	IRepositoryResultPreview,
 	IResultDetailResponse,
 	IResultPreviewBase,
 	IScanSource,
 	IWritingFeedback,
+	IWritingFeedbackCorrectionViewModel,
+	IWritingFeedbackRange,
+	IWritingFeedbackScanScource,
 	ResultPreview,
 } from '../models/report-data.models';
 import { AIScanResult, ResultDetailItem } from '../models/report-matches.models';
@@ -102,6 +107,15 @@ export class ReportDataService {
 	 */
 	public get writingFeedback() {
 		return this._writingFeedback$.value;
+	}
+
+	private _excludedCorrections$ = new BehaviorSubject<IExcludedCorrection[] | undefined>(undefined);
+	/** Emits matches that are relevant to source html one-to-many mode */
+	public get excludedCorrections$() {
+		return this._excludedCorrections$;
+	}
+	public get excludedCorrections() {
+		return this._excludedCorrections$.value;
 	}
 
 	private _filterOptions$ = new BehaviorSubject<ICopyleaksReportOptions | undefined>(undefined);
@@ -199,12 +213,15 @@ export class ReportDataService {
 		private _reportErrorsSvc: ReportErrorsService,
 		private _percentPipe: PercentPipe
 	) {
-		combineLatest([this.filterOptions$, this.excludedResultsIds$, this.scanResultsDetails$])
+		combineLatest([this.filterOptions$, this.excludedResultsIds$, this.scanResultsDetails$, this.excludedCorrections$])
 			.pipe(
 				untilDestroy(this),
-				filter(([options, excludedResultsIds]) => options !== undefined && excludedResultsIds !== undefined)
+				filter(
+					([options, excludedResultsIds, , excludedCorrections]) =>
+						options !== undefined && excludedResultsIds !== undefined && excludedCorrections !== undefined
+				)
 			)
-			.subscribe(([options, excludedResultsIds]) => {
+			.subscribe(([options, excludedResultsIds, , excludedCorrections]) => {
 				if (
 					!this.scanResultsPreviews ||
 					this.scanResultsPreviews === undefined ||
@@ -212,6 +229,7 @@ export class ReportDataService {
 					!this.scanResultsDetails === undefined ||
 					!options ||
 					!excludedResultsIds ||
+					!excludedCorrections ||
 					this._viewSvc.progress$.value !== 100 ||
 					(this.totalCompleteResults <= 100 &&
 						this.scanResultsDetails.length != this.totalCompleteResults &&
@@ -284,6 +302,10 @@ export class ReportDataService {
 						},
 						execludedResultIds: excludedResultsIds ?? [],
 						filteredResultIds: filteredOutResultsIds ?? [],
+						writingFeedback: {
+							hiddenCategories: options.writingFeedback.hiddenCategories ?? [],
+							excludedCorrections: excludedCorrections,
+						},
 					},
 				});
 			});
@@ -356,21 +378,6 @@ export class ReportDataService {
 				}
 			);
 
-		if (endpointsConfig.writingFeedback && endpointsConfig.writingFeedback.url)
-			this._http
-				.get<IWritingFeedback>(endpointsConfig.writingFeedback?.url, {
-					headers: this._createHeaders(endpointsConfig.writingFeedback),
-				})
-				.pipe(untilDestroy(this))
-				.subscribe(
-					writingFeedbackVersionRes => {
-						this._writingFeedback$.next(writingFeedbackVersionRes);
-					},
-					(error: HttpErrorResponse) => {
-						this._reportErrorsSvc.handleHttpError(error, 'initSync - writingFeedback');
-					}
-				);
-
 		this._http
 			.get<ICompleteResults>(endpointsConfig.completeResults.url, {
 				headers: this._createHeaders(endpointsConfig.completeResults),
@@ -381,6 +388,22 @@ export class ReportDataService {
 					this.completeResultsSnapshot = JSON.parse(JSON.stringify(completeResultsRes));
 					this._scanResultsPreviews$.next(completeResultsRes);
 					this._updateCompleteResults(completeResultsRes);
+
+					// if the writing feedback endpoint is passed & is enabled in the complete results response then fetch its data
+					if (endpointsConfig.writingFeedback && endpointsConfig.writingFeedback.url && this.isWritingFeedbackEnabled())
+						this._http
+							.get<IWritingFeedback>(endpointsConfig.writingFeedback?.url, {
+								headers: this._createHeaders(endpointsConfig.writingFeedback),
+							})
+							.pipe(untilDestroy(this))
+							.subscribe(
+								writingFeedbackVersionRes => {
+									this._writingFeedback$.next(writingFeedbackVersionRes);
+								},
+								(error: HttpErrorResponse) => {
+									this._reportErrorsSvc.handleHttpError(error, 'initSync - writingFeedback');
+								}
+							);
 				},
 				(error: HttpErrorResponse) => {
 					this._reportErrorsSvc.handleHttpError(error, 'initSync - completeResults');
@@ -686,7 +709,7 @@ export class ReportDataService {
 	public isWritingFeedbackEnabled() {
 		const completeResult = this.scanResultsPreviews;
 		if (this._viewSvc.progress$.value != 100) return true;
-		if (!completeResult) return false;
+		if (!completeResult || !this.reportEndpointConfig?.writingFeedback) return false;
 		if (completeResult?.scannedDocument?.enabled?.writingFeedback != null)
 			return completeResult?.scannedDocument?.enabled?.writingFeedback;
 		return false;
@@ -739,6 +762,20 @@ export class ReportDataService {
 
 			includeResultsWithoutDate: true,
 			publicationDate: undefined,
+
+			writingFeedback: {
+				hiddenCategories: this.filterOptions?.writingFeedback?.hiddenCategories ?? [],
+			},
+		});
+	}
+
+	public clearCorrectionsFilter() {
+		// Load the filter options from the complete results response
+		this.filterOptions$.next({
+			...this.filterOptions,
+			writingFeedback: {
+				hiddenCategories: [],
+			},
 		});
 	}
 
@@ -822,6 +859,58 @@ export class ReportDataService {
 		}
 	}
 
+	public filterCorrections(
+		corrections: IWritingFeedbackScanScource,
+		filterOptions: ICopyleaksReportOptions,
+		excludedCorrections: IWritingFeedbackCorrectionViewModel[]
+	): IWritingFeedbackScanScource {
+		// Filter indices where the type matches any of the corrections hidden categories
+		const htmlFilterIndices = corrections.html.chars.types.reduce((indices, currentType, index) => {
+			const groupId = corrections.html.chars.groupIds[index];
+			const start = corrections.text.chars.starts[groupId];
+			const length = corrections.text.chars.lengths[groupId];
+			if (
+				(filterOptions?.writingFeedback?.hiddenCategories ?? []).includes(currentType) ||
+				(excludedCorrections ?? []).find(ex => ex.start === start && ex.end === start + length)
+			) {
+				indices.push(index);
+			}
+			return indices;
+		}, [] as number[]);
+
+		// Update both the text & html corrections ranges to filter the hidden categories
+		const htmlFilteredFeedback: IHtmlWritingFeedbackRange = {
+			starts: corrections.html.chars.starts.filter((_, index) => !htmlFilterIndices.includes(index)),
+			lengths: corrections.html.chars.lengths.filter((_, index) => !htmlFilterIndices.includes(index)),
+			types: corrections.html.chars.types.filter((_, index) => !htmlFilterIndices.includes(index)),
+			operationTexts: corrections.html.chars.operationTexts.filter((_, index) => !htmlFilterIndices.includes(index)),
+			groupIds: corrections.html.chars.groupIds.filter((_, index) => !htmlFilterIndices.includes(index)),
+		};
+
+		const textFilterIndices = corrections.text.chars.types.reduce((indices, currentType, index) => {
+			const start = corrections.text.chars.starts[index];
+			const length = corrections.text.chars.lengths[index];
+			if (
+				(filterOptions?.writingFeedback?.hiddenCategories ?? []).includes(currentType) ||
+				(excludedCorrections ?? []).find(ex => ex.start === start && ex.end === start + length)
+			) {
+				indices.push(index);
+			}
+			return indices;
+		}, [] as number[]);
+		const textFilteredFeedback: IWritingFeedbackRange = {
+			starts: corrections.text.chars.starts.filter((_, index) => !textFilterIndices.includes(index)),
+			lengths: corrections.text.chars.lengths.filter((_, index) => !textFilterIndices.includes(index)),
+			types: corrections.text.chars.types.filter((_, index) => !textFilterIndices.includes(index)),
+			operationTexts: corrections.text.chars.operationTexts.filter((_, index) => !textFilterIndices.includes(index)),
+		};
+
+		corrections.text.chars = textFilteredFeedback;
+		corrections.html.chars = htmlFilteredFeedback;
+
+		return corrections;
+	}
+
 	private async _checkScanProgress(progress: IAPIProgress) {
 		if (progress.percents < 100 && progress.percents > 36 && !this._crawledVersion$.value) {
 			const crawledVersion = await this._getReportCrawledVersion();
@@ -848,6 +937,9 @@ export class ReportDataService {
 						isHtmlView: false,
 					});
 			}
+
+			const writingFeedback = await this._getReportWritingFeedback();
+			this._writingFeedback$.next(writingFeedback);
 		}
 	}
 
@@ -869,6 +961,9 @@ export class ReportDataService {
 
 		// Load the excluded results Ids
 		this._excludedResultsIds$.next(completeResultsRes.filters?.execludedResultIds ?? []);
+
+		// Load the excluded corrections
+		this._excludedCorrections$.next(completeResultsRes.filters?.writingFeedback?.excludedCorrections ?? []);
 
 		// Load the filter options from the complete results response
 		this._filterOptions$.next({
@@ -921,6 +1016,9 @@ export class ReportDataService {
 					? completeResultsRes.filters?.resultsMetaData?.publicationDate?.resultsWithNoDates
 					: true,
 			publicationDate: completeResultsRes.filters?.resultsMetaData?.publicationDate?.startDate,
+			writingFeedback: {
+				hiddenCategories: completeResultsRes.filters?.writingFeedback?.hiddenCategories ?? [],
+			},
 		});
 
 		const filteredResults = this.filterResults(this.filterOptions, this.excludedResultsIds);
@@ -1047,6 +1145,16 @@ export class ReportDataService {
 		return await this._http
 			.get<ICompleteResults>(this._reportEndpointConfig$.value.completeResults.url, {
 				headers: this._createHeaders(this._reportEndpointConfig$.value.completeResults),
+			})
+			.toPromise();
+	}
+
+	private async _getReportWritingFeedback() {
+		if (!this._reportEndpointConfig$.value || !this._reportEndpointConfig$.value.completeResults?.url) return undefined;
+
+		return await this._http
+			.get<IWritingFeedback>(this._reportEndpointConfig$.value.writingFeedback.url, {
+				headers: this._createHeaders(this._reportEndpointConfig$.value.writingFeedback),
 			})
 			.toPromise();
 	}

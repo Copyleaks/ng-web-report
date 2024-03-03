@@ -150,7 +150,11 @@ export class ReportMatchHighlightService implements OnDestroy {
 				setTimeout(() => {
 					foundSelection.focused = false;
 				});
-				this._multiOriginalText.next([...this._multiOriginalText.value.filter(match => match != next)]);
+				const selected = this._multiOriginalText.value.filter(match => match != next);
+				if (selected.length === 0) {
+					this._multiOriginalText.next([]);
+					this._originalText.next(null);
+				} else this._multiOriginalText.next([...selected]);
 			} else {
 				setTimeout(() => {
 					next.focused = true;

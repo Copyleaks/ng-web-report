@@ -14,6 +14,7 @@ import {
 	IScanSource,
 	IWritingFeedback,
 	IWritingFeedbackCorrectionViewModel,
+	IWritingFeedbackScanScource,
 	IWritingFeedbackTypeStatistics,
 	ResultPreview,
 } from '../../../models/report-data.models';
@@ -35,6 +36,7 @@ import { ECustomResultsReportView } from '../../core/cr-custom-results/models/cr
 import { ReportLayoutBaseComponent } from './report-layout-base.component';
 import { ReportRealtimeResultsService } from '../../../services/report-realtime-results.service';
 import { ViewMode } from '../../../models/report-config.models';
+import * as helpers from '../../../utils/report-match-helpers';
 
 export abstract class OneToManyReportLayoutBaseComponent extends ReportLayoutBaseComponent {
 	hideRightSection: boolean = false;
@@ -101,6 +103,16 @@ export abstract class OneToManyReportLayoutBaseComponent extends ReportLayoutBas
 		);
 	}
 
+	get filteredCorrections(): IWritingFeedbackCorrectionViewModel[] {
+		if (!this.reportDataSvc.writingFeedback?.corrections) return [];
+		const filteredCorrections = this.reportDataSvc.filterCorrections(
+			JSON.parse(JSON.stringify(this.reportDataSvc.writingFeedback?.corrections)),
+			this.reportDataSvc.filterOptions,
+			this.reportDataSvc.excludedCorrections
+		);
+		return this._mapCorrectionsToViewModel(filteredCorrections);
+	}
+
 	plagiarismScore: number;
 	numberOfWords: number;
 	grammarScore: number;
@@ -128,62 +140,6 @@ export abstract class OneToManyReportLayoutBaseComponent extends ReportLayoutBas
 	}
 
 	initOneToManyViewData(): void {
-		this.reportViewSvc.progress$.pipe(untilDestroy(this)).subscribe(progress => {
-			this.loadingProgressPct = progress;
-		});
-
-		this.reportDataSvc.newResults$.pipe(untilDestroy(this)).subscribe(data => {
-			if (data) this.newScanResultsView = data;
-		});
-
-		this.reportDataSvc.crawledVersion$.pipe(untilDestroy(this)).subscribe(data => {
-			if (data) {
-				this.reportCrawledVersion = data;
-				this.numberOfPages = data.text?.pages?.startPosition?.length ?? 1;
-			}
-		});
-
-		this.reportDataSvc.writingFeedback$.pipe(untilDestroy(this)).subscribe(data => {
-			if (data) this.writingFeedback = data;
-		});
-
-		this.reportDataSvc.filterOptions$.pipe(untilDestroy(this)).subscribe(data => {
-			if (!data) return;
-			if (data.showAlerts === false) {
-				this.alerts = [];
-				return;
-			}
-			this.filterOptions = data;
-			this.alerts =
-				this.scanResultsPreviews?.notifications?.alerts?.filter(a => a.code != ALERTS.SUSPECTED_AI_TEXT_DETECTED) ?? [];
-		});
-
-		this.matchSvc.originalHtmlMatches$.pipe(untilDestroy(this)).subscribe(data => {
-			this.isLoadingScanContent = data === null;
-			if (data != this.reportMatches) {
-				this.oneToManyRerendered = false;
-			}
-			this.reportMatches = data ?? [];
-			const updatedHtml = this._getRenderedMatches(data, this.reportDataSvc.crawledVersion?.html?.value);
-			if (updatedHtml && data) {
-				this.iframeHtml = updatedHtml;
-				this.oneToManyRerendered = true;
-			}
-		});
-
-		this.matchSvc.originalTextMatches$.pipe(untilDestroy(this)).subscribe(data => {
-			if (data) {
-				this.isLoadingScanContent = false;
-				this.contentTextMatches = data;
-				if (this.viewMode === 'writing-feedback') {
-					this._initCorrectionsStatistics();
-					this._mapCorrectionsToViewModel();
-					this.displayedScanCorrectionsView = this.allScanCorrectionsView;
-					console.log(this.writingFeedbackStats);
-				}
-			}
-		});
-
 		this.reportViewSvc.reportViewMode$.pipe(untilDestroy(this)).subscribe(data => {
 			if (!data) return;
 			this.isHtmlView = data.isHtmlView;
@@ -248,6 +204,107 @@ export abstract class OneToManyReportLayoutBaseComponent extends ReportLayoutBas
 				});
 		});
 
+		this.reportViewSvc.progress$.pipe(untilDestroy(this)).subscribe(progress => {
+			this.loadingProgressPct = progress;
+		});
+
+		this.reportDataSvc.newResults$.pipe(untilDestroy(this)).subscribe(data => {
+			if (data) this.newScanResultsView = data;
+		});
+
+		this.reportDataSvc.crawledVersion$.pipe(untilDestroy(this)).subscribe(data => {
+			if (data) {
+				this.reportCrawledVersion = data;
+				this.numberOfPages = data.text?.pages?.startPosition?.length ?? 1;
+			}
+		});
+
+		this.reportDataSvc.writingFeedback$.pipe(untilDestroy(this)).subscribe(data => {
+			if (data) this.writingFeedback = data;
+		});
+
+		combineLatest([this.reportDataSvc.crawledVersion$, this.reportDataSvc.writingFeedback$])
+			.pipe(
+				untilDestroy(this),
+				filter(([scanSource, writingFeedback]) => !!writingFeedback && !!scanSource)
+			)
+			.subscribe(([scanSource, writingFeedback]) => {
+				const filteredCorrections = this.reportDataSvc.filterCorrections(
+					JSON.parse(JSON.stringify(writingFeedback?.corrections)),
+					{
+						writingFeedback: {
+							hiddenCategories: [],
+						},
+					},
+					[]
+				);
+
+				this.allScanCorrectionsView = [];
+
+				this._initCorrectionsStatistics();
+
+				const contentTextMatches = helpers.processCorrectionsText(filteredCorrections, 'text', scanSource);
+				let correctionIndex: number = 0;
+				for (let correctionsRow of contentTextMatches) {
+					for (let correction of correctionsRow) {
+						if (
+							correction.match.type === MatchType.writingFeedback &&
+							filteredCorrections?.text?.chars?.operationTexts
+						) {
+							this.allScanCorrectionsView.push({
+								correctionText: filteredCorrections.text.chars.operationTexts[correctionIndex],
+								type: correction.match.writingFeedbackType,
+								wrongText: this.reportCrawledVersion.text.value.substring(correction.match.start, correction.match.end),
+								start: correction.match.start,
+								end: correction.match.end,
+							} as IWritingFeedbackCorrectionViewModel);
+							this._increaseCorrectionsCategoryTotal(correction.match.writingFeedbackType);
+							correctionIndex++;
+						}
+					}
+				}
+			});
+
+		this.reportDataSvc.filterOptions$.pipe(untilDestroy(this)).subscribe(data => {
+			if (!data) return;
+			if (data.showAlerts === false) {
+				this.alerts = [];
+				return;
+			}
+			this.filterOptions = data;
+			this.alerts =
+				this.scanResultsPreviews?.notifications?.alerts?.filter(a => a.code != ALERTS.SUSPECTED_AI_TEXT_DETECTED) ?? [];
+		});
+
+		this.matchSvc.originalHtmlMatches$.pipe(untilDestroy(this)).subscribe(data => {
+			this.isLoadingScanContent = data === null;
+			if (data != this.reportMatches) {
+				this.oneToManyRerendered = false;
+			}
+			this.reportMatches = data ?? [];
+			const updatedHtml = this._getRenderedMatches(data, this.reportDataSvc.crawledVersion?.html?.value);
+			if (updatedHtml && data) {
+				this.iframeHtml = updatedHtml;
+				this.oneToManyRerendered = true;
+			}
+		});
+
+		this.matchSvc.originalTextMatches$.pipe(untilDestroy(this)).subscribe(data => {
+			if (data) {
+				this.isLoadingScanContent = false;
+				this.contentTextMatches = data;
+
+				if (this.viewMode === 'writing-feedback') {
+					const filteredCorrections = this.reportDataSvc.filterCorrections(
+						JSON.parse(JSON.stringify(this.reportDataSvc.writingFeedback?.corrections)),
+						this.reportDataSvc.filterOptions,
+						this.reportDataSvc.excludedCorrections
+					);
+					this.displayedScanCorrectionsView = this._mapCorrectionsToViewModel(filteredCorrections);
+				}
+			}
+		});
+
 		this.statisticsSvc.statistics$.pipe(untilDestroy(this)).subscribe(data => {
 			if (data) this.reportStatistics = data;
 			const res = Math.min(
@@ -268,7 +325,7 @@ export abstract class OneToManyReportLayoutBaseComponent extends ReportLayoutBas
 					const selectedMatches = multiText.map(c => c.match);
 					if (this.viewMode === 'one-to-many') this._showResultsForMultiSelection(selectedMatches);
 					else if (this.viewMode === 'writing-feedback') {
-						if (selectedMatches.length === 0) this.displayedScanCorrectionsView = this.allScanCorrectionsView;
+						if (selectedMatches.length === 0) this.displayedScanCorrectionsView = this.filteredCorrections;
 						else
 							this.displayedScanCorrectionsView = this.allScanCorrectionsView.filter(sc =>
 								selectedMatches.find(sm => sm.start === sc.start && sm.end === sc.end)
@@ -282,7 +339,7 @@ export abstract class OneToManyReportLayoutBaseComponent extends ReportLayoutBas
 							this.displayedScanCorrectionsView = this.allScanCorrectionsView.filter(
 								sc => this.focusedMatch.start === sc.start && this.focusedMatch.end === sc.end
 							);
-						else this.displayedScanCorrectionsView = this.allScanCorrectionsView;
+						else this.displayedScanCorrectionsView = this.filteredCorrections;
 					}
 				}
 			});
@@ -312,18 +369,19 @@ export abstract class OneToManyReportLayoutBaseComponent extends ReportLayoutBas
 						this.displayedScanCorrectionsView = this.allScanCorrectionsView.filter(
 							sc => textSelectedMatch.start === sc.start && textSelectedMatch.end === sc.end
 						);
-					} else this.displayedScanCorrectionsView = this.allScanCorrectionsView;
+					} else this.displayedScanCorrectionsView = this.filteredCorrections;
 				}
 				break;
 			case 'multi-match-select':
 				let selectedMatches: Match[] = [];
 				message.indexes.forEach(i => {
-					selectedMatches.push(this.reportMatches[i]);
+					if (!selectedMatches.find(s => s.gid === this.reportMatches[i].gid))
+						selectedMatches.push(this.reportMatches[i]);
 				});
 				if (this.viewMode === 'one-to-many') {
 					this._showResultsForMultiSelection(selectedMatches);
 				} else if (this.viewMode === 'writing-feedback') {
-					if (selectedMatches.length === 0) this.displayedScanCorrectionsView = this.allScanCorrectionsView;
+					if (selectedMatches.length === 0) this.displayedScanCorrectionsView = this.filteredCorrections;
 					else this.displayedScanCorrectionsView = [];
 					selectedMatches.forEach(sc => {
 						if (sc.gid > 0 && sc.gid < this.allScanCorrectionsView.length)
@@ -465,35 +523,33 @@ export abstract class OneToManyReportLayoutBaseComponent extends ReportLayoutBas
 				selectedResults: 0,
 			};
 	}
-	private _mapCorrectionsToViewModel(): IWritingFeedbackCorrectionViewModel[] {
+	private _mapCorrectionsToViewModel(
+		filteredCorrections: IWritingFeedbackScanScource
+	): IWritingFeedbackCorrectionViewModel[] {
 		if (
 			this.contentTextMatches.length * (this.contentTextMatches[0] ? this.contentTextMatches[0].length : 0) === 0 ||
 			!this.contentTextMatches
 		)
 			return [];
 
-		this.allScanCorrectionsView = [];
-
+		const viewedCorrections = [];
 		let correctionIndex: number = 0;
 		for (let correctionsRow of this.contentTextMatches) {
 			for (let correction of correctionsRow) {
-				if (
-					correction.match.type === MatchType.writingFeedback &&
-					this.reportDataSvc.writingFeedback?.corrections?.text?.chars?.operationTexts
-				) {
-					this.allScanCorrectionsView.push({
-						correctionText: this.reportDataSvc.writingFeedback.corrections.text.chars.operationTexts[correctionIndex],
+				if (correction.match.type === MatchType.writingFeedback && filteredCorrections?.text?.chars?.operationTexts) {
+					viewedCorrections.push({
+						correctionText: filteredCorrections.text.chars.operationTexts[correctionIndex],
 						type: correction.match.writingFeedbackType,
 						wrongText: this.reportCrawledVersion.text.value.substring(correction.match.start, correction.match.end),
 						start: correction.match.start,
 						end: correction.match.end,
 					} as IWritingFeedbackCorrectionViewModel);
-					this._increaseCorrectionsCategoryTotal(correction.match.writingFeedbackType);
+
 					correctionIndex++;
 				}
 			}
 		}
-		return this.allScanCorrectionsView;
+		return viewedCorrections;
 	}
 
 	private _initCorrectionsStatistics() {

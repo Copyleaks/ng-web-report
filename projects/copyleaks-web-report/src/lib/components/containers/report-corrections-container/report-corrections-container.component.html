@@ -1,12 +1,62 @@
-<cr-corrections-actions [totalWritingFeedbackIssues]="totalWritingFeedbackIssues"></cr-corrections-actions>
+<ng-container *ngIf="selectedCategroy === undefined; else selectedCategroyRef">
+	<cr-corrections-actions
+		[totalWritingFeedbackIssues]="totalWritingFeedbackIssues"
+		[totalFilteredWritingFeedbackIssues]="totalFilteredWritingFeedbackIssues"
+		[totalIgnoredWritingFeedbackIssues]="totalIgnoredWritingFeedbackIssues"
+		[writingFeedbackStats]="writingFeedbackStats"></cr-corrections-actions>
+	<div class="corrections-container">
+		<ng-container
+			*ngIf="!displayedScanCorrectionsView || displayedScanCorrectionsView.length === 0; else displayedCorrectionsRef">
+			<cr-empty-result-state [message]="emptyCorrectionsMessage"></cr-empty-result-state>
+		</ng-container>
 
-<div class="corrections-types-container">
-	<span class="categorized-summery" i18n>Categorized Summery</span>
-	<cr-correction-type-panel
-		*ngFor="let correctionTypeStats of writingFeedbackStats"
-		[stats]="correctionTypeStats"></cr-correction-type-panel>
-</div>
+		<ng-template #displayedCorrectionsRef>
+			<cdk-virtual-scroll-viewport
+				class="correction-info-container"
+				itemSize="107"
+				minBufferPx="200"
+				maxBufferPx="1000">
+				<div class="corrections-types-container">
+					<span class="categorized-summery" i18n>Categorized Summery</span>
+					<cr-correction-type-panel
+						*ngFor="let correctionTypeStats of writingFeedbackStats"
+						[stats]="correctionTypeStats"
+						(selectCategory)="onSelectCategory($event)"></cr-correction-type-panel>
+					<span class="categorized-summery" i18n>Chronological</span>
+				</div>
+				<cr-correction
+					*cdkVirtualFor="let correction of displayedScanCorrectionsView"
+					[correction]="correction"
+					[reportDataSvc]="reportDataSvc"></cr-correction>
+			</cdk-virtual-scroll-viewport>
+		</ng-template>
+	</div>
+</ng-container>
+<ng-template #selectedCategroyRef>
+	<div class="selected-category-toolbar">
+		<div class="total-corrections-container" (click)="goToAllCorrectionsView()">
+			<mat-icon class="left-arrow">chevron_left</mat-icon>
+			<span class="all-correction-title" i18n>All Corrections ({{ totalWritingFeedbackIssues }})</span>
+		</div>
+		<div class="selected-correction-container">
+			<mat-icon class="right-arrow">chevron_right</mat-icon>
+			<span class="correction-title" web-report-title-font i18n>
+				{{ selectedCategroyTitle }} ({{ selectedCategroyTotal }})
+			</span>
+		</div>
+	</div>
 
-<div class="cr-correction-container">
-	<cr-correction *ngFor="let correction of displayedScanCorrectionsView" [correction]="correction"></cr-correction>
-</div>
+	<span class="selected-category-description" i18n>
+		{{ selectedCategroyDescription }}
+	</span>
+
+	<span class="categorized-summery" i18n>Chronological</span>
+
+	<cdk-virtual-scroll-viewport class="all-corrections-info-container" itemSize="40">
+		<cr-correction
+			*cdkVirtualFor="let correction of selectedCategroyCorrections"
+			[correction]="correction"
+			[hideDescription]="true"
+			[reportDataSvc]="reportDataSvc"></cr-correction>
+	</cdk-virtual-scroll-viewport>
+</ng-template>

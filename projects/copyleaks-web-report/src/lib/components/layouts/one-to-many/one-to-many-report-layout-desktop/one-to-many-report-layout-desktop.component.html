@@ -85,20 +85,11 @@
 				[statisticsInfo]="writingFeedback?.score?.statistics"
 				[readabilityInfo]="writingFeedback?.score?.readability"></cr-readability-score>
 
-			<cr-corrections-actions
-				[totalWritingFeedbackIssues]="reportStatistics?.totalWritingFeedbackIssues"></cr-corrections-actions>
-
-			<div class="corrections-types-container">
-				<span class="categorized-summery" i18n>Categorized Summery</span>
-				<cr-correction-type-panel
-					*ngFor="let correctionTypeStats of writingFeedbackStats"
-					[stats]="correctionTypeStats"></cr-correction-type-panel>
-			</div>
-			<div class="cr-correction-container">
-				<cr-correction
-					*ngFor="let correction of displayedScanCorrectionsView"
-					[correction]="correction"></cr-correction>
-			</div>
+			<copyleaks-report-corrections-container
+				[totalWritingFeedbackIssues]="reportStatistics?.totalWritingFeedbackIssues"
+				[writingFeedbackStats]="writingFeedbackStats"
+				[allScanCorrectionsView]="allScanCorrectionsView"
+				[displayedScanCorrectionsView]="displayedScanCorrectionsView"></copyleaks-report-corrections-container>
 		</ng-container>
 
 		<div class="custom-results-container" #customResultView [style.flex-grow]="'1'">

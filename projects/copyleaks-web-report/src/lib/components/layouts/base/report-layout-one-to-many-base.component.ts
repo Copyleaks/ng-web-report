@@ -355,6 +355,7 @@ export abstract class OneToManyReportLayoutBaseComponent extends ReportLayoutBas
 							this.displayedScanCorrectionsView = this.allScanCorrectionsView.filter(
 								sc => this.focusedMatch.start === sc.start && this.focusedMatch.end === sc.end
 							);
+						else this.displayedScanCorrectionsView = this.filteredCorrections;
 						this.correctionClicked = !!this.focusedMatch;
 					}
 				}

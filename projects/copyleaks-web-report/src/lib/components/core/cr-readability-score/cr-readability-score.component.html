@@ -9,7 +9,9 @@
 			</mat-panel-title>
 
 			<mat-panel-description>
-				<mat-icon class="hide-alerts-icon" fontSet="material-icons-round">arrow_drop_down</mat-icon>
+				<mat-icon class="hide-alerts-icon" [class.mobile]="isMobile" fontSet="material-icons-round">
+					arrow_drop_down
+				</mat-icon>
 			</mat-panel-description>
 		</mat-expansion-panel-header>
 

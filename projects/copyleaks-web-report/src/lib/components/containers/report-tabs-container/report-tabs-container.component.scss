@@ -41,6 +41,10 @@
 			background-color: $color-primary;
 			transition: width 0.3s ease-in-out;
 		}
+
+		&.mobile {
+			padding: 4px;
+		}
 	}
 
 	::ng-deep .tab-selected,
@@ -222,4 +226,62 @@
 .tab-grammar.with-company-logo,
 .tab-plagiarism.with-company-logo {
 	border-top-left-radius: 0px !important;
+}
+
+.mobile-tab-container {
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	justify-content: center;
+	width: 100%;
+	gap: 4px;
+	.mobile-tab-title {
+		color: $color-black;
+		font-size: 18px;
+		font-style: normal;
+		font-weight: 700;
+		line-height: normal;
+		text-transform: capitalize;
+	}
+}
+
+.mobile-tab-score-container {
+	width: 50px;
+	height: 50px;
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	justify-content: center;
+}
+.mobile-tab-score {
+	color: $color-black;
+	font-size: 14px;
+	font-style: normal;
+	font-weight: 700;
+	line-height: normal;
+	text-transform: uppercase;
+}
+
+.charts-container {
+	position: relative;
+	width: 50px;
+	height: 50px;
+	ngx-charts-pie-chart,
+	.na-border-pic,
+	.na-border-text,
+	.mobile-tab-score {
+		position: absolute;
+		top: 50%;
+		left: 50%;
+		transform: translate(-50%, -50%);
+	}
+}
+.na-border-text {
+	color: $color-grayed-out;
+	text-align: center;
+	font-size: 12px;
+	font-style: normal;
+	font-weight: 700;
+	line-height: normal;
+	text-transform: uppercase;
 }

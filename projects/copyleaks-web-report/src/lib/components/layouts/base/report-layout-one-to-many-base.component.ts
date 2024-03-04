@@ -91,6 +91,10 @@ export abstract class OneToManyReportLayoutBaseComponent extends ReportLayoutBas
 	customResultsTemplate: TemplateRef<any> | undefined = undefined;
 	writingFeedback: IWritingFeedback;
 	writingFeedbackStats: IWritingFeedbackTypeStatistics[];
+	correctionClicked: boolean = false;
+	totalFilteredCorrections: number;
+	showCorrectionsLoadingView: boolean = true;
+	showReadabilityLoadingView: boolean = true;
 
 	override get rerendered(): boolean {
 		return this.oneToManyRerendered;
@@ -221,6 +225,7 @@ export abstract class OneToManyReportLayoutBaseComponent extends ReportLayoutBas
 
 		this.reportDataSvc.writingFeedback$.pipe(untilDestroy(this)).subscribe(data => {
 			if (data) this.writingFeedback = data;
+			this.showReadabilityLoadingView = !data;
 		});
 
 		combineLatest([this.reportDataSvc.crawledVersion$, this.reportDataSvc.writingFeedback$])
@@ -263,6 +268,11 @@ export abstract class OneToManyReportLayoutBaseComponent extends ReportLayoutBas
 						}
 					}
 				}
+
+				this.totalFilteredCorrections =
+					(this.allScanCorrectionsView?.length ?? 0) -
+					(this.displayedScanCorrectionsView?.length ?? 0) -
+					(this.reportDataSvc.excludedCorrections?.length ?? 0);
 			});
 
 		this.reportDataSvc.filterOptions$.pipe(untilDestroy(this)).subscribe(data => {
@@ -301,6 +311,11 @@ export abstract class OneToManyReportLayoutBaseComponent extends ReportLayoutBas
 						this.reportDataSvc.excludedCorrections
 					);
 					this.displayedScanCorrectionsView = this._mapCorrectionsToViewModel(filteredCorrections);
+					this.showCorrectionsLoadingView = false;
+					this.totalFilteredCorrections =
+						(this.allScanCorrectionsView?.length ?? 0) -
+						(this.displayedScanCorrectionsView?.length ?? 0) -
+						(this.reportDataSvc.excludedCorrections?.length ?? 0);
 				}
 			}
 		});
@@ -330,6 +345,7 @@ export abstract class OneToManyReportLayoutBaseComponent extends ReportLayoutBas
 							this.displayedScanCorrectionsView = this.allScanCorrectionsView.filter(sc =>
 								selectedMatches.find(sm => sm.start === sc.start && sm.end === sc.end)
 							);
+						this.correctionClicked = selectedMatches?.length > 0;
 					}
 				} else {
 					this.focusedMatch = !content.isHtmlView ? text && text.match : html;
@@ -339,7 +355,7 @@ export abstract class OneToManyReportLayoutBaseComponent extends ReportLayoutBas
 							this.displayedScanCorrectionsView = this.allScanCorrectionsView.filter(
 								sc => this.focusedMatch.start === sc.start && this.focusedMatch.end === sc.end
 							);
-						else this.displayedScanCorrectionsView = this.filteredCorrections;
+						this.correctionClicked = !!this.focusedMatch;
 					}
 				}
 			});
@@ -370,6 +386,7 @@ export abstract class OneToManyReportLayoutBaseComponent extends ReportLayoutBas
 							sc => textSelectedMatch.start === sc.start && textSelectedMatch.end === sc.end
 						);
 					} else this.displayedScanCorrectionsView = this.filteredCorrections;
+					this.correctionClicked = !!selectedMatch;
 				}
 				break;
 			case 'multi-match-select':
@@ -387,6 +404,7 @@ export abstract class OneToManyReportLayoutBaseComponent extends ReportLayoutBas
 						if (sc.gid > 0 && sc.gid < this.allScanCorrectionsView.length)
 							this.displayedScanCorrectionsView.push(this.allScanCorrectionsView[sc.gid]);
 					});
+					this.correctionClicked = selectedMatches?.length > 0;
 				}
 				break;
 			case 'upgrade-plan':

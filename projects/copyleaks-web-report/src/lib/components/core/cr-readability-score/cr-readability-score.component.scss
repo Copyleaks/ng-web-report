@@ -67,6 +67,10 @@
 		margin-left: 12px;
 		margin-right: 8px;
 		transition: transform 0.2s ease-in-out;
+
+		&.mobile {
+			margin-right: 0px !important;
+		}
 	}
 
 	.hide-alerts-icon:hover {

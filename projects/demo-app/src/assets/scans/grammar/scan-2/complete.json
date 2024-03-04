@@ -609,7 +609,16 @@
         "repositories": []
     },
     "notifications": {
-        "alerts": []
+        "alerts": [
+            {
+              "additionalData": "",
+              "code": "cross-language-same-as-doc-lang",
+              "helpLink": null,
+              "message": "Submitted language and cross-language text are the same language. No credits were used.",
+              "severity": 1,
+              "title": "Cross Language: Same Document Language"
+            }
+        ]
     },
     "writingFeedback": {
         "textStatistics": {

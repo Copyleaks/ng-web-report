@@ -17,7 +17,6 @@ import { ReportMatchHighlightService } from '../../../services/report-match-high
 import { ReportDataService } from '../../../services/report-data.service';
 import { trigger, state, transition, animate, style } from '@angular/animations';
 import { ECustomResultsReportView } from '../../core/cr-custom-results/models/cr-custom-results.enums';
-
 @Component({
 	selector: 'copyleaks-report-tabs-container',
 	templateUrl: './report-tabs-container.component.html',
@@ -120,6 +119,8 @@ export class ReportTabsContainerComponent implements OnInit, OnDestroy, OnChange
 	 */
 	@Input() showWritingFeedbackIssues: boolean = true;
 
+	@Input() isMobile: boolean = false;
+
 	EReportViewType = EReportViewType;
 	EReportScoreTooltipPosition = EReportScoreTooltipPosition;
 	customTabsTemplateRef: TemplateRef<any>[] | undefined = undefined;
@@ -128,6 +129,18 @@ export class ReportTabsContainerComponent implements OnInit, OnDestroy, OnChange
 	DISABLED: string = $localize`Disabled`;
 
 	totalAiWords = 0;
+
+	plagarismScoreChartColorScheme = {
+		domain: ['#fd7366', '#ffb1b1', '#fed5a9', '#EBF3F5'],
+	};
+
+	aiScoreChartColorScheme = {
+		domain: ['#c1addc', '#EBF3F5'],
+	};
+
+	plagarismScoreChartData = [];
+
+	aiScoreChartData = [];
 
 	constructor(
 		private _reportViewSvc: ReportViewService,
@@ -179,7 +192,57 @@ export class ReportTabsContainerComponent implements OnInit, OnDestroy, OnChange
 				});
 			}
 		}
+
+		if ('selectedTap' in changes) this._updateSelectedTabColors();
+
 		this.totalAiWords = Math.ceil(this.aiScore * this.wordsTotal ?? 0);
+
+		if (
+			this.isMobile &&
+			('aiScore' in changes ||
+				'paraphrasedTotal' in changes ||
+				'minorChangesTotal' in changes ||
+				'identicalTotal' in changes ||
+				'wordsTotal' in changes ||
+				('showLoadingView' in changes && changes['showLoadingView'].currentValue === false))
+		) {
+			setTimeout(() => {
+				this.plagarismScoreChartData = [
+					{
+						name: 'Identical',
+						value: this.identicalTotal,
+					},
+					{
+						name: 'Minor Changes',
+						value: this.minorChangesTotal,
+					},
+					{
+						name: 'Paraphrased',
+						value: this.paraphrasedTotal,
+					},
+					{
+						name: 'Left',
+						value:
+							this.wordsTotal -
+							this.excludedTotal -
+							this.identicalTotal -
+							this.minorChangesTotal -
+							this.paraphrasedTotal,
+					},
+				];
+
+				this.aiScoreChartData = [
+					{
+						name: 'AI',
+						value: this.totalAiWords,
+					},
+					{
+						name: 'Human',
+						value: this.wordsTotal - this.totalAiWords,
+					},
+				];
+			});
+		}
 	}
 
 	selectTap(selectedTab: EReportViewType) {
@@ -187,6 +250,9 @@ export class ReportTabsContainerComponent implements OnInit, OnDestroy, OnChange
 			selectedTab == this.selectedTap ||
 			(selectedTab === EReportViewType.PlagiarismView && this.hidePlagarismTap && this.showDisabledProducts) ||
 			(selectedTab === EReportViewType.AIView && this.hideAiTap && this.showDisabledProducts) ||
+			(selectedTab === EReportViewType.WritingFeedbackTabView &&
+				this.hideWritingFeedbackTap &&
+				this.showDisabledProducts) ||
 			this.loadingProgressPct != 100
 		)
 			return;
@@ -236,6 +302,37 @@ export class ReportTabsContainerComponent implements OnInit, OnDestroy, OnChange
 				});
 				this._reportViewSvc.selectedAlert$.next(null);
 				this._reportViewSvc.selectedCustomTabContent$.next(null);
+				break;
+			default:
+				break;
+		}
+	}
+
+	private _updateSelectedTabColors() {
+		switch (this.selectedTap) {
+			case EReportViewType.AIView:
+				this.plagarismScoreChartColorScheme = {
+					domain: ['#fd7366', '#ffb1b1', '#fed5a9', '#FBFFFF'],
+				};
+				this.aiScoreChartColorScheme = {
+					domain: ['#c1addc', '#EBF3F5'],
+				};
+				break;
+			case EReportViewType.PlagiarismView:
+				this.plagarismScoreChartColorScheme = {
+					domain: ['#fd7366', '#ffb1b1', '#fed5a9', '#EBF3F5'],
+				};
+				this.aiScoreChartColorScheme = {
+					domain: ['#c1addc', '#FBFFFF'],
+				};
+				break;
+			case EReportViewType.WritingFeedbackTabView:
+				this.plagarismScoreChartColorScheme = {
+					domain: ['#fd7366', '#ffb1b1', '#fed5a9', '#FBFFFF'],
+				};
+				this.aiScoreChartColorScheme = {
+					domain: ['#c1addc', '#FBFFFF'],
+				};
 				break;
 			default:
 				break;

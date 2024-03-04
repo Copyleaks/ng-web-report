@@ -83,6 +83,7 @@ import { CrCorrectionTypePanelComponent } from './components/core/cr-correction-
 import { CrCorrectionsActionsComponent } from './components/core/cr-corrections-actions/cr-corrections-actions.component';
 import { FilterCorrectionsDialogComponent } from './dialogs/filter-corrections-dialog/filter-corrections-dialog.component';
 import { FilterCorrectionsDialogService } from './dialogs/filter-corrections-dialog/services/filter-corrections-dialog.service';
+import { NgxChartsModule } from '@swimlane/ngx-charts';
 
 @NgModule({
 	declarations: [
@@ -166,6 +167,7 @@ import { FilterCorrectionsDialogService } from './dialogs/filter-corrections-dia
 		MatCheckboxModule,
 		MatProgressBarModule,
 		CrSpinnerModule,
+		NgxChartsModule,
 	],
 	exports: [
 		CopyleaksWebReportComponent,

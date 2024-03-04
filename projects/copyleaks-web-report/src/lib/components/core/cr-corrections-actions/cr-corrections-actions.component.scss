@@ -54,6 +54,32 @@
 		flex-direction: row;
 		align-items: center;
 	}
+
+	.diselect-match-icon {
+		cursor: pointer;
+		color: $color-dark-blue;
+		width: 24px !important;
+		height: 24px !important;
+		font-size: 24px !important;
+		&:hover {
+			color: $color-primary;
+		}
+	}
+
+	.expanded-section-icon {
+		transform: rotate(180deg);
+	}
+
+	.actions-btns-container {
+		display: flex;
+		flex-direction: row;
+		gap: 8px;
+		height: fit-content;
+	}
+
+	.expand-icon {
+		margin-right: 0px !important;
+	}
 }
 
 ::ng-deep {

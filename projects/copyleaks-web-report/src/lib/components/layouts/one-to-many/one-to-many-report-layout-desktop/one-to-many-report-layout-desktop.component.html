@@ -83,13 +83,17 @@
 		<ng-container *ngIf="viewMode === 'writing-feedback'">
 			<cr-readability-score
 				[statisticsInfo]="writingFeedback?.score?.statistics"
-				[readabilityInfo]="writingFeedback?.score?.readability"></cr-readability-score>
+				[readabilityInfo]="writingFeedback?.score?.readability"
+				[showLoadingView]="showReadabilityLoadingView"></cr-readability-score>
 
 			<copyleaks-report-corrections-container
 				[totalWritingFeedbackIssues]="reportStatistics?.totalWritingFeedbackIssues"
+				[totalFilteredCorrections]="totalFilteredCorrections"
 				[writingFeedbackStats]="writingFeedbackStats"
 				[allScanCorrectionsView]="allScanCorrectionsView"
-				[displayedScanCorrectionsView]="displayedScanCorrectionsView"></copyleaks-report-corrections-container>
+				[displayedScanCorrectionsView]="displayedScanCorrectionsView"
+				[correctionClicked]="correctionClicked"
+				[showLoadingView]="showCorrectionsLoadingView"></copyleaks-report-corrections-container>
 		</ng-container>
 
 		<div class="custom-results-container" #customResultView [style.flex-grow]="'1'">

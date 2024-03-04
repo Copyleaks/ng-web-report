@@ -9,6 +9,7 @@
 		<!-- Report alerts -->
 		<copyleaks-report-alerts-container
 			*ngIf="
+				viewMode === 'one-to-many' &&
 				alerts &&
 				alerts.length > 0 &&
 				!isLoadingScanResults &&
@@ -19,6 +20,12 @@
 			[isMobile]="true"
 			[flexGrow]="20"></copyleaks-report-alerts-container>
 
+		<cr-readability-score
+			*ngIf="viewMode === 'writing-feedback'"
+			[statisticsInfo]="writingFeedback?.score?.statistics"
+			[readabilityInfo]="writingFeedback?.score?.readability"
+			[isMobile]="true"></cr-readability-score>
+
 		<!-- Report scan content section -->
 		<div class="content-section">
 			<!-- Report scan content tabs -->
@@ -27,6 +34,7 @@
 				[hidePlagarismTap]="hidePlagarismTap"
 				[hideWritingFeedbackTap]="hideWritingFeedbackTap"
 				[writingFeedbackScore]="reportStatistics?.writingFeedbackScore"
+				[totalWritingFeedbackIssues]="reportStatistics?.totalWritingFeedbackIssues"
 				[selectedTap]="selectedTap"
 				[plagarismScore]="plagiarismScore"
 				[aiScore]="reportStatistics?.aiScore ?? 0"
@@ -37,7 +45,8 @@
 				[excludedTotal]="reportStatistics?.omittedWords ?? 0"
 				[showLoadingView]="isLoadingScanContent || isLoadingScanResults"
 				[showDisabledProducts]="showDisabledProducts"
-				[loadingProgressPct]="loadingProgressPct"></copyleaks-report-tabs-container>
+				[loadingProgressPct]="loadingProgressPct"
+				[isMobile]="true"></copyleaks-report-tabs-container>
 
 			<!-- Report scan content viewer -->
 			<copyleaks-content-viewer-container
@@ -64,9 +73,10 @@
 	<!-- Report results -->
 	<copyleaks-report-results-container
 		*ngIf="
-			selectedTap !== EReportViewType.AIView ||
-			reportTemplateMode === ECustomResultsReportView.Partial ||
-			reportTemplateMode === ECustomResultsReportView.Full
+			((selectedTap !== EReportViewType.AIView && selectedTap !== EReportViewType.WritingFeedbackTabView) ||
+				reportTemplateMode === ECustomResultsReportView.Partial ||
+				reportTemplateMode === ECustomResultsReportView.Full) &&
+			viewMode === 'one-to-many'
 		"
 		class="results-container"
 		[flexGrow]="15"
@@ -78,6 +88,17 @@
 		[filterOptions]="filterOptions"
 		[reportViewMode]="reportTemplateMode"
 		[customResultsTemplate]="customResultsTemplate"></copyleaks-report-results-container>
+
+	<copyleaks-report-corrections-container
+		*ngIf="viewMode === 'writing-feedback'"
+		[totalWritingFeedbackIssues]="reportStatistics?.totalWritingFeedbackIssues"
+		[totalFilteredCorrections]="totalFilteredCorrections"
+		[writingFeedbackStats]="writingFeedbackStats"
+		[allScanCorrectionsView]="allScanCorrectionsView"
+		[displayedScanCorrectionsView]="displayedScanCorrectionsView"
+		[correctionClicked]="correctionClicked"
+		[isMobile]="true"
+		[showLoadingView]="showCorrectionsLoadingView"></copyleaks-report-corrections-container>
 
 	<!-- Powered by Copyleaks image section -->
 	<div class="powered-by-copyleaks-container"><cr-powered-by></cr-powered-by></div>

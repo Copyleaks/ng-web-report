@@ -31,6 +31,8 @@ export class CrReadabilityScoreComponent implements OnInit, OnChanges {
 
 	@Input() statisticsInfo: IWritingFeedbackStatistics;
 
+	@Input() showLoadingView: boolean = false;
+
 	hideAlerts: boolean;
 	readabilityLevelText: string;
 

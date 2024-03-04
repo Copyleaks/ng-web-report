@@ -3,7 +3,7 @@
 		class="desktop-view"
 		[lockedResultTemplateRef]="lockedResultTemplateRef"
 		[reportEndpointConfig]="endpointsConfig"
-		[showDisabledProducts]="true"
+		[showDisabledProducts]="showCustomResults && reportView === 1"
 		(onCompleteResultUpdate)="onCompleteResultUpdate($event)"
 		(onReportRequestError)="onReportRequestError($event)">
 		<!-- Custom Actions -->

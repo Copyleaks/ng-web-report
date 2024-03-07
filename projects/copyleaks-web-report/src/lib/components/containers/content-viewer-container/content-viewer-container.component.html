@@ -5,7 +5,8 @@
 			<ng-container *ngIf="reportOrigin === 'suspect'" i18n>Found text</ng-container>
 		</span>
 		<span *ngIf="numberOfWords" class="number-of-words" i18n>
-			({{ numberOfWords }} {numberOfWords, plural, =1 {word} other {words} })
+			({{ numberOfWords }}
+			{numberOfWords, plural, =1 {word} other {words}} )
 		</span>
 	</div>
 	<div class="actions-container">

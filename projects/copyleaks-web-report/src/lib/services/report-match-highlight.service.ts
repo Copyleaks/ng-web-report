@@ -26,7 +26,7 @@ export class ReportMatchHighlightService implements OnDestroy {
 		this.textMatchClick$.pipe(untilDestroy(this)).subscribe(event => {
 			switch (event.origin) {
 				case 'original':
-					this.setOriginalTextMatch(event?.elem, event?.multiSelect);
+					this.setOriginalTextMatch(event?.elem, event?.multiSelect, event?.showResults);
 					break;
 				case 'source':
 					this.setSourceTextMatch(event?.elem);
@@ -133,7 +133,11 @@ export class ReportMatchHighlightService implements OnDestroy {
 	 * This will mark/unmark the text match in the original component while in `one-to-many` view mode
 	 * @param match The match to mark/unmark
 	 */
-	public setOriginalTextMatch(next: CrTextMatchComponent | null, multiSelect: boolean = false) {
+	public setOriginalTextMatch(
+		next: CrTextMatchComponent | null,
+		multiSelect: boolean = false,
+		showResults: boolean = true
+	) {
 		// check if the shift key is pressed (multi selection)
 		if (multiSelect) {
 			if (!next) {
@@ -142,7 +146,7 @@ export class ReportMatchHighlightService implements OnDestroy {
 						if (match) match.focused = false;
 					});
 				});
-				this._multiOriginalText.next([]);
+				if (showResults) this._multiOriginalText.next([]);
 				return;
 			}
 			const foundSelection = this._multiOriginalText.value.find(match => match === next);
@@ -151,15 +155,17 @@ export class ReportMatchHighlightService implements OnDestroy {
 					foundSelection.focused = false;
 				});
 				const selected = this._multiOriginalText.value.filter(match => match != next);
-				if (selected.length === 0) {
-					this._multiOriginalText.next([]);
-					this._originalText.next(null);
-				} else this._multiOriginalText.next([...selected]);
+				if (showResults) {
+					if (selected.length === 0) {
+						this._multiOriginalText.next([]);
+						this._originalText.next(null);
+					} else this._multiOriginalText.next([...selected]);
+				}
 			} else {
 				setTimeout(() => {
 					next.focused = true;
 				});
-				this._multiOriginalText.next([...this._multiOriginalText.value, next]);
+				if (showResults) this._multiOriginalText.next([...this._multiOriginalText.value, next]);
 			}
 			return;
 		}
@@ -173,15 +179,17 @@ export class ReportMatchHighlightService implements OnDestroy {
 		const prev = this._originalText.value;
 		if (prev === next) {
 			next = null;
-			this._multiOriginalText.next([]);
+			if (showResults) this._multiOriginalText.next([]);
 		} else {
-			if (next) this._multiOriginalText.next([next]);
-			else this._multiOriginalText.next([]);
+			if (showResults) {
+				if (next) this._multiOriginalText.next([next]);
+				else this._multiOriginalText.next([]);
+			}
 		}
 		setTimeout(() => {
 			helpers.onTextMatchChange([prev, next]);
 		});
-		this._originalText.next(next);
+		if (showResults) this._originalText.next(next);
 	}
 
 	/**

@@ -1,35 +1,80 @@
-<div class="correction-container">
-	<div class="correction-info-container">
-		<div class="correction-description-container">
-			<span class="wrong-text">{{ correction.wrongText }}</span>
-			<mat-icon class="arrow-icon" fontSet="material-icons-round">east</mat-icon>
-			<span class="correction-text">{{ correction.correctionText }}</span>
+<ng-container *ngIf="!showLoadingView; else loadingViewRef">
+	<div @fadeIn class="correction-container">
+		<div class="correction-info-container">
+			<div class="correction-description-container">
+				<span
+					class="wrong-text"
+					[matTooltip]="correction?.wrongText ?? ''"
+					matTooltipClass="web-report-mat-tooltip"
+					i18n-matTooltip>
+					{{ correction.wrongText }}
+				</span>
+				<mat-icon class="arrow-icon" fontSet="material-icons-round">east</mat-icon>
+				<span
+					class="correction-text"
+					[matTooltip]="correction?.correctionText ?? ''"
+					matTooltipClass="web-report-mat-tooltip"
+					i18n-matTooltip>
+					{{ correction.correctionText }}
+				</span>
+			</div>
+			<mat-chip *ngIf="!hideDescription" class="correction-type">{{ correctionType }}</mat-chip>
 		</div>
-		<mat-chip *ngIf="!hideDescription" class="correction-type">{{ correctionType }}</mat-chip>
+		<mat-icon
+			*ngIf="isExcludeView; else excludedIconRef"
+			class="options-icon"
+			fontSet="material-icons-round"
+			[matTooltip]="excludedTooltipText"
+			matTooltipClass="web-report-mat-tooltip"
+			i18n-matTooltip
+			(click)="excludeToggle()">
+			{{ isExcluded ? 'visibility' : 'visibility_off' }}
+		</mat-icon>
+		<ng-template #excludedIconRef>
+			<mat-icon
+				class="options-icon"
+				fontSet="material-icons-round"
+				(click)="$event.stopPropagation(); $event.preventDefault()"
+				[matMenuTriggerFor]="menu">
+				more_vert
+			</mat-icon>
+		</ng-template>
 	</div>
-	<mat-icon
-		*ngIf="isExcludeView; else excludedIconRef"
-		class="options-icon"
-		fontSet="material-icons-round"
-		[matTooltip]="excludedTooltipText"
-		matTooltipClass="web-report-mat-tooltip"
-		i18n-matTooltip
-		(click)="excludeToggle()">
-		{{ isExcluded ? 'visibility' : 'visibility_off' }}
-	</mat-icon>
-	<ng-template #excludedIconRef>
-		<mat-icon class="options-icon" fontSet="material-icons-round" [matMenuTriggerFor]="menu">more_vert</mat-icon>
-	</ng-template>
-</div>
-<span *ngIf="!hideDescription" class="correction-type-description" i18n>
-	{{ correctionDescription }}
-</span>
+	<span *ngIf="!hideDescription" @fadeIn class="correction-type-description" i18n>
+		{{ correctionDescription }}
+	</span>
+</ng-container>
+
+<ng-template #loadingViewRef>
+	<div @fadeIn class="loader-container">
+		<div class="correction-title-loader">
+			<ngx-skeleton-loader
+				class="skeleton correction-line-loader"
+				[appearance]="'line'"
+				style="width: 40%"></ngx-skeleton-loader>
+			<ngx-skeleton-loader class="skeleton circle-loader" [appearance]="'line'"></ngx-skeleton-loader>
+			<ngx-skeleton-loader
+				class="skeleton correction-line-loader"
+				[appearance]="'line'"
+				style="width: 40%"></ngx-skeleton-loader>
+		</div>
+		<ngx-skeleton-loader
+			class="skeleton correction-line-loader"
+			[appearance]="'line'"
+			style="width: 15%"></ngx-skeleton-loader>
+
+		<ngx-skeleton-loader
+			class="skeleton correction-line-loader correction-description-loader"
+			[appearance]="'line'"
+			style="width: 100%"></ngx-skeleton-loader>
+	</div>
+</ng-template>
 
 <mat-menu class="result-item-menu-list" #menu="matMenu" yPosition="below">
-	<button mat-menu-item [disableRipple]="true">
+	<!-- <button mat-menu-item [disableRipple]="true">
 		<mat-icon class="mat-menu-item-icon" fontSet="material-icons-round">help_outline</mat-icon>
 		<span class="mat-menu-item-text" i18n>Learn about correction</span>
-	</button>
+	</button> -->
 	<button mat-menu-item [disableRipple]="true" (click)="ignoreCorrection()">
 		<mat-icon class="mat-menu-item-icon" fontSet="material-icons-round">visibility_off</mat-icon>
 		<span class="mat-menu-item-text" i18n>Ignore Correction</span>

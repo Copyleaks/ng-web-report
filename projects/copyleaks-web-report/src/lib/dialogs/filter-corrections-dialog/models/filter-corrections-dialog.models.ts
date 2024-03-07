@@ -8,5 +8,6 @@ export interface IFilterCorrectionsDialogData {
 	reportViewSvc: ReportViewService;
 	selectedView: EFilterCorrectionsDialogView;
 	totalCorrections: number;
+	totalFilteredCorrections: number;
 	writingFeedbackStats: IWritingFeedbackTypeStatistics[];
 }

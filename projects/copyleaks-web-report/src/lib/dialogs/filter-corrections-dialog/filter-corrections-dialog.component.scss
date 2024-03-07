@@ -50,7 +50,17 @@
 				line-height: normal;
 				color: $color-black;
 			}
-			.excluded-chip {
+
+			.stats-chips-container {
+				display: flex;
+				flex-direction: row;
+				align-content: center;
+				justify-content: flex-start;
+				gap: 4px;
+			}
+
+			.excluded-chip,
+			.filtered-chip {
 				width: fit-content;
 				height: fit-content;
 				line-height: normal;
@@ -60,6 +70,10 @@
 				line-height: normal;
 				font-family: haboro-soft, sans-serif !important;
 				cursor: pointer;
+			}
+
+			.filtered-chip {
+				cursor: auto !important;
 			}
 		}
 		.clear-filter-btn {
@@ -156,7 +170,6 @@
 		justify-content: flex-end;
 		gap: 16px;
 		padding: 0px !important;
-		padding-right: 10px !important;
 		margin: 0px !important;
 		min-height: auto !important;
 		button {
@@ -288,6 +301,25 @@
 				text-decoration-line: underline;
 			}
 		}
+	}
+
+	.search-input {
+		::ng-deep {
+			.mat-form-field-infix {
+				padding: 7px 0px 7px 0px !important;
+			}
+			.mat-form-field-flex {
+				padding-left: 8px !important;
+				padding-right: 8px !important;
+			}
+		}
+	}
+
+	.search-input-search-icon {
+		font-size: 18px !important;
+		width: 18px !important;
+		height: 18px !important;
+		padding: 2px !important;
 	}
 }
 

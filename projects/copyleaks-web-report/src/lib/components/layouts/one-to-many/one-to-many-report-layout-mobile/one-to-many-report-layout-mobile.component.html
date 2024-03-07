@@ -21,7 +21,7 @@
 			[flexGrow]="20"></copyleaks-report-alerts-container>
 
 		<cr-readability-score
-			*ngIf="viewMode === 'writing-feedback'"
+			*ngIf="viewMode === 'writing-feedback' && !showReadabilityLoadingView"
 			[statisticsInfo]="writingFeedback?.score?.statistics"
 			[readabilityInfo]="writingFeedback?.score?.readability"
 			[isMobile]="true"></cr-readability-score>
@@ -55,6 +55,7 @@
 				[contentHtml]="iframeHtml"
 				[scanSource]="reportCrawledVersion"
 				[contentTextMatches]="contentTextMatches"
+				[contentHtmlMatches]="reportMatches"
 				[numberOfPages]="numberOfPages"
 				[numberOfWords]="numberOfWords"
 				[currentPage]="currentPageSource"

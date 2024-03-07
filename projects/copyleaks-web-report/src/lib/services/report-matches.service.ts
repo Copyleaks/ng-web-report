@@ -1,5 +1,5 @@
 import { Injectable, OnDestroy } from '@angular/core';
-import { BehaviorSubject, combineLatest } from 'rxjs';
+import { BehaviorSubject, Subject, combineLatest } from 'rxjs';
 import { filter } from 'rxjs/operators';
 import { ALERTS } from '../constants/report-alerts.constants';
 import {
@@ -56,6 +56,12 @@ export class ReportMatchesService implements OnDestroy {
 	/** Emits matches that are relevant to source html one-to-many mode */
 	public get originalHtmlMatches$() {
 		return this._originalHtmlMatches.asObservable().pipe();
+	}
+
+	private _correctionSelect$ = new Subject<IWritingFeedbackCorrectionViewModel | null>();
+	/** Emits matches that are relevant to source html one-to-many mode */
+	public get correctionSelect$() {
+		return this._correctionSelect$;
 	}
 
 	constructor(private _reportDataSvc: ReportDataService, private _reportViewSvc: ReportViewService) {

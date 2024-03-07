@@ -9,7 +9,7 @@
 		[plagarismScore]="plagiarismScore"
 		[aiScore]="reportStatistics?.aiScore ?? 0"
 		[writingFeedbackScore]="reportStatistics?.writingFeedbackScore"
-		[totalWritingFeedbackIssues]="reportStatistics?.totalWritingFeedbackIssues"
+		[totalWritingFeedbackIssues]="displayedScanCorrectionsView?.length ?? reportStatistics?.totalWritingFeedbackIssues"
 		[wordsTotal]="reportStatistics?.total ?? 0"
 		[identicalTotal]="reportStatistics?.identical ?? 0"
 		[minorChangesTotal]="reportStatistics?.minorChanges ?? 0"
@@ -29,6 +29,7 @@
 		[contentHtml]="iframeHtml"
 		[scanSource]="reportCrawledVersion"
 		[contentTextMatches]="contentTextMatches"
+		[contentHtmlMatches]="reportMatches"
 		[numberOfPages]="numberOfPages"
 		[numberOfWords]="numberOfWords"
 		[currentPage]="currentPageSource"
@@ -82,6 +83,7 @@
 
 		<ng-container *ngIf="viewMode === 'writing-feedback'">
 			<cr-readability-score
+				*ngIf="!showReadabilityLoadingView"
 				[statisticsInfo]="writingFeedback?.score?.statistics"
 				[readabilityInfo]="writingFeedback?.score?.readability"
 				[showLoadingView]="showReadabilityLoadingView"></cr-readability-score>

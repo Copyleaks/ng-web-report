@@ -55,18 +55,24 @@
 							class="identical"
 							[class.first-percentage]="!!identicalTotal"
 							[class.last-percentage]="!minorChangesTotal && !paraphrasedTotal"
-							[style.width.%]="(identicalTotal / wordsTotal) * 100"
+							[style.width.%]="
+								wordsTotal - excludedTotal === 0 ? 0 : (identicalTotal / (wordsTotal - excludedTotal)) * 100
+							"
 							[style.border]="!identicalTotal ? 'none' : ''"></div>
 						<div
 							class="minor-changes"
 							[class.first-percentage]="!identicalTotal"
 							[class.last-percentage]="!paraphrasedTotal"
-							[style.width.%]="(minorChangesTotal / wordsTotal) * 100"
+							[style.width.%]="
+								wordsTotal - excludedTotal === 0 ? 0 : (minorChangesTotal / (wordsTotal - excludedTotal)) * 100
+							"
 							[style.border]="!minorChangesTotal ? 'none' : ''"></div>
 						<div
 							class="paraphrased last-percentage"
 							[class.first-percentage]="!identicalTotal && !minorChangesTotal"
-							[style.width.%]="(paraphrasedTotal / wordsTotal) * 100"
+							[style.width.%]="
+								wordsTotal - excludedTotal === 0 ? 0 : (paraphrasedTotal / (wordsTotal - excludedTotal)) * 100
+							"
 							[style.border]="!paraphrasedTotal ? 'none' : ''"></div>
 					</div>
 				</div>
@@ -241,6 +247,14 @@
 
 	<ng-template #loadingViewRef>
 		<div class="loading-tab first">
+			<div class="bar-title-container">
+				<ngx-skeleton-loader class="skeleton" [appearance]="'line'" style="width: 40%"></ngx-skeleton-loader>
+				<ngx-skeleton-loader class="skeleton" [appearance]="'line'" style="width: 20%"></ngx-skeleton-loader>
+			</div>
+			<ngx-skeleton-loader class="bar skeleton" [appearance]="'line'" style="width: 100%"></ngx-skeleton-loader>
+		</div>
+
+		<div class="loading-tab">
 			<div class="bar-title-container">
 				<ngx-skeleton-loader class="skeleton" [appearance]="'line'" style="width: 40%"></ngx-skeleton-loader>
 				<ngx-skeleton-loader class="skeleton" [appearance]="'line'" style="width: 20%"></ngx-skeleton-loader>

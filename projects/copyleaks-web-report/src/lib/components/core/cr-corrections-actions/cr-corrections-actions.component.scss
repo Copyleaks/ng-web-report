@@ -6,6 +6,7 @@
 	display: flex;
 	flex-direction: row;
 	justify-content: space-between;
+	align-items: center;
 	gap: 10px;
 	border-bottom: 1px solid $color-container-background;
 	padding-bottom: 4px;
@@ -79,6 +80,46 @@
 
 	.expand-icon {
 		margin-right: 0px !important;
+	}
+
+	.skeleton {
+		width: fit-content;
+		display: flex;
+		height: fit-content !important;
+		::ng-deep .loader {
+			height: 19px !important;
+			margin-bottom: 0px !important;
+			border-radius: 10px !important;
+			opacity: 0.2;
+			background-color: $color-medium-dark;
+		}
+	}
+
+	.actions-loader-container {
+		width: 100%;
+		display: flex;
+		flex-direction: row;
+		justify-content: space-between;
+		align-items: center;
+		.search-input-loader {
+			::ng-deep .loader {
+				height: 13px !important;
+			}
+		}
+
+		.icons-loader-container {
+			display: flex;
+			flex-direction: row;
+			gap: 8px;
+
+			.circle {
+				::ng-deep .loader {
+					width: 24px !important;
+					height: 24px !important;
+					border-radius: 50% !important;
+				}
+			}
+		}
 	}
 }
 

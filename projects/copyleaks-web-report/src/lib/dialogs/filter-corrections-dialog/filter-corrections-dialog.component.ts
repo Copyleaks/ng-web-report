@@ -8,7 +8,7 @@ import { EResponsiveLayoutType } from '../../enums/copyleaks-web-report.enums';
 import { FilterCorrectionsDialogService } from './services/filter-corrections-dialog.service';
 import { FormControl, FormGroup } from '@angular/forms';
 import { startWith } from 'rxjs/operators';
-import { getCorrectionCategoryTitle } from '../../utils/enums-helpers';
+import { getCorrectionCategoryDescription, getCorrectionCategoryTitle } from '../../utils/enums-helpers';
 
 @Component({
 	selector: 'cr-filter-corrections-dialog',
@@ -29,6 +29,7 @@ export class FilterCorrectionsDialogComponent implements OnInit, OnDestroy {
 	categoriesKeys: string[];
 	allIncluded: boolean;
 	totalCorrections: number = 0;
+	totalFilteredCorrections: number = 0;
 	searchControl = new FormControl('');
 
 	constructor(
@@ -48,6 +49,7 @@ export class FilterCorrectionsDialogComponent implements OnInit, OnDestroy {
 			this._dialogRef.addPanelClass('excluded-corrections-dialog');
 
 		this.totalCorrections = this.data.totalCorrections ?? 0;
+		this.totalFilteredCorrections = this.data.totalFilteredCorrections ?? 0;
 		this.writingFeedbackStats = this.data.writingFeedbackStats;
 
 		this.excludedCorrections = this.searchedExcludedCorrections = this.data?.reportDataSvc.excludedCorrections;
@@ -114,7 +116,8 @@ export class FilterCorrectionsDialogComponent implements OnInit, OnDestroy {
 			ec =>
 				ec.correctionText?.toLowerCase().includes(searchValue) ||
 				ec.wrongText?.toLowerCase().includes(searchValue) ||
-				getCorrectionCategoryTitle(ec.type)?.toLowerCase()?.includes(searchValue)
+				getCorrectionCategoryTitle(ec.type)?.toLowerCase()?.includes(searchValue) ||
+				getCorrectionCategoryDescription(ec.type)?.toLowerCase()?.includes(searchValue)
 		);
 	}
 

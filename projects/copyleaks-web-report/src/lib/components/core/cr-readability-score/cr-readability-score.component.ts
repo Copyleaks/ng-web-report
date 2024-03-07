@@ -14,6 +14,9 @@ export class CrReadabilityScoreComponent implements OnInit, OnChanges {
 	@HostBinding('style.flex-grow')
 	flexGrowProp: number;
 
+	@HostBinding('style.box-shadow')
+	boxShadow: string;
+
 	@ViewChild('alertsContainer') alertsContainerRef: ElementRef<HTMLDivElement>;
 	@ViewChild('expansionPanel') expansionPanelRef: ElementRef;
 
@@ -66,6 +69,12 @@ export class CrReadabilityScoreComponent implements OnInit, OnChanges {
 	ngOnChanges(changes: SimpleChanges): void {
 		if (changes['readabilityInfo']) {
 			this.readabilityLevelText = this.getReadabilityLevelText;
+		}
+
+		if (changes['isMobile']) {
+			if (changes['isMobile'].currentValue === true)
+				this.boxShadow = '-2px -2px 8px 0px rgba(255, 255, 255, 0.5), 2px 2px 4px 0px rgba(0, 0, 0, 0.15)';
+			else this.boxShadow = null;
 		}
 	}
 

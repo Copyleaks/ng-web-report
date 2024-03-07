@@ -17,7 +17,7 @@ import {
 } from '@angular/core';
 import { PostMessageEvent, ZoomEvent } from '../../../models/report-iframe-events.models';
 import { IReportViewEvent } from '../../../models/report-view.models';
-import { MatchType, ReportOrigin, ResultDetailItem, SlicedMatch } from '../../../models/report-matches.models';
+import { Match, MatchType, ReportOrigin, ResultDetailItem, SlicedMatch } from '../../../models/report-matches.models';
 import { DirectionMode as ReportContentDirectionMode, ViewMode } from '../../../models/report-config.models';
 import { TEXT_FONT_SIZE_UNIT, MIN_TEXT_ZOOM, MAX_TEXT_ZOOM } from '../../../constants/report-content.constants';
 import { PageEvent } from '../../core/cr-paginator/models/cr-paginator.models';
@@ -49,6 +49,19 @@ export class ContentViewerContainerComponent implements OnInit, AfterViewInit, O
 	handleClick(event: MouseEvent): void {
 		if (event.shiftKey) this.isShiftClicked = true;
 		else this.isShiftClicked = false;
+	}
+
+	/**
+	 * Handles PostMessage events, making sure they are from the correct iframe.
+	 * @param event the default PostMessage event
+	 */
+	@HostListener('window:message', ['$event'])
+	onFrameMessage(event: MessageEvent) {
+		const { source, data } = event;
+		if (source !== this.iFrameWindow) {
+			return;
+		}
+		this.iFrameMessageEvent.emit(data as PostMessageEvent);
 	}
 
 	@ViewChild('contentIFrame', { static: false }) contentIFrame: ElementRef<HTMLIFrameElement>;
@@ -102,6 +115,11 @@ export class ContentViewerContainerComponent implements OnInit, AfterViewInit, O
 	 * @Input The source/result text view matches.
 	 */
 	@Input() contentTextMatches: SlicedMatch[][];
+
+	/**
+	 * @Input The source/result text view matches.
+	 */
+	@Input() contentHtmlMatches: Match[];
 
 	/**
 	 * @Input Flag indicating whether to show the content title or not.
@@ -328,19 +346,6 @@ export class ContentViewerContainerComponent implements OnInit, AfterViewInit, O
 
 		if ('isAlertsView' in changes && !changes['isAlertsView'].currentValue && !changes['isAlertsView'].firstChange)
 			this.iframeLoaded = false;
-	}
-
-	/**
-	 * Handles PostMessage events, making sure they are from the correct iframe.
-	 * @param event the default PostMessage event
-	 */
-	@HostListener('window:message', ['$event'])
-	onFrameMessage(event: MessageEvent) {
-		const { source, data } = event;
-		if (source !== this.iFrameWindow) {
-			return;
-		}
-		this.iFrameMessageEvent.emit(data as PostMessageEvent);
 	}
 
 	onViewChange() {

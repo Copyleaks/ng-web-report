@@ -47,6 +47,8 @@ export class CrCorrectionsActionsComponent implements OnInit {
 
 	@Input() filterIndicatorOn: boolean = false;
 
+	@Input() showLoadingView: boolean = true;
+
 	@Output() onExpandToggle = new EventEmitter<boolean>();
 
 	constructor(
@@ -70,6 +72,7 @@ export class CrCorrectionsActionsComponent implements OnInit {
 				reportDataSvc: this._reportDataSvc,
 				selectedView: excludedView ? EFilterCorrectionsDialogView.Exclude : EFilterCorrectionsDialogView.Filter,
 				totalCorrections: this.totalWritingFeedbackIssues,
+				totalFilteredCorrections: this.totalFilteredWritingFeedbackIssues,
 				writingFeedbackStats: this.writingFeedbackStats,
 			} as IFilterCorrectionsDialogData,
 		});

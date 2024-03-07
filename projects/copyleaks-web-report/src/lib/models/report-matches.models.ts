@@ -153,6 +153,7 @@ export interface TextMatchHighlightEvent {
 	origin: ReportOrigin;
 	broadcast: boolean;
 	multiSelect?: boolean;
+	showResults?: boolean;
 }
 
 export interface HtmlMatchClickEvent {

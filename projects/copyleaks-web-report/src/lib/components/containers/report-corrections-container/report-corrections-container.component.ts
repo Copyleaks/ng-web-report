@@ -26,6 +26,7 @@ import { distinctUntilChanged, filter, map, pairwise } from 'rxjs/operators';
 import { CdkVirtualScrollViewport } from '@angular/cdk/scrolling';
 import { Observable, fromEvent } from 'rxjs';
 import { untilDestroy } from '../../../utils/until-destroy';
+import { ReportMatchesService } from '../../../services/report-matches.service';
 
 @Component({
 	selector: 'copyleaks-report-corrections-container',
@@ -63,7 +64,7 @@ export class ReportCorrectionsContainerComponent implements OnInit, OnDestroy, O
 
 	@Input() isMobile: boolean = false;
 
-	@Input() showLoadingView: boolean = false;
+	@Input() showLoadingView: boolean = true;
 
 	selectedCategroyTotal: number = 0;
 	selectedCategroyTitle: string;
@@ -90,7 +91,11 @@ export class ReportCorrectionsContainerComponent implements OnInit, OnDestroy, O
 		return this.displayedScanCorrectionsView?.length;
 	}
 
-	constructor(public reportDataSvc: ReportDataService, private _elementRef: ElementRef) {}
+	constructor(
+		public reportDataSvc: ReportDataService,
+		public reportMatchesSvc: ReportMatchesService,
+		private _elementRef: ElementRef
+	) {}
 
 	ngOnInit(): void {
 		this._resizeObserver = new ResizeObserver(_ => {
@@ -141,7 +146,7 @@ export class ReportCorrectionsContainerComponent implements OnInit, OnDestroy, O
 		this.selectedCategroy = category;
 		this.selectedCategroyTitle = this.getCorrectionCategoryTitle(category);
 		this.selectedCategroyDescription = this.getCorrectionCategoryDescription(category);
-		this.selectedCategroyCorrections = this.allScanCorrectionsView.filter(c => c.type === category);
+		this.selectedCategroyCorrections = this.displayedScanCorrectionsView.filter(c => c.type === category);
 
 		const selectedType = getSelectedCategoryType(category);
 		if (this.writingFeedbackStats && this.writingFeedbackStats[selectedType]) {

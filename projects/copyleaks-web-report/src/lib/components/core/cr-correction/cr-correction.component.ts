@@ -1,16 +1,30 @@
-import { Component, Input, OnDestroy, OnInit, SimpleChanges } from '@angular/core';
+import { Component, HostListener, Input, OnDestroy, OnInit, SimpleChanges } from '@angular/core';
 import { IWritingFeedbackCorrectionViewModel } from '../../../models/report-data.models';
 import { EWritingFeedbackCategories } from '../../../enums/copyleaks-web-report.enums';
 import { getCorrectionCategoryTitle, getCorrectionCategoryDescription } from '../../../utils/enums-helpers';
 import { ReportDataService } from '../../../services/report-data.service';
 import { untilDestroy } from '../../../utils/until-destroy';
+import { trigger, state, transition, animate, style } from '@angular/animations';
+import { ReportMatchesService } from '../../../services/report-matches.service';
 
 @Component({
 	selector: 'cr-correction',
 	templateUrl: './cr-correction.component.html',
 	styleUrls: ['./cr-correction.component.scss'],
+	animations: [
+		trigger('fadeIn', [
+			state('void', style({ opacity: 0 })),
+			transition(':enter', [animate('0.5s ease-in', style({ opacity: 1 }))]),
+		]),
+	],
 })
 export class CrCorrectionComponent implements OnInit, OnDestroy {
+	@HostListener('click', ['$event'])
+	handleClick(_): void {
+		if (this.isExcludeView || this.hideDescription || !this.reportMatchesSvc) return;
+		this.reportMatchesSvc.correctionSelect$.next(this.correction);
+	}
+
 	@Input() correction: IWritingFeedbackCorrectionViewModel;
 
 	/**
@@ -27,6 +41,16 @@ export class CrCorrectionComponent implements OnInit, OnDestroy {
 	 * @Input {boolean} Flag indicating whether the view is for the execluded correction dialog view.
 	 */
 	@Input() reportDataSvc: ReportDataService;
+
+	/**
+	 * @Input {boolean} Flag indicating whether the view is for the execluded correction dialog view.
+	 */
+	@Input() reportMatchesSvc: ReportMatchesService;
+
+	/**
+	 * @Input {boolean} Flag indicating whether to show the loading view or not.
+	 */
+	@Input() showLoadingView: boolean = false;
 
 	isExcluded: boolean = false;
 	excludedTooltipText: string;
@@ -45,16 +69,17 @@ export class CrCorrectionComponent implements OnInit, OnDestroy {
 	constructor() {}
 
 	ngOnInit(): void {
-		this.reportDataSvc.excludedCorrections$.pipe(untilDestroy(this)).subscribe(excludedCorrections => {
-			if (!excludedCorrections) return;
-			if (!excludedCorrections.find(ec => ec.end === this.correction.end && ec.start === this.correction.start)) {
-				this.isExcluded = false;
-				this.excludedTooltipText = $localize`Ignore correction`;
-			} else {
-				this.isExcluded = true;
-				this.excludedTooltipText = $localize`Include correction`;
-			}
-		});
+		if (this.reportDataSvc)
+			this.reportDataSvc.excludedCorrections$.pipe(untilDestroy(this)).subscribe(excludedCorrections => {
+				if (!excludedCorrections) return;
+				if (!excludedCorrections.find(ec => ec.end === this.correction.end && ec.start === this.correction.start)) {
+					this.isExcluded = false;
+					this.excludedTooltipText = $localize`Ignore correction`;
+				} else {
+					this.isExcluded = true;
+					this.excludedTooltipText = $localize`Include correction`;
+				}
+			});
 	}
 
 	ngOnChanges(changes: SimpleChanges): void {

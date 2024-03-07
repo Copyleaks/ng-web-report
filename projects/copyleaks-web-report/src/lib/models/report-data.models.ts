@@ -188,6 +188,7 @@ export interface IExcludedCorrection {
 	type: EWritingFeedbackCategories;
 	start: number;
 	end: number;
+	index: number;
 }
 
 /** Type representing a summary of the scanned document from Copyleaks api */
@@ -462,5 +463,6 @@ export interface IWritingFeedbackCorrectionViewModel {
 	type: EWritingFeedbackCategories;
 	start: number;
 	end: number;
+	index: number;
 }
 //#region

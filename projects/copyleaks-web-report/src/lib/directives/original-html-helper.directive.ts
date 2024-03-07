@@ -1,9 +1,10 @@
 import { Directive, ElementRef, HostBinding, OnDestroy, OnInit } from '@angular/core';
 import { distinctUntilChanged, filter, map, withLatestFrom } from 'rxjs/operators';
-import { MatchJumpEvent, MatchSelectEvent } from '../models/report-iframe-events.models';
+import { CorrectionSelectEvent, MatchJumpEvent, MatchSelectEvent } from '../models/report-iframe-events.models';
 import { ReportMatchHighlightService } from '../services/report-match-highlight.service';
 import { ReportViewService } from '../services/report-view.service';
 import { untilDestroy } from '../utils/until-destroy';
+import { ReportMatchesService } from '../services/report-matches.service';
 
 @Directive({
 	selector: '[crOriginalHtmlHelper]',
@@ -14,6 +15,7 @@ export class OriginalHtmlHelperComponent implements OnInit, OnDestroy {
 
 	constructor(
 		private _reportViewSvc: ReportViewService,
+		private _reportMatchesSvc: ReportMatchesService,
 		private _highlightSvc: ReportMatchHighlightService,
 		private _element: ElementRef<HTMLIFrameElement>
 	) {}
@@ -46,6 +48,22 @@ export class OriginalHtmlHelperComponent implements OnInit, OnDestroy {
 			)
 			.subscribe(_ => {
 				this.messageFrame({ type: 'match-select', index: -1 } as MatchSelectEvent);
+			});
+
+		this._reportMatchesSvc.correctionSelect$
+			.pipe(
+				untilDestroy(this),
+				withLatestFrom(reportViewMode$),
+				filter(
+					([correctionSelect, viewModeData]) =>
+						correctionSelect && viewModeData.viewMode === 'writing-feedback' && viewModeData.isHtmlView
+				)
+			)
+			.subscribe(([correctionSelect, _]) => {
+				this.frame.postMessage(
+					{ type: 'correction-select', gid: correctionSelect.index } as CorrectionSelectEvent,
+					'*'
+				);
 			});
 	}
 

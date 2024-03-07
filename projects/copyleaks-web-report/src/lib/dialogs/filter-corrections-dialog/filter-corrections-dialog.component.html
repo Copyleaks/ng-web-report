@@ -4,9 +4,14 @@
 			<div class="title-container">
 				<span web-report-title-font class="dialog-title" i18n>Filter Writing Assistance Corrections</span>
 				<span web-report-title-font class="corrections-stats" i18n>Corrections ({{ totalCorrections }})</span>
-				<mat-chip *ngIf="totalExcludedCorrections > 0" class="excluded-chip" (click)="viewExcludedDialog()" i18n>
-					{{ totalExcludedCorrections }} excluded
-				</mat-chip>
+				<div class="stats-chips-container">
+					<mat-chip *ngIf="totalFilteredCorrections > 0" class="filtered-chip" i18n>
+						{{ totalFilteredCorrections }} filtered
+					</mat-chip>
+					<mat-chip *ngIf="totalExcludedCorrections > 0" class="excluded-chip" (click)="viewExcludedDialog()" i18n>
+						{{ totalExcludedCorrections }} excluded
+					</mat-chip>
+				</div>
 			</div>
 
 			<div class="clear-filter-btn" (click)="onClearFilter()">
@@ -176,7 +181,7 @@
 				</div>
 				<mat-icon class="exit-filter-button-icon" (click)="onCloseExecludedView()">close</mat-icon>
 			</div>
-			<mat-form-field appearance="fill">
+			<mat-form-field class="search-input" appearance="fill">
 				<div class="search-input-icon-container" fxLayoutAlign="center center" style="margin-right: 8px" matPrefix>
 					<mat-icon class="search-input-search-icon" fontSet="material-icons-round">search</mat-icon>
 				</div>

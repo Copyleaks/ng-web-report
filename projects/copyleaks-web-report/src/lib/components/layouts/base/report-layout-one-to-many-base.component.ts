@@ -246,8 +246,6 @@ export abstract class OneToManyReportLayoutBaseComponent extends ReportLayoutBas
 
 				this.allScanCorrectionsView = [];
 
-				this._initCorrectionsStatistics();
-
 				const contentTextMatches = helpers.processCorrectionsText(filteredCorrections, 'text', scanSource);
 				let correctionIndex: number = 0;
 				for (let correctionsRow of contentTextMatches) {
@@ -262,8 +260,8 @@ export abstract class OneToManyReportLayoutBaseComponent extends ReportLayoutBas
 								wrongText: this.reportCrawledVersion.text.value.substring(correction.match.start, correction.match.end),
 								start: correction.match.start,
 								end: correction.match.end,
+								index: correctionIndex,
 							} as IWritingFeedbackCorrectionViewModel);
-							this._increaseCorrectionsCategoryTotal(correction.match.writingFeedbackType);
 							correctionIndex++;
 						}
 					}
@@ -273,6 +271,12 @@ export abstract class OneToManyReportLayoutBaseComponent extends ReportLayoutBas
 					(this.allScanCorrectionsView?.length ?? 0) -
 					(this.displayedScanCorrectionsView?.length ?? 0) -
 					(this.reportDataSvc.excludedCorrections?.length ?? 0);
+
+				this.displayedScanCorrectionsView?.forEach(c => {
+					c.index = this.allScanCorrectionsView.find(
+						correction => correction.start === c.start && correction.end === c.end
+					)?.index;
+				});
 			});
 
 		this.reportDataSvc.filterOptions$.pipe(untilDestroy(this)).subscribe(data => {
@@ -551,6 +555,8 @@ export abstract class OneToManyReportLayoutBaseComponent extends ReportLayoutBas
 		)
 			return [];
 
+		this._initCorrectionsStatistics();
+
 		const viewedCorrections = [];
 		let correctionIndex: number = 0;
 		for (let correctionsRow of this.contentTextMatches) {
@@ -562,8 +568,11 @@ export abstract class OneToManyReportLayoutBaseComponent extends ReportLayoutBas
 						wrongText: this.reportCrawledVersion.text.value.substring(correction.match.start, correction.match.end),
 						start: correction.match.start,
 						end: correction.match.end,
+						index: this.allScanCorrectionsView?.find(
+							c => correction.match.start === c.start && correction.match.end === c.end
+						)?.index,
 					} as IWritingFeedbackCorrectionViewModel);
-
+					this._increaseCorrectionsCategoryTotal(correction.match.writingFeedbackType);
 					correctionIndex++;
 				}
 			}

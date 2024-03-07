@@ -1,65 +1,85 @@
-<div class="corrections-total" web-report-title-font>
-	<span class="corrections-total-title">
-		<ng-container *ngIf="!correctionClicked; else highlightedCorrectionRef" i18n>
-			Corrections ({{ totalWritingFeedbackIssues }})
-		</ng-container>
-		<ng-template #highlightedCorrectionRef>
-			<ng-container i18n>Highlighted Results ({{ totalSelectedWritingFeedbackIssues }})</ng-container>
-		</ng-template>
-	</span>
-	<div class="stats-chips-container">
-		<mat-chip *ngIf="totalIgnoredWritingFeedbackIssues" (click)="openFilterDialog(true)">
-			{{ totalIgnoredWritingFeedbackIssues }}
-			<ng-container i18n>excluded</ng-container>
-		</mat-chip>
-		<mat-chip *ngIf="totalFilteredWritingFeedbackIssues" class="filter-chip" (click)="openFilterDialog()">
-			<span>
-				{{ totalFilteredWritingFeedbackIssues }}
-				<ng-container i18n>filtered</ng-container>
-			</span>
+<ng-container *ngIf="!showLoadingView; else loadingViewRef">
+	<div class="corrections-total" web-report-title-font>
+		<span class="corrections-total-title">
+			<ng-container *ngIf="!correctionClicked; else highlightedCorrectionRef" i18n>
+				Corrections ({{ totalWritingFeedbackIssues }})
+			</ng-container>
+			<ng-template #highlightedCorrectionRef>
+				<ng-container i18n>Highlighted Results ({{ totalSelectedWritingFeedbackIssues }})</ng-container>
+			</ng-template>
+		</span>
+		<div *ngIf="totalIgnoredWritingFeedbackIssues || totalFilteredWritingFeedbackIssues" class="stats-chips-container">
+			<mat-chip *ngIf="totalIgnoredWritingFeedbackIssues" (click)="openFilterDialog(true)">
+				{{ totalIgnoredWritingFeedbackIssues }}
+				<ng-container i18n>excluded</ng-container>
+			</mat-chip>
+			<mat-chip *ngIf="totalFilteredWritingFeedbackIssues" class="filter-chip" (click)="openFilterDialog()">
+				<span>
+					{{ totalFilteredWritingFeedbackIssues }}
+					<ng-container i18n>filtered</ng-container>
+				</span>
+				<mat-icon
+					class="clear-filter-icon"
+					fontSet="material-icons-round"
+					(click)="$event.stopPropagation(); clearFilter()"
+					matTooltip="Clear Filter"
+					matTooltipClass="web-report-mat-tooltip"
+					i18n-matTooltip>
+					highlight_off
+				</mat-icon>
+			</mat-chip>
+		</div>
+	</div>
+
+	<div class="actions-btns-container">
+		<ng-container *ngIf="!correctionClicked; else highlightedCorrectioniconRef">
 			<mat-icon
-				class="clear-filter-icon"
+				class="filter-icon"
+				[class.off]="!filterIndicatorOn"
+				[class.on]="filterIndicatorOn && totalWritingFeedbackIssues > 0"
+				[class.disabled-icon]="totalWritingFeedbackIssues <= 0"
 				fontSet="material-icons-round"
-				(click)="$event.stopPropagation(); clearFilter()"
-				matTooltip="Clear Filter"
+				(click)="openFilterDialog()"
+				matTooltip="Filter corrections"
 				matTooltipClass="web-report-mat-tooltip"
 				i18n-matTooltip>
-				highlight_off
+				filter_list
 			</mat-icon>
-		</mat-chip>
+		</ng-container>
+
+		<ng-template #highlightedCorrectioniconRef>
+			<mat-icon
+				class="diselect-match-icon"
+				fontSet="material-icons-outlined"
+				(click)="deselectMatch()"
+				matTooltip="Deselect Match"
+				matTooltipClass="web-report-mat-tooltip"
+				i18n-matTooltip>
+				cancel
+			</mat-icon>
+		</ng-template>
+
+		<mat-icon
+			*ngIf="isMobile"
+			class="expand-icon"
+			(click)="expandResultsSection()"
+			[ngClass]="{ 'expanded-section-icon': expandSection }"
+			fontSet="material-icons-round">
+			arrow_drop_down
+		</mat-icon>
 	</div>
-</div>
+</ng-container>
 
-<div class="actions-btns-container">
-	<ng-container *ngIf="!correctionClicked; else highlightedCorrectioniconRef">
-		<mat-icon
-			class="filter-icon"
-			[class.off]="!filterIndicatorOn"
-			[class.on]="filterIndicatorOn"
-			fontSet="material-icons-round"
-			(click)="openFilterDialog()">
-			filter_list
-		</mat-icon>
-	</ng-container>
+<ng-template #loadingViewRef>
+	<div class="actions-loader-container">
+		<ngx-skeleton-loader
+			class="skeleton search-input-loader"
+			[appearance]="'line'"
+			style="width: 40%"></ngx-skeleton-loader>
 
-	<ng-template #highlightedCorrectioniconRef>
-		<mat-icon
-			class="diselect-match-icon"
-			fontSet="material-icons-outlined"
-			(click)="deselectMatch()"
-			matTooltip="Deselect Match"
-			matTooltipClass="web-report-mat-tooltip"
-			i18n-matTooltip>
-			cancel
-		</mat-icon>
-	</ng-template>
-
-	<mat-icon
-		*ngIf="isMobile"
-		class="expand-icon"
-		(click)="expandResultsSection()"
-		[ngClass]="{ 'expanded-section-icon': expandSection }"
-		fontSet="material-icons-round">
-		arrow_drop_down
-	</mat-icon>
-</div>
+		<div class="icons-loader-container">
+			<ngx-skeleton-loader class="skeleton circle" [appearance]="'line'"></ngx-skeleton-loader>
+			<ngx-skeleton-loader class="skeleton circle" [appearance]="'line'"></ngx-skeleton-loader>
+		</div>
+	</div>
+</ng-template>

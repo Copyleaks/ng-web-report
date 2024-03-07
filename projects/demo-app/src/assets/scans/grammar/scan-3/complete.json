@@ -1,0 +1,67 @@
+{
+    "scannedDocument": {
+        "scanId": "safa-grammar-scan-31",
+        "totalWords": 2386,
+        "totalExcluded": 0,
+        "credits": 10,
+        "expectedCredits": 10,
+        "creationTime": "2024-03-05T14:03:45.937926Z",
+        "metadata": {
+            "filename": "bad-grammar"
+        },
+        "enabled": {
+            "plagiarismDetection": true,
+            "aiDetection": true,
+            "writingFeedback": true,
+            "pdfReport": false,
+            "cheatDetection": false
+        }
+    },
+    "results": {
+        "score": {
+            "identicalWords": 157,
+            "minorChangedWords": 144,
+            "relatedMeaningWords": 216,
+            "aggregatedScore": 21.7
+        },
+        "internet": [],
+        "database": [],
+        "batch": [],
+        "repositories": []
+    },
+    "notifications": {
+        "alerts": []
+    },
+    "writingFeedback": {
+        "textStatistics": {
+            "sentenceCount": 259,
+            "averageWordLength": 4.9,
+            "averageSentenceLength": 9.3,
+            "readingTimeSeconds": 636,
+            "speakingTimeSeconds": 1116.9
+        },
+        "score": {
+            "grammarCorrectionsCount": 25,
+            "grammarCorrectionsScore": 93,
+            "grammarScoreWeight": 1,
+            "mechanicsCorrectionsCount": 4,
+            "mechanicsCorrectionsScore": 99,
+            "mechanicsScoreWeight": 1,
+            "sentenceStructureCorrectionsCount": 54,
+            "sentenceStructureCorrectionsScore": 79,
+            "sentenceStructureScoreWeight": 1,
+            "wordChoiceCorrectionsCount": 3,
+            "wordChoiceCorrectionsScore": 99,
+            "wordChoiceScoreWeight": 1,
+            "overallScore": 92
+        },
+        "readability": {
+            "score": 75,
+            "readabilityLevel": 3,
+            "readabilityLevelText": "7th Grader",
+            "readabilityLevelDescription": "Fairly easy to read."
+        }
+    },
+    "status": 0,
+    "developerPayload": ""
+}

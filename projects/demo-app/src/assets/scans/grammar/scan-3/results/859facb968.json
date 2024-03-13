@@ -1,0 +1,536 @@
+{
+    "statistics": {
+        "identical": 29,
+        "minorChanges": 0,
+        "relatedMeaning": 4
+    },
+    "text": {
+        "comparison": {
+            "identical": {
+                "source": {
+                    "chars": {
+                        "starts": [
+                            1,
+                            20,
+                            36,
+                            48,
+                            56,
+                            75,
+                            4124,
+                            4142,
+                            4148,
+                            4156,
+                            4163,
+                            4172,
+                            4178,
+                            4187,
+                            4194
+                        ],
+                        "lengths": [
+                            18,
+                            7,
+                            5,
+                            7,
+                            7,
+                            39,
+                            6,
+                            4,
+                            6,
+                            5,
+                            7,
+                            4,
+                            7,
+                            5,
+                            21
+                        ]
+                    },
+                    "words": {
+                        "starts": [
+                            0,
+                            4,
+                            6,
+                            7,
+                            9,
+                            11,
+                            612,
+                            613,
+                            614,
+                            615,
+                            616,
+                            617,
+                            618,
+                            619,
+                            620
+                        ],
+                        "lengths": [
+                            3,
+                            1,
+                            0,
+                            1,
+                            1,
+                            5,
+                            0,
+                            0,
+                            0,
+                            0,
+                            0,
+                            0,
+                            0,
+                            0,
+                            3
+                        ]
+                    }
+                },
+                "suspected": {
+                    "chars": {
+                        "starts": [
+                            1,
+                            20,
+                            36,
+                            48,
+                            56,
+                            187,
+                            2773,
+                            2791,
+                            2797,
+                            2805,
+                            2812,
+                            2821,
+                            2827,
+                            2836,
+                            2843
+                        ],
+                        "lengths": [
+                            18,
+                            7,
+                            5,
+                            7,
+                            7,
+                            39,
+                            6,
+                            4,
+                            6,
+                            5,
+                            7,
+                            4,
+                            7,
+                            5,
+                            21
+                        ]
+                    },
+                    "words": {
+                        "starts": [
+                            0,
+                            4,
+                            6,
+                            7,
+                            9,
+                            25,
+                            424,
+                            425,
+                            426,
+                            427,
+                            428,
+                            429,
+                            430,
+                            431,
+                            432
+                        ],
+                        "lengths": [
+                            3,
+                            1,
+                            0,
+                            1,
+                            1,
+                            5,
+                            0,
+                            0,
+                            0,
+                            0,
+                            0,
+                            0,
+                            0,
+                            0,
+                            3
+                        ]
+                    }
+                }
+            },
+            "minorChanges": {
+                "source": {
+                    "chars": {
+                        "starts": [],
+                        "lengths": []
+                    },
+                    "words": {
+                        "starts": [],
+                        "lengths": []
+                    }
+                },
+                "suspected": {
+                    "chars": {
+                        "starts": [],
+                        "lengths": []
+                    },
+                    "words": {
+                        "starts": [],
+                        "lengths": []
+                    }
+                }
+            },
+            "relatedMeaning": {
+                "source": {
+                    "chars": {
+                        "starts": [
+                            186
+                        ],
+                        "lengths": [
+                            14
+                        ]
+                    },
+                    "words": {
+                        "starts": [
+                            22
+                        ],
+                        "lengths": [
+                            3
+                        ]
+                    }
+                },
+                "suspected": {
+                    "chars": {
+                        "starts": [
+                            351
+                        ],
+                        "lengths": [
+                            14
+                        ]
+                    },
+                    "words": {
+                        "starts": [
+                            44
+                        ],
+                        "lengths": [
+                            3
+                        ]
+                    }
+                }
+            }
+        },
+        "value": "\nOpen in appSign up\nSign in\n\n\n\n\n\n\n\n\nWrite\n\n\n\n\n\n\nSign up\nSign in\n\n\n\n\n\n\n\n\nMastodon\n\n\n\n\n\nImage by Aphinya Dechalert. Titled: React vs Angular for global dominance.\n\n\n\nMember-only story\n\n\n\n\n\nWhy are developers still using Angular?\n\nespecially when everyone seems to be wanting React\n\n\n\n\n\n\n\n\n\n\n\n\n\nAphinya Dechalert\n\n\n\n·Follow\n\n\n\n\nPublished inmatcha.fyi\n\n\n\n·\n\n4 min read·\nMay 13, 2019\n\n\n\n\n\n\n\n\n--\n\n\n\n48\n\n\n\n\n\n\n\n\n\n\n\n\nShare\n\n\n\n\n\n\n\n\n\n\nThere is no doubt that React is causing a front end upheaval when it comes to choosing a method of coding interfaces. Angular feels like it’s been in the market for a long time. However, in reality, the framework as we currently know it was only released in 2016. React, initially released in 2013, only gained major publicity traction after Facebook changed their BSD license to MIT.\nIn hindsight, the Angular team should have called it something else since it is so far removed and very different from the original Angular.js and just let that one die a slow silent death.\nSo what’s the big deal with Angular? and why, exactly, are developers still using and recommending it?\nOpinionated Architecture\nReact is more geared towards being as flexible as possible, giving developers the choice of architectures and structures. Angular, however, enforces a certain structure onto the project.\nAngular operates on a highly opinionated architecture — which means that your Angular app has to be written in a certain way for things to work properly. While this may sound rigid, the major perk is that once you learn the structures, every Angular app that you’ll ever come into contact will have something similar.\nYou can always expect the three piece creation of css, Angular component and html for your view at minimum. With React, its flexibility is also its weak point where junior or new React developers can create without restrictions, baking into bad practices or shaky architectures. It’s not their fault, not really.\nBest practices come to fruition after enough mistakes have been made and best known solutions come to light. Angular forces these solutions on you in order to maintain a sense of cohesion in the way things are done.\nHistorically, this wasn’t present in Angular.js. The original version of Angular had a more free reign approach, similar to React’s ability to coincide with any existing application. However, as applications grew and teams changed, there’s a higher chance of the application breaking separations of concerns, resulting in a glop of code that eventually...\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n--\n\n\n\n\n\n\n--\n\n\n\n48\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\nFollow\n\n\n\n\n\n\n\nWritten by Aphinya Dechalert\n\n22K Followers\n·Editor for matcha.fyi\n\n\n\n\nI make words for humans📌 maddosh.com 📌 code blog - matcha.fyi 👍Need words? DM me. linkedin.com/in/dechalert\n\n\nFollow\n\n\n\n\n\n\n\n\n\n\n\nHelp\n\nStatus\n\nAbout\n\nCareers\n\nBlog\n\nPrivacy\n\nTerms\n\nText to speech\n\nTeams\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n",
+        "pages": {
+            "startPosition": [
+                0
+            ]
+        }
+    },
+    "html": {
+        "comparison": {
+            "identical": {
+                "groupId": [
+                    0,
+                    0,
+                    0,
+                    1,
+                    2,
+                    3,
+                    4,
+                    5,
+                    6,
+                    7,
+                    8,
+                    9,
+                    10,
+                    11,
+                    12,
+                    13,
+                    14,
+                    14,
+                    14
+                ],
+                "source": {
+                    "chars": {
+                        "starts": [
+                            21839,
+                            21839,
+                            22714,
+                            23179,
+                            28197,
+                            29429,
+                            29894,
+                            30845,
+                            77782,
+                            79380,
+                            79642,
+                            79916,
+                            80211,
+                            80471,
+                            80764,
+                            81062,
+                            81324,
+                            81324,
+                            81591
+                        ],
+                        "lengths": [
+                            11,
+                            11,
+                            7,
+                            7,
+                            5,
+                            7,
+                            7,
+                            39,
+                            6,
+                            4,
+                            6,
+                            5,
+                            7,
+                            4,
+                            7,
+                            5,
+                            14,
+                            14,
+                            5
+                        ]
+                    },
+                    "words": {
+                        "starts": [
+                            0,
+                            0,
+                            0,
+                            4,
+                            6,
+                            7,
+                            9,
+                            11,
+                            612,
+                            613,
+                            614,
+                            615,
+                            616,
+                            617,
+                            618,
+                            619,
+                            620,
+                            620,
+                            620
+                        ],
+                        "lengths": [
+                            3,
+                            3,
+                            3,
+                            1,
+                            0,
+                            1,
+                            1,
+                            5,
+                            0,
+                            0,
+                            0,
+                            0,
+                            0,
+                            0,
+                            0,
+                            0,
+                            3,
+                            3,
+                            3
+                        ]
+                    }
+                },
+                "suspected": {
+                    "chars": {
+                        "starts": [
+                            21650,
+                            22522,
+                            21650,
+                            22984,
+                            28002,
+                            29231,
+                            29693,
+                            34601,
+                            60243,
+                            61840,
+                            62102,
+                            62376,
+                            62671,
+                            62931,
+                            63224,
+                            63522,
+                            63784,
+                            64051,
+                            63784
+                        ],
+                        "lengths": [
+                            11,
+                            7,
+                            11,
+                            7,
+                            5,
+                            7,
+                            7,
+                            39,
+                            6,
+                            4,
+                            6,
+                            5,
+                            7,
+                            4,
+                            7,
+                            5,
+                            14,
+                            5,
+                            14
+                        ]
+                    },
+                    "words": {
+                        "starts": [
+                            0,
+                            0,
+                            0,
+                            4,
+                            6,
+                            7,
+                            9,
+                            25,
+                            424,
+                            425,
+                            426,
+                            427,
+                            428,
+                            429,
+                            430,
+                            431,
+                            432,
+                            432,
+                            432
+                        ],
+                        "lengths": [
+                            3,
+                            3,
+                            3,
+                            1,
+                            0,
+                            1,
+                            1,
+                            5,
+                            0,
+                            0,
+                            0,
+                            0,
+                            0,
+                            0,
+                            0,
+                            0,
+                            3,
+                            3,
+                            3
+                        ]
+                    }
+                }
+            },
+            "minorChanges": {
+                "groupId": [],
+                "source": {
+                    "chars": {
+                        "starts": [],
+                        "lengths": []
+                    },
+                    "words": {
+                        "starts": [],
+                        "lengths": []
+                    }
+                },
+                "suspected": {
+                    "chars": {
+                        "starts": [],
+                        "lengths": []
+                    },
+                    "words": {
+                        "starts": [],
+                        "lengths": []
+                    }
+                }
+            },
+            "relatedMeaning": {
+                "groupId": [
+                    15,
+                    15,
+                    15,
+                    15,
+                    15
+                ],
+                "source": {
+                    "chars": {
+                        "starts": [
+                            33922,
+                            33922,
+                            33922,
+                            34031,
+                            34150
+                        ],
+                        "lengths": [
+                            1,
+                            1,
+                            1,
+                            10,
+                            1
+                        ]
+                    },
+                    "words": {
+                        "starts": [
+                            22,
+                            22,
+                            22,
+                            22,
+                            22
+                        ],
+                        "lengths": [
+                            3,
+                            3,
+                            3,
+                            3,
+                            3
+                        ]
+                    }
+                },
+                "suspected": {
+                    "chars": {
+                        "starts": [
+                            37860,
+                            37969,
+                            38088,
+                            37860,
+                            37860
+                        ],
+                        "lengths": [
+                            1,
+                            10,
+                            1,
+                            1,
+                            1
+                        ]
+                    },
+                    "words": {
+                        "starts": [
+                            44,
+                            44,
+                            44,
+                            44,
+                            44
+                        ],
+                        "lengths": [
+                            3,
+                            3,
+                            3,
+                            3,
+                            3
+                        ]
+                    }
+                }
+            }
+        },
+        "value": "<html lang=\"en\"><head><base href=\"https://medium.matcha.fyi/why-are-developers-still-using-angular-b9ef29d1f97f?gi=6bac654c3c80\" target=\"_blank\"><title data-rh=\"true\">Why are developers still using Angular? | by Aphinya Dechalert | matcha.fyi</title><meta data-rh=\"true\" charset=\"utf-8\"><meta data-rh=\"true\" name=\"viewport\" content=\"width=device-width,minimum-scale=1,initial-scale=1,maximum-scale=1\"><meta data-rh=\"true\" name=\"theme-color\" content=\"#000000\"><meta data-rh=\"true\" name=\"twitter:app:name:iphone\" content=\"Medium\"><meta data-rh=\"true\" name=\"twitter:app:id:iphone\" content=\"828256236\"><meta data-rh=\"true\" property=\"al:ios:app_name\" content=\"Medium\"><meta data-rh=\"true\" property=\"al:ios:app_store_id\" content=\"828256236\"><meta data-rh=\"true\" property=\"al:android:package\" content=\"com.medium.reader\"><meta data-rh=\"true\" property=\"fb:app_id\" content=\"542599432471018\"><meta data-rh=\"true\" property=\"og:site_name\" content=\"Medium\"><meta data-rh=\"true\" property=\"og:type\" content=\"article\"><meta data-rh=\"true\" property=\"article:published_time\" content=\"2022-07-27T20:59:01.335Z\"><meta data-rh=\"true\" name=\"title\" content=\"Why are developers still using Angular? | by Aphinya Dechalert | matcha.fyi\"><meta data-rh=\"true\" property=\"og:title\" content=\"Why are developers still using Angular?\"><meta data-rh=\"true\" property=\"al:android:url\" content=\"medium://p/b9ef29d1f97f\"><meta data-rh=\"true\" property=\"al:ios:url\" content=\"medium://p/b9ef29d1f97f\"><meta data-rh=\"true\" property=\"al:android:app_name\" content=\"Medium\"><meta data-rh=\"true\" name=\"description\" content=\"There is no doubt that React is causing a front end upheaval when it comes to choosing a method of coding interfaces. Angular feels like it’s been in the market for a long time. However, in reality...\"><meta data-rh=\"true\" property=\"og:description\" content=\"especially when everyone seems to be wanting React\"><meta data-rh=\"true\" property=\"og:url\" content=\"https://medium.matcha.fyi/why-are-developers-still-using-angular-b9ef29d1f97f\"><meta data-rh=\"true\" property=\"al:web:url\" content=\"https://medium.matcha.fyi/why-are-developers-still-using-angular-b9ef29d1f97f\"><meta data-rh=\"true\" property=\"og:image\" content=\"https://miro.medium.com/v2/resize:fit:1200/1*XkMSxQY4Md1Cx86RLVzZZA.jpeg\"><meta data-rh=\"true\" property=\"article:author\" content=\"https://medium.com/@PurpleGreenLemon\"><meta data-rh=\"true\" name=\"author\" content=\"Aphinya Dechalert\"><meta data-rh=\"true\" name=\"robots\" content=\"index,follow,max-image-preview:large\"><meta data-rh=\"true\" name=\"referrer\" content=\"unsafe-url\"><meta data-rh=\"true\" property=\"twitter:title\" content=\"Why are developers still using Angular?\"><meta data-rh=\"true\" name=\"twitter:site\" content=\"@dottedsquirrel\"><meta data-rh=\"true\" name=\"twitter:app:url:iphone\" content=\"medium://p/b9ef29d1f97f\"><meta data-rh=\"true\" property=\"twitter:description\" content=\"especially when everyone seems to be wanting React\"><meta data-rh=\"true\" name=\"twitter:image:src\" content=\"https://miro.medium.com/v2/resize:fit:1200/1*XkMSxQY4Md1Cx86RLVzZZA.jpeg\"><meta data-rh=\"true\" name=\"twitter:card\" content=\"summary_large_image\"><meta data-rh=\"true\" name=\"twitter:creator\" content=\"@dottedSquirrel\"><meta data-rh=\"true\" name=\"twitter:label1\" content=\"Reading time\"><meta data-rh=\"true\" name=\"twitter:data1\" content=\"4 min read\"><meta data-rh=\"true\" name=\"twitter:tile:template:testing\" content=\"2\"><meta data-rh=\"true\" name=\"twitter:tile:image\" content=\"https://miro.medium.com/v2/resize:fit:1200/1*XkMSxQY4Md1Cx86RLVzZZA.jpeg\"><meta data-rh=\"true\" name=\"twitter:tile:info1:icon\" content=\"Person\"><meta data-rh=\"true\" name=\"twitter:tile:info1:text\" content=\"Aphinya Dechalert\"><meta data-rh=\"true\" name=\"twitter:tile:info2:icon\" content=\"Calendar\"><meta data-rh=\"true\" name=\"twitter:tile:info2:text\" content=\"Jul 27, 2022\"><meta data-rh=\"true\" name=\"twitter:cta\" content=\"Read on Medium\"><link data-rh=\"true\" rel=\"icon\" href=\"https://sandbox.copyleaks.com/?url=https://miro.medium.com/v2/1*m-R_BkNf1Qjr1YbyOIJY2w.png\"><link data-rh=\"true\" rel=\"search\" type=\"application/opensearchdescription+xml\" title=\"Medium\" href=\"https://sandbox.copyleaks.com/?url=https://medium.matcha.fyi/osd.xml\"><link data-rh=\"true\" rel=\"apple-touch-icon\" sizes=\"152x152\" href=\"https://sandbox.copyleaks.com/?url=https://miro.medium.com/v2/resize:fill:152:152/1*sHhtYhaCe2Uc3IU0IgKwIQ.png\"><link data-rh=\"true\" rel=\"apple-touch-icon\" sizes=\"120x120\" href=\"https://sandbox.copyleaks.com/?url=https://miro.medium.com/v2/resize:fill:120:120/1*sHhtYhaCe2Uc3IU0IgKwIQ.png\"><link data-rh=\"true\" rel=\"apple-touch-icon\" sizes=\"76x76\" href=\"https://sandbox.copyleaks.com/?url=https://miro.medium.com/v2/resize:fill:76:76/1*sHhtYhaCe2Uc3IU0IgKwIQ.png\"><link data-rh=\"true\" rel=\"apple-touch-icon\" sizes=\"60x60\" href=\"https://sandbox.copyleaks.com/?url=https://miro.medium.com/v2/resize:fill:60:60/1*sHhtYhaCe2Uc3IU0IgKwIQ.png\"><link data-rh=\"true\" rel=\"mask-icon\" href=\"https://sandbox.copyleaks.com/?url=https://cdn-static-1.medium.com/_/fp/icons/Medium-Avatar-500x500.svg\" color=\"#171717\"><link data-rh=\"true\" id=\"glyph_preload_link\" rel=\"preload\" as=\"style\" type=\"text/css\" href=\"https://sandbox.copyleaks.com/?url=https://glyph.medium.com/css/unbound.css\"><link data-rh=\"true\" id=\"glyph_link\" rel=\"stylesheet\" type=\"text/css\" href=\"https://sandbox.copyleaks.com/?url=https://glyph.medium.com/css/unbound.css\"><link data-rh=\"true\" rel=\"author\" href=\"https://sandbox.copyleaks.com/?url=https://medium.com/@PurpleGreenLemon\"><link data-rh=\"true\" rel=\"canonical\" href=\"https://sandbox.copyleaks.com/?url=https://www.dottedsquirrel.com/why-are-developers-still-using-angular/\"><link data-rh=\"true\" rel=\"alternate\" href=\"https://sandbox.copyleaks.com/?url=android-app://com.medium.reader/https/medium.com/p/b9ef29d1f97f\"><style type=\"text/css\" data-fela-rehydration=\"496\" data-fela-type=\"STATIC\">html{box-sizing:border-box;-webkit-text-size-adjust:100%}*, *:before, *:after{box-sizing:inherit}body{margin:0;padding:0;text-rendering:optimizeLegibility;-webkit-font-smoothing:antialiased;color:rgba(0,0,0,0.8);position:relative;min-height:100vh}h1, h2, h3, h4, h5, h6, dl, dd, ol, ul, menu, figure, blockquote, p, pre, form{margin:0}menu, ol, ul{padding:0;list-style:none;list-style-image:none}main{display:block}a{color:inherit;text-decoration:none}a, button, input{-webkit-tap-highlight-color:transparent}img, svg{vertical-align:middle}button{background:transparent;overflow:visible}button, input, optgroup, select, textarea{margin:0}:root{--reach-tabs:1;--reach-menu-button:1}#speechify-root{font-family:Sohne, sans-serif}div[data-popper-reference-hidden=\"true\"]{visibility:hidden;pointer-events:none}\n/*XCode style (c) Angel Garcia <angelgarcia.mail@gmail.com>*/.hljs {background: #fff;color: black;\n}/* Gray DOCTYPE selectors like WebKit */\n.xml .hljs-meta {color: #c0c0c0;\n}.hljs-comment,\n.hljs-quote {color: #007400;\n}.hljs-tag,\n.hljs-attribute,\n.hljs-keyword,\n.hljs-selector-tag,\n.hljs-literal,\n.hljs-name {color: #aa0d91;\n}.hljs-variable,\n.hljs-template-variable {color: #3F6E74;\n}.hljs-code,\n.hljs-string,\n.hljs-meta .hljs-string {color: #c41a16;\n}.hljs-regexp,\n.hljs-link {color: #0E0EFF;\n}.hljs-title,\n.hljs-symbol,\n.hljs-bullet,\n.hljs-number {color: #1c00cf;\n}.hljs-section,\n.hljs-meta {color: #643820;\n}.hljs-title.class_,\n.hljs-class .hljs-title,\n.hljs-type,\n.hljs-built_in,\n.hljs-params {color: #5c2699;\n}.hljs-attr {color: #836C28;\n}.hljs-subst {color: #000;\n}.hljs-formula {background-color: #eee;font-style: italic;\n}.hljs-addition {background-color: #baeeba;\n}.hljs-deletion {background-color: #ffc8bd;\n}.hljs-selector-id,\n.hljs-selector-class {color: #9b703f;\n}.hljs-doctag,\n.hljs-strong {font-weight: bold;\n}.hljs-emphasis {font-style: italic;\n}\n</style><style type=\"text/css\" data-fela-rehydration=\"496\" data-fela-type=\"KEYFRAME\">@-webkit-keyframes k1{0%{opacity:0.8}50%{opacity:0.5}100%{opacity:0.8}}@-moz-keyframes k1{0%{opacity:0.8}50%{opacity:0.5}100%{opacity:0.8}}@keyframes k1{0%{opacity:0.8}50%{opacity:0.5}100%{opacity:0.8}}</style><style type=\"text/css\" data-fela-rehydration=\"496\" data-fela-type=\"RULE\">.a{font-family:medium-content-sans-serif-font, -apple-system, BlinkMacSystemFont, \"Segoe UI\", Roboto, Oxygen, Ubuntu, Cantarell, \"Open Sans\", \"Helvetica Neue\", sans-serif}.b{font-weight:400}.c{background-color:rgba(255, 255, 255, 1)}.l{display:block}.m{position:sticky}.n{top:0}.o{z-index:500}.p{padding:0 24px}.q{align-items:center}.r{border-bottom:solid 1px #F2F2F2}.y{height:41px}.z{line-height:20px}.ab{display:flex}.ac{height:57px}.ae{flex:1 0 auto}.af{color:inherit}.ag{fill:inherit}.ah{font-size:inherit}.ai{border:inherit}.aj{font-family:inherit}.ak{letter-spacing:inherit}.al{font-weight:inherit}.am{padding:0}.an{margin:0}.ao{cursor:pointer}.ap:disabled{cursor:not-allowed}.aq:disabled{color:#6B6B6B}.ar:disabled{fill:#6B6B6B}.au{fill:rgba(0, 0, 0, 1)}.av{height:22px}.aw{margin-left:16px}.ax{border:none}.ay{border-radius:20px}.az{width:240px}.ba{background:#F9F9F9}.bb path{fill:#6B6B6B}.bd{outline:none}.be{font-family:sohne, \"Helvetica Neue\", Helvetica, Arial, sans-serif}.bf{font-size:14px}.bg{width:100%}.bh{padding:10px 20px 10px 0}.bi{background-color:transparent}.bj{color:#242424}.bk::placeholder{color:#6B6B6B}.bl{display:inline-block}.bm{margin-left:12px}.bn{margin-right:12px}.bo{border-radius:4px}.bp{margin-left:24px}.bq{height:24px}.bw{background-color:#F9F9F9}.bx{border-radius:50%}.by{height:32px}.bz{width:32px}.ca{justify-content:center}.cg{max-width:680px}.ch{min-width:0}.ci{animation:k1 1.2s ease-in-out infinite}.cj{height:100vh}.ck{margin-bottom:16px}.cl{margin-top:48px}.cm{align-items:flex-start}.cn{flex-direction:column}.co{justify-content:space-between}.cp{margin-bottom:24px}.cv{width:80%}.cw{background-color:#F2F2F2}.dc{height:44px}.dd{width:44px}.de{margin:auto 0}.df{margin-bottom:4px}.dg{height:16px}.dh{width:120px}.di{width:80px}.do{margin-bottom:8px}.dp{width:96%}.dq{width:98%}.dr{width:81%}.ds{margin-left:8px}.dt{color:#6B6B6B}.du{font-size:13px}.dv{height:100%}.eo{color:#FFFFFF}.ep{fill:#FFFFFF}.eq{background:rgba(134, 132, 132, 1)}.er{border-color:rgba(134, 132, 132, 1)}.ev:disabled{cursor:inherit !important}.ew:disabled{opacity:0.3}.ex:disabled:hover{background:rgba(134, 132, 132, 1)}.ey:disabled:hover{border-color:rgba(134, 132, 132, 1)}.ez{border-radius:99em}.fa{border-width:1px}.fb{border-style:solid}.fc{box-sizing:border-box}.fd{text-decoration:none}.fe{text-align:center}.fh{margin-right:32px}.fi{position:relative}.fj{fill:#6B6B6B}.fm{background:transparent}.fn svg{margin-left:4px}.fo svg{fill:#6B6B6B}.fq{box-shadow:inset 0 0 0 1px rgba(0, 0, 0, 0.05)}.fr{position:absolute}.ft{display:none}.fz{margin:0 24px}.gd{background:rgba(255, 255, 255, 1)}.ge{border:1px solid #F2F2F2}.gf{box-shadow:0 1px 4px #F2F2F2}.gg{max-height:100vh}.gh{overflow-y:auto}.gi{left:0}.gj{top:calc(100vh + 100px)}.gk{bottom:calc(100vh + 100px)}.gl{width:10px}.gm{pointer-events:none}.gn{word-break:break-word}.go{word-wrap:break-word}.gp:after{display:block}.gq:after{content:\"\"}.gr:after{clear:both}.gs{margin-left:auto}.gt{margin-right:auto}.gu{max-width:1920px}.ha{clear:both}.hc{cursor:zoom-in}.hd{z-index:auto}.hf{max-width:100%}.hg{height:auto}.hh{margin-top:10px}.hi{max-width:728px}.hl{margin-right:4px}.hm{margin-top:2px}.hn{box-sizing:content-box}.ho{line-height:1.23}.hp{letter-spacing:0}.hq{font-style:normal}.hr{font-weight:700}.ih{margin-top:0px}.ii{margin-bottom:-0.27em}.ij{line-height:1.394}.iz{@media all and (max-width: 551.98px):8px}.ja{@media all and (min-width: 552px) and (max-width: 727.98px):8px}.jb{@media all and (min-width: 728px) and (max-width: 903.98px):16px}.jc{@media all and (min-width: 904px) and (max-width: 1079.98px):16px}.jd{@media all and (min-width: 1080px):16px}.jj{align-items:baseline}.jk{width:48px}.jl{height:48px}.jm{border:2px solid rgba(255, 255, 255, 1)}.jn{z-index:0}.jo{box-shadow:none}.jp{border:1px solid rgba(0, 0, 0, 0.05)}.jq{margin-left:-12px}.jr{width:28px}.js{height:28px}.jt{z-index:1}.ju{width:24px}.jv{margin-bottom:2px}.jw{flex-wrap:nowrap}.jx{font-size:16px}.jy{line-height:24px}.ka{margin:0 8px}.kb{display:inline}.kc{color:rgba(134, 132, 132, 1)}.kd{fill:rgba(134, 132, 132, 1)}.kg{flex:0 0 auto}.kj{flex-wrap:wrap}.km{white-space:pre-wrap}.kn{overflow:hidden}.ko{max-height:20px}.kp{text-overflow:ellipsis}.kq{display:-webkit-box}.kr{-webkit-line-clamp:1}.ks{-webkit-box-orient:vertical}.kt{word-break:break-all}.kv{padding-left:8px}.kw{padding-right:8px}.lx> *{flex-shrink:0}.ly{overflow-x:scroll}.lz::-webkit-scrollbar{display:none}.ma{scrollbar-width:none}.mb{-ms-overflow-style:none}.mc{width:74px}.md{flex-direction:row}.mg{-webkit-user-select:none}.mh{border:0}.mi{fill:rgba(117, 117, 117, 1)}.ml{outline:0}.mm{user-select:none}.mn> svg{pointer-events:none}.mw{cursor:progress}.mx{margin-left:4px}.my{opacity:1}.mz{padding:4px 0}.nc{width:16px}.ne{display:inline-flex}.nk{padding:8px 2px}.nl svg{color:#6B6B6B}.oc{line-height:1.58}.od{letter-spacing:-0.004em}.oe{font-family:source-serif-pro, Georgia, Cambria, \"Times New Roman\", Times, serif}.ox{margin-bottom:-0.46em}.oy{line-height:1.12}.oz{letter-spacing:-0.022em}.pa{font-weight:600}.pt{margin-bottom:-0.28em}.pz{text-decoration:underline}.qa{border-top:none}.qg{height:52px}.qh{max-height:52px}.qi{position:static}.qk{max-width:155px}.qq{margin-right:20px}.qw{align-items:flex-end}.qx{width:76px}.qy{height:76px}.qz{border:2px solid #F9F9F9}.ra{height:72px}.rb{width:72px}.rc{margin-left:-16px}.rd{width:36px}.re{height:36px}.rf{padding:8px 16px}.rg{width:auto}.rh{stroke:#F2F2F2}.ri{color:#F2F2F2}.rj{fill:#F2F2F2}.rk{background:#F2F2F2}.rl{border-color:#F2F2F2}.rr{font-weight:500}.rs{font-size:24px}.rt{line-height:30px}.ru{letter-spacing:-0.016em}.rv{margin-top:8px}.rw{margin-top:16px}.rx{height:0px}.ry{border-bottom:solid 1px #E5E5E5}.rz{margin-top:72px}.sa{padding:24px 0}.sb{margin-bottom:0px}.sc{margin-right:16px}.as:hover:not(:disabled){color:rgba(25, 25, 25, 1)}.at:hover:not(:disabled){fill:rgba(25, 25, 25, 1)}.es:hover{background:rgba(115, 113, 113, 1)}.et:hover{border-color:rgba(115, 113, 113, 1)}.eu:hover{cursor:pointer}.fk:hover{color:#242424}.fl:hover{fill:#242424}.fp:hover svg{fill:#242424}.fs:hover{background-color:rgba(0, 0, 0, 0.1)}.jz:hover{text-decoration:underline}.ke:hover:not(:disabled){color:rgba(115, 113, 113, 1)}.kf:hover:not(:disabled){fill:rgba(115, 113, 113, 1)}.mk:hover{fill:rgba(8, 8, 8, 1)}.na:hover{fill:#000000}.nb:hover p{color:#000000}.nd:hover{color:#000000}.nm:hover svg{color:#000000}.rm:hover{background:#F2F2F2}.rn:hover{border-color:#F2F2F2}.ro:hover{cursor:wait}.rp:hover{color:#F2F2F2}.rq:hover{fill:#F2F2F2}.bc:focus-within path{fill:#242424}.he:focus{transform:scale(1.01)}.mj:focus{fill:rgba(8, 8, 8, 1)}.nn:focus svg{color:#000000}.mo:active{border-style:none}</style><style type=\"text/css\" data-fela-rehydration=\"496\" data-fela-type=\"RULE\" media=\"all and (min-width: 1080px)\">.d{display:none}.bv{width:64px}.cf{margin:0 64px}.cu{height:48px}.db{margin-bottom:52px}.dn{margin-bottom:48px}.ee{font-size:14px}.ef{line-height:20px}.el{font-size:13px}.em{padding:5px 12px}.fg{display:flex}.fy{margin-bottom:68px}.gc{max-width:680px}.gz{margin-top:40px}.ie{font-size:42px}.if{line-height:52px}.ig{letter-spacing:-0.011em}.iw{font-size:22px}.ix{margin-top:0.92em}.iy{line-height:28px}.ji{align-items:center}.lj{border-top:solid 1px #F2F2F2}.lk{border-bottom:solid 1px #F2F2F2}.ll{margin:32px 0 0}.lm{padding:3px 8px}.lv> *{margin-right:24px}.lw> :last-child{margin-right:0}.mv{margin-top:0px}.nj{margin:0}.ot{font-size:20px}.ou{margin-top:2.14em}.ov{line-height:32px}.ow{letter-spacing:-0.003em}.pp{font-size:24px}.pq{margin-top:1.95em}.pr{line-height:30px}.ps{letter-spacing:-0.016em}.py{margin-top:0.94em}.qf{margin-bottom:88px}.qp{display:inline-block}.qv{padding-top:72px}</style><style type=\"text/css\" data-fela-rehydration=\"496\" data-fela-type=\"RULE\" media=\"all and (max-width: 1079.98px)\">.e{display:none}.hj{margin-left:auto}.hk{text-align:center}.mu{margin-top:0px}.qo{display:inline-block}</style><style type=\"text/css\" data-fela-rehydration=\"496\" data-fela-type=\"RULE\" media=\"all and (max-width: 903.98px)\">.f{display:none}.mt{margin-top:0px}.qn{display:inline-block}</style><style type=\"text/css\" data-fela-rehydration=\"496\" data-fela-type=\"RULE\" media=\"all and (max-width: 727.98px)\">.g{display:none}.mr{margin-top:0px}.ms{margin-right:0px}.qm{display:inline-block}</style><style type=\"text/css\" data-fela-rehydration=\"496\" data-fela-type=\"RULE\" media=\"all and (max-width: 551.98px)\">.h{display:none}.s{display:flex}.t{justify-content:space-between}.br{width:24px}.cb{margin:0 24px}.cq{height:40px}.cx{margin-bottom:44px}.dj{margin-bottom:32px}.dw{font-size:13px}.dx{line-height:20px}.eg{padding:0px 8px 1px}.fu{margin-bottom:4px}.gv{margin-top:32px}.hs{font-size:32px}.ht{line-height:38px}.hu{letter-spacing:-0.014em}.ik{font-size:18px}.il{margin-top:0.79em}.im{line-height:24px}.je{align-items:flex-start}.kh{flex-direction:column}.kk{margin-bottom:2px}.kx{margin:24px -24px 0}.ky{padding:0}.ln> *{margin-right:8px}.lo> :last-child{margin-right:24px}.me{margin-left:0px}.mp{margin-top:0px}.mq{margin-right:0px}.nf{margin:0}.no{border:1px solid #F2F2F2}.np{border-radius:99em}.nq{padding:0px 16px 0px 12px}.nr{height:38px}.ns{align-items:center}.nu svg{margin-right:8px}.of{margin-top:1.56em}.og{line-height:28px}.oh{letter-spacing:-0.003em}.pb{font-size:20px}.pc{margin-top:1.2em}.pd{letter-spacing:0}.pu{margin-top:0.67em}.qb{margin-bottom:80px}.ql{display:inline-block}.qr{padding-top:48px}.nt:hover{border-color:#E5E5E5}</style><style type=\"text/css\" data-fela-rehydration=\"496\" data-fela-type=\"RULE\" media=\"all and (min-width: 904px) and (max-width: 1079.98px)\">.i{display:none}.bu{width:64px}.ce{margin:0 64px}.ct{height:48px}.da{margin-bottom:52px}.dm{margin-bottom:48px}.ec{font-size:14px}.ed{line-height:20px}.ej{font-size:13px}.ek{padding:5px 12px}.ff{display:flex}.fx{margin-bottom:68px}.gb{max-width:680px}.gy{margin-top:40px}.ib{font-size:42px}.ic{line-height:52px}.id{letter-spacing:-0.011em}.it{font-size:22px}.iu{margin-top:0.92em}.iv{line-height:28px}.jh{align-items:center}.lf{border-top:solid 1px #F2F2F2}.lg{border-bottom:solid 1px #F2F2F2}.lh{margin:32px 0 0}.li{padding:3px 8px}.lt> *{margin-right:24px}.lu> :last-child{margin-right:0}.ni{margin:0}.op{font-size:20px}.oq{margin-top:2.14em}.or{line-height:32px}.os{letter-spacing:-0.003em}.pl{font-size:24px}.pm{margin-top:1.95em}.pn{line-height:30px}.po{letter-spacing:-0.016em}.px{margin-top:0.94em}.qe{margin-bottom:88px}.qu{padding-top:72px}</style><style type=\"text/css\" data-fela-rehydration=\"496\" data-fela-type=\"RULE\" media=\"all and (min-width: 728px) and (max-width: 903.98px)\">.j{display:none}.w{display:flex}.x{justify-content:space-between}.bt{width:64px}.cd{margin:0 48px}.cs{height:48px}.cz{margin-bottom:52px}.dl{margin-bottom:48px}.ea{font-size:13px}.eb{line-height:20px}.ei{padding:0px 8px 1px}.fw{margin-bottom:68px}.ga{max-width:680px}.gx{margin-top:40px}.hy{font-size:42px}.hz{line-height:52px}.ia{letter-spacing:-0.011em}.iq{font-size:22px}.ir{margin-top:0.92em}.is{line-height:28px}.jg{align-items:center}.lb{border-top:solid 1px #F2F2F2}.lc{border-bottom:solid 1px #F2F2F2}.ld{margin:32px 0 0}.le{padding:3px 8px}.lr> *{margin-right:24px}.ls> :last-child{margin-right:0}.nh{margin:0}.ol{font-size:20px}.om{margin-top:2.14em}.on{line-height:32px}.oo{letter-spacing:-0.003em}.ph{font-size:24px}.pi{margin-top:1.95em}.pj{line-height:30px}.pk{letter-spacing:-0.016em}.pw{margin-top:0.94em}.qd{margin-bottom:88px}.qt{padding-top:72px}</style><style type=\"text/css\" data-fela-rehydration=\"496\" data-fela-type=\"RULE\" media=\"all and (min-width: 552px) and (max-width: 727.98px)\">.k{display:none}.u{display:flex}.v{justify-content:space-between}.bs{width:24px}.cc{margin:0 24px}.cr{height:40px}.cy{margin-bottom:44px}.dk{margin-bottom:32px}.dy{font-size:13px}.dz{line-height:20px}.eh{padding:0px 8px 1px}.fv{margin-bottom:4px}.gw{margin-top:32px}.hv{font-size:32px}.hw{line-height:38px}.hx{letter-spacing:-0.014em}.in{font-size:18px}.io{margin-top:0.79em}.ip{line-height:24px}.jf{align-items:flex-start}.ki{flex-direction:column}.kl{margin-bottom:2px}.kz{margin:24px 0 0}.la{padding:0}.lp> *{margin-right:8px}.lq> :last-child{margin-right:8px}.mf{margin-left:0px}.ng{margin:0}.nv{border:1px solid #F2F2F2}.nw{border-radius:99em}.nx{padding:0px 16px 0px 12px}.ny{height:38px}.nz{align-items:center}.ob svg{margin-right:8px}.oi{margin-top:1.56em}.oj{line-height:28px}.ok{letter-spacing:-0.003em}.pe{font-size:20px}.pf{margin-top:1.2em}.pg{letter-spacing:0}.pv{margin-top:0.67em}.qc{margin-bottom:80px}.qs{padding-top:48px}.oa:hover{border-color:#E5E5E5}</style><style type=\"text/css\" data-fela-rehydration=\"496\" data-fela-type=\"RULE\" media=\"print\">.qj{display:none}</style><style type=\"text/css\" data-fela-rehydration=\"496\" data-fela-type=\"RULE\" media=\"(prefers-reduced-motion: no-preference)\">.hb{transition:transform 300ms cubic-bezier(0.2, 0, 0.2, 1)}</style><style type=\"text/css\" data-fela-rehydration=\"496\" data-fela-type=\"RULE\" media=\"(orientation: landscape) and (max-width: 903.98px)\">.ku{max-height:none}</style></head><body><div id=\"root\"><div class=\"a b c\"><div class=\"d e f g h i j k\"></div>\n<div class=\"l c\"><div class=\"l m n o c\"><div class=\"p q r s t u v w x i d y z\"><a class=\"dt ag du be ak b am an ao ap aq ar as at s u w i d q dv z\" href=\"https://rsci.app.link/?%24canonical_url=https%3A%2F%2Fmedium.com%2Fp%2Fb9ef29d1f97f&amp;%7Efeature=LoOpenInAppButton&amp;%7Echannel=ShowPostUnderCollection&amp;source=---two_column_layout_nav----------------------------------\" rel=\"noopener follow\" target=\"_blank\">Open in app<svg width=\"10\" height=\"10\" viewbox=\"0 0 10 10\" fill=\"none\" class=\"ds\"><path d=\"M.98 8.48a.37.37 0 1 0 .54.54l-.54-.54zm7.77-7.23h.38c0-.2-.17-.38-.38-.38v.38zM8.37 6.5a.37.37 0 1 0 .76 0h-.76zM3.5.87a.37.37 0 1 0 0 .76V.88zM1.52 9.03l7.5-7.5-.54-.54-7.5 7.5.54.54zm6.86-7.77V6.5h.74V1.25h-.74zm-4.88.38h5.25V.88H3.5v.74z\" fill=\"currentColor\"></path></svg></a><div class=\"ab q\"><p class=\"be b dw dx dy dz ea eb ec ed ee ef dt\"><span><a class=\"be b dw dx eg dy dz eh ea eb ei ej ed ek el ef em eo ep eq er es et eu ev ew ex ey ez fa fb fc bl fd fe\" data-testid=\"headerSignUpButton\" href=\"https://medium.com/m/signin?operation=register&amp;redirect=https%3A%2F%2Fmedium.matcha.fyi%2Fwhy-are-developers-still-using-angular-b9ef29d1f97f&amp;source=post_page---two_column_layout_nav-----------------------global_nav-----------\" rel=\"noopener follow\" target=\"_blank\">Sign up</a></span></p>\n<div class=\"aw l\"><p class=\"be b dw dx dy dz ea eb ec ed ee ef dt\"><span><a class=\"af ag ah ai aj ak al am an ao ap aq ar as at\" data-testid=\"headerSignInButton\" href=\"https://medium.com/m/signin?operation=login&amp;redirect=https%3A%2F%2Fmedium.matcha.fyi%2Fwhy-are-developers-still-using-angular-b9ef29d1f97f&amp;source=post_page---two_column_layout_nav-----------------------global_nav-----------\" rel=\"noopener follow\" target=\"_blank\">Sign in</a></span></p>\n</div>\n</div>\n</div>\n<div class=\"p q r ab ac\"><div class=\"ab q ae\"><a class=\"af ag ah ai aj ak al am an ao ap aq ar as at ab\" aria-label=\"Homepage\" data-testid=\"headerMediumLogo\" href=\"https://medium.com/?source=---two_column_layout_nav----------------------------------\" rel=\"noopener follow\" target=\"_blank\"><svg viewbox=\"0 0 3940 610\" class=\"au av\"><path d=\"M594.79 308.2c0 163.76-131.85 296.52-294.5 296.52S5.8 472 5.8 308.2 137.65 11.69 300.29 11.69s294.5 132.75 294.5 296.51M917.86 308.2c0 154.16-65.93 279.12-147.25 279.12s-147.25-125-147.25-279.12S689.29 29.08 770.61 29.08s147.25 125 147.25 279.12M1050 308.2c0 138.12-23.19 250.08-51.79 250.08s-51.79-112-51.79-250.08 23.19-250.08 51.8-250.08S1050 170.09 1050 308.2M1862.77 37.4l.82-.18v-6.35h-167.48l-155.51 365.5-155.51-365.5h-180.48v6.35l.81.18c30.57 6.9 46.09 17.19 46.09 54.3v434.45c0 37.11-15.58 47.4-46.15 54.3l-.81.18V587H1327v-6.35l-.81-.18c-30.57-6.9-46.09-17.19-46.09-54.3V116.9L1479.87 587h11.33l205.59-483.21V536.9c-2.62 29.31-18 38.36-45.68 44.61l-.82.19v6.3h213.3v-6.3l-.82-.19c-27.71-6.25-43.46-15.3-46.08-44.61l-.14-445.2h.14c0-37.11 15.52-47.4 46.08-54.3m97.43 287.8c3.49-78.06 31.52-134.4 78.56-135.37 14.51.24 26.68 5 36.14 14.16 20.1 19.51 29.55 60.28 28.09 121.21zm-2.11 22h250v-1.05c-.71-59.69-18-106.12-51.34-138-28.82-27.55-71.49-42.71-116.31-42.71h-1c-23.26 0-51.79 5.64-72.09 15.86-23.11 10.7-43.49 26.7-60.45 47.7-27.3 33.83-43.84 79.55-47.86 130.93-.13 1.54-.24 3.08-.35 4.62s-.18 2.92-.25 4.39a332.64 332.64 0 0 0-.36 21.69C1860.79 507 1923.65 600 2035.3 600c98 0 155.07-71.64 169.3-167.8l-7.19-2.53c-25 51.68-69.9 83-121 79.18-69.76-5.22-123.2-75.95-118.35-161.63m532.69 157.68c-8.2 19.45-25.31 30.15-48.24 30.15s-43.89-15.74-58.78-44.34c-16-30.7-24.42-74.1-24.42-125.51 0-107 33.28-176.21 84.79-176.21 21.57 0 38.55 10.7 46.65 29.37zm165.84 76.28c-30.57-7.23-46.09-18-46.09-57V5.28L2424.77 60v6.7l1.14-.09c25.62-2.07 43 1.47 53.09 10.79 7.9 7.3 11.75 18.5 11.75 34.26v71.14c-18.31-11.69-40.09-17.38-66.52-17.38-53.6 0-102.59 22.57-137.92 63.56-36.83 42.72-56.3 101.1-56.3 168.81C2230 518.72 2289.53 600 2378.13 600c51.83 0 93.53-28.4 112.62-76.3V588h166.65v-6.66zm159.29-505.33c0-37.76-28.47-66.24-66.24-66.24-37.59 0-67 29.1-67 66.24s29.44 66.24 67 66.24c37.77 0 66.24-28.48 66.24-66.24m43.84 505.33c-30.57-7.23-46.09-18-46.09-57h-.13V166.65l-166.66 47.85v6.5l1 .09c36.06 3.21 45.93 15.63 45.93 57.77V588h166.8v-6.66zm427.05 0c-30.57-7.23-46.09-18-46.09-57V166.65L3082 212.92v6.52l.94.1c29.48 3.1 38 16.23 38 58.56v226c-9.83 19.45-28.27 31-50.61 31.78-36.23 0-56.18-24.47-56.18-68.9V166.66l-166.66 47.85V221l1 .09c36.06 3.2 45.94 15.62 45.94 57.77v191.27a214.48 214.48 0 0 0 3.47 39.82l3 13.05c14.11 50.56 51.08 77 109 77 49.06 0 92.06-30.37 111-77.89v66h166.66v-6.66zM3934.2 588v-6.67l-.81-.19c-33.17-7.65-46.09-22.07-46.09-51.43v-243.2c0-75.83-42.59-121.09-113.93-121.09-52 0-95.85 30.05-112.73 76.86-13.41-49.6-52-76.86-109.06-76.86-50.12 0-89.4 26.45-106.25 71.13v-69.87l-166.66 45.89v6.54l1 .09c35.63 3.16 45.93 15.94 45.93 57V588h155.5v-6.66l-.82-.2c-26.46-6.22-35-17.56-35-46.66V255.72c7-16.35 21.11-35.72 49-35.72 34.64 0 52.2 24 52.2 71.28V588h155.54v-6.66l-.82-.2c-26.46-6.22-35-17.56-35-46.66v-248a160.45 160.45 0 0 0-2.2-27.68c7.42-17.77 22.34-38.8 51.37-38.8 35.13 0 52.2 23.31 52.2 71.28V588z\"></path></svg></a><div class=\"aw h\"><div class=\"ab ax ay az ba q bb bc\"><div class=\"bl\" aria-hidden=\"false\" aria-describedby=\"searchResults\" aria-labelledby=\"searchResults\"></div>\n<div class=\"bm bn ab\"><svg width=\"24\" height=\"24\" viewbox=\"0 0 24 24\" fill=\"none\"><path fill-rule=\"evenodd\" clip-rule=\"evenodd\" d=\"M4.1 11.06a6.95 6.95 0 1 1 13.9 0 6.95 6.95 0 0 1-13.9 0zm6.94-8.05a8.05 8.05 0 1 0 5.13 14.26l3.75 3.75a.56.56 0 1 0 .8-.79l-3.74-3.73A8.05 8.05 0 0 0 11.04 3v.01z\" fill=\"currentColor\"></path></svg></div>\n<input role=\"combobox\" aria-controls=\"searchResults\" aria-expanded=\"false\" aria-label=\"search\" data-testid=\"headerSearchInput\" tabindex=\"0\" class=\"ax bd be bf z bg bh bi bj bk\" placeholder=\"Search\" value=\"\"></div>\n</div>\n</div>\n<div class=\"h k w ff fg\"><div class=\"fh ab\"><span><a class=\"af ag ah ai aj ak al am an ao ap aq ar as at\" data-testid=\"headerWriteButton\" href=\"https://medium.com/m/signin?operation=register&amp;redirect=https%3A%2F%2Fmedium.com%2Fnew-story&amp;source=---two_column_layout_nav-----------------------new_post_topnav-----------\" rel=\"noopener follow\" target=\"_blank\"><div class=\"be b bf z dt fi fj ab q fk fl\"><svg width=\"24\" height=\"24\" viewbox=\"0 0 24 24\" fill=\"none\" aria-label=\"Write\"><path d=\"M14 4a.5.5 0 0 0 0-1v1zm7 6a.5.5 0 0 0-1 0h1zm-7-7H4v1h10V3zM3 4v16h1V4H3zm1 17h16v-1H4v1zm17-1V10h-1v10h1zm-1 1a1 1 0 0 0 1-1h-1v1zM3 20a1 1 0 0 0 1 1v-1H3zM4 3a1 1 0 0 0-1 1h1V3z\" fill=\"currentColor\"></path><path d=\"M17.5 4.5l-8.46 8.46a.25.25 0 0 0-.06.1l-.82 2.47c-.07.2.12.38.31.31l2.47-.82a.25.25 0 0 0 .1-.06L19.5 6.5m-2-2l2.32-2.32c.1-.1.26-.1.36 0l1.64 1.64c.1.1.1.26 0 .36L19.5 6.5m-2-2l2 2\" stroke=\"currentColor\"></path></svg><div class=\"ds l\">Write</div>\n</div>\n</a></span></div>\n</div>\n<div class=\"k j i d\"><div class=\"fh ab\"><a class=\"af ag ah ai aj ak al am an ao ap aq ar as at\" data-testid=\"headerSearchButton\" href=\"https://medium.com/search?source=---two_column_layout_nav----------------------------------\" rel=\"noopener follow\" target=\"_blank\"><div class=\"be b bf z dt fi fj ab q fk fl\"><svg width=\"24\" height=\"24\" viewbox=\"0 0 24 24\" fill=\"none\" aria-label=\"Search\"><path fill-rule=\"evenodd\" clip-rule=\"evenodd\" d=\"M4.1 11.06a6.95 6.95 0 1 1 13.9 0 6.95 6.95 0 0 1-13.9 0zm6.94-8.05a8.05 8.05 0 1 0 5.13 14.26l3.75 3.75a.56.56 0 1 0 .8-.79l-3.74-3.73A8.05 8.05 0 0 0 11.04 3v.01z\" fill=\"currentColor\"></path></svg></div>\n</a></div>\n</div>\n<div class=\"fh h k j\"><div class=\"ab q\"><p class=\"be b dw dx dy dz ea eb ec ed ee ef dt\"><span><a class=\"be b dw dx eg dy dz eh ea eb ei ej ed ek el ef em eo ep eq er es et eu ev ew ex ey ez fa fb fc bl fd fe\" data-testid=\"headerSignUpButton\" href=\"https://medium.com/m/signin?operation=register&amp;redirect=https%3A%2F%2Fmedium.matcha.fyi%2Fwhy-are-developers-still-using-angular-b9ef29d1f97f&amp;source=post_page---two_column_layout_nav-----------------------global_nav-----------\" rel=\"noopener follow\" target=\"_blank\">Sign up</a></span></p>\n<div class=\"aw l\"><p class=\"be b dw dx dy dz ea eb ec ed ee ef dt\"><span><a class=\"af ag ah ai aj ak al am an ao ap aq ar as at\" data-testid=\"headerSignInButton\" href=\"https://medium.com/m/signin?operation=login&amp;redirect=https%3A%2F%2Fmedium.matcha.fyi%2Fwhy-are-developers-still-using-angular-b9ef29d1f97f&amp;source=post_page---two_column_layout_nav-----------------------global_nav-----------\" rel=\"noopener follow\" target=\"_blank\">Sign in</a></span></p>\n</div>\n</div>\n</div>\n<div class=\"l\" aria-hidden=\"false\"><button class=\"ax fm am ab q ao fn fo fp\" aria-label=\"user options menu\" data-testid=\"headerUserIcon\"><div class=\"l fi\"><img alt=\"\" class=\"l fc bx by bz cw\" src=\"https://sandbox.copyleaks.com/?url=https://miro.medium.com/v2/resize:fill:64:64/1*dmbNkD5D-u45r44go_cf0g.png\" width=\"32\" height=\"32\" loading=\"lazy\" role=\"presentation\"><div class=\"fq bx l by bz fr n ax fs\"></div>\n</div>\n</button></div>\n</div>\n</div>\n<div class=\"ft\"><a rel=\"me\" href=\"https://me.dm/@PurpleGreenLemon\" target=\"_blank\">Mastodon</a></div>\n<div class=\"l\"><div class=\"fu fv fw fx fy l\"><div class=\"ab ca\"><div class=\"ch bg fz ga gb gc\"></div>\n</div>\n<article class=\"meteredContent\"><div class=\"l\"><div class=\"l\"><span class=\"l\"></span><section><div><div class=\"fr gi gj gk gl gm\"></div>\n<div class=\"gn go gp gq gr\"><div class=\"ab ca\"><div class=\"ch bg fz ga gb gc\"><figure class=\"gv gw gx gy gz ha gs gt paragraph-image\"><div role=\"button\" tabindex=\"0\" class=\"hb hc fi hd bg he\"><div class=\"gs gt gu\"><picture><source srcset=\"https://miro.medium.com/v2/resize:fit:640/format:webp/1*XkMSxQY4Md1Cx86RLVzZZA.jpeg 640w, https://miro.medium.com/v2/resize:fit:720/format:webp/1*XkMSxQY4Md1Cx86RLVzZZA.jpeg 720w, https://miro.medium.com/v2/resize:fit:750/format:webp/1*XkMSxQY4Md1Cx86RLVzZZA.jpeg 750w, https://miro.medium.com/v2/resize:fit:786/format:webp/1*XkMSxQY4Md1Cx86RLVzZZA.jpeg 786w, https://miro.medium.com/v2/resize:fit:828/format:webp/1*XkMSxQY4Md1Cx86RLVzZZA.jpeg 828w, https://miro.medium.com/v2/resize:fit:1100/format:webp/1*XkMSxQY4Md1Cx86RLVzZZA.jpeg 1100w, https://miro.medium.com/v2/resize:fit:1400/format:webp/1*XkMSxQY4Md1Cx86RLVzZZA.jpeg 1400w\" sizes=\"(min-resolution: 4dppx) and (max-width: 700px) 50vw, (-webkit-min-device-pixel-ratio: 4) and (max-width: 700px) 50vw, (min-resolution: 3dppx) and (max-width: 700px) 67vw, (-webkit-min-device-pixel-ratio: 3) and (max-width: 700px) 65vw, (min-resolution: 2.5dppx) and (max-width: 700px) 80vw, (-webkit-min-device-pixel-ratio: 2.5) and (max-width: 700px) 80vw, (min-resolution: 2dppx) and (max-width: 700px) 100vw, (-webkit-min-device-pixel-ratio: 2) and (max-width: 700px) 100vw, 700px\" type=\"image/webp\"></source><source data-testid=\"og\" srcset=\"https://miro.medium.com/v2/resize:fit:640/1*XkMSxQY4Md1Cx86RLVzZZA.jpeg 640w, https://miro.medium.com/v2/resize:fit:720/1*XkMSxQY4Md1Cx86RLVzZZA.jpeg 720w, https://miro.medium.com/v2/resize:fit:750/1*XkMSxQY4Md1Cx86RLVzZZA.jpeg 750w, https://miro.medium.com/v2/resize:fit:786/1*XkMSxQY4Md1Cx86RLVzZZA.jpeg 786w, https://miro.medium.com/v2/resize:fit:828/1*XkMSxQY4Md1Cx86RLVzZZA.jpeg 828w, https://miro.medium.com/v2/resize:fit:1100/1*XkMSxQY4Md1Cx86RLVzZZA.jpeg 1100w, https://miro.medium.com/v2/resize:fit:1400/1*XkMSxQY4Md1Cx86RLVzZZA.jpeg 1400w\" sizes=\"(min-resolution: 4dppx) and (max-width: 700px) 50vw, (-webkit-min-device-pixel-ratio: 4) and (max-width: 700px) 50vw, (min-resolution: 3dppx) and (max-width: 700px) 67vw, (-webkit-min-device-pixel-ratio: 3) and (max-width: 700px) 65vw, (min-resolution: 2.5dppx) and (max-width: 700px) 80vw, (-webkit-min-device-pixel-ratio: 2.5) and (max-width: 700px) 80vw, (min-resolution: 2dppx) and (max-width: 700px) 100vw, (-webkit-min-device-pixel-ratio: 2) and (max-width: 700px) 100vw, 700px\"></source><img alt=\"\" class=\"bg hf hg c\" width=\"700\" height=\"394\" loading=\"eager\" role=\"presentation\"></picture></div>\n</div>\n<figcaption class=\"hh fe hi gs gt hj hk be b bf z dt\">Image by Aphinya Dechalert. Titled: React vs Angular for global dominance.</figcaption></figure><div><div class=\"speechify-ignore l\"><div class=\"gv gw gx gy gz l\"></div>\n<div class=\"ck l\"><div class=\"hn ab\"><div class=\"bl\" aria-hidden=\"false\"><button class=\"l ax ao am\" aria-label=\"Member-only story\"><div class=\"h k j i d\"><div><div class=\"bl\" aria-hidden=\"false\"><svg width=\"16\" height=\"16\" viewbox=\"0 0 64 64\" fill=\"none\"><path d=\"M39.64 40.83L33.87 56.7a1.99 1.99 0 0 1-3.74 0l-5.77-15.87a2.02 2.02 0 0 0-1.2-1.2L7.3 33.88a1.99 1.99 0 0 1 0-3.74l15.87-5.77a2.02 2.02 0 0 0 1.2-1.2L30.12 7.3a1.99 1.99 0 0 1 3.74 0l5.77 15.87a2.02 2.02 0 0 0 1.2 1.2l15.86 5.76a1.99 1.99 0 0 1 0 3.74l-15.87 5.77a2.02 2.02 0 0 0-1.2 1.2z\" fill=\"#FFC017\"></path></svg></div>\n</div>\n</div>\n<div class=\"s u w ff fg q\"><svg width=\"16\" height=\"16\" viewbox=\"0 0 64 64\" fill=\"none\" class=\"hl hm\"><path d=\"M39.64 40.83L33.87 56.7a1.99 1.99 0 0 1-3.74 0l-5.77-15.87a2.02 2.02 0 0 0-1.2-1.2L7.3 33.88a1.99 1.99 0 0 1 0-3.74l15.87-5.77a2.02 2.02 0 0 0 1.2-1.2L30.12 7.3a1.99 1.99 0 0 1 3.74 0l5.77 15.87a2.02 2.02 0 0 0 1.2 1.2l15.86 5.76a1.99 1.99 0 0 1 0 3.74l-15.87 5.77a2.02 2.02 0 0 0-1.2 1.2z\" fill=\"#FFC017\"></path></svg><p class=\"be b bf z dt\">Member-only story</p>\n</div>\n</button></div>\n</div>\n</div>\n</div>\n<h1 id=\"6c1d\" class=\"pw-post-title ho hp hq be hr hs ht hu hv hw hx hy hz ia ib ic id ie if ig ih ii bj\" data-testid=\"storyTitle\">Why are developers still using Angular?</h1>\n</div>\n<div><h2 id=\"fc8a\" class=\"pw-subtitle-paragraph ij hp hq be b ik il im in io ip iq ir is it iu iv iw ix iy cp dt\">especially when everyone seems to be wanting React</h2>\n<div class=\"iz ja jb jc jd\"><div class=\"speechify-ignore ab co\"><div class=\"speechify-ignore bg l\"><div class=\"je jf jg jh ji ab\"><div><div class=\"ab jj\"><a href=\"https://medium.com/@PurpleGreenLemon?source=post_page-----b9ef29d1f97f--------------------------------\" rel=\"noopener follow\" target=\"_blank\"><div><div class=\"bl\" aria-hidden=\"false\"><div class=\"l jk jl bx jm jn\"><div class=\"l fi\"><img alt=\"Aphinya Dechalert\" class=\"l fc bx dc dd cw\" src=\"https://sandbox.copyleaks.com/?url=https://miro.medium.com/v2/resize:fill:88:88/1*wMZ9W402oTcM2c9s7tZDSg.jpeg\" width=\"44\" height=\"44\" loading=\"lazy\" data-testid=\"authorPhoto\"><div class=\"jo bx l dc dd fr n jp fs\"></div>\n</div>\n</div>\n</div>\n</div>\n</a><a href=\"https://medium.matcha.fyi/?source=post_page-----b9ef29d1f97f--------------------------------\" rel=\"noopener  ugc nofollow\" target=\"_blank\"><div class=\"jq ab fi\"><div><div class=\"bl\" aria-hidden=\"false\"><div class=\"l jr js bx jm jt\"><div class=\"l fi\"><img alt=\"matcha.fyi\" class=\"l fc bx bq ju cw\" src=\"https://sandbox.copyleaks.com/?url=https://miro.medium.com/v2/da:true/resize:fill:48:48/1*mYAI2ty5HRGa7h-oM1cSoA.gif\" width=\"24\" height=\"24\" loading=\"lazy\" data-testid=\"publicationPhoto\"><div class=\"jo bx l bq ju fr n jp fs\"></div>\n</div>\n</div>\n</div>\n</div>\n</div>\n</a></div>\n</div>\n<div class=\"bm bg l\"><div class=\"ab\"><div style=\"flex:1\"><span class=\"be b bf z bj\"><div class=\"jv ab q\"><div class=\"ab q jw\"><div class=\"ab q\"><div><div class=\"bl\" aria-hidden=\"false\"><p class=\"be b jx jy bj\"><a class=\"af ag ah ai aj ak al am an ao ap aq ar jz\" data-testid=\"authorName\" href=\"https://medium.com/@PurpleGreenLemon?source=post_page-----b9ef29d1f97f--------------------------------\" rel=\"noopener follow\" target=\"_blank\">Aphinya Dechalert</a></p>\n</div>\n</div>\n</div>\n<span class=\"ka kb\" aria-hidden=\"true\"><span class=\"be b bf z dt\">·</span></span><p class=\"be b jx jy dt\"><span><a class=\"kc kd ah ai aj ak al am an ao ap aq ar ew ke kf\" href=\"https://medium.com/m/signin?actionUrl=https%3A%2F%2Fmedium.com%2F_%2Fsubscribe%2Fuser%2F3ac3fb3f09e0&amp;operation=register&amp;redirect=https%3A%2F%2Fmedium.matcha.fyi%2Fwhy-are-developers-still-using-angular-b9ef29d1f97f&amp;user=Aphinya+Dechalert&amp;userId=3ac3fb3f09e0&amp;source=post_page-3ac3fb3f09e0----b9ef29d1f97f---------------------post_header-----------\" rel=\"noopener follow\" target=\"_blank\">Follow</a></span></p>\n</div>\n</div>\n</span></div>\n</div>\n<div class=\"l kg\"><span class=\"be b bf z dt\"><div class=\"ab cm kh ki kj\"><div class=\"kk kl ab\"><div class=\"be b bf z dt ab km\"><span class=\"hl l kg\">Published in</span><div><div class=\"bl\" aria-hidden=\"false\"><a class=\"af ag ah ai aj ak al am an ao ap aq ar jz ab q\" data-testid=\"publicationName\" href=\"https://medium.matcha.fyi/?source=post_page-----b9ef29d1f97f--------------------------------\" rel=\"noopener  ugc nofollow\" target=\"_blank\"><p class=\"be b bf z kn ko kp kq kr ks kt ku bj\">matcha.fyi</p>\n</a></div>\n</div>\n</div>\n<div class=\"h k\"><span class=\"ka kb\" aria-hidden=\"true\"><span class=\"be b bf z dt\">·</span></span></div>\n</div>\n<span class=\"be b bf z dt\"><div class=\"ab ae\"><span data-testid=\"storyReadTime\">4 min read</span><div class=\"kv kw l\" aria-hidden=\"true\"><span class=\"l\" aria-hidden=\"true\"><span class=\"be b bf z dt\">·</span></span></div>\n<span data-testid=\"storyPublishDate\">May 13, 2019</span></div>\n</span></div>\n</span></div>\n</div>\n</div>\n<div class=\"ab co kx ky kz la lb lc ld le lf lg lh li lj lk ll lm\"><div class=\"h k w ff fg q\"><div class=\"mc l\"><div class=\"ab q md\"><div class=\"pw-multi-vote-icon fi hl me mf mg\"><span><a class=\"af ag ah ai aj ak al am an ao ap aq ar as at\" data-testid=\"headerClapButton\" href=\"https://medium.com/m/signin?actionUrl=https%3A%2F%2Fmedium.com%2F_%2Fvote%2Fmadhash%2Fb9ef29d1f97f&amp;operation=register&amp;redirect=https%3A%2F%2Fmedium.matcha.fyi%2Fwhy-are-developers-still-using-angular-b9ef29d1f97f&amp;user=Aphinya+Dechalert&amp;userId=3ac3fb3f09e0&amp;source=-----b9ef29d1f97f---------------------clap_footer-----------\" rel=\"noopener follow\" target=\"_blank\"><div><div class=\"bl\" aria-hidden=\"false\"><div class=\"mh ao mi mj mk ml am mm mn mo mg\"><svg width=\"24\" height=\"24\" viewbox=\"0 0 24 24\" aria-label=\"clap\"><path fill-rule=\"evenodd\" clip-rule=\"evenodd\" d=\"M11.37.83L12 3.28l.63-2.45h-1.26zM13.92 3.95l1.52-2.1-1.18-.4-.34 2.5zM8.59 1.84l1.52 2.11-.34-2.5-1.18.4zM18.52 18.92a4.23 4.23 0 0 1-2.62 1.33l.41-.37c2.39-2.4 2.86-4.95 1.4-7.63l-.91-1.6-.8-1.67c-.25-.56-.19-.98.21-1.29a.7.7 0 0 1 .55-.13c.28.05.54.23.72.5l2.37 4.16c.97 1.62 1.14 4.23-1.33 6.7zm-11-.44l-4.15-4.15a.83.83 0 0 1 1.17-1.17l2.16 2.16a.37.37 0 0 0 .51-.52l-2.15-2.16L3.6 11.2a.83.83 0 0 1 1.17-1.17l3.43 3.44a.36.36 0 0 0 .52 0 .36.36 0 0 0 0-.52L5.29 9.51l-.97-.97a.83.83 0 0 1 0-1.16.84.84 0 0 1 1.17 0l.97.97 3.44 3.43a.36.36 0 0 0 .51 0 .37.37 0 0 0 0-.52L6.98 7.83a.82.82 0 0 1-.18-.9.82.82 0 0 1 .76-.51c.22 0 .43.09.58.24l5.8 5.79a.37.37 0 0 0 .58-.42L13.4 9.67c-.26-.56-.2-.98.2-1.29a.7.7 0 0 1 .55-.13c.28.05.55.23.73.5l2.2 3.86c1.3 2.38.87 4.59-1.29 6.75a4.65 4.65 0 0 1-4.19 1.37 7.73 7.73 0 0 1-4.07-2.25zm3.23-12.5l2.12 2.11c-.41.5-.47 1.17-.13 1.9l.22.46-3.52-3.53a.81.81 0 0 1-.1-.36c0-.23.09-.43.24-.59a.85.85 0 0 1 1.17 0zm7.36 1.7a1.86 1.86 0 0 0-1.23-.84 1.44 1.44 0 0 0-1.12.27c-.3.24-.5.55-.58.89-.25-.25-.57-.4-.91-.47-.28-.04-.56 0-.82.1l-2.18-2.18a1.56 1.56 0 0 0-2.2 0c-.2.2-.33.44-.4.7a1.56 1.56 0 0 0-2.63.75 1.6 1.6 0 0 0-2.23-.04 1.56 1.56 0 0 0 0 2.2c-.24.1-.5.24-.72.45a1.56 1.56 0 0 0 0 2.2l.52.52a1.56 1.56 0 0 0-.75 2.61L7 19a8.46 8.46 0 0 0 4.48 2.45 5.18 5.18 0 0 0 3.36-.5 4.89 4.89 0 0 0 4.2-1.51c2.75-2.77 2.54-5.74 1.43-7.59L18.1 7.68z\"></path></svg></div>\n</div>\n</div>\n</a></span></div>\n<div class=\"pw-multi-vote-count l mp mq mr ms mt mu mv\"><p class=\"be b du z dt\"><span class=\"mw\">--</span></p>\n</div>\n</div>\n</div>\n<div><div class=\"bl\" aria-hidden=\"false\"><button class=\"ao mh my mz ab q fj na nb\" aria-label=\"responses\"><svg width=\"24\" height=\"24\" viewbox=\"0 0 24 24\" class=\"ih\"><path d=\"M18 16.8a7.14 7.14 0 0 0 2.24-5.32c0-4.12-3.53-7.48-8.05-7.48C7.67 4 4 7.36 4 11.48c0 4.13 3.67 7.48 8.2 7.48a8.9 8.9 0 0 0 2.38-.32c.23.2.48.39.75.56 1.06.69 2.2 1.04 3.4 1.04.22 0 .4-.11.48-.29a.5.5 0 0 0-.04-.52 6.4 6.4 0 0 1-1.16-2.65v.02zm-3.12 1.06l-.06-.22-.32.1a8 8 0 0 1-2.3.33c-4.03 0-7.3-2.96-7.3-6.59S8.17 4.9 12.2 4.9c4 0 7.1 2.96 7.1 6.6 0 1.8-.6 3.47-2.02 4.72l-.2.16v.26l.02.3a6.74 6.74 0 0 0 .88 2.4 5.27 5.27 0 0 1-2.17-.86c-.28-.17-.72-.38-.94-.59l.01-.02z\"></path></svg><p class=\"be b du z dt\"><span class=\"pw-responses-count mx ih\">48</span></p>\n</button></div>\n</div>\n</div>\n<div class=\"ab q ln lo lp lq lr ls lt lu lv lw lx ly lz ma mb\"><div class=\"nc k j i d\"></div>\n<div class=\"h k\"><div><div class=\"bl\" aria-hidden=\"false\"><span><a class=\"af ag ah ai aj ak al am an ao ap aq ar as at\" data-testid=\"headerBookmarkButton\" href=\"https://medium.com/m/signin?actionUrl=https%3A%2F%2Fmedium.com%2F_%2Fbookmark%2Fp%2Fb9ef29d1f97f&amp;operation=register&amp;redirect=https%3A%2F%2Fmedium.matcha.fyi%2Fwhy-are-developers-still-using-angular-b9ef29d1f97f&amp;source=-----b9ef29d1f97f---------------------bookmark_footer-----------\" rel=\"noopener follow\" target=\"_blank\"><svg width=\"25\" height=\"25\" viewbox=\"0 0 25 25\" fill=\"none\" class=\"dt nd\" aria-label=\"Add to list bookmark button\"><path d=\"M18 2.5a.5.5 0 0 1 1 0V5h2.5a.5.5 0 0 1 0 1H19v2.5a.5.5 0 1 1-1 0V6h-2.5a.5.5 0 0 1 0-1H18V2.5zM7 7a1 1 0 0 1 1-1h3.5a.5.5 0 0 0 0-1H8a2 2 0 0 0-2 2v14a.5.5 0 0 0 .8.4l5.7-4.4 5.7 4.4a.5.5 0 0 0 .8-.4v-8.5a.5.5 0 0 0-1 0v7.48l-5.2-4a.5.5 0 0 0-.6 0l-5.2 4V7z\" fill=\"currentColor\"></path></svg></a></span></div>\n</div>\n</div>\n<div class=\"fc ne cm\"><div class=\"l ae\"><div class=\"ab ca\"><div class=\"nf ng nh ni nj hf ch bg\"><div class=\"ab\"></div>\n</div>\n</div>\n</div>\n</div>\n<div class=\"bl\" aria-hidden=\"false\" aria-describedby=\"postFooterSocialMenu\" aria-labelledby=\"postFooterSocialMenu\"><div><div class=\"bl\" aria-hidden=\"false\"><button aria-controls=\"postFooterSocialMenu\" aria-expanded=\"false\" aria-label=\"Share Post\" data-testid=\"headerSocialShareButton\" class=\"af fj ah ai aj ak al nk an ao ap ew nl nm nb nn no np nq nr s ns nt nu nv nw nx ny u nz oa ob\"><svg width=\"24\" height=\"24\" viewbox=\"0 0 24 24\" fill=\"none\"><path fill-rule=\"evenodd\" clip-rule=\"evenodd\" d=\"M15.22 4.93a.42.42 0 0 1-.12.13h.01a.45.45 0 0 1-.29.08.52.52 0 0 1-.3-.13L12.5 3v7.07a.5.5 0 0 1-.5.5.5.5 0 0 1-.5-.5V3.02l-2 2a.45.45 0 0 1-.57.04h-.02a.4.4 0 0 1-.16-.3.4.4 0 0 1 .1-.32l2.8-2.8a.5.5 0 0 1 .7 0l2.8 2.8a.42.42 0 0 1 .07.5zm-.1.14zm.88 2h1.5a2 2 0 0 1 2 2v10a2 2 0 0 1-2 2h-11a2 2 0 0 1-2-2v-10a2 2 0 0 1 2-2H8a.5.5 0 0 1 .35.14c.1.1.15.22.15.35a.5.5 0 0 1-.15.35.5.5 0 0 1-.35.15H6.4c-.5 0-.9.4-.9.9v10.2a.9.9 0 0 0 .9.9h11.2c.5 0 .9-.4.9-.9V8.96c0-.5-.4-.9-.9-.9H16a.5.5 0 0 1 0-1z\" fill=\"currentColor\"></path></svg><div class=\"j i d\"><p class=\"be b bf z dt\">Share</p>\n</div>\n</button></div>\n</div>\n</div>\n</div>\n</div>\n</div>\n</div>\n</div>\n</div>\n<p id=\"2aa4\" class=\"pw-post-body-paragraph oc od hq oe b ik of og oh in oi oj ok ol om on oo op oq or os ot ou ov ow ox gn bj\">There is no doubt that React is causing a front end upheaval when it comes to choosing a method of coding interfaces. Angular feels like it’s been in the market for a long time. However, in reality, the framework as we currently know it was only released in 2016. React, initially released in 2013, only gained major publicity traction after Facebook changed their BSD license to MIT.</p>\n<p id=\"520e\" class=\"pw-post-body-paragraph oc od hq oe b ik of og oh in oi oj ok ol om on oo op oq or os ot ou ov ow ox gn bj\">In hindsight, the Angular team should have called it something else since it is so far removed and very different from the original Angular.js and just let that one die a slow silent death.</p>\n<p id=\"24d1\" class=\"pw-post-body-paragraph oc od hq oe b ik of og oh in oi oj ok ol om on oo op oq or os ot ou ov ow ox gn bj\">So what’s the big deal with Angular? and why, exactly, are developers still using and recommending it?</p>\n<h1 id=\"1c16\" class=\"oy oz hq be pa pb pc im pd pe pf ip pg ph pi pj pk pl pm pn po pp pq pr ps pt bj\">Opinionated Architecture</h1>\n<p id=\"be7a\" class=\"pw-post-body-paragraph oc od hq oe b ik pu og oh in pv oj ok ol pw on oo op px or os ot py ov ow ox gn bj\">React is more geared towards being as flexible as possible, giving developers the choice of architectures and structures. Angular, however, enforces a certain structure onto the project.</p>\n<p id=\"9357\" class=\"pw-post-body-paragraph oc od hq oe b ik of og oh in oi oj ok ol om on oo op oq or os ot ou ov ow ox gn bj\">Angular operates on a highly opinionated architecture — which means that your Angular app has to be written in a certain way for things to work properly. While this may sound rigid, the major perk is that once you learn the structures, every Angular app that you’ll ever come into contact will have something similar.</p>\n<p id=\"9953\" class=\"pw-post-body-paragraph oc od hq oe b ik of og oh in oi oj ok ol om on oo op oq or os ot ou ov ow ox gn bj\">You can always expect the three piece creation of css, Angular component and html for your view at minimum. With React, its flexibility is also its weak point where junior or new React developers can create without restrictions, baking into bad practices or shaky architectures. It’s not their fault, not really.</p>\n<p id=\"dea8\" class=\"pw-post-body-paragraph oc od hq oe b ik of og oh in oi oj ok ol om on oo op oq or os ot ou ov ow ox gn bj\">Best practices come to fruition after enough mistakes have been made and best known solutions come to light. Angular forces these solutions on you in order to maintain a sense of cohesion in the way things are done.</p>\n<p id=\"3f83\" class=\"pw-post-body-paragraph oc od hq oe b ik of og oh in oi oj ok ol om on oo op oq or os ot ou ov ow ox gn bj\">Historically, this wasn’t present in Angular.js. The original version of Angular had a more free reign approach, similar to React’s ability to coincide with any existing application. However, as applications grew and teams changed, there’s a higher chance of the application breaking <a class=\"af pz\" href=\"https://itnext.io/rethinking-separation-of-concerns-with-react-7e5de1b5c0f7\" rel=\"noopener ugc nofollow\" target=\"_blank\">separations of concerns</a>, resulting in a glop of code that eventually...</p>\n</div>\n</div>\n</div>\n</div>\n</section></div>\n</div>\n</article><div class=\"ab ca\"><div class=\"ch bg fz ga gb gc\"></div>\n</div>\n</div>\n<div class=\"l\"></div>\n<footer class=\"qa qb qc qd qe qf qg qh hn ab q qi jt c\"><div class=\"l ae\"><div class=\"ab ca\"><div class=\"ch bg fz ga gb gc\"><div class=\"ab co qj\"><div class=\"ab q md\"><div class=\"qk l\"><span class=\"l ql qm qn e d\"><div class=\"ab q md\"><div class=\"pw-multi-vote-icon fi hl me mf mg\"><span><a class=\"af ag ah ai aj ak al am an ao ap aq ar as at\" data-testid=\"footerClapButton\" href=\"https://medium.com/m/signin?actionUrl=https%3A%2F%2Fmedium.com%2F_%2Fvote%2Fmadhash%2Fb9ef29d1f97f&amp;operation=register&amp;redirect=https%3A%2F%2Fmedium.matcha.fyi%2Fwhy-are-developers-still-using-angular-b9ef29d1f97f&amp;user=Aphinya+Dechalert&amp;userId=3ac3fb3f09e0&amp;source=-----b9ef29d1f97f---------------------clap_footer-----------\" rel=\"noopener follow\" target=\"_blank\"><div><div class=\"bl\" aria-hidden=\"false\"><div class=\"mh ao mi mj mk ml am mm mn mo mg\"><svg width=\"24\" height=\"24\" viewbox=\"0 0 24 24\" aria-label=\"clap\"><path fill-rule=\"evenodd\" clip-rule=\"evenodd\" d=\"M11.37.83L12 3.28l.63-2.45h-1.26zM13.92 3.95l1.52-2.1-1.18-.4-.34 2.5zM8.59 1.84l1.52 2.11-.34-2.5-1.18.4zM18.52 18.92a4.23 4.23 0 0 1-2.62 1.33l.41-.37c2.39-2.4 2.86-4.95 1.4-7.63l-.91-1.6-.8-1.67c-.25-.56-.19-.98.21-1.29a.7.7 0 0 1 .55-.13c.28.05.54.23.72.5l2.37 4.16c.97 1.62 1.14 4.23-1.33 6.7zm-11-.44l-4.15-4.15a.83.83 0 0 1 1.17-1.17l2.16 2.16a.37.37 0 0 0 .51-.52l-2.15-2.16L3.6 11.2a.83.83 0 0 1 1.17-1.17l3.43 3.44a.36.36 0 0 0 .52 0 .36.36 0 0 0 0-.52L5.29 9.51l-.97-.97a.83.83 0 0 1 0-1.16.84.84 0 0 1 1.17 0l.97.97 3.44 3.43a.36.36 0 0 0 .51 0 .37.37 0 0 0 0-.52L6.98 7.83a.82.82 0 0 1-.18-.9.82.82 0 0 1 .76-.51c.22 0 .43.09.58.24l5.8 5.79a.37.37 0 0 0 .58-.42L13.4 9.67c-.26-.56-.2-.98.2-1.29a.7.7 0 0 1 .55-.13c.28.05.55.23.73.5l2.2 3.86c1.3 2.38.87 4.59-1.29 6.75a4.65 4.65 0 0 1-4.19 1.37 7.73 7.73 0 0 1-4.07-2.25zm3.23-12.5l2.12 2.11c-.41.5-.47 1.17-.13 1.9l.22.46-3.52-3.53a.81.81 0 0 1-.1-.36c0-.23.09-.43.24-.59a.85.85 0 0 1 1.17 0zm7.36 1.7a1.86 1.86 0 0 0-1.23-.84 1.44 1.44 0 0 0-1.12.27c-.3.24-.5.55-.58.89-.25-.25-.57-.4-.91-.47-.28-.04-.56 0-.82.1l-2.18-2.18a1.56 1.56 0 0 0-2.2 0c-.2.2-.33.44-.4.7a1.56 1.56 0 0 0-2.63.75 1.6 1.6 0 0 0-2.23-.04 1.56 1.56 0 0 0 0 2.2c-.24.1-.5.24-.72.45a1.56 1.56 0 0 0 0 2.2l.52.52a1.56 1.56 0 0 0-.75 2.61L7 19a8.46 8.46 0 0 0 4.48 2.45 5.18 5.18 0 0 0 3.36-.5 4.89 4.89 0 0 0 4.2-1.51c2.75-2.77 2.54-5.74 1.43-7.59L18.1 7.68z\"></path></svg></div>\n</div>\n</div>\n</a></span></div>\n<div class=\"pw-multi-vote-count l mp mq mr ms mt mu mv\"><p class=\"be b du z dt\"><span class=\"mw\">--</span></p>\n</div>\n</div>\n</span><span class=\"l h g f qo qp\"><div class=\"ab q md\"><div class=\"pw-multi-vote-icon fi hl me mf mg\"><span><a class=\"af ag ah ai aj ak al am an ao ap aq ar as at\" data-testid=\"footerClapButton\" href=\"https://medium.com/m/signin?actionUrl=https%3A%2F%2Fmedium.com%2F_%2Fvote%2Fmadhash%2Fb9ef29d1f97f&amp;operation=register&amp;redirect=https%3A%2F%2Fmedium.matcha.fyi%2Fwhy-are-developers-still-using-angular-b9ef29d1f97f&amp;user=Aphinya+Dechalert&amp;userId=3ac3fb3f09e0&amp;source=-----b9ef29d1f97f---------------------clap_footer-----------\" rel=\"noopener follow\" target=\"_blank\"><div><div class=\"bl\" aria-hidden=\"false\"><div class=\"mh ao mi mj mk ml am mm mn mo mg\"><svg width=\"24\" height=\"24\" viewbox=\"0 0 24 24\" aria-label=\"clap\"><path fill-rule=\"evenodd\" clip-rule=\"evenodd\" d=\"M11.37.83L12 3.28l.63-2.45h-1.26zM13.92 3.95l1.52-2.1-1.18-.4-.34 2.5zM8.59 1.84l1.52 2.11-.34-2.5-1.18.4zM18.52 18.92a4.23 4.23 0 0 1-2.62 1.33l.41-.37c2.39-2.4 2.86-4.95 1.4-7.63l-.91-1.6-.8-1.67c-.25-.56-.19-.98.21-1.29a.7.7 0 0 1 .55-.13c.28.05.54.23.72.5l2.37 4.16c.97 1.62 1.14 4.23-1.33 6.7zm-11-.44l-4.15-4.15a.83.83 0 0 1 1.17-1.17l2.16 2.16a.37.37 0 0 0 .51-.52l-2.15-2.16L3.6 11.2a.83.83 0 0 1 1.17-1.17l3.43 3.44a.36.36 0 0 0 .52 0 .36.36 0 0 0 0-.52L5.29 9.51l-.97-.97a.83.83 0 0 1 0-1.16.84.84 0 0 1 1.17 0l.97.97 3.44 3.43a.36.36 0 0 0 .51 0 .37.37 0 0 0 0-.52L6.98 7.83a.82.82 0 0 1-.18-.9.82.82 0 0 1 .76-.51c.22 0 .43.09.58.24l5.8 5.79a.37.37 0 0 0 .58-.42L13.4 9.67c-.26-.56-.2-.98.2-1.29a.7.7 0 0 1 .55-.13c.28.05.55.23.73.5l2.2 3.86c1.3 2.38.87 4.59-1.29 6.75a4.65 4.65 0 0 1-4.19 1.37 7.73 7.73 0 0 1-4.07-2.25zm3.23-12.5l2.12 2.11c-.41.5-.47 1.17-.13 1.9l.22.46-3.52-3.53a.81.81 0 0 1-.1-.36c0-.23.09-.43.24-.59a.85.85 0 0 1 1.17 0zm7.36 1.7a1.86 1.86 0 0 0-1.23-.84 1.44 1.44 0 0 0-1.12.27c-.3.24-.5.55-.58.89-.25-.25-.57-.4-.91-.47-.28-.04-.56 0-.82.1l-2.18-2.18a1.56 1.56 0 0 0-2.2 0c-.2.2-.33.44-.4.7a1.56 1.56 0 0 0-2.63.75 1.6 1.6 0 0 0-2.23-.04 1.56 1.56 0 0 0 0 2.2c-.24.1-.5.24-.72.45a1.56 1.56 0 0 0 0 2.2l.52.52a1.56 1.56 0 0 0-.75 2.61L7 19a8.46 8.46 0 0 0 4.48 2.45 5.18 5.18 0 0 0 3.36-.5 4.89 4.89 0 0 0 4.2-1.51c2.75-2.77 2.54-5.74 1.43-7.59L18.1 7.68z\"></path></svg></div>\n</div>\n</div>\n</a></span></div>\n<div class=\"pw-multi-vote-count l mp mq mr ms mt mu mv\"><p class=\"be b du z dt\"><span class=\"mw\">--</span></p>\n</div>\n</div>\n</span></div>\n<div class=\"bp ab\"><div><div class=\"bl\" aria-hidden=\"false\"><button class=\"ao mh my mz ab q fj na nb\" aria-label=\"responses\"><svg width=\"24\" height=\"24\" viewbox=\"0 0 24 24\" class=\"ih\"><path d=\"M18 16.8a7.14 7.14 0 0 0 2.24-5.32c0-4.12-3.53-7.48-8.05-7.48C7.67 4 4 7.36 4 11.48c0 4.13 3.67 7.48 8.2 7.48a8.9 8.9 0 0 0 2.38-.32c.23.2.48.39.75.56 1.06.69 2.2 1.04 3.4 1.04.22 0 .4-.11.48-.29a.5.5 0 0 0-.04-.52 6.4 6.4 0 0 1-1.16-2.65v.02zm-3.12 1.06l-.06-.22-.32.1a8 8 0 0 1-2.3.33c-4.03 0-7.3-2.96-7.3-6.59S8.17 4.9 12.2 4.9c4 0 7.1 2.96 7.1 6.6 0 1.8-.6 3.47-2.02 4.72l-.2.16v.26l.02.3a6.74 6.74 0 0 0 .88 2.4 5.27 5.27 0 0 1-2.17-.86c-.28-.17-.72-.38-.94-.59l.01-.02z\"></path></svg><p class=\"be b bf z dt\"><span class=\"pw-responses-count mx ih\">48</span></p>\n</button></div>\n</div>\n</div>\n</div>\n<div class=\"ab q\"><div class=\"qq l kg\"><div><div class=\"bl\" aria-hidden=\"false\"><span><a class=\"af ag ah ai aj ak al am an ao ap aq ar as at\" data-testid=\"footerBookmarkButton\" href=\"https://medium.com/m/signin?actionUrl=https%3A%2F%2Fmedium.com%2F_%2Fbookmark%2Fp%2Fb9ef29d1f97f&amp;operation=register&amp;redirect=https%3A%2F%2Fmedium.matcha.fyi%2Fwhy-are-developers-still-using-angular-b9ef29d1f97f&amp;source=--------------------------bookmark_footer-----------\" rel=\"noopener follow\" target=\"_blank\"><svg width=\"25\" height=\"25\" viewbox=\"0 0 25 25\" fill=\"none\" class=\"dt nd\" aria-label=\"Add to list bookmark button\"><path d=\"M18 2.5a.5.5 0 0 1 1 0V5h2.5a.5.5 0 0 1 0 1H19v2.5a.5.5 0 1 1-1 0V6h-2.5a.5.5 0 0 1 0-1H18V2.5zM7 7a1 1 0 0 1 1-1h3.5a.5.5 0 0 0 0-1H8a2 2 0 0 0-2 2v14a.5.5 0 0 0 .8.4l5.7-4.4 5.7 4.4a.5.5 0 0 0 .8-.4v-8.5a.5.5 0 0 0-1 0v7.48l-5.2-4a.5.5 0 0 0-.6 0l-5.2 4V7z\" fill=\"currentColor\"></path></svg></a></span></div>\n</div>\n</div>\n<div class=\"qq l kg\"><div class=\"bl\" aria-hidden=\"false\" aria-describedby=\"postFooterSocialMenu\" aria-labelledby=\"postFooterSocialMenu\"><div><div class=\"bl\" aria-hidden=\"false\"><button aria-controls=\"postFooterSocialMenu\" aria-expanded=\"false\" aria-label=\"Share Post\" data-testid=\"footerSocialShareButton\" class=\"af fj ah ai aj ak al nk an ao ap ew nl nm nb nn\"><svg width=\"24\" height=\"24\" viewbox=\"0 0 24 24\" fill=\"none\"><path fill-rule=\"evenodd\" clip-rule=\"evenodd\" d=\"M15.22 4.93a.42.42 0 0 1-.12.13h.01a.45.45 0 0 1-.29.08.52.52 0 0 1-.3-.13L12.5 3v7.07a.5.5 0 0 1-.5.5.5.5 0 0 1-.5-.5V3.02l-2 2a.45.45 0 0 1-.57.04h-.02a.4.4 0 0 1-.16-.3.4.4 0 0 1 .1-.32l2.8-2.8a.5.5 0 0 1 .7 0l2.8 2.8a.42.42 0 0 1 .07.5zm-.1.14zm.88 2h1.5a2 2 0 0 1 2 2v10a2 2 0 0 1-2 2h-11a2 2 0 0 1-2-2v-10a2 2 0 0 1 2-2H8a.5.5 0 0 1 .35.14c.1.1.15.22.15.35a.5.5 0 0 1-.15.35.5.5 0 0 1-.35.15H6.4c-.5 0-.9.4-.9.9v10.2a.9.9 0 0 0 .9.9h11.2c.5 0 .9-.4.9-.9V8.96c0-.5-.4-.9-.9-.9H16a.5.5 0 0 1 0-1z\" fill=\"currentColor\"></path></svg></button></div>\n</div>\n</div>\n</div>\n</div>\n</div>\n</div>\n</div>\n</div>\n</footer><div class=\"qr qs qt qu qv l bw\"><div class=\"ab ca\"><div class=\"ch bg fz ga gb gc\"><div class=\"ck ab qw co\"><div class=\"ab jj\"><a href=\"https://medium.com/@PurpleGreenLemon?source=post_page-----b9ef29d1f97f--------------------------------\" rel=\"noopener follow\" target=\"_blank\"><div class=\"l qx qy bx qz jn\"><div class=\"l fi\"><img alt=\"Aphinya Dechalert\" class=\"l fc bx ra rb cw\" src=\"https://sandbox.copyleaks.com/?url=https://miro.medium.com/v2/resize:fill:144:144/1*wMZ9W402oTcM2c9s7tZDSg.jpeg\" width=\"72\" height=\"72\" loading=\"lazy\"><div class=\"jo bx l ra rb fr n jp fs\"></div>\n</div>\n</div>\n</a><a href=\"https://medium.matcha.fyi/?source=post_page-----b9ef29d1f97f--------------------------------\" rel=\"noopener follow\" target=\"_blank\"><div class=\"rc ab fi\"><div><div class=\"bl\" aria-hidden=\"false\"><div class=\"l rd re bx qz jt\"><div class=\"l fi\"><img alt=\"matcha.fyi\" class=\"l fc bx by bz cw\" src=\"https://sandbox.copyleaks.com/?url=https://miro.medium.com/v2/da:true/resize:fill:64:64/1*mYAI2ty5HRGa7h-oM1cSoA.gif\" width=\"32\" height=\"32\" loading=\"lazy\"><div class=\"jo bx l by bz fr n jp fs\"></div>\n</div>\n</div>\n</div>\n</div>\n</div>\n</a></div>\n<div class=\"j i d\"><div class=\"ab\"><span><a class=\"be b bf z eo rf ep eq er es et eu ev ew ex ey ez rg fa fb fc bl fd fe\" href=\"https://medium.com/m/signin?actionUrl=https%3A%2F%2Fmedium.com%2F_%2Fsubscribe%2Fuser%2F3ac3fb3f09e0&amp;operation=register&amp;redirect=https%3A%2F%2Fmedium.matcha.fyi%2Fwhy-are-developers-still-using-angular-b9ef29d1f97f&amp;user=Aphinya+Dechalert&amp;userId=3ac3fb3f09e0&amp;source=post_page-3ac3fb3f09e0----b9ef29d1f97f---------------------follow_profile-----------\" rel=\"noopener follow\" target=\"_blank\">Follow</a></span><div class=\"ds l\"><div><div><div class=\"bl\" aria-hidden=\"false\"><div class=\"l\"><span><a class=\"af ag ah ai aj ak al am an ao ap aq ar as at\" href=\"https://medium.com/m/signin?actionUrl=%2F_%2Fapi%2Fsubscriptions%2Fnewsletters%2Ff3ce8e735d14&amp;operation=register&amp;redirect=https%3A%2F%2Fmedium.matcha.fyi%2Fwhy-are-developers-still-using-angular-b9ef29d1f97f&amp;newsletterV3=3ac3fb3f09e0&amp;newsletterV3Id=f3ce8e735d14&amp;user=Aphinya+Dechalert&amp;userId=3ac3fb3f09e0&amp;source=-----b9ef29d1f97f---------------------subscribe_user-----------\" rel=\"noopener follow\" target=\"_blank\"><button class=\"be b bf z ri am rj rk rl rm rn ro rp rq ev ew ex ey ez fa fb fc bl fd fe\" aria-label=\"Subscribe\"><svg width=\"38\" height=\"38\" viewbox=\"0 0 38 38\" fill=\"none\" class=\"rh re rd\"><rect x=\"26.25\" y=\"9.25\" width=\"0.5\" height=\"6.5\" rx=\"0.25\"></rect><rect x=\"29.75\" y=\"12.25\" width=\"0.5\" height=\"6.5\" rx=\"0.25\" transform=\"rotate(90 29.75 12.25)\"></rect><path d=\"M19.5 12.5h-7a1 1 0 0 0-1 1v11a1 1 0 0 0 1 1h13a1 1 0 0 0 1-1v-5\"></path><path d=\"M11.5 14.5L19 20l4-3\"></path></svg></button></a></span></div>\n</div>\n</div>\n</div>\n</div>\n</div>\n</div>\n</div>\n<div class=\"ab cm co\"><div class=\"l\"><div class=\"ab q\"><a class=\"af ag ah ai aj ak al am an ao ap aq ar as at ab q\" href=\"https://medium.com/@PurpleGreenLemon?source=post_page-----b9ef29d1f97f--------------------------------\" rel=\"noopener follow\" target=\"_blank\"><h2 class=\"pw-author-name be rr rs rt ru bj\"><span class=\"gn\">Written by Aphinya Dechalert</span></h2>\n</a></div>\n<div class=\"rv ab\"><div class=\"l kg\"><span class=\"pw-follower-count be b bf z bj\"><a class=\"af ag ah ai aj ak al am an ao ap aq ar jz\" href=\"https://medium.com/@PurpleGreenLemon/followers?source=post_page-----b9ef29d1f97f--------------------------------\" rel=\"noopener follow\" target=\"_blank\">22K Followers</a></span></div>\n<div class=\"be b bf z kn ko kp ab kr ks kt ku dt km\"><span class=\"ka l\" aria-hidden=\"true\"><span class=\"be b bf z dt\">·</span></span><span class=\"l kg\">Editor for </span><div><div class=\"bl\" aria-hidden=\"false\"><a class=\"af ag ah ai aj ak al am an ao ap aq ar jz ab q\" href=\"https://medium.matcha.fyi/?source=post_page-----b9ef29d1f97f--------------------------------\" rel=\"noopener follow\" target=\"_blank\"><p class=\"be b bf z kn ko kp kq kr ks kt ku bj\">matcha.fyi</p>\n</a></div>\n</div>\n</div>\n</div>\n<div class=\"rw l\"><p class=\"be b bf z bj\">I make words for humans📌 <a class=\"af ag ah ai aj ak al am an ao ap aq ar pz go\" href=\"http://maddosh.com\" rel=\"noopener  ugc nofollow\" target=\"_blank\">maddosh.com</a> 📌 code blog - <a class=\"af ag ah ai aj ak al am an ao ap aq ar pz go\" href=\"http://matcha.fyi\" rel=\"noopener  ugc nofollow\" target=\"_blank\">matcha.fyi</a> 👍Need words? DM me. <a class=\"af ag ah ai aj ak al am an ao ap aq ar pz go\" href=\"http://linkedin.com/in/dechalert\" rel=\"noopener  ugc nofollow\" target=\"_blank\">linkedin.com/in/dechalert</a></p>\n</div>\n</div>\n<div class=\"h k\"><div class=\"ab\"><span><a class=\"be b bf z eo rf ep eq er es et eu ev ew ex ey ez rg fa fb fc bl fd fe\" href=\"https://medium.com/m/signin?actionUrl=https%3A%2F%2Fmedium.com%2F_%2Fsubscribe%2Fuser%2F3ac3fb3f09e0&amp;operation=register&amp;redirect=https%3A%2F%2Fmedium.matcha.fyi%2Fwhy-are-developers-still-using-angular-b9ef29d1f97f&amp;user=Aphinya+Dechalert&amp;userId=3ac3fb3f09e0&amp;source=post_page-3ac3fb3f09e0----b9ef29d1f97f---------------------follow_profile-----------\" rel=\"noopener follow\" target=\"_blank\">Follow</a></span><div class=\"ds l\"><div><div><div class=\"bl\" aria-hidden=\"false\"><div class=\"l\"><span><a class=\"af ag ah ai aj ak al am an ao ap aq ar as at\" href=\"https://medium.com/m/signin?actionUrl=%2F_%2Fapi%2Fsubscriptions%2Fnewsletters%2Ff3ce8e735d14&amp;operation=register&amp;redirect=https%3A%2F%2Fmedium.matcha.fyi%2Fwhy-are-developers-still-using-angular-b9ef29d1f97f&amp;newsletterV3=3ac3fb3f09e0&amp;newsletterV3Id=f3ce8e735d14&amp;user=Aphinya+Dechalert&amp;userId=3ac3fb3f09e0&amp;source=-----b9ef29d1f97f---------------------subscribe_user-----------\" rel=\"noopener follow\" target=\"_blank\"><button class=\"be b bf z ri am rj rk rl rm rn ro rp rq ev ew ex ey ez fa fb fc bl fd fe\" aria-label=\"Subscribe\"><svg width=\"38\" height=\"38\" viewbox=\"0 0 38 38\" fill=\"none\" class=\"rh re rd\"><rect x=\"26.25\" y=\"9.25\" width=\"0.5\" height=\"6.5\" rx=\"0.25\"></rect><rect x=\"29.75\" y=\"12.25\" width=\"0.5\" height=\"6.5\" rx=\"0.25\" transform=\"rotate(90 29.75 12.25)\"></rect><path d=\"M19.5 12.5h-7a1 1 0 0 0-1 1v11a1 1 0 0 0 1 1h13a1 1 0 0 0 1-1v-5\"></path><path d=\"M11.5 14.5L19 20l4-3\"></path></svg></button></a></span></div>\n</div>\n</div>\n</div>\n</div>\n</div>\n</div>\n</div>\n<div class=\"rx bg ry gv gw gx gy gz\"></div>\n</div>\n</div>\n<div class=\"h k j\"><div class=\"rx bg ry rz\"></div>\n<div class=\"ab ca\"><div class=\"ch bg fz ga gb gc\"><div class=\"sa ab md kj\"><div class=\"sb sc l\"><a class=\"af ag ah ai aj ak al am an ao ap aq ar as at\" href=\"https://help.medium.com/hc/en-us?source=post_page-----b9ef29d1f97f--------------------------------\" rel=\"noopener follow\" target=\"_blank\"><p class=\"be b du z dt\">Help</p>\n</a></div>\n<div class=\"sb sc l\"><a class=\"af ag ah ai aj ak al am an ao ap aq ar as at\" href=\"https://medium.statuspage.io/?source=post_page-----b9ef29d1f97f--------------------------------\" rel=\"noopener follow\" target=\"_blank\"><p class=\"be b du z dt\">Status</p>\n</a></div>\n<div class=\"sb sc l\"><a class=\"af ag ah ai aj ak al am an ao ap aq ar as at\" href=\"https://medium.com/about?autoplay=1&amp;source=post_page-----b9ef29d1f97f--------------------------------\" rel=\"noopener follow\" target=\"_blank\"><p class=\"be b du z dt\">About</p>\n</a></div>\n<div class=\"sb sc l\"><a class=\"af ag ah ai aj ak al am an ao ap aq ar as at\" href=\"https://medium.com/jobs-at-medium/work-at-medium-959d1a85284e?source=post_page-----b9ef29d1f97f--------------------------------\" rel=\"noopener follow\" target=\"_blank\"><p class=\"be b du z dt\">Careers</p>\n</a></div>\n<div class=\"sb sc l\"><a class=\"af ag ah ai aj ak al am an ao ap aq ar as at\" href=\"https://blog.medium.com/?source=post_page-----b9ef29d1f97f--------------------------------\" rel=\"noopener follow\" target=\"_blank\"><p class=\"be b du z dt\">Blog</p>\n</a></div>\n<div class=\"sb sc l\"><a class=\"af ag ah ai aj ak al am an ao ap aq ar as at\" href=\"https://policy.medium.com/medium-privacy-policy-f03bf92035c9?source=post_page-----b9ef29d1f97f--------------------------------\" rel=\"noopener follow\" target=\"_blank\"><p class=\"be b du z dt\">Privacy</p>\n</a></div>\n<div class=\"sb sc l\"><a class=\"af ag ah ai aj ak al am an ao ap aq ar as at\" href=\"https://policy.medium.com/medium-terms-of-service-9db0094a1e0f?source=post_page-----b9ef29d1f97f--------------------------------\" rel=\"noopener follow\" target=\"_blank\"><p class=\"be b du z dt\">Terms</p>\n</a></div>\n<div class=\"sb sc l\"><a class=\"af ag ah ai aj ak al am an ao ap aq ar as at\" href=\"https://speechify.com/medium?source=post_page-----b9ef29d1f97f--------------------------------\" rel=\"noopener follow\" target=\"_blank\"><p class=\"be b du z dt\">Text to speech</p>\n</a></div>\n<div class=\"sb l\"><a class=\"af ag ah ai aj ak al am an ao ap aq ar as at\" href=\"https://medium.com/business?source=post_page-----b9ef29d1f97f--------------------------------\" rel=\"noopener follow\" target=\"_blank\"><p class=\"be b du z dt\">Teams</p>\n</a></div>\n</div>\n</div>\n</div>\n</div>\n</div>\n</div>\n</div>\n</div>\n</div>\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n</body></html>"
+    },
+    "version": 3
+}

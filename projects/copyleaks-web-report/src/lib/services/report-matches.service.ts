@@ -222,7 +222,24 @@ export class ReportMatchesService implements OnDestroy {
 			)
 			.subscribe(([scanSource, , writingFeedback, viewMode, filterOptions, excludedCorrections]) => {
 				if (!scanSource || !writingFeedback || !viewMode) return;
-				this._processHtmlWritingFeedbackCorrections(scanSource, writingFeedback, filterOptions, excludedCorrections);
+
+				const hasHtml =
+					!!writingFeedback?.corrections?.html?.chars &&
+					!!writingFeedback?.corrections?.html?.chars.types &&
+					!!writingFeedback?.corrections?.html?.chars.groupIds &&
+					!!writingFeedback?.corrections?.html?.chars.lengths &&
+					!!writingFeedback?.corrections?.html?.chars.starts;
+
+				if (viewMode.isHtmlView && !hasHtml) {
+					this._reportViewSvc.reportViewMode$.next({
+						...this._reportViewSvc.reportViewMode,
+						isHtmlView: false,
+					});
+					return;
+				}
+
+				if (hasHtml)
+					this._processHtmlWritingFeedbackCorrections(scanSource, writingFeedback, filterOptions, excludedCorrections);
 				this._processTextWritingFeedbackCorrections(scanSource, writingFeedback, filterOptions, excludedCorrections);
 			});
 	}

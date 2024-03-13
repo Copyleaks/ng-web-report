@@ -9,7 +9,7 @@
 		[plagarismScore]="plagiarismScore"
 		[aiScore]="reportStatistics?.aiScore ?? 0"
 		[writingFeedbackScore]="reportStatistics?.writingFeedbackScore"
-		[totalWritingFeedbackIssues]="displayedScanCorrectionsView?.length ?? reportStatistics?.totalWritingFeedbackIssues"
+		[totalWritingFeedbackIssues]="reportStatistics?.totalWritingFeedbackIssues"
 		[wordsTotal]="reportStatistics?.total ?? 0"
 		[identicalTotal]="reportStatistics?.identical ?? 0"
 		[minorChangesTotal]="reportStatistics?.minorChanges ?? 0"
@@ -28,6 +28,7 @@
 		[isAlertsView]="isAlertsMode"
 		[contentHtml]="iframeHtml"
 		[scanSource]="reportCrawledVersion"
+		[writingFeedback]="writingFeedback"
 		[contentTextMatches]="contentTextMatches"
 		[contentHtmlMatches]="reportMatches"
 		[numberOfPages]="numberOfPages"
@@ -89,9 +90,10 @@
 				[showLoadingView]="showReadabilityLoadingView"></cr-readability-score>
 
 			<copyleaks-report-corrections-container
-				[totalWritingFeedbackIssues]="reportStatistics?.totalWritingFeedbackIssues"
+				[totalWritingFeedbackIssues]="allScanCorrectionsView?.length ?? 0"
 				[totalFilteredCorrections]="totalFilteredCorrections"
 				[writingFeedbackStats]="writingFeedbackStats"
+				[allWritingFeedbacksStats]="allWritingFeedbacksStats"
 				[allScanCorrectionsView]="allScanCorrectionsView"
 				[displayedScanCorrectionsView]="displayedScanCorrectionsView"
 				[correctionClicked]="correctionClicked"

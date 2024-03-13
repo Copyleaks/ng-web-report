@@ -27,6 +27,7 @@ import { CdkVirtualScrollViewport } from '@angular/cdk/scrolling';
 import { Observable, fromEvent } from 'rxjs';
 import { untilDestroy } from '../../../utils/until-destroy';
 import { ReportMatchesService } from '../../../services/report-matches.service';
+import { ReportMatchHighlightService } from '../../../services/report-match-highlight.service';
 
 @Component({
 	selector: 'copyleaks-report-corrections-container',
@@ -53,6 +54,8 @@ export class ReportCorrectionsContainerComponent implements OnInit, OnDestroy, O
 	@Input() totalFilteredCorrections: number = 0;
 
 	@Input() writingFeedbackStats: IWritingFeedbackTypeStatistics[];
+
+	@Input() allWritingFeedbacksStats: IWritingFeedbackTypeStatistics[];
 
 	@Input() displayedScanCorrectionsView: IWritingFeedbackCorrectionViewModel[];
 
@@ -94,6 +97,7 @@ export class ReportCorrectionsContainerComponent implements OnInit, OnDestroy, O
 	constructor(
 		public reportDataSvc: ReportDataService,
 		public reportMatchesSvc: ReportMatchesService,
+		private _reportMatchesHighlightSvc: ReportMatchHighlightService,
 		private _elementRef: ElementRef
 	) {}
 
@@ -116,6 +120,13 @@ export class ReportCorrectionsContainerComponent implements OnInit, OnDestroy, O
 			if (this.correctionClicked)
 				this.totalSelectedWritingFeedbackIssues = this.displayedScanCorrectionsView?.length ?? 0;
 			else this.totalSelectedWritingFeedbackIssues = 0;
+
+			if (this.selectedCategroy) {
+				this.selectedCategroyCorrections = this.displayedScanCorrectionsView.filter(
+					c => c.type === this.selectedCategroy
+				);
+				if (this.selectedCategroyCorrections.length === 0) this.selectedCategroy = undefined;
+			}
 		}
 
 		if (
@@ -147,6 +158,7 @@ export class ReportCorrectionsContainerComponent implements OnInit, OnDestroy, O
 		this.selectedCategroyTitle = this.getCorrectionCategoryTitle(category);
 		this.selectedCategroyDescription = this.getCorrectionCategoryDescription(category);
 		this.selectedCategroyCorrections = this.displayedScanCorrectionsView.filter(c => c.type === category);
+		this._reportMatchesHighlightSvc.clearAllMatchs();
 
 		const selectedType = getSelectedCategoryType(category);
 		if (this.writingFeedbackStats && this.writingFeedbackStats[selectedType]) {

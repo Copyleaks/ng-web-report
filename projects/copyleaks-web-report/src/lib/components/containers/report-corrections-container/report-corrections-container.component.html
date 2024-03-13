@@ -5,7 +5,7 @@
 		[totalFilteredWritingFeedbackIssues]="totalFilteredCorrections"
 		[totalIgnoredWritingFeedbackIssues]="totalIgnoredWritingFeedbackIssues"
 		[totalSelectedWritingFeedbackIssues]="totalSelectedWritingFeedbackIssues"
-		[writingFeedbackStats]="writingFeedbackStats"
+		[writingFeedbackStats]="allWritingFeedbacksStats"
 		[correctionClicked]="correctionClicked"
 		[isMobile]="isMobile"
 		[filterIndicatorOn]="filterIndicatorOn"
@@ -150,6 +150,7 @@
 		<div class="corrections-loader-container" [class.mobile]="isMobile">
 			<cr-correction
 				*ngFor="let _ of isMobile ? [1, 2, 3, 4] : [1, 2, 3, 4, 5, 6, 7, 8, 9]"
+				class="loading-correction-view"
 				[showLoadingView]="true"></cr-correction>
 		</div>
 	</ng-template>
@@ -179,6 +180,7 @@
 			*cdkVirtualFor="let correction of selectedCategroyCorrections"
 			[correction]="correction"
 			[hideDescription]="true"
-			[reportDataSvc]="reportDataSvc"></cr-correction>
+			[reportDataSvc]="reportDataSvc"
+			[reportMatchesSvc]="reportMatchesSvc"></cr-correction>
 	</cdk-virtual-scroll-viewport>
 </ng-template>

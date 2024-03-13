@@ -173,27 +173,51 @@ export class ReportTabsContainerComponent implements OnInit, OnDestroy, OnChange
 			'hideWritingFeedbackTap' in changes ||
 			('showLoadingView' in changes && changes['showLoadingView'].currentValue === false)
 		) {
-			if (!this.showLoadingView && this.showDisabledProducts && this.hideAiTap) {
+			if (
+				(!this.showLoadingView &&
+					this.showDisabledProducts &&
+					!this.hidePlagarismTap &&
+					this.hideAiTap &&
+					this.hideWritingFeedbackTap) ||
+				(!this.showLoadingView && !this.hidePlagarismTap && this.hideAiTap && this.hideWritingFeedbackTap)
+			) {
 				this.selectedTap = EReportViewType.PlagiarismView;
 				this._reportViewSvc.selectedAlert$.next(null);
 				this._reportViewSvc.reportViewMode$.next({ ...this._reportViewSvc.reportViewMode, alertCode: undefined });
 			}
-			if (!this.showLoadingView && this.hidePlagarismTap && this.hideWritingFeedbackTap && !this.hideAiTap) {
+
+			if (
+				!this.showLoadingView &&
+				this.hidePlagarismTap &&
+				!this.hideAiTap &&
+				!(this.selectedTap === EReportViewType.WritingFeedbackTabView && !this.hideWritingFeedbackTap)
+			) {
 				this.selectedTap = EReportViewType.AIView;
 				this._reportViewSvc.selectedAlert$.next(ALERTS.SUSPECTED_AI_TEXT_DETECTED);
 				this._reportViewSvc.reportViewMode$.next({
 					...this._reportViewSvc.reportViewMode,
 					viewMode:
 						this._reportNgTemplatesSvc.reportTemplatesMode$.value != ECustomResultsReportView.Full &&
-						this._reportNgTemplatesSvc.reportTemplatesMode$.value != ECustomResultsReportView.Partial
+						this._reportNgTemplatesSvc.reportTemplatesMode$.value != ECustomResultsReportView.Partial &&
+						this.hideWritingFeedbackTap
 							? 'only-ai'
 							: 'one-to-many',
 					alertCode: ALERTS.SUSPECTED_AI_TEXT_DETECTED,
 				});
 			}
+
+			if (!this.showLoadingView && this.hidePlagarismTap && this.hideAiTap && !this.hideWritingFeedbackTap) {
+				this.selectedTap = EReportViewType.WritingFeedbackTabView;
+				this._reportViewSvc.selectedAlert$.next(null);
+				this._reportViewSvc.reportViewMode$.next({
+					...this._reportViewSvc.reportViewMode,
+					alertCode: undefined,
+					viewMode: 'writing-feedback',
+				});
+			}
 		}
 
-		if ('selectedTap' in changes) this._updateSelectedTabColors();
+		if (this.isMobile && 'selectedTap' in changes) this._updateSelectedTabColors();
 
 		this.totalAiWords = Math.ceil(this.aiScore * this.wordsTotal ?? 0);
 

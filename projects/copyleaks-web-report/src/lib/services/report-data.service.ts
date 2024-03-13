@@ -865,27 +865,39 @@ export class ReportDataService {
 		excludedCorrections: IWritingFeedbackCorrectionViewModel[]
 	): IWritingFeedbackScanScource {
 		// Filter indices where the type matches any of the corrections hidden categories
-		const htmlFilterIndices = corrections.html.chars.types.reduce((indices, currentType, index) => {
-			const groupId = corrections.html.chars.groupIds[index];
-			const start = corrections.text.chars.starts[groupId];
-			const length = corrections.text.chars.lengths[groupId];
-			if (
-				(filterOptions?.writingFeedback?.hiddenCategories ?? []).includes(currentType) ||
-				(excludedCorrections ?? []).find(ex => ex.start === start && ex.end === start + length)
-			) {
-				indices.push(index);
-			}
-			return indices;
-		}, [] as number[]);
 
-		// Update both the text & html corrections ranges to filter the hidden categories
-		const htmlFilteredFeedback: IHtmlWritingFeedbackRange = {
-			starts: corrections.html.chars.starts.filter((_, index) => !htmlFilterIndices.includes(index)),
-			lengths: corrections.html.chars.lengths.filter((_, index) => !htmlFilterIndices.includes(index)),
-			types: corrections.html.chars.types.filter((_, index) => !htmlFilterIndices.includes(index)),
-			operationTexts: corrections.html.chars.operationTexts.filter((_, index) => !htmlFilterIndices.includes(index)),
-			groupIds: corrections.html.chars.groupIds.filter((_, index) => !htmlFilterIndices.includes(index)),
-		};
+		let htmlFilteredFeedback: IHtmlWritingFeedbackRange;
+		if (
+			corrections?.html?.chars &&
+			corrections?.html?.chars.types &&
+			corrections?.html?.chars.groupIds &&
+			corrections?.html?.chars.lengths &&
+			corrections?.html?.chars.starts
+		) {
+			const htmlFilterIndices = corrections?.html?.chars.types.reduce((indices, currentType, index) => {
+				const groupId = corrections?.html?.chars.groupIds[index];
+				const start = corrections.text.chars.starts[groupId];
+				const length = corrections.text.chars.lengths[groupId];
+				if (
+					(filterOptions?.writingFeedback?.hiddenCategories ?? []).includes(currentType) ||
+					(excludedCorrections ?? []).find(ex => ex.start === start && ex.end === start + length)
+				) {
+					indices.push(index);
+				}
+				return indices;
+			}, [] as number[]);
+
+			// Update both the text & html corrections ranges to filter the hidden categories
+			htmlFilteredFeedback = {
+				starts: corrections?.html?.chars.starts.filter((_, index) => !htmlFilterIndices.includes(index)),
+				lengths: corrections?.html?.chars.lengths.filter((_, index) => !htmlFilterIndices.includes(index)),
+				types: corrections?.html?.chars.types.filter((_, index) => !htmlFilterIndices.includes(index)),
+				operationTexts: corrections?.html?.chars.operationTexts.filter(
+					(_, index) => !htmlFilterIndices.includes(index)
+				),
+				groupIds: corrections?.html?.chars.groupIds.filter((_, index) => !htmlFilterIndices.includes(index)),
+			};
+		}
 
 		const textFilterIndices = corrections.text.chars.types.reduce((indices, currentType, index) => {
 			const start = corrections.text.chars.starts[index];

@@ -1,7 +1,12 @@
 import { Injectable, OnDestroy } from '@angular/core';
 import { BehaviorSubject, combineLatest } from 'rxjs';
 import { distinct, filter } from 'rxjs/operators';
-import { ICompleteResults } from '../models/report-data.models';
+import {
+	ICompleteResults,
+	IExcludedCorrection,
+	IWritingFeedback,
+	IWritingFeedbackScanScource,
+} from '../models/report-data.models';
 import { ResultDetailItem } from '../models/report-matches.models';
 import { ICopyleaksReportOptions } from '../models/report-options.models';
 import { ReportStatistics } from '../models/report-statistics.models';
@@ -9,6 +14,7 @@ import * as helpers from '../utils/report-statistics-helpers';
 import { untilDestroy } from '../utils/until-destroy';
 import { ReportDataService } from './report-data.service';
 import { ReportViewService } from './report-view.service';
+import { IReportViewEvent } from '../models/report-view.models';
 
 @Injectable()
 export class ReportStatisticsService implements OnDestroy {
@@ -16,7 +22,14 @@ export class ReportStatisticsService implements OnDestroy {
 	public statistics$ = this._statistics.asObservable().pipe(distinct());
 
 	constructor(private _reportDataSvc: ReportDataService, private _reportViewSvc: ReportViewService) {
-		const { scanResultsPreviews$, scanResultsDetails$, excludedResultsIds$, filterOptions$ } = this._reportDataSvc;
+		const {
+			scanResultsPreviews$,
+			scanResultsDetails$,
+			excludedResultsIds$,
+			filterOptions$,
+			writingFeedback$,
+			excludedCorrections$,
+		} = this._reportDataSvc;
 		const { selectedResult$, reportViewMode$ } = this._reportViewSvc;
 
 		combineLatest([scanResultsPreviews$, selectedResult$, reportViewMode$])
@@ -36,11 +49,27 @@ export class ReportStatisticsService implements OnDestroy {
 					} as ICopyleaksReportOptions);
 			});
 
-		combineLatest([scanResultsPreviews$, scanResultsDetails$, reportViewMode$, excludedResultsIds$, filterOptions$])
+		combineLatest([
+			scanResultsPreviews$,
+			scanResultsDetails$,
+			reportViewMode$,
+			excludedResultsIds$,
+			filterOptions$,
+			writingFeedback$,
+			excludedCorrections$,
+		])
 			.pipe(
 				untilDestroy(this),
 				filter(
-					([, , viewModeData, excludedResultsIds, filterOptions]) =>
+					([, , viewModeData, excludedResultsIds, filterOptions, ,]: [
+						ICompleteResults,
+						ResultDetailItem[],
+						IReportViewEvent,
+						string[],
+						ICopyleaksReportOptions,
+						IWritingFeedback,
+						IExcludedCorrection[]
+					]) =>
 						(viewModeData?.viewMode === 'one-to-many' ||
 							viewModeData?.viewMode === 'only-ai' ||
 							viewModeData?.viewMode === 'writing-feedback') &&
@@ -48,7 +77,7 @@ export class ReportStatisticsService implements OnDestroy {
 						filterOptions != undefined
 				)
 			)
-			.subscribe(([completeResult, , , excludedResultsIds, filterOptions]) => {
+			.subscribe(([completeResult, , , excludedResultsIds, filterOptions, writingFeedback, excludedCorrections]) => {
 				if (completeResult && filterOptions && excludedResultsIds) {
 					const isRealtimeInitView =
 						this._reportDataSvc.realTimeView &&
@@ -56,8 +85,16 @@ export class ReportStatisticsService implements OnDestroy {
 						(!this._reportDataSvc.excludedResultsIds || this._reportDataSvc.excludedResultsIds.length === 0);
 
 					const filteredResults = this._reportDataSvc.filterResults(filterOptions, excludedResultsIds);
+					let filteredCorrections: IWritingFeedbackScanScource;
+					if (writingFeedback) {
+						filteredCorrections = this._reportDataSvc.filterCorrections(
+							JSON.parse(JSON.stringify(writingFeedback?.corrections)),
+							filterOptions,
+							excludedCorrections
+						);
+					}
 					if (isRealtimeInitView && this._reportDataSvc.totalCompleteResults != filteredResults.length) return;
-					this.retreieveOneToManyStatistics(completeResult, filteredResults, filterOptions);
+					this.retreieveOneToManyStatistics(completeResult, filteredResults, filterOptions, filteredCorrections);
 				}
 			});
 	}
@@ -95,7 +132,8 @@ export class ReportStatisticsService implements OnDestroy {
 	retreieveOneToManyStatistics(
 		completeResult: ICompleteResults,
 		filteredResults: ResultDetailItem[],
-		options: ICopyleaksReportOptions
+		options: ICopyleaksReportOptions,
+		filteredCorrections?: IWritingFeedbackScanScource
 	) {
 		const showAll = options.showIdentical && options.showMinorChanges && options.showRelated;
 		const missingAggregated =
@@ -109,7 +147,7 @@ export class ReportStatisticsService implements OnDestroy {
 			!this._reportDataSvc.completeResultsSnapshot ||
 			numberOfOriginalResults != this._reportDataSvc.totalCompleteResults
 		) {
-			stats = helpers.calculateStatistics(completeResult, filteredResults, options);
+			stats = helpers.calculateStatistics(completeResult, filteredResults, options, filteredCorrections);
 		} else {
 			// * if results are still loading  or no results are fitlered while all match types are visible
 			// * we can use the complete result stats without heavy calculations
@@ -125,12 +163,7 @@ export class ReportStatisticsService implements OnDestroy {
 				humanScore: aiStatistics?.human ?? 0,
 				writingFeedbackScore:
 					(this._reportDataSvc.completeResultsSnapshot?.writingFeedback?.score?.overallScore ?? 0) / 100,
-				totalWritingFeedbackIssues:
-					(this._reportDataSvc.completeResultsSnapshot?.writingFeedback?.score?.wordChoiceCorrectionsCount ?? 0) +
-					(this._reportDataSvc.completeResultsSnapshot?.writingFeedback?.score?.sentenceStructureCorrectionsCount ??
-						0) +
-					(this._reportDataSvc.completeResultsSnapshot?.writingFeedback?.score?.mechanicsCorrectionsCount ?? 0) +
-					(this._reportDataSvc.completeResultsSnapshot?.writingFeedback?.score?.grammarCorrectionsCount ?? 0),
+				totalWritingFeedbackIssues: filteredCorrections?.text?.chars?.operationTexts?.length ?? 0,
 			};
 		}
 

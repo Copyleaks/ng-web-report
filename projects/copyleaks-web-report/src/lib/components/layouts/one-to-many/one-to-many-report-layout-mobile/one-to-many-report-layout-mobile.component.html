@@ -54,6 +54,7 @@
 				[isAlertsView]="isAlertsMode"
 				[contentHtml]="iframeHtml"
 				[scanSource]="reportCrawledVersion"
+				[writingFeedback]="writingFeedback"
 				[contentTextMatches]="contentTextMatches"
 				[contentHtmlMatches]="reportMatches"
 				[numberOfPages]="numberOfPages"
@@ -92,9 +93,10 @@
 
 	<copyleaks-report-corrections-container
 		*ngIf="viewMode === 'writing-feedback'"
-		[totalWritingFeedbackIssues]="reportStatistics?.totalWritingFeedbackIssues"
+		[totalWritingFeedbackIssues]="allScanCorrectionsView?.length ?? 0"
 		[totalFilteredCorrections]="totalFilteredCorrections"
 		[writingFeedbackStats]="writingFeedbackStats"
+		[allWritingFeedbacksStats]="allWritingFeedbacksStats"
 		[allScanCorrectionsView]="allScanCorrectionsView"
 		[displayedScanCorrectionsView]="displayedScanCorrectionsView"
 		[correctionClicked]="correctionClicked"

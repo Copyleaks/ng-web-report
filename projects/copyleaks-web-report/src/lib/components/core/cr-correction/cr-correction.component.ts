@@ -21,7 +21,7 @@ import { ReportMatchesService } from '../../../services/report-matches.service';
 export class CrCorrectionComponent implements OnInit, OnDestroy {
 	@HostListener('click', ['$event'])
 	handleClick(_): void {
-		if (this.isExcludeView || this.hideDescription || !this.reportMatchesSvc) return;
+		if (this.isExcludeView || this.showLoadingView || !this.reportMatchesSvc) return;
 		this.reportMatchesSvc.correctionSelect$.next(this.correction);
 	}
 

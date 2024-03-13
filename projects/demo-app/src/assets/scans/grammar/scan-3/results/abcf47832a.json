@@ -1,0 +1,449 @@
+{
+    "statistics": {
+        "identical": 43,
+        "minorChanges": 0,
+        "relatedMeaning": 0
+    },
+    "text": {
+        "comparison": {
+            "identical": {
+                "source": {
+                    "chars": {
+                        "starts": [
+                            1,
+                            20,
+                            36,
+                            48,
+                            3990,
+                            4124,
+                            4142,
+                            4148,
+                            4156,
+                            4163,
+                            4172,
+                            4178,
+                            4187,
+                            4194
+                        ],
+                        "lengths": [
+                            18,
+                            7,
+                            5,
+                            4,
+                            131,
+                            6,
+                            4,
+                            6,
+                            5,
+                            7,
+                            4,
+                            7,
+                            5,
+                            21
+                        ]
+                    },
+                    "words": {
+                        "starts": [
+                            0,
+                            4,
+                            6,
+                            7,
+                            589,
+                            612,
+                            613,
+                            614,
+                            615,
+                            616,
+                            617,
+                            618,
+                            619,
+                            620
+                        ],
+                        "lengths": [
+                            3,
+                            1,
+                            0,
+                            0,
+                            22,
+                            0,
+                            0,
+                            0,
+                            0,
+                            0,
+                            0,
+                            0,
+                            0,
+                            3
+                        ]
+                    }
+                },
+                "suspected": {
+                    "chars": {
+                        "starts": [
+                            1,
+                            20,
+                            36,
+                            48,
+                            429,
+                            673,
+                            688,
+                            694,
+                            702,
+                            709,
+                            718,
+                            724,
+                            733,
+                            740
+                        ],
+                        "lengths": [
+                            18,
+                            7,
+                            5,
+                            4,
+                            131,
+                            6,
+                            4,
+                            6,
+                            5,
+                            7,
+                            4,
+                            7,
+                            5,
+                            21
+                        ]
+                    },
+                    "words": {
+                        "starts": [
+                            0,
+                            4,
+                            6,
+                            7,
+                            58,
+                            95,
+                            96,
+                            97,
+                            98,
+                            99,
+                            100,
+                            101,
+                            102,
+                            103
+                        ],
+                        "lengths": [
+                            3,
+                            1,
+                            0,
+                            0,
+                            22,
+                            0,
+                            0,
+                            0,
+                            0,
+                            0,
+                            0,
+                            0,
+                            0,
+                            3
+                        ]
+                    }
+                }
+            },
+            "minorChanges": {
+                "source": {
+                    "chars": {
+                        "starts": [],
+                        "lengths": []
+                    },
+                    "words": {
+                        "starts": [],
+                        "lengths": []
+                    }
+                },
+                "suspected": {
+                    "chars": {
+                        "starts": [],
+                        "lengths": []
+                    },
+                    "words": {
+                        "starts": [],
+                        "lengths": []
+                    }
+                }
+            },
+            "relatedMeaning": {
+                "source": {
+                    "chars": {
+                        "starts": [],
+                        "lengths": []
+                    },
+                    "words": {
+                        "starts": [],
+                        "lengths": []
+                    }
+                },
+                "suspected": {
+                    "chars": {
+                        "starts": [],
+                        "lengths": []
+                    },
+                    "words": {
+                        "starts": [],
+                        "lengths": []
+                    }
+                }
+            }
+        },
+        "value": "\nOpen in appSign up\nSign in\n\n\n\n\n\n\n\n\nWrite\n\n\n\n\n\n\nSign up\nSign in\n\n\n\n\n\n\n\n\nMauricio Ginastera\nFollowing\n\n\n4 Following\n\nPeople\n\nPublications\n\n\n\n\n\nMichael Truong\n\nYour typical, aspiring FAANG software engineer that's still in college.\n\n\nFollow\n\n\n\n\n\nMoein Moeinnia\n\nSoftware Engineer who loves coding with Golang and Node.js. Join me on this coding adventure as we explore their full potential together.\n\n\nFollow\n\n\n\n\n\nHassan Trabelsi\n\nI love to talk about all of the things that interest me in life from technologies to personal development to travel and psychology.\n\n\nFollow\n\n\n\n\n\nMedium Staff\n\nNews and updates from the staff at Medium.\n\n\nFollow\n\n\n\n\n\n\n\n\n\n\nMauricio Ginastera\n\n\n\nFollow\n\n\n\n\n\n\n\n\nHelp\n\nStatus\n\nAbout\n\nCareers\n\nBlog\n\nPrivacy\n\nTerms\n\nText to speech\n\nTeams\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n",
+        "pages": {
+            "startPosition": [
+                0
+            ]
+        }
+    },
+    "html": {
+        "comparison": {
+            "identical": {
+                "groupId": [
+                    0,
+                    0,
+                    0,
+                    1,
+                    2,
+                    3,
+                    4,
+                    5,
+                    6,
+                    7,
+                    8,
+                    9,
+                    10,
+                    11,
+                    12,
+                    13,
+                    13,
+                    13
+                ],
+                "source": {
+                    "chars": {
+                        "starts": [
+                            21839,
+                            21839,
+                            22714,
+                            23179,
+                            28197,
+                            29429,
+                            77089,
+                            77782,
+                            79380,
+                            79642,
+                            79916,
+                            80211,
+                            80471,
+                            80764,
+                            81062,
+                            81324,
+                            81324,
+                            81591
+                        ],
+                        "lengths": [
+                            11,
+                            11,
+                            7,
+                            7,
+                            5,
+                            4,
+                            131,
+                            6,
+                            4,
+                            6,
+                            5,
+                            7,
+                            4,
+                            7,
+                            5,
+                            14,
+                            14,
+                            5
+                        ]
+                    },
+                    "words": {
+                        "starts": [
+                            0,
+                            0,
+                            0,
+                            4,
+                            6,
+                            7,
+                            589,
+                            612,
+                            613,
+                            614,
+                            615,
+                            616,
+                            617,
+                            618,
+                            619,
+                            620,
+                            620,
+                            620
+                        ],
+                        "lengths": [
+                            3,
+                            3,
+                            3,
+                            1,
+                            0,
+                            0,
+                            22,
+                            0,
+                            0,
+                            0,
+                            0,
+                            0,
+                            0,
+                            0,
+                            0,
+                            3,
+                            3,
+                            3
+                        ]
+                    }
+                },
+                "suspected": {
+                    "chars": {
+                        "starts": [
+                            11995,
+                            12592,
+                            11995,
+                            12945,
+                            17812,
+                            18700,
+                            24067,
+                            30198,
+                            31455,
+                            31648,
+                            31850,
+                            32077,
+                            32268,
+                            32493,
+                            32723,
+                            32917,
+                            33116,
+                            32917
+                        ],
+                        "lengths": [
+                            11,
+                            7,
+                            11,
+                            7,
+                            5,
+                            4,
+                            131,
+                            6,
+                            4,
+                            6,
+                            5,
+                            7,
+                            4,
+                            7,
+                            5,
+                            14,
+                            5,
+                            14
+                        ]
+                    },
+                    "words": {
+                        "starts": [
+                            0,
+                            0,
+                            0,
+                            4,
+                            6,
+                            7,
+                            58,
+                            95,
+                            96,
+                            97,
+                            98,
+                            99,
+                            100,
+                            101,
+                            102,
+                            103,
+                            103,
+                            103
+                        ],
+                        "lengths": [
+                            3,
+                            3,
+                            3,
+                            1,
+                            0,
+                            0,
+                            22,
+                            0,
+                            0,
+                            0,
+                            0,
+                            0,
+                            0,
+                            0,
+                            0,
+                            3,
+                            3,
+                            3
+                        ]
+                    }
+                }
+            },
+            "minorChanges": {
+                "groupId": [],
+                "source": {
+                    "chars": {
+                        "starts": [],
+                        "lengths": []
+                    },
+                    "words": {
+                        "starts": [],
+                        "lengths": []
+                    }
+                },
+                "suspected": {
+                    "chars": {
+                        "starts": [],
+                        "lengths": []
+                    },
+                    "words": {
+                        "starts": [],
+                        "lengths": []
+                    }
+                }
+            },
+            "relatedMeaning": {
+                "groupId": [],
+                "source": {
+                    "chars": {
+                        "starts": [],
+                        "lengths": []
+                    },
+                    "words": {
+                        "starts": [],
+                        "lengths": []
+                    }
+                },
+                "suspected": {
+                    "chars": {
+                        "starts": [],
+                        "lengths": []
+                    },
+                    "words": {
+                        "starts": [],
+                        "lengths": []
+                    }
+                }
+            }
+        },
+        "value": "<html lang=\"en\"><head><base href=\"https://medium.com/@mauricio.ginastera/following\" target=\"_blank\"><title data-rh=\"true\">Medium</title><meta data-rh=\"true\" charset=\"utf-8\"><meta data-rh=\"true\" name=\"viewport\" content=\"width=device-width,minimum-scale=1,initial-scale=1,maximum-scale=1\"><meta data-rh=\"true\" name=\"theme-color\" content=\"#000000\"><meta data-rh=\"true\" name=\"twitter:app:name:iphone\" content=\"Medium\"><meta data-rh=\"true\" name=\"twitter:app:id:iphone\" content=\"828256236\"><meta data-rh=\"true\" property=\"al:ios:app_name\" content=\"Medium\"><meta data-rh=\"true\" property=\"al:ios:app_store_id\" content=\"828256236\"><meta data-rh=\"true\" property=\"al:android:package\" content=\"com.medium.reader\"><meta data-rh=\"true\" property=\"al:android:app_name\" content=\"Medium\"><meta data-rh=\"true\" property=\"fb:app_id\" content=\"542599432471018\"><meta data-rh=\"true\" property=\"og:site_name\" content=\"Medium\"><link data-rh=\"true\" rel=\"icon\" href=\"https://sandbox.copyleaks.com/?url=https://miro.medium.com/v2/1*m-R_BkNf1Qjr1YbyOIJY2w.png\"><link data-rh=\"true\" rel=\"search\" type=\"application/opensearchdescription+xml\" title=\"Medium\" href=\"https://sandbox.copyleaks.com/?url=https://medium.com/osd.xml\"><link data-rh=\"true\" rel=\"apple-touch-icon\" sizes=\"152x152\" href=\"https://sandbox.copyleaks.com/?url=https://miro.medium.com/v2/resize:fill:152:152/1*sHhtYhaCe2Uc3IU0IgKwIQ.png\"><link data-rh=\"true\" rel=\"apple-touch-icon\" sizes=\"120x120\" href=\"https://sandbox.copyleaks.com/?url=https://miro.medium.com/v2/resize:fill:120:120/1*sHhtYhaCe2Uc3IU0IgKwIQ.png\"><link data-rh=\"true\" rel=\"apple-touch-icon\" sizes=\"76x76\" href=\"https://sandbox.copyleaks.com/?url=https://miro.medium.com/v2/resize:fill:76:76/1*sHhtYhaCe2Uc3IU0IgKwIQ.png\"><link data-rh=\"true\" rel=\"apple-touch-icon\" sizes=\"60x60\" href=\"https://sandbox.copyleaks.com/?url=https://miro.medium.com/v2/resize:fill:60:60/1*sHhtYhaCe2Uc3IU0IgKwIQ.png\"><link data-rh=\"true\" rel=\"mask-icon\" href=\"https://sandbox.copyleaks.com/?url=https://cdn-static-1.medium.com/_/fp/icons/Medium-Avatar-500x500.svg\" color=\"#171717\"><link data-rh=\"true\" id=\"glyph_preload_link\" rel=\"preload\" as=\"style\" type=\"text/css\" href=\"https://sandbox.copyleaks.com/?url=https://glyph.medium.com/css/unbound.css\"><link data-rh=\"true\" id=\"glyph_link\" rel=\"stylesheet\" type=\"text/css\" href=\"https://sandbox.copyleaks.com/?url=https://glyph.medium.com/css/unbound.css\"><style type=\"text/css\" data-fela-rehydration=\"264\" data-fela-type=\"STATIC\">html{box-sizing:border-box;-webkit-text-size-adjust:100%}*, *:before, *:after{box-sizing:inherit}body{margin:0;padding:0;text-rendering:optimizeLegibility;-webkit-font-smoothing:antialiased;color:rgba(0,0,0,0.8);position:relative;min-height:100vh}h1, h2, h3, h4, h5, h6, dl, dd, ol, ul, menu, figure, blockquote, p, pre, form{margin:0}menu, ol, ul{padding:0;list-style:none;list-style-image:none}main{display:block}a{color:inherit;text-decoration:none}a, button, input{-webkit-tap-highlight-color:transparent}img, svg{vertical-align:middle}button{background:transparent;overflow:visible}button, input, optgroup, select, textarea{margin:0}:root{--reach-tabs:1;--reach-menu-button:1}#speechify-root{font-family:Sohne, sans-serif}div[data-popper-reference-hidden=\"true\"]{visibility:hidden;pointer-events:none}\n/*XCode style (c) Angel Garcia <angelgarcia.mail@gmail.com>*/.hljs {background: #fff;color: black;\n}/* Gray DOCTYPE selectors like WebKit */\n.xml .hljs-meta {color: #c0c0c0;\n}.hljs-comment,\n.hljs-quote {color: #007400;\n}.hljs-tag,\n.hljs-attribute,\n.hljs-keyword,\n.hljs-selector-tag,\n.hljs-literal,\n.hljs-name {color: #aa0d91;\n}.hljs-variable,\n.hljs-template-variable {color: #3F6E74;\n}.hljs-code,\n.hljs-string,\n.hljs-meta .hljs-string {color: #c41a16;\n}.hljs-regexp,\n.hljs-link {color: #0E0EFF;\n}.hljs-title,\n.hljs-symbol,\n.hljs-bullet,\n.hljs-number {color: #1c00cf;\n}.hljs-section,\n.hljs-meta {color: #643820;\n}.hljs-title.class_,\n.hljs-class .hljs-title,\n.hljs-type,\n.hljs-built_in,\n.hljs-params {color: #5c2699;\n}.hljs-attr {color: #836C28;\n}.hljs-subst {color: #000;\n}.hljs-formula {background-color: #eee;font-style: italic;\n}.hljs-addition {background-color: #baeeba;\n}.hljs-deletion {background-color: #ffc8bd;\n}.hljs-selector-id,\n.hljs-selector-class {color: #9b703f;\n}.hljs-doctag,\n.hljs-strong {font-weight: bold;\n}.hljs-emphasis {font-style: italic;\n}\n</style><style type=\"text/css\" data-fela-rehydration=\"264\" data-fela-type=\"RULE\">.a{font-family:medium-content-sans-serif-font, -apple-system, BlinkMacSystemFont, \"Segoe UI\", Roboto, Oxygen, Ubuntu, Cantarell, \"Open Sans\", \"Helvetica Neue\", sans-serif}.b{font-weight:400}.c{background-color:rgba(255, 255, 255, 1)}.l{display:block}.m{position:sticky}.n{top:0}.o{z-index:500}.p{padding:0 24px}.q{align-items:center}.r{border-bottom:solid 1px #F2F2F2}.y{height:41px}.z{line-height:20px}.ab{display:flex}.ac{height:57px}.ae{flex:1 0 auto}.af{color:inherit}.ag{fill:inherit}.ah{font-size:inherit}.ai{border:inherit}.aj{font-family:inherit}.ak{letter-spacing:inherit}.al{font-weight:inherit}.am{padding:0}.an{margin:0}.ao{cursor:pointer}.ap:disabled{cursor:not-allowed}.aq:disabled{color:#6B6B6B}.ar:disabled{fill:#6B6B6B}.au{fill:rgba(0, 0, 0, 1)}.av{height:22px}.aw{margin-left:16px}.ax{border:none}.ay{border-radius:20px}.az{width:240px}.ba{background:#F9F9F9}.bb path{fill:#6B6B6B}.bd{outline:none}.be{font-family:sohne, \"Helvetica Neue\", Helvetica, Arial, sans-serif}.bf{font-size:14px}.bg{width:100%}.bh{padding:10px 20px 10px 0}.bi{background-color:transparent}.bj{color:#242424}.bk::placeholder{color:#6B6B6B}.bl{display:inline-block}.bm{margin-left:12px}.bn{margin-right:12px}.bo{border-radius:4px}.bp{margin-left:24px}.bq{height:24px}.bw{background-color:#F9F9F9}.bx{border-radius:50%}.by{height:32px}.bz{width:32px}.ca{margin:auto}.cb{max-width:1336px}.cc{flex-direction:row}.cd{justify-content:space-evenly}.ck{flex:1 1 auto}.cl{height:100vh}.cm{justify-content:center}.cn{height:25px}.co{fill:rgba(41, 41, 41, 1)}.cp{padding-right:24px}.dh{box-sizing:border-box}.di{border-left:1px solid #F2F2F2}.dj{min-height:100vh}.dk{height:100%}.dl{position:relative}.dm{margin-left:8px}.dn{color:#6B6B6B}.do{font-size:13px}.eg{color:#FFFFFF}.eh{fill:#FFFFFF}.ei{background:#1A8917}.ej{border-color:#1A8917}.eo:disabled{cursor:inherit !important}.ep:disabled{opacity:0.3}.eq:disabled:hover{background:#1A8917}.er:disabled:hover{border-color:#1A8917}.es{border-radius:99em}.et{border-width:1px}.eu{border-style:solid}.ev{text-decoration:none}.ew{text-align:center}.ez{margin-right:32px}.fa{fill:#6B6B6B}.fd{background:transparent}.fe svg{margin-left:4px}.ff svg{fill:#6B6B6B}.fh{box-shadow:inset 0 0 0 1px rgba(0, 0, 0, 0.05)}.fi{position:absolute}.fk{background-color:#F2F2F2}.fl{min-width:0}.fm{margin:0 24px}.fv{padding-right:8px}.fw{max-width:50%}.fx{text-overflow:ellipsis}.fy{overflow:hidden}.fz{white-space:nowrap}.ga{margin-right:8px}.gb{vertical-align:text-top}.gc path{stroke:#6B6B6B}.gd{margin-top:8px}.ge{font-weight:500}.gu{padding-top:32px}.gv{border-bottom:1px solid #F2F2F2}.gw{padding-bottom:8px}.gx{border-bottom:1px solid #242424}.gy{margin-right:20px}.gz{margin-top:40px}.ha{margin-top:24px}.hb{height:48px}.hc{width:48px}.he{padding-left:24px}.hf{justify-content:space-between}.hg{flex-direction:column}.hh{font-size:16px}.hi{max-height:40px}.hj{display:-webkit-box}.hk{-webkit-line-clamp:2}.hl{-webkit-box-orient:vertical}.hn{letter-spacing:0}.ho{margin-top:4px}.hp{max-width:100%}.hq{white-space:pre-wrap}.hr{word-break:break-word}.hx{min-width:86px}.hy{text-align:right}.hz{padding:5px 12px}.ia{top:-6px}.ib{right:-6px}.ic{width:24px}.id{top:57px}.ie{min-height:calc(100vh - 57px)}.if{padding-bottom:0px}.ig{border-bottom:none}.ih{height:88px}.ii{width:88px}.ij{margin-top:16px}.ik{margin-top:12px}.il{margin-bottom:40px}.im{padding:8px 16px}.in{width:auto}.io{stroke:#F2F2F2}.ip{height:36px}.iq{width:36px}.ir{color:#F2F2F2}.is{fill:#F2F2F2}.it{background:#F2F2F2}.iu{border-color:#F2F2F2}.ja{padding:24px 0}.jb{flex-wrap:wrap}.jc{margin-right:6px}.jd{font-size:11px}.je{line-height:16px}.as:hover:not(:disabled){color:rgba(25, 25, 25, 1)}.at:hover:not(:disabled){fill:rgba(25, 25, 25, 1)}.ek:hover{background:#156D12}.el:hover{border-color:#156D12}.em:hover{cursor:pointer}.fb:hover{color:#242424}.fc:hover{fill:#242424}.fg:hover svg{fill:#242424}.fj:hover{background-color:rgba(0, 0, 0, 0.1)}.hd:hover{background-color:none}.iv:hover{background:#F2F2F2}.iw:hover{border-color:#F2F2F2}.ix:hover{cursor:wait}.iy:hover{color:#F2F2F2}.iz:hover{fill:#F2F2F2}.bc:focus-within path{fill:#242424}</style><style type=\"text/css\" data-fela-rehydration=\"264\" data-fela-type=\"RULE\" media=\"all and (min-width: 1080px)\">.d{display:none}.bv{width:64px}.ce{max-width:728px}.cf{min-width:728px}.dd{padding-left:clamp(24px, 24px + 100vw - 1080px, 40px)}.de{display:block}.df{min-width:368px}.dg{max-width:368px}.dx{font-size:14px}.dy{line-height:20px}.ee{font-size:13px}.ef{padding:5px 12px}.ey{display:flex}.fp{max-width:680px}.fu{margin-top:48px}.gr{font-size:42px}.gs{line-height:52px}.gt{letter-spacing:-0.011em}.hw{margin-left:32px}</style><style type=\"text/css\" data-fela-rehydration=\"264\" data-fela-type=\"RULE\" media=\"all and (max-width: 1079.98px)\">.e{display:none}</style><style type=\"text/css\" data-fela-rehydration=\"264\" data-fela-type=\"RULE\" media=\"all and (max-width: 903.98px)\">.f{display:none}</style><style type=\"text/css\" data-fela-rehydration=\"264\" data-fela-type=\"RULE\" media=\"all and (max-width: 727.98px)\">.g{display:none}</style><style type=\"text/css\" data-fela-rehydration=\"264\" data-fela-type=\"RULE\" media=\"all and (max-width: 551.98px)\">.h{display:none}.s{display:flex}.t{justify-content:space-between}.br{width:24px}.cj{min-width:0}.cq{padding-left:24px}.cr{min-width:352px}.cs{max-width:352px}.dp{font-size:13px}.dq{line-height:20px}.dz{padding:0px 8px 1px}.fq{margin-top:24px}.gf{font-size:24px}.gg{line-height:30px}.gh{letter-spacing:-0.016em}.hs{margin-left:8px}</style><style type=\"text/css\" data-fela-rehydration=\"264\" data-fela-type=\"RULE\" media=\"all and (min-width: 904px) and (max-width: 1079.98px)\">.i{display:none}.bu{width:64px}.cg{min-width:0}.cz{padding-left:24px}.da{display:block}.db{min-width:352px}.dc{max-width:352px}.dv{font-size:14px}.dw{line-height:20px}.ec{font-size:13px}.ed{padding:5px 12px}.ex{display:flex}.fo{max-width:680px}.ft{margin-top:48px}.go{font-size:42px}.gp{line-height:52px}.gq{letter-spacing:-0.011em}.hv{margin-left:32px}</style><style type=\"text/css\" data-fela-rehydration=\"264\" data-fela-type=\"RULE\" media=\"all and (min-width: 728px) and (max-width: 903.98px)\">.j{display:none}.w{display:flex}.x{justify-content:space-between}.bt{width:64px}.ch{min-width:0}.cw{padding-left:24px}.cx{min-width:352px}.cy{max-width:352px}.dt{font-size:13px}.du{line-height:20px}.eb{padding:0px 8px 1px}.fn{max-width:680px}.fs{margin-top:48px}.gl{font-size:42px}.gm{line-height:52px}.gn{letter-spacing:-0.011em}.hu{margin-left:32px}</style><style type=\"text/css\" data-fela-rehydration=\"264\" data-fela-type=\"RULE\" media=\"all and (min-width: 552px) and (max-width: 727.98px)\">.k{display:none}.u{display:flex}.v{justify-content:space-between}.bs{width:24px}.ci{min-width:0}.ct{padding-left:24px}.cu{min-width:352px}.cv{max-width:352px}.dr{font-size:13px}.ds{line-height:20px}.ea{padding:0px 8px 1px}.fr{margin-top:24px}.gi{font-size:24px}.gj{line-height:30px}.gk{letter-spacing:-0.016em}.ht{margin-left:32px}</style><style type=\"text/css\" data-fela-rehydration=\"264\" data-fela-type=\"RULE\" media=\"(orientation: landscape) and (max-width: 903.98px)\">.hm{max-height:none}</style></head><body><div id=\"root\"><div class=\"a b c\"><div class=\"d e f g h i j k\"></div>\n<div class=\"l c\"><div class=\"l m n o c\"><div class=\"p q r s t u v w x i d y z\"><a class=\"dn ag do be ak b am an ao ap aq ar as at s u w i d q dk z\" href=\"https://rsci.app.link/?%24canonical_url=https%3A%2F%2Fmedium.com%2F%40mauricio.ginastera%2Ffollowing&amp;%7Efeature=LoOpenInAppButton&amp;%7Echannel=ShowUserFollowing\" rel=\"noopener follow\" target=\"_blank\">Open in app<svg width=\"10\" height=\"10\" viewbox=\"0 0 10 10\" fill=\"none\" class=\"dm\"><path d=\"M.98 8.48a.37.37 0 1 0 .54.54l-.54-.54zm7.77-7.23h.38c0-.2-.17-.38-.38-.38v.38zM8.37 6.5a.37.37 0 1 0 .76 0h-.76zM3.5.87a.37.37 0 1 0 0 .76V.88zM1.52 9.03l7.5-7.5-.54-.54-7.5 7.5.54.54zm6.86-7.77V6.5h.74V1.25h-.74zm-4.88.38h5.25V.88H3.5v.74z\" fill=\"currentColor\"></path></svg></a><div class=\"ab q\"><p class=\"be b dp dq dr ds dt du dv dw dx dy dn\"><span><button class=\"be b dp dq dz dr ds ea dt du eb ec dw ed ee dy ef eg eh ei ej ek el em eo ep eq er es et eu dh bl ev ew\" data-testid=\"headerSignUpButton\">Sign up</button></span></p>\n<div class=\"aw l\"><p class=\"be b dp dq dr ds dt du dv dw dx dy dn\"><span><a class=\"af ag ah ai aj ak al am an ao ap aq ar as at\" data-testid=\"headerSignInButton\" rel=\"noopener follow\" href=\"https://medium.com/m/signin?operation=login&amp;redirect=https%3A%2F%2Fmedium.com%2F%40mauricio.ginastera%2Ffollowing\" target=\"_blank\">Sign in</a></span></p>\n</div>\n</div>\n</div>\n<div class=\"p q r ab ac\"><div class=\"ab q ae\"><a class=\"af ag ah ai aj ak al am an ao ap aq ar as at ab\" aria-label=\"Homepage\" data-testid=\"headerMediumLogo\" rel=\"noopener follow\" href=\"https://medium.com/\" target=\"_blank\"><svg viewbox=\"0 0 3940 610\" class=\"au av\"><path d=\"M594.79 308.2c0 163.76-131.85 296.52-294.5 296.52S5.8 472 5.8 308.2 137.65 11.69 300.29 11.69s294.5 132.75 294.5 296.51M917.86 308.2c0 154.16-65.93 279.12-147.25 279.12s-147.25-125-147.25-279.12S689.29 29.08 770.61 29.08s147.25 125 147.25 279.12M1050 308.2c0 138.12-23.19 250.08-51.79 250.08s-51.79-112-51.79-250.08 23.19-250.08 51.8-250.08S1050 170.09 1050 308.2M1862.77 37.4l.82-.18v-6.35h-167.48l-155.51 365.5-155.51-365.5h-180.48v6.35l.81.18c30.57 6.9 46.09 17.19 46.09 54.3v434.45c0 37.11-15.58 47.4-46.15 54.3l-.81.18V587H1327v-6.35l-.81-.18c-30.57-6.9-46.09-17.19-46.09-54.3V116.9L1479.87 587h11.33l205.59-483.21V536.9c-2.62 29.31-18 38.36-45.68 44.61l-.82.19v6.3h213.3v-6.3l-.82-.19c-27.71-6.25-43.46-15.3-46.08-44.61l-.14-445.2h.14c0-37.11 15.52-47.4 46.08-54.3m97.43 287.8c3.49-78.06 31.52-134.4 78.56-135.37 14.51.24 26.68 5 36.14 14.16 20.1 19.51 29.55 60.28 28.09 121.21zm-2.11 22h250v-1.05c-.71-59.69-18-106.12-51.34-138-28.82-27.55-71.49-42.71-116.31-42.71h-1c-23.26 0-51.79 5.64-72.09 15.86-23.11 10.7-43.49 26.7-60.45 47.7-27.3 33.83-43.84 79.55-47.86 130.93-.13 1.54-.24 3.08-.35 4.62s-.18 2.92-.25 4.39a332.64 332.64 0 0 0-.36 21.69C1860.79 507 1923.65 600 2035.3 600c98 0 155.07-71.64 169.3-167.8l-7.19-2.53c-25 51.68-69.9 83-121 79.18-69.76-5.22-123.2-75.95-118.35-161.63m532.69 157.68c-8.2 19.45-25.31 30.15-48.24 30.15s-43.89-15.74-58.78-44.34c-16-30.7-24.42-74.1-24.42-125.51 0-107 33.28-176.21 84.79-176.21 21.57 0 38.55 10.7 46.65 29.37zm165.84 76.28c-30.57-7.23-46.09-18-46.09-57V5.28L2424.77 60v6.7l1.14-.09c25.62-2.07 43 1.47 53.09 10.79 7.9 7.3 11.75 18.5 11.75 34.26v71.14c-18.31-11.69-40.09-17.38-66.52-17.38-53.6 0-102.59 22.57-137.92 63.56-36.83 42.72-56.3 101.1-56.3 168.81C2230 518.72 2289.53 600 2378.13 600c51.83 0 93.53-28.4 112.62-76.3V588h166.65v-6.66zm159.29-505.33c0-37.76-28.47-66.24-66.24-66.24-37.59 0-67 29.1-67 66.24s29.44 66.24 67 66.24c37.77 0 66.24-28.48 66.24-66.24m43.84 505.33c-30.57-7.23-46.09-18-46.09-57h-.13V166.65l-166.66 47.85v6.5l1 .09c36.06 3.21 45.93 15.63 45.93 57.77V588h166.8v-6.66zm427.05 0c-30.57-7.23-46.09-18-46.09-57V166.65L3082 212.92v6.52l.94.1c29.48 3.1 38 16.23 38 58.56v226c-9.83 19.45-28.27 31-50.61 31.78-36.23 0-56.18-24.47-56.18-68.9V166.66l-166.66 47.85V221l1 .09c36.06 3.2 45.94 15.62 45.94 57.77v191.27a214.48 214.48 0 0 0 3.47 39.82l3 13.05c14.11 50.56 51.08 77 109 77 49.06 0 92.06-30.37 111-77.89v66h166.66v-6.66zM3934.2 588v-6.67l-.81-.19c-33.17-7.65-46.09-22.07-46.09-51.43v-243.2c0-75.83-42.59-121.09-113.93-121.09-52 0-95.85 30.05-112.73 76.86-13.41-49.6-52-76.86-109.06-76.86-50.12 0-89.4 26.45-106.25 71.13v-69.87l-166.66 45.89v6.54l1 .09c35.63 3.16 45.93 15.94 45.93 57V588h155.5v-6.66l-.82-.2c-26.46-6.22-35-17.56-35-46.66V255.72c7-16.35 21.11-35.72 49-35.72 34.64 0 52.2 24 52.2 71.28V588h155.54v-6.66l-.82-.2c-26.46-6.22-35-17.56-35-46.66v-248a160.45 160.45 0 0 0-2.2-27.68c7.42-17.77 22.34-38.8 51.37-38.8 35.13 0 52.2 23.31 52.2 71.28V588z\"></path></svg></a><div class=\"aw h\"><div class=\"ab ax ay az ba q bb bc\"><div class=\"bl\" aria-hidden=\"false\" aria-describedby=\"searchResults\" aria-labelledby=\"searchResults\"></div>\n<div class=\"bm bn ab\"><svg width=\"24\" height=\"24\" viewbox=\"0 0 24 24\" fill=\"none\"><path fill-rule=\"evenodd\" clip-rule=\"evenodd\" d=\"M4.1 11.06a6.95 6.95 0 1 1 13.9 0 6.95 6.95 0 0 1-13.9 0zm6.94-8.05a8.05 8.05 0 1 0 5.13 14.26l3.75 3.75a.56.56 0 1 0 .8-.79l-3.74-3.73A8.05 8.05 0 0 0 11.04 3v.01z\" fill=\"currentColor\"></path></svg></div>\n<input role=\"combobox\" aria-controls=\"searchResults\" aria-expanded=\"false\" aria-label=\"search\" data-testid=\"headerSearchInput\" tabindex=\"0\" class=\"ax bd be bf z bg bh bi bj bk\" placeholder=\"Search\" value=\"\"></div>\n</div>\n</div>\n<div class=\"h k w ex ey\"><div class=\"ez ab\"><span><a class=\"af ag ah ai aj ak al am an ao ap aq ar as at\" data-testid=\"headerWriteButton\" rel=\"noopener follow\" href=\"https://medium.com/m/signin?operation=register&amp;redirect=https%3A%2F%2Fmedium.com%2Fnew-story\" target=\"_blank\"><div class=\"be b bf z dn dl fa ab q fb fc\"><svg width=\"24\" height=\"24\" viewbox=\"0 0 24 24\" fill=\"none\" aria-label=\"Write\"><path d=\"M14 4a.5.5 0 0 0 0-1v1zm7 6a.5.5 0 0 0-1 0h1zm-7-7H4v1h10V3zM3 4v16h1V4H3zm1 17h16v-1H4v1zm17-1V10h-1v10h1zm-1 1a1 1 0 0 0 1-1h-1v1zM3 20a1 1 0 0 0 1 1v-1H3zM4 3a1 1 0 0 0-1 1h1V3z\" fill=\"currentColor\"></path><path d=\"M17.5 4.5l-8.46 8.46a.25.25 0 0 0-.06.1l-.82 2.47c-.07.2.12.38.31.31l2.47-.82a.25.25 0 0 0 .1-.06L19.5 6.5m-2-2l2.32-2.32c.1-.1.26-.1.36 0l1.64 1.64c.1.1.1.26 0 .36L19.5 6.5m-2-2l2 2\" stroke=\"currentColor\"></path></svg><div class=\"dm l\">Write</div>\n</div>\n</a></span></div>\n</div>\n<div class=\"k j i d\"><div class=\"ez ab\"><a class=\"af ag ah ai aj ak al am an ao ap aq ar as at\" data-testid=\"headerSearchButton\" rel=\"noopener follow\" href=\"https://medium.com/search\" target=\"_blank\"><div class=\"be b bf z dn dl fa ab q fb fc\"><svg width=\"24\" height=\"24\" viewbox=\"0 0 24 24\" fill=\"none\" aria-label=\"Search\"><path fill-rule=\"evenodd\" clip-rule=\"evenodd\" d=\"M4.1 11.06a6.95 6.95 0 1 1 13.9 0 6.95 6.95 0 0 1-13.9 0zm6.94-8.05a8.05 8.05 0 1 0 5.13 14.26l3.75 3.75a.56.56 0 1 0 .8-.79l-3.74-3.73A8.05 8.05 0 0 0 11.04 3v.01z\" fill=\"currentColor\"></path></svg></div>\n</a></div>\n</div>\n<div class=\"ez h k j\"><div class=\"ab q\"><p class=\"be b dp dq dr ds dt du dv dw dx dy dn\"><span><button class=\"be b dp dq dz dr ds ea dt du eb ec dw ed ee dy ef eg eh ei ej ek el em eo ep eq er es et eu dh bl ev ew\" data-testid=\"headerSignUpButton\">Sign up</button></span></p>\n<div class=\"aw l\"><p class=\"be b dp dq dr ds dt du dv dw dx dy dn\"><span><a class=\"af ag ah ai aj ak al am an ao ap aq ar as at\" data-testid=\"headerSignInButton\" rel=\"noopener follow\" href=\"https://medium.com/m/signin?operation=login&amp;redirect=https%3A%2F%2Fmedium.com%2F%40mauricio.ginastera%2Ffollowing\" target=\"_blank\">Sign in</a></span></p>\n</div>\n</div>\n</div>\n<div class=\"l\" aria-hidden=\"false\"><button class=\"ax fd am ab q ao fe ff fg\" aria-label=\"user options menu\" data-testid=\"headerUserIcon\"><div class=\"l dl\"><img alt=\"\" class=\"l dh bx by bz fk\" src=\"https://sandbox.copyleaks.com/?url=https://miro.medium.com/v2/resize:fill:64:64/1*dmbNkD5D-u45r44go_cf0g.png\" width=\"32\" height=\"32\" loading=\"lazy\" role=\"presentation\"><div class=\"fh bx l by bz fi n ax fj\"></div>\n</div>\n</button></div>\n</div>\n</div>\n<div class=\"ca cb l\"><div class=\"ab cc cd\"><main class=\"ce cf cg ch ci cj l ck\"><div class=\"dj l c\"><div class=\"ab cm\"><div class=\"fl bg fm fn fo fp\"><div class=\"fq fr fs ft fu l\"><div class=\"ab q\"><div class=\"bl fv fw fx fy fz\"><span class=\"be b do z dn\"><a class=\"af ag ah ai aj ak al am an ao ap aq ar as at\" rel=\"noopener follow\" href=\"https://medium.com/@mauricio.ginastera\" target=\"_blank\">Mauricio Ginastera</a></span></div>\n<div class=\"bl fv fw fx fy fz\"><span class=\"be b do z dn\"><svg width=\"18\" height=\"18\" viewbox=\"0 0 18 18\" fill=\"none\" class=\"ga gb gc\"><path d=\"M6.75 4.5l4.5 4.5-4.5 4.5\" stroke=\"#242424\" stroke-width=\"1.13\" stroke-linecap=\"round\" stroke-linejoin=\"round\"></path></svg></span><span class=\"be b do z bj\">Following</span></div>\n</div>\n<div class=\"gd l\"></div>\n<h2 class=\"be ge gf gg gh gi gj gk gl gm gn go gp gq gr gs gt bj\">4 Following</h2>\n</div>\n<nav class=\"gu gv l\"><div class=\"gw gx gy bl\"><span class=\"l\"><button class=\"af ag ah ai aj ak al am an ao ap aq ar as at\"><h4 class=\"be b do z bj\">People</h4>\n</button></span></div>\n<div class=\"gw bl\"><span class=\"l\"><button class=\"af ag ah ai aj ak al am an ao ap aq ar as at\"><h4 class=\"be b do z dn\">Publications</h4>\n</button></span></div>\n</nav><div class=\"gz l\"></div>\n<div class=\"l\"><div><ul><div class=\"ha ab\"><a rel=\"noopener follow\" href=\"https://medium.com/@truong.minh.michael\" target=\"_blank\"><div class=\"l dl\"><div class=\"l dl\"><img alt=\"Michael Truong\" class=\"l dh bx hb hc fk\" src=\"https://sandbox.copyleaks.com/?url=https://miro.medium.com/v2/resize:fill:96:96/1*zwLZZ7Dbr-91_2q3M-uSLw.jpeg\" width=\"48\" height=\"48\" loading=\"lazy\"><div class=\"fh bx l hb hc fi n ax hd\"></div>\n</div>\n</div>\n</a><div class=\"he bg ab hf\"><div class=\"bg ab hg\"><div class=\"ab q\"><a class=\"af ag ah ai aj ak al am an ao ap aq ar as at\" rel=\"noopener follow\" href=\"https://medium.com/@truong.minh.michael\" target=\"_blank\"><h2 class=\"be ge hh z fy hi fx hj hk hl hm hn bj\">Michael Truong</h2>\n</a></div>\n<a class=\"af ag ah ai aj ak al am an ao ap aq ar as at\" rel=\"noopener follow\" href=\"https://medium.com/@truong.minh.michael\" target=\"_blank\"><div class=\"ho bg hp l hq hr\"><p class=\"be b bf z dn\">Your typical, aspiring FAANG software engineer that's still in college.</p>\n</div>\n</a></div>\n<div class=\"hs ht hu hv hw hx l hy\"><span><button class=\"be b do z eg hz eh ei ej ek el em eo ep eq er es et eu dh bl ev ew\">Follow</button></span></div>\n</div>\n</div>\n<div class=\"ha ab\"><a rel=\"noopener follow\" href=\"https://medium.com/@moein.moeinnia\" target=\"_blank\"><div class=\"l dl\"><div class=\"l dl\"><img alt=\"Moein Moeinnia\" class=\"l dh bx hb hc fk\" src=\"https://sandbox.copyleaks.com/?url=https://miro.medium.com/v2/resize:fill:96:96/1*ZUqTna_fvRaDCyeswXIH2A.jpeg\" width=\"48\" height=\"48\" loading=\"lazy\"><div class=\"fh bx l hb hc fi n ax hd\"></div>\n</div>\n</div>\n</a><div class=\"he bg ab hf\"><div class=\"bg ab hg\"><div class=\"ab q\"><a class=\"af ag ah ai aj ak al am an ao ap aq ar as at\" rel=\"noopener follow\" href=\"https://medium.com/@moein.moeinnia\" target=\"_blank\"><h2 class=\"be ge hh z fy hi fx hj hk hl hm hn bj\">Moein Moeinnia</h2>\n</a></div>\n<a class=\"af ag ah ai aj ak al am an ao ap aq ar as at\" rel=\"noopener follow\" href=\"https://medium.com/@moein.moeinnia\" target=\"_blank\"><div class=\"ho bg hp l hq hr\"><p class=\"be b bf z dn\">Software Engineer who loves coding with Golang and Node.js. Join me on this coding adventure as we explore their full potential together.</p>\n</div>\n</a></div>\n<div class=\"hs ht hu hv hw hx l hy\"><span><button class=\"be b do z eg hz eh ei ej ek el em eo ep eq er es et eu dh bl ev ew\">Follow</button></span></div>\n</div>\n</div>\n<div class=\"ha ab\"><a rel=\"noopener follow\" href=\"https://medium.com/@hassan.trabelsi\" target=\"_blank\"><div class=\"l dl\"><div class=\"l dl\"><img alt=\"Hassan Trabelsi\" class=\"l dh bx hb hc fk\" src=\"https://sandbox.copyleaks.com/?url=https://miro.medium.com/v2/resize:fill:96:96/1*GALkk9mqiulRHsdg2wQLyw.jpeg\" width=\"48\" height=\"48\" loading=\"lazy\"><div class=\"fh bx l hb hc fi n ax hd\"></div>\n</div>\n</div>\n</a><div class=\"he bg ab hf\"><div class=\"bg ab hg\"><div class=\"ab q\"><a class=\"af ag ah ai aj ak al am an ao ap aq ar as at\" rel=\"noopener follow\" href=\"https://medium.com/@hassan.trabelsi\" target=\"_blank\"><h2 class=\"be ge hh z fy hi fx hj hk hl hm hn bj\">Hassan Trabelsi</h2>\n</a></div>\n<a class=\"af ag ah ai aj ak al am an ao ap aq ar as at\" rel=\"noopener follow\" href=\"https://medium.com/@hassan.trabelsi\" target=\"_blank\"><div class=\"ho bg hp l hq hr\"><p class=\"be b bf z dn\">I love to talk about all of the things that interest me in life from technologies to personal development to travel and psychology.</p>\n</div>\n</a></div>\n<div class=\"hs ht hu hv hw hx l hy\"><span><button class=\"be b do z eg hz eh ei ej ek el em eo ep eq er es et eu dh bl ev ew\">Follow</button></span></div>\n</div>\n</div>\n<div class=\"ha ab\"><a rel=\"noopener follow\" href=\"https://medium.com/@MediumStaff\" target=\"_blank\"><div class=\"l dl\"><div class=\"l dl\"><img alt=\"Medium Staff\" class=\"l dh bx hb hc fk\" src=\"https://sandbox.copyleaks.com/?url=https://miro.medium.com/v2/resize:fill:96:96/1*sHhtYhaCe2Uc3IU0IgKwIQ.png\" width=\"48\" height=\"48\" loading=\"lazy\"><div class=\"fh bx l hb hc fi n ax hd\"></div>\n</div>\n<svg width=\"40\" height=\"40\" viewbox=\"0 0 40 40\" fill=\"none\" role=\"presentation\" aria-hidden=\"true\" focusable=\"false\" class=\"fi ia ib bq ic\"><mask id=\"star-four-with-outline_svg__a\" maskunits=\"userSpaceOnUse\" x=\"1\" y=\"1\" width=\"38\" height=\"38\" fill=\"#000\"><path fill=\"#fff\" d=\"M1 1h38v38H1z\"></path><path d=\"M24.7 25.43l-3.55 9.77a1.22 1.22 0 0 1-2.3 0l-3.55-9.77a1.24 1.24 0 0 0-.73-.73L4.8 21.15a1.22 1.22 0 0 1 0-2.3l9.77-3.55a1.24 1.24 0 0 0 .73-.73l3.55-9.77a1.22 1.22 0 0 1 2.3 0l3.55 9.77a1.24 1.24 0 0 0 .73.73l9.77 3.55a1.22 1.22 0 0 1 0 2.3l-9.77 3.55a1.24 1.24 0 0 0-.73.73z\"></path></mask><path d=\"M24.7 25.43l-3.55 9.77a1.22 1.22 0 0 1-2.3 0l-3.55-9.77a1.24 1.24 0 0 0-.73-.73L4.8 21.15a1.22 1.22 0 0 1 0-2.3l9.77-3.55a1.24 1.24 0 0 0 .73-.73l3.55-9.77a1.22 1.22 0 0 1 2.3 0l3.55 9.77a1.24 1.24 0 0 0 .73.73l9.77 3.55a1.22 1.22 0 0 1 0 2.3l-9.77 3.55a1.24 1.24 0 0 0-.73.73z\" fill=\"#FFC017\"></path><path d=\"M21.15 35.2l2.81 1.05v-.02l-2.81-1.03zm-2.3 0l-2.82 1.03v.02l2.82-1.05zm-3.55-9.77l2.82-1.02v-.01l-2.82 1.03zm-.73-.73l1.03-2.82-1.03 2.82zM4.8 21.15l-1.05 2.81h.02l1.03-2.81zm0-2.3l-1.03-2.82h-.02l1.05 2.82zm9.77-3.55l1.02 2.82h.01l-1.03-2.82zm.73-.73l2.82 1.03-2.82-1.03zm3.55-9.77l-2.81-1.05v.02l2.81 1.03zM20 4v3-3zm1.15.8l2.82-1.03v-.02L21.14 4.8zm3.55 9.77l-2.82 1.02v.01l2.82-1.03zm.73.73l-1.03 2.82 1.03-2.82zm9.77 3.55l1.05-2.81h-.02l-1.03 2.81zm0 2.3l1.03 2.82h.02l-1.05-2.82zm-9.77 3.55l-1.02-2.82h-.01l1.03 2.82zm-3.55-.3l-3.55 9.78 5.64 2.05 3.55-9.77-5.64-2.05zm-3.54 9.76c.12-.34.35-.64.65-.84l3.42 4.92c.71-.49 1.25-1.19 1.55-2l-5.62-2.08zm.65-.84c.3-.2.65-.32 1.01-.32v6c.86 0 1.7-.26 2.41-.76L19 33.32zM20 33c.36 0 .72.11 1.01.32l-3.42 4.92c.7.5 1.55.76 2.41.76v-6zm1.01.32c.3.2.53.5.65.84l-5.62 2.09c.3.8.84 1.5 1.55 2L21 33.31zm.66.86l-3.55-9.77-5.64 2.05 3.55 9.77 5.64-2.05zm-3.55-9.78a4.24 4.24 0 0 0-.99-1.53L12.9 27.1c-.18-.18-.32-.4-.4-.64l5.63-2.07zm-.99-1.53a4.24 4.24 0 0 0-1.53-.99l-2.07 5.63a1.76 1.76 0 0 1-.64-.4l4.24-4.24zm-1.54-.99l-9.77-3.55-2.05 5.64 9.77 3.55 2.05-5.64zm-9.75-3.54c.34.12.64.35.84.65L1.76 22.4c.49.71 1.19 1.25 2 1.55l2.08-5.62zm.84.65c.2.3.32.65.32 1.01H1c0 .86.26 1.7.76 2.41L6.68 19zM7 20c0 .36-.11.72-.32 1.01L1.76 17.6c-.5.7-.76 1.55-.76 2.41h6zm-.32 1.01c-.2.3-.5.53-.84.65l-2.09-5.62c-.8.3-1.5.84-2 1.55L6.69 21zm-.86.66l9.77-3.55-2.05-5.64-9.77 3.55 2.05 5.64zm9.78-3.55c.58-.22 1.1-.55 1.53-.99L12.9 12.9c.18-.18.4-.32.64-.4l2.07 5.63zm1.53-.99c.44-.43.77-.95.99-1.53l-5.63-2.07c.08-.24.22-.46.4-.64l4.24 4.24zm.99-1.54l3.55-9.77-5.64-2.05-3.55 9.77 5.64 2.05zm3.54-9.75c-.12.34-.35.64-.65.84L17.6 1.76c-.71.49-1.25 1.19-1.55 2l5.62 2.08zm-.65.84c-.3.2-.65.32-1.01.32V1c-.86 0-1.7.26-2.41.76L21 6.68zM20 7c-.36 0-.72-.11-1.01-.32l3.42-4.92C21.71 1.26 20.86 1 20 1v6zm-1.01-.32c-.3-.2-.53-.5-.65-.84l5.62-2.09c-.3-.8-.84-1.5-1.55-2L19 6.69zm-.66-.86l3.55 9.77 5.64-2.05-3.55-9.77-5.64 2.05zm3.55 9.78c.22.58.55 1.1.99 1.53l4.24-4.24c.18.18.32.4.4.64l-5.63 2.07zm.99 1.53c.43.44.95.77 1.53.99l2.07-5.63c.24.08.46.22.64.4l-4.24 4.24zm1.54.99l9.77 3.55 2.05-5.64-9.77-3.55-2.05 5.64zm9.75 3.54a1.78 1.78 0 0 1-.84-.65l4.92-3.42a4.22 4.22 0 0 0-2-1.55l-2.08 5.62zm-.84-.65c-.2-.3-.32-.65-.32-1.01h6c0-.86-.26-1.7-.76-2.41L33.32 21zM33 20c0-.36.11-.72.32-1.01l4.92 3.42c.5-.7.76-1.55.76-2.41h-6zm.32-1.01c.2-.3.5-.53.84-.65l2.09 5.62c.8-.3 1.5-.84 2-1.55L33.31 19zm.86-.66l-9.77 3.55 2.05 5.64 9.77-3.55-2.05-5.64zm-9.78 3.55c-.58.22-1.1.55-1.53.99l4.24 4.24c-.18.18-.4.32-.64.4l-2.07-5.63zm-1.53.99c-.44.43-.77.95-.99 1.53l5.63 2.07c-.08.24-.22.46-.4.64l-4.24-4.24z\" fill=\"#fff\" mask=\"url(#star-four-with-outline_svg__a)\"></path></svg></div>\n</a><div class=\"he bg ab hf\"><div class=\"bg ab hg\"><div class=\"ab q\"><a class=\"af ag ah ai aj ak al am an ao ap aq ar as at\" rel=\"noopener follow\" href=\"https://medium.com/@MediumStaff\" target=\"_blank\"><h2 class=\"be ge hh z fy hi fx hj hk hl hm hn bj\">Medium Staff</h2>\n</a></div>\n<a class=\"af ag ah ai aj ak al am an ao ap aq ar as at\" rel=\"noopener follow\" href=\"https://medium.com/@MediumStaff\" target=\"_blank\"><div class=\"ho bg hp l hq hr\"><p class=\"be b bf z dn\">News and updates from the staff at Medium.</p>\n</div>\n</a></div>\n<div class=\"hs ht hu hv hw hx l hy\"><span><button class=\"be b do z eg hz eh ei ej ek el em eo ep eq er es et eu dh bl ev ew\">Follow</button></span></div>\n</div>\n</div>\n</ul><div></div>\n</div>\n</div>\n</div>\n</div>\n</div>\n</main><div class=\"cp cq h cr cs ct k cu cv cw j cx cy cz da db dc dd de df dg dh c di dj\"><div class=\"dk bg bl dl\"><div class=\"l m id\"><div class=\"ie ab hg\"><div class=\"l ae\"><div class=\"if ig gz l\"><a class=\"af ag ah ai aj ak al am an ao ap aq ar as at\" rel=\"noopener follow\" href=\"https://medium.com/@mauricio.ginastera\" target=\"_blank\"><div class=\"l dl\"><img alt=\"Mauricio Ginastera\" class=\"l dh bx ih ii fk\" src=\"https://sandbox.copyleaks.com/?url=https://miro.medium.com/v2/da:true/resize:fill:176:176/0*HusK2X_hgPSPUAPD\" width=\"88\" height=\"88\" loading=\"lazy\"><div class=\"fh bx l ih ii fi n ax hd\"></div>\n</div>\n</a><div class=\"ij l\"><a class=\"af ag ah ai aj ak al am an ao ap aq ar as at\" rel=\"noopener follow\" href=\"https://medium.com/@mauricio.ginastera\" target=\"_blank\"><h2 class=\"pw-author-name be ge hh z hn bj\"><span class=\"hr\">Mauricio Ginastera</span></h2>\n</a></div>\n<div class=\"ho l\"></div>\n<div class=\"ik l\"></div>\n<div class=\"il ha ab\"><span><button class=\"be b bf z eg im eh ei ej ek el em eo ep eq er es in et eu dh bl ev ew\">Follow</button></span><div class=\"dm l\"><div><div><div class=\"bl\" aria-hidden=\"false\"><div class=\"l\"><span><a class=\"af ag ah ai aj ak al am an ao ap aq ar as at\" rel=\"noopener follow\" href=\"https://medium.com/m/signin?actionUrl=%2F_%2Fapi%2Fusers%2F2d51a37a557%2Flazily-enable-writer-subscription&amp;operation=register&amp;redirect=https%3A%2F%2Fmedium.com%2F%40mauricio.ginastera%2Ffollowing&amp;user=Mauricio+Ginastera&amp;userId=2d51a37a557\" target=\"_blank\"><button class=\"be b bf z ir am is it iu iv iw ix iy iz eo ep eq er es et eu dh bl ev ew\" aria-label=\"Subscribe\"><svg width=\"38\" height=\"38\" viewbox=\"0 0 38 38\" fill=\"none\" class=\"io ip iq\"><rect x=\"26.25\" y=\"9.25\" width=\"0.5\" height=\"6.5\" rx=\"0.25\"></rect><rect x=\"29.75\" y=\"12.25\" width=\"0.5\" height=\"6.5\" rx=\"0.25\" transform=\"rotate(90 29.75 12.25)\"></rect><path d=\"M19.5 12.5h-7a1 1 0 0 0-1 1v11a1 1 0 0 0 1 1h13a1 1 0 0 0 1-1v-5\"></path><path d=\"M11.5 14.5L19 20l4-3\"></path></svg></button></a></span></div>\n</div>\n</div>\n</div>\n</div>\n</div>\n</div>\n<div class=\"if ig gz l\"></div>\n</div>\n<div class=\"ja ab cc jb\"><div class=\"jc l\"><a class=\"af ag ah ai aj ak al am an ao ap aq ar as at\" href=\"https://help.medium.com/hc/en-us\" rel=\"noopener follow\" target=\"_blank\"><p class=\"be b jd je dn\">Help</p>\n</a></div>\n<div class=\"jc l\"><a class=\"af ag ah ai aj ak al am an ao ap aq ar as at\" href=\"https://medium.statuspage.io\" rel=\"noopener follow\" target=\"_blank\"><p class=\"be b jd je dn\">Status</p>\n</a></div>\n<div class=\"jc l\"><a class=\"af ag ah ai aj ak al am an ao ap aq ar as at\" rel=\"noopener follow\" href=\"https://medium.com/about?autoplay=1\" target=\"_blank\"><p class=\"be b jd je dn\">About</p>\n</a></div>\n<div class=\"jc l\"><a class=\"af ag ah ai aj ak al am an ao ap aq ar as at\" rel=\"noopener follow\" href=\"https://medium.com/jobs-at-medium/work-at-medium-959d1a85284e\" target=\"_blank\"><p class=\"be b jd je dn\">Careers</p>\n</a></div>\n<div class=\"jc l\"><a class=\"af ag ah ai aj ak al am an ao ap aq ar as at\" href=\"https://blog.medium.com\" rel=\"noopener follow\" target=\"_blank\"><p class=\"be b jd je dn\">Blog</p>\n</a></div>\n<div class=\"jc l\"><a class=\"af ag ah ai aj ak al am an ao ap aq ar as at\" href=\"https://policy.medium.com/medium-privacy-policy-f03bf92035c9\" rel=\"noopener follow\" target=\"_blank\"><p class=\"be b jd je dn\">Privacy</p>\n</a></div>\n<div class=\"jc l\"><a class=\"af ag ah ai aj ak al am an ao ap aq ar as at\" href=\"https://policy.medium.com/medium-terms-of-service-9db0094a1e0f\" rel=\"noopener follow\" target=\"_blank\"><p class=\"be b jd je dn\">Terms</p>\n</a></div>\n<div class=\"jc l\"><a class=\"af ag ah ai aj ak al am an ao ap aq ar as at\" href=\"https://speechify.com/medium\" rel=\"noopener follow\" target=\"_blank\"><p class=\"be b jd je dn\">Text to speech</p>\n</a></div>\n<div class=\"l\"><a class=\"af ag ah ai aj ak al am an ao ap aq ar as at\" rel=\"noopener follow\" href=\"https://medium.com/business\" target=\"_blank\"><p class=\"be b jd je dn\">Teams</p>\n</a></div>\n</div>\n</div>\n</div>\n</div>\n</div>\n</div>\n</div>\n</div>\n</div>\n</div>\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n</body></html>"
+    },
+    "version": 3
+}

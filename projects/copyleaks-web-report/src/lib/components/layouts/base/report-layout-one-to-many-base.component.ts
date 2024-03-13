@@ -95,6 +95,7 @@ export abstract class OneToManyReportLayoutBaseComponent extends ReportLayoutBas
 	totalFilteredCorrections: number;
 	showCorrectionsLoadingView: boolean = true;
 	showReadabilityLoadingView: boolean = true;
+	allWritingFeedbacksStats: IWritingFeedbackTypeStatistics[];
 
 	override get rerendered(): boolean {
 		return this.oneToManyRerendered;
@@ -207,6 +208,10 @@ export abstract class OneToManyReportLayoutBaseComponent extends ReportLayoutBas
 					}
 				});
 		});
+		this.reportDataSvc.writingFeedback$.pipe(untilDestroy(this)).subscribe(data => {
+			if (data) this.writingFeedback = data;
+			this.showReadabilityLoadingView = !data;
+		});
 
 		this.reportViewSvc.progress$.pipe(untilDestroy(this)).subscribe(progress => {
 			this.loadingProgressPct = progress;
@@ -221,11 +226,6 @@ export abstract class OneToManyReportLayoutBaseComponent extends ReportLayoutBas
 				this.reportCrawledVersion = data;
 				this.numberOfPages = data.text?.pages?.startPosition?.length ?? 1;
 			}
-		});
-
-		this.reportDataSvc.writingFeedback$.pipe(untilDestroy(this)).subscribe(data => {
-			if (data) this.writingFeedback = data;
-			this.showReadabilityLoadingView = !data;
 		});
 
 		combineLatest([this.reportDataSvc.crawledVersion$, this.reportDataSvc.writingFeedback$])
@@ -245,6 +245,7 @@ export abstract class OneToManyReportLayoutBaseComponent extends ReportLayoutBas
 				);
 
 				this.allScanCorrectionsView = [];
+				this.allWritingFeedbacksStats = this._initCorrectionsStatistics();
 
 				const contentTextMatches = helpers.processCorrectionsText(filteredCorrections, 'text', scanSource);
 				let correctionIndex: number = 0;
@@ -262,6 +263,10 @@ export abstract class OneToManyReportLayoutBaseComponent extends ReportLayoutBas
 								end: correction.match.end,
 								index: correctionIndex,
 							} as IWritingFeedbackCorrectionViewModel);
+							this._increaseCorrectionsCategoryTotal(
+								this.allWritingFeedbacksStats,
+								correction.match.writingFeedbackType
+							);
 							correctionIndex++;
 						}
 					}
@@ -308,7 +313,21 @@ export abstract class OneToManyReportLayoutBaseComponent extends ReportLayoutBas
 				this.isLoadingScanContent = false;
 				this.contentTextMatches = data;
 
-				if (this.viewMode === 'writing-feedback') {
+				if (this.reportViewSvc.reportViewMode?.viewMode === 'writing-feedback') {
+					if (
+						this.writingFeedback &&
+						this.isHtmlView &&
+						!(
+							this.writingFeedback?.corrections?.html?.chars &&
+							this.writingFeedback?.corrections?.html?.chars.types &&
+							this.writingFeedback?.corrections?.html?.chars.groupIds &&
+							this.writingFeedback?.corrections?.html?.chars.lengths &&
+							this.writingFeedback?.corrections?.html?.chars.starts
+						)
+					) {
+						this.isHtmlView = false;
+					}
+
 					const filteredCorrections = this.reportDataSvc.filterCorrections(
 						JSON.parse(JSON.stringify(this.reportDataSvc.writingFeedback?.corrections)),
 						this.reportDataSvc.filterOptions,
@@ -555,7 +574,7 @@ export abstract class OneToManyReportLayoutBaseComponent extends ReportLayoutBas
 		)
 			return [];
 
-		this._initCorrectionsStatistics();
+		this.writingFeedbackStats = this._initCorrectionsStatistics();
 
 		const viewedCorrections = [];
 		let correctionIndex: number = 0;
@@ -572,7 +591,7 @@ export abstract class OneToManyReportLayoutBaseComponent extends ReportLayoutBas
 							c => correction.match.start === c.start && correction.match.end === c.end
 						)?.index,
 					} as IWritingFeedbackCorrectionViewModel);
-					this._increaseCorrectionsCategoryTotal(correction.match.writingFeedbackType);
+					this._increaseCorrectionsCategoryTotal(this.writingFeedbackStats, correction.match.writingFeedbackType);
 					correctionIndex++;
 				}
 			}
@@ -580,8 +599,8 @@ export abstract class OneToManyReportLayoutBaseComponent extends ReportLayoutBas
 		return viewedCorrections;
 	}
 
-	private _initCorrectionsStatistics() {
-		this.writingFeedbackStats = [
+	private _initCorrectionsStatistics(): IWritingFeedbackTypeStatistics[] {
+		return [
 			{
 				type: EWritingFeedbackTypes.General,
 				categories: [
@@ -757,10 +776,13 @@ export abstract class OneToManyReportLayoutBaseComponent extends ReportLayoutBas
 		];
 	}
 
-	private _increaseCorrectionsCategoryTotal(type: EWritingFeedbackCategories) {
+	private _increaseCorrectionsCategoryTotal(
+		writingFeedbackStats: IWritingFeedbackTypeStatistics[],
+		type: EWritingFeedbackCategories
+	) {
 		switch (type) {
 			case EWritingFeedbackCategories.General:
-				this.writingFeedbackStats[EWritingFeedbackTypes.General].categories[0].totalIssues++;
+				writingFeedbackStats[EWritingFeedbackTypes.General].categories[0].totalIssues++;
 				break;
 
 			case EWritingFeedbackCategories.SubjectVerbDisagreement:
@@ -771,16 +793,15 @@ export abstract class OneToManyReportLayoutBaseComponent extends ReportLayoutBas
 			case EWritingFeedbackCategories.Pronoun:
 			case EWritingFeedbackCategories.PartOfSpeech:
 			case EWritingFeedbackCategories.Conjunction:
-				this.writingFeedbackStats[EWritingFeedbackTypes.Grammar].categories[
+				writingFeedbackStats[EWritingFeedbackTypes.Grammar].categories[
 					type - EWritingFeedbackCategories.SubjectVerbDisagreement
 				].totalIssues++;
 				break;
 
 			case EWritingFeedbackCategories.MisusedWord:
 			case EWritingFeedbackCategories.Homophone:
-				this.writingFeedbackStats[EWritingFeedbackTypes.WordChoice].categories[
-					type - EWritingFeedbackCategories.MisusedWord
-				].totalIssues++;
+				writingFeedbackStats[EWritingFeedbackTypes.WordChoice].categories[type - EWritingFeedbackCategories.MisusedWord]
+					.totalIssues++;
 				break;
 
 			case EWritingFeedbackCategories.Capitalization:
@@ -790,7 +811,7 @@ export abstract class OneToManyReportLayoutBaseComponent extends ReportLayoutBas
 			case EWritingFeedbackCategories.Apostrophe:
 			case EWritingFeedbackCategories.Space:
 			case EWritingFeedbackCategories.Spelling:
-				this.writingFeedbackStats[EWritingFeedbackTypes.Mechanics].categories[
+				writingFeedbackStats[EWritingFeedbackTypes.Mechanics].categories[
 					type - EWritingFeedbackCategories.Capitalization
 				].totalIssues++;
 				break;
@@ -801,21 +822,21 @@ export abstract class OneToManyReportLayoutBaseComponent extends ReportLayoutBas
 			case EWritingFeedbackCategories.IneffectiveConstruction:
 			case EWritingFeedbackCategories.ExtraWords:
 			case EWritingFeedbackCategories.MissingWords:
-				this.writingFeedbackStats[EWritingFeedbackTypes.SentenceStructure].categories[
+				writingFeedbackStats[EWritingFeedbackTypes.SentenceStructure].categories[
 					type - EWritingFeedbackCategories.FusedSentence
 				].totalIssues++;
 				break;
 
 			case EWritingFeedbackCategories.AdjectiveGenderAgreement:
 			case EWritingFeedbackCategories.AdjectiveNumberAgreement:
-				this.writingFeedbackStats[EWritingFeedbackTypes.MismatchInGenderBetweenAdjectives].categories[
+				writingFeedbackStats[EWritingFeedbackTypes.MismatchInGenderBetweenAdjectives].categories[
 					type - EWritingFeedbackCategories.AdjectiveGenderAgreement
 				].totalIssues++;
 				break;
 
 			case EWritingFeedbackCategories.ArticleGenderAgreement:
 			case EWritingFeedbackCategories.ArticleNumberAgreement:
-				this.writingFeedbackStats[EWritingFeedbackTypes.IncorrectNumberAgreementBetweenArticles].categories[
+				writingFeedbackStats[EWritingFeedbackTypes.IncorrectNumberAgreementBetweenArticles].categories[
 					type - EWritingFeedbackCategories.ArticleGenderAgreement
 				].totalIssues++;
 				break;
@@ -825,7 +846,7 @@ export abstract class OneToManyReportLayoutBaseComponent extends ReportLayoutBas
 			case EWritingFeedbackCategories.CompoundWordError:
 			case EWritingFeedbackCategories.MoodInconsistency:
 			case EWritingFeedbackCategories.AccentError:
-				this.writingFeedbackStats[EWritingFeedbackTypes.IncorrectNumberAgreementBetweenNouns].categories[
+				writingFeedbackStats[EWritingFeedbackTypes.IncorrectNumberAgreementBetweenNouns].categories[
 					type - EWritingFeedbackCategories.NounGenderAgreement
 				].totalIssues++;
 				break;

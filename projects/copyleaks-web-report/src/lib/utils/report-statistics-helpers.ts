@@ -1,5 +1,5 @@
 import { ALERTS } from '../constants/report-alerts.constants';
-import { ICompleteResults } from '../models/report-data.models';
+import { ICompleteResults, IWritingFeedbackScanScource } from '../models/report-data.models';
 import {
 	AIScanResult,
 	AIScanResultSummary,
@@ -149,7 +149,8 @@ export const mergeWords = (matches: Match[]): Match[] => {
 export const calculateStatistics = (
 	completeResult: ICompleteResults,
 	results: ResultDetailItem[],
-	options?: ICopyleaksReportOptions
+	options?: ICopyleaksReportOptions,
+	filteredCorrections?: IWritingFeedbackScanScource
 ): ReportStatistics => {
 	const { totalWords, totalExcluded } = completeResult.scannedDocument;
 	const identical = options?.showIdentical ? results.flatMap(createWordIntervalsFrom('identical', 'source')) : [];
@@ -188,11 +189,7 @@ export const calculateStatistics = (
 		aiScore: aiStatistics?.ai ?? 0,
 		humanScore: aiStatistics?.human ?? 0,
 		writingFeedbackScore: (completeResult.writingFeedback?.score?.overallScore ?? 0) / 100,
-		totalWritingFeedbackIssues:
-			(completeResult.writingFeedback?.score?.wordChoiceCorrectionsCount ?? 0) +
-			(completeResult.writingFeedback?.score?.sentenceStructureCorrectionsCount ?? 0) +
-			(completeResult.writingFeedback?.score?.mechanicsCorrectionsCount ?? 0) +
-			(completeResult.writingFeedback?.score?.grammarCorrectionsCount ?? 0),
+		totalWritingFeedbackIssues: filteredCorrections?.text?.chars?.operationTexts?.length ?? 0,
 	};
 };
 

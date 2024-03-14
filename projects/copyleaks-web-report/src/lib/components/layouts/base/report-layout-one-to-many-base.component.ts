@@ -73,6 +73,7 @@ export abstract class OneToManyReportLayoutBaseComponent extends ReportLayoutBas
 
 	isLoadingScanContent: boolean = true;
 	isLoadingScanResults: boolean = true;
+	isLoadingScanCorrections: boolean = true;
 	loadingProgressPct: number = 0;
 
 	hidePlagarismTap: boolean = false;
@@ -180,6 +181,8 @@ export abstract class OneToManyReportLayoutBaseComponent extends ReportLayoutBas
 					this.hidePlagarismTap = !this.reportDataSvc.isPlagiarismEnabled();
 					this.hideWritingFeedbackTap = !this.reportDataSvc.isWritingFeedbackEnabled();
 
+					if (previews && this.hideWritingFeedbackTap) this.isLoadingScanCorrections = false;
+
 					this.numberOfWords = previews?.scannedDocument?.totalWords;
 
 					if (this.scanResultsPreviews && this.scanResultsDetails) {
@@ -282,6 +285,8 @@ export abstract class OneToManyReportLayoutBaseComponent extends ReportLayoutBas
 						correction => correction.start === c.start && correction.end === c.end
 					)?.index;
 				});
+
+				this.isLoadingScanCorrections = false;
 			});
 
 		this.reportDataSvc.filterOptions$.pipe(untilDestroy(this)).subscribe(data => {

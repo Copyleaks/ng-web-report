@@ -867,13 +867,13 @@ export class ReportDataService {
 		// Filter indices where the type matches any of the corrections hidden categories
 
 		let htmlFilteredFeedback: IHtmlWritingFeedbackRange;
-		if (
-			corrections?.html?.chars &&
-			corrections?.html?.chars.types &&
-			corrections?.html?.chars.groupIds &&
-			corrections?.html?.chars.lengths &&
-			corrections?.html?.chars.starts
-		) {
+		const hasHtml =
+			!!corrections?.html?.chars &&
+			!!corrections?.html?.chars.types &&
+			!!corrections?.html?.chars.groupIds &&
+			!!corrections?.html?.chars.lengths &&
+			!!corrections?.html?.chars.starts;
+		if (hasHtml) {
 			const htmlFilterIndices = corrections?.html?.chars.types.reduce((indices, currentType, index) => {
 				const groupId = corrections?.html?.chars.groupIds[index];
 				const start = corrections.text.chars.starts[groupId];
@@ -918,7 +918,7 @@ export class ReportDataService {
 		};
 
 		corrections.text.chars = textFilteredFeedback;
-		corrections.html.chars = htmlFilteredFeedback;
+		if (hasHtml) corrections.html.chars = htmlFilteredFeedback;
 
 		return corrections;
 	}

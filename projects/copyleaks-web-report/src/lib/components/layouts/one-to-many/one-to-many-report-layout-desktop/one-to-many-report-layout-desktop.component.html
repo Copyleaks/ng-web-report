@@ -97,7 +97,9 @@
 				[allScanCorrectionsView]="allScanCorrectionsView"
 				[displayedScanCorrectionsView]="displayedScanCorrectionsView"
 				[correctionClicked]="correctionClicked"
-				[showLoadingView]="showCorrectionsLoadingView"></copyleaks-report-corrections-container>
+				[showLoadingView]="
+					showCorrectionsLoadingView || isLoadingScanCorrections
+				"></copyleaks-report-corrections-container>
 		</ng-container>
 
 		<div class="custom-results-container" #customResultView [style.flex-grow]="'1'">

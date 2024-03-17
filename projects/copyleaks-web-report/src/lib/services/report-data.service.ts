@@ -213,7 +213,13 @@ export class ReportDataService {
 		private _reportErrorsSvc: ReportErrorsService,
 		private _percentPipe: PercentPipe
 	) {
-		combineLatest([this.filterOptions$, this.excludedResultsIds$, this.scanResultsDetails$, this.excludedCorrections$])
+		combineLatest([
+			this.filterOptions$,
+			this.excludedResultsIds$,
+			this.scanResultsDetails$,
+			this.excludedCorrections$,
+			this.writingFeedback$,
+		])
 			.pipe(
 				untilDestroy(this),
 				filter(
@@ -221,7 +227,7 @@ export class ReportDataService {
 						options !== undefined && excludedResultsIds !== undefined && excludedCorrections !== undefined
 				)
 			)
-			.subscribe(([options, excludedResultsIds, , excludedCorrections]) => {
+			.subscribe(([options, excludedResultsIds, , excludedCorrections, writingFeedback]) => {
 				if (
 					!this.scanResultsPreviews ||
 					this.scanResultsPreviews === undefined ||
@@ -233,12 +239,26 @@ export class ReportDataService {
 					this._viewSvc.progress$.value !== 100 ||
 					(this.totalCompleteResults <= 100 &&
 						this.scanResultsDetails.length != this.totalCompleteResults &&
-						this.realTimeView)
+						this.realTimeView) ||
+					(this.isWritingFeedbackEnabled() && writingFeedback === undefined)
 				)
 					return;
 
 				const filteredResults = this.filterResults(options, excludedResultsIds);
-				const stats: ReportStatistics = this._getReportStats(filteredResults, this.scanResultsPreviews);
+				let filteredCorrections: IWritingFeedbackScanScource;
+				if (writingFeedback) {
+					filteredCorrections = this.filterCorrections(
+						JSON.parse(JSON.stringify(writingFeedback?.corrections)),
+						this.filterOptions,
+						this.excludedCorrections
+					);
+				}
+
+				const stats: ReportStatistics = this._getReportStats(
+					filteredResults,
+					this.scanResultsPreviews,
+					filteredCorrections
+				);
 				const filteredOutResultsIds = [
 					...(this.scanResultsPreviews$.value?.results.internet ?? []),
 					...(this.scanResultsPreviews$.value?.results.batch ?? []),
@@ -269,6 +289,7 @@ export class ReportDataService {
 							minorChangedWords: stats.minorChanges,
 							relatedMeaningWords: stats.relatedMeaning,
 							aggregatedScore: stats.aggregatedScore ?? 0,
+							writingFeedbackTotal: this.isWritingFeedbackEnabled() ? stats.totalWritingFeedbackIssues : null,
 						},
 					},
 					filters: {
@@ -387,8 +408,6 @@ export class ReportDataService {
 				completeResultsRes => {
 					this.completeResultsSnapshot = JSON.parse(JSON.stringify(completeResultsRes));
 					this._scanResultsPreviews$.next(completeResultsRes);
-					this._updateCompleteResults(completeResultsRes);
-
 					// if the writing feedback endpoint is passed & is enabled in the complete results response then fetch its data
 					if (endpointsConfig.writingFeedback && endpointsConfig.writingFeedback.url && this.isWritingFeedbackEnabled())
 						this._http
@@ -404,6 +423,7 @@ export class ReportDataService {
 									this._reportErrorsSvc.handleHttpError(error, 'initSync - writingFeedback');
 								}
 							);
+					this._updateCompleteResults(completeResultsRes);
 				},
 				(error: HttpErrorResponse) => {
 					this._reportErrorsSvc.handleHttpError(error, 'initSync - completeResults');
@@ -950,8 +970,14 @@ export class ReportDataService {
 					});
 			}
 
-			const writingFeedback = await this._getReportWritingFeedback();
-			this._writingFeedback$.next(writingFeedback);
+			if (
+				this.reportEndpointConfig.writingFeedback &&
+				this.reportEndpointConfig.writingFeedback.url &&
+				this.isWritingFeedbackEnabled()
+			) {
+				const writingFeedback = await this._getReportWritingFeedback();
+				this._writingFeedback$.next(writingFeedback);
+			}
 		}
 	}
 
@@ -1034,7 +1060,15 @@ export class ReportDataService {
 		});
 
 		const filteredResults = this.filterResults(this.filterOptions, this.excludedResultsIds);
-		const stats: ReportStatistics = this._getReportStats(filteredResults, completeResultsRes);
+		let filteredCorrections: IWritingFeedbackScanScource;
+		if (this.writingFeedback) {
+			filteredCorrections = this.filterCorrections(
+				JSON.parse(JSON.stringify(this.writingFeedback?.corrections)),
+				this.filterOptions,
+				this.excludedCorrections
+			);
+		}
+		const stats: ReportStatistics = this._getReportStats(filteredResults, completeResultsRes, filteredCorrections);
 
 		this._scanResultsPreviews$.next({
 			...completeResultsRes,
@@ -1087,21 +1121,23 @@ export class ReportDataService {
 		}
 	}
 
-	private _getReportStats(filteredResults: ResultDetailItem[], completeResultsRes: ICompleteResults) {
+	private _getReportStats(
+		filteredResults: ResultDetailItem[],
+		completeResultsRes: ICompleteResults,
+		filteredCorrections?: IWritingFeedbackScanScource
+	) {
 		const showAll =
 			this.filterOptions?.showIdentical && this.filterOptions?.showMinorChanges && this.filterOptions?.showRelated;
-		const missingAggregated =
-			this.totalCompleteResults !== 0 && this.scanResultsPreviews?.results.score.aggregatedScore === 0;
+
 		const numberOfOriginalResults = this.totalOriginalCompleteResults;
 		let stats: ReportStatistics;
 		if (
 			this.totalCompleteResults != filteredResults.length ||
 			!showAll ||
-			missingAggregated ||
 			!this.completeResultsSnapshot ||
 			numberOfOriginalResults != this.totalCompleteResults
 		) {
-			stats = helpers.calculateStatistics(completeResultsRes, filteredResults, this.filterOptions);
+			stats = helpers.calculateStatistics(completeResultsRes, filteredResults, this.filterOptions, filteredCorrections);
 		} else {
 			// * if results are still loading  or no results are fitlered while all match types are visible
 			// * we can use the complete result stats without heavy calculations
@@ -1115,12 +1151,8 @@ export class ReportDataService {
 				total: this.completeResultsSnapshot.scannedDocument.totalWords,
 				aiScore: aiStatistics?.ai ?? 0,
 				humanScore: aiStatistics?.human ?? 0,
-				writingFeedbackScore: this.completeResultsSnapshot?.writingFeedback?.score?.overallScore ?? null,
-				totalWritingFeedbackIssues:
-					(this.completeResultsSnapshot?.writingFeedback?.score?.wordChoiceCorrectionsCount ?? 0) +
-					(this.completeResultsSnapshot?.writingFeedback?.score?.sentenceStructureCorrectionsCount ?? 0) +
-					(this.completeResultsSnapshot?.writingFeedback?.score?.mechanicsCorrectionsCount ?? 0) +
-					(this.completeResultsSnapshot?.writingFeedback?.score?.grammarCorrectionsCount ?? 0),
+				writingFeedbackScore: (this.completeResultsSnapshot?.writingFeedback?.score?.overallScore ?? 0) / 100,
+				totalWritingFeedbackIssues: filteredCorrections?.text?.chars?.operationTexts?.length ?? 0,
 			};
 		}
 		return stats;

@@ -19,7 +19,7 @@ export interface ReportStatistics {
 	/** Human probability */
 	humanScore: number;
 	/** Writing Feedback score */
-	writingFeedbackScore?: number;
+	writingFeedbackOverallScore?: number;
 	/** Writing Feedback total issues */
-	totalWritingFeedbackIssues?: number;
+	writingFeedbackOverallIssues?: number;
 }

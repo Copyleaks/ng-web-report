@@ -94,7 +94,13 @@ export class ReportStatisticsService implements OnDestroy {
 						);
 					}
 					if (isRealtimeInitView && this._reportDataSvc.totalCompleteResults != filteredResults.length) return;
-					this.retreieveOneToManyStatistics(completeResult, filteredResults, filterOptions, filteredCorrections);
+					this.retreieveOneToManyStatistics(
+						completeResult,
+						filteredResults,
+						filterOptions,
+						filteredCorrections,
+						writingFeedback
+					);
 				}
 			});
 	}
@@ -133,7 +139,8 @@ export class ReportStatisticsService implements OnDestroy {
 		completeResult: ICompleteResults,
 		filteredResults: ResultDetailItem[],
 		options: ICopyleaksReportOptions,
-		filteredCorrections?: IWritingFeedbackScanScource
+		filteredCorrections?: IWritingFeedbackScanScource,
+		writingFeedback?: IWritingFeedback
 	) {
 		const showAll = options.showIdentical && options.showMinorChanges && options.showRelated;
 		const missingAggregated =
@@ -145,9 +152,19 @@ export class ReportStatisticsService implements OnDestroy {
 			!showAll ||
 			missingAggregated ||
 			!this._reportDataSvc.completeResultsSnapshot ||
-			numberOfOriginalResults != this._reportDataSvc.totalCompleteResults
+			numberOfOriginalResults != this._reportDataSvc.totalCompleteResults ||
+			(this._reportDataSvc.isWritingFeedbackEnabled() &&
+				this._reportDataSvc.writingFeedback &&
+				this._reportDataSvc.writingFeedback?.corrections.text.chars.operationTexts?.length !=
+					filteredCorrections?.text?.chars?.operationTexts?.length)
 		) {
-			stats = helpers.calculateStatistics(completeResult, filteredResults, options, filteredCorrections);
+			stats = helpers.calculateStatistics(
+				completeResult,
+				filteredResults,
+				options,
+				filteredCorrections,
+				writingFeedback?.score
+			);
 		} else {
 			// * if results are still loading  or no results are fitlered while all match types are visible
 			// * we can use the complete result stats without heavy calculations
@@ -161,9 +178,9 @@ export class ReportStatisticsService implements OnDestroy {
 				total: this._reportDataSvc.completeResultsSnapshot?.scannedDocument?.totalWords,
 				aiScore: aiStatistics?.ai ?? 0,
 				humanScore: aiStatistics?.human ?? 0,
-				writingFeedbackScore:
+				writingFeedbackOverallScore:
 					(this._reportDataSvc.completeResultsSnapshot?.writingFeedback?.score?.overallScore ?? 0) / 100,
-				totalWritingFeedbackIssues: filteredCorrections?.text?.chars?.operationTexts?.length ?? 0,
+				writingFeedbackOverallIssues: filteredCorrections?.text?.chars?.operationTexts?.length ?? 0,
 			};
 		}
 

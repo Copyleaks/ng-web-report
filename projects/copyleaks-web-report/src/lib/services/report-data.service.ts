@@ -257,7 +257,8 @@ export class ReportDataService {
 				const stats: ReportStatistics = this._getReportStats(
 					filteredResults,
 					this.scanResultsPreviews,
-					filteredCorrections
+					filteredCorrections,
+					writingFeedback
 				);
 				const filteredOutResultsIds = [
 					...(this.scanResultsPreviews$.value?.results.internet ?? []),
@@ -289,7 +290,8 @@ export class ReportDataService {
 							minorChangedWords: stats.minorChanges,
 							relatedMeaningWords: stats.relatedMeaning,
 							aggregatedScore: stats.aggregatedScore ?? 0,
-							writingFeedbackTotal: this.isWritingFeedbackEnabled() ? stats.totalWritingFeedbackIssues : null,
+							writingFeedbackOverallIssues: this.isWritingFeedbackEnabled() ? stats.writingFeedbackOverallIssues : null,
+							writingFeedbackOverallScore: this.isWritingFeedbackEnabled() ? stats.writingFeedbackOverallScore : null,
 						},
 					},
 					filters: {
@@ -1068,7 +1070,12 @@ export class ReportDataService {
 				this.excludedCorrections
 			);
 		}
-		const stats: ReportStatistics = this._getReportStats(filteredResults, completeResultsRes, filteredCorrections);
+		const stats: ReportStatistics = this._getReportStats(
+			filteredResults,
+			completeResultsRes,
+			filteredCorrections,
+			this.writingFeedback
+		);
 
 		this._scanResultsPreviews$.next({
 			...completeResultsRes,
@@ -1079,6 +1086,8 @@ export class ReportDataService {
 					minorChangedWords: stats.minorChanges,
 					relatedMeaningWords: stats.relatedMeaning,
 					aggregatedScore: stats.aggregatedScore ?? 0,
+					writingFeedbackOverallIssues: this.isWritingFeedbackEnabled() ? stats.writingFeedbackOverallIssues : null,
+					writingFeedbackOverallScore: this.isWritingFeedbackEnabled() ? stats.writingFeedbackOverallScore : null,
 				},
 			},
 			filters: {
@@ -1124,7 +1133,8 @@ export class ReportDataService {
 	private _getReportStats(
 		filteredResults: ResultDetailItem[],
 		completeResultsRes: ICompleteResults,
-		filteredCorrections?: IWritingFeedbackScanScource
+		filteredCorrections?: IWritingFeedbackScanScource,
+		writingFeedback?: IWritingFeedback
 	) {
 		const showAll =
 			this.filterOptions?.showIdentical && this.filterOptions?.showMinorChanges && this.filterOptions?.showRelated;
@@ -1135,9 +1145,19 @@ export class ReportDataService {
 			this.totalCompleteResults != filteredResults.length ||
 			!showAll ||
 			!this.completeResultsSnapshot ||
-			numberOfOriginalResults != this.totalCompleteResults
+			numberOfOriginalResults != this.totalCompleteResults ||
+			(this.isWritingFeedbackEnabled() &&
+				this.writingFeedback &&
+				this.writingFeedback?.corrections.text.chars.operationTexts?.length !=
+					filteredCorrections?.text?.chars?.operationTexts?.length)
 		) {
-			stats = helpers.calculateStatistics(completeResultsRes, filteredResults, this.filterOptions, filteredCorrections);
+			stats = helpers.calculateStatistics(
+				completeResultsRes,
+				filteredResults,
+				this.filterOptions,
+				filteredCorrections,
+				writingFeedback?.score
+			);
 		} else {
 			// * if results are still loading  or no results are fitlered while all match types are visible
 			// * we can use the complete result stats without heavy calculations
@@ -1151,8 +1171,8 @@ export class ReportDataService {
 				total: this.completeResultsSnapshot.scannedDocument.totalWords,
 				aiScore: aiStatistics?.ai ?? 0,
 				humanScore: aiStatistics?.human ?? 0,
-				writingFeedbackScore: (this.completeResultsSnapshot?.writingFeedback?.score?.overallScore ?? 0) / 100,
-				totalWritingFeedbackIssues: filteredCorrections?.text?.chars?.operationTexts?.length ?? 0,
+				writingFeedbackOverallScore: (this.completeResultsSnapshot?.writingFeedback?.score?.overallScore ?? 0) / 100,
+				writingFeedbackOverallIssues: filteredCorrections?.text?.chars?.operationTexts?.length ?? 0,
 			};
 		}
 		return stats;

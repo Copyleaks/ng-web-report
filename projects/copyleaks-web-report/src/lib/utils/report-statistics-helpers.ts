@@ -1,5 +1,11 @@
 import { ALERTS } from '../constants/report-alerts.constants';
-import { ICompleteResults, IWritingFeedbackScanScource } from '../models/report-data.models';
+import { EWritingFeedbackTypes } from '../enums/copyleaks-web-report.enums';
+import {
+	ICompleteResults,
+	IWritingFeedbackCorrections,
+	IWritingFeedbackScanScource,
+	IWritingFeedbackScore,
+} from '../models/report-data.models';
 import {
 	AIScanResult,
 	AIScanResultSummary,
@@ -8,9 +14,11 @@ import {
 	MatchType,
 	ResultDetailItem,
 	SubjectResultKey,
+	WritingFeedbackScanResultSummary,
 } from '../models/report-matches.models';
 import { ICopyleaksReportOptions } from '../models/report-options.models';
 import { ReportStatistics } from '../models/report-statistics.models';
+import { getSelectedCategoryType } from './enums-helpers';
 
 /**
  * Higher order function that returns a function that extracts Match Intervals from a Result
@@ -150,7 +158,8 @@ export const calculateStatistics = (
 	completeResult: ICompleteResults,
 	results: ResultDetailItem[],
 	options?: ICopyleaksReportOptions,
-	filteredCorrections?: IWritingFeedbackScanScource
+	filteredCorrections?: IWritingFeedbackScanScource,
+	writingFeedbackScore?: IWritingFeedbackScore
 ): ReportStatistics => {
 	const { totalWords, totalExcluded } = completeResult.scannedDocument;
 	const identical = options?.showIdentical ? results.flatMap(createWordIntervalsFrom('identical', 'source')) : [];
@@ -179,6 +188,12 @@ export const calculateStatistics = (
 
 	const aiStatistics = getAiStatistics(completeResult);
 
+	const wfStats = getWritingFeedbackStatistics(
+		writingFeedbackScore,
+		filteredCorrections,
+		completeResult.scannedDocument?.totalWords
+	);
+
 	return {
 		aggregatedScore,
 		identical: identicalCount,
@@ -188,8 +203,8 @@ export const calculateStatistics = (
 		total: totalWords,
 		aiScore: aiStatistics?.ai ?? 0,
 		humanScore: aiStatistics?.human ?? 0,
-		writingFeedbackScore: (completeResult.writingFeedback?.score?.overallScore ?? 0) / 100,
-		totalWritingFeedbackIssues: filteredCorrections?.text?.chars?.operationTexts?.length ?? 0,
+		writingFeedbackOverallScore: wfStats.overallScore,
+		writingFeedbackOverallIssues: wfStats.overallTotalIssues,
 	};
 };
 
@@ -200,4 +215,78 @@ export const getAiStatistics = (completeResult: ICompleteResults): AIScanResultS
 		return aiData.summary;
 	}
 	return null;
+};
+
+export const getWritingFeedbackStatistics = (
+	score: IWritingFeedbackScore,
+	filteredCorrections?: IWritingFeedbackScanScource,
+	totalWords?: number
+): WritingFeedbackScanResultSummary | null => {
+	if (!score?.corrections || !filteredCorrections)
+		return {
+			overallScore: null,
+			overallTotalIssues: null,
+		};
+	const scoreCopy: IWritingFeedbackScore = JSON.parse(JSON.stringify(score));
+	scoreCopy.corrections = {
+		...scoreCopy.corrections,
+		grammarCorrectionsScore: calculateScore(
+			totalWords,
+			filteredCorrections?.text?.chars?.types?.filter(
+				type => getSelectedCategoryType(type) === EWritingFeedbackTypes.Grammar
+			)?.length ?? 0
+		),
+		sentenceStructureCorrectionsScore: calculateScore(
+			totalWords,
+			filteredCorrections?.text?.chars?.types?.filter(
+				type => getSelectedCategoryType(type) === EWritingFeedbackTypes.SentenceStructure
+			)?.length ?? 0
+		),
+		mechanicsCorrectionsScore: calculateScore(
+			totalWords,
+			filteredCorrections?.text?.chars?.types?.filter(
+				type => getSelectedCategoryType(type) === EWritingFeedbackTypes.Mechanics
+			)?.length ?? 0
+		),
+		wordChoiceCorrectionsScore: calculateScore(
+			totalWords,
+			filteredCorrections?.text?.chars?.types?.filter(
+				type => getSelectedCategoryType(type) === EWritingFeedbackTypes.WordChoice
+			)?.length ?? 0
+		),
+	};
+
+	return {
+		overallScore: (calculateOverallCorrectionsScore(scoreCopy.corrections) ?? 0) / 100,
+		overallTotalIssues: filteredCorrections?.text?.chars?.operationTexts?.length,
+	};
+};
+
+export const calculateOverallCorrectionsScore = (correctionsScore: IWritingFeedbackCorrections): number => {
+	if (!correctionsScore) return 0;
+	const weightSum =
+		correctionsScore.grammarScoreWeight +
+		correctionsScore.mechanicsScoreWeight +
+		correctionsScore.sentenceStructureScoreWeight +
+		correctionsScore.wordChoiceScoreWeight;
+
+	if (weightSum > 0) {
+		const overallCorrectionsScore =
+			Math.round(
+				((correctionsScore.grammarCorrectionsScore * correctionsScore.grammarScoreWeight +
+					correctionsScore.mechanicsCorrectionsScore * correctionsScore.mechanicsScoreWeight +
+					correctionsScore.sentenceStructureCorrectionsScore * correctionsScore.sentenceStructureScoreWeight +
+					correctionsScore.wordChoiceCorrectionsScore * correctionsScore.wordChoiceScoreWeight) /
+					weightSum) *
+					Math.pow(10, 0)
+			) / Math.pow(10, 0);
+		return overallCorrectionsScore;
+	}
+	return 0; // or handle the case where weightSum <= 0 differently if needed
+};
+
+export const calculateScore = (numTokens: number, categoryCorrectedTokens: number): number => {
+	if (!numTokens) return 0;
+	const score = ((numTokens - categoryCorrectedTokens) / numTokens) ** 4 * 100;
+	return score;
 };

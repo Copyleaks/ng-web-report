@@ -114,6 +114,11 @@ export interface AIScanResultSummary {
 	another_writer_score: number;
 }
 
+export interface WritingFeedbackScanResultSummary {
+	overallTotalIssues: number;
+	overallScore: number;
+}
+
 export interface AIScanResultItem {
 	classification: EMatchClassification;
 	probability: number;

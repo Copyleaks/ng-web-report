@@ -217,7 +217,8 @@ export interface IScore {
 	minorChangedWords: number;
 	relatedMeaningWords: number;
 	aggregatedScore: number;
-	writingFeedbackTotal?: number;
+	writingFeedbackOverallIssues?: number;
+	writingFeedbackOverallScore?: number;
 }
 
 /** Base type for a result preview  */

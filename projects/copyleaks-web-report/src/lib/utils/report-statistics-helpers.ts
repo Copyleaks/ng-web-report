@@ -157,9 +157,7 @@ export const mergeWords = (matches: Match[]): Match[] => {
 export const calculateStatistics = (
 	completeResult: ICompleteResults,
 	results: ResultDetailItem[],
-	options?: ICopyleaksReportOptions,
-	filteredCorrections?: IWritingFeedbackScanScource,
-	writingFeedbackScore?: IWritingFeedbackScore
+	options?: ICopyleaksReportOptions
 ): ReportStatistics => {
 	const { totalWords, totalExcluded } = completeResult.scannedDocument;
 	const identical = options?.showIdentical ? results.flatMap(createWordIntervalsFrom('identical', 'source')) : [];
@@ -188,12 +186,6 @@ export const calculateStatistics = (
 
 	const aiStatistics = getAiStatistics(completeResult);
 
-	const wfStats = getWritingFeedbackStatistics(
-		writingFeedbackScore,
-		filteredCorrections,
-		completeResult.scannedDocument?.totalWords
-	);
-
 	return {
 		aggregatedScore,
 		identical: identicalCount,
@@ -203,8 +195,6 @@ export const calculateStatistics = (
 		total: totalWords,
 		aiScore: aiStatistics?.ai ?? 0,
 		humanScore: aiStatistics?.human ?? 0,
-		writingFeedbackOverallScore: wfStats.overallScore,
-		writingFeedbackOverallIssues: wfStats.overallTotalIssues,
 	};
 };
 

@@ -1151,13 +1151,26 @@ export class ReportDataService {
 				this.writingFeedback?.corrections.text.chars.operationTexts?.length !=
 					filteredCorrections?.text?.chars?.operationTexts?.length)
 		) {
-			stats = helpers.calculateStatistics(
-				completeResultsRes,
-				filteredResults,
-				this.filterOptions,
-				filteredCorrections,
-				writingFeedback?.score
-			);
+			stats = helpers.calculateStatistics(completeResultsRes, filteredResults, this.filterOptions);
+
+			if (
+				this.isWritingFeedbackEnabled() &&
+				this.writingFeedback &&
+				this.writingFeedback?.corrections.text.chars.operationTexts?.length !=
+					filteredCorrections?.text?.chars?.operationTexts?.length
+			) {
+				const wfStats = helpers.getWritingFeedbackStatistics(
+					writingFeedback?.score,
+					filteredCorrections,
+					completeResultsRes?.scannedDocument?.totalWords
+				);
+				stats.writingFeedbackOverallIssues = wfStats.overallTotalIssues;
+				stats.writingFeedbackOverallScore = wfStats.overallScore;
+			} else {
+				stats.writingFeedbackOverallIssues = filteredCorrections?.text?.chars?.operationTexts?.length ?? 0;
+				stats.writingFeedbackOverallScore =
+					(this.completeResultsSnapshot?.writingFeedback?.score?.overallScore ?? 0) / 100;
+			}
 		} else {
 			// * if results are still loading  or no results are fitlered while all match types are visible
 			// * we can use the complete result stats without heavy calculations

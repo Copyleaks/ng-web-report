@@ -1,0 +1,72 @@
+{
+    "scannedDocument": {
+        "scanId": "safa-grammar-scan-32",
+        "totalWords": 624,
+        "totalExcluded": 0,
+        "credits": 3,
+        "expectedCredits": 3,
+        "creationTime": "2024-03-12T13:10:33.424769Z",
+        "metadata": {
+            "publishDate": "2023-08-10T21:39:51.0000000Z",
+            "creationDate": "2023-08-10T21:39:51.0000000Z",
+            "lastModificationDate": "2023-09-23T17:39:46.0000000Z",
+            "author": "Hassan Trabelsi",
+            "organization": "Stackademic",
+            "filename": "why-are-developers-still-using-angular-e7b6e17eade8"
+        },
+        "enabled": {
+            "plagiarismDetection": false,
+            "aiDetection": false,
+            "writingFeedback": true,
+            "pdfReport": false,
+            "cheatDetection": false
+        }
+    },
+    "results": {
+        "score": {
+            "identicalWords": 155,
+            "minorChangedWords": 0,
+            "relatedMeaningWords": 0,
+            "aggregatedScore": 0
+        },
+        "internet": [],
+        "database": [],
+        "batch": [],
+        "repositories": []
+    },
+    "notifications": {
+        "alerts": []
+    },
+    "writingFeedback": {
+        "textStatistics": {
+            "sentenceCount": 88,
+            "averageWordLength": 5,
+            "averageSentenceLength": 7.2,
+            "readingTimeSeconds": 167,
+            "speakingTimeSeconds": 294.5
+        },
+        "score": {
+            "grammarCorrectionsCount": 1,
+            "grammarCorrectionsScore": 99,
+            "grammarScoreWeight": 1,
+            "mechanicsCorrectionsCount": 1,
+            "mechanicsCorrectionsScore": 99,
+            "mechanicsScoreWeight": 1,
+            "sentenceStructureCorrectionsCount": 3,
+            "sentenceStructureCorrectionsScore": 96,
+            "sentenceStructureScoreWeight": 1,
+            "wordChoiceCorrectionsCount": 0,
+            "wordChoiceCorrectionsScore": 100,
+            "wordChoiceScoreWeight": 1,
+            "overallScore": 98
+        },
+        "readability": {
+            "score": 71,
+            "readabilityLevel": 3,
+            "readabilityLevelText": "7th Grader",
+            "readabilityLevelDescription": "Fairly easy to read."
+        }
+    },
+    "status": 0,
+    "developerPayload": ""
+}

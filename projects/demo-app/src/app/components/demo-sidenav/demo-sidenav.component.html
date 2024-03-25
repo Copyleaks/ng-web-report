@@ -92,6 +92,11 @@
 		<span class="item-text">AI Only</span>
 	</button>
 
+	<button mat-menu-item style="width: 200px" (click)="navigateToReportPreview('writing-feedback/wf-only')">
+		<mat-icon class="item-icon" fontSet="material-icons-round">spellcheck</mat-icon>
+		<span class="item-text">Writing Feedback Only</span>
+	</button>
+
 	<button mat-menu-item style="width: 200px" (click)="navigateToReportPreview('all-disabled/default')">
 		<mat-icon class="item-icon" fontSet="material-icons-round">error</mat-icon>
 		<span class="item-text">Report Unavailable</span>
@@ -139,12 +144,12 @@
 	</button>
 
 	<button
-		(click)="navigateToReportPreview('grammar/scan-3')"
+		(click)="navigateToReportPreview('writing-feedback/scan-3')"
 		matTooltipPosition="right"
-		matTooltip="Grammar Scan Example"
+		matTooltip="Writing feedback Scan Example"
 		mat-menu-item>
 		<mat-icon class="item-icon" fontSet="material-icons-round">spellcheck</mat-icon>
-		<span class="item-text">Grammar</span>
+		<span class="item-text">Writing Feedback</span>
 	</button>
 
 	<button

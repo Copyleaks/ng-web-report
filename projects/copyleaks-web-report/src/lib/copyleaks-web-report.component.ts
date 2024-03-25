@@ -11,7 +11,7 @@ import {
 	ViewChild,
 } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
-import { filter, map } from 'rxjs/operators';
+import { filter, map, takeUntil } from 'rxjs/operators';
 import { IResultItem } from './components/containers/report-results-item-container/components/models/report-result-item.models';
 import { ALERTS } from './constants/report-alerts.constants';
 import { EReportLayoutType, EResponsiveLayoutType } from './enums/copyleaks-web-report.enums';
@@ -26,9 +26,9 @@ import { ReportMatchesService } from './services/report-matches.service';
 import { ReportNgTemplatesService } from './services/report-ng-templates.service';
 import { ReportStatisticsService } from './services/report-statistics.service';
 import { ReportViewService } from './services/report-view.service';
-import { untilDestroy } from './utils/until-destroy';
 import { ReportRealtimeResultsService } from './services/report-realtime-results.service';
 import { ECustomResultsReportView } from './components/core/cr-custom-results/models/cr-custom-results.enums';
+import { Subject } from 'rxjs';
 
 @Component({
 	selector: 'copyleaks-web-report',
@@ -94,6 +94,9 @@ export class CopyleaksWebReportComponent implements OnInit, OnDestroy {
 	ReportLayoutType = EReportLayoutType;
 	ResponsiveLayoutType = EResponsiveLayoutType;
 
+	// Subject for destroying all the subscriptions in the main library component
+	private unsubscribe$ = new Subject();
+
 	constructor(
 		private _breakpointObserver: BreakpointObserver,
 		private _reportNgTemplatesSvc: ReportNgTemplatesService,
@@ -117,12 +120,12 @@ export class CopyleaksWebReportComponent implements OnInit, OnDestroy {
 
 		// Handel report requests errors & emit it
 		this._reportErrorsSvc.reportHttpRequestError$
-			.pipe(untilDestroy(this))
+			.pipe(takeUntil(this.unsubscribe$))
 			.subscribe(error => this.onReportRequestError.emit(error));
 
 		this._reportDataSvc.scanResultsPreviews$
 			.pipe(
-				untilDestroy(this),
+				takeUntil(this.unsubscribe$),
 				filter(
 					scanResultsPreviews =>
 						scanResultsPreviews != undefined &&
@@ -149,7 +152,7 @@ export class CopyleaksWebReportComponent implements OnInit, OnDestroy {
 				if (this._reportDataSvc.scanResultsDetails) this.onCompleteResultUpdate.emit(scanResultsPreviews);
 			});
 
-		this._reportRealtimeResultsSvc.onNewResults$.pipe(untilDestroy(this)).subscribe(data => {
+		this._reportRealtimeResultsSvc.onNewResults$.pipe(takeUntil(this.unsubscribe$)).subscribe(data => {
 			this._reportDataSvc.pushNewResults(data);
 		});
 	}
@@ -236,7 +239,8 @@ export class CopyleaksWebReportComponent implements OnInit, OnDestroy {
 					}
 					return null;
 				}),
-				untilDestroy(this)
+
+				takeUntil(this.unsubscribe$)
 			)
 			.subscribe((layout: EResponsiveLayoutType | null) => {
 				this.responsiveLayoutType = layout;
@@ -279,7 +283,7 @@ export class CopyleaksWebReportComponent implements OnInit, OnDestroy {
 
 		if (alertCode) this._reportViewSvc.selectedAlert$.next(alertCode);
 
-		this._reportViewSvc.reportViewMode$.pipe(untilDestroy(this)).subscribe(data => {
+		this._reportViewSvc.reportViewMode$.pipe(takeUntil(this.unsubscribe$)).subscribe(data => {
 			if (!data) return;
 			let updatedParams: IReportViewQueryParams = {
 				viewMode: data.viewMode,
@@ -315,5 +319,8 @@ export class CopyleaksWebReportComponent implements OnInit, OnDestroy {
 		});
 	}
 
-	ngOnDestroy() {}
+	ngOnDestroy() {
+		this.unsubscribe$.next();
+		this.unsubscribe$.complete();
+	}
 }

@@ -1,5 +1,5 @@
 <ng-container *ngIf="!showLoadingView; else loadingViewRef">
-	<div @fadeIn class="correction-container">
+	<div class="correction-container">
 		<div class="correction-info-container">
 			<div class="correction-description-container">
 				<span
@@ -40,13 +40,13 @@
 			</mat-icon>
 		</ng-template>
 	</div>
-	<span *ngIf="!hideDescription" @fadeIn class="correction-type-description" i18n>
+	<span *ngIf="!hideDescription" class="correction-type-description" i18n>
 		{{ correctionDescription }}
 	</span>
 </ng-container>
 
 <ng-template #loadingViewRef>
-	<div @fadeIn class="loader-container">
+	<div class="loader-container">
 		<div class="correction-title-loader">
 			<ngx-skeleton-loader
 				class="skeleton correction-line-loader"

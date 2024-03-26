@@ -175,6 +175,24 @@ export class OriginalTextHelperDirective implements AfterContentInit, OnDestroy 
 			)
 			.subscribe(([textMatchClickEvent, ,]) => {
 				this.lastSelectedOriginalTextMatch = textMatchClickEvent;
+
+				const currentSelectedCorrection = this._reportMatchesSvc.correctionSelect;
+				if (
+					!!currentSelectedCorrection &&
+					textMatchClickEvent?.elem?.match?.start != currentSelectedCorrection.start &&
+					textMatchClickEvent?.elem?.match?.end != currentSelectedCorrection.end
+				)
+					setTimeout(() => {
+						const components = this.children?.toArray();
+						components?.forEach(component => {
+							if (
+								component &&
+								component?.match?.start === currentSelectedCorrection.start &&
+								component?.match?.end === currentSelectedCorrection.end
+							)
+								component.focused = false;
+						});
+					});
 			});
 
 		reportViewMode$

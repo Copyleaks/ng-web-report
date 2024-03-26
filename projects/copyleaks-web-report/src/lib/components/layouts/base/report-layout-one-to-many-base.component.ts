@@ -430,7 +430,7 @@ export abstract class OneToManyReportLayoutBaseComponent extends ReportLayoutBas
 					if (selectedMatches.length === 0) this.displayedScanCorrectionsView = this.filteredCorrections;
 					else this.displayedScanCorrectionsView = [];
 					selectedMatches.forEach(sc => {
-						if (sc.gid > 0 && sc.gid < this.allScanCorrectionsView.length)
+						if (sc.gid >= 0 && sc.gid < this.allScanCorrectionsView.length)
 							this.displayedScanCorrectionsView.push(this.allScanCorrectionsView[sc.gid]);
 					});
 					this.correctionClicked = selectedMatches?.length > 0;

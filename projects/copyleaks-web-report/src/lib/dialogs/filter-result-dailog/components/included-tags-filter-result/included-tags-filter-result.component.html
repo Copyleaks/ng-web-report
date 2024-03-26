@@ -1,11 +1,17 @@
 <div class="contaienr" fxLayout="column" fxLayoutAlign="start start" fxLayoutGap="4px">
 	<div class="search-tag-container" fxLayout="row" fxLayoutAlign="start center" fxLayoutGap="8px">
-		<div class="search-icon" fxLayout="column" fxLayoutAlign="center center" (click)="searchValue ? clearSearch() : ''">
+		<div class="search-icon" fxLayout="column" fxLayoutAlign="center center">
 			<ng-container *ngIf="!searchValue; else clearSearchIcon">
 				<mat-icon>search</mat-icon>
 			</ng-container>
 			<ng-template #clearSearchIcon>
-				<button mat-icon-button>
+				<button
+					mat-icon-button
+					class="clear-icon-button"
+					(click)="searchValue ? clearSearch() : ''"
+					matTooltip="Clear"
+					matTooltipClass="web-report-mat-tooltip"
+					i18n-matTooltip>
 					<mat-icon>close</mat-icon>
 				</button>
 			</ng-template>
@@ -27,7 +33,10 @@
 		<button
 			*ngIf="allTagItem && allTagItem.length > 0"
 			class="arrow-drop-button"
-			(click)="showMoreMenu = !showMoreMenu">
+			(click)="showMoreMenu = !showMoreMenu"
+			[matTooltip]="showMoreMenu ? COLLAPSE_TOOLTIP : EXPEND_TOOLTIP"
+			matTooltipClass="web-report-mat-tooltip"
+			i18n-matTooltip>
 			<ng-container *ngIf="showMoreMenu; else showLessMenuIcon">
 				<mat-icon fontSet="material-icons-round">arrow_drop_up</mat-icon>
 			</ng-container>

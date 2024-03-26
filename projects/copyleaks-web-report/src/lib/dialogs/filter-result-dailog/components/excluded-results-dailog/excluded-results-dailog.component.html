@@ -3,23 +3,33 @@
 		<span class="header" web-report-title-font i18n>Excluded Matching Results</span>
 		<span class="total-excluded">({{ allResultsItemLength }})</span>
 	</div>
-	<button mat-icon-button class="dialog-close-button" (click)="closeDailog()">
+	<button
+		mat-icon-button
+		class="dialog-close-button"
+		(click)="closeDailog()"
+		matTooltip="Close"
+		matTooltipClass="web-report-mat-tooltip"
+		i18n-matTooltip>
 		<mat-icon class="close-icon">close</mat-icon>
 	</button>
 </div>
 
 <div mat-dialog-content>
 	<div class="search-container" fxLayout="row" fxLayoutAlign="start center" fxLayoutGap="8px">
-		<div
-			class="search-icon-contaier"
-			fxLayout="row"
-			fxLayoutAlign="center center"
-			(click)="!!searchValue ? clearSearch() : ''">
+		<div class="search-icon-contaier" fxLayout="row" fxLayoutAlign="center center">
 			<ng-container *ngIf="!searchValue; else clearSearchIcon">
 				<mat-icon>search</mat-icon>
 			</ng-container>
 			<ng-template #clearSearchIcon>
-				<mat-icon>close</mat-icon>
+				<button
+					mat-icon-button
+					class="serach-input-clear-button"
+					(click)="!!searchValue ? clearSearch() : ''"
+					matTooltip="Clear"
+					matTooltipClass="web-report-mat-tooltip"
+					i18n-matTooltip>
+					<mat-icon>close</mat-icon>
+				</button>
 			</ng-template>
 		</div>
 		<input

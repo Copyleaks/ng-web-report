@@ -35,7 +35,7 @@
 							fxLayout="column"
 							fxLayoutAlign="start start"
 							fxLayoutGap="4px"
-							*cdkVirtualFor="let item of displayedResults">
+							*cdkVirtualFor="let item of displayedResults; let i = index">
 							<cr-report-results-item
 								#resultitem
 								[resultItem]="item"

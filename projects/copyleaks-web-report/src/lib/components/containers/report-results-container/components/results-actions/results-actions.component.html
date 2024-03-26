@@ -93,10 +93,17 @@
 
 	<div *ngIf="resultsActions?.totalExcluded || resultsActions?.totalFiltered" class="chips-container">
 		<ng-container *ngIf="resultsActions?.totalExcluded">
-			<mat-chip (click)="showFilterDialog(true)">
-				{{ resultsActions?.totalExcluded }}
-				<ng-container i18n>excluded</ng-container>
-			</mat-chip>
+			<button
+				class="chip-button"
+				(click)="showFilterDialog(true)"
+				matTooltip="Manage excluded results"
+				matTooltipClass="web-report-mat-tooltip"
+				i18n-matTooltip>
+				<mat-chip>
+					{{ resultsActions?.totalExcluded }}
+					<ng-container i18n>excluded</ng-container>
+				</mat-chip>
+			</button>
 		</ng-container>
 
 		<ng-container *ngIf="resultsActions?.totalFiltered">

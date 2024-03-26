@@ -98,6 +98,7 @@ export class ResultsActionsComponent implements OnInit, OnChanges, OnDestroy {
 			width: this.isMobile ? '' : '670px',
 			panelClass: 'filter-result-dailog',
 			ariaLabel: $localize`Report Filter Options`,
+			autoFocus: false,
 			data: {
 				reportDataSvc: this._reportDataSvc,
 				reportViewSvc: this._reportViewSvc,

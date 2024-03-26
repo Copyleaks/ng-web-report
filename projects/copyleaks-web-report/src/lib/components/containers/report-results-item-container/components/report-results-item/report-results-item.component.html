@@ -1,4 +1,4 @@
-<div
+<a
 	@fadeIn
 	class="result-item-container"
 	[ngClass]="{
@@ -6,7 +6,9 @@
 		'locked-result-item-container': isLocked
 	}"
 	fxLayout="column"
-	fxLayoutAlign="start center">
+	fxLayoutAlign="start center"
+	tabIndex="0"
+	(keyup.enter)="handleClick()">
 	<ng-container *ngIf="!isLocked">
 		<!--  -->
 		<div fxLayout="column" fxLayoutAlign="start" class="item-container">
@@ -134,9 +136,16 @@
 				</div>
 				<ng-container *ngIf="!showLoader">
 					<ng-container *ngIf="!excludeView; else showExcludeResult">
-						<mat-icon class="item-menu" mat-icon [matMenuTriggerFor]="menu" (click)="$event.stopPropagation()">
-							more_vert
-						</mat-icon>
+						<button
+							class="item-menu-button"
+							mat-icon-button
+							(click)="$event.stopPropagation()"
+							[matMenuTriggerFor]="menu"
+							matTooltip="More options"
+							i18n-matTooltip
+							matTooltipClass="web-report-mat-tooltip">
+							<mat-icon class="item-menu" mat-icon>more_vert</mat-icon>
+						</button>
 					</ng-container>
 
 					<ng-template #showExcludeResult>
@@ -219,7 +228,7 @@
 				[ngTemplateOutletContext]="{ result: resultItem }"></ng-container>
 		</ng-container>
 	</ng-container>
-</div>
+</a>
 
 <mat-menu class="result-item-menu-list" #menu="matMenu" yPosition="below">
 	<button mat-menu-item (click)="hideResult()" [disableRipple]="true">
@@ -236,12 +245,17 @@
 		<mat-icon class="mat-menu-item-icon" fontSet="material-icons-round">delete</mat-icon>
 		<span class="mat-menu-item-text" i18n>Delete result</span>
 	</button>
-	<button *ngIf="previewResult?.url" mat-menu-item (click)="visitResultSource()" [disableRipple]="true">
+	<a
+		*ngIf="previewResult?.url"
+		mat-menu-item
+		(click)="visitResultSource()"
+		(keyup.enter)="visitResultSource()"
+		[disableRipple]="true">
 		<mat-icon class="mat-menu-item-icon" fontSet="material-icons-round">open_in_new</mat-icon>
 		<span class="mat-menu-item-text" i18n>Visit result source</span>
-	</button>
-	<button mat-menu-item (click)="comapreResult()" [disableRipple]="true">
+	</a>
+	<a mat-menu-item (click)="comapreResult()" (keyup.enter)="comapreResult()" [disableRipple]="true">
 		<mat-icon class="mat-menu-item-icon" fontSet="material-icons-round">compare_arrows</mat-icon>
 		<span class="mat-menu-item-text" i18n>Compare with submitted file</span>
-	</button>
+	</a>
 </mat-menu>

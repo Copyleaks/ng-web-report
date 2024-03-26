@@ -1,4 +1,13 @@
-<app-demo-sidenav>
+<div class="main-container">
+	<!-- style="display: flex; flex-direction: row; align-items: center; gap: 8px" -->
+	<div class="report-options" [matMenuTriggerFor]="previewsMenu">
+		<div style="display: flex; flex-direction: row; align-items: center; gap: 8px">
+			<mat-icon class="item-icon" fontSet="material-icons-round">preview</mat-icon>
+			<span class="item-text">Report Previews</span>
+			<mat-icon class="item-expand-icon" fontSet="material-icons-round">chevron_right</mat-icon>
+		</div>
+	</div>
+
 	<ng-container *ngIf="endpointsConfig">
 		<copyleaks-web-report
 			class="desktop-view"
@@ -115,18 +124,149 @@
 			</cr-custom-results>
 		</copyleaks-web-report>
 	</ng-container>
-</app-demo-sidenav>
 
-<!-- Custom locked results template ref -->
-<ng-template #lockedResultTemplateRef let-result="result">
-	<div class="locked-result-container">
-		<div class="locked-result-container-header">
-			<mat-icon>lock</mat-icon>
-			<span>Locked Result</span>
+	<!-- Custom locked results template ref -->
+	<ng-template #lockedResultTemplateRef let-result="result">
+		<div class="locked-result-container">
+			<div class="locked-result-container-header">
+				<mat-icon>lock</mat-icon>
+				<span>Locked Result</span>
+			</div>
+			<div class="locked-result-container-body">Locked results are only viewable after report has been saved.</div>
+			<div class="locked-result-container-actions">
+				<cr-button (click)="lockedResultClick(result)">Save Report</cr-button>
+			</div>
 		</div>
-		<div class="locked-result-container-body">Locked results are only viewable after report has been saved.</div>
-		<div class="locked-result-container-actions">
-			<cr-button (click)="lockedResultClick(result)">Save Report</cr-button>
-		</div>
-	</div>
-</ng-template>
+	</ng-template>
+</div>
+<mat-menu #previewsMenu="matMenu">
+	<button mat-menu-item style="width: 200px" (click)="navigateToReportPreview('bundle/sample-report')">
+		<mat-icon class="item-icon" fontSet="material-icons-round">grading</mat-icon>
+		<span class="item-text">Sample Report</span>
+	</button>
+
+	<button mat-menu-item [matMenuTriggerFor]="bundleMenu" style="width: 200px">
+		<mat-icon class="item-icon" fontSet="material-icons-round">view_agenda</mat-icon>
+		<span class="item-text">Bundle</span>
+	</button>
+
+	<button mat-menu-item [matMenuTriggerFor]="plagiarismMenu" style="width: 200px">
+		<mat-icon class="item-icon" fontSet="material-icons-round">flag_circle</mat-icon>
+		<span class="item-text">Plagiairsm Only</span>
+	</button>
+
+	<button mat-menu-item style="width: 200px" (click)="navigateToReportPreview('ai-only/default')">
+		<mat-icon class="item-icon" fontSet="material-icons-round">smart_toy</mat-icon>
+		<span class="item-text">AI Only</span>
+	</button>
+
+	<button mat-menu-item style="width: 200px" (click)="navigateToReportPreview('all-disabled/default')">
+		<mat-icon class="item-icon" fontSet="material-icons-round">error</mat-icon>
+		<span class="item-text">Report Unavailable</span>
+	</button>
+
+	<button mat-menu-item style="width: 200px" (click)="navigateToReportPreview('real-time/both')">
+		<mat-icon class="item-icon" fontSet="material-icons-round">visibility</mat-icon>
+		<span class="item-text">Real-time Report</span>
+	</button>
+</mat-menu>
+
+<mat-menu #plagiarismMenu="matMenu">
+	<button
+		(click)="navigateToReportPreview('plagiairsm-only/batch')"
+		matTooltipPosition="right"
+		matTooltip="Report With Batch Result Example"
+		mat-menu-item>
+		<mat-icon class="item-icon" fontSet="material-icons-round">batch_prediction</mat-icon>
+		<span class="item-text">Batch</span>
+	</button>
+
+	<button
+		(click)="navigateToReportPreview('plagiairsm-only/cross-language')"
+		matTooltipPosition="right"
+		matTooltip="Report With Batch Result Example"
+		mat-menu-item>
+		<mat-icon class="item-icon" fontSet="material-icons-round">translate</mat-icon>
+		<span class="item-text">Cross Language</span>
+	</button>
+
+	<button
+		(click)="navigateToReportPreview('plagiairsm-only/more-than-100-results')"
+		matTooltipPosition="right"
+		matTooltip="Report With Batch Result Example"
+		mat-menu-item>
+		<mat-icon class="item-icon" fontSet="material-icons-round">reorder</mat-icon>
+		<span class="item-text">100+ Results</span>
+	</button>
+
+	<button
+		(click)="navigateToReportPreview('plagiairsm-only/partial-report')"
+		matTooltipPosition="right"
+		matTooltip="Partial Report Example"
+		mat-menu-item>
+		<mat-icon class="item-icon" fontSet="material-icons-round">hourglass_top</mat-icon>
+		<span class="item-text">Partial Report</span>
+	</button>
+</mat-menu>
+
+<mat-menu #bundleMenu="matMenu">
+	<button
+		(click)="navigateToReportPreview('bundle/default')"
+		matTooltip="Scanned Website Example"
+		matTooltipPosition="right"
+		mat-menu-item>
+		<mat-icon class="item-icon" fontSet="material-icons-round">code</mat-icon>
+		<span class="item-text">HTML</span>
+	</button>
+	<button
+		(click)="navigateToReportPreview('bundle/Filter')"
+		matTooltipPosition="right"
+		matTooltip="Scanned PDF Example"
+		mat-menu-item>
+		<mat-icon class="item-icon" fontSet="material-icons-round">picture_as_pdf</mat-icon>
+		<span class="item-text">PDF</span>
+	</button>
+	<button
+		(click)="navigateToReportPreview('bundle/ai-content', 'suspected-ai-text')"
+		matTooltipPosition="right"
+		matTooltip="Suspected AI Text Example"
+		mat-menu-item>
+		<mat-icon class="item-icon" fontSet="material-icons-round">smart_toy</mat-icon>
+		<span class="item-text">AI</span>
+	</button>
+	<button
+		(click)="navigateToReportPreview('bundle/both')"
+		matTooltipPosition="right"
+		matTooltip="Suspected AI Text Example"
+		mat-menu-item>
+		<mat-icon class="item-icon" fontSet="material-icons-round">circle</mat-icon>
+		<span class="item-text">Both</span>
+	</button>
+
+	<button
+		(click)="navigateToReportPreview('repository/both')"
+		matTooltipPosition="right"
+		matTooltip="Scan With Repository Results Example"
+		mat-menu-item>
+		<mat-icon class="item-icon" fontSet="material-icons-round">storage</mat-icon>
+		<span class="item-text">Repository + Locked Results</span>
+	</button>
+
+	<button
+		(click)="navigateToReportPreview('bundle/default', 'suspected-character-replacement')"
+		matTooltipPosition="right"
+		matTooltip="Suspected Character Replacement Example"
+		mat-menu-item>
+		<mat-icon class="item-icon" fontSet="material-icons-round">text_fields</mat-icon>
+		<span class="item-text">SCR</span>
+	</button>
+
+	<button
+		(click)="navigateToReportPreview('bundle/custom-empty-state')"
+		matTooltipPosition="right"
+		matTooltip="Custom Empty State Example"
+		mat-menu-item>
+		<mat-icon class="item-icon" fontSet="material-icons-round">edit</mat-icon>
+		<span class="item-text">Custom Empty State</span>
+	</button>
+</mat-menu>

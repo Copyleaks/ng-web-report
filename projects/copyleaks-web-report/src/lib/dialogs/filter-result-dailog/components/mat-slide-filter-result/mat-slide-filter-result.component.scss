@@ -17,4 +17,9 @@
 		font-size: 12px;
 		font-weight: 700;
 	}
+	mat-slide-toggle {
+		&:focus-within {
+			outline: 2px solid black;
+		}
+	}
 }

@@ -18,42 +18,49 @@
 					matInput
 					[formControl]="searchFc"
 					i18n-placeholder />
-				<mat-icon
-					class="clear-icon"
-					fontSet="material-icons-outlined"
+				<button
+					mat-icon-button
+					class="clear-button"
 					(click)="showSearch()"
 					matTooltip="Clear"
 					matTooltipClass="web-report-mat-tooltip"
 					i18n-matTooltip>
-					cancel
-				</mat-icon>
+					<mat-icon class="clear-icon" fontSet="material-icons-outlined">cancel</mat-icon>
+				</button>
 			</div>
 
 			<div fxLayout="row" fxLayoutAlign="start center" fxLayoutGap="8px" class="results-search-filter-container">
-				<mat-icon
+				<button
+					mat-icon-button
 					*ngIf="!showSearchFiled"
-					class="open-search-icon"
 					(click)="showSearch()"
-					fontSet="material-icons-round"
-					[ngClass]="{ 'disabled-icon': !resultsActions?.totalResults || resultsActions?.totalResults === 0 }"
 					matTooltip="Search matching text results"
 					matTooltipClass="web-report-mat-tooltip"
 					i18n-matTooltip>
-					search
-				</mat-icon>
-				<mat-icon
-					class="filter-search-icon"
+					<mat-icon
+						class="open-search-icon"
+						fontSet="material-icons-round"
+						[ngClass]="{ 'disabled-icon': !resultsActions?.totalResults || resultsActions?.totalResults === 0 }">
+						search
+					</mat-icon>
+				</button>
+				<button
+					mat-icon-button
 					(click)="showFilterDialog()"
-					fontSet="material-icons-round"
-					[ngClass]="{
-						'disabled-icon': !resultsActions?.totalResults || resultsActions?.totalResults === 0,
-						'selected-icon': isFilterOn || resultsActions?.totalFiltered != 0
-					}"
 					matTooltip="Filter matching text results"
 					matTooltipClass="web-report-mat-tooltip"
 					i18n-matTooltip>
-					filter_list
-				</mat-icon>
+					<mat-icon
+						class="filter-search-icon"
+						fontSet="material-icons-round"
+						[ngClass]="{
+							'disabled-icon': !resultsActions?.totalResults || resultsActions?.totalResults === 0,
+							'selected-icon': isFilterOn || resultsActions?.totalFiltered != 0
+						}">
+						filter_list
+					</mat-icon>
+				</button>
+
 				<mat-icon
 					*ngIf="isMobile"
 					class="expand-icon"

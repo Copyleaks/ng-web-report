@@ -65,6 +65,9 @@
 		fxLayoutAlign="start end"
 		aria-label="'This is a button to expand or collapse the result score statistics."
 		i18n-aria-label
+		[matTooltip]="showPlagiarismPercentages ? PERCENTAGE_BTN_COLLAPSE_TOOLTIP : PERCENTAGE_BTN_EXPEND_TOOLTIP"
+		i18n-matTooltip
+		matTooltipClass="web-report-mat-tooltip"
 		(click)="showPlagiarismPercentages = !showPlagiarismPercentages">
 		<ng-container *ngIf="showPlagiarismPercentages; else showLessPerDetailsIcon">
 			<mat-icon fontSet="material-icons-round">arrow_drop_up</mat-icon>

@@ -8,7 +8,7 @@
 .result-item-hover-container {
 	&:hover {
 		cursor: pointer;
-		border-color: $color-primary;
+		border-color: $color-primary !important;
 		.percentage-result-item-container {
 			background-color: $color-light-primary;
 		}
@@ -117,7 +117,11 @@
 					}
 				}
 			}
-
+			.item-menu-button {
+				width: unset;
+				height: unset;
+				line-height: unset;
+			}
 			.item-menu,
 			.exclude-result {
 				cursor: pointer;
@@ -234,7 +238,8 @@
 			padding: 0px 8px;
 			display: flex;
 			align-items: center;
-			&:hover {
+			&:hover,
+			&:focus {
 				background-color: $color-container-background !important;
 			}
 			.mat-menu-item-icon {

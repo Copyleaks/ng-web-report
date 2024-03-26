@@ -3,7 +3,9 @@
 		<span class="header" web-report-title-font i18n>Excluded Matching Results</span>
 		<span class="total-excluded">({{ allResultsItemLength }})</span>
 	</div>
-	<mat-icon class="close-icon" (click)="closeDailog()">close</mat-icon>
+	<button mat-icon-button class="dialog-close-button" (click)="closeDailog()">
+		<mat-icon class="close-icon">close</mat-icon>
+	</button>
 </div>
 
 <div mat-dialog-content>

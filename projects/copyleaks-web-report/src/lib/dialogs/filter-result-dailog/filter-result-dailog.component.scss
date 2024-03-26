@@ -49,6 +49,9 @@
 				font-size: 14px;
 				font-weight: 500;
 			}
+			&:focus {
+				outline: 2px solid black;
+			}
 		}
 	}
 	.result-container {

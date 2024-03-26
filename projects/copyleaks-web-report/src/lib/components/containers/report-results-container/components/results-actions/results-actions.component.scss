@@ -126,9 +126,26 @@
 		background-color: $color-container-background;
 		font-size: 16px;
 	}
+
+	.clear-button {
+		width: unset;
+		height: unset;
+		line-height: unset;
+	}
+	.clear-button:focus,
+	.clear-button:hover {
+		mat-icon {
+			color: $color-primary;
+		}
+	}
 }
 
 .results-search-filter-container {
+	button {
+		line-height: unset;
+		width: unset;
+		height: unset;
+	}
 	mat-icon {
 		cursor: pointer;
 		color: $color-dark-blue;
@@ -207,6 +224,11 @@ mat-icon {
 	justify-content: flex-start;
 	align-items: center;
 	gap: 4px;
+	.chip-button {
+		padding: 0;
+		min-width: unset;
+		line-height: unset;
+	}
 }
 
 mat-chip {

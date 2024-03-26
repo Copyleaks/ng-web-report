@@ -2,17 +2,19 @@
 	<div class="expand-result-top-continer" fxLayout="row" fxLayoutAlign="space-between start">
 		<div class="expand-result-continer" fxLayout="column" fxLayoutAlign="start start">
 			<diV class="result-header" fxLayout="column" fxLayoutAlign="space-between center">
-				<button
+				<a
+					tabIndex="0"
 					class="back-button"
 					fxLayout="row"
 					fxLayoutAlign="center center"
 					fxLayoutGap="4px"
 					mat-button
 					[disableRipple]="true"
-					(click)="clickBack()">
+					(click)="clickBack()"
+					(keyup.enter)="clickBack()">
 					<mat-icon fontSet="material-icons-round">chevron_left</mat-icon>
 					<span i18n>Back</span>
-				</button>
+				</a>
 				<div fxLayout="row" fxLayoutAlign="start start" fxLayoutGap="8px" style="width: 100%">
 					<div class="result-logo" fxLayout="column" fxLayoutAlign="center center">
 						<ng-container [ngSwitch]="resultItem?.resultPreview?.type">
@@ -79,23 +81,12 @@
 								class="exclude-button"
 								(click)="excludeResult()"
 								aria-label="This is a button that excludes or includes the result in the plagiarism report."
-								i18n-aria-label>
-								<mat-icon
-									*ngIf="exclude"
-									matTooltip="Include result"
-									matTooltipClass="web-report-mat-tooltip"
-									i18n-matTooltip
-									fontSet="material-icons-round">
-									visibility
-								</mat-icon>
-								<mat-icon
-									*ngIf="!exclude"
-									matTooltip="Exclude result"
-									matTooltipClass="web-report-mat-tooltip"
-									i18n-matTooltip
-									fontSet="material-icons-round">
-									visibility_off
-								</mat-icon>
+								i18n-aria-label
+								matTooltipClass="web-report-mat-tooltip"
+								i18n-matTooltip
+								[matTooltip]="exclude ? INCLUDE_RESULT_TOOLTIP : EXCLUDE_RESULT_TOOLTIP">
+								<mat-icon *ngIf="exclude" fontSet="material-icons-round">visibility</mat-icon>
+								<mat-icon *ngIf="!exclude" fontSet="material-icons-round">visibility_off</mat-icon>
 							</button>
 							<span class="result-title" [title]="resultItem?.resultPreview?.title">
 								{{ resultItem?.resultPreview?.title }}

@@ -45,6 +45,9 @@ export class ReportExpandResultItemComponent implements OnInit, OnChanges {
 		return '';
 	}
 
+	EXCLUDE_RESULT_TOOLTIP = $localize`Exclude result`;
+	INCLUDE_RESULT_TOOLTIP = $localize`Include result`;
+
 	constructor(private _reportViewSvc: ReportViewService, private _highlightService: ReportMatchHighlightService) {}
 
 	ngOnInit(): void {}

@@ -1,0 +1,32 @@
+:host {
+	display: block;
+	height: 100vh;
+	background-color: #ecf3f5;
+	padding: 10px;
+}
+
+.main-container {
+	display: flex;
+	justify-content: center;
+	height: 100%;
+	.report-options {
+		position: absolute;
+		top: 10px;
+		left: 10px;
+		cursor: pointer;
+		.item-icon {
+			color: #a0a9bf;
+		}
+		.item-text,
+		.item-expand-icon {
+			color: #0b163e;
+		}
+		&:hover {
+			.item-icon,
+			.item-text,
+			.item-expand-icon {
+				color: #3f9af5;
+			}
+		}
+	}
+}

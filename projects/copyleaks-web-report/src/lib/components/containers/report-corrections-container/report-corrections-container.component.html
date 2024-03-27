@@ -48,7 +48,8 @@
 							[correction]="correction"
 							[reportDataSvc]="reportDataSvc"
 							[reportMatchesSvc]="reportMatchesSvc"
-							[showLoadingView]="false"></cr-correction>
+							[showLoadingView]="false"
+							(selectCategory)="onSelectCategory($event)"></cr-correction>
 					</cdk-virtual-scroll-viewport>
 				</ng-container>
 				<ng-template #correctionsMobileViewRef>

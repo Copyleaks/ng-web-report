@@ -84,6 +84,7 @@ import { CrCorrectionsActionsComponent } from './components/core/cr-corrections-
 import { FilterCorrectionsDialogComponent } from './dialogs/filter-corrections-dialog/filter-corrections-dialog.component';
 import { FilterCorrectionsDialogService } from './dialogs/filter-corrections-dialog/services/filter-corrections-dialog.service';
 import { NgxChartsModule } from '@swimlane/ngx-charts';
+import { SecondsToTimePipeModule } from './pipes/seconds-to-time/seconds-to-time.module';
 
 @NgModule({
 	declarations: [
@@ -160,6 +161,7 @@ import { NgxChartsModule } from '@swimlane/ngx-charts';
 		MatExpansionModule,
 		SimilarityPipeModule,
 		DecodeUriPipeModule,
+		SecondsToTimePipeModule,
 		CrReportScoreTooltipModule,
 		MatSlideToggleModule,
 		MatDividerModule,

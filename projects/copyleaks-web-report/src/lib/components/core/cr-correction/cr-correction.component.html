@@ -3,22 +3,38 @@
 		<div class="correction-info-container">
 			<div class="correction-description-container">
 				<span
+					*ngIf="correction?.wrongText != correction?.correctionText"
 					class="wrong-text"
 					[matTooltip]="correction?.wrongText ?? ''"
 					matTooltipClass="web-report-mat-tooltip"
 					i18n-matTooltip>
 					{{ correction.wrongText }}
 				</span>
-				<mat-icon class="arrow-icon" fontSet="material-icons-round">east</mat-icon>
+				<mat-icon
+					*ngIf="correction?.wrongText != correction?.correctionText && correction.correctionText"
+					class="arrow-icon"
+					fontSet="material-icons-round">
+					east
+				</mat-icon>
 				<span
+					*ngIf="correction.correctionText"
 					class="correction-text"
+					[style.max-width]="correction?.wrongText != correction?.correctionText ? '42%' : '100%'"
 					[matTooltip]="correction?.correctionText ?? ''"
 					matTooltipClass="web-report-mat-tooltip"
 					i18n-matTooltip>
 					{{ correction.correctionText }}
 				</span>
 			</div>
-			<mat-chip *ngIf="!hideDescription" class="correction-type">{{ correctionType }}</mat-chip>
+			<mat-chip
+				*ngIf="!hideDescription"
+				class="correction-type"
+				matTooltip="Show All Corrections by Category"
+				matTooltipClass="web-report-mat-tooltip"
+				(click)="$event.stopPropagation(); $event.preventDefault(); goToCorrectionCategoryView()"
+				i18n-matTooltip>
+				{{ correctionType }}
+			</mat-chip>
 		</div>
 		<mat-icon
 			*ngIf="isExcludeView; else excludedIconRef"

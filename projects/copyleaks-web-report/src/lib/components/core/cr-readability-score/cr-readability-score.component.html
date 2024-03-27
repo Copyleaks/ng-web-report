@@ -19,38 +19,46 @@
 			<div class="stat-container insights">
 				<span class="stat-title insights" i18n>Insights</span>
 				<span class="stat-value readability-description" web-report-title-font i18n>
-					{{ readabilityInfo?.readabilityLevelText }}
+					Reading level: {{ readabilityInfo?.readabilityLevelText }}
 				</span>
 			</div>
 
 			<div class="stat-container">
 				<span class="stat-title" i18n>Number of sentences:</span>
-				<span class="stat-value" i18n>{{ statisticsInfo?.sentenceCount }}</span>
+				<span class="stat-value" i18n>
+					{{ statisticsInfo?.sentenceCount }} {statisticsInfo?.sentenceCount, plural, =1 {Sentence} other {Sentences}}
+				</span>
 			</div>
 
 			<div class="stat-container">
 				<span class="stat-title" i18n>Avg. Words per sentences:</span>
-				<span class="stat-value" i18n>{{ statisticsInfo?.averageSentenceLength }}</span>
+				<span class="stat-value" i18n>
+					{{ statisticsInfo?.averageSentenceLength }} {statisticsInfo?.averageSentenceLength, plural, =1 {Word} other
+					{Words}}
+				</span>
 			</div>
 
 			<div class="stat-container">
 				<span class="stat-title" i18n>Avg. Word length:</span>
-				<span class="stat-value" i18n>{{ statisticsInfo?.averageWordLength }}</span>
+				<span class="stat-value" i18n>
+					{{ statisticsInfo?.averageWordLength }} {statisticsInfo?.averageWordLength, plural, =1 {Character} other
+					{Characters}}
+				</span>
 			</div>
 
 			<div class="stat-container">
 				<span class="stat-title" i18n>Reading time:</span>
-				<span class="stat-value" i18n>{{ statisticsInfo?.readingTimeSeconds }}</span>
+				<span class="stat-value" i18n>{{ statisticsInfo?.readingTimeSeconds | secondsToTime }}</span>
 			</div>
 
 			<div class="stat-container">
 				<span class="stat-title" i18n>Speaking time:</span>
-				<span class="stat-value" i18n>{{ statisticsInfo?.speakingTimeSeconds }}</span>
+				<span class="stat-value" i18n>{{ statisticsInfo?.speakingTimeSeconds | secondsToTime }}</span>
 			</div>
 
 			<div class="stat-container">
 				<span class="stat-title" i18n>Readability score:</span>
-				<span class="stat-value" i18n>{{ readabilityInfo?.score }}</span>
+				<span class="stat-value" i18n>{{ readabilityInfo?.score }}%</span>
 			</div>
 		</div>
 	</mat-expansion-panel>

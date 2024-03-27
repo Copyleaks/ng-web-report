@@ -1,4 +1,4 @@
-import { Component, HostListener, Input, OnDestroy, OnInit, SimpleChanges } from '@angular/core';
+import { Component, EventEmitter, HostListener, Input, OnDestroy, OnInit, Output, SimpleChanges } from '@angular/core';
 import { IWritingFeedbackCorrectionViewModel } from '../../../models/report-data.models';
 import { EWritingFeedbackCategories } from '../../../enums/copyleaks-web-report.enums';
 import { getCorrectionCategoryTitle, getCorrectionCategoryDescription } from '../../../utils/enums-helpers';
@@ -51,6 +51,8 @@ export class CrCorrectionComponent implements OnInit, OnDestroy {
 	 * @Input {boolean} Flag indicating whether to show the loading view or not.
 	 */
 	@Input() showLoadingView: boolean = false;
+
+	@Output() selectCategory = new EventEmitter<EWritingFeedbackCategories>();
 
 	isExcluded: boolean = false;
 	excludedTooltipText: string;
@@ -117,6 +119,10 @@ export class CrCorrectionComponent implements OnInit, OnDestroy {
 					ec => ec.end !== this.correction?.end && ec.start !== this.correction?.start
 				),
 			]);
+	}
+
+	goToCorrectionCategoryView() {
+		this.selectCategory.emit(this.correction?.type);
 	}
 
 	ngOnDestroy(): void {}

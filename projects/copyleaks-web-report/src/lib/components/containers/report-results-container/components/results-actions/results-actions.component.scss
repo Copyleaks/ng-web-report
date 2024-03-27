@@ -128,9 +128,7 @@
 	}
 
 	.clear-button {
-		width: unset;
-		height: unset;
-		line-height: unset;
+		margin-right: 4px;
 	}
 	.clear-button:focus,
 	.clear-button:hover {
@@ -141,11 +139,6 @@
 }
 
 .results-search-filter-container {
-	button {
-		line-height: unset;
-		width: unset;
-		height: unset;
-	}
 	mat-icon {
 		cursor: pointer;
 		color: $color-dark-blue;
@@ -195,7 +188,6 @@ mat-icon {
 
 .clear-icon {
 	color: $color-black;
-	padding-right: 4px;
 }
 
 .search-input {
@@ -216,6 +208,7 @@ mat-icon {
 	width: 14px;
 	height: 14px;
 	color: $color-container-background;
+	line-height: 12px !important;
 }
 
 .chips-container {
@@ -226,10 +219,42 @@ mat-icon {
 	gap: 4px;
 	.chip-button {
 		padding: 0;
-		min-width: unset;
-		line-height: unset;
-		border: none;
-		background-color: transparent;
+		&:focus {
+			::ng-deep {
+				.mat-button-focus-overlay {
+					background-color: transparent;
+					outline: 2px solid black;
+					opacity: 1;
+				}
+			}
+			.clear-filter-chip-button {
+				::ng-deep {
+					.mat-button-focus-overlay {
+						outline: unset;
+					}
+				}
+			}
+		}
+		&:focus-within:not(:focus) {
+			::ng-deep {
+				.mat-button-focus-overlay {
+					background-color: transparent;
+					opacity: 1;
+				}
+			}
+			.clear-filter-chip-button {
+				::ng-deep {
+					.mat-button-focus-overlay {
+						background-color: transparent;
+						outline: unset;
+						opacity: 1;
+					}
+				}
+				mat-icon.clear-filter-icon {
+					color: $color-primary;
+				}
+			}
+		}
 	}
 }
 
@@ -244,4 +269,11 @@ cr-spinner {
 .filter-chip.disabled {
 	opacity: 0.5;
 	pointer-events: none;
+}
+
+.icon-button {
+	width: unset;
+	height: unset;
+	line-height: unset;
+	min-width: unset;
 }

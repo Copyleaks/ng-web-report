@@ -195,6 +195,7 @@ export abstract class OneToManyReportLayoutBaseComponent extends ReportLayoutBas
 						];
 
 						this.scanResultsView = allResults
+							.filter(result => result != undefined)
 							.sort((a, b) => (b.isLocked ? 0 : b.matchedWords) - (a.isLocked ? 0 : a.matchedWords))
 							.map(result => {
 								const foundResultDetail = this.scanResultsDetails?.find(r => r.id === result.id);

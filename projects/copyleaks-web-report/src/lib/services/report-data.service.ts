@@ -612,19 +612,21 @@ export class ReportDataService {
 		let filteredResultsIds = this._getFilteredResultsIds(settings, completeResults, excludedResultsIds);
 
 		// check if a match hiding will make one of the results score zero, if so filter theses results out
-		let resultsUpdateStatistics = this.scanResultsDetails.map(r => {
-			return {
-				...r,
-				result: {
-					...r.result,
-					statistics: {
-						identical: r.result?.statistics.identical,
-						minorChanges: r.result?.statistics.minorChanges,
-						relatedMeaning: r.result?.statistics.relatedMeaning,
+		let resultsUpdateStatistics = this.scanResultsDetails
+			.filter(r => r != undefined)
+			.map(r => {
+				return {
+					...r,
+					result: {
+						...r.result,
+						statistics: {
+							identical: r.result?.statistics?.identical,
+							minorChanges: r.result?.statistics?.minorChanges,
+							relatedMeaning: r.result?.statistics?.relatedMeaning,
+						},
 					},
-				},
-			} as ResultDetailItem;
-		});
+				} as ResultDetailItem;
+			});
 		resultsUpdateStatistics.forEach(r => {
 			if (!settings.showIdentical && r.result?.statistics.identical != undefined) r.result.statistics.identical = 0;
 			if (!settings.showMinorChanges && r.result?.statistics.minorChanges != undefined)

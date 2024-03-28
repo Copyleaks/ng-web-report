@@ -14,6 +14,10 @@ export enum EReportLayoutType {
 	 * Only AI layout/view: The layout where there is only AI view (plagiarism is disabled).
 	 */
 	OnlyAi = 'only-ai',
+	/**
+	 * Only AI layout/view: The layout where there is only AI view (plagiarism is disabled).
+	 */
+	WritingFeedback = 'writing-feedback',
 }
 
 /**
@@ -38,6 +42,7 @@ export enum EReportViewType {
 	AIView = 'AIView',
 	PlagiarismView = 'PlagiarismView',
 	CustomTabView = 'CustomTabView',
+	WritingFeedbackTabView = 'WritingFeedbackTabView',
 }
 
 export enum EReportScoreTooltipPosition {
@@ -98,4 +103,76 @@ export enum EMatchClassification {
 	AI = 2,
 	SameWriter = 3,
 	AnotherWriter = 4,
+}
+
+export enum EWritingFeedbackTypes {
+	General,
+	Grammar,
+	WordChoice,
+	Mechanics,
+	SentenceStructure,
+	MismatchInGenderBetweenAdjectives,
+	IncorrectNumberAgreementBetweenArticles,
+	IncorrectNumberAgreementBetweenNouns,
+}
+
+export enum EWritingFeedbackCategories {
+	General = 1,
+
+	// Grammar
+	SubjectVerbDisagreement,
+	NounForm,
+	VerbForm,
+	Article,
+	Preposition,
+	Pronoun,
+	PartOfSpeech,
+	Conjunction,
+
+	// Word Choice
+	MisusedWord,
+	Homophone,
+
+	// Mechanics
+	Capitalization,
+	Hyphen,
+	Punctuation,
+	Comma,
+	Apostrophe,
+	Space,
+	Spelling,
+
+	// Sentence Structure
+	FusedSentence,
+	CommaSplice,
+	SentenceFragments,
+	IneffectiveConstruction,
+	ExtraWords,
+	MissingWords,
+
+	// Mismatch in gender between adjectives
+	AdjectiveGenderAgreement,
+	AdjectiveNumberAgreement,
+
+	// Incorrect number agreement between articles
+	ArticleGenderAgreement,
+	ArticleNumberAgreement,
+
+	// Incorrect number agreement between nouns
+	NounGenderAgreement,
+	SubjunctiveMood,
+	CompoundWordError,
+	MoodInconsistency,
+	AccentError,
+}
+
+export enum EReadabilityLevel {
+	FifthGrader = 1,
+	SixthGrader,
+	SeventhGrader,
+	EighthNinthGrader,
+	TenthTwelfthGrader,
+	CollegeStudent,
+	CollegeGraduate,
+	Professional,
 }

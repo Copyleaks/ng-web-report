@@ -14,12 +14,17 @@
 			<copyleaks-report-tabs-container
 				[hideAiTap]="hideAiTap"
 				[hidePlagarismTap]="hidePlagarismTap"
+				[hideWritingFeedbackTap]="hideWritingFeedbackTap"
+				[writingFeedbackScore]="reportStatistics?.writingFeedbackOverallScore"
+				[totalWritingFeedbackIssues]="reportStatistics?.writingFeedbackOverallIssues"
 				[selectedTap]="EReportViewType.AIView"
 				[plagarismScore]="plagiarismScore"
 				[aiScore]="reportStatistics?.aiScore ?? 0"
 				[wordsTotal]="reportStatistics?.total ?? 0"
 				[showLoadingView]="isLoadingScanContent"
-				[loadingProgressPct]="loadingProgressPct"></copyleaks-report-tabs-container>
+				[loadingProgressPct]="loadingProgressPct"
+				[isMobile]="true"
+				[showDisabledProducts]="showDisabledProducts"></copyleaks-report-tabs-container>
 
 			<!-- Report scan content viewer -->
 			<copyleaks-content-viewer-container

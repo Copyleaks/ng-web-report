@@ -398,6 +398,10 @@ export class FilterResultDailogComponent implements OnInit {
 			publicationDate: this._filterResultsSvc.resultsMetaFormGroup
 				.get(EFilterResultForm.fgPublicationDate)
 				?.get(EFilterResultForm.fcPublicationStartDate)?.value,
+
+			writingFeedback: {
+				hiddenCategories: this.data.reportDataSvc.filterOptions.writingFeedback?.hiddenCategories ?? [],
+			},
 		} as ICopyleaksReportOptions;
 	}
 

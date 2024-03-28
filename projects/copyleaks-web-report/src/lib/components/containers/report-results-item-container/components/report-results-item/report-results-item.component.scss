@@ -240,6 +240,10 @@
 			.mat-menu-item-icon {
 				opacity: 0.4;
 				color: $color-medium-dark;
+				$icon-size: 18px;
+				width: $icon-size !important;
+				height: $icon-size !important;
+				font-size: $icon-size !important;
 			}
 			.mat-menu-item-text {
 				display: flex;

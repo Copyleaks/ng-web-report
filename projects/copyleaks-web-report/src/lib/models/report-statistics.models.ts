@@ -18,4 +18,8 @@ export interface ReportStatistics {
 	aiScore: number;
 	/** Human probability */
 	humanScore: number;
+	/** Writing Feedback score */
+	writingFeedbackOverallScore?: number;
+	/** Writing Feedback total issues */
+	writingFeedbackOverallIssues?: number;
 }

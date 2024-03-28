@@ -6,7 +6,8 @@ export type PostMessageEvent =
 	| MatchWarnEvent
 	| UpgradePlanEvent
 	| ZoomEvent
-	| MultiMatchSelectEvent;
+	| MultiMatchSelectEvent
+	| CorrectionSelectEvent;
 
 /** base type of post message event */
 interface BasePostMessageEvent {
@@ -55,4 +56,10 @@ export interface UpgradePlanEvent extends BasePostMessageEvent {
 export interface ZoomEvent extends BasePostMessageEvent {
 	type: 'zoom';
 	zoomIn: boolean;
+}
+
+export interface CorrectionSelectEvent extends BasePostMessageEvent {
+	type: 'correction-select';
+	/** the index of the match that was selected */
+	gid: number;
 }

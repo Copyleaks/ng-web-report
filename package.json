@@ -34,6 +34,8 @@
     "@angular/platform-browser-dynamic": "~13.3.0",
     "@angular/router": "~13.3.0",
     "@ncstate/sat-popover": "^4.0.0",
+    "@swimlane/ngx-charts": "^20.5.0",
+    "chart.js": "^4.4.2",
     "ngx-skeleton-loader": "^5.0.0",
     "rxjs": "~6.6.7",
     "scroll-into-view-if-needed": "^2.2.28",

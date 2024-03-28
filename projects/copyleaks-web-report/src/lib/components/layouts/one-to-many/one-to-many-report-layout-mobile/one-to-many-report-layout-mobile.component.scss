@@ -30,6 +30,23 @@
 	.alerts-container {
 		overflow-y: auto;
 	}
+
+	cr-readability-score {
+		border-radius: 10px !important;
+		background: #fbffff !important;
+		padding: 8px !important;
+		display: flex;
+		overflow-y: auto;
+		flex-grow: 0 !important;
+		max-height: 25% !important;
+
+		::ng-deep {
+			.mat-expansion-panel-header {
+				border-bottom: none !important;
+				padding: 0px !important;
+			}
+		}
+	}
 }
 
 .content-section {
@@ -72,6 +89,20 @@
 				background: none !important;
 				box-shadow: none !important;
 			}
+		}
+	}
+}
+
+copyleaks-report-corrections-container {
+	height: auto !important;
+	flex-grow: 0 !important;
+	box-shadow: -2px -2px 8px 0px rgba(255, 255, 255, 0.5), 2px 2px 4px 0px rgba(0, 0, 0, 0.15);
+	border-radius: 10px;
+	background-color: $color-white;
+
+	::ng-deep {
+		cr-correction {
+			width: 320px !important;
 		}
 	}
 }

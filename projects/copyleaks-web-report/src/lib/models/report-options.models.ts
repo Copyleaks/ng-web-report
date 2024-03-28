@@ -1,3 +1,4 @@
+import { EWritingFeedbackCategories } from '../enums/copyleaks-web-report.enums';
 import { ResultPreview } from './report-data.models';
 
 /**
@@ -34,6 +35,12 @@ export interface ICopyleaksReportOptions {
 	includeResultsWithoutDate?: boolean;
 	/** */
 	includedTags?: string[];
+	/** */
+	writingFeedback?: ICopyleaksReportWritingFeedbackOptions;
+}
+
+export interface ICopyleaksReportWritingFeedbackOptions {
+	hiddenCategories?: EWritingFeedbackCategories[];
 }
 
 export interface CopyleaksResultCardAction {

@@ -5,7 +5,7 @@
  * - 'one-to-many': Source is displayed alongside multiple results.
  * - 'one-to-one': Source is displayed alongside a single result.
  */
-export type ViewMode = 'one-to-many' | 'one-to-one' | 'only-ai';
+export type ViewMode = 'one-to-many' | 'one-to-one' | 'only-ai' | 'writing-feedback';
 /** possible content modes of the report */
 export type ContentMode = 'text' | 'html';
 /** possible text direction modes of the report */
@@ -44,6 +44,11 @@ export interface IClsReportEndpointConfigModel {
 	 * @property {IEndpointDetails} result - Object containing endpoint details for fetching individual scan results.
 	 */
 	result: IEndpointDetails;
+
+	/**
+	 * @property {IEndpointDetails} writingFeedback - Object containing endpoint details for fetching writing feedback details.
+	 */
+	writingFeedback?: IEndpointDetails;
 
 	/**
 	 * @property {IEndpointDetails} progress - Object containing endpoint details for fetching scan progress.

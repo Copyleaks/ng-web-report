@@ -18,6 +18,12 @@
 		border-color: $color-primary;
 	}
 
+	::ng-deep {
+		.duplicated-space {
+			background-color: #ffcb8e;
+		}
+	}
+
 	.correction-container {
 		display: flex;
 		flex-direction: row;

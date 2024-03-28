@@ -7,9 +7,8 @@
 					class="wrong-text"
 					[matTooltip]="correction?.wrongText ?? ''"
 					matTooltipClass="web-report-mat-tooltip"
-					i18n-matTooltip>
-					{{ correction.wrongText }}
-				</span>
+					[innerHtml]="correction.wrongText"
+					i18n-matTooltip></span>
 				<mat-icon
 					*ngIf="correction?.wrongText != correction?.correctionText && correction.correctionText"
 					class="arrow-icon"
@@ -22,9 +21,8 @@
 					[style.max-width]="correction?.wrongText != correction?.correctionText ? '42%' : '100%'"
 					[matTooltip]="correction?.correctionText ?? ''"
 					matTooltipClass="web-report-mat-tooltip"
-					i18n-matTooltip>
-					{{ correction.correctionText }}
-				</span>
+					[innerHtml]="correction.correctionText"
+					i18n-matTooltip></span>
 			</div>
 			<mat-chip
 				*ngIf="!hideDescription"

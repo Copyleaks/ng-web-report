@@ -88,7 +88,24 @@ export class CrCorrectionComponent implements OnInit, OnDestroy {
 		if (changes['correction']) {
 			this.correctionType = this.getCorrectionType;
 			this.correctionDescription = this.getCorrectionDescription;
+
+			if (this.correction.type === EWritingFeedbackCategories.Space) {
+				this.correction.correctionText = this.replaceExtraSpacesWithSpan(this.correction.correctionText);
+				this.correction.wrongText = this.replaceExtraSpacesWithSpan(this.correction.wrongText);
+			}
 		}
+	}
+
+	replaceExtraSpacesWithSpan(correctionText) {
+		const regex = /( {2,})/g;
+		const replacementFunction = correction => {
+			let result = ' ';
+			for (let i = 1; i < correction.length; i++) {
+				result += `<span class="duplicated-space">&nbsp;</span>`;
+			}
+			return result;
+		};
+		return correctionText.replace(regex, replacementFunction);
 	}
 
 	ignoreCorrection() {

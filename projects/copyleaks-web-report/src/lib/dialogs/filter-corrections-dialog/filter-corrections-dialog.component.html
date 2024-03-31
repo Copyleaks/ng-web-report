@@ -195,16 +195,13 @@
 		</div>
 
 		<div mat-dialog-content class="excluded-content-container">
-			<ng-container *ngIf="searchedExcludedCorrections && searchedExcludedCorrections.length > 0; else emptyViewRef">
-				<cdk-virtual-scroll-viewport class="correction-info-container" itemSize="107">
-					<cr-correction
-						*cdkVirtualFor="let correction of searchedExcludedCorrections"
-						[correction]="correction"
-						[reportDataSvc]="data?.reportDataSvc"
-						[isExcludeView]="true"></cr-correction>
-				</cdk-virtual-scroll-viewport>
-			</ng-container>
-			<ng-template #emptyViewRef></ng-template>
+			<cdk-virtual-scroll-viewport class="correction-info-container" itemSize="107">
+				<cr-correction
+					*cdkVirtualFor="let correction of searchedExcludedCorrections"
+					[correction]="correction"
+					[reportDataSvc]="data?.reportDataSvc"
+					[isExcludeView]="true"></cr-correction>
+			</cdk-virtual-scroll-viewport>
 		</div>
 
 		<div mat-dialog-actions class="include-all-container">

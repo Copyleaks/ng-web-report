@@ -95,6 +95,7 @@ export class FilterCorrectionsDialogComponent implements OnInit, OnDestroy {
 	onCloseExecludedView() {
 		this.selectedView = EFilterCorrectionsDialogView.Filter;
 		this._dialogRef.removePanelClass('excluded-corrections-dialog');
+		this.excludedCorrections = this.searchedExcludedCorrections = this.data?.reportDataSvc.excludedCorrections;
 	}
 
 	formatCategroyFormControlKey(key: string): string {

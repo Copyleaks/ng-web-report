@@ -110,7 +110,7 @@ export abstract class OneToManyReportLayoutBaseComponent extends ReportLayoutBas
 	}
 
 	get filteredCorrections(): IWritingFeedbackCorrectionViewModel[] {
-		if (!this.reportDataSvc.writingFeedback?.corrections) return [];
+		if (!this.reportDataSvc.writingFeedback?.corrections || !this.reportCrawledVersion) return [];
 		const filteredCorrections = this.reportDataSvc.filterCorrections(
 			JSON.parse(JSON.stringify(this.reportDataSvc.writingFeedback?.corrections)),
 			this.reportDataSvc.filterOptions,
@@ -359,10 +359,16 @@ export abstract class OneToManyReportLayoutBaseComponent extends ReportLayoutBas
 		});
 
 		const { originalText$, originalHtml$, multiOriginalText$ } = this.highlightSvc;
-		combineLatest([originalText$, originalHtml$, multiOriginalText$, this.reportViewSvc.reportViewMode$])
+		combineLatest([
+			originalText$,
+			originalHtml$,
+			multiOriginalText$,
+			this.reportViewSvc.reportViewMode$,
+			this.reportDataSvc.crawledVersion$,
+		])
 			.pipe(
 				untilDestroy(this),
-				filter(([, , , content]) => !content.alertCode)
+				filter(([, , , content, crawledVersion]) => !content.alertCode && !!crawledVersion)
 			)
 			.subscribe(([text, html, multiText, content]) => {
 				if (multiText && multiText.length > 0) {
@@ -590,7 +596,7 @@ export abstract class OneToManyReportLayoutBaseComponent extends ReportLayoutBas
 					viewedCorrections.push({
 						correctionText: filteredCorrections.text.chars.operationTexts[correctionIndex],
 						type: correction.match.writingFeedbackType,
-						wrongText: this.reportCrawledVersion.text.value.substring(correction.match.start, correction.match.end),
+						wrongText: this.reportCrawledVersion?.text?.value?.substring(correction.match.start, correction.match.end),
 						start: correction.match.start,
 						end: correction.match.end,
 						index: this.allScanCorrectionsView?.find(

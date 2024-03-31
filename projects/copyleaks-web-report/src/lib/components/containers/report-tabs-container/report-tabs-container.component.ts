@@ -215,6 +215,35 @@ export class ReportTabsContainerComponent implements OnInit, OnDestroy, OnChange
 					viewMode: 'writing-feedback',
 				});
 			}
+
+			if (
+				!this.showLoadingView &&
+				this.hideWritingFeedbackTap &&
+				this.selectedTap === EReportViewType.WritingFeedbackTabView
+			) {
+				this.selectedTap = !this.hidePlagarismTap
+					? EReportViewType.PlagiarismView
+					: !this.hideAiTap
+					? EReportViewType.AIView
+					: null;
+				this._reportViewSvc.reportViewMode$.next({
+					...this._reportViewSvc.reportViewMode,
+					viewMode:
+						this._reportNgTemplatesSvc.reportTemplatesMode$.value != ECustomResultsReportView.Full &&
+						this._reportNgTemplatesSvc.reportTemplatesMode$.value != ECustomResultsReportView.Partial &&
+						this.hidePlagarismTap
+							? 'only-ai'
+							: 'one-to-many',
+					alertCode: !this.hidePlagarismTap
+						? undefined
+						: !this.hideAiTap
+						? ALERTS.SUSPECTED_AI_TEXT_DETECTED
+						: undefined,
+				});
+				this._reportViewSvc.selectedAlert$.next(
+					!this.hidePlagarismTap ? null : !this.hideAiTap ? ALERTS.SUSPECTED_AI_TEXT_DETECTED : null
+				);
+			}
 		}
 
 		if (this.isMobile && 'selectedTap' in changes) this._updateSelectedTabColors();

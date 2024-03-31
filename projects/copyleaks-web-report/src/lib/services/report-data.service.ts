@@ -420,12 +420,13 @@ export class ReportDataService {
 							.subscribe(
 								writingFeedbackVersionRes => {
 									this._writingFeedback$.next(writingFeedbackVersionRes);
+									this._updateCompleteResults(completeResultsRes);
 								},
 								(error: HttpErrorResponse) => {
 									this._reportErrorsSvc.handleHttpError(error, 'initSync - writingFeedback');
 								}
 							);
-					this._updateCompleteResults(completeResultsRes);
+					else this._updateCompleteResults(completeResultsRes);
 				},
 				(error: HttpErrorResponse) => {
 					this._reportErrorsSvc.handleHttpError(error, 'initSync - completeResults');
@@ -734,6 +735,12 @@ export class ReportDataService {
 		const completeResult = this.scanResultsPreviews;
 		if (this._viewSvc.progress$.value != 100) return true;
 		if (!completeResult || !this.reportEndpointConfig?.writingFeedback) return false;
+		if (
+			completeResult?.notifications?.alerts?.length &&
+			completeResult?.notifications?.alerts.filter(alert => alert.code == ALERTS.WRITING_FEEDBACK_LANG_NOT_SUPPORTED)
+				.length == 1
+		)
+			return false;
 		if (completeResult?.scannedDocument?.enabled?.writingFeedback != null)
 			return completeResult?.scannedDocument?.enabled?.writingFeedback;
 		return false;

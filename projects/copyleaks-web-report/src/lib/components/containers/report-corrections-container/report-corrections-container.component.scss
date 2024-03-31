@@ -81,11 +81,12 @@
 		flex-direction: row;
 		justify-content: flex-start;
 		align-items: center;
-		padding: 4px 0px;
+		padding: 2px 0px 12px 0px;
+		border-bottom: 1px solid $color-container-background;
 
 		.total-corrections-container {
 			display: flex;
-			padding: 8px 8px 8px 0px;
+			padding: 0px 8px 0px 0px;
 			align-items: center;
 			gap: 4px;
 			cursor: pointer;
@@ -100,6 +101,8 @@
 				width: $icon-size;
 				height: $icon-size;
 				font-size: $icon-size;
+				position: relative;
+				left: -3px;
 			}
 			.all-correction-title {
 				font-size: 14px;

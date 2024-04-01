@@ -11,7 +11,7 @@ export class SecondsToTimePipe implements PipeTransform {
 
 		const hours: number = Math.floor(value / 3600);
 		const minutes: number = Math.floor((value % 3600) / 60);
-		const seconds: number = value % 60;
+		const seconds: number = Math.floor(value % 60);
 
 		let timeParts = [];
 		if (hours > 0) {

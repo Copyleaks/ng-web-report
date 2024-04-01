@@ -359,7 +359,7 @@ export const processCorrectionsText = (
 		})
 	);
 
-	const excluded = sourceTextExcluded(source);
+	const excluded = []; // ! temprorarily ignored the excluded for writing feedback scan
 	const grouped = mergeMatches([...extractedCorrections, ...excluded]);
 	const filled = fillMissingGaps(grouped, source.text.value.length);
 	return paginateMatches(source.text.value, source.text.pages.startPosition, filled);
@@ -383,7 +383,7 @@ export const processCorrectionsHtml = (
 			ids: [],
 		})
 	);
-	const excluded = sourceHtmlExcluded(source);
+	const excluded = []; // ! temprorarily ignored the excluded for writing feedback scan
 	const grouped = mergeMatches([...extractedCorrections, ...excluded]);
 	const filled = fillMissingGaps(grouped, source.html?.value?.length);
 

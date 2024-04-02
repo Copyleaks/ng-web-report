@@ -14,41 +14,65 @@ import { ReportMatchHighlightService } from '../../../services/report-match-high
 	styleUrls: ['./cr-corrections-actions.component.scss'],
 })
 export class CrCorrectionsActionsComponent implements OnInit {
+	/**
+	 * The padding style property.
+	 */
 	@HostBinding('style.padding')
 	paddingProp: string;
 
 	/**
-	 * @Input {number} The report Writing Feedback total issues.
+	 * The total number of writing feedback issues.
 	 */
 	@Input() totalWritingFeedbackIssues: number = 0;
 
 	/**
-	 * @Input {number} The report Writing Feedback total ignored issues.
+	 * The total number of ignored writing feedback issues.
 	 */
 	@Input() totalIgnoredWritingFeedbackIssues: number = 0;
 
 	/**
-	 * @Input {number} The report Writing Feedback total ignored issues.
+	 * The total number of selected writing feedback issues.
 	 */
 	@Input() totalSelectedWritingFeedbackIssues: number = 0;
 
 	/**
-	 * @Input {number} The report Writing Feedback total filtered out issues.
+	 * The total number of filtered writing feedback issues.
 	 */
 	@Input() totalFilteredWritingFeedbackIssues: number = 0;
 
+	/**
+	 * The statistics for different types of writing feedback.
+	 */
 	@Input() writingFeedbackStats: IWritingFeedbackTypeStatistics[];
 
+	/**
+	 * Indicates if a correction is clicked.
+	 */
 	@Input() correctionClicked: boolean = false;
 
+	/**
+	 * Indicates if the section should be expanded.
+	 */
 	@Input() expandSection: boolean = false;
 
+	/**
+	 * Indicates if the component is being viewed on a mobile device.
+	 */
 	@Input() isMobile: boolean = false;
 
+	/**
+	 * Indicates if the filter indicator is on.
+	 */
 	@Input() filterIndicatorOn: boolean = false;
 
+	/**
+	 * Indicates if the loading view should be shown.
+	 */
 	@Input() showLoadingView: boolean = true;
 
+	/**
+	 * Event emitter for expand toggle.
+	 */
 	@Output() onExpandToggle = new EventEmitter<boolean>();
 
 	constructor(
@@ -60,6 +84,10 @@ export class CrCorrectionsActionsComponent implements OnInit {
 
 	ngOnInit(): void {}
 
+	/**
+	 * Opens the filter dialog.
+	 * @param excludedView Indicates if the excluded view is selected.
+	 */
 	openFilterDialog(excludedView: boolean = false): void {
 		this._matDialog.open(FilterCorrectionsDialogComponent, {
 			maxWidth: '95%',
@@ -78,14 +106,23 @@ export class CrCorrectionsActionsComponent implements OnInit {
 		});
 	}
 
+	/**
+	 * Clears the filter.
+	 */
 	clearFilter() {
 		this._reportDataSvc.clearCorrectionsFilter();
 	}
 
+	/**
+	 * Deselects the match.
+	 */
 	deselectMatch() {
 		this._highlightService.clearAllMatchs();
 	}
 
+	/**
+	 * Toggles the expand state of the results section.
+	 */
 	expandResultsSection() {
 		this.expandSection = !this.expandSection;
 		this.onExpandToggle.emit(this.expandSection);

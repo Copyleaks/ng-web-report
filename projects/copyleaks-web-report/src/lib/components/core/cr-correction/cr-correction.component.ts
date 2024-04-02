@@ -6,6 +6,7 @@ import { ReportDataService } from '../../../services/report-data.service';
 import { untilDestroy } from '../../../utils/until-destroy';
 import { trigger, state, transition, animate, style } from '@angular/animations';
 import { ReportMatchesService } from '../../../services/report-matches.service';
+import { ReportMatchHighlightService } from '../../../services/report-match-highlight.service';
 
 @Component({
 	selector: 'cr-correction',
@@ -18,6 +19,9 @@ import { ReportMatchesService } from '../../../services/report-matches.service';
 		]),
 	],
 })
+/**
+ * Represents the correction component used for displaying and interacting with a writing feedback correction.
+ */
 export class CrCorrectionComponent implements OnInit, OnDestroy {
 	@HostListener('click', ['$event'])
 	handleClick(_): void {
@@ -25,33 +29,46 @@ export class CrCorrectionComponent implements OnInit, OnDestroy {
 		this.reportMatchesSvc.correctionSelect$.next(this.correction);
 	}
 
+	/**
+	 * @Input Represents the correction for the writing feedback.
+	 */
 	@Input() correction: IWritingFeedbackCorrectionViewModel;
 
 	/**
-	 * @Input {boolean} Flag indicating whether the view is for the execluded correction dialog view.
+	 * @Input {boolean} Flag indicating whether the view is for the execluded correction view.
 	 */
 	@Input() isExcludeView: boolean = false;
 
 	/**
-	 * @Input {boolean} Flag indicating whether the view is for the execluded correction dialog view.
+	 * @Input {boolean} Flag indicating whether to show the correction description or not.
 	 */
 	@Input() hideDescription: boolean = false;
 
 	/**
-	 * @Input {boolean} Flag indicating whether the view is for the execluded correction dialog view.
+	 * @Input Service for all the report data.
 	 */
 	@Input() reportDataSvc: ReportDataService;
 
 	/**
-	 * @Input {boolean} Flag indicating whether the view is for the execluded correction dialog view.
+	 * @Input Service for report matches and corrections.
 	 */
 	@Input() reportMatchesSvc: ReportMatchesService;
+
+	/**
+	 * @Input Service for report match highlight.
+	 */
+	@Input() highlightService: ReportMatchHighlightService;
 
 	/**
 	 * @Input {boolean} Flag indicating whether to show the loading view or not.
 	 */
 	@Input() showLoadingView: boolean = false;
 
+	/**
+	 * Emits an event when a category is selected.
+	 * @event selectCategory
+	 * @type {EventEmitter<EWritingFeedbackCategories>}
+	 */
 	@Output() selectCategory = new EventEmitter<EWritingFeedbackCategories>();
 
 	isExcluded: boolean = false;
@@ -113,11 +130,13 @@ export class CrCorrectionComponent implements OnInit, OnDestroy {
 			!this.reportDataSvc.excludedCorrections?.find(
 				ec => ec.end === this.correction?.end && ec.start === this.correction?.start
 			)
-		)
+		) {
 			this.reportDataSvc.excludedCorrections$.next([
 				...(this.reportDataSvc.excludedCorrections ?? []),
 				this.correction,
 			]);
+			this.highlightService.clearAllMatchs();
+		}
 	}
 
 	excludeToggle() {

@@ -13,18 +13,31 @@ export class CrCorrectionTypePanelComponent implements OnInit, OnChanges {
 	displayProp: string;
 
 	/**
-	 * @Input {boolean} Flag indicating whether the view is a mobile or not.
+	 * Flag indicating whether the view is a mobile or not.
 	 */
 	@Input() isMobile: boolean;
 
+	/**
+	 * The statistics for the writing feedback type.
+	 */
 	@Input() stats: IWritingFeedbackTypeStatistics;
 
+	/**
+	 * Event emitted when a category is selected.
+	 */
 	@Output() selectCategory = new EventEmitter<EWritingFeedbackCategories>();
 
+	/**
+	 * The total number of corrections.
+	 */
 	totalCorrections: number = 0;
 
 	constructor() {}
 
+	/**
+	 * Lifecycle hook that is called when any data-bound property of the component changes.
+	 * @param changes - The changed properties.
+	 */
 	ngOnChanges(changes: SimpleChanges): void {
 		if (changes['stats']) {
 			this.totalCorrections = 0;
@@ -38,14 +51,28 @@ export class CrCorrectionTypePanelComponent implements OnInit, OnChanges {
 
 	ngOnInit(): void {}
 
+	/**
+	 * Gets the title for the correction category.
+	 * @param type - The correction category type.
+	 * @returns The title of the correction category.
+	 */
 	getCorrectionCategoryTitle(type: EWritingFeedbackCategories): string {
 		return getCorrectionCategoryTitle(type);
 	}
 
+	/**
+	 * Gets the title for the correction type.
+	 * @param type - The correction type.
+	 * @returns The title of the correction type.
+	 */
 	getCorrectionTypeTitle(type: EWritingFeedbackTypes): string {
 		return getCorrectionTypeTitle(type);
 	}
 
+	/**
+	 * Handles the selection of a category.
+	 * @param type - The selected category type.
+	 */
 	onSelectCategory(type: EWritingFeedbackCategories): void {
 		this.selectCategory.emit(type);
 	}

@@ -53,8 +53,14 @@ export class ReportCorrectionsContainerComponent implements OnInit, OnDestroy, O
 	 */
 	@Input() totalFilteredCorrections: number = 0;
 
+	/**
+	 * Represents the statistics for different types of writing feedback.
+	 */
 	@Input() writingFeedbackStats: IWritingFeedbackTypeStatistics[];
 
+	/**
+	 * Represents the statistics for different types of writing feedbacks.
+	 */
 	@Input() allWritingFeedbacksStats: IWritingFeedbackTypeStatistics[];
 
 	@Input() displayedScanCorrectionsView: IWritingFeedbackCorrectionViewModel[];
@@ -97,7 +103,7 @@ export class ReportCorrectionsContainerComponent implements OnInit, OnDestroy, O
 	constructor(
 		public reportDataSvc: ReportDataService,
 		public reportMatchesSvc: ReportMatchesService,
-		private _reportMatchesHighlightSvc: ReportMatchHighlightService,
+		public highlightService: ReportMatchHighlightService,
 		private _elementRef: ElementRef
 	) {}
 
@@ -158,7 +164,7 @@ export class ReportCorrectionsContainerComponent implements OnInit, OnDestroy, O
 		this.selectedCategroyTitle = this.getCorrectionCategoryTitle(category);
 		this.selectedCategroyDescription = this.getCorrectionCategoryDescription(category);
 		this.selectedCategroyCorrections = this.displayedScanCorrectionsView.filter(c => c.type === category);
-		this._reportMatchesHighlightSvc.clearAllMatchs();
+		this.highlightService.clearAllMatchs();
 
 		const selectedType = getSelectedCategoryType(category);
 		if (this.writingFeedbackStats && this.writingFeedbackStats[selectedType]) {

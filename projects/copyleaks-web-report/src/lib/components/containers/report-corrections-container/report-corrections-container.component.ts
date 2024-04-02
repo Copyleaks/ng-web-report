@@ -62,17 +62,34 @@ export class ReportCorrectionsContainerComponent implements OnInit, OnDestroy, O
 	 * Represents the statistics for different types of writing feedbacks.
 	 */
 	@Input() allWritingFeedbacksStats: IWritingFeedbackTypeStatistics[];
-
+	/**
+	 * Represents the displayed scan corrections view.
+	 */
 	@Input() displayedScanCorrectionsView: IWritingFeedbackCorrectionViewModel[];
 
+	/**
+	 * Represents all the scan corrections view.
+	 */
 	@Input() allScanCorrectionsView: IWritingFeedbackCorrectionViewModel[];
 
+	/**
+	 * Represents the selected category for writing feedback.
+	 */
 	@Input() selectedCategroy: EWritingFeedbackCategories | undefined = undefined;
 
+	/**
+	 * Represents whether a correction is clicked or not.
+	 */
 	@Input() correctionClicked: boolean = false;
 
+	/**
+	 * Represents whether the component is being viewed on a mobile device.
+	 */
 	@Input() isMobile: boolean = false;
 
+	/**
+	 * Represents whether the loading view should be shown or not.
+	 */
 	@Input() showLoadingView: boolean = true;
 
 	selectedCategroyTotal: number = 0;

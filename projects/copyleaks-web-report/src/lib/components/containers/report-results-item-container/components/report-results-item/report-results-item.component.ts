@@ -22,6 +22,7 @@ import { ReportDataService } from '../../../../../services/report-data.service';
 import { MatDialog } from '@angular/material/dialog';
 import { RemoveResultConfirmationDialogComponent } from '../../../../../dialogs/remove-result-confirmation-dialog/remove-result-confirmation-dialog.component';
 import { IRemoveResultConfirmationDialogData } from '../../../../../dialogs/remove-result-confirmation-dialog/models/remove-result-confirmation-dialog.models';
+import { ReportMatchHighlightService } from '../../../../../services/report-match-highlight.service';
 
 @Component({
 	selector: 'cr-report-results-item',
@@ -43,6 +44,7 @@ export class ReportResultsItemComponent implements OnInit, OnChanges, OnDestroy 
 	@Input() isMobile: boolean = false;
 	@Input() reportViewSvc: ReportViewService;
 	@Input() reportDataSvc: ReportDataService;
+	@Input() highlightService: ReportMatchHighlightService;
 	@Input() reportNgTemplatesSvc: ReportNgTemplatesService;
 
 	@Output() hiddenResultEvent = new EventEmitter<string>();
@@ -170,6 +172,7 @@ export class ReportResultsItemComponent implements OnInit, OnChanges, OnDestroy 
 	hideResult() {
 		this.hiddenResultEvent.emit(this.previewResult.id);
 		this.isResultExcluded = true;
+		this.highlightService.clearAllMatchs();
 	}
 
 	deleteResult() {
@@ -187,6 +190,7 @@ export class ReportResultsItemComponent implements OnInit, OnChanges, OnDestroy 
 				resultInfo: this.resultItem,
 			} as IRemoveResultConfirmationDialogData,
 		});
+		this.highlightService.clearAllMatchs();
 	}
 
 	comapreResult() {

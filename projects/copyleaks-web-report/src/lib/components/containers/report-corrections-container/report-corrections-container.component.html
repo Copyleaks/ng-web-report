@@ -48,6 +48,7 @@
 							[correction]="correction"
 							[reportDataSvc]="reportDataSvc"
 							[reportMatchesSvc]="reportMatchesSvc"
+							[highlightService]="highlightService"
 							[showLoadingView]="false"
 							(selectCategory)="onSelectCategory($event)"></cr-correction>
 					</cdk-virtual-scroll-viewport>
@@ -63,6 +64,7 @@
 							[correction]="correction"
 							[reportDataSvc]="reportDataSvc"
 							[reportMatchesSvc]="reportMatchesSvc"
+							[highlightService]="highlightService"
 							[showLoadingView]="false"></cr-correction>
 					</cdk-virtual-scroll-viewport>
 				</ng-template>
@@ -182,6 +184,7 @@
 			[correction]="correction"
 			[hideDescription]="true"
 			[reportDataSvc]="reportDataSvc"
-			[reportMatchesSvc]="reportMatchesSvc"></cr-correction>
+			[reportMatchesSvc]="reportMatchesSvc"
+			[highlightService]="highlightService"></cr-correction>
 	</cdk-virtual-scroll-viewport>
 </ng-template>

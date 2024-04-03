@@ -1,0 +1,229 @@
+@import '../../../styles/containers.styles.scss';
+@import '../../../styles/styles.scss';
+@import '../../../styles/website-colors.styles.scss';
+@import '../../../styles/cls-mat-components-overrides/cls-progress-bar-overrides.scss';
+
+:host {
+	display: flex;
+	flex-direction: column;
+	gap: 10px;
+
+	cr-corrections-actions {
+		&.mobile {
+			padding: 8px !important;
+		}
+	}
+
+	.corrections-types-container {
+		display: flex;
+		flex-direction: column;
+		gap: 8px;
+	}
+
+	.categorized-summery {
+		color: $color-grayed-out;
+		font-size: 14px;
+		font-style: normal;
+		font-weight: 500;
+		line-height: normal;
+	}
+
+	.corrections-container {
+		height: calc(100% - 40px);
+		overflow: auto;
+		box-sizing: border-box;
+
+		&.mobile {
+			padding: 0px 4px;
+			box-sizing: content-box;
+			width: 100%;
+			height: 108px !important;
+			display: flex;
+			flex-direction: row;
+			align-items: center;
+			justify-content: flex-start;
+		}
+
+		&.less-or-equal-to-one {
+			padding-bottom: 8px;
+		}
+		&.empty.mobile {
+			padding-bottom: 8px;
+			height: 230px !important;
+			align-items: center;
+			justify-content: center;
+		}
+	}
+
+	.correction-info-container {
+		width: 100%;
+		height: 100%;
+
+		&.scroll-with-padding {
+			::ng-deep .cdk-virtual-scroll-content-wrapper {
+				padding-right: 5px !important;
+				box-sizing: border-box;
+			}
+		}
+		::ng-deep .cdk-virtual-scroll-content-wrapper {
+			width: 100%;
+			gap: 8px;
+			display: flex;
+			flex-direction: column;
+			> cr-correction {
+				height: 107px;
+			}
+		}
+	}
+
+	.selected-category-toolbar {
+		display: flex;
+		flex-direction: row;
+		justify-content: flex-start;
+		align-items: center;
+		padding: 12px 0px 12px 0px;
+		border-bottom: 1px solid $color-container-background;
+
+		.total-corrections-container {
+			display: flex;
+			padding: 0px 8px 0px 0px;
+			align-items: center;
+			gap: 4px;
+			cursor: pointer;
+
+			.all-correction-title,
+			.left-arrow {
+				color: $color-dark-blue;
+				transition: 0.4s;
+			}
+			.left-arrow {
+				$icon-size: 18px;
+				width: $icon-size;
+				height: $icon-size;
+				font-size: $icon-size;
+				position: relative;
+				left: -3px;
+			}
+			.all-correction-title {
+				font-size: 14px;
+				font-style: normal;
+				font-weight: 500;
+				line-height: normal;
+			}
+		}
+
+		.total-corrections-container:hover {
+			.all-correction-title,
+			.left-arrow {
+				color: $color-primary !important;
+			}
+		}
+
+		.selected-correction-container {
+			display: flex;
+			flex-direction: row;
+			justify-content: flex-start;
+			align-items: center;
+			gap: 4px;
+			.correction-title,
+			.right-arrow {
+				color: $color-primary;
+			}
+			.right-arrow {
+				$icon-size: 18px;
+				width: $icon-size;
+				height: $icon-size;
+				font-size: $icon-size;
+			}
+			.correction-title {
+				text-overflow: ellipsis;
+				font-size: 14px;
+				font-style: normal;
+				font-weight: 400;
+				line-height: normal;
+			}
+		}
+	}
+
+	.all-corrections-info-container {
+		width: 100%;
+		height: 100%;
+		::ng-deep .cdk-virtual-scroll-content-wrapper {
+			width: 100%;
+			gap: 8px;
+			display: flex;
+			flex-direction: column;
+			> cr-correction {
+				height: 40px !important;
+			}
+		}
+	}
+
+	.navigate-mobie-button-container {
+		align-self: center;
+		padding-bottom: 8px;
+		.navigate-mobie-button-select {
+			background-color: $color-primary !important;
+		}
+
+		.navigate-mobie-button {
+			width: 12px !important;
+			height: 12px !important;
+			padding: 0px !important;
+			border-radius: 50%;
+			background-color: $color-dialog-background;
+			border: 0px;
+		}
+
+		.mat-chip-navigate {
+			font-size: 12px;
+			font-weight: 500;
+			color: $color-white;
+			background-color: $color-dark-blue;
+			padding: 2px 8px !important;
+			height: fit-content !important;
+			min-height: auto !important;
+			line-height: normal !important;
+			border-radius: 16px !important;
+		}
+	}
+
+	.mobile-scroll {
+		height: 100%;
+		width: 100%;
+		overflow-y: hidden;
+		overflow-x: unset;
+		&::-webkit-scrollbar {
+			width: 0px !important;
+			height: 0px !important;
+		}
+
+		::ng-deep .cdk-virtual-scroll-content-wrapper {
+			display: flex;
+			flex-direction: row !important;
+			gap: 8px;
+			cr-report-results-item {
+				height: 189px !important;
+			}
+		}
+	}
+
+	.corrections-loader-container {
+		display: flex;
+		flex-direction: column;
+		gap: 8px;
+		overflow-x: hidden;
+		padding-bottom: 8px;
+		padding-left: 8px;
+		&.mobile {
+			flex-direction: row;
+		}
+		cr-correction {
+			min-width: 300px !important;
+		}
+	}
+
+	.loading-correction-view {
+		pointer-events: none;
+	}
+}

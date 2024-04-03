@@ -38,5 +38,10 @@
 			</clipPath>
 		</defs>
 	</svg>
-	<span class="empty-state-text" web-report-title-font i18n>No matched text results were found!</span>
+	<ng-container *ngIf="message; else defaultMessageRef">
+		<span class="empty-state-text" web-report-title-font i18n>{{ message }}</span>
+	</ng-container>
+	<ng-template #defaultMessageRef>
+		<span class="empty-state-text" web-report-title-font i18n>No matched text results were found!</span>
+	</ng-template>
 </div>

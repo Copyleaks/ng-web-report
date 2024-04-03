@@ -23,6 +23,7 @@ import { ECustomResultsReportView } from '../../core/cr-custom-results/models/cr
 import { EnumNavigateMobileButton } from '../report-results-item-container/components/models/report-result-item.enum';
 import { IResultItem } from '../report-results-item-container/components/models/report-result-item.models';
 import { IResultsActions } from './components/results-actions/models/results-actions.models';
+import { ReportMatchHighlightService } from '../../../services/report-match-highlight.service';
 
 @Component({
 	selector: 'copyleaks-report-results-container',
@@ -98,6 +99,7 @@ export class ReportResultsContainerComponent implements OnInit, OnChanges {
 		private _cdr: ChangeDetectorRef,
 		private _elementRef: ElementRef,
 		public reportDataSvc: ReportDataService,
+		public highlightService: ReportMatchHighlightService,
 		public reportNgTemplatesSvc: ReportNgTemplatesService,
 		public reportViewSvc: ReportViewService
 	) {}

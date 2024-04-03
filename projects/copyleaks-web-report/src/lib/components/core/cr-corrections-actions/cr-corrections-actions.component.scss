@@ -1,0 +1,133 @@
+@import '../../../styles/styles.scss';
+@import '../../../styles/website-colors.styles.scss';
+@import '../../../styles/cls-mat-components-overrides/cls-mat-chip-overrides.scss';
+
+:host {
+	display: flex;
+	flex-direction: row;
+	justify-content: space-between;
+	align-items: center;
+	gap: 10px;
+	border-bottom: 1px solid $color-container-background;
+	padding-bottom: 4px;
+	padding-top: 4px;
+	padding-right: 8px;
+	.corrections-total {
+		display: flex;
+		flex-direction: column;
+		gap: 4px;
+		.corrections-total-title {
+			color: $color-black;
+			font-size: 14px;
+			font-style: normal;
+			font-weight: 700;
+			line-height: normal;
+		}
+		.stats-chips-container {
+			display: flex;
+			flex-direction: row;
+			gap: 4px;
+		}
+	}
+
+	.filter-icon {
+		color: $color-dark-blue;
+		cursor: pointer;
+		&.on,
+		&:hover {
+			color: $color-primary;
+		}
+	}
+
+	.clear-filter-icon {
+		font-size: 14px;
+		width: 14px;
+		height: 14px;
+		color: $color-container-background;
+		line-height: normal !important;
+		&:hover {
+			color: $color-primary;
+		}
+	}
+
+	mat-chip {
+		cursor: pointer;
+		display: flex;
+		flex-direction: row;
+		align-items: center;
+	}
+
+	.diselect-match-icon {
+		cursor: pointer;
+		color: $color-dark-blue;
+		width: 24px !important;
+		height: 24px !important;
+		font-size: 24px !important;
+		&:hover {
+			color: $color-primary;
+		}
+	}
+
+	.expanded-section-icon {
+		transform: rotate(180deg);
+	}
+
+	.actions-btns-container {
+		display: flex;
+		flex-direction: row;
+		gap: 8px;
+		height: fit-content;
+	}
+
+	.expand-icon {
+		margin-right: 0px !important;
+	}
+
+	.skeleton {
+		width: fit-content;
+		display: flex;
+		height: fit-content !important;
+		::ng-deep .loader {
+			height: 19px !important;
+			margin-bottom: 0px !important;
+			border-radius: 10px !important;
+			opacity: 0.2;
+			background-color: $color-medium-dark;
+		}
+	}
+
+	.actions-loader-container {
+		width: 100%;
+		display: flex;
+		flex-direction: row;
+		justify-content: space-between;
+		align-items: center;
+		.search-input-loader {
+			::ng-deep .loader {
+				height: 13px !important;
+			}
+		}
+
+		.icons-loader-container {
+			display: flex;
+			flex-direction: row;
+			gap: 8px;
+
+			.circle {
+				::ng-deep .loader {
+					width: 24px !important;
+					height: 24px !important;
+					border-radius: 50% !important;
+				}
+			}
+		}
+	}
+}
+
+::ng-deep {
+	.filter-corrections-dailog .mat-dialog-container {
+		background-color: $color-white !important;
+		padding: 16px !important;
+		border-radius: 10px !important;
+	}
+}

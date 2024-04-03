@@ -17,7 +17,6 @@ import { ReportMatchHighlightService } from '../../../services/report-match-high
 import { ReportDataService } from '../../../services/report-data.service';
 import { trigger, state, transition, animate, style } from '@angular/animations';
 import { ECustomResultsReportView } from '../../core/cr-custom-results/models/cr-custom-results.enums';
-
 @Component({
 	selector: 'copyleaks-report-tabs-container',
 	templateUrl: './report-tabs-container.component.html',
@@ -61,14 +60,24 @@ export class ReportTabsContainerComponent implements OnInit, OnDestroy, OnChange
 	@Input() excludedTotal: number = 0;
 
 	/**
-	 * @Input {boolean} Flag indicating whether to show the report Plagiarism tab or not.
+	 * @Input {number} The report plagiarism score.
 	 */
 	@Input() plagarismScore: number = 0;
 
 	/**
-	 * @Input {boolean} Flag indicating whether to show the report AI tab or not.
+	 * @Input {number} The report AI score.
 	 */
 	@Input() aiScore: number = 0;
+
+	/**
+	 * @Input {number} The report Writing Feedback score.
+	 */
+	@Input() writingFeedbackScore: number = 0;
+
+	/**
+	 * @Input {number} The report Writing Feedback total issues.
+	 */
+	@Input() totalWritingFeedbackIssues: number = 0;
 
 	/**
 	 * @Input {boolean} Flag indicating whether to show the report Plagiarism tab or not.
@@ -81,6 +90,11 @@ export class ReportTabsContainerComponent implements OnInit, OnDestroy, OnChange
 	@Input() hideAiTap = false;
 
 	/**
+	 * @Input {boolean} Flag indicating whether to show the report Writing Feedback tab or not.
+	 */
+	@Input() hideWritingFeedbackTap = false;
+
+	/**
 	 * @Input {boolean} Flag indicating whether to show the loading view or not.
 	 */
 	@Input() showLoadingView = false;
@@ -91,11 +105,21 @@ export class ReportTabsContainerComponent implements OnInit, OnDestroy, OnChange
 	@Input() showDisabledProducts: boolean = false;
 
 	/**
-	 * @Input {boolean} - Flag indicating whether to still show the disabled products tabs.
+	 * @Input {number} - The current scan progress percentage.
 	 */
 	@Input() loadingProgressPct: number = 0;
 
+	/**
+	 * @Input {string} - Link for the company logo image to display in the tabs panel.
+	 */
 	@Input() companyLogo: string = null;
+
+	/**
+	 * @Input {string} - Flag indicating whether to show the Writing Feedback tab with total number of issues or not (with score percentage).
+	 */
+	@Input() showWritingFeedbackIssues: boolean = true;
+
+	@Input() isMobile: boolean = false;
 
 	EReportViewType = EReportViewType;
 	EReportScoreTooltipPosition = EReportScoreTooltipPosition;
@@ -105,6 +129,18 @@ export class ReportTabsContainerComponent implements OnInit, OnDestroy, OnChange
 	DISABLED: string = $localize`Disabled`;
 
 	totalAiWords = 0;
+
+	plagarismScoreChartColorScheme = {
+		domain: ['#fd7366', '#ffb1b1', '#fed5a9', '#EBF3F5'],
+	};
+
+	aiScoreChartColorScheme = {
+		domain: ['#c1addc', '#EBF3F5'],
+	};
+
+	plagarismScoreChartData = [];
+
+	aiScoreChartData = [];
 
 	constructor(
 		private _reportViewSvc: ReportViewService,
@@ -134,28 +170,132 @@ export class ReportTabsContainerComponent implements OnInit, OnDestroy, OnChange
 			'showDisabledProducts' in changes ||
 			'hidePlagarismTap' in changes ||
 			'hideAiTap' in changes ||
+			'hideWritingFeedbackTap' in changes ||
 			('showLoadingView' in changes && changes['showLoadingView'].currentValue === false)
 		) {
-			if (!this.showLoadingView && this.showDisabledProducts && this.hideAiTap) {
+			if (
+				(!this.showLoadingView &&
+					this.showDisabledProducts &&
+					!this.hidePlagarismTap &&
+					this.hideAiTap &&
+					this.hideWritingFeedbackTap) ||
+				(!this.showLoadingView && !this.hidePlagarismTap && this.hideAiTap && this.hideWritingFeedbackTap)
+			) {
 				this.selectedTap = EReportViewType.PlagiarismView;
 				this._reportViewSvc.selectedAlert$.next(null);
 				this._reportViewSvc.reportViewMode$.next({ ...this._reportViewSvc.reportViewMode, alertCode: undefined });
 			}
-			if (!this.showLoadingView && this.hidePlagarismTap && !this.hideAiTap) {
+
+			if (
+				!this.showLoadingView &&
+				this.hidePlagarismTap &&
+				!this.hideAiTap &&
+				!(this.selectedTap === EReportViewType.WritingFeedbackTabView && !this.hideWritingFeedbackTap)
+			) {
 				this.selectedTap = EReportViewType.AIView;
 				this._reportViewSvc.selectedAlert$.next(ALERTS.SUSPECTED_AI_TEXT_DETECTED);
 				this._reportViewSvc.reportViewMode$.next({
 					...this._reportViewSvc.reportViewMode,
 					viewMode:
 						this._reportNgTemplatesSvc.reportTemplatesMode$.value != ECustomResultsReportView.Full &&
-						this._reportNgTemplatesSvc.reportTemplatesMode$.value != ECustomResultsReportView.Partial
+						this._reportNgTemplatesSvc.reportTemplatesMode$.value != ECustomResultsReportView.Partial &&
+						this.hideWritingFeedbackTap
 							? 'only-ai'
 							: 'one-to-many',
 					alertCode: ALERTS.SUSPECTED_AI_TEXT_DETECTED,
 				});
 			}
+
+			if (!this.showLoadingView && this.hidePlagarismTap && this.hideAiTap && !this.hideWritingFeedbackTap) {
+				this.selectedTap = EReportViewType.WritingFeedbackTabView;
+				this._reportViewSvc.selectedAlert$.next(null);
+				this._reportViewSvc.reportViewMode$.next({
+					...this._reportViewSvc.reportViewMode,
+					alertCode: undefined,
+					viewMode: 'writing-feedback',
+				});
+			}
+
+			if (
+				!this.showLoadingView &&
+				this.hideWritingFeedbackTap &&
+				this.selectedTap === EReportViewType.WritingFeedbackTabView
+			) {
+				this.selectedTap = !this.hidePlagarismTap
+					? EReportViewType.PlagiarismView
+					: !this.hideAiTap
+					? EReportViewType.AIView
+					: null;
+				this._reportViewSvc.reportViewMode$.next({
+					...this._reportViewSvc.reportViewMode,
+					viewMode:
+						this._reportNgTemplatesSvc.reportTemplatesMode$.value != ECustomResultsReportView.Full &&
+						this._reportNgTemplatesSvc.reportTemplatesMode$.value != ECustomResultsReportView.Partial &&
+						this.hidePlagarismTap
+							? 'only-ai'
+							: 'one-to-many',
+					alertCode: !this.hidePlagarismTap
+						? undefined
+						: !this.hideAiTap
+						? ALERTS.SUSPECTED_AI_TEXT_DETECTED
+						: undefined,
+				});
+				this._reportViewSvc.selectedAlert$.next(
+					!this.hidePlagarismTap ? null : !this.hideAiTap ? ALERTS.SUSPECTED_AI_TEXT_DETECTED : null
+				);
+			}
 		}
+
+		if (this.isMobile && 'selectedTap' in changes) this._updateSelectedTabColors();
+
 		this.totalAiWords = Math.ceil(this.aiScore * this.wordsTotal ?? 0);
+
+		if (
+			this.isMobile &&
+			('aiScore' in changes ||
+				'paraphrasedTotal' in changes ||
+				'minorChangesTotal' in changes ||
+				'identicalTotal' in changes ||
+				'wordsTotal' in changes ||
+				('showLoadingView' in changes && changes['showLoadingView'].currentValue === false))
+		) {
+			setTimeout(() => {
+				this.plagarismScoreChartData = [
+					{
+						name: 'Identical',
+						value: this.identicalTotal,
+					},
+					{
+						name: 'Minor Changes',
+						value: this.minorChangesTotal,
+					},
+					{
+						name: 'Paraphrased',
+						value: this.paraphrasedTotal,
+					},
+					{
+						name: 'Left',
+						value:
+							this.wordsTotal -
+							this.excludedTotal -
+							this.identicalTotal -
+							this.minorChangesTotal -
+							this.paraphrasedTotal,
+					},
+				];
+
+				this.aiScoreChartData = [
+					{
+						name: 'AI',
+						value: this.totalAiWords,
+					},
+					{
+						name: 'Human',
+						value: this.wordsTotal - this.totalAiWords,
+					},
+				];
+			});
+		}
 	}
 
 	selectTap(selectedTab: EReportViewType) {
@@ -163,6 +303,9 @@ export class ReportTabsContainerComponent implements OnInit, OnDestroy, OnChange
 			selectedTab == this.selectedTap ||
 			(selectedTab === EReportViewType.PlagiarismView && this.hidePlagarismTap && this.showDisabledProducts) ||
 			(selectedTab === EReportViewType.AIView && this.hideAiTap && this.showDisabledProducts) ||
+			(selectedTab === EReportViewType.WritingFeedbackTabView &&
+				this.hideWritingFeedbackTap &&
+				this.showDisabledProducts) ||
 			this.loadingProgressPct != 100
 		)
 			return;
@@ -176,6 +319,7 @@ export class ReportTabsContainerComponent implements OnInit, OnDestroy, OnChange
 					...this._reportViewSvc.reportViewMode,
 					viewMode:
 						!this.reportDataSvc.isPlagiarismEnabled() &&
+						!this.reportDataSvc.isWritingFeedbackEnabled() &&
 						!this.showDisabledProducts &&
 						this._reportNgTemplatesSvc.reportTemplatesMode$.value != ECustomResultsReportView.Full &&
 						this._reportNgTemplatesSvc.reportTemplatesMode$.value != ECustomResultsReportView.Partial
@@ -200,6 +344,48 @@ export class ReportTabsContainerComponent implements OnInit, OnDestroy, OnChange
 				});
 				this._reportViewSvc.selectedAlert$.next(null);
 				this._reportViewSvc.selectedCustomTabContent$.next(null);
+				break;
+			case EReportViewType.WritingFeedbackTabView:
+				this._reportViewSvc.reportViewMode$.next({
+					...this._reportViewSvc.reportViewMode,
+					viewMode: 'writing-feedback',
+					alertCode: undefined,
+					sourcePageIndex: 1,
+					suspectPageIndex: 1,
+				});
+				this._reportViewSvc.selectedAlert$.next(null);
+				this._reportViewSvc.selectedCustomTabContent$.next(null);
+				break;
+			default:
+				break;
+		}
+	}
+
+	private _updateSelectedTabColors() {
+		switch (this.selectedTap) {
+			case EReportViewType.AIView:
+				this.plagarismScoreChartColorScheme = {
+					domain: ['#fd7366', '#ffb1b1', '#fed5a9', '#FBFFFF'],
+				};
+				this.aiScoreChartColorScheme = {
+					domain: ['#c1addc', '#EBF3F5'],
+				};
+				break;
+			case EReportViewType.PlagiarismView:
+				this.plagarismScoreChartColorScheme = {
+					domain: ['#fd7366', '#ffb1b1', '#fed5a9', '#EBF3F5'],
+				};
+				this.aiScoreChartColorScheme = {
+					domain: ['#c1addc', '#FBFFFF'],
+				};
+				break;
+			case EReportViewType.WritingFeedbackTabView:
+				this.plagarismScoreChartColorScheme = {
+					domain: ['#fd7366', '#ffb1b1', '#fed5a9', '#FBFFFF'],
+				};
+				this.aiScoreChartColorScheme = {
+					domain: ['#c1addc', '#FBFFFF'],
+				};
 				break;
 			default:
 				break;

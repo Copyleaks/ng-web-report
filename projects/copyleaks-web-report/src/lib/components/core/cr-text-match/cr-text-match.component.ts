@@ -33,7 +33,7 @@ export class CrTextMatchComponent implements AfterContentInit {
 		if (value) {
 			scrollIntoView(this.element.nativeElement, {
 				behavior: 'smooth',
-				block: 'nearest',
+				block: 'center',
 				skipOverflowHiddenElements: true,
 			});
 		}

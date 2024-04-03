@@ -37,7 +37,6 @@
 	.results-alerts-container {
 		display: flex;
 		flex-direction: column;
-		gap: 10px;
 		flex-grow: 100;
 		height: auto;
 		padding: 8px;
@@ -52,6 +51,16 @@
 			::ng-deep .report-results-item-top-container {
 				height: calc(100% - 48px) !important;
 			}
+		}
+
+		cr-readability-score {
+			flex-grow: 0 !important;
+		}
+
+		copyleaks-report-corrections-container {
+			height: 95%;
+			flex-grow: 95;
+			overflow-y: auto;
 		}
 	}
 }
@@ -76,4 +85,24 @@ copyleaks-report-alerts-container {
 	flex-grow: 0 !important;
 	flex-shrink: 0 !important;
 	height: auto !important;
+}
+
+.cr-correction-container {
+	height: 95%;
+	flex-grow: 95;
+	overflow-y: auto;
+}
+
+.corrections-types-container {
+	display: flex;
+	flex-direction: column;
+	gap: 8px;
+}
+
+.categorized-summery {
+	color: $color-grayed-out;
+	font-size: 14px;
+	font-style: normal;
+	font-weight: 500;
+	line-height: normal;
 }

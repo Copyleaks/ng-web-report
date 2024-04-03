@@ -42,6 +42,7 @@
 								[isMobile]="isMobile"
 								[reportViewSvc]="reportViewSvc"
 								[reportDataSvc]="reportDataSvc"
+								[highlightService]="highlightService"
 								[reportNgTemplatesSvc]="reportNgTemplatesSvc"
 								(hiddenResultEvent)="excludeResultById($event)"
 								(showResultEvent)="includeResultById($event)"
@@ -67,6 +68,7 @@
 								[isMobile]="isMobile"
 								[reportViewSvc]="reportViewSvc"
 								[reportDataSvc]="reportDataSvc"
+								[highlightService]="highlightService"
 								[reportNgTemplatesSvc]="reportNgTemplatesSvc"
 								(hiddenResultEvent)="excludeResultById($event)"
 								(showResultEvent)="includeResultById($event)"
@@ -92,6 +94,7 @@
 						[reportViewSvc]="reportViewSvc"
 						[reportNgTemplatesSvc]="reportNgTemplatesSvc"
 						[reportDataSvc]="reportDataSvc"
+						[highlightService]="highlightService"
 						[showLoader]="true"
 						[style]="'width:100%'"></cr-report-results-item>
 				</ng-container>
@@ -186,6 +189,7 @@
 							[reportViewSvc]="reportViewSvc"
 							[reportNgTemplatesSvc]="reportNgTemplatesSvc"
 							[reportDataSvc]="reportDataSvc"
+							[highlightService]="highlightService"
 							[showLoader]="true"
 							[style]="'width:100%'"></cr-report-results-item>
 					</ng-container>
@@ -197,6 +201,7 @@
 							[reportViewSvc]="reportViewSvc"
 							[reportNgTemplatesSvc]="reportNgTemplatesSvc"
 							[reportDataSvc]="reportDataSvc"
+							[highlightService]="highlightService"
 							[resultItem]="item"
 							[isMobile]="isMobile"
 							[showLoader]="false"
@@ -213,6 +218,7 @@
 							[reportViewSvc]="reportViewSvc"
 							[reportNgTemplatesSvc]="reportNgTemplatesSvc"
 							[reportDataSvc]="reportDataSvc"
+							[highlightService]="highlightService"
 							[showLoader]="true"
 							[style]="'width:100%'"></cr-report-results-item>
 					</ng-container>

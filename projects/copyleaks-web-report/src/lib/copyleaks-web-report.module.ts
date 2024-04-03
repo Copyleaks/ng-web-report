@@ -76,6 +76,15 @@ import { ReportRealtimeResultsService } from './services/report-realtime-results
 import { RemoveResultConfirmationDialogComponent } from './dialogs/remove-result-confirmation-dialog/remove-result-confirmation-dialog.component';
 import { CrSpinnerModule } from './components/core/cr-spinner/cr-spinner.module';
 import { DecodeUriPipeModule } from './pipes/decode-uri/decode-uri.module';
+import { ReportCorrectionsContainerComponent } from './components/containers/report-corrections-container/report-corrections-container.component';
+import { CrCorrectionComponent } from './components/core/cr-correction/cr-correction.component';
+import { CrReadabilityScoreComponent } from './components/core/cr-readability-score/cr-readability-score.component';
+import { CrCorrectionTypePanelComponent } from './components/core/cr-correction-type-panel/cr-correction-type-panel.component';
+import { CrCorrectionsActionsComponent } from './components/core/cr-corrections-actions/cr-corrections-actions.component';
+import { FilterCorrectionsDialogComponent } from './dialogs/filter-corrections-dialog/filter-corrections-dialog.component';
+import { FilterCorrectionsDialogService } from './dialogs/filter-corrections-dialog/services/filter-corrections-dialog.service';
+import { NgxChartsModule } from '@swimlane/ngx-charts';
+import { SecondsToTimePipeModule } from './pipes/seconds-to-time/seconds-to-time.module';
 
 @NgModule({
 	declarations: [
@@ -108,6 +117,7 @@ import { DecodeUriPipeModule } from './pipes/decode-uri/decode-uri.module';
 		ReportExpandResultItemComponent,
 		PercentageResultItemComponent,
 		ReportTabsContainerComponent,
+		ReportCorrectionsContainerComponent,
 		OneToManyReportLayoutDesktopComponent,
 		OneToManyReportLayoutMobileComponent,
 		OneToOneReportLayoutDesktopComponent,
@@ -124,6 +134,11 @@ import { DecodeUriPipeModule } from './pipes/decode-uri/decode-uri.module';
 		MatSlideFilterResultComponent,
 		MatSlideLogoFilterResultComponent,
 		ExcludedResultsDailogComponent,
+		CrCorrectionComponent,
+		CrReadabilityScoreComponent,
+		CrCorrectionTypePanelComponent,
+		CrCorrectionsActionsComponent,
+		FilterCorrectionsDialogComponent,
 	],
 	imports: [
 		CommonModule,
@@ -146,6 +161,7 @@ import { DecodeUriPipeModule } from './pipes/decode-uri/decode-uri.module';
 		MatExpansionModule,
 		SimilarityPipeModule,
 		DecodeUriPipeModule,
+		SecondsToTimePipeModule,
 		CrReportScoreTooltipModule,
 		MatSlideToggleModule,
 		MatDividerModule,
@@ -153,6 +169,7 @@ import { DecodeUriPipeModule } from './pipes/decode-uri/decode-uri.module';
 		MatCheckboxModule,
 		MatProgressBarModule,
 		CrSpinnerModule,
+		NgxChartsModule,
 	],
 	exports: [
 		CopyleaksWebReportComponent,
@@ -166,6 +183,6 @@ import { DecodeUriPipeModule } from './pipes/decode-uri/decode-uri.module';
 		CrCustomResultsBoxContentComponent,
 		EmptyResultStateComponent,
 	],
-	providers: [ReportRealtimeResultsService, FilterResultDailogService],
+	providers: [ReportRealtimeResultsService, FilterResultDailogService, FilterCorrectionsDialogService],
 })
 export class CopyleaksWebReportModule {}

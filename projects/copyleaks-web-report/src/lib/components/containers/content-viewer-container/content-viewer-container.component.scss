@@ -153,6 +153,15 @@
 				}
 			}
 
+			&.cr-m-3 {
+				background-color: $color-grammar-dark;
+				transition: 0.2s;
+
+				&:hover {
+					background-color: $color-match-selected;
+				}
+			}
+
 			&.cr-m-100 {
 				background: transparent;
 				color: red;

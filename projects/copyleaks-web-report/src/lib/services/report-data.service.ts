@@ -12,11 +12,17 @@ import {
 	ICompleteResults,
 	IDatabaseResultPreview,
 	IDeleteScanResultModel,
+	IExcludedCorrection,
+	IHtmlWritingFeedbackRange,
 	IInternetResultPreview,
 	IRepositoryResultPreview,
 	IResultDetailResponse,
 	IResultPreviewBase,
 	IScanSource,
+	IWritingFeedback,
+	IWritingFeedbackCorrectionViewModel,
+	IWritingFeedbackRange,
+	IWritingFeedbackScanScource,
 	ResultPreview,
 } from '../models/report-data.models';
 import { AIScanResult, ResultDetailItem } from '../models/report-matches.models';
@@ -87,6 +93,29 @@ export class ReportDataService {
 	 */
 	public get crawledVersion() {
 		return this._crawledVersion$.value;
+	}
+
+	private _writingFeedback$ = new BehaviorSubject<IWritingFeedback | undefined>(undefined);
+	/**
+	 * Subject for sharing the report writing feedback details.
+	 */
+	public get writingFeedback$() {
+		return this._writingFeedback$;
+	}
+	/**
+	 * Getter for the report writing feedback details.
+	 */
+	public get writingFeedback() {
+		return this._writingFeedback$.value;
+	}
+
+	private _excludedCorrections$ = new BehaviorSubject<IExcludedCorrection[] | undefined>(undefined);
+	/** Emits matches that are relevant to source html one-to-many mode */
+	public get excludedCorrections$() {
+		return this._excludedCorrections$;
+	}
+	public get excludedCorrections() {
+		return this._excludedCorrections$.value;
 	}
 
 	private _filterOptions$ = new BehaviorSubject<ICopyleaksReportOptions | undefined>(undefined);
@@ -184,12 +213,21 @@ export class ReportDataService {
 		private _reportErrorsSvc: ReportErrorsService,
 		private _percentPipe: PercentPipe
 	) {
-		combineLatest([this.filterOptions$, this.excludedResultsIds$, this.scanResultsDetails$])
+		combineLatest([
+			this.filterOptions$,
+			this.excludedResultsIds$,
+			this.scanResultsDetails$,
+			this.excludedCorrections$,
+			this.writingFeedback$,
+		])
 			.pipe(
 				untilDestroy(this),
-				filter(([options, excludedResultsIds]) => options !== undefined && excludedResultsIds !== undefined)
+				filter(
+					([options, excludedResultsIds, , excludedCorrections]) =>
+						options !== undefined && excludedResultsIds !== undefined && excludedCorrections !== undefined
+				)
 			)
-			.subscribe(([options, excludedResultsIds]) => {
+			.subscribe(([options, excludedResultsIds, , excludedCorrections, writingFeedback]) => {
 				if (
 					!this.scanResultsPreviews ||
 					this.scanResultsPreviews === undefined ||
@@ -197,15 +235,31 @@ export class ReportDataService {
 					!this.scanResultsDetails === undefined ||
 					!options ||
 					!excludedResultsIds ||
+					!excludedCorrections ||
 					this._viewSvc.progress$.value !== 100 ||
 					(this.totalCompleteResults <= 100 &&
 						this.scanResultsDetails.length != this.totalCompleteResults &&
-						this.realTimeView)
+						this.realTimeView) ||
+					(this.isWritingFeedbackEnabled() && writingFeedback === undefined)
 				)
 					return;
 
 				const filteredResults = this.filterResults(options, excludedResultsIds);
-				const stats: ReportStatistics = this._getReportStats(filteredResults, this.scanResultsPreviews);
+				let filteredCorrections: IWritingFeedbackScanScource;
+				if (writingFeedback) {
+					filteredCorrections = this.filterCorrections(
+						JSON.parse(JSON.stringify(writingFeedback?.corrections)),
+						this.filterOptions,
+						this.excludedCorrections
+					);
+				}
+
+				const stats: ReportStatistics = this._getReportStats(
+					filteredResults,
+					this.scanResultsPreviews,
+					filteredCorrections,
+					writingFeedback
+				);
 				const filteredOutResultsIds = [
 					...(this.scanResultsPreviews$.value?.results.internet ?? []),
 					...(this.scanResultsPreviews$.value?.results.batch ?? []),
@@ -235,7 +289,9 @@ export class ReportDataService {
 							identicalWords: stats.identical,
 							minorChangedWords: stats.minorChanges,
 							relatedMeaningWords: stats.relatedMeaning,
-							aggregatedScore: stats.aggregatedScore ?? 0,
+							aggregatedScore: this.isPlagiarismEnabled() ? stats.aggregatedScore ?? 0 : null,
+							writingFeedbackOverallIssues: this.isWritingFeedbackEnabled() ? stats.writingFeedbackOverallIssues : null,
+							writingFeedbackOverallScore: this.isWritingFeedbackEnabled() ? stats.writingFeedbackOverallScore : null,
 						},
 					},
 					filters: {
@@ -269,6 +325,10 @@ export class ReportDataService {
 						},
 						execludedResultIds: excludedResultsIds ?? [],
 						filteredResultIds: filteredOutResultsIds ?? [],
+						writingFeedback: {
+							hiddenCategories: options.writingFeedback.hiddenCategories ?? [],
+							excludedCorrections: excludedCorrections,
+						},
 					},
 				});
 			});
@@ -321,7 +381,6 @@ export class ReportDataService {
 		// first emit the progress as 100, so no real-time view is rendered
 		this._viewSvc.progress$.next(100);
 
-		// Create observables for each request with error handling
 		this._http
 			.get<IScanSource>(endpointsConfig.crawledVersion.url, {
 				headers: this._createHeaders(endpointsConfig.crawledVersion),
@@ -331,7 +390,7 @@ export class ReportDataService {
 				crawledVersionRes => {
 					this._crawledVersion$.next(crawledVersionRes);
 
-					if (!crawledVersionRes.html.value && this._viewSvc.reportViewMode.isHtmlView)
+					if (!crawledVersionRes.html?.value && this._viewSvc.reportViewMode.isHtmlView)
 						this._viewSvc.reportViewMode$.next({
 							...this._viewSvc.reportViewMode,
 							isHtmlView: false,
@@ -351,7 +410,23 @@ export class ReportDataService {
 				completeResultsRes => {
 					this.completeResultsSnapshot = JSON.parse(JSON.stringify(completeResultsRes));
 					this._scanResultsPreviews$.next(completeResultsRes);
-					this._updateCompleteResults(completeResultsRes);
+					// if the writing feedback endpoint is passed & is enabled in the complete results response then fetch its data
+					if (endpointsConfig.writingFeedback && endpointsConfig.writingFeedback.url && this.isWritingFeedbackEnabled())
+						this._http
+							.get<IWritingFeedback>(endpointsConfig.writingFeedback?.url, {
+								headers: this._createHeaders(endpointsConfig.writingFeedback),
+							})
+							.pipe(untilDestroy(this))
+							.subscribe(
+								writingFeedbackVersionRes => {
+									this._writingFeedback$.next(writingFeedbackVersionRes);
+									this._updateCompleteResults(completeResultsRes);
+								},
+								(error: HttpErrorResponse) => {
+									this._reportErrorsSvc.handleHttpError(error, 'initSync - writingFeedback');
+								}
+							);
+					else this._updateCompleteResults(completeResultsRes);
 				},
 				(error: HttpErrorResponse) => {
 					this._reportErrorsSvc.handleHttpError(error, 'initSync - completeResults');
@@ -377,6 +452,9 @@ export class ReportDataService {
 							enabled: {
 								aiDetection: false,
 								plagiarismDetection: false,
+								cheatDetection: false,
+								pdfReport: false,
+								writingFeedback: false,
 							},
 						},
 						status: EScanStatus.Error,
@@ -535,19 +613,21 @@ export class ReportDataService {
 		let filteredResultsIds = this._getFilteredResultsIds(settings, completeResults, excludedResultsIds);
 
 		// check if a match hiding will make one of the results score zero, if so filter theses results out
-		let resultsUpdateStatistics = this.scanResultsDetails.map(r => {
-			return {
-				...r,
-				result: {
-					...r.result,
-					statistics: {
-						identical: r.result?.statistics.identical,
-						minorChanges: r.result?.statistics.minorChanges,
-						relatedMeaning: r.result?.statistics.relatedMeaning,
+		let resultsUpdateStatistics = this.scanResultsDetails
+			.filter(r => r != undefined)
+			.map(r => {
+				return {
+					...r,
+					result: {
+						...r.result,
+						statistics: {
+							identical: r.result?.statistics?.identical,
+							minorChanges: r.result?.statistics?.minorChanges,
+							relatedMeaning: r.result?.statistics?.relatedMeaning,
+						},
 					},
-				},
-			} as ResultDetailItem;
-		});
+				} as ResultDetailItem;
+			});
 		resultsUpdateStatistics.forEach(r => {
 			if (!settings.showIdentical && r.result?.statistics.identical != undefined) r.result.statistics.identical = 0;
 			if (!settings.showMinorChanges && r.result?.statistics.minorChanges != undefined)
@@ -651,6 +731,21 @@ export class ReportDataService {
 		return false;
 	}
 
+	public isWritingFeedbackEnabled() {
+		const completeResult = this.scanResultsPreviews;
+		if (this._viewSvc.progress$.value != 100) return true;
+		if (!completeResult || !this.reportEndpointConfig?.writingFeedback) return false;
+		if (
+			completeResult?.notifications?.alerts?.length &&
+			completeResult?.notifications?.alerts.filter(alert => alert.code == ALERTS.WRITING_FEEDBACK_LANG_NOT_SUPPORTED)
+				.length == 1
+		)
+			return false;
+		if (completeResult?.scannedDocument?.enabled?.writingFeedback != null)
+			return completeResult?.scannedDocument?.enabled?.writingFeedback;
+		return false;
+	}
+
 	public getAiScore() {
 		if (this.isAiDetectionEnabled()) {
 			const completeResult = this.scanResultsPreviews;
@@ -663,6 +758,15 @@ export class ReportDataService {
 				return aiData.summary.ai;
 			}
 			return 0;
+		}
+		return null;
+	}
+
+	public getWritingFeedbackScore() {
+		if (this.isWritingFeedbackEnabled()) {
+			const completeResult = this.scanResultsPreviews;
+			if (completeResult === undefined || !completeResult.writingFeedback) return null;
+			return completeResult.writingFeedback.score.overallScore;
 		}
 		return null;
 	}
@@ -689,6 +793,20 @@ export class ReportDataService {
 
 			includeResultsWithoutDate: true,
 			publicationDate: undefined,
+
+			writingFeedback: {
+				hiddenCategories: this.filterOptions?.writingFeedback?.hiddenCategories ?? [],
+			},
+		});
+	}
+
+	public clearCorrectionsFilter() {
+		// Load the filter options from the complete results response
+		this.filterOptions$.next({
+			...this.filterOptions,
+			writingFeedback: {
+				hiddenCategories: [],
+			},
 		});
 	}
 
@@ -772,6 +890,70 @@ export class ReportDataService {
 		}
 	}
 
+	public filterCorrections(
+		corrections: IWritingFeedbackScanScource,
+		filterOptions: ICopyleaksReportOptions,
+		excludedCorrections: IWritingFeedbackCorrectionViewModel[]
+	): IWritingFeedbackScanScource {
+		// Filter indices where the type matches any of the corrections hidden categories
+
+		let htmlFilteredFeedback: IHtmlWritingFeedbackRange;
+		const hasHtml =
+			!!corrections?.html?.chars &&
+			!!corrections?.html?.chars.types &&
+			!!corrections?.html?.chars.groupIds &&
+			!!corrections?.html?.chars.lengths &&
+			!!corrections?.html?.chars.starts;
+		if (hasHtml) {
+			const htmlFilterIndices = corrections?.html?.chars.types.reduce((indices, currentType, index) => {
+				const groupId = corrections?.html?.chars.groupIds[index];
+				const start = corrections.text.chars.starts[groupId];
+				const length = corrections.text.chars.lengths[groupId];
+				if (
+					(filterOptions?.writingFeedback?.hiddenCategories ?? []).includes(currentType) ||
+					(excludedCorrections ?? []).find(ex => ex.start === start && ex.end === start + length)
+				) {
+					indices.push(index);
+				}
+				return indices;
+			}, [] as number[]);
+
+			// Update both the text & html corrections ranges to filter the hidden categories
+			htmlFilteredFeedback = {
+				starts: corrections?.html?.chars.starts.filter((_, index) => !htmlFilterIndices.includes(index)),
+				lengths: corrections?.html?.chars.lengths.filter((_, index) => !htmlFilterIndices.includes(index)),
+				types: corrections?.html?.chars.types.filter((_, index) => !htmlFilterIndices.includes(index)),
+				operationTexts: corrections?.html?.chars.operationTexts.filter(
+					(_, index) => !htmlFilterIndices.includes(index)
+				),
+				groupIds: corrections?.html?.chars.groupIds.filter((_, index) => !htmlFilterIndices.includes(index)),
+			};
+		}
+
+		const textFilterIndices = corrections.text.chars.types.reduce((indices, currentType, index) => {
+			const start = corrections.text.chars.starts[index];
+			const length = corrections.text.chars.lengths[index];
+			if (
+				(filterOptions?.writingFeedback?.hiddenCategories ?? []).includes(currentType) ||
+				(excludedCorrections ?? []).find(ex => ex.start === start && ex.end === start + length)
+			) {
+				indices.push(index);
+			}
+			return indices;
+		}, [] as number[]);
+		const textFilteredFeedback: IWritingFeedbackRange = {
+			starts: corrections.text.chars.starts.filter((_, index) => !textFilterIndices.includes(index)),
+			lengths: corrections.text.chars.lengths.filter((_, index) => !textFilterIndices.includes(index)),
+			types: corrections.text.chars.types.filter((_, index) => !textFilterIndices.includes(index)),
+			operationTexts: corrections.text.chars.operationTexts.filter((_, index) => !textFilterIndices.includes(index)),
+		};
+
+		corrections.text.chars = textFilteredFeedback;
+		if (hasHtml) corrections.html.chars = htmlFilteredFeedback;
+
+		return corrections;
+	}
+
 	private async _checkScanProgress(progress: IAPIProgress) {
 		if (progress.percents < 100 && progress.percents > 36 && !this._crawledVersion$.value) {
 			const crawledVersion = await this._getReportCrawledVersion();
@@ -798,6 +980,15 @@ export class ReportDataService {
 						isHtmlView: false,
 					});
 			}
+
+			if (
+				this.reportEndpointConfig.writingFeedback &&
+				this.reportEndpointConfig.writingFeedback.url &&
+				this.isWritingFeedbackEnabled()
+			) {
+				const writingFeedback = await this._getReportWritingFeedback();
+				this._writingFeedback$.next(writingFeedback);
+			}
 		}
 	}
 
@@ -819,6 +1010,9 @@ export class ReportDataService {
 
 		// Load the excluded results Ids
 		this._excludedResultsIds$.next(completeResultsRes.filters?.execludedResultIds ?? []);
+
+		// Load the excluded corrections
+		this._excludedCorrections$.next(completeResultsRes.filters?.writingFeedback?.excludedCorrections ?? []);
 
 		// Load the filter options from the complete results response
 		this._filterOptions$.next({
@@ -871,10 +1065,26 @@ export class ReportDataService {
 					? completeResultsRes.filters?.resultsMetaData?.publicationDate?.resultsWithNoDates
 					: true,
 			publicationDate: completeResultsRes.filters?.resultsMetaData?.publicationDate?.startDate,
+			writingFeedback: {
+				hiddenCategories: completeResultsRes.filters?.writingFeedback?.hiddenCategories ?? [],
+			},
 		});
 
 		const filteredResults = this.filterResults(this.filterOptions, this.excludedResultsIds);
-		const stats: ReportStatistics = this._getReportStats(filteredResults, completeResultsRes);
+		let filteredCorrections: IWritingFeedbackScanScource;
+		if (this.writingFeedback) {
+			filteredCorrections = this.filterCorrections(
+				JSON.parse(JSON.stringify(this.writingFeedback?.corrections)),
+				this.filterOptions,
+				this.excludedCorrections
+			);
+		}
+		const stats: ReportStatistics = this._getReportStats(
+			filteredResults,
+			completeResultsRes,
+			filteredCorrections,
+			this.writingFeedback
+		);
 
 		this._scanResultsPreviews$.next({
 			...completeResultsRes,
@@ -884,7 +1094,9 @@ export class ReportDataService {
 					identicalWords: stats.identical,
 					minorChangedWords: stats.minorChanges,
 					relatedMeaningWords: stats.relatedMeaning,
-					aggregatedScore: stats.aggregatedScore ?? 0,
+					aggregatedScore: this.isPlagiarismEnabled() ? stats.aggregatedScore ?? 0 : null,
+					writingFeedbackOverallIssues: this.isWritingFeedbackEnabled() ? stats.writingFeedbackOverallIssues : null,
+					writingFeedbackOverallScore: this.isWritingFeedbackEnabled() ? stats.writingFeedbackOverallScore : null,
 				},
 			},
 			filters: {
@@ -927,21 +1139,47 @@ export class ReportDataService {
 		}
 	}
 
-	private _getReportStats(filteredResults: ResultDetailItem[], completeResultsRes: ICompleteResults) {
+	private _getReportStats(
+		filteredResults: ResultDetailItem[],
+		completeResultsRes: ICompleteResults,
+		filteredCorrections?: IWritingFeedbackScanScource,
+		writingFeedback?: IWritingFeedback
+	) {
 		const showAll =
 			this.filterOptions?.showIdentical && this.filterOptions?.showMinorChanges && this.filterOptions?.showRelated;
-		const missingAggregated =
-			this.totalCompleteResults !== 0 && this.scanResultsPreviews?.results.score.aggregatedScore === 0;
+
 		const numberOfOriginalResults = this.totalOriginalCompleteResults;
 		let stats: ReportStatistics;
 		if (
 			this.totalCompleteResults != filteredResults.length ||
 			!showAll ||
-			missingAggregated ||
 			!this.completeResultsSnapshot ||
-			numberOfOriginalResults != this.totalCompleteResults
+			numberOfOriginalResults != this.totalCompleteResults ||
+			(this.isWritingFeedbackEnabled() &&
+				this.writingFeedback &&
+				this.writingFeedback?.corrections.text.chars.operationTexts?.length !=
+					filteredCorrections?.text?.chars?.operationTexts?.length)
 		) {
 			stats = helpers.calculateStatistics(completeResultsRes, filteredResults, this.filterOptions);
+
+			if (
+				this.isWritingFeedbackEnabled() &&
+				this.writingFeedback &&
+				this.writingFeedback?.corrections.text.chars.operationTexts?.length !=
+					filteredCorrections?.text?.chars?.operationTexts?.length
+			) {
+				const wfStats = helpers.getWritingFeedbackStatistics(
+					writingFeedback?.score,
+					filteredCorrections,
+					completeResultsRes?.scannedDocument?.totalWords
+				);
+				stats.writingFeedbackOverallIssues = wfStats.overallTotalIssues;
+				stats.writingFeedbackOverallScore = wfStats.overallScore;
+			} else {
+				stats.writingFeedbackOverallIssues = filteredCorrections?.text?.chars?.operationTexts?.length ?? 0;
+				stats.writingFeedbackOverallScore =
+					(this.completeResultsSnapshot?.writingFeedback?.score?.overallScore ?? 0) / 100;
+			}
 		} else {
 			// * if results are still loading  or no results are fitlered while all match types are visible
 			// * we can use the complete result stats without heavy calculations
@@ -955,6 +1193,8 @@ export class ReportDataService {
 				total: this.completeResultsSnapshot.scannedDocument.totalWords,
 				aiScore: aiStatistics?.ai ?? 0,
 				humanScore: aiStatistics?.human ?? 0,
+				writingFeedbackOverallScore: (this.completeResultsSnapshot?.writingFeedback?.score?.overallScore ?? 0) / 100,
+				writingFeedbackOverallIssues: filteredCorrections?.text?.chars?.operationTexts?.length ?? 0,
 			};
 		}
 		return stats;
@@ -991,6 +1231,16 @@ export class ReportDataService {
 		return await this._http
 			.get<ICompleteResults>(this._reportEndpointConfig$.value.completeResults.url, {
 				headers: this._createHeaders(this._reportEndpointConfig$.value.completeResults),
+			})
+			.toPromise();
+	}
+
+	private async _getReportWritingFeedback() {
+		if (!this._reportEndpointConfig$.value || !this._reportEndpointConfig$.value.completeResults?.url) return undefined;
+
+		return await this._http
+			.get<IWritingFeedback>(this._reportEndpointConfig$.value.writingFeedback.url, {
+				headers: this._createHeaders(this._reportEndpointConfig$.value.writingFeedback),
 			})
 			.toPromise();
 	}

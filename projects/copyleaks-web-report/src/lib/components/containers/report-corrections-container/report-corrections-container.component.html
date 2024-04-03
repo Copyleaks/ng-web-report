@@ -1,0 +1,190 @@
+<ng-container *ngIf="selectedCategroy === undefined; else selectedCategroyRef">
+	<cr-corrections-actions
+		[class.mobile]="isMobile"
+		[totalWritingFeedbackIssues]="totalWritingFeedbackIssues"
+		[totalFilteredWritingFeedbackIssues]="totalFilteredCorrections"
+		[totalIgnoredWritingFeedbackIssues]="totalIgnoredWritingFeedbackIssues"
+		[totalSelectedWritingFeedbackIssues]="totalSelectedWritingFeedbackIssues"
+		[writingFeedbackStats]="allWritingFeedbacksStats"
+		[correctionClicked]="correctionClicked"
+		[isMobile]="isMobile"
+		[filterIndicatorOn]="filterIndicatorOn"
+		[expandSection]="showResultsSection"
+		(onExpandToggle)="showResultsSection = $event"
+		[showLoadingView]="showLoadingView"></cr-corrections-actions>
+	<ng-container *ngIf="!showLoadingView; else loadingViewRef">
+		<div
+			*ngIf="showResultsSection"
+			class="corrections-container"
+			[class.mobile]="isMobile"
+			[class.less-or-equal-to-one]="(displayedScanCorrectionsView?.length ?? 0) <= 1"
+			[class.empty]="(displayedScanCorrectionsView?.length ?? 0) === 0">
+			<ng-container
+				*ngIf="
+					!displayedScanCorrectionsView || displayedScanCorrectionsView.length === 0;
+					else displayedCorrectionsRef
+				">
+				<cr-empty-result-state [message]="emptyCorrectionsMessage"></cr-empty-result-state>
+			</ng-container>
+
+			<ng-template #displayedCorrectionsRef>
+				<ng-container *ngIf="!isMobile; else correctionsMobileViewRef">
+					<cdk-virtual-scroll-viewport
+						class="correction-info-container"
+						[class.scroll-with-padding]="addPaddingToContainer"
+						itemSize="107"
+						minBufferPx="200"
+						maxBufferPx="1000">
+						<div class="corrections-types-container">
+							<span class="categorized-summery" i18n>Categorized Summary</span>
+							<cr-correction-type-panel
+								*ngFor="let correctionTypeStats of writingFeedbackStats"
+								[stats]="correctionTypeStats"
+								(selectCategory)="onSelectCategory($event)"></cr-correction-type-panel>
+							<span class="categorized-summery" i18n>Chronological</span>
+						</div>
+						<cr-correction
+							*cdkVirtualFor="let correction of displayedScanCorrectionsView"
+							[correction]="correction"
+							[reportDataSvc]="reportDataSvc"
+							[reportMatchesSvc]="reportMatchesSvc"
+							[highlightService]="highlightService"
+							[showLoadingView]="false"
+							(selectCategory)="onSelectCategory($event)"></cr-correction>
+					</cdk-virtual-scroll-viewport>
+				</ng-container>
+				<ng-template #correctionsMobileViewRef>
+					<cdk-virtual-scroll-viewport
+						class="mobile-scroll"
+						orientation="horizontal"
+						itemSize="320"
+						(scrolledIndexChange)="onScroll($event)">
+						<cr-correction
+							*cdkVirtualFor="let correction of displayedScanCorrectionsView"
+							[correction]="correction"
+							[reportDataSvc]="reportDataSvc"
+							[reportMatchesSvc]="reportMatchesSvc"
+							[highlightService]="highlightService"
+							[showLoadingView]="false"></cr-correction>
+					</cdk-virtual-scroll-viewport>
+				</ng-template>
+			</ng-template>
+		</div>
+		<div
+			class="navigate-mobie-button-container"
+			*ngIf="isMobile && (displayedScanCorrectionsView?.length ?? 0) > 1 && showResultsSection"
+			fxLayout="row"
+			fxLayoutAlign="start center"
+			fxLayoutGap="8px">
+			<mat-chip
+				*ngIf="(displayedScanCorrectionsView?.length ?? 0) > 5 && currentViewedIndex > 2"
+				role="button"
+				(click)="scrollToIndex(0)"
+				class="mat-chip-navigate">
+				{{
+					currentViewedIndex < (displayedScanCorrectionsView?.length ?? 0) - 3
+						? currentViewedIndex - 2
+						: (displayedScanCorrectionsView?.length ?? 0) - 5
+				}}
+			</mat-chip>
+			<button
+				class="navigate-mobie-button"
+				aria-label="This is a result navigation button."
+				i18n-aria-label
+				[ngClass]="{
+					'navigate-mobie-button-select ': navigateMobileButton == enumNavigateMobileButton.FirstButton
+				}"
+				(click)="onDotNavigate(enumNavigateMobileButton.FirstButton)"></button>
+			<button
+				*ngIf="(displayedScanCorrectionsView?.length ?? 0) > 1"
+				class="navigate-mobie-button"
+				aria-label="This is a result navigation button."
+				i18n-aria-label
+				[ngClass]="{
+					'navigate-mobie-button-select ': navigateMobileButton == enumNavigateMobileButton.SecondButton
+				}"
+				(click)="onDotNavigate(enumNavigateMobileButton.SecondButton)"></button>
+			<button
+				*ngIf="(displayedScanCorrectionsView?.length ?? 0) > 2"
+				class="navigate-mobie-button"
+				aria-label="This is a result navigation button."
+				i18n-aria-label
+				[ngClass]="{
+					'navigate-mobie-button-select ': navigateMobileButton == enumNavigateMobileButton.ThirdButton
+				}"
+				(click)="onDotNavigate(enumNavigateMobileButton.ThirdButton)"></button>
+			<button
+				*ngIf="(displayedScanCorrectionsView?.length ?? 0) > 3"
+				class="navigate-mobie-button"
+				aria-label="This is a result navigation button."
+				i18n-aria-label
+				[ngClass]="{
+					'navigate-mobie-button-select ': navigateMobileButton == enumNavigateMobileButton.FourthButton
+				}"
+				(click)="onDotNavigate(enumNavigateMobileButton.FourthButton)"></button>
+			<button
+				*ngIf="(displayedScanCorrectionsView?.length ?? 0) > 4"
+				class="navigate-mobie-button"
+				aria-label="This is a result navigation button."
+				i18n-aria-label
+				[ngClass]="{
+					'navigate-mobie-button-select ': navigateMobileButton == enumNavigateMobileButton.FifthButton
+				}"
+				(click)="onDotNavigate(enumNavigateMobileButton.FifthButton)"></button>
+
+			<mat-chip
+				*ngIf="
+					(displayedScanCorrectionsView?.length ?? 0) > 5 &&
+					currentViewedIndex < (displayedScanCorrectionsView?.length ?? 0) - 3
+				"
+				role="button"
+				(click)="scrollToIndex((displayedScanCorrectionsView?.length ?? 0) - 1)"
+				class="mat-chip-navigate">
+				{{
+					currentViewedIndex > 2
+						? (displayedScanCorrectionsView?.length ?? 0) - currentViewedIndex - 3
+						: (displayedScanCorrectionsView?.length ?? 0) - 5
+				}}
+			</mat-chip>
+		</div>
+	</ng-container>
+
+	<ng-template #loadingViewRef>
+		<div class="corrections-loader-container" [class.mobile]="isMobile">
+			<cr-correction
+				*ngFor="let _ of isMobile ? [1, 2, 3, 4] : [1, 2, 3, 4, 5, 6, 7, 8, 9]"
+				class="loading-correction-view"
+				[showLoadingView]="true"></cr-correction>
+		</div>
+	</ng-template>
+</ng-container>
+<ng-template #selectedCategroyRef>
+	<div class="selected-category-toolbar">
+		<div class="total-corrections-container" (click)="goToAllCorrectionsView()">
+			<mat-icon class="left-arrow">chevron_left</mat-icon>
+			<span class="all-correction-title" i18n>All Corrections ({{ totalWritingFeedbackIssues }})</span>
+		</div>
+		<div class="selected-correction-container">
+			<mat-icon class="right-arrow">chevron_right</mat-icon>
+			<span class="correction-title" web-report-title-font i18n>
+				{{ selectedCategroyTitle }} ({{ selectedCategroyTotal }})
+			</span>
+		</div>
+	</div>
+
+	<span class="selected-category-description" i18n>
+		{{ selectedCategroyDescription }}
+	</span>
+
+	<span class="categorized-summery" i18n>Chronological</span>
+
+	<cdk-virtual-scroll-viewport class="all-corrections-info-container" itemSize="40">
+		<cr-correction
+			*cdkVirtualFor="let correction of selectedCategroyCorrections"
+			[correction]="correction"
+			[hideDescription]="true"
+			[reportDataSvc]="reportDataSvc"
+			[reportMatchesSvc]="reportMatchesSvc"
+			[highlightService]="highlightService"></cr-correction>
+	</cdk-virtual-scroll-viewport>
+</ng-template>

@@ -9,15 +9,22 @@
 		<!-- Report alerts -->
 		<copyleaks-report-alerts-container
 			*ngIf="
+				viewMode === 'one-to-many' &&
 				alerts &&
 				alerts.length > 0 &&
 				!isLoadingScanResults &&
-				reportViewMode !== ECustomResultsReportView.Full &&
-				reportViewMode !== ECustomResultsReportView.Partial
+				reportTemplateMode !== ECustomResultsReportView.Full &&
+				reportTemplateMode !== ECustomResultsReportView.Partial
 			"
 			[alerts]="alerts"
 			[isMobile]="true"
 			[flexGrow]="20"></copyleaks-report-alerts-container>
+
+		<cr-readability-score
+			*ngIf="viewMode === 'writing-feedback' && !showReadabilityLoadingView"
+			[statisticsInfo]="writingFeedback?.score?.statistics"
+			[readabilityInfo]="writingFeedback?.score?.readability"
+			[isMobile]="true"></cr-readability-score>
 
 		<!-- Report scan content section -->
 		<div class="content-section">
@@ -25,6 +32,9 @@
 			<copyleaks-report-tabs-container
 				[hideAiTap]="hideAiTap"
 				[hidePlagarismTap]="hidePlagarismTap"
+				[hideWritingFeedbackTap]="hideWritingFeedbackTap"
+				[writingFeedbackScore]="reportStatistics?.writingFeedbackOverallScore"
+				[totalWritingFeedbackIssues]="reportStatistics?.writingFeedbackOverallIssues"
 				[selectedTap]="selectedTap"
 				[plagarismScore]="plagiarismScore"
 				[aiScore]="reportStatistics?.aiScore ?? 0"
@@ -33,11 +43,14 @@
 				[minorChangesTotal]="reportStatistics?.minorChanges ?? 0"
 				[paraphrasedTotal]="reportStatistics?.relatedMeaning ?? 0"
 				[excludedTotal]="reportStatistics?.omittedWords ?? 0"
-				[showLoadingView]="isLoadingScanContent || isLoadingScanResults"
+				[showLoadingView]="
+					selectedTap === EReportViewType.WritingFeedbackTabView
+						? isLoadingScanCorrections
+						: isLoadingScanContent || isLoadingScanResults
+				"
 				[showDisabledProducts]="showDisabledProducts"
-				[hideAiTap]="hideAiTap"
-				[hidePlagarismTap]="hidePlagarismTap"
-				[loadingProgressPct]="loadingProgressPct"></copyleaks-report-tabs-container>
+				[loadingProgressPct]="loadingProgressPct"
+				[isMobile]="true"></copyleaks-report-tabs-container>
 
 			<!-- Report scan content viewer -->
 			<copyleaks-content-viewer-container
@@ -45,14 +58,16 @@
 				[isAlertsView]="isAlertsMode"
 				[contentHtml]="iframeHtml"
 				[scanSource]="reportCrawledVersion"
+				[writingFeedback]="writingFeedback"
 				[contentTextMatches]="contentTextMatches"
+				[contentHtmlMatches]="reportMatches"
 				[numberOfPages]="numberOfPages"
 				[numberOfWords]="numberOfWords"
 				[currentPage]="currentPageSource"
 				[reportResponsive]="EResponsiveLayoutType.Mobile"
 				[hidePoweredBy]="true"
 				[isMultiSelection]="isMultiSelection"
-				viewMode="one-to-many"
+				[viewMode]="viewMode"
 				reportOrigin="original"
 				(iFrameMessageEvent)="onIFrameMessage($event)"
 				(viewChangeEvent)="onReportViewChange($event)"></copyleaks-content-viewer-container>
@@ -64,9 +79,10 @@
 	<!-- Report results -->
 	<copyleaks-report-results-container
 		*ngIf="
-			selectedTap !== EReportViewType.AIView ||
-			reportViewMode === ECustomResultsReportView.Partial ||
-			reportViewMode === ECustomResultsReportView.Full
+			((selectedTap !== EReportViewType.AIView && selectedTap !== EReportViewType.WritingFeedbackTabView) ||
+				reportTemplateMode === ECustomResultsReportView.Partial ||
+				reportTemplateMode === ECustomResultsReportView.Full) &&
+			viewMode === 'one-to-many'
 		"
 		class="results-container"
 		[flexGrow]="15"
@@ -74,10 +90,22 @@
 		[newResults]="newScanResultsView"
 		[resultsActions]="scanResultsActions"
 		[isMobile]="true"
-		[showLoadingView]="isLoadingScanResults"
+		[showLoadingView]="isLoadingScanResults || isLoadingScanCorrections"
 		[filterOptions]="filterOptions"
-		[reportViewMode]="reportViewMode"
+		[reportViewMode]="reportTemplateMode"
 		[customResultsTemplate]="customResultsTemplate"></copyleaks-report-results-container>
+
+	<copyleaks-report-corrections-container
+		*ngIf="viewMode === 'writing-feedback'"
+		[totalWritingFeedbackIssues]="allScanCorrectionsView?.length ?? 0"
+		[totalFilteredCorrections]="totalFilteredCorrections"
+		[writingFeedbackStats]="writingFeedbackStats"
+		[allWritingFeedbacksStats]="allWritingFeedbacksStats"
+		[allScanCorrectionsView]="allScanCorrectionsView"
+		[displayedScanCorrectionsView]="displayedScanCorrectionsView"
+		[correctionClicked]="correctionClicked"
+		[isMobile]="true"
+		[showLoadingView]="showCorrectionsLoadingView || isLoadingScanCorrections"></copyleaks-report-corrections-container>
 
 	<!-- Powered by Copyleaks image section -->
 	<div class="powered-by-copyleaks-container"><cr-powered-by></cr-powered-by></div>

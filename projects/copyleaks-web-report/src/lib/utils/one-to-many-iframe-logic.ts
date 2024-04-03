@@ -1,6 +1,11 @@
 /* tslint:disable */
 
-import { MatchJumpEvent, MatchSelectEvent, PostMessageEvent } from '../models/report-iframe-events.models';
+import {
+	CorrectionSelectEvent,
+	MatchJumpEvent,
+	MatchSelectEvent,
+	PostMessageEvent,
+} from '../models/report-iframe-events.models';
 
 /**
  * document ready event handler
@@ -94,6 +99,10 @@ function ready() {
 			case 'multi-match-select':
 				// do nothing
 				break;
+
+			case 'correction-select':
+				handelCorrectionSelect(event);
+				break;
 			default:
 				console.error('unknown event in frame', nativeEvent);
 		}
@@ -117,6 +126,39 @@ function ready() {
 			return;
 		}
 		onMatchSelect(elem, true); // should not rebroadcast
+	}
+
+	/**
+	 * handle a broadcasted `match-select` event
+	 * @param event the match select event
+	 */
+	function handelCorrectionSelect(event: CorrectionSelectEvent) {
+		const elements: any = document.querySelectorAll<HTMLSpanElement>(`span[match][data-gid='${event.gid}']`);
+		let elem: HTMLSpanElement;
+		for (let element of elements) {
+			// find the first element that can be viewed as selected
+			if ((element as HTMLSpanElement).innerHTML && (element as HTMLSpanElement).innerHTML.trim().length > 0) {
+				elem = element;
+				break;
+			}
+		}
+
+		// select the correction
+		current?.toggleAttribute('on', false);
+		current = elem;
+		currentMulti.forEach(e => e?.toggleAttribute('on', false));
+		if (current) {
+			currentMulti = [...elements];
+			currentMulti.forEach(e => {
+				e?.toggleAttribute('on', true);
+			});
+		} else currentMulti = [];
+		current?.toggleAttribute('on', true);
+		if (isPdf) {
+			elem?.closest('.pc')?.classList?.add('opened');
+			currentMulti.forEach(e => e?.closest('.pc')?.classList?.add('opened'));
+		}
+		current?.scrollIntoView({ behavior: 'smooth', block: 'center' });
 	}
 
 	/**

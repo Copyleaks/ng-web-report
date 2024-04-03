@@ -1,5 +1,5 @@
 import { CrTextMatchComponent } from '../components/core/cr-text-match/cr-text-match.component';
-import { EMatchClassification } from '../enums/copyleaks-web-report.enums';
+import { EMatchClassification, EWritingFeedbackCategories } from '../enums/copyleaks-web-report.enums';
 
 import { EExcludeReason } from '../enums/copyleaks-web-report.enums';
 import { IResultDetailResponse } from './report-data.models';
@@ -33,6 +33,8 @@ export interface Match extends Range {
 	gid?: number;
 	/** associated exclude reason - relevant to **excluded** match type */
 	reason?: EExcludeReason;
+	/** associated writing feedback type - relevant to **WritingFeedback** match type */
+	writingFeedbackType?: EWritingFeedbackCategories;
 }
 
 /**
@@ -43,12 +45,14 @@ export enum MatchType {
 	identical = 0,
 	minorChanges = 1,
 	relatedMeaning = 2,
-	none = 3,
+	writingFeedback = 3,
+	none = 4,
 
 	// custom
 	suspectedCharacterReplacement = 100,
 	// custom
 	aiText = 101,
+	// custom
 }
 
 /**
@@ -110,6 +114,11 @@ export interface AIScanResultSummary {
 	another_writer_score: number;
 }
 
+export interface WritingFeedbackScanResultSummary {
+	overallTotalIssues: number;
+	overallScore: number;
+}
+
 export interface AIScanResultItem {
 	classification: EMatchClassification;
 	probability: number;
@@ -149,6 +158,7 @@ export interface TextMatchHighlightEvent {
 	origin: ReportOrigin;
 	broadcast: boolean;
 	multiSelect?: boolean;
+	showResults?: boolean;
 }
 
 export interface HtmlMatchClickEvent {

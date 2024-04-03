@@ -71,6 +71,13 @@ span[match][data-type='2'] {
 span[match][data-type='2'].hover {
 	background-color: #3f9af533;
 }
+span[match][data-type='3'] {
+	background-color: #ff9a02;
+  transition: 0.2s;
+}
+span[match][data-type='3'].hover {
+	background-color: #3f9af533;
+}
 span[match][on] {
 	background-color: #3F9AF533 !important;
 }

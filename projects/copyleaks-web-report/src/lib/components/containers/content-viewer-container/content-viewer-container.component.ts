@@ -17,12 +17,12 @@ import {
 } from '@angular/core';
 import { PostMessageEvent, ZoomEvent } from '../../../models/report-iframe-events.models';
 import { IReportViewEvent } from '../../../models/report-view.models';
-import { MatchType, ReportOrigin, ResultDetailItem, SlicedMatch } from '../../../models/report-matches.models';
+import { Match, MatchType, ReportOrigin, ResultDetailItem, SlicedMatch } from '../../../models/report-matches.models';
 import { DirectionMode as ReportContentDirectionMode, ViewMode } from '../../../models/report-config.models';
 import { TEXT_FONT_SIZE_UNIT, MIN_TEXT_ZOOM, MAX_TEXT_ZOOM } from '../../../constants/report-content.constants';
 import { PageEvent } from '../../core/cr-paginator/models/cr-paginator.models';
 import { ReportMatchHighlightService } from '../../../services/report-match-highlight.service';
-import { IScanSource } from '../../../models/report-data.models';
+import { IScanSource, IWritingFeedback } from '../../../models/report-data.models';
 import { EResponsiveLayoutType } from '../../../enums/copyleaks-web-report.enums';
 import { ReportViewService } from '../../../services/report-view.service';
 import { untilDestroy } from '../../../utils/until-destroy';
@@ -49,6 +49,19 @@ export class ContentViewerContainerComponent implements OnInit, AfterViewInit, O
 	handleClick(event: MouseEvent): void {
 		if (event.shiftKey) this.isShiftClicked = true;
 		else this.isShiftClicked = false;
+	}
+
+	/**
+	 * Handles PostMessage events, making sure they are from the correct iframe.
+	 * @param event the default PostMessage event
+	 */
+	@HostListener('window:message', ['$event'])
+	onFrameMessage(event: MessageEvent) {
+		const { source, data } = event;
+		if (source !== this.iFrameWindow) {
+			return;
+		}
+		this.iFrameMessageEvent.emit(data as PostMessageEvent);
 	}
 
 	@ViewChild('contentIFrame', { static: false }) contentIFrame: ElementRef<HTMLIFrameElement>;
@@ -86,6 +99,14 @@ export class ContentViewerContainerComponent implements OnInit, AfterViewInit, O
 	@Input() scanSource: IScanSource;
 
 	/**
+	 * @Input The writing feedback data
+	 *
+	 * @description
+	 * Includes data about the text & Html views.
+	 */
+	@Input() writingFeedback: IWritingFeedback;
+
+	/**
 	 * @Input The scan result data
 	 *
 	 * @description
@@ -102,6 +123,11 @@ export class ContentViewerContainerComponent implements OnInit, AfterViewInit, O
 	 * @Input The source/result text view matches.
 	 */
 	@Input() contentTextMatches: SlicedMatch[][];
+
+	/**
+	 * @Input The source/result text view matches.
+	 */
+	@Input() contentHtmlMatches: Match[];
 
 	/**
 	 * @Input Flag indicating whether to show the content title or not.
@@ -258,6 +284,16 @@ export class ContentViewerContainerComponent implements OnInit, AfterViewInit, O
 	 * `true` if the source document has an `html` section
 	 */
 	get hasHtml(): boolean {
+		if (this.viewMode === 'writing-feedback')
+			return (
+				!!this.writingFeedback?.corrections?.html &&
+				!!this.writingFeedback.corrections.html.chars &&
+				!!this.writingFeedback.corrections.html.chars.groupIds &&
+				!!this.writingFeedback.corrections.html.chars.lengths &&
+				!!this.writingFeedback.corrections.html.chars.starts &&
+				!!this.writingFeedback.corrections.html.chars.operationTexts &&
+				!!this.writingFeedback.corrections.html.chars.types
+			);
 		if (this.reportOrigin === 'original' || this.reportOrigin === 'source') return !!this.scanSource?.html?.value;
 		return !!this.contentHtml;
 	}
@@ -328,19 +364,6 @@ export class ContentViewerContainerComponent implements OnInit, AfterViewInit, O
 
 		if ('isAlertsView' in changes && !changes['isAlertsView'].currentValue && !changes['isAlertsView'].firstChange)
 			this.iframeLoaded = false;
-	}
-
-	/**
-	 * Handles PostMessage events, making sure they are from the correct iframe.
-	 * @param event the default PostMessage event
-	 */
-	@HostListener('window:message', ['$event'])
-	onFrameMessage(event: MessageEvent) {
-		const { source, data } = event;
-		if (source !== this.iFrameWindow) {
-			return;
-		}
-		this.iFrameMessageEvent.emit(data as PostMessageEvent);
 	}
 
 	onViewChange() {

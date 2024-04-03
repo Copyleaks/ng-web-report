@@ -1,0 +1,66 @@
+<mat-accordion #expansionPanel>
+	<mat-expansion-panel [expanded]="false">
+		<mat-expansion-panel-header [ngClass]="{ 'mobile-results-panel-header': isMobile }">
+			<mat-panel-title>
+				<div class="container-title">
+					<span class="title" web-report-title-font i18n>Readability Score:</span>
+					<span class="description" i18n>{{ readabilityInfo?.readabilityLevelDescription }}</span>
+				</div>
+			</mat-panel-title>
+
+			<mat-panel-description>
+				<mat-icon class="hide-alerts-icon" [class.mobile]="isMobile" fontSet="material-icons-round">
+					arrow_drop_down
+				</mat-icon>
+			</mat-panel-description>
+		</mat-expansion-panel-header>
+
+		<div class="stats-container">
+			<div class="stat-container insights">
+				<span class="stat-title insights" i18n>Insights</span>
+				<span class="stat-value readability-description" web-report-title-font i18n>
+					Reading level:
+					<span style="font-weight: 500">{{ readabilityInfo?.readabilityLevelText }}</span>
+				</span>
+			</div>
+
+			<div class="stat-container">
+				<span class="stat-title" i18n>Number of sentences:</span>
+				<span class="stat-value" i18n>
+					{{ statisticsInfo?.sentenceCount }} {statisticsInfo?.sentenceCount, plural, =1 {Sentence} other {Sentences}}
+				</span>
+			</div>
+
+			<div class="stat-container">
+				<span class="stat-title" i18n>Avg. Words per sentences:</span>
+				<span class="stat-value" i18n>
+					{{ statisticsInfo?.averageSentenceLength }} {statisticsInfo?.averageSentenceLength, plural, =1 {Word} other
+					{Words}}
+				</span>
+			</div>
+
+			<div class="stat-container">
+				<span class="stat-title" i18n>Avg. Word length:</span>
+				<span class="stat-value" i18n>
+					{{ statisticsInfo?.averageWordLength }} {statisticsInfo?.averageWordLength, plural, =1 {Character} other
+					{Characters}}
+				</span>
+			</div>
+
+			<div class="stat-container">
+				<span class="stat-title" i18n>Reading time:</span>
+				<span class="stat-value" i18n>{{ statisticsInfo?.readingTimeSeconds | secondsToTime }}</span>
+			</div>
+
+			<div class="stat-container">
+				<span class="stat-title" i18n>Speaking time:</span>
+				<span class="stat-value" i18n>{{ statisticsInfo?.speakingTimeSeconds | secondsToTime }}</span>
+			</div>
+
+			<div class="stat-container">
+				<span class="stat-title" i18n>Readability score:</span>
+				<span class="stat-value" i18n>{{ readabilityInfo?.score }}%</span>
+			</div>
+		</div>
+	</mat-expansion-panel>
+</mat-accordion>

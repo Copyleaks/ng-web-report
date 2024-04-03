@@ -38,39 +38,86 @@
 			[class.tab-selected]="selectedTap === EReportViewType.PlagiarismView && !hidePlagarismTap"
 			[class.tab-disabled]="hidePlagarismTap && showDisabledProducts"
 			[class.with-company-logo]="selectedTap === EReportViewType.PlagiarismView && !hidePlagarismTap && companyLogo"
+			[class.mobile]="isMobile"
 			[matTooltip]="hidePlagarismTap && showDisabledProducts ? DISABLED : ''"
 			matTooltipClass="web-report-mat-tooltip"
 			(click)="selectTap(EReportViewType.PlagiarismView)"
 			(keyup.enter)="selectTap(EReportViewType.PlagiarismView)">
-			<div class="bar-title-container">
-				<span class="bar-title" web-report-title-font i18n>Matched Text</span>
-				<span class="bar-score" web-report-title-font>
-					{{ hidePlagarismTap && showDisabledProducts ? 'N/A' : (plagarismScore | percent : '1.0-1') }}
-				</span>
-			</div>
-			<div class="grade-bar">
-				<div class="bar plagiarism" [style.width.%]="100">
-					<div
-						class="identical"
-						[class.first-percentage]="!!identicalTotal"
-						[class.last-percentage]="!minorChangesTotal && !paraphrasedTotal"
-						[style.width.%]="(identicalTotal / wordsTotal) * 100"
-						[style.border]="!identicalTotal ? 'none' : ''"></div>
-					<div
-						class="minor-changes"
-						[class.first-percentage]="!identicalTotal"
-						[class.last-percentage]="!paraphrasedTotal"
-						[style.width.%]="(minorChangesTotal / wordsTotal) * 100"
-						[style.border]="!minorChangesTotal ? 'none' : ''"></div>
-					<div
-						class="paraphrased last-percentage"
-						[class.first-percentage]="!identicalTotal && !minorChangesTotal"
-						[style.width.%]="(paraphrasedTotal / wordsTotal) * 100"
-						[style.border]="!paraphrasedTotal ? 'none' : ''"></div>
+			<ng-container *ngIf="!isMobile; else mobileViewRef">
+				<div class="bar-title-container">
+					<span class="bar-title" web-report-title-font i18n>Matched Text</span>
+					<span *ngIf="!isMobile" class="bar-score" web-report-title-font>
+						{{ hidePlagarismTap && showDisabledProducts ? 'N/A' : (plagarismScore | percent : '1.0-1') }}
+					</span>
 				</div>
-			</div>
+				<div class="grade-bar">
+					<div class="bar plagiarism" [style.width.%]="100">
+						<div
+							class="identical"
+							[class.first-percentage]="!!identicalTotal"
+							[class.last-percentage]="!minorChangesTotal && !paraphrasedTotal"
+							[style.width.%]="
+								wordsTotal - excludedTotal === 0 ? 0 : (identicalTotal / (wordsTotal - excludedTotal)) * 100
+							"
+							[style.border]="!identicalTotal ? 'none' : ''"></div>
+						<div
+							class="minor-changes"
+							[class.first-percentage]="!identicalTotal"
+							[class.last-percentage]="!paraphrasedTotal"
+							[style.width.%]="
+								wordsTotal - excludedTotal === 0 ? 0 : (minorChangesTotal / (wordsTotal - excludedTotal)) * 100
+							"
+							[style.border]="!minorChangesTotal ? 'none' : ''"></div>
+						<div
+							class="paraphrased last-percentage"
+							[class.first-percentage]="!identicalTotal && !minorChangesTotal"
+							[style.width.%]="
+								wordsTotal - excludedTotal === 0 ? 0 : (paraphrasedTotal / (wordsTotal - excludedTotal)) * 100
+							"
+							[style.border]="!paraphrasedTotal ? 'none' : ''"></div>
+					</div>
+				</div>
+			</ng-container>
+			<ng-template #mobileViewRef>
+				<div class="mobile-tab-container">
+					<div class="charts-container">
+						<ng-container *ngIf="!hidePlagarismTap; else NaViewRef">
+							<ngx-charts-pie-chart
+								[results]="plagarismScoreChartData"
+								[view]="[90, 90]"
+								[legend]="false"
+								[labels]="false"
+								[arcWidth]="0.2"
+								[scheme]="plagarismScoreChartColorScheme"
+								[tooltipDisabled]="true"
+								[doughnut]="true"
+								[gradient]="true"
+								[explodeSlices]="true"></ngx-charts-pie-chart>
+							<span class="mobile-tab-score" web-report-title-font i18n>{{ plagarismScore | percent : '1.0-1' }}</span>
+						</ng-container>
+
+						<ng-template #NaViewRef>
+							<svg
+								class="na-border-pic"
+								xmlns="http://www.w3.org/2000/svg"
+								width="51"
+								height="50"
+								viewBox="0 0 51 50"
+								fill="none">
+								<path
+									d="M25.6665 3.5C22.8431 3.5 20.0473 4.05611 17.4388 5.13659C14.8303 6.21706 12.4602 7.80074 10.4637 9.7972C8.46726 11.7937 6.88358 14.1638 5.8031 16.7723C4.72262 19.3808 4.16651 22.1766 4.1665 25C4.1665 27.8234 4.72262 30.6192 5.80309 33.2277C6.88357 35.8362 8.46724 38.2063 10.4637 40.2028C12.4602 42.1992 14.8303 43.7829 17.4388 44.8634C20.0473 45.9439 22.8431 46.5 25.6665 46.5C28.4899 46.5 31.2857 45.9439 33.8942 44.8634C36.5027 43.7829 38.8728 42.1993 40.8693 40.2028C42.8658 38.2063 44.4494 35.8362 45.5299 33.2277C46.6104 30.6192 47.1665 27.8234 47.1665 25C47.1665 22.1766 46.6104 19.3808 45.5299 16.7723C44.4494 14.1638 42.8658 11.7937 40.8693 9.7972C38.8728 7.80075 36.5027 6.21707 33.8942 5.13659C31.2857 4.05611 28.4899 3.5 25.6665 3.5ZM16.2908 2.36495C19.2633 1.13371 22.4491 0.499998 25.6665 0.5C28.8839 0.5 32.0698 1.13371 35.0422 2.36495C38.0147 3.59619 40.7156 5.40085 42.9906 7.67589C45.2657 9.95092 47.0703 12.6518 48.3016 15.6243C49.5328 18.5967 50.1665 21.7826 50.1665 25C50.1665 28.2174 49.5328 31.4033 48.3015 34.3757C47.0703 37.3482 45.2657 40.0491 42.9906 42.3241C40.7156 44.5992 38.0147 46.4038 35.0422 47.6351C32.0698 48.8663 28.8839 49.5 25.6665 49.5C22.4491 49.5 19.2632 48.8663 16.2908 47.635C13.3183 46.4038 10.6174 44.5991 8.34238 42.3241C6.06735 40.0491 4.26269 37.3482 3.03145 34.3757C1.80021 31.4033 1.1665 28.2174 1.1665 25C1.1665 21.7826 1.80022 18.5967 3.03146 15.6242C4.2627 12.6518 6.06736 9.95091 8.3424 7.67587C10.6174 5.40084 13.3183 3.59618 16.2908 2.36495Z"
+									fill="#FBFFFF"
+									stroke="#9DA9BF" />
+							</svg>
+							<span class="na-border-text" web-report-title-font i18n>N/A</span>
+						</ng-template>
+					</div>
+					<span class="mobile-tab-title" web-report-title-font>Matched Text</span>
+				</div>
+			</ng-template>
 		</a>
-		<a
+
+		<div
 			*ngIf="!hideAiTap || showDisabledProducts"
 			@fadeIn
 			class="tab-ai"
@@ -90,20 +137,110 @@
 			[class.with-company-logo]="
 				selectedTap === EReportViewType.AIView && !hideAiTap && hidePlagarismTap && companyLogo
 			"
+			[class.mobile]="isMobile"
 			[matTooltip]="hideAiTap && showDisabledProducts ? DISABLED : ''"
 			matTooltipClass="web-report-mat-tooltip"
 			(click)="selectTap(EReportViewType.AIView)"
 			(keyup.enter)="selectTap(EReportViewType.AIView)">
-			<div class="bar-title-container">
-				<span class="bar-title" web-report-title-font i18n>AI Content</span>
-				<span class="bar-score" web-report-title-font>
-					{{ hideAiTap && showDisabledProducts ? 'N/A' : (aiScore | percent : '1.0-1') }}
-				</span>
-			</div>
-			<div class="grade-bar">
-				<div class="bar ai-content" [style.width.%]="aiScore * 100" [style.border]="!aiScore ? 'none' : ''"></div>
-			</div>
-		</a>
+			<ng-container *ngIf="!isMobile; else mobileViewRef">
+				<div class="bar-title-container">
+					<span class="bar-title" web-report-title-font i18n>AI Content</span>
+					<span *ngIf="!isMobile" class="bar-score" web-report-title-font>
+						{{ hideAiTap && showDisabledProducts ? 'N/A' : (aiScore | percent : '1.0-1') }}
+					</span>
+				</div>
+				<div *ngIf="!isMobile" class="grade-bar">
+					<div class="bar ai-content" [style.width.%]="aiScore * 100" [style.border]="!aiScore ? 'none' : ''"></div>
+				</div>
+			</ng-container>
+			<ng-template #mobileViewRef>
+				<div class="mobile-tab-container">
+					<div class="charts-container">
+						<ng-container *ngIf="!hideAiTap; else NaViewRef">
+							<ngx-charts-pie-chart
+								[results]="aiScoreChartData"
+								[view]="[90, 90]"
+								[legend]="false"
+								[labels]="false"
+								[arcWidth]="0.2"
+								[scheme]="aiScoreChartColorScheme"
+								[tooltipDisabled]="true"
+								[doughnut]="true"></ngx-charts-pie-chart>
+							<span class="mobile-tab-score" web-report-title-font i18n>{{ aiScore | percent : '1.0-1' }}</span>
+						</ng-container>
+						<ng-template #NaViewRef>
+							<svg
+								class="na-border-pic"
+								xmlns="http://www.w3.org/2000/svg"
+								width="51"
+								height="50"
+								viewBox="0 0 51 50"
+								fill="none">
+								<path
+									d="M25.6665 3.5C22.8431 3.5 20.0473 4.05611 17.4388 5.13659C14.8303 6.21706 12.4602 7.80074 10.4637 9.7972C8.46726 11.7937 6.88358 14.1638 5.8031 16.7723C4.72262 19.3808 4.16651 22.1766 4.1665 25C4.1665 27.8234 4.72262 30.6192 5.80309 33.2277C6.88357 35.8362 8.46724 38.2063 10.4637 40.2028C12.4602 42.1992 14.8303 43.7829 17.4388 44.8634C20.0473 45.9439 22.8431 46.5 25.6665 46.5C28.4899 46.5 31.2857 45.9439 33.8942 44.8634C36.5027 43.7829 38.8728 42.1993 40.8693 40.2028C42.8658 38.2063 44.4494 35.8362 45.5299 33.2277C46.6104 30.6192 47.1665 27.8234 47.1665 25C47.1665 22.1766 46.6104 19.3808 45.5299 16.7723C44.4494 14.1638 42.8658 11.7937 40.8693 9.7972C38.8728 7.80075 36.5027 6.21707 33.8942 5.13659C31.2857 4.05611 28.4899 3.5 25.6665 3.5ZM16.2908 2.36495C19.2633 1.13371 22.4491 0.499998 25.6665 0.5C28.8839 0.5 32.0698 1.13371 35.0422 2.36495C38.0147 3.59619 40.7156 5.40085 42.9906 7.67589C45.2657 9.95092 47.0703 12.6518 48.3016 15.6243C49.5328 18.5967 50.1665 21.7826 50.1665 25C50.1665 28.2174 49.5328 31.4033 48.3015 34.3757C47.0703 37.3482 45.2657 40.0491 42.9906 42.3241C40.7156 44.5992 38.0147 46.4038 35.0422 47.6351C32.0698 48.8663 28.8839 49.5 25.6665 49.5C22.4491 49.5 19.2632 48.8663 16.2908 47.635C13.3183 46.4038 10.6174 44.5991 8.34238 42.3241C6.06735 40.0491 4.26269 37.3482 3.03145 34.3757C1.80021 31.4033 1.1665 28.2174 1.1665 25C1.1665 21.7826 1.80022 18.5967 3.03146 15.6242C4.2627 12.6518 6.06736 9.95091 8.3424 7.67587C10.6174 5.40084 13.3183 3.59618 16.2908 2.36495Z"
+									fill="#FBFFFF"
+									stroke="#9DA9BF" />
+							</svg>
+							<span class="na-border-text" web-report-title-font i18n>N/A</span>
+						</ng-template>
+					</div>
+					<span class="mobile-tab-title" web-report-title-font>AI Content</span>
+				</div>
+			</ng-template>
+		</div>
+
+		<div
+			*ngIf="!hideWritingFeedbackTap || showDisabledProducts"
+			@fadeIn
+			class="tab-grammar"
+			tabindex="0"
+			[style.flex-grow]="1"
+			[class.tab-selected]="selectedTap === EReportViewType.WritingFeedbackTabView && !hideWritingFeedbackTap"
+			[class.tab-disabled]="hideWritingFeedbackTap && showDisabledProducts"
+			[class.with-company-logo]="
+				selectedTap === EReportViewType.WritingFeedbackTabView &&
+				!hideWritingFeedbackTap &&
+				hideAiTap &&
+				hidePlagarismTap &&
+				companyLogo
+			"
+			[class.mobile]="isMobile"
+			[matTooltip]="hideWritingFeedbackTap && showDisabledProducts ? DISABLED : ''"
+			matTooltipClass="web-report-mat-tooltip"
+			(click)="selectTap(EReportViewType.WritingFeedbackTabView)">
+			<ng-container *ngIf="!isMobile; else mobileViewRef">
+				<div class="bar-title-container">
+					<span class="bar-title" web-report-title-font i18n>Writing Assistant</span>
+					<span class="bar-score" web-report-title-font>
+						<ng-container *ngIf="showWritingFeedbackIssues; else pctRef" i18n>
+							{{ hideWritingFeedbackTap && showDisabledProducts ? 'N/A' : totalWritingFeedbackIssues }}
+						</ng-container>
+						<ng-template #pctRef>
+							{{ hideWritingFeedbackTap && showDisabledProducts ? 'N/A' : (writingFeedbackScore | percent : '1.0-1') }}
+						</ng-template>
+					</span>
+				</div>
+				<div class="grade-bar" [style.visibility]="showWritingFeedbackIssues || !isMobile ? 'hidden' : 'auto'">
+					<div
+						class="bar grammar-check"
+						[style.width.%]="writingFeedbackScore * 100"
+						[style.border]="!writingFeedbackScore ? 'none' : ''"></div>
+				</div>
+			</ng-container>
+			<ng-template #mobileViewRef>
+				<div class="mobile-tab-container">
+					<div class="mobile-tab-score-container">
+						<ng-container *ngIf="!hideWritingFeedbackTap; else NaViewRef">
+							<span class="mobile-tab-score" web-report-title-font>{{ totalWritingFeedbackIssues }}</span>
+						</ng-container>
+						<ng-template #NaViewRef>
+							<span class="na-border-text" web-report-title-font i18n>N/A</span>
+						</ng-template>
+					</div>
+					<span class="mobile-tab-title" web-report-title-font>Assistant</span>
+				</div>
+			</ng-template>
+		</div>
 
 		<ng-container *ngFor="let ref of customTabsTemplateRef">
 			<ng-container *ngTemplateOutlet="ref"></ng-container>
@@ -112,6 +249,14 @@
 
 	<ng-template #loadingViewRef>
 		<div class="loading-tab first">
+			<div class="bar-title-container">
+				<ngx-skeleton-loader class="skeleton" [appearance]="'line'" style="width: 40%"></ngx-skeleton-loader>
+				<ngx-skeleton-loader class="skeleton" [appearance]="'line'" style="width: 20%"></ngx-skeleton-loader>
+			</div>
+			<ngx-skeleton-loader class="bar skeleton" [appearance]="'line'" style="width: 100%"></ngx-skeleton-loader>
+		</div>
+
+		<div class="loading-tab">
 			<div class="bar-title-container">
 				<ngx-skeleton-loader class="skeleton" [appearance]="'line'" style="width: 40%"></ngx-skeleton-loader>
 				<ngx-skeleton-loader class="skeleton" [appearance]="'line'" style="width: 20%"></ngx-skeleton-loader>

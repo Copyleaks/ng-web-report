@@ -17,6 +17,10 @@ $copyleaks-design-v2-warn: mat.define-palette($copyleaks-warn-palette);
 
 $copyleaks-design-v2-typography: mat-typography-config(
 	$font-family: 'haboro-soft, Almarai, sans-serif',
+	$title: mat.define-typography-level(20px, 32px, 500, $font-family: 'Almarai, haboro-soft, sans-serif'),
+	$headline: mat.define-typography-level(24px, 32px, 400, $font-family: 'Almarai, haboro-soft, sans-serif'),
+	$subheading-2: mat.define-typography-level(16px, 28px, 400, $font-family: 'Almarai, haboro-soft, sans-serif'),
+	$subheading-1: mat.define-typography-level(15px, 24px, 400, $font-family: 'Almarai, haboro-soft, sans-serif'),
 );
 
 // Copyleaks theme object which consists of configurations for individual

@@ -95,7 +95,7 @@ export class ResultsActionsComponent implements OnInit, OnChanges, OnDestroy {
 		this._matDialog.open(FilterResultDailogComponent, {
 			maxWidth: '95%',
 			minWidth: this.isMobile ? '95%' : '',
-			width: this.isMobile ? '' : '670px',
+			width: this.isMobile ? '' : '1010px',
 			panelClass: 'filter-result-dailog',
 			ariaLabel: $localize`Report Filter Options`,
 			data: {

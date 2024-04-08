@@ -4,6 +4,7 @@
 @import '../../styles/cls-mat-components-overrides/cls-scroll-bar-overrides.scss';
 @import '../../styles/cls-mat-components-overrides/cls-mat-chip-overrides.scss';
 @import '../../styles/cls-mat-components-overrides/cls-mat-checkbox-overrides.scss';
+@import '../../styles/cls-mat-components-overrides/cls-mat-expansion-panel-overrides.scss';
 
 :host {
 	display: flex;
@@ -11,7 +12,8 @@
 	font-family: haboro-soft, sans-serif !important;
 	::ng-deep {
 		input,
-		button {
+		button,
+		span {
 			font-family: haboro-soft, sans-serif !important;
 		}
 
@@ -19,7 +21,53 @@
 			opacity: 0.5;
 			pointer-events: none;
 		}
+
+		.mat-expansion-panel {
+			gap: 8px !important;
+		}
+
+		/* Hide default toggle icon */
+		.mat-expansion-panel-header .mat-expansion-indicator::after {
+			border: none;
+			content: '';
+		}
+
+		.mat-expansion-indicator {
+			display: none !important;
+		}
+
+		mat-panel-description {
+			margin-right: 0px !important;
+			justify-content: end;
+		}
+
+		.mat-expansion-panel-header[aria-expanded='true'] .expand-icon {
+			transform: rotate(180deg);
+		}
+
+		.mat-expansion-panel-header {
+			padding-right: 0px !important;
+		}
 	}
+
+	mat-accordion {
+		width: 100%;
+		display: flex;
+
+		&.disabled {
+			opacity: 0.5;
+			pointer-events: none;
+		}
+	}
+}
+
+.expand-icon {
+	width: 18px;
+	height: 18px;
+	font-size: 18px;
+	color: $color-black;
+	transition: transform 0.2s ease-in-out;
+	transition: 0.4s ease-in-out;
 }
 
 .header-container {
@@ -53,10 +101,19 @@
 	}
 	.result-container {
 		line-height: normal !important;
+		display: flex;
+		flex-direction: column;
+		gap: 4px;
+
 		.total-results {
 			color: $color-black;
 			font-size: 16px;
 			font-weight: 700;
+
+			&.mobile {
+				font-weight: 500;
+				font-family: haboro-soft, sans-serif !important;
+			}
 		}
 		.total-excuded {
 			cursor: pointer;
@@ -83,9 +140,12 @@
 }
 
 .mobile-body-top-container {
-	height: 370px;
-	overflow: hidden;
-	padding: 16px 0px !important;
+	max-height: 370px;
+	overflow-y: auto;
+	padding: 16px 0px 0px 10px !important;
+	display: flex;
+	flex-direction: column !important;
+	gap: 16px;
 
 	.mobile-body-container {
 		overflow-y: auto;
@@ -212,7 +272,7 @@
 }
 
 .mat-dialog-content.mobile-body-top-container {
-	padding: 16px 0px !important;
+	padding: 16px 10px 0px 0px !important;
 }
 
 .total-stat {
@@ -264,4 +324,17 @@ cr-excluded-results-dailog {
 	.total-excluded {
 		cursor: pointer !important;
 	}
+}
+.mobile-option-title {
+	color: $color-black;
+	font-size: 16px;
+	font-style: normal;
+	font-weight: 700;
+	line-height: normal;
+	text-transform: capitalize;
+	display: flex;
+	flex-direction: row;
+	gap: 8px;
+	align-items: center;
+	justify-content: flex-start;
 }

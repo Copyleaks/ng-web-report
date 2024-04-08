@@ -37,6 +37,8 @@ export interface ICopyleaksReportOptions {
 	includedTags?: string[];
 	/** */
 	writingFeedback?: ICopyleaksReportWritingFeedbackOptions;
+	/** */
+	excludedDomains?: string[];
 }
 
 export interface ICopyleaksReportWritingFeedbackOptions {

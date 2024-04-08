@@ -329,6 +329,7 @@ export class ReportDataService {
 							hiddenCategories: options.writingFeedback.hiddenCategories ?? [],
 							excludedCorrections: excludedCorrections,
 						},
+						excludedDomains: options?.excludedDomains ?? [],
 					},
 				});
 			});
@@ -1068,6 +1069,7 @@ export class ReportDataService {
 			writingFeedback: {
 				hiddenCategories: completeResultsRes.filters?.writingFeedback?.hiddenCategories ?? [],
 			},
+			excludedDomains: completeResultsRes.filters?.excludedDomains ?? [],
 		});
 
 		const filteredResults = this.filterResults(this.filterOptions, this.excludedResultsIds);
@@ -1130,6 +1132,7 @@ export class ReportDataService {
 				},
 				execludedResultIds: this.excludedResultsIds ?? [],
 				filteredResultIds: [],
+				excludedDomains: this.filterOptions?.excludedDomains ?? [],
 			},
 		});
 
@@ -1308,6 +1311,17 @@ export class ReportDataService {
 		if (settings.includedTags && settings.includedTags.length > 0)
 			filteredResultsIds = filteredResultsIds.filter(id =>
 				completeResults.find(cr => cr.id === id && cr.tags?.find(t => settings.includedTags?.includes(t.title)))
+			);
+
+		if (settings.excludedDomains && settings.excludedDomains.length > 0)
+			filteredResultsIds = filteredResultsIds.filter(id =>
+				// check if the result is from the internet and the domain is not excluded, the domain exclude must check if it has the domain in case also the excluded domain is like copyleaks.com
+				completeResults.find(
+					cr =>
+						cr.id === id &&
+						(cr.type !== EResultPreviewType.Internet ||
+							!settings.excludedDomains?.find(domain => cr.url && cr.url?.includes(domain)))
+				)
 			);
 		return filteredResultsIds;
 	}

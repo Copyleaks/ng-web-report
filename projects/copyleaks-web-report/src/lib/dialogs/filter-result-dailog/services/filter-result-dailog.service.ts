@@ -36,6 +36,10 @@ export class FilterResultDailogService {
 		return this._filterResultForm?.get(EFilterResultForm.fcIncludedTags) as FormControl;
 	}
 
+	get excludedDomainsFormControl() {
+		return this._filterResultForm?.get(EFilterResultForm.fcExcludedDomains) as FormControl;
+	}
+
 	get repositoriesFormGroup() {
 		return this.sourceTypeFormGroup.get(EFilterResultForm.fgRepositories) as FormGroup;
 	}
@@ -91,6 +95,7 @@ export class FilterResultDailogService {
 				authorSubmissions: new FormControl(this.getFormControlValue(EFilterResultForm.fcAuthorSubmissions)),
 			}),
 			includedTags: new FormControl(this.getFormControlValue(EFilterResultForm.fcIncludedTags)),
+			excludedDomains: new FormControl(this.getFormControlValue(EFilterResultForm.fcExcludedDomains)),
 		});
 
 		this.addRepositoriesToForm(this.reposIds);
@@ -168,6 +173,7 @@ export class FilterResultDailogService {
 				authorSubmissions: true,
 			},
 			includedTags: this.selectedTagItem ?? ([] as ITagItem[]),
+			excludedDomains: [],
 		});
 
 		this.initFormRepositories();
@@ -237,6 +243,10 @@ export class FilterResultDailogService {
 					: true;
 			case EFilterResultForm.fcIncludedTags:
 				return this.selectedTagItem ?? ([] as ITagItem[]);
+			case EFilterResultForm.fcExcludedDomains:
+				return this._completeResults.filters?.excludedDomains != undefined
+					? this._completeResults.filters?.excludedDomains
+					: [];
 			default:
 				return null;
 		}

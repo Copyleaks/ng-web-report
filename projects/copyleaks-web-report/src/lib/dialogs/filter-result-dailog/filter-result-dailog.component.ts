@@ -4,7 +4,7 @@ import { IResultItem } from '../../components/containers/report-results-item-con
 import { ITotalSourceType } from './components/source-type-filter-result/models/source-type-filter-result.models';
 import { FilterResultDailogService } from './services/filter-result-dailog.service';
 import { ITagItem } from './components/included-tags-filter-result/models/included-tags-filter-result.models';
-import { EFilterResultForm, IFilterResultDailogData } from './models/filter-result-dailog.enum';
+import { EFilterResultForm, EFilterResultSection, IFilterResultDailogData } from './models/filter-result-dailog.enum';
 import { FormGroup } from '@angular/forms';
 import { untilDestroy } from '../../utils/until-destroy';
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
@@ -39,6 +39,7 @@ import { EResponsiveLayoutType } from '../../enums/copyleaks-web-report.enums';
 })
 export class FilterResultDailogComponent implements OnInit {
 	allTagItem: ITagItem[] = [];
+	allExcludedDomains: string[] = [];
 	isMobile: boolean = false;
 	resultsActions: IResultsActions = {
 		totalResults: 0,
@@ -67,6 +68,9 @@ export class FilterResultDailogComponent implements OnInit {
 	matchTypeErrorMessage: string | null;
 	initFormData: boolean = false;
 	totalResultsWithoutDate: number;
+
+	EFilterResultSection = EFilterResultSection;
+	selectedFilter: EFilterResultSection;
 
 	get totalFiltered() {
 		return this.totalSourceType ? this.getTotalFilterdResult() : 0;
@@ -320,6 +324,11 @@ export class FilterResultDailogComponent implements OnInit {
 
 					this.allTagItem = this._filterResultsSvc.selectedTagItem;
 
+					this.allExcludedDomains = this._filterResultsSvc.excludedDomainsFormControl.value;
+					this._filterResultsSvc.excludedDomainsFormControl.valueChanges.pipe(untilDestroy(this)).subscribe(value => {
+						this.allExcludedDomains = value;
+					});
+
 					this.loading = false;
 					this.initFormData = true;
 				}
@@ -402,7 +411,12 @@ export class FilterResultDailogComponent implements OnInit {
 			writingFeedback: {
 				hiddenCategories: this.data.reportDataSvc.filterOptions.writingFeedback?.hiddenCategories ?? [],
 			},
+			excludedDomains: this._filterResultsSvc.excludedDomainsFormControl?.value ?? [],
 		} as ICopyleaksReportOptions;
+	}
+
+	expandSettings(selectedFilter?: EFilterResultSection) {
+		this.selectedFilter = selectedFilter;
 	}
 
 	ngOnDestroy() {}

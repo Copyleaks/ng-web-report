@@ -85,6 +85,7 @@ import { FilterCorrectionsDialogComponent } from './dialogs/filter-corrections-d
 import { FilterCorrectionsDialogService } from './dialogs/filter-corrections-dialog/services/filter-corrections-dialog.service';
 import { NgxChartsModule } from '@swimlane/ngx-charts';
 import { SecondsToTimePipeModule } from './pipes/seconds-to-time/seconds-to-time.module';
+import { ExcludedDomainsInputComponent } from './dialogs/filter-result-dailog/components/excluded-domains-input/excluded-domains-input.component';
 
 @NgModule({
 	declarations: [
@@ -139,6 +140,7 @@ import { SecondsToTimePipeModule } from './pipes/seconds-to-time/seconds-to-time
 		CrCorrectionTypePanelComponent,
 		CrCorrectionsActionsComponent,
 		FilterCorrectionsDialogComponent,
+		ExcludedDomainsInputComponent,
 	],
 	imports: [
 		CommonModule,

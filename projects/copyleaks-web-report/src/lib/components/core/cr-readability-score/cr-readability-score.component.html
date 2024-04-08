@@ -1,5 +1,5 @@
 <mat-accordion #expansionPanel>
-	<mat-expansion-panel [expanded]="false">
+	<mat-expansion-panel #panel [expanded]="false">
 		<mat-expansion-panel-header [ngClass]="{ 'mobile-results-panel-header': isMobile }">
 			<mat-panel-title>
 				<div class="container-title">
@@ -9,7 +9,12 @@
 			</mat-panel-title>
 
 			<mat-panel-description>
-				<mat-icon class="hide-alerts-icon" [class.mobile]="isMobile" fontSet="material-icons-round">
+				<mat-icon
+					class="hide-alerts-icon"
+					[class.mobile]="isMobile"
+					fontSet="material-icons-round"
+					[matTooltip]="panel.expanded ? COLLAPSE_TOOLTIP : EXPEND_TOOLTIP"
+					matTooltipClass="web-report-mat-tooltip">
 					arrow_drop_down
 				</mat-icon>
 			</mat-panel-description>

@@ -117,7 +117,7 @@
 			</ng-template>
 		</a>
 
-		<div
+		<a
 			*ngIf="!hideAiTap || showDisabledProducts"
 			@fadeIn
 			class="tab-ai"
@@ -187,9 +187,9 @@
 					<span class="mobile-tab-title" web-report-title-font>AI Content</span>
 				</div>
 			</ng-template>
-		</div>
+		</a>
 
-		<div
+		<a
 			*ngIf="!hideWritingFeedbackTap || showDisabledProducts"
 			@fadeIn
 			class="tab-grammar"
@@ -207,7 +207,8 @@
 			[class.mobile]="isMobile"
 			[matTooltip]="hideWritingFeedbackTap && showDisabledProducts ? DISABLED : ''"
 			matTooltipClass="web-report-mat-tooltip"
-			(click)="selectTap(EReportViewType.WritingFeedbackTabView)">
+			(click)="selectTap(EReportViewType.WritingFeedbackTabView)"
+			(keyup.enter)="selectTap(EReportViewType.WritingFeedbackTabView)">
 			<ng-container *ngIf="!isMobile; else mobileViewRef">
 				<div class="bar-title-container">
 					<span class="bar-title" web-report-title-font i18n>Writing Assistant</span>
@@ -240,7 +241,7 @@
 					<span class="mobile-tab-title" web-report-title-font>Assistant</span>
 				</div>
 			</ng-template>
-		</div>
+		</a>
 
 		<ng-container *ngFor="let ref of customTabsTemplateRef">
 			<ng-container *ngTemplateOutlet="ref"></ng-container>

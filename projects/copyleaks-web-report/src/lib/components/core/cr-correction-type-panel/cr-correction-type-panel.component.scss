@@ -52,7 +52,6 @@
 		height: $icon-size;
 		color: $color-black;
 		cursor: pointer;
-		margin-left: 12px;
 		transition: transform 0.2s ease-in-out;
 	}
 
@@ -123,6 +122,7 @@
 		flex-direction: row;
 		gap: 10px;
 		flex-wrap: wrap;
+
 		mat-chip {
 			width: fit-content !important;
 			border-radius: 16px !important;
@@ -136,5 +136,22 @@
 			cursor: pointer;
 			border: none !important;
 		}
+	}
+}
+
+.focus-indicator {
+	:focus-visible {
+		border: 2px solid black !important;
+	}
+}
+
+.icon-button {
+	width: fit-content;
+	height: unset;
+	line-height: unset;
+	padding: 0;
+
+	mat-icon {
+		line-height: normal;
 	}
 }

@@ -9,42 +9,54 @@
 			</ng-template>
 		</span>
 		<div *ngIf="totalIgnoredWritingFeedbackIssues || totalFilteredWritingFeedbackIssues" class="stats-chips-container">
-			<mat-chip *ngIf="totalIgnoredWritingFeedbackIssues" (click)="openFilterDialog(true)">
+			<mat-chip
+				[tabIndex]="0"
+				*ngIf="totalIgnoredWritingFeedbackIssues"
+				(keyup.enter)="openFilterDialog(true)"
+				(click)="openFilterDialog(true)">
 				{{ totalIgnoredWritingFeedbackIssues }}
 				<ng-container i18n>excluded</ng-container>
 			</mat-chip>
-			<mat-chip *ngIf="totalFilteredWritingFeedbackIssues" class="filter-chip" (click)="openFilterDialog()">
-				<span>
-					{{ totalFilteredWritingFeedbackIssues }}
-					<ng-container i18n>filtered</ng-container>
-				</span>
-				<mat-icon
-					class="clear-filter-icon"
-					fontSet="material-icons-round"
-					(click)="$event.stopPropagation(); clearFilter()"
-					matTooltip="Clear Filter"
-					matTooltipClass="web-report-mat-tooltip"
-					i18n-matTooltip>
-					highlight_off
-				</mat-icon>
-			</mat-chip>
+			<button mat-button *ngIf="totalFilteredWritingFeedbackIssues" class="chip-button" (click)="openFilterDialog()">
+				<mat-chip *ngIf="totalFilteredWritingFeedbackIssues" class="filter-chip">
+					<span>
+						{{ totalFilteredWritingFeedbackIssues }}
+						<ng-container i18n>filtered</ng-container>
+					</span>
+					<button
+						mat-icon-button
+						class="clear-filter-btn"
+						(click)="$event.stopPropagation(); clearFilter()"
+						matTooltip="Clear Filter"
+						matTooltipClass="web-report-mat-tooltip"
+						i18n-matTooltip
+						aria-label="Clear filtered results.">
+						<mat-icon class="clear-filter-icon" fontSet="material-icons-round">highlight_off</mat-icon>
+					</button>
+				</mat-chip>
+			</button>
 		</div>
 	</div>
 
 	<div class="actions-btns-container">
 		<ng-container *ngIf="!correctionClicked; else highlightedCorrectioniconRef">
-			<mat-icon
-				class="filter-icon"
-				[class.off]="!filterIndicatorOn"
-				[class.on]="filterIndicatorOn && totalWritingFeedbackIssues > 0"
-				[class.disabled-icon]="totalWritingFeedbackIssues <= 0"
-				fontSet="material-icons-round"
+			<button
+				mat-icon-button
+				class="filter-btn"
 				(click)="openFilterDialog()"
 				matTooltip="Filter corrections"
 				matTooltipClass="web-report-mat-tooltip"
-				i18n-matTooltip>
-				filter_list
-			</mat-icon>
+				i18n-matTooltip
+				[disabled]="totalWritingFeedbackIssues <= 0">
+				<mat-icon
+					class="filter-icon"
+					[class.off]="!filterIndicatorOn"
+					[class.on]="filterIndicatorOn && totalWritingFeedbackIssues > 0"
+					[class.disabled-icon]="totalWritingFeedbackIssues <= 0"
+					fontSet="material-icons-round">
+					filter_list
+				</mat-icon>
+			</button>
 		</ng-container>
 
 		<ng-template #highlightedCorrectioniconRef>

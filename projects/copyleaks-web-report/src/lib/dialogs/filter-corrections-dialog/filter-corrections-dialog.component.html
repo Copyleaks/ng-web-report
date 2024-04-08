@@ -8,16 +8,20 @@
 					<mat-chip *ngIf="totalFilteredCorrections > 0" class="filtered-chip" i18n>
 						{{ totalFilteredCorrections }} filtered
 					</mat-chip>
-					<mat-chip *ngIf="totalExcludedCorrections > 0" class="excluded-chip" (click)="viewExcludedDialog()" i18n>
-						{{ totalExcludedCorrections }} excluded
-					</mat-chip>
+					<button mat-button class="icon-button" *ngIf="totalExcludedCorrections > 0" (click)="viewExcludedDialog()">
+						<mat-chip class="excluded-chip" i18n>{{ totalExcludedCorrections }} excluded</mat-chip>
+					</button>
 				</div>
 			</div>
 
-			<div class="clear-filter-btn" (click)="onClearFilter()">
+			<button
+				mat-icon-button
+				class="clear-filter-btn clear-filter-button-text icon-button"
+				(click)="onClearFilter()"
+				i18n>
 				<mat-icon class="clear-filter-button-icon">refresh</mat-icon>
-				<span class="clear-filter-button-text" i18n>Clear filter</span>
-			</div>
+				Clear filter
+			</button>
 		</div>
 
 		<div mat-dialog-content class="content-container">
@@ -179,7 +183,13 @@
 					<span web-report-title-font class="dialog-title" i18n>Ignored Corrections</span>
 					<span web-report-title-font class="ignored-corrections-stats" i18n>({{ totalExcludedCorrections }})</span>
 				</div>
-				<mat-icon class="exit-filter-button-icon" (click)="onCloseExecludedView()">close</mat-icon>
+				<button
+					mat-icon-button
+					class="icon-button close-dialog-btn"
+					(click)="onCloseExecludedView()"
+					aria-label="Closes dialog">
+					<mat-icon class="exit-filter-button-icon">close</mat-icon>
+				</button>
 			</div>
 			<mat-form-field class="search-input" appearance="fill">
 				<div class="search-input-icon-container" fxLayoutAlign="center center" style="margin-right: 8px" matPrefix>
@@ -205,10 +215,14 @@
 		</div>
 
 		<div mat-dialog-actions class="include-all-container">
-			<span class="include-all-btn" (click)="includeAllToggle()">
+			<button mat-icon-button class="icon-button include-all-btn" (click)="includeAllToggle()">
 				<ng-container *ngIf="allIncluded; else includeAllRef" i18n>Exclude all</ng-container>
 				<ng-template #includeAllRef>Include all</ng-template>
-			</span>
+			</button>
+			<!-- <span class="include-all-btn" (click)="includeAllToggle()">
+				<ng-container *ngIf="allIncluded; else includeAllRef" i18n>Exclude all</ng-container>
+				<ng-template #includeAllRef>Include all</ng-template>
+			</span> -->
 		</div>
 	</ng-container>
 	<ng-container *ngSwitchDefault></ng-container>

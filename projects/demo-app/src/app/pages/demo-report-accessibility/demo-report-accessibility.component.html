@@ -140,11 +140,6 @@
 	</ng-template>
 </div>
 <mat-menu #previewsMenu="matMenu">
-	<button mat-menu-item style="width: 200px" (click)="navigateToReportPreview('bundle/sample-report')">
-		<mat-icon class="item-icon" fontSet="material-icons-round">grading</mat-icon>
-		<span class="item-text">Sample Report</span>
-	</button>
-
 	<button mat-menu-item [matMenuTriggerFor]="bundleMenu" style="width: 200px">
 		<mat-icon class="item-icon" fontSet="material-icons-round">view_agenda</mat-icon>
 		<span class="item-text">Bundle</span>
@@ -158,6 +153,11 @@
 	<button mat-menu-item style="width: 200px" (click)="navigateToReportPreview('ai-only/default')">
 		<mat-icon class="item-icon" fontSet="material-icons-round">smart_toy</mat-icon>
 		<span class="item-text">AI Only</span>
+	</button>
+
+	<button mat-menu-item style="width: 200px" (click)="navigateToReportPreview('writing-feedback/wf-only')">
+		<mat-icon class="item-icon" fontSet="material-icons-round">spellcheck</mat-icon>
+		<span class="item-text">Writing Feedback Only</span>
 	</button>
 
 	<button mat-menu-item style="width: 200px" (click)="navigateToReportPreview('all-disabled/default')">
@@ -211,6 +211,15 @@
 
 <mat-menu #bundleMenu="matMenu">
 	<button
+		(click)="navigateToReportPreview('bundle/both')"
+		matTooltipPosition="right"
+		matTooltip="Suspected AI Text Example"
+		mat-menu-item>
+		<mat-icon class="item-icon" fontSet="material-icons-round">circle</mat-icon>
+		<span class="item-text">Both</span>
+	</button>
+
+	<button
 		(click)="navigateToReportPreview('bundle/default')"
 		matTooltip="Scanned Website Example"
 		matTooltipPosition="right"
@@ -234,13 +243,14 @@
 		<mat-icon class="item-icon" fontSet="material-icons-round">smart_toy</mat-icon>
 		<span class="item-text">AI</span>
 	</button>
+
 	<button
-		(click)="navigateToReportPreview('bundle/both')"
+		(click)="navigateToReportPreview('writing-feedback/scan-3')"
 		matTooltipPosition="right"
-		matTooltip="Suspected AI Text Example"
+		matTooltip="Writing feedback Scan Example"
 		mat-menu-item>
-		<mat-icon class="item-icon" fontSet="material-icons-round">circle</mat-icon>
-		<span class="item-text">Both</span>
+		<mat-icon class="item-icon" fontSet="material-icons-round">spellcheck</mat-icon>
+		<span class="item-text">Writing Feedback</span>
 	</button>
 
 	<button
@@ -268,5 +278,43 @@
 		mat-menu-item>
 		<mat-icon class="item-icon" fontSet="material-icons-round">edit</mat-icon>
 		<span class="item-text">Custom Empty State</span>
+	</button>
+</mat-menu>
+
+<mat-menu #plagiarismMenu="matMenu">
+	<button
+		(click)="navigateToReportPreview('plagiairsm-only/batch')"
+		matTooltipPosition="right"
+		matTooltip="Report With Batch Result Example"
+		mat-menu-item>
+		<mat-icon class="item-icon" fontSet="material-icons-round">batch_prediction</mat-icon>
+		<span class="item-text">Batch</span>
+	</button>
+
+	<button
+		(click)="navigateToReportPreview('plagiairsm-only/cross-language')"
+		matTooltipPosition="right"
+		matTooltip="Report With Batch Result Example"
+		mat-menu-item>
+		<mat-icon class="item-icon" fontSet="material-icons-round">translate</mat-icon>
+		<span class="item-text">Cross Language</span>
+	</button>
+
+	<button
+		(click)="navigateToReportPreview('plagiairsm-only/more-than-100-results')"
+		matTooltipPosition="right"
+		matTooltip="Report With Batch Result Example"
+		mat-menu-item>
+		<mat-icon class="item-icon" fontSet="material-icons-round">reorder</mat-icon>
+		<span class="item-text">100+ Results</span>
+	</button>
+
+	<button
+		(click)="navigateToReportPreview('plagiairsm-only/partial-report')"
+		matTooltipPosition="right"
+		matTooltip="Partial Report Example"
+		mat-menu-item>
+		<mat-icon class="item-icon" fontSet="material-icons-round">hourglass_top</mat-icon>
+		<span class="item-text">Partial Report</span>
 	</button>
 </mat-menu>

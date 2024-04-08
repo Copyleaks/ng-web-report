@@ -160,10 +160,14 @@
 </ng-container>
 <ng-template #selectedCategroyRef>
 	<div class="selected-category-toolbar">
-		<div class="total-corrections-container" (click)="goToAllCorrectionsView()">
+		<button
+			mat-icon-button
+			class="total-corrections-container all-correction-title icon-button"
+			(click)="goToAllCorrectionsView()"
+			i18n>
 			<mat-icon class="left-arrow">chevron_left</mat-icon>
-			<span class="all-correction-title" i18n>All Corrections ({{ totalWritingFeedbackIssues }})</span>
-		</div>
+			All Corrections ({{ totalWritingFeedbackIssues }})
+		</button>
 		<div class="selected-correction-container">
 			<mat-icon class="right-arrow">chevron_right</mat-icon>
 			<span class="correction-title" web-report-title-font i18n>

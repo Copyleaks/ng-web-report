@@ -73,36 +73,51 @@
 					line-break: anywhere;
 				}
 			}
-			.correction-type {
-				background: rgba(255, 154, 2, 0.1) !important;
-				color: $color-grammar-dark !important;
-				font-size: 12px !important;
-				font-style: normal !important;
-				font-weight: 500 !important;
-				line-height: normal;
-				text-transform: capitalize;
-				width: fit-content !important;
-				border: none !important;
-				cursor: pointer;
-				transition: 0.5s;
-				&:hover {
-					border: 1px solid $color-grammar-dark;
-					box-shadow: 0px 1px 2px 0px rgba(0, 0, 0, 0.27);
+			.correction-type-btn {
+				padding: 0;
+				width: fit-content;
+
+				.correction-type {
+					background: rgba(255, 154, 2, 0.1) !important;
+					color: $color-grammar-dark !important;
+					font-size: 12px !important;
+					font-style: normal !important;
+					font-weight: 500 !important;
+					line-height: normal;
+					text-transform: capitalize;
+					width: fit-content !important;
+					border: none !important;
+					cursor: pointer;
+					transition: 0.5s;
+					&:hover {
+						border: 1px solid $color-grammar-dark;
+						box-shadow: 0px 1px 2px 0px rgba(0, 0, 0, 0.27);
+					}
 				}
 			}
 		}
 
-		.options-icon {
-			$icon-size: 18px;
-			width: $icon-size;
-			height: $icon-size;
-			font-size: $icon-size;
-			color: $color-dark-blue;
-			align-self: flex-start;
-			cursor: pointer;
-		}
-		.options-icon:hover {
-			color: $color-primary;
+		.exclude-toggle-btn {
+			width: 18px;
+			height: 18px;
+			.options-icon {
+				$icon-size: 18px;
+				width: $icon-size;
+				height: $icon-size;
+				font-size: $icon-size;
+				color: $color-dark-blue;
+				align-self: flex-start;
+				cursor: pointer;
+				line-height: normal;
+			}
+			.options-icon:hover {
+				color: $color-primary;
+			}
+			&:focus-visible {
+				.options-icon {
+					color: $color-primary;
+				}
+			}
 		}
 	}
 
@@ -176,4 +191,11 @@
 
 mat-icon:hover {
 	transition: 0.2s;
+}
+
+.icon-button {
+	width: unset;
+	height: unset;
+	line-height: unset;
+	min-width: unset;
 }

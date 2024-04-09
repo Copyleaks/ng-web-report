@@ -1,181 +1,23 @@
-<cr-results-actions
-	*ngIf="!showLoadingView"
-	[resultsActions]="resultsActions"
-	[searchedValue]="searchedValue"
-	[showLoadingView]="false"
-	[isMobile]="isMobile"
-	[isFilterOn]="filterIndicatorOn"
-	[expandSection]="showResultsSection"
-	(onExpandToggle)="showResultsSection = $event"
-	(onSearch)="onSearch($event)"></cr-results-actions>
+<ng-container *ngIf="!selectedCategory; else selectedCategroyRef">
+	<cr-results-actions
+		*ngIf="!showLoadingView"
+		[resultsActions]="resultsActions"
+		[searchedValue]="searchedValue"
+		[showLoadingView]="false"
+		[isMobile]="isMobile"
+		[isFilterOn]="filterIndicatorOn"
+		[expandSection]="showResultsSection"
+		(onExpandToggle)="showResultsSection = $event"
+		(onSearch)="onSearch($event)"></cr-results-actions>
 
-<div
-	class="report-results-item-top-container"
-	[style]="'width:100%'"
-	[style.display]="
-		showLoadingView || !showResultsSection || !displayedResults || showCustomResults || displayedResults.length === 0
-			? 'none'
-			: 'flex'
-	">
-	<div #resultsContainer class="results-item-top-container">
-		<div
-			fxLayoutGap="8px"
-			[ngClass]="{
-				'results-item-container': !isMobile,
-				'results-item-mobile-container': isMobile
-			}">
-			<ng-container *ngIf="displayedResults && displayedResults.length > 0">
-				<ng-container *ngIf="!isMobile; else mobileContainerView">
-					<cdk-virtual-scroll-viewport
-						class="desktop-scroll"
-						itemSize="189"
-						[ngClass]="{ 'scroll-with-padding': addPaddingToContainer }">
-						<div
-							style="width: 100%"
-							fxLayout="column"
-							fxLayoutAlign="start start"
-							fxLayoutGap="4px"
-							*cdkVirtualFor="let item of displayedResults">
-							<cr-report-results-item
-								#resultitem
-								[resultItem]="item"
-								[isMobile]="isMobile"
-								[reportViewSvc]="reportViewSvc"
-								[reportDataSvc]="reportDataSvc"
-								[highlightService]="highlightService"
-								[reportNgTemplatesSvc]="reportNgTemplatesSvc"
-								(hiddenResultEvent)="excludeResultById($event)"
-								(showResultEvent)="includeResultById($event)"
-								style="width: 100%"></cr-report-results-item>
-						</div>
-					</cdk-virtual-scroll-viewport>
-				</ng-container>
-				<ng-template #mobileContainerView>
-					<cdk-virtual-scroll-viewport
-						class="mobile-scroll"
-						orientation="horizontal"
-						itemSize="313"
-						(scrolledIndexChange)="onScroll($event)">
-						<div
-							style="width: 100%"
-							fxLayout="column"
-							fxLayoutAlign="start start"
-							fxLayoutGap="4px"
-							*cdkVirtualFor="let item of displayedResults">
-							<cr-report-results-item
-								#resultitem
-								[resultItem]="item"
-								[isMobile]="isMobile"
-								[reportViewSvc]="reportViewSvc"
-								[reportDataSvc]="reportDataSvc"
-								[highlightService]="highlightService"
-								[reportNgTemplatesSvc]="reportNgTemplatesSvc"
-								(hiddenResultEvent)="excludeResultById($event)"
-								(showResultEvent)="includeResultById($event)"
-								style="width: 100%"></cr-report-results-item>
-						</div>
-
-						<div
-							class="custom-results-container-mobile"
-							#customEmptyResultView
-							[ngStyle]="{
-								display:
-									customResultsTemplate && reportViewMode === ECustomResultsReportView.Partial && showResultsSection
-										? 'flex'
-										: 'none'
-							}">
-							<ng-container *ngTemplateOutlet="customResultsTemplate ?? null"></ng-container>
-						</div>
-					</cdk-virtual-scroll-viewport>
-				</ng-template>
-
-				<ng-container *ngIf="lastItemLoading">
-					<cr-report-results-item
-						[reportViewSvc]="reportViewSvc"
-						[reportNgTemplatesSvc]="reportNgTemplatesSvc"
-						[reportDataSvc]="reportDataSvc"
-						[highlightService]="highlightService"
-						[showLoader]="true"
-						[style]="'width:100%'"></cr-report-results-item>
-				</ng-container>
-			</ng-container>
-		</div>
-	</div>
-	<div
-		class="navigate-mobie-button-contaienr"
-		*ngIf="isMobile && displayedResultsLength > 1"
-		fxLayout="row"
-		fxLayoutAlign="start center"
-		fxLayoutGap="8px">
-		<mat-chip
-			*ngIf="displayedResultsLength > 5 && currentViewedIndex > 2"
-			role="button"
-			(click)="scrollToIndex(0)"
-			class="mat-chip-navigate">
-			{{ currentViewedIndex < displayedResultsLength - 3 ? currentViewedIndex - 2 : displayedResultsLength - 5 }}
-		</mat-chip>
-		<button
-			class="navigate-mobie-button"
-			aria-label="This is a result navigation button."
-			i18n-aria-label
-			[ngClass]="{
-				'navigate-mobie-button-select ': navigateMobileButton == enumNavigateMobileButton.FirstButton
-			}"
-			(click)="onDotNavigate(enumNavigateMobileButton.FirstButton)"></button>
-		<button
-			*ngIf="displayedResultsLength > 1"
-			class="navigate-mobie-button"
-			aria-label="This is a result navigation button."
-			i18n-aria-label
-			[ngClass]="{
-				'navigate-mobie-button-select ': navigateMobileButton == enumNavigateMobileButton.SecondButton
-			}"
-			(click)="onDotNavigate(enumNavigateMobileButton.SecondButton)"></button>
-		<button
-			*ngIf="displayedResultsLength > 2"
-			class="navigate-mobie-button"
-			aria-label="This is a result navigation button."
-			i18n-aria-label
-			[ngClass]="{
-				'navigate-mobie-button-select ': navigateMobileButton == enumNavigateMobileButton.ThirdButton
-			}"
-			(click)="onDotNavigate(enumNavigateMobileButton.ThirdButton)"></button>
-		<button
-			*ngIf="displayedResultsLength > 3"
-			class="navigate-mobie-button"
-			aria-label="This is a result navigation button."
-			i18n-aria-label
-			[ngClass]="{
-				'navigate-mobie-button-select ': navigateMobileButton == enumNavigateMobileButton.FourthButton
-			}"
-			(click)="onDotNavigate(enumNavigateMobileButton.FourthButton)"></button>
-		<button
-			*ngIf="displayedResultsLength > 4"
-			class="navigate-mobie-button"
-			aria-label="This is a result navigation button."
-			i18n-aria-label
-			[ngClass]="{
-				'navigate-mobie-button-select ': navigateMobileButton == enumNavigateMobileButton.FifthButton
-			}"
-			(click)="onDotNavigate(enumNavigateMobileButton.FifthButton)"></button>
-
-		<mat-chip
-			*ngIf="displayedResultsLength > 5 && currentViewedIndex < displayedResultsLength - 3"
-			role="button"
-			(click)="scrollToIndex(displayedResultsLength - 1)"
-			class="mat-chip-navigate">
-			{{ currentViewedIndex > 2 ? displayedResultsLength - currentViewedIndex - 3 : displayedResultsLength - 5 }}
-		</mat-chip>
-	</div>
-</div>
-<ng-container *ngIf="showLoadingView">
-	<cr-results-actions [showLoadingView]="showLoadingView"></cr-results-actions>
 	<div
 		class="report-results-item-top-container"
 		[style]="'width:100%'"
-		fxLayout="column"
-		fxLayoutAlign="start center"
-		fxLayoutGap="8px">
+		[style.display]="
+			showLoadingView || !showResultsSection || !displayedResults || showCustomResults || displayedResults.length === 0
+				? 'none'
+				: 'flex'
+		">
 		<div #resultsContainer class="results-item-top-container">
 			<div
 				fxLayoutGap="8px"
@@ -183,8 +25,83 @@
 					'results-item-container': !isMobile,
 					'results-item-mobile-container': isMobile
 				}">
-				<ng-container *ngIf="!newResults || newResults.length === 0; else realTimeView">
-					<ng-container *ngFor="let _ of [1, 2, 3, 4, 5, 6, 7, 8]">
+				<ng-container *ngIf="displayedResults && displayedResults.length > 0">
+					<ng-container *ngIf="!isMobile; else mobileContainerView">
+						<cdk-virtual-scroll-viewport
+							class="desktop-scroll"
+							itemSize="189"
+							[ngClass]="{ 'scroll-with-padding': addPaddingToContainer }"
+							minBufferPx="200"
+							maxBufferPx="1000">
+							<div class="corrections-types-container">
+								<span class="categorized-summery" i18n>Categorized Summary</span>
+								<cr-categories-analysis-panel
+									*ngFor="let stats of allMatchResultsStats"
+									[matchesStats]="stats"
+									[selectedView]="EReportViewType.PlagiarismView"
+									(selectCategory)="onSelectCategory($event)"></cr-categories-analysis-panel>
+								<span class="categorized-summery" i18n>Chronological</span>
+							</div>
+							<div
+								style="width: 100%"
+								fxLayout="column"
+								fxLayoutAlign="start start"
+								fxLayoutGap="4px"
+								*cdkVirtualFor="let item of displayedResults">
+								<cr-report-results-item
+									#resultitem
+									[resultItem]="item"
+									[isMobile]="isMobile"
+									[reportViewSvc]="reportViewSvc"
+									[reportDataSvc]="reportDataSvc"
+									[highlightService]="highlightService"
+									[reportNgTemplatesSvc]="reportNgTemplatesSvc"
+									(hiddenResultEvent)="excludeResultById($event)"
+									(showResultEvent)="includeResultById($event)"
+									style="width: 100%"></cr-report-results-item>
+							</div>
+						</cdk-virtual-scroll-viewport>
+					</ng-container>
+					<ng-template #mobileContainerView>
+						<cdk-virtual-scroll-viewport
+							class="mobile-scroll"
+							orientation="horizontal"
+							itemSize="313"
+							(scrolledIndexChange)="onScroll($event)">
+							<div
+								style="width: 100%"
+								fxLayout="column"
+								fxLayoutAlign="start start"
+								fxLayoutGap="4px"
+								*cdkVirtualFor="let item of displayedResults">
+								<cr-report-results-item
+									#resultitem
+									[resultItem]="item"
+									[isMobile]="isMobile"
+									[reportViewSvc]="reportViewSvc"
+									[reportDataSvc]="reportDataSvc"
+									[highlightService]="highlightService"
+									[reportNgTemplatesSvc]="reportNgTemplatesSvc"
+									(hiddenResultEvent)="excludeResultById($event)"
+									(showResultEvent)="includeResultById($event)"
+									style="width: 100%"></cr-report-results-item>
+							</div>
+
+							<div
+								class="custom-results-container-mobile"
+								#customEmptyResultView
+								[ngStyle]="{
+									display:
+										customResultsTemplate && reportViewMode === ECustomResultsReportView.Partial && showResultsSection
+											? 'flex'
+											: 'none'
+								}">
+								<ng-container *ngTemplateOutlet="customResultsTemplate ?? null"></ng-container>
+							</div>
+						</cdk-virtual-scroll-viewport>
+					</ng-template>
+
+					<ng-container *ngIf="lastItemLoading">
 						<cr-report-results-item
 							[reportViewSvc]="reportViewSvc"
 							[reportNgTemplatesSvc]="reportNgTemplatesSvc"
@@ -194,84 +111,223 @@
 							[style]="'width:100%'"></cr-report-results-item>
 					</ng-container>
 				</ng-container>
-				<ng-template #realTimeView>
-					<ng-container *ngFor="let item of newResults">
-						<cr-report-results-item
-							class="real-time-result"
-							[reportViewSvc]="reportViewSvc"
-							[reportNgTemplatesSvc]="reportNgTemplatesSvc"
-							[reportDataSvc]="reportDataSvc"
-							[highlightService]="highlightService"
-							[resultItem]="item"
-							[isMobile]="isMobile"
-							[showLoader]="false"
-							[showItemBody]="true"
-							(hiddenResultEvent)="excludeResultById($event)"
-							(showResultEvent)="includeResultById($event)"
-							style="width: 100%">
-							>
-						</cr-report-results-item>
-					</ng-container>
-
-					<ng-container *ngFor="let _ of [1, 2, 3]">
-						<cr-report-results-item
-							[reportViewSvc]="reportViewSvc"
-							[reportNgTemplatesSvc]="reportNgTemplatesSvc"
-							[reportDataSvc]="reportDataSvc"
-							[highlightService]="highlightService"
-							[showLoader]="true"
-							[style]="'width:100%'"></cr-report-results-item>
-					</ng-container>
-				</ng-template>
 			</div>
 		</div>
+		<div
+			class="navigate-mobie-button-contaienr"
+			*ngIf="isMobile && displayedResultsLength > 1"
+			fxLayout="row"
+			fxLayoutAlign="start center"
+			fxLayoutGap="8px">
+			<mat-chip
+				*ngIf="displayedResultsLength > 5 && currentViewedIndex > 2"
+				role="button"
+				(click)="scrollToIndex(0)"
+				class="mat-chip-navigate">
+				{{ currentViewedIndex < displayedResultsLength - 3 ? currentViewedIndex - 2 : displayedResultsLength - 5 }}
+			</mat-chip>
+			<button
+				class="navigate-mobie-button"
+				aria-label="This is a result navigation button."
+				i18n-aria-label
+				[ngClass]="{
+					'navigate-mobie-button-select ': navigateMobileButton == enumNavigateMobileButton.FirstButton
+				}"
+				(click)="onDotNavigate(enumNavigateMobileButton.FirstButton)"></button>
+			<button
+				*ngIf="displayedResultsLength > 1"
+				class="navigate-mobie-button"
+				aria-label="This is a result navigation button."
+				i18n-aria-label
+				[ngClass]="{
+					'navigate-mobie-button-select ': navigateMobileButton == enumNavigateMobileButton.SecondButton
+				}"
+				(click)="onDotNavigate(enumNavigateMobileButton.SecondButton)"></button>
+			<button
+				*ngIf="displayedResultsLength > 2"
+				class="navigate-mobie-button"
+				aria-label="This is a result navigation button."
+				i18n-aria-label
+				[ngClass]="{
+					'navigate-mobie-button-select ': navigateMobileButton == enumNavigateMobileButton.ThirdButton
+				}"
+				(click)="onDotNavigate(enumNavigateMobileButton.ThirdButton)"></button>
+			<button
+				*ngIf="displayedResultsLength > 3"
+				class="navigate-mobie-button"
+				aria-label="This is a result navigation button."
+				i18n-aria-label
+				[ngClass]="{
+					'navigate-mobie-button-select ': navigateMobileButton == enumNavigateMobileButton.FourthButton
+				}"
+				(click)="onDotNavigate(enumNavigateMobileButton.FourthButton)"></button>
+			<button
+				*ngIf="displayedResultsLength > 4"
+				class="navigate-mobie-button"
+				aria-label="This is a result navigation button."
+				i18n-aria-label
+				[ngClass]="{
+					'navigate-mobie-button-select ': navigateMobileButton == enumNavigateMobileButton.FifthButton
+				}"
+				(click)="onDotNavigate(enumNavigateMobileButton.FifthButton)"></button>
+
+			<mat-chip
+				*ngIf="displayedResultsLength > 5 && currentViewedIndex < displayedResultsLength - 3"
+				role="button"
+				(click)="scrollToIndex(displayedResultsLength - 1)"
+				class="mat-chip-navigate">
+				{{ currentViewedIndex > 2 ? displayedResultsLength - currentViewedIndex - 3 : displayedResultsLength - 5 }}
+			</mat-chip>
+		</div>
+	</div>
+	<ng-container *ngIf="showLoadingView">
+		<cr-results-actions [showLoadingView]="showLoadingView"></cr-results-actions>
+		<div
+			class="report-results-item-top-container"
+			[style]="'width:100%'"
+			fxLayout="column"
+			fxLayoutAlign="start center"
+			fxLayoutGap="8px">
+			<div #resultsContainer class="results-item-top-container">
+				<div
+					fxLayoutGap="8px"
+					[ngClass]="{
+						'results-item-container': !isMobile,
+						'results-item-mobile-container': isMobile
+					}">
+					<ng-container *ngIf="!newResults || newResults.length === 0; else realTimeView">
+						<ng-container *ngFor="let _ of [1, 2, 3, 4, 5, 6, 7, 8]">
+							<cr-report-results-item
+								[reportViewSvc]="reportViewSvc"
+								[reportNgTemplatesSvc]="reportNgTemplatesSvc"
+								[reportDataSvc]="reportDataSvc"
+								[highlightService]="highlightService"
+								[showLoader]="true"
+								[style]="'width:100%'"></cr-report-results-item>
+						</ng-container>
+					</ng-container>
+					<ng-template #realTimeView>
+						<ng-container *ngFor="let item of newResults">
+							<cr-report-results-item
+								class="real-time-result"
+								[reportViewSvc]="reportViewSvc"
+								[reportNgTemplatesSvc]="reportNgTemplatesSvc"
+								[reportDataSvc]="reportDataSvc"
+								[highlightService]="highlightService"
+								[resultItem]="item"
+								[isMobile]="isMobile"
+								[showLoader]="false"
+								[showItemBody]="true"
+								(hiddenResultEvent)="excludeResultById($event)"
+								(showResultEvent)="includeResultById($event)"
+								style="width: 100%">
+								>
+							</cr-report-results-item>
+						</ng-container>
+
+						<ng-container *ngFor="let _ of [1, 2, 3]">
+							<cr-report-results-item
+								[reportViewSvc]="reportViewSvc"
+								[reportNgTemplatesSvc]="reportNgTemplatesSvc"
+								[reportDataSvc]="reportDataSvc"
+								[highlightService]="highlightService"
+								[showLoader]="true"
+								[style]="'width:100%'"></cr-report-results-item>
+						</ng-container>
+					</ng-template>
+				</div>
+			</div>
+		</div>
+	</ng-container>
+
+	<cr-empty-result-state
+		*ngIf="
+			!showLoadingView &&
+			!showCustomView &&
+			showResultsSection &&
+			(!displayedResults || displayedResults.length === 0) &&
+			!(
+				customResultsTemplate &&
+				(reportViewMode === ECustomResultsReportView.Full || reportViewMode === ECustomResultsReportView.Partial)
+			)
+		">
+		>
+	</cr-empty-result-state>
+
+	<div
+		class="custom-empty-results-container"
+		#customEmptyResultView
+		[ngStyle]="{
+			display:
+				!showCustomView ||
+				showLoadingView ||
+				!(!displayedResults || displayedResults.length === 0) ||
+				!showResultsSection ||
+				(customResultsTemplate &&
+					(reportViewMode === ECustomResultsReportView.Full || reportViewMode === ECustomResultsReportView.Partial))
+					? 'none'
+					: 'flex'
+		}">
+		<ng-container *ngTemplateOutlet="customEmptyResultsTemplate ?? null"></ng-container>
+	</div>
+
+	<div
+		class="custom-results-container"
+		[ngStyle]="{
+			display:
+				(customResultsTemplate && reportViewMode === ECustomResultsReportView.Full && showResultsSection) ||
+				(!showLoadingView &&
+					customResultsTemplate &&
+					isMobile &&
+					reportViewMode === ECustomResultsReportView.Partial &&
+					showResultsSection &&
+					(!displayedResults || displayedResults.length === 0))
+					? 'flex'
+					: 'none'
+		}">
+		<ng-container *ngTemplateOutlet="customResultsTemplate ?? null"></ng-container>
 	</div>
 </ng-container>
 
-<cr-empty-result-state
-	*ngIf="
-		!showLoadingView &&
-		!showCustomView &&
-		showResultsSection &&
-		(!displayedResults || displayedResults.length === 0) &&
-		!(
-			customResultsTemplate &&
-			(reportViewMode === ECustomResultsReportView.Full || reportViewMode === ECustomResultsReportView.Partial)
-		)
-	">
-	>
-</cr-empty-result-state>
+<ng-template #selectedCategroyRef>
+	<div class="selected-category-container">
+		<div class="selected-category-toolbar">
+			<div class="total-corrections-container" (click)="goToAllResultsView()">
+				<mat-icon class="left-arrow">chevron_left</mat-icon>
+				<span class="all-correction-title" i18n>All Matching Results ({{ resultsActions?.totalResults }})</span>
+			</div>
+			<div class="selected-correction-container">
+				<mat-icon class="right-arrow">chevron_right</mat-icon>
+				<span class="correction-title" web-report-title-font i18n>
+					{{ selectedCategory?.type }} ({{ selectedCategoryResults?.length }})
+				</span>
+			</div>
+		</div>
 
-<div
-	class="custom-empty-results-container"
-	#customEmptyResultView
-	[ngStyle]="{
-		display:
-			!showCustomView ||
-			showLoadingView ||
-			!(!displayedResults || displayedResults.length === 0) ||
-			!showResultsSection ||
-			(customResultsTemplate &&
-				(reportViewMode === ECustomResultsReportView.Full || reportViewMode === ECustomResultsReportView.Partial))
-				? 'none'
-				: 'flex'
-	}">
-	<ng-container *ngTemplateOutlet="customEmptyResultsTemplate ?? null"></ng-container>
-</div>
+		<span class="categorized-summery" i18n>Chronological</span>
 
-<div
-	class="custom-results-container"
-	[ngStyle]="{
-		display:
-			(customResultsTemplate && reportViewMode === ECustomResultsReportView.Full && showResultsSection) ||
-			(!showLoadingView &&
-				customResultsTemplate &&
-				isMobile &&
-				reportViewMode === ECustomResultsReportView.Partial &&
-				showResultsSection &&
-				(!displayedResults || displayedResults.length === 0))
-				? 'flex'
-				: 'none'
-	}">
-	<ng-container *ngTemplateOutlet="customResultsTemplate ?? null"></ng-container>
-</div>
+		<cdk-virtual-scroll-viewport
+			class="desktop-scroll all-corrections-info-container"
+			itemSize="189"
+			[ngClass]="{ 'scroll-with-padding': addPaddingToContainer }">
+			<div
+				style="width: 100%"
+				fxLayout="column"
+				fxLayoutAlign="start start"
+				fxLayoutGap="4px"
+				*cdkVirtualFor="let item of selectedCategoryResults">
+				<cr-report-results-item
+					#resultitem
+					[resultItem]="item"
+					[isMobile]="isMobile"
+					[reportViewSvc]="reportViewSvc"
+					[reportDataSvc]="reportDataSvc"
+					[highlightService]="highlightService"
+					[reportNgTemplatesSvc]="reportNgTemplatesSvc"
+					(hiddenResultEvent)="excludeResultById($event)"
+					(showResultEvent)="includeResultById($event)"
+					style="width: 100%"></cr-report-results-item>
+			</div>
+		</cdk-virtual-scroll-viewport>
+	</div>
+</ng-template>

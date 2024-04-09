@@ -5,8 +5,8 @@ import { IFilterCorrectionsDialogData } from '../../../dialogs/filter-correction
 import { ReportDataService } from '../../../services/report-data.service';
 import { ReportViewService } from '../../../services/report-view.service';
 import { EFilterCorrectionsDialogView } from '../../../dialogs/filter-corrections-dialog/enums/filter-corrections-dialog.enums';
-import { IWritingFeedbackTypeStatistics } from '../../../models/report-data.models';
 import { ReportMatchHighlightService } from '../../../services/report-match-highlight.service';
+import { IWritingFeedbackTypeStatistics } from '../../../models/report-statistics.models';
 
 @Component({
 	selector: 'cr-corrections-actions',

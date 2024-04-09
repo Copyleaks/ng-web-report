@@ -2,12 +2,7 @@ import { Renderer2, TemplateRef } from '@angular/core';
 import { combineLatest } from 'rxjs';
 import { filter } from 'rxjs/operators';
 import { ALERTS } from '../../../constants/report-alerts.constants';
-import {
-	EReportViewType,
-	EResponsiveLayoutType,
-	EWritingFeedbackCategories,
-	EWritingFeedbackTypes,
-} from '../../../enums/copyleaks-web-report.enums';
+import { EReportViewType, EResponsiveLayoutType } from '../../../enums/copyleaks-web-report.enums';
 import {
 	ICompleteResultNotificationAlert,
 	ICompleteResults,
@@ -15,13 +10,16 @@ import {
 	IWritingFeedback,
 	IWritingFeedbackCorrectionViewModel,
 	IWritingFeedbackScanScource,
-	IWritingFeedbackTypeStatistics,
 	ResultPreview,
 } from '../../../models/report-data.models';
 import { PostMessageEvent } from '../../../models/report-iframe-events.models';
 import { Match, MatchType, ResultDetailItem, SlicedMatch } from '../../../models/report-matches.models';
 import { ICopyleaksReportOptions } from '../../../models/report-options.models';
-import { ReportStatistics } from '../../../models/report-statistics.models';
+import {
+	IMatchesTypeStatistics,
+	IWritingFeedbackTypeStatistics,
+	ReportStatistics,
+} from '../../../models/report-statistics.models';
 import { ReportDataService } from '../../../services/report-data.service';
 import { ReportMatchHighlightService } from '../../../services/report-match-highlight.service';
 import { ReportMatchesService } from '../../../services/report-matches.service';
@@ -97,6 +95,7 @@ export abstract class OneToManyReportLayoutBaseComponent extends ReportLayoutBas
 	showCorrectionsLoadingView: boolean = true;
 	showReadabilityLoadingView: boolean = true;
 	allWritingFeedbacksStats: IWritingFeedbackTypeStatistics[];
+	allMatchResultsStats: IMatchesTypeStatistics[];
 
 	override get rerendered(): boolean {
 		return this.oneToManyRerendered;
@@ -249,7 +248,7 @@ export abstract class OneToManyReportLayoutBaseComponent extends ReportLayoutBas
 				);
 
 				this.allScanCorrectionsView = [];
-				this.allWritingFeedbacksStats = this._initCorrectionsStatistics();
+				this.allWritingFeedbacksStats = this.statisticsSvc.initCorrectionsStatistics();
 
 				const contentTextMatches = helpers.processCorrectionsText(filteredCorrections, 'text', scanSource);
 				let correctionIndex: number = 0;
@@ -267,7 +266,7 @@ export abstract class OneToManyReportLayoutBaseComponent extends ReportLayoutBas
 								end: correction.match.end,
 								index: correctionIndex,
 							} as IWritingFeedbackCorrectionViewModel);
-							this._increaseCorrectionsCategoryTotal(
+							this.statisticsSvc.increaseCorrectionsCategoryTotal(
 								this.allWritingFeedbacksStats,
 								correction.match.writingFeedbackType
 							);
@@ -586,7 +585,7 @@ export abstract class OneToManyReportLayoutBaseComponent extends ReportLayoutBas
 		)
 			return [];
 
-		this.writingFeedbackStats = this._initCorrectionsStatistics();
+		this.writingFeedbackStats = this.statisticsSvc.initCorrectionsStatistics();
 
 		const viewedCorrections = [];
 		let correctionIndex: number = 0;
@@ -603,267 +602,14 @@ export abstract class OneToManyReportLayoutBaseComponent extends ReportLayoutBas
 							c => correction.match.start === c.start && correction.match.end === c.end
 						)?.index,
 					} as IWritingFeedbackCorrectionViewModel);
-					this._increaseCorrectionsCategoryTotal(this.writingFeedbackStats, correction.match.writingFeedbackType);
+					this.statisticsSvc.increaseCorrectionsCategoryTotal(
+						this.writingFeedbackStats,
+						correction.match.writingFeedbackType
+					);
 					correctionIndex++;
 				}
 			}
 		}
 		return viewedCorrections;
-	}
-
-	private _initCorrectionsStatistics(): IWritingFeedbackTypeStatistics[] {
-		return [
-			{
-				type: EWritingFeedbackTypes.General,
-				categories: [
-					{
-						type: EWritingFeedbackCategories.General,
-						totalIssues: 0,
-					},
-				],
-			},
-			{
-				type: EWritingFeedbackTypes.Grammar,
-				categories: [
-					{
-						type: EWritingFeedbackCategories.SubjectVerbDisagreement,
-						totalIssues: 0,
-					},
-					{
-						type: EWritingFeedbackCategories.NounForm,
-						totalIssues: 0,
-					},
-					{
-						type: EWritingFeedbackCategories.VerbForm,
-						totalIssues: 0,
-					},
-					{
-						type: EWritingFeedbackCategories.Article,
-						totalIssues: 0,
-					},
-					{
-						type: EWritingFeedbackCategories.Preposition,
-						totalIssues: 0,
-					},
-					{
-						type: EWritingFeedbackCategories.Pronoun,
-						totalIssues: 0,
-					},
-					{
-						type: EWritingFeedbackCategories.PartOfSpeech,
-						totalIssues: 0,
-					},
-					{
-						type: EWritingFeedbackCategories.Conjunction,
-						totalIssues: 0,
-					},
-				],
-			},
-			{
-				type: EWritingFeedbackTypes.WordChoice,
-				categories: [
-					{
-						type: EWritingFeedbackCategories.MisusedWord,
-						totalIssues: 0,
-					},
-					{
-						type: EWritingFeedbackCategories.Homophone,
-						totalIssues: 0,
-					},
-				],
-			},
-			{
-				type: EWritingFeedbackTypes.Mechanics,
-				categories: [
-					{
-						type: EWritingFeedbackCategories.Capitalization,
-						totalIssues: 0,
-					},
-					{
-						type: EWritingFeedbackCategories.Hyphen,
-						totalIssues: 0,
-					},
-					{
-						type: EWritingFeedbackCategories.Punctuation,
-						totalIssues: 0,
-					},
-					{
-						type: EWritingFeedbackCategories.Comma,
-						totalIssues: 0,
-					},
-					{
-						type: EWritingFeedbackCategories.Apostrophe,
-						totalIssues: 0,
-					},
-					{
-						type: EWritingFeedbackCategories.Space,
-						totalIssues: 0,
-					},
-					{
-						type: EWritingFeedbackCategories.Spelling,
-						totalIssues: 0,
-					},
-				],
-			},
-			{
-				type: EWritingFeedbackTypes.SentenceStructure,
-				categories: [
-					{
-						type: EWritingFeedbackCategories.FusedSentence,
-						totalIssues: 0,
-					},
-					{
-						type: EWritingFeedbackCategories.CommaSplice,
-						totalIssues: 0,
-					},
-					{
-						type: EWritingFeedbackCategories.SentenceFragments,
-						totalIssues: 0,
-					},
-					{
-						type: EWritingFeedbackCategories.IneffectiveConstruction,
-						totalIssues: 0,
-					},
-					{
-						type: EWritingFeedbackCategories.ExtraWords,
-						totalIssues: 0,
-					},
-					{
-						type: EWritingFeedbackCategories.MissingWords,
-						totalIssues: 0,
-					},
-				],
-			},
-			{
-				type: EWritingFeedbackTypes.MismatchInGenderBetweenAdjectives,
-				categories: [
-					{
-						type: EWritingFeedbackCategories.AdjectiveGenderAgreement,
-						totalIssues: 0,
-					},
-					{
-						type: EWritingFeedbackCategories.AdjectiveNumberAgreement,
-						totalIssues: 0,
-					},
-				],
-			},
-			{
-				type: EWritingFeedbackTypes.IncorrectNumberAgreementBetweenArticles,
-				categories: [
-					{
-						type: EWritingFeedbackCategories.ArticleGenderAgreement,
-						totalIssues: 0,
-					},
-					{
-						type: EWritingFeedbackCategories.ArticleNumberAgreement,
-						totalIssues: 0,
-					},
-				],
-			},
-			{
-				type: EWritingFeedbackTypes.IncorrectNumberAgreementBetweenNouns,
-				categories: [
-					{
-						type: EWritingFeedbackCategories.NounGenderAgreement,
-						totalIssues: 0,
-					},
-					{
-						type: EWritingFeedbackCategories.SubjunctiveMood,
-						totalIssues: 0,
-					},
-					{
-						type: EWritingFeedbackCategories.CompoundWordError,
-						totalIssues: 0,
-					},
-					{
-						type: EWritingFeedbackCategories.MoodInconsistency,
-						totalIssues: 0,
-					},
-					{
-						type: EWritingFeedbackCategories.AccentError,
-						totalIssues: 0,
-					},
-				],
-			},
-		];
-	}
-
-	private _increaseCorrectionsCategoryTotal(
-		writingFeedbackStats: IWritingFeedbackTypeStatistics[],
-		type: EWritingFeedbackCategories
-	) {
-		switch (type) {
-			case EWritingFeedbackCategories.General:
-				writingFeedbackStats[EWritingFeedbackTypes.General].categories[0].totalIssues++;
-				break;
-
-			case EWritingFeedbackCategories.SubjectVerbDisagreement:
-			case EWritingFeedbackCategories.NounForm:
-			case EWritingFeedbackCategories.VerbForm:
-			case EWritingFeedbackCategories.Article:
-			case EWritingFeedbackCategories.Preposition:
-			case EWritingFeedbackCategories.Pronoun:
-			case EWritingFeedbackCategories.PartOfSpeech:
-			case EWritingFeedbackCategories.Conjunction:
-				writingFeedbackStats[EWritingFeedbackTypes.Grammar].categories[
-					type - EWritingFeedbackCategories.SubjectVerbDisagreement
-				].totalIssues++;
-				break;
-
-			case EWritingFeedbackCategories.MisusedWord:
-			case EWritingFeedbackCategories.Homophone:
-				writingFeedbackStats[EWritingFeedbackTypes.WordChoice].categories[type - EWritingFeedbackCategories.MisusedWord]
-					.totalIssues++;
-				break;
-
-			case EWritingFeedbackCategories.Capitalization:
-			case EWritingFeedbackCategories.Hyphen:
-			case EWritingFeedbackCategories.Punctuation:
-			case EWritingFeedbackCategories.Comma:
-			case EWritingFeedbackCategories.Apostrophe:
-			case EWritingFeedbackCategories.Space:
-			case EWritingFeedbackCategories.Spelling:
-				writingFeedbackStats[EWritingFeedbackTypes.Mechanics].categories[
-					type - EWritingFeedbackCategories.Capitalization
-				].totalIssues++;
-				break;
-
-			case EWritingFeedbackCategories.FusedSentence:
-			case EWritingFeedbackCategories.CommaSplice:
-			case EWritingFeedbackCategories.SentenceFragments:
-			case EWritingFeedbackCategories.IneffectiveConstruction:
-			case EWritingFeedbackCategories.ExtraWords:
-			case EWritingFeedbackCategories.MissingWords:
-				writingFeedbackStats[EWritingFeedbackTypes.SentenceStructure].categories[
-					type - EWritingFeedbackCategories.FusedSentence
-				].totalIssues++;
-				break;
-
-			case EWritingFeedbackCategories.AdjectiveGenderAgreement:
-			case EWritingFeedbackCategories.AdjectiveNumberAgreement:
-				writingFeedbackStats[EWritingFeedbackTypes.MismatchInGenderBetweenAdjectives].categories[
-					type - EWritingFeedbackCategories.AdjectiveGenderAgreement
-				].totalIssues++;
-				break;
-
-			case EWritingFeedbackCategories.ArticleGenderAgreement:
-			case EWritingFeedbackCategories.ArticleNumberAgreement:
-				writingFeedbackStats[EWritingFeedbackTypes.IncorrectNumberAgreementBetweenArticles].categories[
-					type - EWritingFeedbackCategories.ArticleGenderAgreement
-				].totalIssues++;
-				break;
-
-			case EWritingFeedbackCategories.NounGenderAgreement:
-			case EWritingFeedbackCategories.SubjunctiveMood:
-			case EWritingFeedbackCategories.CompoundWordError:
-			case EWritingFeedbackCategories.MoodInconsistency:
-			case EWritingFeedbackCategories.AccentError:
-				writingFeedbackStats[EWritingFeedbackTypes.IncorrectNumberAgreementBetweenNouns].categories[
-					type - EWritingFeedbackCategories.NounGenderAgreement
-				].totalIssues++;
-				break;
-			default:
-				break;
-		}
 	}
 }

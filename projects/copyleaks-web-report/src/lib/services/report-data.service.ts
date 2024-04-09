@@ -170,6 +170,8 @@ export class ReportDataService {
 				!!this._filterOptions$.value?.hiddenRepositories?.length) ||
 			(this._filterOptions$.value?.showTop100Results === true && this.totalCompleteResults > 100) ||
 			(this._filterOptions$.value?.includedTags?.length && this._filterOptions$.value?.includedTags?.length > 0) ||
+			(this._filterOptions$.value?.excludedDomains?.length &&
+				this._filterOptions$.value?.excludedDomains?.length > 0) ||
 			!!this._filterOptions$.value?.publicationDate ||
 			!!this._filterOptions$.value?.wordLimit ||
 			this._filterOptions$.value?.includeResultsWithoutDate == false

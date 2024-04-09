@@ -9,12 +9,13 @@ import {
 } from '../models/report-data.models';
 import { ResultDetailItem } from '../models/report-matches.models';
 import { ICopyleaksReportOptions } from '../models/report-options.models';
-import { ReportStatistics } from '../models/report-statistics.models';
+import { IWritingFeedbackTypeStatistics, ReportStatistics } from '../models/report-statistics.models';
 import * as helpers from '../utils/report-statistics-helpers';
 import { untilDestroy } from '../utils/until-destroy';
 import { ReportDataService } from './report-data.service';
 import { ReportViewService } from './report-view.service';
 import { IReportViewEvent } from '../models/report-view.models';
+import { EWritingFeedbackTypes, EWritingFeedbackCategories } from '../enums/copyleaks-web-report.enums';
 
 @Injectable()
 export class ReportStatisticsService implements OnDestroy {
@@ -194,6 +195,262 @@ export class ReportStatisticsService implements OnDestroy {
 		}
 
 		this._statistics.next(stats);
+	}
+
+	public initCorrectionsStatistics(): IWritingFeedbackTypeStatistics[] {
+		return [
+			{
+				type: EWritingFeedbackTypes.General,
+				categories: [
+					{
+						type: EWritingFeedbackCategories.General,
+						totalIssues: 0,
+					},
+				],
+			},
+			{
+				type: EWritingFeedbackTypes.Grammar,
+				categories: [
+					{
+						type: EWritingFeedbackCategories.SubjectVerbDisagreement,
+						totalIssues: 0,
+					},
+					{
+						type: EWritingFeedbackCategories.NounForm,
+						totalIssues: 0,
+					},
+					{
+						type: EWritingFeedbackCategories.VerbForm,
+						totalIssues: 0,
+					},
+					{
+						type: EWritingFeedbackCategories.Article,
+						totalIssues: 0,
+					},
+					{
+						type: EWritingFeedbackCategories.Preposition,
+						totalIssues: 0,
+					},
+					{
+						type: EWritingFeedbackCategories.Pronoun,
+						totalIssues: 0,
+					},
+					{
+						type: EWritingFeedbackCategories.PartOfSpeech,
+						totalIssues: 0,
+					},
+					{
+						type: EWritingFeedbackCategories.Conjunction,
+						totalIssues: 0,
+					},
+				],
+			},
+			{
+				type: EWritingFeedbackTypes.WordChoice,
+				categories: [
+					{
+						type: EWritingFeedbackCategories.MisusedWord,
+						totalIssues: 0,
+					},
+					{
+						type: EWritingFeedbackCategories.Homophone,
+						totalIssues: 0,
+					},
+				],
+			},
+			{
+				type: EWritingFeedbackTypes.Mechanics,
+				categories: [
+					{
+						type: EWritingFeedbackCategories.Capitalization,
+						totalIssues: 0,
+					},
+					{
+						type: EWritingFeedbackCategories.Hyphen,
+						totalIssues: 0,
+					},
+					{
+						type: EWritingFeedbackCategories.Punctuation,
+						totalIssues: 0,
+					},
+					{
+						type: EWritingFeedbackCategories.Comma,
+						totalIssues: 0,
+					},
+					{
+						type: EWritingFeedbackCategories.Apostrophe,
+						totalIssues: 0,
+					},
+					{
+						type: EWritingFeedbackCategories.Space,
+						totalIssues: 0,
+					},
+					{
+						type: EWritingFeedbackCategories.Spelling,
+						totalIssues: 0,
+					},
+				],
+			},
+			{
+				type: EWritingFeedbackTypes.SentenceStructure,
+				categories: [
+					{
+						type: EWritingFeedbackCategories.FusedSentence,
+						totalIssues: 0,
+					},
+					{
+						type: EWritingFeedbackCategories.CommaSplice,
+						totalIssues: 0,
+					},
+					{
+						type: EWritingFeedbackCategories.SentenceFragments,
+						totalIssues: 0,
+					},
+					{
+						type: EWritingFeedbackCategories.IneffectiveConstruction,
+						totalIssues: 0,
+					},
+					{
+						type: EWritingFeedbackCategories.ExtraWords,
+						totalIssues: 0,
+					},
+					{
+						type: EWritingFeedbackCategories.MissingWords,
+						totalIssues: 0,
+					},
+				],
+			},
+			{
+				type: EWritingFeedbackTypes.MismatchInGenderBetweenAdjectives,
+				categories: [
+					{
+						type: EWritingFeedbackCategories.AdjectiveGenderAgreement,
+						totalIssues: 0,
+					},
+					{
+						type: EWritingFeedbackCategories.AdjectiveNumberAgreement,
+						totalIssues: 0,
+					},
+				],
+			},
+			{
+				type: EWritingFeedbackTypes.IncorrectNumberAgreementBetweenArticles,
+				categories: [
+					{
+						type: EWritingFeedbackCategories.ArticleGenderAgreement,
+						totalIssues: 0,
+					},
+					{
+						type: EWritingFeedbackCategories.ArticleNumberAgreement,
+						totalIssues: 0,
+					},
+				],
+			},
+			{
+				type: EWritingFeedbackTypes.IncorrectNumberAgreementBetweenNouns,
+				categories: [
+					{
+						type: EWritingFeedbackCategories.NounGenderAgreement,
+						totalIssues: 0,
+					},
+					{
+						type: EWritingFeedbackCategories.SubjunctiveMood,
+						totalIssues: 0,
+					},
+					{
+						type: EWritingFeedbackCategories.CompoundWordError,
+						totalIssues: 0,
+					},
+					{
+						type: EWritingFeedbackCategories.MoodInconsistency,
+						totalIssues: 0,
+					},
+					{
+						type: EWritingFeedbackCategories.AccentError,
+						totalIssues: 0,
+					},
+				],
+			},
+		];
+	}
+
+	public increaseCorrectionsCategoryTotal(
+		writingFeedbackStats: IWritingFeedbackTypeStatistics[],
+		type: EWritingFeedbackCategories
+	) {
+		switch (type) {
+			case EWritingFeedbackCategories.General:
+				writingFeedbackStats[EWritingFeedbackTypes.General].categories[0].totalIssues++;
+				break;
+
+			case EWritingFeedbackCategories.SubjectVerbDisagreement:
+			case EWritingFeedbackCategories.NounForm:
+			case EWritingFeedbackCategories.VerbForm:
+			case EWritingFeedbackCategories.Article:
+			case EWritingFeedbackCategories.Preposition:
+			case EWritingFeedbackCategories.Pronoun:
+			case EWritingFeedbackCategories.PartOfSpeech:
+			case EWritingFeedbackCategories.Conjunction:
+				writingFeedbackStats[EWritingFeedbackTypes.Grammar].categories[
+					type - EWritingFeedbackCategories.SubjectVerbDisagreement
+				].totalIssues++;
+				break;
+
+			case EWritingFeedbackCategories.MisusedWord:
+			case EWritingFeedbackCategories.Homophone:
+				writingFeedbackStats[EWritingFeedbackTypes.WordChoice].categories[type - EWritingFeedbackCategories.MisusedWord]
+					.totalIssues++;
+				break;
+
+			case EWritingFeedbackCategories.Capitalization:
+			case EWritingFeedbackCategories.Hyphen:
+			case EWritingFeedbackCategories.Punctuation:
+			case EWritingFeedbackCategories.Comma:
+			case EWritingFeedbackCategories.Apostrophe:
+			case EWritingFeedbackCategories.Space:
+			case EWritingFeedbackCategories.Spelling:
+				writingFeedbackStats[EWritingFeedbackTypes.Mechanics].categories[
+					type - EWritingFeedbackCategories.Capitalization
+				].totalIssues++;
+				break;
+
+			case EWritingFeedbackCategories.FusedSentence:
+			case EWritingFeedbackCategories.CommaSplice:
+			case EWritingFeedbackCategories.SentenceFragments:
+			case EWritingFeedbackCategories.IneffectiveConstruction:
+			case EWritingFeedbackCategories.ExtraWords:
+			case EWritingFeedbackCategories.MissingWords:
+				writingFeedbackStats[EWritingFeedbackTypes.SentenceStructure].categories[
+					type - EWritingFeedbackCategories.FusedSentence
+				].totalIssues++;
+				break;
+
+			case EWritingFeedbackCategories.AdjectiveGenderAgreement:
+			case EWritingFeedbackCategories.AdjectiveNumberAgreement:
+				writingFeedbackStats[EWritingFeedbackTypes.MismatchInGenderBetweenAdjectives].categories[
+					type - EWritingFeedbackCategories.AdjectiveGenderAgreement
+				].totalIssues++;
+				break;
+
+			case EWritingFeedbackCategories.ArticleGenderAgreement:
+			case EWritingFeedbackCategories.ArticleNumberAgreement:
+				writingFeedbackStats[EWritingFeedbackTypes.IncorrectNumberAgreementBetweenArticles].categories[
+					type - EWritingFeedbackCategories.ArticleGenderAgreement
+				].totalIssues++;
+				break;
+
+			case EWritingFeedbackCategories.NounGenderAgreement:
+			case EWritingFeedbackCategories.SubjunctiveMood:
+			case EWritingFeedbackCategories.CompoundWordError:
+			case EWritingFeedbackCategories.MoodInconsistency:
+			case EWritingFeedbackCategories.AccentError:
+				writingFeedbackStats[EWritingFeedbackTypes.IncorrectNumberAgreementBetweenNouns].categories[
+					type - EWritingFeedbackCategories.NounGenderAgreement
+				].totalIssues++;
+				break;
+			default:
+				break;
+		}
 	}
 
 	/** dtor */

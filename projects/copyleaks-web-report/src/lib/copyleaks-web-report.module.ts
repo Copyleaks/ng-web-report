@@ -79,7 +79,7 @@ import { DecodeUriPipeModule } from './pipes/decode-uri/decode-uri.module';
 import { ReportCorrectionsContainerComponent } from './components/containers/report-corrections-container/report-corrections-container.component';
 import { CrCorrectionComponent } from './components/core/cr-correction/cr-correction.component';
 import { CrReadabilityScoreComponent } from './components/core/cr-readability-score/cr-readability-score.component';
-import { CrCorrectionTypePanelComponent } from './components/core/cr-correction-type-panel/cr-correction-type-panel.component';
+import { CrCategoriesAnalysisTypePanelComponent } from './components/core/cr-categories-analysis-panel/cr-categories-analysis-panel.component';
 import { CrCorrectionsActionsComponent } from './components/core/cr-corrections-actions/cr-corrections-actions.component';
 import { FilterCorrectionsDialogComponent } from './dialogs/filter-corrections-dialog/filter-corrections-dialog.component';
 import { FilterCorrectionsDialogService } from './dialogs/filter-corrections-dialog/services/filter-corrections-dialog.service';
@@ -137,7 +137,7 @@ import { ExcludedDomainsInputComponent } from './dialogs/filter-result-dailog/co
 		ExcludedResultsDailogComponent,
 		CrCorrectionComponent,
 		CrReadabilityScoreComponent,
-		CrCorrectionTypePanelComponent,
+		CrCategoriesAnalysisTypePanelComponent,
 		CrCorrectionsActionsComponent,
 		FilterCorrectionsDialogComponent,
 		ExcludedDomainsInputComponent,

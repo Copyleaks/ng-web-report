@@ -137,4 +137,40 @@
 			border: none !important;
 		}
 	}
+
+	.title-percentage-container {
+		display: flex;
+		flex-direction: row;
+		gap: 16px;
+		align-items: center;
+
+		.percentage {
+			font-weight: 700;
+		}
+	}
+
+	.matches-category-title-container {
+		display: flex;
+		flex-direction: column;
+		gap: 2px;
+		.stats-container {
+			display: flex;
+			flex-direction: row;
+			gap: 8px;
+			align-items: center;
+			span {
+				font-size: 14px;
+				font-style: normal;
+				font-weight: 500;
+				line-height: normal;
+				color: $grayed-out-disabled;
+			}
+			mat-icon {
+				width: 16px;
+				height: 16px;
+				font-size: 16px;
+				color: $grayed-out-disabled;
+			}
+		}
+	}
 }

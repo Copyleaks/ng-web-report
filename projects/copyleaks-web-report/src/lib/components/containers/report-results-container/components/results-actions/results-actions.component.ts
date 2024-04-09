@@ -31,6 +31,9 @@ export class ResultsActionsComponent implements OnInit, OnChanges, OnDestroy {
 	@HostBinding('style.justify-content')
 	justifyContent = 'center';
 
+	@HostBinding('style.border-bottom')
+	borderBottom: string;
+
 	@Input() resultsActions: IResultsActions | null;
 	@Input() searchedValue: string | null = null;
 	@Input() isMobile: boolean = false;
@@ -73,6 +76,7 @@ export class ResultsActionsComponent implements OnInit, OnChanges, OnDestroy {
 
 	ngOnChanges(changes: SimpleChanges): void {
 		if ('searchedValue' in changes) this.searchFc.setValue(changes['searchedValue'].currentValue);
+		if ('isMobile' in changes && changes['isMobile'].currentValue === true) this.borderBottom = 'none';
 	}
 
 	showSearch() {

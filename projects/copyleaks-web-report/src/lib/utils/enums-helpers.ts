@@ -1,5 +1,24 @@
-import { EWritingFeedbackCategories, EWritingFeedbackTypes } from '../enums/copyleaks-web-report.enums';
-import { IWritingFeedbackCategoryStatistics, IWritingFeedbackTypeStatistics } from '../models/report-data.models';
+import {
+	EResultPreviewType,
+	EWritingFeedbackCategories,
+	EWritingFeedbackTypes,
+} from '../enums/copyleaks-web-report.enums';
+import { IWritingFeedbackTypeStatistics, IWritingFeedbackCategoryStatistics } from '../models/report-statistics.models';
+
+export function getResultsTypeTitle(type: EResultPreviewType): string {
+	switch (type) {
+		case EResultPreviewType.Batch:
+			return $localize`This batch`;
+		case EResultPreviewType.Internet:
+			return $localize`Internet`;
+		case EResultPreviewType.Repositroy:
+			return $localize`Repository`;
+		case EResultPreviewType.Database:
+			return $localize`Copyleaks internal database`;
+		default:
+			return $localize`Unknown Type`;
+	}
+}
 
 export function getCorrectionTypeTitle(type: EWritingFeedbackTypes): string {
 	switch (type) {

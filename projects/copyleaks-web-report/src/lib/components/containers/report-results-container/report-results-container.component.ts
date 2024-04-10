@@ -88,6 +88,7 @@ export class ReportResultsContainerComponent implements OnInit, OnChanges {
 	selectedCategoryResults: IResultItem[];
 
 	private _resizeObserver: ResizeObserver;
+	hideCategoriesSection: boolean;
 
 	get allResultsItemLength() {
 		return this.allResults?.length;
@@ -487,6 +488,9 @@ export class ReportResultsContainerComponent implements OnInit, OnChanges {
 					break;
 			}
 		});
+		// check if all allMatchResultsStats categories are empty
+		if (this.allMatchResultsStats.every(r => r.categories.length === 0)) this.hideCategoriesSection = true;
+		else this.hideCategoriesSection = false;
 	}
 
 	private _initMatchResultsStatistics(): IMatchesTypeStatistics[] {

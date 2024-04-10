@@ -34,7 +34,7 @@
 							minBufferPx="200"
 							maxBufferPx="1000">
 							<div class="corrections-types-container">
-								<span class="categorized-summery" i18n>Categorized Summary</span>
+								<span *ngIf="!hideCategoriesSection" class="categorized-summery" i18n>Categorized Summary</span>
 								<cr-categories-analysis-panel
 									*ngFor="let stats of allMatchResultsStats"
 									[matchesStats]="stats"

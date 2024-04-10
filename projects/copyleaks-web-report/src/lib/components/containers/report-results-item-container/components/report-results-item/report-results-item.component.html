@@ -8,6 +8,9 @@
 	fxLayout="column"
 	fxLayoutAlign="start center"
 	[tabIndex]="0"
+	role="link"
+	aria-label="Opens view of the selected result agianst the submitted text"
+	i18n-aria-label
 	(keyup.enter)="handleClick()">
 	<ng-container *ngIf="!isLocked">
 		<!--  -->
@@ -111,18 +114,30 @@
 								<div
 									class="chips-container"
 									aria-label="This is a list of tags the are associated with the given results"
-									i18n-aria-label>
+									i18n-aria-label
+									role="list">
 									<mat-chip
 										*ngIf="firstTag"
 										class="first-tag"
 										[matTooltip]="firstTag.description | decodeUri"
 										matTooltipClass="web-report-mat-tooltip"
 										i18n-matTooltip
+										[tabIndex]="0"
+										role="listitem"
+										aria-label="Opens view of the selected result agianst the submitted text"
+										i18n-aria-label
 										(click)="handleClick()">
 										{{ firstTag.title | decodeUri }}
 									</mat-chip>
 
-									<mat-chip *ngIf="numberOfTags > 1" class="plus-chip" (click)="handleClick()">
+									<mat-chip
+										*ngIf="numberOfTags > 1"
+										class="plus-chip"
+										(click)="handleClick()"
+										[tabIndex]="0"
+										role="listitem"
+										aria-label="Opens view of the selected result agianst the submitted text"
+										i18n-aria-label>
 										{{ '+' + (numberOfTags - 1) }}
 									</mat-chip>
 								</div>
@@ -149,7 +164,9 @@
 								class="icon-button"
 								matTooltip="Include result"
 								matTooltipClass="web-report-mat-tooltip"
-								i18n-matTooltip>
+								i18n-matTooltip
+								aria-label="Includes result in report"
+								i18n-aria-label>
 								<mat-icon class="exclude-result" mat-icon fontSet="material-icons-round">visibility</mat-icon>
 							</button>
 						</ng-container>
@@ -160,7 +177,9 @@
 								class="icon-button"
 								matTooltip="Exclude result"
 								matTooltipClass="web-report-mat-tooltip"
-								i18n-matTooltip>
+								i18n-matTooltip
+								aria-label="Exclude result in report"
+								i18n-aria-label>
 								<mat-icon class="exclude-result" mat-icon fontSet="material-icons-round">visibility_off</mat-icon>
 							</button>
 						</ng-template>

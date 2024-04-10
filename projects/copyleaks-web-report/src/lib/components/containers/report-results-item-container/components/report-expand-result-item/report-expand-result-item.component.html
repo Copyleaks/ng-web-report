@@ -11,7 +11,10 @@
 					mat-button
 					[disableRipple]="true"
 					(click)="clickBack()"
-					(keyup.enter)="clickBack()">
+					(keyup.enter)="clickBack()"
+					role="link"
+					aria-label="Navigates back."
+					i18n-aria-label>
 					<mat-icon fontSet="material-icons-round">chevron_left</mat-icon>
 					<span i18n>Back</span>
 				</a>
@@ -37,8 +40,8 @@
 							<ng-container *ngSwitchCase="eResultPreviewType.Internet">
 								<ng-container *ngIf="faviconExists; else defaultInternetIcon">
 									<img
+										alt="Source image"
 										class="internet-result-favicon"
-										role="presentation"
 										[src]="'https://www.google.com/s2/favicons?domain=' + faviconURL"
 										(error)="onFaviconError()"
 										(load)="onFaviconLoad()" />
@@ -93,7 +96,12 @@
 							</span>
 						</div>
 						<ng-container *ngIf="resultItem?.resultPreview?.url; else resultSource">
-							<a class="result-url-source" [href]="resultItem?.resultPreview?.url" target="_blank">
+							<a
+								class="result-url-source"
+								[href]="resultItem?.resultPreview?.url"
+								target="_blank"
+								aria-label="Opens the founded source"
+								i18n-aria-label>
 								<mat-icon fontSet="material-icons-round">open_in_new</mat-icon>
 								<span [title]="resultItem?.resultPreview?.url">
 									<ng-container i18n>Source:</ng-container>
@@ -112,7 +120,10 @@
 				class="mat-chip-list-container"
 				fxLayout="row"
 				fxLayoutAlign="start start">
-				<mat-chip-list aria-label="This is a list of tags the are associated with the given results" i18n-aria-label>
+				<mat-chip-list
+					aria-label="This is a list of tags the are associated with the given results"
+					i18n-aria-label
+					role>
 					<mat-chip
 						*ngFor="let tag of resultItem?.resultPreview?.tags"
 						[matTooltip]="tag?.description ?? ''"

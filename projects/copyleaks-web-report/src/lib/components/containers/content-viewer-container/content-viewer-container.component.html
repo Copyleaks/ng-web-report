@@ -24,7 +24,9 @@
 					(click)="onJumpToNextMatchClick(false)"
 					matTooltip="Go to previous match"
 					matTooltipClass="web-report-mat-tooltip"
-					i18n-matTooltip>
+					i18n-matTooltip
+					aria-label="Go to previous match"
+					i18n-aria-label>
 					<mat-icon
 						[ngClass]="{
 							'disabled-icon': isMultiSelection
@@ -48,7 +50,9 @@
 					(click)="onJumpToNextMatchClick()"
 					matTooltip="Go to next match"
 					matTooltipClass="web-report-mat-tooltip"
-					i18n-matTooltip>
+					i18n-matTooltip
+					aria-label="Go to next match"
+					i18n-aria-label>
 					<mat-icon
 						[ngClass]="{
 							'disabled-icon': isMultiSelection
@@ -65,7 +69,9 @@
 					(click)="changeContentDirection('ltr')"
 					matTooltip="Align Left"
 					matTooltipClass="web-report-mat-tooltip"
-					i18n-matTooltip>
+					i18n-matTooltip
+					aria-label="Align content to left"
+					i18n-aria-label>
 					<mat-icon fontSet="material-icons-round">format_align_left</mat-icon>
 				</button>
 			</span>
@@ -77,7 +83,9 @@
 					(click)="changeContentDirection('rtl')"
 					matTooltip="Align right"
 					matTooltipClass="web-report-mat-tooltip"
-					i18n-matTooltip>
+					i18n-matTooltip
+					aria-label="Align content to right"
+					i18n-aria-label>
 					<mat-icon fontSet="material-icons-round">format_align_right</mat-icon>
 				</button>
 			</span>
@@ -89,7 +97,9 @@
 					(click)="zoomIn()"
 					matTooltip="Zoom in"
 					matTooltipClass="web-report-mat-tooltip"
-					i18n-matTooltip>
+					i18n-matTooltip
+					aria-label="Zoom in"
+					i18n-aria-label>
 					<mat-icon fontSet="material-icons-round">zoom_in</mat-icon>
 				</button>
 			</span>
@@ -101,7 +111,9 @@
 					(click)="zoomOut()"
 					matTooltip="Zoom out"
 					matTooltipClass="web-report-mat-tooltip"
-					i18n-matTooltip>
+					i18n-matTooltip
+					aria-label="Zoom out"
+					i18n-aria-label>
 					<mat-icon>zoom_out</mat-icon>
 				</button>
 			</span>
@@ -112,15 +124,16 @@
 				[matTooltip]="!hasHtml ? ONLY_TEXT_VIEW_IS_AVAILABLE : ''"
 				matTooltipClass="web-report-mat-tooltip"
 				i18n-matTooltip>
-				<a
-					fxLayout="row"
-					tabIndex="0"
+				<button
+					class="actions-container-icon-button"
+					mat-icon-button
 					*ngIf="isHtmlView && hasHtml"
 					(click)="onViewChange()"
-					(keyup.enter)="onViewChange()"
 					matTooltip="Switch to textual mode"
 					matTooltipClass="web-report-mat-tooltip"
-					i18n-matTooltip>
+					i18n-matTooltip
+					aria-label="Switch to textual mode"
+					i18n-aria-label>
 					<mat-icon
 						[ngClass]="{
 							'disabled-icon': !hasHtml || isAlertsView
@@ -128,16 +141,17 @@
 						fontSet="material-icons-round">
 						title
 					</mat-icon>
-				</a>
-				<a
-					fxLayout="row"
-					tabIndex="0"
+				</button>
+				<button
+					class="actions-container-icon-button"
+					mat-icon-button
 					*ngIf="!isHtmlView || (isHtmlView && !hasHtml)"
 					(click)="onViewChange()"
-					(keyup.enter)="onViewChange()"
 					matTooltip="Switch to rich text mode"
 					matTooltipClass="web-report-mat-tooltip"
-					i18n-matTooltip>
+					i18n-matTooltip
+					aria-label="Switch to rich text mode"
+					i18n-aria-label>
 					<mat-icon
 						[ngClass]="{
 							'disabled-icon': !hasHtml || isAlertsView
@@ -145,7 +159,7 @@
 						fontSet="material-icons-round">
 						image
 					</mat-icon>
-				</a>
+				</button>
 			</span>
 		</ng-container>
 	</div>
@@ -174,7 +188,8 @@
 				}"
 				#contentIFrame
 				sandbox="allow-scripts"
-				crOriginalHtmlHelper></iframe>
+				crOriginalHtmlHelper
+				title="Submitted text"></iframe>
 			<div
 				class="text-container"
 				#contentText
@@ -234,7 +249,8 @@
 				}"
 				#contentIFrame
 				sandbox="allow-scripts"
-				crSourceHtmlHelper></iframe>
+				crSourceHtmlHelper
+				title="Submitted text"></iframe>
 			<div
 				class="text-container"
 				[class.with-shift-selected]="isShiftClicked"
@@ -290,7 +306,8 @@
 				}"
 				#contentIFrame
 				sandbox="allow-scripts"
-				crSuspectHtmlHelper></iframe>
+				crSuspectHtmlHelper
+				title="Submitted text"></iframe>
 			<div
 				class="text-container"
 				[class.with-shift-selected]="isShiftClicked"

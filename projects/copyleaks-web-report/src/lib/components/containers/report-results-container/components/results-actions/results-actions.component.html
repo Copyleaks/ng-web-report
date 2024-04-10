@@ -3,10 +3,10 @@
 		<ng-container
 			*ngIf="!resultsActions?.selectedResults || resultsActions?.selectedResults === 0; else highlightedResultsView">
 			<div *ngIf="!showSearchFiled" class="tootal-results-container">
-				<span class="tootal-results" web-report-title-font>
-					<ng-container i18n>Matching Text Results&nbsp;</ng-container>
+				<h6 class="tootal-results" web-report-title-font i18n>
+					Matching Text Results&nbsp;
 					<span *ngIf="!hideTotal">({{ resultsActions?.totalResults }})</span>
-				</span>
+				</h6>
 			</div>
 
 			<div *ngIf="showSearchFiled" fxLayout="row" fxLayoutAlign="start center" class="input-search-container">
@@ -24,7 +24,9 @@
 					(click)="showSearch()"
 					matTooltip="Clear"
 					matTooltipClass="web-report-mat-tooltip"
-					i18n-matTooltip>
+					i18n-matTooltip
+					aria-label="Clears entered text"
+					i18n-aria-label>
 					<mat-icon class="clear-icon" fontSet="material-icons-outlined">cancel</mat-icon>
 				</button>
 			</div>
@@ -37,7 +39,9 @@
 					(click)="!resultsActions?.totalResults || resultsActions?.totalResults === 0 ? '' : showSearch()"
 					matTooltip="Search matching text results"
 					matTooltipClass="web-report-mat-tooltip"
-					i18n-matTooltip>
+					i18n-matTooltip
+					aria-label="Search matching text results"
+					i18n-aria-label>
 					<mat-icon
 						class="open-search-icon"
 						fontSet="material-icons-round"
@@ -51,7 +55,9 @@
 					(click)="!resultsActions?.totalResults || resultsActions?.totalResults === 0 ? '' : showFilterDialog()"
 					matTooltip="Filter matching text results"
 					matTooltipClass="web-report-mat-tooltip"
-					i18n-matTooltip>
+					i18n-matTooltip
+					aria-label="Opens filters dialog"
+					i18n-aria-label>
 					<mat-icon
 						class="filter-search-icon"
 						fontSet="material-icons-round"
@@ -87,7 +93,9 @@
 				(click)="deselectMatch()"
 				matTooltip="Deselect Match"
 				matTooltipClass="web-report-mat-tooltip"
-				i18n-matTooltip>
+				i18n-matTooltip
+				aria-label="Deselects a match result"
+				i18n-aria-label>
 				<mat-icon class="diselect-match-icon" fontSet="material-icons-outlined">cancel</mat-icon>
 			</button>
 		</ng-template>
@@ -95,8 +103,13 @@
 
 	<div *ngIf="resultsActions?.totalExcluded || resultsActions?.totalFiltered" class="chips-container">
 		<ng-container *ngIf="resultsActions?.totalExcluded">
-			<button mat-button class="icon-button chip-button" (click)="showFilterDialog(true)">
-				<mat-chip>
+			<button
+				mat-button
+				class="icon-button chip-button"
+				aria-label="Opens excluded results dialog"
+				i18n-aria-label
+				(click)="showFilterDialog(true)">
+				<mat-chip role="text" aria-label="Shows number of excluded results." i18n-aria-label>
 					{{ resultsActions?.totalExcluded }}
 					<ng-container i18n>excluded</ng-container>
 				</mat-chip>
@@ -104,9 +117,19 @@
 		</ng-container>
 
 		<ng-container *ngIf="resultsActions?.totalFiltered">
-			<button mat-button class="icon-button chip-button" [disabled]="loadingResults" (click)="showFilterDialog()">
-				<mat-chip class="filter-chip" [class.disabled]="loadingResults">
-					<span>
+			<button
+				mat-button
+				class="icon-button chip-button"
+				aria-label="Opens filters dialog"
+				i18n-aria-label
+				[disabled]="loadingResults"
+				(click)="showFilterDialog()">
+				<mat-chip
+					class="filter-chip"
+					[class.disabled]="loadingResults"
+					aria-describedby="fliter-text"
+					role="presentation">
+					<span id="fliter-text" aria-label="Shows number of filtered results." i18n-aria-label>
 						{{ resultsActions?.totalFiltered }}
 						<ng-container i18n>filtered</ng-container>
 					</span>
@@ -117,7 +140,9 @@
 							(click)="$event.stopPropagation(); clearFilter()"
 							matTooltip="Clear Filter"
 							matTooltipClass="web-report-mat-tooltip"
-							i18n-matTooltip>
+							i18n-matTooltip
+							aria-label="Clear fliters selection"
+							i18n-aria-label>
 							<mat-icon class="clear-filter-icon" fontSet="material-icons-round">highlight_off</mat-icon>
 						</button>
 					</ng-container>

@@ -36,6 +36,9 @@ export class ReportAlertsContainerComponent implements OnInit {
 	addPaddingToContainer: boolean;
 	stopPaddingCheck: boolean;
 
+	EXPEND_TOOLTIP = $localize`Expend`;
+	COLLAPSE_TOOLTIP = $localize`Collapse`;
+
 	ngOnInit(): void {
 		if (this.flexGrow !== undefined && this.flexGrow !== null) this.flexGrowProp = this.flexGrow;
 	}

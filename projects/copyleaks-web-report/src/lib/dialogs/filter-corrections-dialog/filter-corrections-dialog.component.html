@@ -34,7 +34,9 @@
 								*ngFor="let key of categoriesKeys | slice : 0 : 1"
 								class="category-checkbox"
 								[formControlName]="key"
-								disableRipple>
+								i18n-aria-label
+								aria-label="Choose to include or exclude general corrections"
+								aria-live="assertive">
 								<span class="category-name" i18n>{{ formatCategroyFormControlKey(key) }}</span>
 								<span class="total-stat" web-report-title-font>
 									({{ writingFeedbackStats[0].categories[0].totalIssues }})
@@ -49,7 +51,9 @@
 								*ngFor="let key of categoriesKeys | slice : 1 : 9; let i = index"
 								class="category-checkbox"
 								[formControlName]="key"
-								disableRipple>
+								i18n-aria-label
+								aria-label="Choose to include or exclude corrections of type grammar"
+								aria-live="assertive">
 								<span class="category-name" i18n>{{ formatCategroyFormControlKey(key) }}</span>
 								<span class="total-stat" web-report-title-font>
 									({{ writingFeedbackStats[1].categories[i].totalIssues }})
@@ -64,7 +68,9 @@
 								*ngFor="let key of categoriesKeys | slice : 9 : 11; let i = index"
 								class="category-checkbox"
 								[formControlName]="key"
-								disableRipple>
+								i18n-aria-label
+								aria-label="Choose to include or exclude corrections of type word choice"
+								aria-live="assertive">
 								<span class="category-name" i18n>{{ formatCategroyFormControlKey(key) }}</span>
 								<span class="total-stat" web-report-title-font>
 									({{ writingFeedbackStats[2].categories[i].totalIssues }})
@@ -82,7 +88,9 @@
 								*ngFor="let key of categoriesKeys | slice : 11 : 18; let i = index"
 								class="category-checkbox"
 								[formControlName]="key"
-								disableRipple>
+								i18n-aria-label
+								aria-label="Choose to include or exclude corrections of type mechanics"
+								aria-live="assertive">
 								<span class="category-name" i18n>{{ formatCategroyFormControlKey(key) }}</span>
 								<span class="total-stat" web-report-title-font>
 									({{ writingFeedbackStats[3].categories[i].totalIssues }})
@@ -99,7 +107,9 @@
 								*ngFor="let key of categoriesKeys | slice : 28 : 33; let i = index"
 								class="category-checkbox"
 								[formControlName]="key"
-								disableRipple>
+								i18n-aria-label
+								aria-label="Choose to include or exclude corrections of type Incorrect number agreement between nouns"
+								aria-live="assertive">
 								<span class="category-name" i18n>{{ formatCategroyFormControlKey(key) }}</span>
 								<span class="total-stat" web-report-title-font>
 									({{ writingFeedbackStats[7].categories[i].totalIssues }})
@@ -117,7 +127,9 @@
 								*ngFor="let key of categoriesKeys | slice : 18 : 24; let i = index"
 								class="category-checkbox"
 								[formControlName]="key"
-								disableRipple>
+								i18n-aria-label
+								aria-label="Choose to include or exclude corrections of type sentence structure"
+								aria-live="assertive">
 								<span class="category-name" i18n>{{ formatCategroyFormControlKey(key) }}</span>
 								<span class="total-stat" web-report-title-font>
 									({{ writingFeedbackStats[4].categories[i].totalIssues }})
@@ -132,7 +144,9 @@
 								*ngFor="let key of categoriesKeys | slice : 24 : 26; let i = index"
 								class="category-checkbox"
 								[formControlName]="key"
-								disableRipple>
+								i18n-aria-label
+								aria-label="Choose to include or exclude corrections of type mismatch in gender between adjectives"
+								aria-live="assertive">
 								<span class="category-name" i18n>{{ formatCategroyFormControlKey(key) }}</span>
 								<span class="total-stat" web-report-title-font>
 									({{ writingFeedbackStats[5].categories[i].totalIssues }})
@@ -150,7 +164,9 @@
 								*ngFor="let key of categoriesKeys | slice : 26 : 28; let i = index"
 								class="category-checkbox"
 								[formControlName]="key"
-								disableRipple>
+								i18n-aria-label
+								aria-label="Choose to include or exclude corrections of type Incorrect number agreement between articles"
+								aria-live="assertive">
 								<span class="category-name" i18n>{{ formatCategroyFormControlKey(key) }}</span>
 								<span class="total-stat" web-report-title-font>
 									({{ writingFeedbackStats[6].categories[i].totalIssues }})
@@ -168,10 +184,16 @@
 				[padding]="isMobile ? '3px 17px' : '3px 24px'"
 				(click)="onDiscardChanges()"
 				[width]="isMobile ? '151px' : '170px'"
-				color="primary">
+				color="primary"
+				ariaLabel="Discard changes and closes filters dialog">
 				<span class="discard-changes-button" i18n>Discard changes</span>
 			</cr-button>
-			<cr-button (click)="onSaveChanges()" [width]="isMobile ? '161px' : '220px'" padding="3px 24px" color="primary">
+			<cr-button
+				ariaLabel="Saves changes and apply filters"
+				(click)="onSaveChanges()"
+				[width]="isMobile ? '161px' : '220px'"
+				padding="3px 24px"
+				color="primary">
 				<span class="apply-filters-button" i18n>Apply filters</span>
 			</cr-button>
 		</div>
@@ -187,7 +209,8 @@
 					mat-icon-button
 					class="icon-button close-dialog-btn"
 					(click)="onCloseExecludedView()"
-					aria-label="Closes dialog">
+					aria-label="Closes dialog"
+					i18n-aria-label>
 					<mat-icon class="exit-filter-button-icon">close</mat-icon>
 				</button>
 			</div>

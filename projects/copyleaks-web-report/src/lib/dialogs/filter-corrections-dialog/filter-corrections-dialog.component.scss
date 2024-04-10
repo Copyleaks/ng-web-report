@@ -165,6 +165,13 @@
 								align-items: center;
 							}
 						}
+						&:focus-within:not(:hover) {
+							::ng-deep {
+								.mat-checkbox-ripple {
+									display: unset !important;
+								}
+							}
+						}
 					}
 				}
 			}

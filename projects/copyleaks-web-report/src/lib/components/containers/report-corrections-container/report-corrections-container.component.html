@@ -164,7 +164,9 @@
 			mat-icon-button
 			class="total-corrections-container all-correction-title icon-button"
 			(click)="goToAllCorrectionsView()"
-			i18n>
+			i18n
+			aria-label="Navigates back to all correction results."
+			i18n-aria-label>
 			<mat-icon class="left-arrow">chevron_left</mat-icon>
 			All Corrections ({{ totalWritingFeedbackIssues }})
 		</button>

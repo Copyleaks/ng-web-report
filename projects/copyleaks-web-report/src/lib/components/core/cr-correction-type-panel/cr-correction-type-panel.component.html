@@ -25,7 +25,9 @@
 				class="icon-button"
 				*ngFor="let stat of stats?.categories"
 				[style.display]="stat?.totalIssues === 0 ? 'none' : 'flex'"
-				(click)="onSelectCategory(stat?.type)">
+				(click)="onSelectCategory(stat?.type)"
+				aria-label="Shows all corrections of the same type"
+				i18n-aria-label>
 				<mat-chip [style.display]="stat?.totalIssues === 0 ? 'none' : 'flex'">
 					{{ getCorrectionCategoryTitle(stat?.type) }} ({{ stat?.totalIssues }})
 				</mat-chip>

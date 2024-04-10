@@ -32,8 +32,10 @@
 				matTooltip="Show All Corrections by Category"
 				i18n-matTooltip
 				matTooltipClass="web-report-mat-tooltip"
+				aria-label="Shows all corrections of the same type."
+				i18n-aria-label
 				(click)="$event.stopPropagation(); $event.preventDefault(); goToCorrectionCategoryView()">
-				<mat-chip class="correction-type">
+				<mat-chip class="correction-type" role="banner">
 					{{ correctionType }}
 				</mat-chip>
 			</button>
@@ -44,7 +46,9 @@
 			class="icon-button exclude-toggle-btn"
 			(click)="excludeToggle()"
 			[matTooltip]="excludedTooltipText"
-			matTooltipClass="web-report-mat-tooltip">
+			matTooltipClass="web-report-mat-tooltip"
+			aria-label="Include or exclude correction in report"
+			i18n-aria-label>
 			<mat-icon class="options-icon" fontSet="material-icons-round">
 				{{ isExcluded ? 'visibility' : 'visibility_off' }}
 			</mat-icon>

@@ -10,6 +10,9 @@
 		</span>
 		<div *ngIf="totalIgnoredWritingFeedbackIssues || totalFilteredWritingFeedbackIssues" class="stats-chips-container">
 			<mat-chip
+				role="button"
+				aria-label="Opens excluded results dialog"
+				i18n-aria-label
 				[tabIndex]="0"
 				*ngIf="totalIgnoredWritingFeedbackIssues"
 				(keyup.enter)="openFilterDialog(true)"
@@ -17,9 +20,19 @@
 				{{ totalIgnoredWritingFeedbackIssues }}
 				<ng-container i18n>excluded</ng-container>
 			</mat-chip>
-			<button mat-button *ngIf="totalFilteredWritingFeedbackIssues" class="chip-button" (click)="openFilterDialog()">
-				<mat-chip *ngIf="totalFilteredWritingFeedbackIssues" class="filter-chip">
-					<span>
+			<button
+				mat-button
+				*ngIf="totalFilteredWritingFeedbackIssues"
+				class="chip-button"
+				aria-label="Opens filters dialog"
+				i18n-aria-label
+				(click)="openFilterDialog()">
+				<mat-chip
+					*ngIf="totalFilteredWritingFeedbackIssues"
+					class="filter-chip"
+					aria-describedby="fliter-text"
+					role="presentation">
+					<span id="fliter-text" aria-label="Shows number of filtered results." i18n-aria-label>
 						{{ totalFilteredWritingFeedbackIssues }}
 						<ng-container i18n>filtered</ng-container>
 					</span>
@@ -30,7 +43,8 @@
 						matTooltip="Clear Filter"
 						matTooltipClass="web-report-mat-tooltip"
 						i18n-matTooltip
-						aria-label="Clear filtered results.">
+						aria-label="Clear filtered results."
+						i18n-aria-label>
 						<mat-icon class="clear-filter-icon" fontSet="material-icons-round">highlight_off</mat-icon>
 					</button>
 				</mat-chip>
@@ -47,7 +61,9 @@
 				matTooltip="Filter corrections"
 				matTooltipClass="web-report-mat-tooltip"
 				i18n-matTooltip
-				[disabled]="totalWritingFeedbackIssues <= 0">
+				[disabled]="totalWritingFeedbackIssues <= 0"
+				aria-label="Opens filters dialog"
+				i18n-aria-label>
 				<mat-icon
 					class="filter-icon"
 					[class.off]="!filterIndicatorOn"

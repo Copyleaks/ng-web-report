@@ -9,7 +9,9 @@
 		(click)="closeDailog()"
 		matTooltip="Close"
 		matTooltipClass="web-report-mat-tooltip"
-		i18n-matTooltip>
+		i18n-matTooltip
+		aria-label="Closes the dialog"
+		i18n-aria-label>
 		<mat-icon class="close-icon">close</mat-icon>
 	</button>
 </div>
@@ -27,7 +29,9 @@
 					(click)="!!searchValue ? clearSearch() : ''"
 					matTooltip="Clear"
 					matTooltipClass="web-report-mat-tooltip"
-					i18n-matTooltip>
+					i18n-matTooltip
+					aria-label="Clears entered text"
+					i18n-aria-label>
 					<mat-icon>close</mat-icon>
 				</button>
 			</ng-template>
@@ -59,7 +63,12 @@
 </div>
 
 <div mat-dialog-actions>
-	<button class="include-all-button" (click)="includeAllButtonToggle()" i18n>
+	<button
+		class="include-all-button"
+		(click)="includeAllButtonToggle()"
+		aria-label="Includes or excludes previously excluded results"
+		i18n-aria-label
+		i18n>
 		<ng-container *ngIf="!allResultsIncluded; else ExcludeResultBtnTxtRef">Include all</ng-container>
 		<ng-template #ExcludeResultBtnTxtRef>Exclude all</ng-template>
 	</button>

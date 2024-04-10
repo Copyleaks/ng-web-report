@@ -7,7 +7,9 @@
 				class="clear-button"
 				fxLayout="row"
 				fxLayoutAlign="start center"
-				fxLayoutGap="4px">
+				fxLayoutGap="4px"
+				aria-label="Clears filters selection"
+				i18n-aria-label>
 				<mat-icon>refresh</mat-icon>
 				<span i18n>Clear filter</span>
 			</button>
@@ -26,13 +28,17 @@
 			</span>
 			<div class="chips-stats-container">
 				<ng-container *ngIf="!!resultsActions?.totalExcluded">
-					<mat-chip
-						class="total-excluded"
-						role="button"
+					<button
+						mat-button
+						class="chip-button"
+						aria-label="Opens excluded results dialog"
+						i18n-aria-label
 						(click)="!!resultsActions.totalExcluded ? (data.showExcludedDailog = !data.showExcludedDailog) : ''">
-						{{ resultsActions.totalExcluded }}
-						<ng-container i18n>excluded</ng-container>
-					</mat-chip>
+						<mat-chip class="total-excluded" role="presentation">
+							{{ resultsActions.totalExcluded }}
+							<ng-container i18n>excluded</ng-container>
+						</mat-chip>
+					</button>
 				</ng-container>
 
 				<ng-container *ngIf="!!resultsActions.totalFiltered">

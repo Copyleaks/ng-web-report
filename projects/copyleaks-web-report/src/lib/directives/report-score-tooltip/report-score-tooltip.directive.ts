@@ -30,6 +30,7 @@ export class ReportScoreTooltipDirective {
 	) {}
 
 	@HostListener('mouseenter')
+	@HostListener('focus')
 	onMouseEnter(): void {
 		if (this.componentRef === null && !this._areAllPropsUndefined) {
 			const componentFactory = this.componentFactoryResolver.resolveComponentFactory(
@@ -44,6 +45,7 @@ export class ReportScoreTooltipDirective {
 	}
 
 	@HostListener('mouseleave')
+	@HostListener('blur')
 	onMouseLeave(): void {
 		this.destroy();
 	}

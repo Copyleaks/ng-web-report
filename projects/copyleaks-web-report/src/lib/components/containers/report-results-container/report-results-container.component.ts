@@ -467,7 +467,6 @@ export class ReportResultsContainerComponent implements OnInit, OnChanges {
 							'Others files',
 							result
 						);
-						console.log('here');
 					}
 					this.allMatchResultsStats[2].totalResults += 1;
 					this.allMatchResultsStats[2].totalResultsPct =

@@ -44,19 +44,14 @@
 		}
 	}
 
-	.clear-filter-btn {
-		width: unset;
-		height: unset;
-		line-height: unset;
-		.clear-filter-icon {
-			font-size: 14px;
-			width: 14px;
-			height: 14px;
-			color: $color-container-background;
-			line-height: 13px !important;
-			&:hover {
-				color: $color-primary;
-			}
+	.clear-filter-icon {
+		font-size: 14px;
+		width: 14px;
+		height: 14px;
+		color: $color-container-background;
+		line-height: normal !important;
+		&:hover {
+			color: $color-primary;
 		}
 	}
 
@@ -139,24 +134,5 @@
 		background-color: $color-white !important;
 		padding: 16px !important;
 		border-radius: 10px !important;
-	}
-}
-.chip-button {
-	width: unset;
-	height: unset;
-	line-height: unset;
-	padding: 0;
-	&:focus-within:not(:focus) {
-		::ng-deep {
-			.mat-button-focus-overlay {
-				background-color: transparent;
-				opacity: 1;
-			}
-		}
-		.clear-filter-btn {
-			mat-icon.clear-filter-icon {
-				color: $color-primary;
-			}
-		}
 	}
 }

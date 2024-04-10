@@ -121,6 +121,11 @@ export class ReportTabsContainerComponent implements OnInit, OnDestroy, OnChange
 
 	@Input() isMobile: boolean = false;
 
+	/**
+	 * @Input {boolean} Flag indicating whether to force the Writing Feedback tab to hide or not.
+	 */
+	@Input() forceWritingFeedbackTapHide = false;
+
 	EReportViewType = EReportViewType;
 	EReportScoreTooltipPosition = EReportScoreTooltipPosition;
 	customTabsTemplateRef: TemplateRef<any>[] | undefined = undefined;

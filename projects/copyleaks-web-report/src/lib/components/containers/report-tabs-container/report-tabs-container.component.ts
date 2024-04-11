@@ -148,7 +148,7 @@ export class ReportTabsContainerComponent implements OnInit, OnDestroy, OnChange
 	aiScoreChartData = [];
 
 	constructor(
-		private _reportViewSvc: ReportViewService,
+		public reportViewSvc: ReportViewService,
 		public reportDataSvc: ReportDataService,
 		private _reportNgTemplatesSvc: ReportNgTemplatesService,
 		private cdr: ChangeDetectorRef,
@@ -165,7 +165,7 @@ export class ReportTabsContainerComponent implements OnInit, OnDestroy, OnChange
 			}
 		});
 
-		this._reportViewSvc.selectedCustomTabContent$.pipe(untilDestroy(this)).subscribe(content => {
+		this.reportViewSvc.selectedCustomTabContent$.pipe(untilDestroy(this)).subscribe(content => {
 			this.selectedTap = content ? EReportViewType.CustomTabView : this.selectedTap;
 		});
 	}
@@ -187,8 +187,8 @@ export class ReportTabsContainerComponent implements OnInit, OnDestroy, OnChange
 				(!this.showLoadingView && !this.hidePlagarismTap && this.hideAiTap && this.hideWritingFeedbackTap)
 			) {
 				this.selectedTap = EReportViewType.PlagiarismView;
-				this._reportViewSvc.selectedAlert$.next(null);
-				this._reportViewSvc.reportViewMode$.next({ ...this._reportViewSvc.reportViewMode, alertCode: undefined });
+				this.reportViewSvc.selectedAlert$.next(null);
+				this.reportViewSvc.reportViewMode$.next({ ...this.reportViewSvc.reportViewMode, alertCode: undefined });
 			}
 
 			if (
@@ -198,9 +198,9 @@ export class ReportTabsContainerComponent implements OnInit, OnDestroy, OnChange
 				!(this.selectedTap === EReportViewType.WritingFeedbackTabView && !this.hideWritingFeedbackTap)
 			) {
 				this.selectedTap = EReportViewType.AIView;
-				this._reportViewSvc.selectedAlert$.next(ALERTS.SUSPECTED_AI_TEXT_DETECTED);
-				this._reportViewSvc.reportViewMode$.next({
-					...this._reportViewSvc.reportViewMode,
+				this.reportViewSvc.selectedAlert$.next(ALERTS.SUSPECTED_AI_TEXT_DETECTED);
+				this.reportViewSvc.reportViewMode$.next({
+					...this.reportViewSvc.reportViewMode,
 					viewMode:
 						this._reportNgTemplatesSvc.reportTemplatesMode$.value != ECustomResultsReportView.Full &&
 						this._reportNgTemplatesSvc.reportTemplatesMode$.value != ECustomResultsReportView.Partial &&
@@ -213,9 +213,9 @@ export class ReportTabsContainerComponent implements OnInit, OnDestroy, OnChange
 
 			if (!this.showLoadingView && this.hidePlagarismTap && this.hideAiTap && !this.hideWritingFeedbackTap) {
 				this.selectedTap = EReportViewType.WritingFeedbackTabView;
-				this._reportViewSvc.selectedAlert$.next(null);
-				this._reportViewSvc.reportViewMode$.next({
-					...this._reportViewSvc.reportViewMode,
+				this.reportViewSvc.selectedAlert$.next(null);
+				this.reportViewSvc.reportViewMode$.next({
+					...this.reportViewSvc.reportViewMode,
 					alertCode: undefined,
 					viewMode: 'writing-feedback',
 				});
@@ -231,8 +231,8 @@ export class ReportTabsContainerComponent implements OnInit, OnDestroy, OnChange
 					: !this.hideAiTap
 					? EReportViewType.AIView
 					: null;
-				this._reportViewSvc.reportViewMode$.next({
-					...this._reportViewSvc.reportViewMode,
+				this.reportViewSvc.reportViewMode$.next({
+					...this.reportViewSvc.reportViewMode,
 					viewMode:
 						this._reportNgTemplatesSvc.reportTemplatesMode$.value != ECustomResultsReportView.Full &&
 						this._reportNgTemplatesSvc.reportTemplatesMode$.value != ECustomResultsReportView.Partial &&
@@ -245,7 +245,7 @@ export class ReportTabsContainerComponent implements OnInit, OnDestroy, OnChange
 						? ALERTS.SUSPECTED_AI_TEXT_DETECTED
 						: undefined,
 				});
-				this._reportViewSvc.selectedAlert$.next(
+				this.reportViewSvc.selectedAlert$.next(
 					!this.hidePlagarismTap ? null : !this.hideAiTap ? ALERTS.SUSPECTED_AI_TEXT_DETECTED : null
 				);
 			}
@@ -320,8 +320,8 @@ export class ReportTabsContainerComponent implements OnInit, OnDestroy, OnChange
 
 		switch (selectedTab) {
 			case EReportViewType.AIView:
-				this._reportViewSvc.reportViewMode$.next({
-					...this._reportViewSvc.reportViewMode,
+				this.reportViewSvc.reportViewMode$.next({
+					...this.reportViewSvc.reportViewMode,
 					viewMode:
 						!this.reportDataSvc.isPlagiarismEnabled() &&
 						!this.reportDataSvc.isWritingFeedbackEnabled() &&
@@ -335,31 +335,31 @@ export class ReportTabsContainerComponent implements OnInit, OnDestroy, OnChange
 					sourcePageIndex: 1,
 					suspectPageIndex: 1,
 				});
-				this._reportViewSvc.selectedAlert$.next(ALERTS.SUSPECTED_AI_TEXT_DETECTED);
-				this._reportViewSvc.selectedCustomTabContent$.next(null);
+				this.reportViewSvc.selectedAlert$.next(ALERTS.SUSPECTED_AI_TEXT_DETECTED);
+				this.reportViewSvc.selectedCustomTabContent$.next(null);
 
 				break;
 			case EReportViewType.PlagiarismView:
-				this._reportViewSvc.reportViewMode$.next({
-					...this._reportViewSvc.reportViewMode,
+				this.reportViewSvc.reportViewMode$.next({
+					...this.reportViewSvc.reportViewMode,
 					viewMode: 'one-to-many',
 					alertCode: undefined,
 					sourcePageIndex: 1,
 					suspectPageIndex: 1,
 				});
-				this._reportViewSvc.selectedAlert$.next(null);
-				this._reportViewSvc.selectedCustomTabContent$.next(null);
+				this.reportViewSvc.selectedAlert$.next(null);
+				this.reportViewSvc.selectedCustomTabContent$.next(null);
 				break;
 			case EReportViewType.WritingFeedbackTabView:
-				this._reportViewSvc.reportViewMode$.next({
-					...this._reportViewSvc.reportViewMode,
+				this.reportViewSvc.reportViewMode$.next({
+					...this.reportViewSvc.reportViewMode,
 					viewMode: 'writing-feedback',
 					alertCode: undefined,
 					sourcePageIndex: 1,
 					suspectPageIndex: 1,
 				});
-				this._reportViewSvc.selectedAlert$.next(null);
-				this._reportViewSvc.selectedCustomTabContent$.next(null);
+				this.reportViewSvc.selectedAlert$.next(null);
+				this.reportViewSvc.selectedCustomTabContent$.next(null);
 				break;
 			default:
 				break;

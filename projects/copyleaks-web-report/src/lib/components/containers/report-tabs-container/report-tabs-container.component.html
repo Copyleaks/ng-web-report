@@ -13,6 +13,7 @@
 			aria-describedby="plagiarism-view-text"
 			@fadeIn
 			class="tab-plagiarism"
+			[reportViewService]="reportViewSvc"
 			[crReportScoreTooltip]="
 				hidePlagarismTap && showDisabledProducts
 					? null
@@ -126,6 +127,7 @@
 			aria-describedby="AI-view-text"
 			class="tab-ai"
 			tabindex="0"
+			[reportViewService]="reportViewSvc"
 			[crReportScoreTooltip]="
 				hideAiTap && showDisabledProducts
 					? null

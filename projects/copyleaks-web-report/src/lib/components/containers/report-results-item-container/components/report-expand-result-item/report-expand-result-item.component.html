@@ -136,7 +136,9 @@
 		</div>
 
 		<div class="plagiarism-detection-container">
-			<cr-percentage-result-item [percentageResult]="percentageResult"></cr-percentage-result-item>
+			<cr-percentage-result-item
+				[reportViewService]="reportViewSvc"
+				[percentageResult]="percentageResult"></cr-percentage-result-item>
 		</div>
 	</div>
 </ng-container>

@@ -20,6 +20,7 @@ import { ReportViewService } from '../../services/report-view.service';
 export class ReportScoreTooltipDirective {
 	@Input() crReportScoreTooltip: IReportScoreTooltipModel | null = null;
 	@Input() crReportScoreTooltipPosition: EReportScoreTooltipPosition = EReportScoreTooltipPosition.DEFAULT;
+	@Input() reportViewService: ReportViewService;
 
 	private componentRef: ComponentRef<any> | null = null;
 
@@ -27,8 +28,7 @@ export class ReportScoreTooltipDirective {
 		private elementRef: ElementRef,
 		private appRef: ApplicationRef,
 		private componentFactoryResolver: ComponentFactoryResolver,
-		private injector: Injector,
-		private reportViewService: ReportViewService
+		private injector: Injector
 	) {}
 
 	@HostListener('mouseenter')

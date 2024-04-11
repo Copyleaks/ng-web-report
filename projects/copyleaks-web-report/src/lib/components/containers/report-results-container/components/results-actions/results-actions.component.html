@@ -38,10 +38,10 @@
 					mat-icon-button
 					*ngIf="!showSearchFiled"
 					(click)="!resultsActions?.totalResults || resultsActions?.totalResults === 0 ? '' : showSearch()"
-					matTooltip="Search matching text results"
+					matTooltip="Search Results"
 					matTooltipClass="web-report-mat-tooltip"
 					i18n-matTooltip
-					aria-label="Search matching text results"
+					aria-label="Search Results"
 					i18n-aria-label>
 					<mat-icon class="open-search-icon" fontSet="material-icons-round">search</mat-icon>
 				</button>
@@ -53,10 +53,10 @@
 					}"
 					mat-icon-button
 					(click)="!resultsActions?.totalResults || resultsActions?.totalResults === 0 ? '' : showFilterDialog()"
-					matTooltip="Filter matching text results"
+					matTooltip="Filter Matching Results"
 					matTooltipClass="web-report-mat-tooltip"
 					i18n-matTooltip
-					aria-label="Opens filters dialog"
+					aria-label="Filter Matching Results"
 					i18n-aria-label>
 					<mat-icon class="filter-search-icon" fontSet="material-icons-round">filter_list</mat-icon>
 				</button>

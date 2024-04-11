@@ -12,7 +12,7 @@
     "lib:test": "ng test copyleaks-web-report",
     "lib:lint": "ng lint copyleaks-web-report",
     "lib:prettier": "prettier --write projects/copyleaks-web-report/**/*.{ts,js,css,scss,html} projects/demo-app/**/*.{ts,js,css,scss,html}",
-    "lib:version": "cd projects/copyleaks-web-report && npm version patch",
+    "lib:version": "cd projects/copyleaks-web-report && npm version minor",
     "lib:build": "ng build copyleaks-web-report --configuration production",
     "lib:copy-readme": "copy \"./README.md\" \"./dist/copyleaks-web-report/\"",
     "lib:publish": "cd dist/copyleaks-web-report && npm publish",

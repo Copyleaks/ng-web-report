@@ -1,5 +1,5 @@
 <ng-container *ngIf="!showLoadingView; else loadingViewRef">
-	<div class="correction-container">
+	<div class="correction-container" [tabIndex]="0" (keyup.enter)="handleClick($event)">
 		<div class="correction-info-container">
 			<div class="correction-description-container">
 				<span
@@ -24,6 +24,7 @@
 					[innerHtml]="correction.correctionText"
 					i18n-matTooltip></span>
 			</div>
+
 			<mat-chip
 				*ngIf="!hideDescription"
 				class="correction-type"
@@ -34,16 +35,19 @@
 				{{ correctionType }}
 			</mat-chip>
 		</div>
-		<mat-icon
+		<button
+			mat-icon-button
 			*ngIf="isExcludeView; else excludedIconRef"
-			class="options-icon"
-			fontSet="material-icons-round"
+			class="icon-button exclude-toggle-btn"
+			(click)="excludeToggle()"
 			[matTooltip]="excludedTooltipText"
 			matTooltipClass="web-report-mat-tooltip"
-			i18n-matTooltip
-			(click)="excludeToggle()">
-			{{ isExcluded ? 'visibility' : 'visibility_off' }}
-		</mat-icon>
+			aria-label="Include or exclude correction in report"
+			i18n-aria-label>
+			<mat-icon class="options-icon" fontSet="material-icons-round">
+				{{ isExcluded ? 'visibility' : 'visibility_off' }}
+			</mat-icon>
+		</button>
 		<ng-template #excludedIconRef>
 			<mat-icon
 				class="options-icon"
@@ -85,10 +89,6 @@
 </ng-template>
 
 <mat-menu class="result-item-menu-list" #menu="matMenu" yPosition="below">
-	<!-- <button mat-menu-item [disableRipple]="true">
-		<mat-icon class="mat-menu-item-icon" fontSet="material-icons-round">help_outline</mat-icon>
-		<span class="mat-menu-item-text" i18n>Learn about correction</span>
-	</button> -->
 	<button mat-menu-item [disableRipple]="true" (click)="ignoreCorrection()">
 		<mat-icon class="mat-menu-item-icon" fontSet="material-icons-round">visibility_off</mat-icon>
 		<span class="mat-menu-item-text" i18n>Ignore Correction</span>

@@ -1,4 +1,6 @@
 :host {
+	width: 100vw;
+	height: 100vh;
 	::ng-deep {
 		.mat-list-item-content {
 			display: flex !important;
@@ -116,4 +118,5 @@ mat-list-item:hover,
 	width: 100%;
 	padding: 8px;
 	box-sizing: border-box;
+	justify-content: center;
 }

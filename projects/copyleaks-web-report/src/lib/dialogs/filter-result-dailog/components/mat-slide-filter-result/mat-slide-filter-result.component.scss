@@ -17,4 +17,13 @@
 		font-size: 12px;
 		font-weight: 700;
 	}
+	mat-slide-toggle {
+		&:focus-within:not(:hover) {
+			::ng-deep {
+				.mat-slide-toggle-ripple {
+					display: unset !important;
+				}
+			}
+		}
+	}
 }

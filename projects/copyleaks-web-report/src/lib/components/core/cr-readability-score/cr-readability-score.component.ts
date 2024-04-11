@@ -62,6 +62,9 @@ export class CrReadabilityScoreComponent implements OnInit, OnChanges {
 		}
 	}
 
+	EXPEND_TOOLTIP = $localize`Expend`;
+	COLLAPSE_TOOLTIP = $localize`Collapse`;
+
 	constructor() {}
 
 	ngOnInit(): void {}

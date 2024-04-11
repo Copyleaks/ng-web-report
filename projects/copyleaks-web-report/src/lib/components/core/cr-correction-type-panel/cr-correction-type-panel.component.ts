@@ -32,6 +32,9 @@ export class CrCorrectionTypePanelComponent implements OnInit, OnChanges {
 	 */
 	totalCorrections: number = 0;
 
+	EXPEND_TOOLTIP = $localize`Expend`;
+	COLLAPSE_TOOLTIP = $localize`Collapse`;
+
 	constructor() {}
 
 	/**

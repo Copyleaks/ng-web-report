@@ -90,8 +90,13 @@
 			align-items: center;
 			gap: 4px;
 			cursor: pointer;
+			color: $color-dark-blue;
+			font-size: 14px;
+			font-style: normal;
+			font-weight: 500;
+			line-height: normal;
+			transition: 0.4s;
 
-			.all-correction-title,
 			.left-arrow {
 				color: $color-dark-blue;
 				transition: 0.4s;
@@ -104,16 +109,10 @@
 				position: relative;
 				left: -3px;
 			}
-			.all-correction-title {
-				font-size: 14px;
-				font-style: normal;
-				font-weight: 500;
-				line-height: normal;
-			}
 		}
 
 		.total-corrections-container:hover {
-			.all-correction-title,
+			color: $color-primary !important;
 			.left-arrow {
 				color: $color-primary !important;
 			}
@@ -225,5 +224,21 @@
 
 	.loading-correction-view {
 		pointer-events: none;
+	}
+}
+
+.icon-button {
+	width: unset;
+	line-height: unset;
+	height: unset;
+	border-radius: unset;
+	mat-icon {
+		line-height: 16px !important;
+	}
+
+	::ng-deep {
+		.mat-button-wrapper {
+			margin-top: 1px;
+		}
 	}
 }

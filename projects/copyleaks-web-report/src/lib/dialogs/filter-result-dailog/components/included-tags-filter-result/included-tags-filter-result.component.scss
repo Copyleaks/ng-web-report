@@ -39,6 +39,23 @@
 				height: 24px;
 				padding: 4px;
 			}
+
+			.clear-icon-button {
+				width: unset;
+				height: unset;
+				line-height: unset;
+				&:focus {
+					background-color: $color-primary;
+					mat-icon {
+						color: $color-white;
+					}
+					::ng-deep {
+						.mat-button-focus-overlay {
+							background-color: transparent;
+						}
+					}
+				}
+			}
 		}
 	}
 	.mat-chip-container {
@@ -108,7 +125,8 @@
 			padding: 0 8px;
 			box-sizing: border-box;
 			border-radius: 10px;
-			&:hover {
+			&:hover,
+			:focus-within {
 				background-color: $color-container-background;
 			}
 			.mat-checkbox-tag {

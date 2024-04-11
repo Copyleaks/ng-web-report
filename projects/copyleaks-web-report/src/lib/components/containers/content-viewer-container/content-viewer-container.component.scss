@@ -216,6 +216,23 @@
 		display: flex;
 		align-items: center;
 		justify-content: center;
+
+		a:focus {
+			mat-icon {
+				color: $color-primary;
+			}
+		}
+
+		.actions-container-icon-button {
+			width: unset;
+			height: unset;
+			line-height: unset;
+			&:focus {
+				mat-icon {
+					color: $color-primary;
+				}
+			}
+		}
 	}
 
 	.skeleton {

@@ -119,7 +119,8 @@
 				}
 			}
 
-			.back-button:hover {
+			.back-button:hover,
+			.back-button:focus {
 				color: $color-primary;
 				background-color: $color-container-background;
 				border-radius: 16px;

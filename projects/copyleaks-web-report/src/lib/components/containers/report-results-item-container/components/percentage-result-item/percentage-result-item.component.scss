@@ -76,6 +76,10 @@
 		padding: 0px;
 		background-color: $color-white;
 		cursor: pointer;
+		width: unset;
+		height: unset;
+		line-height: unset;
+
 		mat-icon {
 			width: 18px;
 			height: 18px;

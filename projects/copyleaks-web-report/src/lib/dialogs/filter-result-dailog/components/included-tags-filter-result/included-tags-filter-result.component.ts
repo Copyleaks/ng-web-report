@@ -31,9 +31,13 @@ export class IncludedTagsFilterResultComponent implements OnInit, OnChanges {
 		return this.searchTagControl.value;
 	}
 
+	EXPEND_TOOLTIP = $localize`Expend`;
+	COLLAPSE_TOOLTIP = $localize`Collapse`;
+
 	constructor(private filterService: FilterResultDailogService) {}
 
 	ngOnInit(): void {
+		this.isSearchInputDisabled();
 		this.includedTagsForm = this.filterService.includedTagsFormControl;
 
 		this.filteredTagList = this.searchTagControl.valueChanges.pipe(
@@ -64,5 +68,10 @@ export class IncludedTagsFilterResultComponent implements OnInit, OnChanges {
 	clearSearch() {
 		this.searchTagControl.setValue('');
 	}
+
+	isSearchInputDisabled() {
+		if (!this.allTagItem || this.allTagItem.length === 0) this.searchTagControl.disable();
+	}
+
 	ngOnDestroy() {}
 }

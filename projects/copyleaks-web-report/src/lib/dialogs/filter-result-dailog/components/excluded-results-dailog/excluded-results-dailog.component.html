@@ -3,21 +3,37 @@
 		<span class="header" web-report-title-font i18n>Excluded Matching Results</span>
 		<span class="total-excluded">({{ allResultsItemLength }})</span>
 	</div>
-	<mat-icon class="close-icon" (click)="closeDailog()">close</mat-icon>
+	<button
+		mat-icon-button
+		class="dialog-close-button"
+		(click)="closeDailog()"
+		matTooltip="Close"
+		matTooltipClass="web-report-mat-tooltip"
+		i18n-matTooltip
+		aria-label="Closes the dialog"
+		i18n-aria-label>
+		<mat-icon class="close-icon">close</mat-icon>
+	</button>
 </div>
 
 <div mat-dialog-content>
 	<div class="search-container" fxLayout="row" fxLayoutAlign="start center" fxLayoutGap="8px">
-		<div
-			class="search-icon-contaier"
-			fxLayout="row"
-			fxLayoutAlign="center center"
-			(click)="!!searchValue ? clearSearch() : ''">
+		<div class="search-icon-contaier" fxLayout="row" fxLayoutAlign="center center">
 			<ng-container *ngIf="!searchValue; else clearSearchIcon">
 				<mat-icon>search</mat-icon>
 			</ng-container>
 			<ng-template #clearSearchIcon>
-				<mat-icon>close</mat-icon>
+				<button
+					mat-icon-button
+					class="serach-input-clear-button"
+					(click)="!!searchValue ? clearSearch() : ''"
+					matTooltip="Clear"
+					matTooltipClass="web-report-mat-tooltip"
+					i18n-matTooltip
+					aria-label="Clears entered text"
+					i18n-aria-label>
+					<mat-icon>close</mat-icon>
+				</button>
 			</ng-template>
 		</div>
 		<input
@@ -47,7 +63,12 @@
 </div>
 
 <div mat-dialog-actions>
-	<button class="include-all-button" (click)="includeAllButtonToggle()" i18n>
+	<button
+		class="include-all-button"
+		(click)="includeAllButtonToggle()"
+		aria-label="Includes or excludes previously excluded results"
+		i18n-aria-label
+		i18n>
 		<ng-container *ngIf="!allResultsIncluded; else ExcludeResultBtnTxtRef">Include all</ng-container>
 		<ng-template #ExcludeResultBtnTxtRef>Exclude all</ng-template>
 	</button>

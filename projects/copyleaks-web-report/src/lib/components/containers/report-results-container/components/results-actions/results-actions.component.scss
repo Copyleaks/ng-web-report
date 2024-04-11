@@ -73,6 +73,7 @@
 		font-weight: 700;
 		font-size: 14px;
 		white-space: nowrap;
+		margin: 0;
 	}
 
 	.separate-circle-icon {
@@ -126,6 +127,16 @@
 		background-color: $color-container-background;
 		font-size: 16px;
 	}
+
+	.clear-button {
+		margin-right: 4px;
+	}
+	.clear-button:focus,
+	.clear-button:hover {
+		mat-icon {
+			color: $color-primary;
+		}
+	}
 }
 
 .results-search-filter-container {
@@ -178,7 +189,6 @@ mat-icon {
 
 .clear-icon {
 	color: $color-black;
-	padding-right: 4px;
 }
 
 .search-input {
@@ -220,4 +230,11 @@ cr-spinner {
 .filter-chip.disabled {
 	opacity: 0.5;
 	pointer-events: none;
+}
+
+.icon-button {
+	width: unset;
+	height: unset;
+	line-height: unset;
+	min-width: unset;
 }

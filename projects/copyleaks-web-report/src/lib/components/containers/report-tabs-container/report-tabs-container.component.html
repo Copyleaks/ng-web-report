@@ -6,11 +6,14 @@
 			</div>
 		</ng-container>
 
-		<div
+		<a
 			*ngIf="!hidePlagarismTap || showDisabledProducts"
 			tabindex="0"
+			role="button"
+			aria-describedby="plagiarism-view-text"
 			@fadeIn
 			class="tab-plagiarism"
+			[reportViewService]="reportViewSvc"
 			[crReportScoreTooltip]="
 				hidePlagarismTap && showDisabledProducts
 					? null
@@ -41,10 +44,11 @@
 			[class.mobile]="isMobile"
 			[matTooltip]="hidePlagarismTap && showDisabledProducts ? DISABLED : ''"
 			matTooltipClass="web-report-mat-tooltip"
-			(click)="selectTap(EReportViewType.PlagiarismView)">
+			(click)="selectTap(EReportViewType.PlagiarismView)"
+			(keyup.enter)="selectTap(EReportViewType.PlagiarismView)">
 			<ng-container *ngIf="!isMobile; else mobileViewRef">
 				<div class="bar-title-container">
-					<span class="bar-title" web-report-title-font i18n>Matched Text</span>
+					<span id="plagiarism-view-text" class="bar-title" web-report-title-font i18n>Matched Text</span>
 					<span *ngIf="!isMobile" class="bar-score" web-report-title-font>
 						{{ hidePlagarismTap && showDisabledProducts ? 'N/A' : (plagarismScore | percent : '1.0-1') }}
 					</span>
@@ -114,13 +118,16 @@
 					<span class="mobile-tab-title" web-report-title-font>Matched Text</span>
 				</div>
 			</ng-template>
-		</div>
+		</a>
 
-		<div
+		<a
 			*ngIf="!hideAiTap || showDisabledProducts"
 			@fadeIn
+			role="button"
+			aria-describedby="AI-view-text"
 			class="tab-ai"
 			tabindex="0"
+			[reportViewService]="reportViewSvc"
 			[crReportScoreTooltip]="
 				hideAiTap && showDisabledProducts
 					? null
@@ -139,10 +146,11 @@
 			[class.mobile]="isMobile"
 			[matTooltip]="hideAiTap && showDisabledProducts ? DISABLED : ''"
 			matTooltipClass="web-report-mat-tooltip"
-			(click)="selectTap(EReportViewType.AIView)">
+			(click)="selectTap(EReportViewType.AIView)"
+			(keyup.enter)="selectTap(EReportViewType.AIView)">
 			<ng-container *ngIf="!isMobile; else mobileViewRef">
 				<div class="bar-title-container">
-					<span class="bar-title" web-report-title-font i18n>AI Content</span>
+					<span id="AI-view-text" class="bar-title" web-report-title-font i18n>AI Content</span>
 					<span *ngIf="!isMobile" class="bar-score" web-report-title-font>
 						{{ hideAiTap && showDisabledProducts ? 'N/A' : (aiScore | percent : '1.0-1') }}
 					</span>
@@ -185,13 +193,15 @@
 					<span class="mobile-tab-title" web-report-title-font>AI Content</span>
 				</div>
 			</ng-template>
-		</div>
+		</a>
 
-		<div
-			*ngIf="!hideWritingFeedbackTap || showDisabledProducts"
+		<a
+			*ngIf="(!hideWritingFeedbackTap || showDisabledProducts) && !forceWritingFeedbackTapHide"
 			@fadeIn
 			class="tab-grammar"
 			tabindex="0"
+			role="button"
+			aria-describedby="WritingFeedback-view-text"
 			[style.flex-grow]="1"
 			[class.tab-selected]="selectedTap === EReportViewType.WritingFeedbackTabView && !hideWritingFeedbackTap"
 			[class.tab-disabled]="hideWritingFeedbackTap && showDisabledProducts"
@@ -205,10 +215,11 @@
 			[class.mobile]="isMobile"
 			[matTooltip]="hideWritingFeedbackTap && showDisabledProducts ? DISABLED : ''"
 			matTooltipClass="web-report-mat-tooltip"
-			(click)="selectTap(EReportViewType.WritingFeedbackTabView)">
+			(click)="selectTap(EReportViewType.WritingFeedbackTabView)"
+			(keyup.enter)="selectTap(EReportViewType.WritingFeedbackTabView)">
 			<ng-container *ngIf="!isMobile; else mobileViewRef">
 				<div class="bar-title-container">
-					<span class="bar-title" web-report-title-font i18n>Writing Assistant</span>
+					<span id="WritingFeedback-view-text" class="bar-title" web-report-title-font i18n>Writing Assistant</span>
 					<span class="bar-score" web-report-title-font>
 						<ng-container *ngIf="showWritingFeedbackIssues; else pctRef" i18n>
 							{{ hideWritingFeedbackTap && showDisabledProducts ? 'N/A' : totalWritingFeedbackIssues }}
@@ -238,7 +249,7 @@
 					<span class="mobile-tab-title" web-report-title-font>Assistant</span>
 				</div>
 			</ng-template>
-		</div>
+		</a>
 
 		<ng-container *ngFor="let ref of customTabsTemplateRef">
 			<ng-container *ngTemplateOutlet="ref"></ng-container>

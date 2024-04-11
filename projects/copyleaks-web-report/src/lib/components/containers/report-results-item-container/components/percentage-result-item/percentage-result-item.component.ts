@@ -3,6 +3,7 @@ import { ISourceMetadataSection, IStatistics } from '../../../../../models/repor
 import { EMatchType } from './models/percentage-result-item.enum';
 import { IPercentageResult } from './models/percentage-result-item.models';
 import { ReportDataService } from '../../../../../services/report-data.service';
+import { ReportViewService } from '../../../../../services/report-view.service';
 
 @Component({
 	selector: 'cr-percentage-result-item',
@@ -12,6 +13,7 @@ import { ReportDataService } from '../../../../../services/report-data.service';
 export class PercentageResultItemComponent implements OnInit, OnChanges {
 	@Input() percentageResult: IPercentageResult;
 	@Input() reportDataSvc: ReportDataService;
+	@Input() reportViewService: ReportViewService;
 	@Input() excludeResult: boolean = false;
 
 	showPlagiarismPercentages: boolean = false;
@@ -19,6 +21,9 @@ export class PercentageResultItemComponent implements OnInit, OnChanges {
 	iStatisticsResult: IStatistics;
 	similarWords: number;
 	eMatchType = EMatchType;
+
+	PERCENTAGE_BTN_EXPEND_TOOLTIP = $localize`Expend`;
+	PERCENTAGE_BTN_COLLAPSE_TOOLTIP = $localize`Collapse`;
 
 	constructor() {}
 

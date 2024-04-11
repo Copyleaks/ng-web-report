@@ -92,17 +92,27 @@
 			}
 		}
 
-		.options-icon {
-			$icon-size: 18px;
-			width: $icon-size;
-			height: $icon-size;
-			font-size: $icon-size;
-			color: $color-dark-blue;
-			align-self: flex-start;
-			cursor: pointer;
-		}
-		.options-icon:hover {
-			color: $color-primary;
+		.exclude-toggle-btn {
+			width: 18px;
+			height: 18px;
+			.options-icon {
+				$icon-size: 18px;
+				width: $icon-size;
+				height: $icon-size;
+				font-size: $icon-size;
+				color: $color-dark-blue;
+				align-self: flex-start;
+				cursor: pointer;
+				line-height: normal;
+			}
+			.options-icon:hover {
+				color: $color-primary;
+			}
+			&:focus-visible {
+				.options-icon {
+					color: $color-primary;
+				}
+			}
 		}
 	}
 
@@ -176,4 +186,11 @@
 
 mat-icon:hover {
 	transition: 0.2s;
+}
+
+.icon-button {
+	width: unset;
+	height: unset;
+	line-height: unset;
+	min-width: unset;
 }

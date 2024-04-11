@@ -16,6 +16,8 @@ import { ReportRealtimeResultsService } from '../../../../services/report-realti
 export class OnlyAiReportLayoutMobileComponent extends OneToManyReportLayoutBaseComponent implements OnInit, OnDestroy {
 	@Input() companyLogo: string = null;
 
+	@Input() hideWritingFeedback: boolean = false;
+
 	constructor(
 		reportDataSvc: ReportDataService,
 		reportViewSvc: ReportViewService,

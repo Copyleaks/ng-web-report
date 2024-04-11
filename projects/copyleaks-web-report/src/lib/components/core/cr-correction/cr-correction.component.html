@@ -25,20 +25,15 @@
 					i18n-matTooltip></span>
 			</div>
 
-			<button
-				mat-button
+			<mat-chip
 				*ngIf="!hideDescription"
-				class="correction-type-btn"
+				class="correction-type"
 				matTooltip="Show All Corrections by Category"
-				i18n-matTooltip
 				matTooltipClass="web-report-mat-tooltip"
-				aria-label="Shows all corrections of the same type."
-				i18n-aria-label
-				(click)="$event.stopPropagation(); $event.preventDefault(); goToCorrectionCategoryView()">
-				<mat-chip class="correction-type" role="banner">
-					{{ correctionType }}
-				</mat-chip>
-			</button>
+				(click)="$event.stopPropagation(); $event.preventDefault(); goToCorrectionCategoryView()"
+				i18n-matTooltip>
+				{{ correctionType }}
+			</mat-chip>
 		</div>
 		<button
 			mat-icon-button

@@ -8,9 +8,9 @@
 					<mat-chip *ngIf="totalFilteredCorrections > 0" class="filtered-chip" i18n>
 						{{ totalFilteredCorrections }} filtered
 					</mat-chip>
-					<button mat-button class="icon-button" *ngIf="totalExcludedCorrections > 0" (click)="viewExcludedDialog()">
-						<mat-chip class="excluded-chip" i18n>{{ totalExcludedCorrections }} excluded</mat-chip>
-					</button>
+					<mat-chip *ngIf="totalExcludedCorrections > 0" class="excluded-chip" (click)="viewExcludedDialog()" i18n>
+						{{ totalExcludedCorrections }} excluded
+					</mat-chip>
 				</div>
 			</div>
 

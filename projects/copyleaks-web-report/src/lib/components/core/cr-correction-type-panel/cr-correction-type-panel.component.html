@@ -20,18 +20,12 @@
 		</mat-expansion-panel-header>
 
 		<div class="categories-container">
-			<button
-				mat-button
-				class="icon-button"
+			<mat-chip
 				*ngFor="let stat of stats?.categories"
 				[style.display]="stat?.totalIssues === 0 ? 'none' : 'flex'"
-				(click)="onSelectCategory(stat?.type)"
-				aria-label="Shows all corrections of the same type"
-				i18n-aria-label>
-				<mat-chip [style.display]="stat?.totalIssues === 0 ? 'none' : 'flex'">
-					{{ getCorrectionCategoryTitle(stat?.type) }} ({{ stat?.totalIssues }})
-				</mat-chip>
-			</button>
+				(click)="onSelectCategory(stat?.type)">
+				{{ getCorrectionCategoryTitle(stat?.type) }} ({{ stat?.totalIssues }})
+			</mat-chip>
 		</div>
 	</mat-expansion-panel>
 </mat-accordion>

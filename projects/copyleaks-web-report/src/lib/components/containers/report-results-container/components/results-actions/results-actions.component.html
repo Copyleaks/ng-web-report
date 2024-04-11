@@ -103,54 +103,33 @@
 
 	<div *ngIf="resultsActions?.totalExcluded || resultsActions?.totalFiltered" class="chips-container">
 		<ng-container *ngIf="resultsActions?.totalExcluded">
-			<button
-				mat-button
-				class="icon-button chip-button"
-				aria-label="Opens excluded results dialog"
-				i18n-aria-label
-				(click)="showFilterDialog(true)">
-				<mat-chip role="text" aria-label="Shows number of excluded results." i18n-aria-label>
-					{{ resultsActions?.totalExcluded }}
-					<ng-container i18n>excluded</ng-container>
-				</mat-chip>
-			</button>
+			<mat-chip (click)="showFilterDialog(true)">
+				{{ resultsActions?.totalExcluded }}
+				<ng-container i18n>excluded</ng-container>
+			</mat-chip>
 		</ng-container>
 
 		<ng-container *ngIf="resultsActions?.totalFiltered">
-			<button
-				mat-button
-				class="icon-button chip-button"
-				aria-label="Opens filters dialog"
-				i18n-aria-label
-				[disabled]="loadingResults"
-				(click)="showFilterDialog()">
-				<mat-chip
-					class="filter-chip"
-					[class.disabled]="loadingResults"
-					aria-describedby="fliter-text"
-					role="presentation">
-					<span id="fliter-text" aria-label="Shows number of filtered results." i18n-aria-label>
-						{{ resultsActions?.totalFiltered }}
-						<ng-container i18n>filtered</ng-container>
-					</span>
-					<ng-container *ngIf="!loadingResults; else loadingResultsViewRef">
-						<button
-							class="icon-button clear-filter-chip-button"
-							mat-icon-button
-							(click)="$event.stopPropagation(); clearFilter()"
-							matTooltip="Clear Filter"
-							matTooltipClass="web-report-mat-tooltip"
-							i18n-matTooltip
-							aria-label="Clear fliters selection"
-							i18n-aria-label>
-							<mat-icon class="clear-filter-icon" fontSet="material-icons-round">highlight_off</mat-icon>
-						</button>
-					</ng-container>
-					<ng-template #loadingResultsViewRef>
-						<cr-spinner size="14px"></cr-spinner>
-					</ng-template>
-				</mat-chip>
-			</button>
+			<mat-chip class="filter-chip" [class.disabled]="loadingResults" (click)="showFilterDialog()">
+				<span>
+					{{ resultsActions?.totalFiltered }}
+					<ng-container i18n>filtered</ng-container>
+				</span>
+				<ng-container *ngIf="!loadingResults; else loadingResultsViewRef">
+					<mat-icon
+						class="clear-filter-icon"
+						fontSet="material-icons-round"
+						(click)="$event.stopPropagation(); clearFilter()"
+						matTooltip="Clear Filter"
+						matTooltipClass="web-report-mat-tooltip"
+						i18n-matTooltip>
+						highlight_off
+					</mat-icon>
+				</ng-container>
+				<ng-template #loadingResultsViewRef>
+					<cr-spinner size="14px"></cr-spinner>
+				</ng-template>
+			</mat-chip>
 		</ng-container>
 	</div>
 </ng-container>

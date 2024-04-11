@@ -9,46 +9,25 @@
 			</ng-template>
 		</span>
 		<div *ngIf="totalIgnoredWritingFeedbackIssues || totalFilteredWritingFeedbackIssues" class="stats-chips-container">
-			<mat-chip
-				role="button"
-				aria-label="Opens excluded results dialog"
-				i18n-aria-label
-				[tabIndex]="0"
-				*ngIf="totalIgnoredWritingFeedbackIssues"
-				(keyup.enter)="openFilterDialog(true)"
-				(click)="openFilterDialog(true)">
+			<mat-chip *ngIf="totalIgnoredWritingFeedbackIssues" (click)="openFilterDialog(true)">
 				{{ totalIgnoredWritingFeedbackIssues }}
 				<ng-container i18n>excluded</ng-container>
 			</mat-chip>
-			<button
-				mat-button
-				*ngIf="totalFilteredWritingFeedbackIssues"
-				class="chip-button"
-				aria-label="Opens filters dialog"
-				i18n-aria-label
-				(click)="openFilterDialog()">
-				<mat-chip
-					*ngIf="totalFilteredWritingFeedbackIssues"
-					class="filter-chip"
-					aria-describedby="fliter-text"
-					role="presentation">
-					<span id="fliter-text" aria-label="Shows number of filtered results." i18n-aria-label>
-						{{ totalFilteredWritingFeedbackIssues }}
-						<ng-container i18n>filtered</ng-container>
-					</span>
-					<button
-						mat-icon-button
-						class="clear-filter-btn"
-						(click)="$event.stopPropagation(); clearFilter()"
-						matTooltip="Clear Filter"
-						matTooltipClass="web-report-mat-tooltip"
-						i18n-matTooltip
-						aria-label="Clear filtered results."
-						i18n-aria-label>
-						<mat-icon class="clear-filter-icon" fontSet="material-icons-round">highlight_off</mat-icon>
-					</button>
-				</mat-chip>
-			</button>
+			<mat-chip *ngIf="totalFilteredWritingFeedbackIssues" class="filter-chip" (click)="openFilterDialog()">
+				<span>
+					{{ totalFilteredWritingFeedbackIssues }}
+					<ng-container i18n>filtered</ng-container>
+				</span>
+				<mat-icon
+					class="clear-filter-icon"
+					fontSet="material-icons-round"
+					(click)="$event.stopPropagation(); clearFilter()"
+					matTooltip="Clear Filter"
+					matTooltipClass="web-report-mat-tooltip"
+					i18n-matTooltip>
+					highlight_off
+				</mat-icon>
+			</mat-chip>
 		</div>
 	</div>
 

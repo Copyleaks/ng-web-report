@@ -209,7 +209,6 @@ mat-icon {
 	width: 14px;
 	height: 14px;
 	color: $color-container-background;
-	line-height: 12px !important;
 }
 
 .chips-container {
@@ -218,45 +217,6 @@ mat-icon {
 	justify-content: flex-start;
 	align-items: center;
 	gap: 4px;
-	.chip-button {
-		padding: 0;
-		&:focus {
-			::ng-deep {
-				.mat-button-focus-overlay {
-					background-color: transparent;
-					outline: 2px solid black;
-					opacity: 1;
-				}
-			}
-			.clear-filter-chip-button {
-				::ng-deep {
-					.mat-button-focus-overlay {
-						outline: unset;
-					}
-				}
-			}
-		}
-		&:focus-within:not(:focus) {
-			::ng-deep {
-				.mat-button-focus-overlay {
-					background-color: transparent;
-					opacity: 1;
-				}
-			}
-			.clear-filter-chip-button {
-				::ng-deep {
-					.mat-button-focus-overlay {
-						background-color: transparent;
-						outline: unset;
-						opacity: 1;
-					}
-				}
-				mat-icon.clear-filter-icon {
-					color: $color-primary;
-				}
-			}
-		}
-	}
 }
 
 mat-chip {

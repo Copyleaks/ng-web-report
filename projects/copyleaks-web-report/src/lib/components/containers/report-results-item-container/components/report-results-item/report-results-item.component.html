@@ -151,7 +151,16 @@
 				</div>
 				<ng-container *ngIf="!showLoader">
 					<ng-container *ngIf="!excludeView; else showExcludeResult">
-						<mat-icon class="item-menu" mat-icon (click)="$event.stopPropagation()" [matMenuTriggerFor]="menu">
+						<mat-icon
+							class="item-menu"
+							mat-icon
+							(click)="$event.stopPropagation()"
+							[matMenuTriggerFor]="menu"
+							matTooltip="More Options"
+							i18n-matTooltip
+							matTooltipClass="web-report-mat-tooltip"
+							aria-label="More Options"
+							i18n-aria-label>
 							more_vert
 						</mat-icon>
 					</ng-container>

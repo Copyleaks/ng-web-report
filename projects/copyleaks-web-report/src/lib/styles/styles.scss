@@ -19,12 +19,14 @@
 }
 
 .disabled-icon {
-	opacity: 0.5;
-	pointer-events: none;
+	opacity: 0.5 !important;
+	pointer-events: none !important;
 }
 
 .selected-icon {
-	color: $color-primary !important;
+	mat-icon {
+		color: $color-primary !important;
+	}
 }
 
 [web-report-title-font] {

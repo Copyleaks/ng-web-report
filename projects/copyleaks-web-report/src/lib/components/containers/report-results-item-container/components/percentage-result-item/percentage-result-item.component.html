@@ -61,9 +61,8 @@
 
 	<button
 		*ngIf="percentageResult?.showArrowButton"
+		mat-icon-button
 		class="show-plagiarism-detection-button"
-		fxLayout="row"
-		fxLayoutAlign="start end"
 		aria-label="'This is a button to expand or collapse the result score statistics."
 		i18n-aria-label
 		[matTooltip]="showPlagiarismPercentages ? PERCENTAGE_BTN_COLLAPSE_TOOLTIP : PERCENTAGE_BTN_EXPEND_TOOLTIP"

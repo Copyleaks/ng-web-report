@@ -256,25 +256,15 @@ cr-excluded-results-dailog {
 	gap: 4px;
 	align-items: center;
 	justify-content: flex-start;
-	.chip-button {
-		padding: 0;
-		width: unset;
-		height: unset;
-		line-height: unset;
-		mat-chip {
-			font-size: 14px !important;
-			font-style: normal !important;
-			font-weight: 500 !important;
-			line-height: normal !important;
-			font-family: haboro-soft, sans-serif !important;
-		}
+	mat-chip {
+		font-size: 14px !important;
+		font-style: normal !important;
+		font-weight: 500 !important;
+		line-height: normal !important;
+		font-family: haboro-soft, sans-serif !important;
+	}
 
-		.total-excluded {
-			cursor: pointer !important;
-		}
-
-		&:focus-visible {
-			outline: 2px solid black !important;
-		}
+	.total-excluded {
+		cursor: pointer !important;
 	}
 }

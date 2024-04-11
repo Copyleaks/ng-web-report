@@ -28,17 +28,13 @@
 			</span>
 			<div class="chips-stats-container">
 				<ng-container *ngIf="!!resultsActions?.totalExcluded">
-					<button
-						mat-button
-						class="chip-button"
-						aria-label="Opens excluded results dialog"
-						i18n-aria-label
+					<mat-chip
+						class="total-excluded"
+						role="button"
 						(click)="!!resultsActions.totalExcluded ? (data.showExcludedDailog = !data.showExcludedDailog) : ''">
-						<mat-chip class="total-excluded" role="presentation">
-							{{ resultsActions.totalExcluded }}
-							<ng-container i18n>excluded</ng-container>
-						</mat-chip>
-					</button>
+						{{ resultsActions.totalExcluded }}
+						<ng-container i18n>excluded</ng-container>
+					</mat-chip>
 				</ng-container>
 
 				<ng-container *ngIf="!!resultsActions.totalFiltered">

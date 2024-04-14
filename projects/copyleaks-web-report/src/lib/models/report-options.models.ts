@@ -16,7 +16,7 @@ export interface ICopyleaksReportOptions {
 	/** */
 	showInternetResults?: boolean;
 	/** */
-	showInternalDatabaseResults?: boolean;
+	showInternalDatabaseResults?: ICopyleaksReportInternalDatabaseOptions;
 	/** */
 	showBatchResults?: boolean;
 	/** */
@@ -43,6 +43,11 @@ export interface ICopyleaksReportOptions {
 
 export interface ICopyleaksReportWritingFeedbackOptions {
 	hiddenCategories?: EWritingFeedbackCategories[];
+}
+
+export interface ICopyleaksReportInternalDatabaseOptions {
+	showYourResults?: boolean;
+	showOthersResults?: boolean;
 }
 
 export interface CopyleaksResultCardAction {

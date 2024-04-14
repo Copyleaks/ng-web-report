@@ -127,7 +127,7 @@ export interface IResultPreviews {
 	score: IScore;
 }
 
-/**
+/*
  * A results filters for report view
  */
 export interface ICompleteResultsFilters {
@@ -156,9 +156,14 @@ export interface IMatchTypeFilters {
 
 export interface ISourceTypeFilters {
 	internet: boolean;
-	internalDatabase: boolean;
+	internalDatabase: IInternalDatabaseFilter;
 	batch: boolean;
 	repositories: string[];
+}
+
+export interface IInternalDatabaseFilter {
+	yourResults: boolean;
+	othersResults: boolean;
 }
 
 export interface IResultsMetaDataFilters {

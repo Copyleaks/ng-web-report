@@ -155,6 +155,13 @@ export class ReportDataService {
 			if (result.result?.statistics.relatedMeaning && result.result?.statistics.relatedMeaning > 0) totalParaphrased++;
 		});
 
+		let totalYourFiles = 0,
+			totalOthersFiles = 0;
+		this.scanResultsPreviews?.results.database.forEach((result: IDatabaseResultPreview) => {
+			if (result.scanId) totalYourFiles++;
+			else totalOthersFiles++;
+		});
+
 		return (
 			(totalIdentical > 0 && this._filterOptions$.value?.showIdentical === false) ||
 			(totalMinorChanges > 0 && this._filterOptions$.value?.showMinorChanges === false) ||
@@ -164,7 +171,9 @@ export class ReportDataService {
 			(this.scanResultsPreviews?.results.internet.length &&
 				this._filterOptions$.value?.showInternetResults === false) ||
 			(this.scanResultsPreviews?.results.database.length &&
-				this._filterOptions$.value?.showInternalDatabaseResults === false) ||
+				((this._filterOptions$.value?.showInternalDatabaseResults.showOthersResults === false &&
+					totalOthersFiles > 0) ||
+					(this._filterOptions$.value?.showInternalDatabaseResults.showYourResults === false && totalYourFiles > 0))) ||
 			(this.scanResultsPreviews?.results.batch.length && this._filterOptions$.value?.showBatchResults === false) ||
 			(!!this.scanResultsPreviews?.results.repositories?.length &&
 				!!this._filterOptions$.value?.hiddenRepositories?.length) ||
@@ -321,7 +330,10 @@ export class ReportDataService {
 						},
 						sourceType: {
 							batch: options?.showBatchResults ?? true,
-							internalDatabase: options?.showInternalDatabaseResults ?? true,
+							internalDatabase: {
+								yourResults: options?.showInternalDatabaseResults?.showYourResults ?? true,
+								othersResults: options?.showInternalDatabaseResults?.showOthersResults ?? true,
+							},
 							internet: options?.showInternetResults ?? true,
 							repositories: options?.hiddenRepositories ?? [],
 						},
@@ -788,7 +800,10 @@ export class ReportDataService {
 			includedTags: [],
 
 			showInternetResults: true,
-			showInternalDatabaseResults: true,
+			showInternalDatabaseResults: {
+				showYourResults: true,
+				showOthersResults: true,
+			},
 			showBatchResults: true,
 			hiddenRepositories: [],
 
@@ -1051,8 +1066,14 @@ export class ReportDataService {
 					: true,
 			showInternalDatabaseResults:
 				completeResultsRes.filters?.sourceType?.internalDatabase != undefined
-					? completeResultsRes.filters?.sourceType?.internalDatabase
-					: true,
+					? {
+							showYourResults: completeResultsRes.filters?.sourceType?.internalDatabase?.yourResults,
+							showOthersResults: completeResultsRes.filters?.sourceType?.internalDatabase?.othersResults,
+					  }
+					: {
+							showYourResults: true,
+							showOthersResults: true,
+					  },
 			showBatchResults:
 				completeResultsRes.filters?.sourceType?.batch != undefined
 					? completeResultsRes.filters?.sourceType?.batch
@@ -1128,7 +1149,10 @@ export class ReportDataService {
 				},
 				sourceType: {
 					batch: this.filterOptions?.showBatchResults ?? true,
-					internalDatabase: this.filterOptions?.showInternalDatabaseResults ?? true,
+					internalDatabase: {
+						yourResults: this.filterOptions?.showInternalDatabaseResults?.showYourResults ?? true,
+						othersResults: this.filterOptions?.showInternalDatabaseResults?.showOthersResults ?? true,
+					},
 					internet: this.filterOptions?.showInternetResults ?? true,
 					repositories: this.filterOptions?.hiddenRepositories ?? [],
 				},
@@ -1274,9 +1298,27 @@ export class ReportDataService {
 				completeResults.find(cr => cr.id === id && cr.type !== EResultPreviewType.Batch)
 			);
 
-		if (settings.showInternalDatabaseResults !== undefined && settings.showInternalDatabaseResults === false)
+		if (
+			settings.showInternalDatabaseResults !== undefined &&
+			settings.showInternalDatabaseResults.showYourResults === false &&
+			settings.showInternalDatabaseResults.showOthersResults === false
+		)
 			filteredResultsIds = filteredResultsIds.filter(id =>
 				completeResults.find(cr => cr.id === id && cr.type !== EResultPreviewType.Database)
+			);
+		else if (
+			settings.showInternalDatabaseResults !== undefined &&
+			settings.showInternalDatabaseResults.showYourResults === false
+		)
+			filteredResultsIds = filteredResultsIds.filter(id =>
+				completeResults.find(cr => cr.id === id && (cr.type !== EResultPreviewType.Database || !cr.scanId))
+			);
+		else if (
+			settings.showInternalDatabaseResults !== undefined &&
+			settings.showInternalDatabaseResults.showOthersResults === false
+		)
+			filteredResultsIds = filteredResultsIds.filter(id =>
+				completeResults.find(cr => cr.id === id && (cr.type !== EResultPreviewType.Database || !!cr.scanId))
 			);
 
 		if (settings.hiddenRepositories !== undefined && settings.hiddenRepositories.length > 0) {

@@ -6,6 +6,8 @@ export enum EFilterResultForm {
 	fgSourceType = 'sourceType',
 	fcInternet = 'internet',
 	fcInternalDatabase = 'internalDatabase',
+	fcYourResults = 'yourResults',
+	fcOthersResults = 'othersResults',
 	fcBatch = 'batch',
 	fgRepositories = 'repositories',
 

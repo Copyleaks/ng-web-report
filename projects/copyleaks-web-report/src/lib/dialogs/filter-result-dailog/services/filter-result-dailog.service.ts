@@ -70,6 +70,8 @@ export class FilterResultDailogService {
 			sourceType: this._formBuilder.group({
 				internet: new FormControl(this.getFormControlValue(EFilterResultForm.fcInternet)),
 				internalDatabase: new FormControl(this.getFormControlValue(EFilterResultForm.fcInternalDatabase)),
+				yourResults: new FormControl(this.getFormControlValue(EFilterResultForm.fcYourResults)),
+				othersResults: new FormControl(this.getFormControlValue(EFilterResultForm.fcOthersResults)),
 				batch: new FormControl(this.getFormControlValue(EFilterResultForm.fcBatch)),
 				repositories: this._formBuilder.group({}),
 			}),
@@ -188,7 +190,16 @@ export class FilterResultDailogService {
 					: true;
 			case EFilterResultForm.fcInternalDatabase:
 				return this._completeResults.filters?.sourceType?.internalDatabase != undefined
-					? this._completeResults.filters?.sourceType?.internalDatabase
+					? this._completeResults.filters?.sourceType?.internalDatabase.othersResults ||
+							this._completeResults.filters?.sourceType?.internalDatabase.yourResults
+					: true;
+			case EFilterResultForm.fcYourResults:
+				return this._completeResults.filters?.sourceType?.internalDatabase != undefined
+					? this._completeResults.filters?.sourceType?.internalDatabase.yourResults
+					: true;
+			case EFilterResultForm.fcOthersResults:
+				return this._completeResults.filters?.sourceType?.internalDatabase != undefined
+					? this._completeResults.filters?.sourceType?.internalDatabase.othersResults
 					: true;
 			case EFilterResultForm.fcBatch:
 				return this._completeResults.filters?.sourceType?.batch != undefined

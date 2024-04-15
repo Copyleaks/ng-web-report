@@ -116,12 +116,21 @@ export class FilterResultDailogComponent implements OnInit {
 							?.get(EFilterResultForm.fgSourceType)
 							?.get(EFilterResultForm.fcInternet)
 							?.setValue(true, { emitEvent: false });
-					else if (this.totalSourceType.totalInternalDatabase > 0)
+					else if (this.totalSourceType.totalInternalDatabase > 0) {
 						this._filterResultsSvc.filterResultFormGroup
 							?.get(EFilterResultForm.fgSourceType)
 							?.get(EFilterResultForm.fcInternalDatabase)
 							?.setValue(true, { emitEvent: false });
-					else if (this.totalSourceType.totalbatch > 0)
+						if (this.totalSourceType.totalYourFiles > 0)
+							this._filterResultsSvc.sourceTypeFormGroup
+								.get(EFilterResultForm.fcYourResults)
+								?.setValue(true, { emitEvent: false });
+
+						if (this.totalSourceType.totalOthersFiles > 0)
+							this._filterResultsSvc.sourceTypeFormGroup
+								.get(EFilterResultForm.fcOthersResults)
+								?.setValue(true, { emitEvent: false });
+					} else if (this.totalSourceType.totalbatch > 0)
 						this._filterResultsSvc.filterResultFormGroup
 							?.get(EFilterResultForm.fgSourceType)
 							?.get(EFilterResultForm.fcBatch)

@@ -156,14 +156,11 @@ export interface IMatchTypeFilters {
 
 export interface ISourceTypeFilters {
 	internet: boolean;
-	internalDatabase: IInternalDatabaseFilter;
+	internalDatabase: boolean;
 	batch: boolean;
 	repositories: string[];
-}
-
-export interface IInternalDatabaseFilter {
-	yourResults: boolean;
-	othersResults: boolean;
+	yourResults?: boolean;
+	othersResults?: boolean;
 }
 
 export interface IResultsMetaDataFilters {

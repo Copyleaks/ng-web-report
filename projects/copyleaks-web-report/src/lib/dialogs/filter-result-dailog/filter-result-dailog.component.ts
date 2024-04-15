@@ -98,8 +98,9 @@ export class FilterResultDailogComponent implements OnInit {
 			if (
 				!formData.showInternetResults &&
 				!formData.showBatchResults &&
-				!formData.showInternalDatabaseResults.showYourResults &&
-				!formData.showInternalDatabaseResults.showOthersResults &&
+				!formData.showYourResults &&
+				!formData.showOthersResults &&
+				!formData.showInternalDatabaseResults &&
 				formData.hiddenRepositories &&
 				formData.hiddenRepositories.length === this._filterResultsSvc.reposIds.length &&
 				!(
@@ -466,11 +467,16 @@ export class FilterResultDailogComponent implements OnInit {
 			showInternalDatabaseResults:
 				this.totalSourceType.totalInternalDatabase === 0
 					? false
-					: {
-							showYourResults: this._filterResultsSvc.sourceTypeFormGroup.get(EFilterResultForm.fcYourResults)?.value,
-							showOthersResults: this._filterResultsSvc.sourceTypeFormGroup.get(EFilterResultForm.fcOthersResults)
-								?.value,
-					  },
+					: this._filterResultsSvc.sourceTypeFormGroup.get(EFilterResultForm.fcYourResults)?.value ||
+					  this._filterResultsSvc.sourceTypeFormGroup.get(EFilterResultForm.fcOthersResults)?.value,
+			showYourResults:
+				this.totalSourceType.totalInternalDatabase === 0
+					? false
+					: this._filterResultsSvc.sourceTypeFormGroup.get(EFilterResultForm.fcYourResults)?.value,
+			showOthersResults:
+				this.totalSourceType.totalInternalDatabase === 0
+					? false
+					: this._filterResultsSvc.sourceTypeFormGroup.get(EFilterResultForm.fcOthersResults)?.value,
 			showBatchResults:
 				this.totalSourceType.totalbatch === 0
 					? false

@@ -16,7 +16,7 @@ export interface ICopyleaksReportOptions {
 	/** */
 	showInternetResults?: boolean;
 	/** */
-	showInternalDatabaseResults?: ICopyleaksReportInternalDatabaseOptions;
+	showInternalDatabaseResults?: boolean;
 	/** */
 	showBatchResults?: boolean;
 	/** */
@@ -39,15 +39,14 @@ export interface ICopyleaksReportOptions {
 	writingFeedback?: ICopyleaksReportWritingFeedbackOptions;
 	/** */
 	excludedDomains?: string[];
+	/** */
+	showYourResults?: boolean;
+	/** */
+	showOthersResults?: boolean;
 }
 
 export interface ICopyleaksReportWritingFeedbackOptions {
 	hiddenCategories?: EWritingFeedbackCategories[];
-}
-
-export interface ICopyleaksReportInternalDatabaseOptions {
-	showYourResults?: boolean;
-	showOthersResults?: boolean;
 }
 
 export interface CopyleaksResultCardAction {

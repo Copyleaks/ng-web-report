@@ -189,17 +189,18 @@ export class FilterResultDailogService {
 					? this._completeResults.filters?.sourceType?.internet
 					: true;
 			case EFilterResultForm.fcInternalDatabase:
-				return this._completeResults.filters?.sourceType?.internalDatabase != undefined
-					? this._completeResults.filters?.sourceType?.internalDatabase.othersResults ||
-							this._completeResults.filters?.sourceType?.internalDatabase.yourResults
+				return this._completeResults.filters?.sourceType?.othersResults != undefined &&
+					this._completeResults.filters?.sourceType?.yourResults != undefined
+					? this._completeResults.filters?.sourceType?.othersResults ||
+							this._completeResults.filters?.sourceType?.yourResults
 					: true;
 			case EFilterResultForm.fcYourResults:
-				return this._completeResults.filters?.sourceType?.internalDatabase != undefined
-					? this._completeResults.filters?.sourceType?.internalDatabase.yourResults
+				return this._completeResults.filters?.sourceType?.yourResults != undefined
+					? this._completeResults.filters?.sourceType?.yourResults
 					: true;
 			case EFilterResultForm.fcOthersResults:
-				return this._completeResults.filters?.sourceType?.internalDatabase != undefined
-					? this._completeResults.filters?.sourceType?.internalDatabase.othersResults
+				return this._completeResults.filters?.sourceType?.othersResults != undefined
+					? this._completeResults.filters?.sourceType?.othersResults
 					: true;
 			case EFilterResultForm.fcBatch:
 				return this._completeResults.filters?.sourceType?.batch != undefined

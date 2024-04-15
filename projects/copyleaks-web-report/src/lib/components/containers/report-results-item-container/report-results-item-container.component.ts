@@ -26,6 +26,18 @@ export class ReportResultsItemContainerComponent implements OnInit, AfterViewIni
 	 */
 	@Input() showLoadingView = false;
 
+	/**
+	 * @Input Flag indicating whether the content has masked text or not.
+	 */
+	@Input() hasMaskedContent: boolean;
+
+	/**
+	 * @Input Flag indicating whether the content has masked text or not.
+	 */
+	@Input() hideMaskedContentDisclaimer: { flag: boolean } = {
+		flag: false,
+	};
+
 	constructor(private _reportDataSvc: ReportDataService) {}
 
 	ngOnInit(): void {}
@@ -39,6 +51,10 @@ export class ReportResultsItemContainerComponent implements OnInit, AfterViewIni
 				...(this._reportDataSvc.excludedResultsIds?.filter(id => id !== resultId) ?? []),
 			]);
 		else this._reportDataSvc.excludedResultsIds$.next([...(this._reportDataSvc.excludedResultsIds ?? []), resultId]);
+	}
+
+	closeDisclaimer() {
+		this.hideMaskedContentDisclaimer.flag = true;
 	}
 
 	//#endregion

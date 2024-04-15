@@ -1,13 +1,13 @@
 import { Renderer2 } from '@angular/core';
 import { ReportDataService } from '../../../services/report-data.service';
 import iframeJsScript from '../../../utils/one-to-one-iframe-logic';
-import { Match, ResultDetailItem, SlicedMatch } from '../../../models/report-matches.models';
+import { Match, MatchType, ResultDetailItem, SlicedMatch } from '../../../models/report-matches.models';
 import { ReportMatchesService } from '../../../services/report-matches.service';
 import { ReportViewService } from '../../../services/report-view.service';
 import { ReportMatchHighlightService } from '../../../services/report-match-highlight.service';
 import { ReportStatisticsService } from '../../../services/report-statistics.service';
 import { filter } from 'rxjs/operators';
-import { EResponsiveLayoutType } from '../../../enums/copyleaks-web-report.enums';
+import { EResponsiveLayoutType, EResultPreviewType } from '../../../enums/copyleaks-web-report.enums';
 import { IScanSource } from '../../../models/report-data.models';
 import { PostMessageEvent } from '../../../models/report-iframe-events.models';
 import { untilDestroy } from '../../../utils/until-destroy';
@@ -47,6 +47,12 @@ export abstract class OneToOneReportLayoutBaseComponent extends ReportLayoutBase
 	isLoadingSourceContent: boolean = false;
 	isLoadingSuspectContent: boolean = false;
 	isLoadingResultItem: boolean = false;
+
+	isOthersFile: boolean;
+	hasNonIdenticalMatchWords: boolean;
+	hideMaskedContentDisclaimer: { flag: boolean } = {
+		flag: false,
+	};
 
 	get isLoadingScanContent(): boolean {
 		return (!this.suspectIframeHtml && !this.suspectTextMatches) || (!this.sourceIframeHtml && !this.sourceTextMatches);
@@ -92,7 +98,18 @@ export abstract class OneToOneReportLayoutBaseComponent extends ReportLayoutBase
 		});
 
 		this.matchSvc.suspectTextMatches$.pipe(untilDestroy(this)).subscribe(data => {
-			if (data) this.suspectTextMatches = data;
+			if (data) {
+				this.suspectTextMatches = data;
+				this.hasNonIdenticalMatchWords =
+					data
+						.flat()
+						?.filter(
+							match =>
+								match?.match?.type === MatchType.none ||
+								match?.match?.type === MatchType.minorChanges ||
+								match?.match?.type === MatchType.relatedMeaning
+						)?.length > 0;
+			}
 		});
 
 		this.matchSvc.sourceHtmlMatches$.pipe(untilDestroy(this)).subscribe(data => {
@@ -115,6 +132,10 @@ export abstract class OneToOneReportLayoutBaseComponent extends ReportLayoutBase
 					this.numberOfPagesSuspect = resultData.result?.text?.pages?.startPosition?.length ?? 1;
 					this.resultData = resultData;
 					this.resultItem = this.reportDataSvc.newResults?.find(r => r.resultDetails?.id === resultData.id) ?? null;
+
+					this.isOthersFile =
+						this.resultItem?.resultPreview?.type === EResultPreviewType.Database &&
+						!this.resultItem?.resultPreview?.scanId;
 
 					this.matchSvc.suspectHtmlMatches$.pipe(untilDestroy(this)).subscribe(data => {
 						if (!resultData?.result?.html.value) return;
@@ -148,6 +169,10 @@ export abstract class OneToOneReportLayoutBaseComponent extends ReportLayoutBase
 							excluded: this.reportDataSvc.crawledVersion?.metadata.excluded ?? 0,
 						},
 					} as IResultItem;
+
+					this.isOthersFile =
+						this.resultItem?.resultPreview?.type === EResultPreviewType.Database &&
+						!this.resultItem?.resultPreview?.scanId;
 				}
 
 				this.matchSvc.suspectHtmlMatches$.pipe(untilDestroy(this)).subscribe(data => {
@@ -219,5 +244,11 @@ export abstract class OneToOneReportLayoutBaseComponent extends ReportLayoutBase
 			default:
 				console.error('unknown event', message);
 		}
+	}
+
+	openDisclaimer() {
+		this.hideMaskedContentDisclaimer = {
+			flag: false,
+		};
 	}
 }

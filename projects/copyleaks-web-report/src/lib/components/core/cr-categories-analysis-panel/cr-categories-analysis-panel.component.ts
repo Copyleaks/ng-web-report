@@ -70,11 +70,17 @@ export class CrCategoriesAnalysisTypePanelComponent implements OnInit, OnChanges
 			});
 			if (this.totalCorrections === 0) this.displayProp = 'none';
 			else this.displayProp = 'flex';
+
+			// sort the writingFeedbackStats categories by the number of issues
+			this.writingFeedbackStats.categories.sort((a, b) => b.totalIssues - a.totalIssues);
 		}
 		if (changes['matchesStats']) {
 			if (this.matchesStats?.totalResults === 0 || this.matchesStats?.categories?.length === 0)
 				this.displayProp = 'none';
 			else this.displayProp = 'flex';
+
+			// sort the matchesStats categories by the number of issues
+			this.matchesStats.categories.sort((a, b) => b.totalResults - a.totalResults);
 		}
 	}
 

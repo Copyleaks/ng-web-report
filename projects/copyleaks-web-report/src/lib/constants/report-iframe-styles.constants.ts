@@ -55,31 +55,31 @@ span[match][data-type='0'] {
   transition: 0.2s;
 }
 span[match][data-type='0'].hover {
-	background-color: #3f9af533;
+	background-color: #00E2A2 ;
 }
 span[match][data-type='1'] {
 	background-color: #FFB1B1;
   transition: 0.2s;
 }
 span[match][data-type='1'].hover {
-	background-color: #3f9af533;
+	background-color: #00E2A2 ;
 }
 span[match][data-type='2'] {
 	background-color: #fed5a9;
   transition: 0.2s;
 }
 span[match][data-type='2'].hover {
-	background-color: #3f9af533;
+	background-color: #00E2A2 ;
 }
 span[match][data-type='3'] {
 	background-color: #ff9a02;
   transition: 0.2s;
 }
 span[match][data-type='3'].hover {
-	background-color: #3f9af533;
+	background-color: #00E2A2 ;
 }
 span[match][on] {
-	background-color: #3F9AF533 !important;
+	background-color: #00E2A2  !important;
 }
 
 `;

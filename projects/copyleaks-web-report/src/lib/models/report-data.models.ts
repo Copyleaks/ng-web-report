@@ -140,6 +140,7 @@ export interface ICompleteResultsFilters {
 	includedTags?: string[];
 	writingFeedback?: IWritingFeedbackFilter;
 	excludedDomains?: string[];
+	isFilterEnabled?: boolean;
 }
 
 export interface IGeneralFilters {

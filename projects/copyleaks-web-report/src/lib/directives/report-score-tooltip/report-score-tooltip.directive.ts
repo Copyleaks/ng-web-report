@@ -11,7 +11,8 @@ import {
 } from '@angular/core';
 import { CrReportScoreTooltipContentComponent } from './cr-report-score-tooltip-content.component';
 import { IReportScoreTooltipModel } from '../../models/report-view.models';
-import { EReportScoreTooltipPosition } from '../../enums/copyleaks-web-report.enums';
+import { EReportScoreTooltipPosition, EResponsiveLayoutType } from '../../enums/copyleaks-web-report.enums';
+import { ReportViewService } from '../../services/report-view.service';
 
 @Directive({
 	selector: '[crReportScoreTooltip]',
@@ -19,6 +20,7 @@ import { EReportScoreTooltipPosition } from '../../enums/copyleaks-web-report.en
 export class ReportScoreTooltipDirective {
 	@Input() crReportScoreTooltip: IReportScoreTooltipModel | null = null;
 	@Input() crReportScoreTooltipPosition: EReportScoreTooltipPosition = EReportScoreTooltipPosition.DEFAULT;
+	@Input() reportViewService: ReportViewService;
 
 	private componentRef: ComponentRef<any> | null = null;
 
@@ -30,7 +32,10 @@ export class ReportScoreTooltipDirective {
 	) {}
 
 	@HostListener('mouseenter')
+	@HostListener('focus')
 	onMouseEnter(): void {
+		if (this.reportViewService.reportResponsiveMode.mode == EResponsiveLayoutType.Mobile) return;
+
 		if (this.componentRef === null && !this._areAllPropsUndefined) {
 			const componentFactory = this.componentFactoryResolver.resolveComponentFactory(
 				CrReportScoreTooltipContentComponent
@@ -44,6 +49,7 @@ export class ReportScoreTooltipDirective {
 	}
 
 	@HostListener('mouseleave')
+	@HostListener('blur')
 	onMouseLeave(): void {
 		this.destroy();
 	}

@@ -7,6 +7,7 @@ import { DemoCustomResultsBoxItemModule } from '../../components/demo-custom-res
 import { DemoReportPreviewsRoutingModule } from './demo-report-previews-routing.module';
 import { DemoReportPreviewsComponent } from './demo-report-previews.component';
 import { CrButtonModule } from 'projects/copyleaks-web-report/src/lib/components/core/cr-button/cr-button.module';
+import { DemoSidenavModule } from '../../components/demo-sidenav/demo-sidenav.module';
 
 @NgModule({
 	declarations: [DemoReportPreviewsComponent],
@@ -17,6 +18,7 @@ import { CrButtonModule } from 'projects/copyleaks-web-report/src/lib/components
 		CrButtonModule,
 		MatIconModule,
 		DemoCustomResultsBoxItemModule,
+		DemoSidenavModule,
 	],
 	exports: [DemoReportPreviewsComponent],
 })

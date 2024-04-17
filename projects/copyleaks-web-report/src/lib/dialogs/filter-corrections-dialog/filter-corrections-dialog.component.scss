@@ -83,12 +83,18 @@
 			gap: 4px;
 			align-items: center;
 			color: $color-primary;
+			width: unset;
+			height: unset;
+			border-radius: unset;
+			line-height: unset;
+
 			cursor: pointer;
 			.clear-filter-button-icon {
 				$icon-size: 24px;
 				width: $icon-size;
 				height: $icon-size;
 				font-size: $icon-size;
+				line-height: 20px;
 			}
 
 			.clear-filter-button-text {
@@ -159,6 +165,13 @@
 								align-items: center;
 							}
 						}
+						&:focus-within:not(:hover) {
+							::ng-deep {
+								.mat-checkbox-ripple {
+									display: unset !important;
+								}
+							}
+						}
 					}
 				}
 			}
@@ -220,16 +233,29 @@
 					font-size: 12px;
 				}
 			}
-			.exit-filter-button-icon {
+
+			.close-dialog-btn {
 				width: 18px;
 				height: 18px;
-				font-size: 18px;
-				color: $grayed-out-disabled;
-				cursor: pointer;
-			}
 
-			.exit-filter-button-icon:hover {
-				color: $color-primary;
+				.exit-filter-button-icon {
+					width: 18px;
+					height: 18px;
+					font-size: 18px;
+					color: $grayed-out-disabled;
+					cursor: pointer;
+					line-height: 1px;
+				}
+
+				.exit-filter-button-icon:hover {
+					color: $color-primary;
+				}
+				&:focus-visible {
+					outline: none !important;
+					.exit-filter-button-icon {
+						color: $color-primary;
+					}
+				}
 			}
 		}
 	}
@@ -326,5 +352,16 @@
 ::ng-deep {
 	.excluded-corrections-dialog {
 		width: 450px !important;
+	}
+}
+
+.icon-button {
+	width: unset;
+	height: unset;
+	border-radius: unset;
+	line-height: unset;
+	padding: 0;
+	&:focus-visible {
+		outline: 2px solid black !important;
 	}
 }

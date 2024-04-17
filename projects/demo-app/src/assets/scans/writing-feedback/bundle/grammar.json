@@ -1,0 +1,123 @@
+{
+    "score": {
+        "readability": {
+            "score": 85,
+            "readabilityLevel": 2,
+            "readabilityLevelText": "6th Grader",
+            "readabilityLevelDescription": "Easy to read"
+        },
+        "statistics": {
+            "sentenceCount": 36,
+            "averageSentenceLength": 15.1,
+            "averageWordLength": 4.7,
+            "readingTimeSeconds": 142,
+            "speakingTimeSeconds": 250.6
+        },
+        "corrections": {
+            "grammarCorrectionsCount": 2,
+            "grammarCorrectionsScore": 98,
+            "grammarScoreWeight": 1,
+            "mechanicsCorrectionsCount": 3,
+            "mechanicsCorrectionsScore": 97,
+            "mechanicsScoreWeight": 1,
+            "sentenceStructureCorrectionsCount": 1,
+            "sentenceStructureCorrectionsScore": 99,
+            "sentenceStructureScoreWeight": 1,
+            "wordChoiceCorrectionsCount": 1,
+            "wordChoiceCorrectionsScore": 99,
+            "wordChoiceScoreWeight": 1,
+            "overallScore": 98
+        }
+    },
+    "corrections": {
+        "text": {
+            "chars": {
+                "types": [
+                    23,
+                    11,
+                    15,
+                    4,
+                    4,
+                    14,
+                    18
+                ],
+                "starts": [
+                    849,
+                    1250,
+                    1370,
+                    1829,
+                    2436,
+                    2798,
+                    2824
+                ],
+                "lengths": [
+                    4,
+                    4,
+                    5,
+                    6,
+                    6,
+                    5,
+                    5
+                ],
+                "operationTexts": [
+                    "",
+                    "to ",
+                    "fish, ",
+                    "grow ",
+                    "swim ",
+                    "who ",
+                    "thick "
+                ]
+            }
+        },
+        "html": {
+            "chars": {
+                "types": [
+                    23,
+                    11,
+                    15,
+                    4,
+                    4,
+                    14,
+                    18
+                ],
+                "starts": [
+                    965,
+                    1393,
+                    1513,
+                    1999,
+                    2633,
+                    3022,
+                    3048
+                ],
+                "lengths": [
+                    4,
+                    4,
+                    5,
+                    6,
+                    6,
+                    5,
+                    5
+                ],
+                "operationTexts": [
+                    "",
+                    "to ",
+                    "fish, ",
+                    "grow ",
+                    "swim ",
+                    "who ",
+                    "thick "
+                ],
+                "groupIds": [
+                    0,
+                    1,
+                    2,
+                    3,
+                    4,
+                    5,
+                    6
+                ]
+            }
+        }
+    }
+}

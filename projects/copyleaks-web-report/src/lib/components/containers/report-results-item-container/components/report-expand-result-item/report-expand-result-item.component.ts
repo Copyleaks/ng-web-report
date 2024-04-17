@@ -45,7 +45,10 @@ export class ReportExpandResultItemComponent implements OnInit, OnChanges {
 		return '';
 	}
 
-	constructor(private _reportViewSvc: ReportViewService, private _highlightService: ReportMatchHighlightService) {}
+	EXCLUDE_RESULT_TOOLTIP = $localize`Exclude result`;
+	INCLUDE_RESULT_TOOLTIP = $localize`Include result`;
+
+	constructor(public reportViewSvc: ReportViewService, private _highlightService: ReportMatchHighlightService) {}
 
 	ngOnInit(): void {}
 
@@ -70,8 +73,8 @@ export class ReportExpandResultItemComponent implements OnInit, OnChanges {
 	}
 
 	clickBack() {
-		this._reportViewSvc.reportViewMode$.next({
-			...this._reportViewSvc.reportViewMode,
+		this.reportViewSvc.reportViewMode$.next({
+			...this.reportViewSvc.reportViewMode,
 			viewMode: 'one-to-many',
 			suspectId: undefined,
 			sourcePageIndex: 1,
@@ -79,7 +82,7 @@ export class ReportExpandResultItemComponent implements OnInit, OnChanges {
 			alertCode: undefined,
 		});
 
-		this._reportViewSvc.selectedAlert$.next(null);
+		this.reportViewSvc.selectedAlert$.next(null);
 
 		this._highlightService.clear();
 	}

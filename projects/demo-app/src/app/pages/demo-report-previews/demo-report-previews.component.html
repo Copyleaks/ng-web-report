@@ -14,7 +14,6 @@
 				<mat-icon fontSet="material-icons-round">info</mat-icon>
 			</div>
 		</cr-actions>
-
 		<!-- Custom results empty state -->
 		<cr-custom-empty-results *ngIf="showCustomEmptyResults">
 			<div class="custom-empty-state-container" style="display: flex; flex-direction: column; gap: 8px">
@@ -39,7 +38,6 @@
 							</svg>
 							<span>16,000+ open-access journals</span>
 						</div>
-
 						<div style="display: flex; flex-direction: row; gap: 8px">
 							<svg xmlns="http://www.w3.org/2000/svg" width="28" height="24" viewBox="0 0 28 24" fill="none">
 								<path
@@ -53,7 +51,6 @@
 							</svg>
 							<span>20+ code data repositories</span>
 						</div>
-
 						<div style="display: flex; flex-direction: row; gap: 8px">
 							<svg xmlns="http://www.w3.org/2000/svg" width="28" height="24" viewBox="0 0 28 24" fill="none">
 								<path
@@ -67,7 +64,6 @@
 							</svg>
 							<span>60 trillion websites</span>
 						</div>
-
 						<div style="display: flex; flex-direction: row; gap: 8px">
 							<svg xmlns="http://www.w3.org/2000/svg" width="28" height="24" viewBox="0 0 28 24" fill="none">
 								<path
@@ -88,7 +84,6 @@
 				</div>
 			</div>
 		</cr-custom-empty-results>
-
 		<!-- Custom report tab with content -->
 		<cr-custom-tabs *ngIf="showCustomAiTab || showCustomPlagiairsmTab">
 			<cr-custom-tab-item [flexGrow]="0.3">
@@ -102,7 +97,6 @@
 					<demo-custom-results-box-item [lockResultItem]="lockResultItem"></demo-custom-results-box-item>
 				</cr-custom-tab-item-content>
 			</cr-custom-tab-item>
-
 			<cr-custom-tab-item [flexGrow]="0.3">
 				<cr-custom-tab-item-title>
 					<div style="display: flex; flex-direction: row; justify-content: space-between; align-items: center">
@@ -115,7 +109,6 @@
 				</cr-custom-tab-item-content>
 			</cr-custom-tab-item>
 		</cr-custom-tabs>
-
 		<!-- custom results -->
 		<cr-custom-results *ngIf="showCustomResults" [reportView]="reportView">
 			<cr-custom-results-box-content>
@@ -124,7 +117,6 @@
 		</cr-custom-results>
 	</copyleaks-web-report>
 </ng-container>
-
 <!-- Custom locked results template ref -->
 <ng-template #lockedResultTemplateRef let-result="result">
 	<div class="locked-result-container">

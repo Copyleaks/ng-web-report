@@ -29,17 +29,24 @@
 				[matTooltip]="isMultiSelection ? MULTISELECT_IS_ON : ''"
 				matTooltipClass="web-report-mat-tooltip"
 				i18n-matTooltip>
-				<mat-icon
-					[ngClass]="{
-						'disabled-icon': isMultiSelection
-					}"
-					fontSet="material-icons-round"
+				<button
+					class="actions-container-icon-button"
+					[disabled]="isMultiSelection"
+					mat-icon-button
+					(click)="onJumpToNextMatchClick(false)"
 					matTooltip="Go to previous match"
 					matTooltipClass="web-report-mat-tooltip"
 					i18n-matTooltip
-					(click)="onJumpToNextMatchClick(false)">
-					arrow_upward
-				</mat-icon>
+					aria-label="Go to previous match"
+					i18n-aria-label>
+					<mat-icon
+						[ngClass]="{
+							'disabled-icon': isMultiSelection
+						}"
+						fontSet="material-icons-round">
+						arrow_upward
+					</mat-icon>
+				</button>
 			</span>
 
 			<span
@@ -48,78 +55,123 @@
 				[matTooltip]="isMultiSelection ? MULTISELECT_IS_ON : ''"
 				matTooltipClass="web-report-mat-tooltip"
 				i18n-matTooltip>
-				<mat-icon
-					[ngClass]="{
-						'disabled-icon': isMultiSelection
-					}"
-					fontSet="material-icons-round"
+				<button
+					class="actions-container-icon-button"
+					[disabled]="isMultiSelection"
+					mat-icon-button
+					(click)="onJumpToNextMatchClick()"
 					matTooltip="Go to next match"
 					matTooltipClass="web-report-mat-tooltip"
 					i18n-matTooltip
-					(click)="onJumpToNextMatchClick()">
-					arrow_downward
-				</mat-icon>
+					aria-label="Go to next match"
+					i18n-aria-label>
+					<mat-icon
+						[ngClass]="{
+							'disabled-icon': isMultiSelection
+						}"
+						fontSet="material-icons-round">
+						arrow_downward
+					</mat-icon>
+				</button>
+			</span>
+			<span class="icon-tooltip-wrapper" *ngIf="!isHtmlView || !hasHtml || isAlertsView">
+				<button
+					class="actions-container-icon-button"
+					mat-icon-button
+					(click)="changeContentDirection('ltr')"
+					matTooltip="Align left"
+					matTooltipClass="web-report-mat-tooltip"
+					i18n-matTooltip
+					aria-label="Align content to left"
+					i18n-aria-label>
+					<mat-icon fontSet="material-icons-round">format_align_left</mat-icon>
+				</button>
 			</span>
 
-			<mat-icon
-				*ngIf="!isHtmlView || !hasHtml || isAlertsView"
-				fontSet="material-icons-round"
-				(click)="changeContentDirection('ltr')"
-				matTooltip="Align Left"
-				matTooltipClass="web-report-mat-tooltip"
-				i18n-matTooltip>
-				format_align_left
-			</mat-icon>
-			<mat-icon
-				*ngIf="!isHtmlView || !hasHtml || isAlertsView"
-				fontSet="material-icons-round"
-				(click)="changeContentDirection('rtl')"
-				matTooltip="Align right"
-				matTooltipClass="web-report-mat-tooltip"
-				i18n-matTooltip>
-				format_align_right
-			</mat-icon>
-			<mat-icon
-				fontSet="material-icons-round"
-				(click)="zoomIn()"
-				matTooltip="Zoom in"
-				matTooltipClass="web-report-mat-tooltip"
-				i18n-matTooltip>
-				zoom_in
-			</mat-icon>
-			<mat-icon (click)="zoomOut()" matTooltip="Zoom out" matTooltipClass="web-report-mat-tooltip" i18n-matTooltip>
-				zoom_out
-			</mat-icon>
+			<span class="icon-tooltip-wrapper" *ngIf="!isHtmlView || !hasHtml || isAlertsView">
+				<button
+					class="actions-container-icon-button"
+					mat-icon-button
+					(click)="changeContentDirection('rtl')"
+					matTooltip="Align right"
+					matTooltipClass="web-report-mat-tooltip"
+					i18n-matTooltip
+					aria-label="Align content to right"
+					i18n-aria-label>
+					<mat-icon fontSet="material-icons-round">format_align_right</mat-icon>
+				</button>
+			</span>
+
+			<span class="icon-tooltip-wrapper">
+				<button
+					class="actions-container-icon-button"
+					mat-icon-button
+					(click)="zoomIn()"
+					matTooltip="Zoom in"
+					matTooltipClass="web-report-mat-tooltip"
+					i18n-matTooltip
+					aria-label="Zoom in"
+					i18n-aria-label>
+					<mat-icon fontSet="material-icons-round">zoom_in</mat-icon>
+				</button>
+			</span>
+
+			<span class="icon-tooltip-wrapper">
+				<button
+					class="actions-container-icon-button"
+					mat-icon-button
+					(click)="zoomOut()"
+					matTooltip="Zoom out"
+					matTooltipClass="web-report-mat-tooltip"
+					i18n-matTooltip
+					aria-label="Zoom out"
+					i18n-aria-label>
+					<mat-icon>zoom_out</mat-icon>
+				</button>
+			</span>
+
 			<span
 				*ngIf="hasHtml && !isAlertsView"
 				class="icon-tooltip-wrapper"
 				[matTooltip]="!hasHtml ? ONLY_TEXT_VIEW_IS_AVAILABLE : ''"
 				matTooltipClass="web-report-mat-tooltip"
 				i18n-matTooltip>
-				<mat-icon
+				<button
+					class="actions-container-icon-button"
+					mat-icon-button
 					*ngIf="isHtmlView && hasHtml"
-					[ngClass]="{
-						'disabled-icon': !hasHtml || isAlertsView
-					}"
-					fontSet="material-icons-round"
 					(click)="onViewChange()"
 					matTooltip="Switch to textual mode"
 					matTooltipClass="web-report-mat-tooltip"
-					i18n-matTooltip>
-					title
-				</mat-icon>
-				<mat-icon
+					i18n-matTooltip
+					aria-label="Switch to textual mode"
+					i18n-aria-label>
+					<mat-icon
+						[ngClass]="{
+							'disabled-icon': !hasHtml || isAlertsView
+						}"
+						fontSet="material-icons-round">
+						title
+					</mat-icon>
+				</button>
+				<button
+					class="actions-container-icon-button"
+					mat-icon-button
 					*ngIf="!isHtmlView || (isHtmlView && !hasHtml)"
-					[ngClass]="{
-						'disabled-icon': !hasHtml || isAlertsView
-					}"
-					fontSet="material-icons-round"
 					(click)="onViewChange()"
 					matTooltip="Switch to rich text mode"
 					matTooltipClass="web-report-mat-tooltip"
-					i18n-matTooltip>
-					image
-				</mat-icon>
+					i18n-matTooltip
+					aria-label="Switch to rich text mode"
+					i18n-aria-label>
+					<mat-icon
+						[ngClass]="{
+							'disabled-icon': !hasHtml || isAlertsView
+						}"
+						fontSet="material-icons-round">
+						image
+					</mat-icon>
+				</button>
 			</span>
 		</ng-container>
 	</div>
@@ -148,7 +200,8 @@
 				}"
 				#contentIFrame
 				sandbox="allow-scripts"
-				crOriginalHtmlHelper></iframe>
+				crOriginalHtmlHelper
+				title="Submitted text"></iframe>
 			<div
 				class="text-container"
 				#contentText
@@ -208,7 +261,8 @@
 				}"
 				#contentIFrame
 				sandbox="allow-scripts"
-				crSourceHtmlHelper></iframe>
+				crSourceHtmlHelper
+				title="Submitted text"></iframe>
 			<div
 				class="text-container"
 				[class.with-shift-selected]="isShiftClicked"
@@ -264,7 +318,8 @@
 				}"
 				#contentIFrame
 				sandbox="allow-scripts"
-				crSuspectHtmlHelper></iframe>
+				crSuspectHtmlHelper
+				title="Submitted text"></iframe>
 			<div
 				class="text-container"
 				[class.with-shift-selected]="isShiftClicked"

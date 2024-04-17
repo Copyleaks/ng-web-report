@@ -305,6 +305,7 @@ export class ReportDataService {
 						},
 					},
 					filters: {
+						isFilterEnabled: this.isFilterOn,
 						general: {
 							alerts: options?.showAlerts ?? true,
 							authorSubmissions: options?.showSameAuthorSubmissions ?? true,

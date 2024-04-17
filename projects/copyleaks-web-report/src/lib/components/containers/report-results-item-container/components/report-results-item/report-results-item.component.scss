@@ -8,7 +8,7 @@
 .result-item-hover-container {
 	&:hover {
 		cursor: pointer;
-		border-color: $color-primary;
+		border-color: $color-primary !important;
 		.percentage-result-item-container {
 			background-color: $color-light-primary;
 		}
@@ -117,7 +117,13 @@
 					}
 				}
 			}
-
+			.icon-button {
+				width: unset;
+				height: unset;
+				line-height: unset;
+				min-width: unset;
+				padding: 0;
+			}
 			.item-menu,
 			.exclude-result {
 				cursor: pointer;
@@ -131,6 +137,7 @@
 			}
 
 			.exclude-result {
+				line-height: unset;
 				font-size: 18px;
 				height: 18px;
 				width: 18px;
@@ -226,6 +233,7 @@
 	box-shadow: 2px 2px 4px 0px rgba(0, 0, 0, 0.25) !important;
 	border-radius: 10px;
 	.mat-menu-content {
+		align-items: flex-start !important;
 		background-color: $color-white !important;
 		.mat-menu-item {
 			background-color: $color-white !important;

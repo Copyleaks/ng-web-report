@@ -33,18 +33,25 @@
 
 	<div class="actions-btns-container">
 		<ng-container *ngIf="!correctionClicked; else highlightedCorrectioniconRef">
-			<mat-icon
-				class="filter-icon"
-				[class.off]="!filterIndicatorOn"
-				[class.on]="filterIndicatorOn && totalWritingFeedbackIssues > 0"
-				[class.disabled-icon]="totalWritingFeedbackIssues <= 0"
-				fontSet="material-icons-round"
+			<button
+				mat-icon-button
+				class="filter-btn"
 				(click)="openFilterDialog()"
 				matTooltip="Filter corrections"
 				matTooltipClass="web-report-mat-tooltip"
-				i18n-matTooltip>
-				filter_list
-			</mat-icon>
+				i18n-matTooltip
+				[disabled]="totalWritingFeedbackIssues <= 0"
+				aria-label="Opens filters dialog"
+				i18n-aria-label>
+				<mat-icon
+					class="filter-icon"
+					[class.off]="!filterIndicatorOn"
+					[class.on]="filterIndicatorOn && totalWritingFeedbackIssues > 0"
+					[class.disabled-icon]="totalWritingFeedbackIssues <= 0"
+					fontSet="material-icons-round">
+					filter_list
+				</mat-icon>
+			</button>
 		</ng-container>
 
 		<ng-template #highlightedCorrectioniconRef>

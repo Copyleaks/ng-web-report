@@ -1,63 +1,67 @@
-<section class="layout-section">
-	<h1>One-to-many Layout - Desktop</h1>
-	<copyleaks-web-report class="desktop-view" [reportLayoutType]="ReportLayoutType.OneToMany">
-		<cr-actions>
-			<div style="display: flex; flex-direction: row; margin-left: auto; gap: 8px">
-				<mat-icon fontSet="material-icons-round">info</mat-icon>
-				<mat-icon fontSet="material-icons-round">download</mat-icon>
-				<mat-icon fontSet="material-icons-round">share</mat-icon>
-			</div>
-		</cr-actions>
-	</copyleaks-web-report>
-</section>
+<app-demo-sidenav>
+	<div fxFlex>
+		<section class="layout-section">
+			<h1>One-to-many Layout - Desktop</h1>
+			<copyleaks-web-report class="desktop-view" [reportLayoutType]="ReportLayoutType.OneToMany">
+				<cr-actions>
+					<div style="display: flex; flex-direction: row; margin-left: auto; gap: 8px">
+						<mat-icon fontSet="material-icons-round">info</mat-icon>
+						<mat-icon fontSet="material-icons-round">download</mat-icon>
+						<mat-icon fontSet="material-icons-round">share</mat-icon>
+					</div>
+				</cr-actions>
+			</copyleaks-web-report>
+		</section>
 
-<div class="divider"></div>
+		<div class="divider"></div>
 
-<section class="layout-section">
-	<h1>One-to-one Layout - Desktop</h1>
-	<copyleaks-web-report class="desktop-view" [reportLayoutType]="ReportLayoutType.OneToOne">
-		<cr-actions>
-			<div style="display: flex; flex-direction: row; margin-left: auto; gap: 8px">
-				<mat-icon fontSet="material-icons-round">info</mat-icon>
-				<mat-icon fontSet="material-icons-round">download</mat-icon>
-				<mat-icon fontSet="material-icons-round">share</mat-icon>
-			</div>
-		</cr-actions>
-	</copyleaks-web-report>
-</section>
+		<section class="layout-section">
+			<h1>One-to-one Layout - Desktop</h1>
+			<copyleaks-web-report class="desktop-view" [reportLayoutType]="ReportLayoutType.OneToOne">
+				<cr-actions>
+					<div style="display: flex; flex-direction: row; margin-left: auto; gap: 8px">
+						<mat-icon fontSet="material-icons-round">info</mat-icon>
+						<mat-icon fontSet="material-icons-round">download</mat-icon>
+						<mat-icon fontSet="material-icons-round">share</mat-icon>
+					</div>
+				</cr-actions>
+			</copyleaks-web-report>
+		</section>
 
-<div class="divider"></div>
+		<div class="divider"></div>
 
-<section class="layout-section">
-	<h1>One-to-many Layout - Mobile</h1>
-	<copyleaks-web-report
-		class="mobile-view"
-		[reportLayoutType]="ReportLayoutType.OneToMany"
-		[responsiveLayoutType]="ResponsiveLayoutType.Mobile">
-		<cr-actions>
-			<div style="display: flex; flex-direction: row; margin-left: auto; gap: 8px">
-				<mat-icon fontSet="material-icons-round">info</mat-icon>
-				<mat-icon fontSet="material-icons-round">download</mat-icon>
-				<mat-icon fontSet="material-icons-round">share</mat-icon>
-			</div>
-		</cr-actions>
-	</copyleaks-web-report>
-</section>
+		<section class="layout-section">
+			<h1>One-to-many Layout - Mobile</h1>
+			<copyleaks-web-report
+				class="mobile-view"
+				[reportLayoutType]="ReportLayoutType.OneToMany"
+				[responsiveLayoutType]="ResponsiveLayoutType.Mobile">
+				<cr-actions>
+					<div style="display: flex; flex-direction: row; margin-left: auto; gap: 8px">
+						<mat-icon fontSet="material-icons-round">info</mat-icon>
+						<mat-icon fontSet="material-icons-round">download</mat-icon>
+						<mat-icon fontSet="material-icons-round">share</mat-icon>
+					</div>
+				</cr-actions>
+			</copyleaks-web-report>
+		</section>
 
-<div class="divider"></div>
+		<div class="divider"></div>
 
-<section class="layout-section">
-	<h1>One-to-one Layout - Mobile</h1>
-	<copyleaks-web-report
-		class="mobile-view"
-		[reportLayoutType]="ReportLayoutType.OneToOne"
-		[responsiveLayoutType]="ResponsiveLayoutType.Mobile">
-		<cr-actions>
-			<div style="display: flex; flex-direction: row; margin-left: auto; gap: 8px">
-				<mat-icon fontSet="material-icons-round">info</mat-icon>
-				<mat-icon fontSet="material-icons-round">download</mat-icon>
-				<mat-icon fontSet="material-icons-round">share</mat-icon>
-			</div>
-		</cr-actions>
-	</copyleaks-web-report>
-</section>
+		<section class="layout-section">
+			<h1>One-to-one Layout - Mobile</h1>
+			<copyleaks-web-report
+				class="mobile-view"
+				[reportLayoutType]="ReportLayoutType.OneToOne"
+				[responsiveLayoutType]="ResponsiveLayoutType.Mobile">
+				<cr-actions>
+					<div style="display: flex; flex-direction: row; margin-left: auto; gap: 8px">
+						<mat-icon fontSet="material-icons-round">info</mat-icon>
+						<mat-icon fontSet="material-icons-round">download</mat-icon>
+						<mat-icon fontSet="material-icons-round">share</mat-icon>
+					</div>
+				</cr-actions>
+			</copyleaks-web-report>
+		</section>
+	</div>
+</app-demo-sidenav>

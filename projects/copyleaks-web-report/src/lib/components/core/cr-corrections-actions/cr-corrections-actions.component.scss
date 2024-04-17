@@ -30,12 +30,17 @@
 		}
 	}
 
-	.filter-icon {
-		color: $color-dark-blue;
-		cursor: pointer;
-		&.on,
-		&:hover {
-			color: $color-primary;
+	.filter-btn {
+		width: unset;
+		height: unset;
+		line-height: unset;
+		.filter-icon {
+			color: $color-dark-blue;
+			cursor: pointer;
+			&.on,
+			&:hover {
+				color: $color-primary;
+			}
 		}
 	}
 

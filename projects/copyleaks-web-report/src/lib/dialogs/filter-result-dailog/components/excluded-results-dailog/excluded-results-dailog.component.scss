@@ -35,16 +35,40 @@
 			border-radius: 50%;
 			width: 24px;
 			height: 24px;
-			&:hover {
+			&:hover,
+			&:focus-within {
 				background-color: $color-primary;
 				mat-icon {
 					color: $color-white;
+				}
+				.serach-input-clear-button {
+					mat-icon {
+						color: $color-white;
+					}
 				}
 			}
 			mat-icon {
 				font-size: 18px;
 				width: 18px;
 				height: 18px;
+			}
+			.serach-input-clear-button {
+				line-height: unset;
+				width: unset;
+				height: unset;
+				&:focus {
+					::ng-deep {
+						.mat-button-focus-overlay {
+							background-color: transparent;
+						}
+					}
+				}
+				mat-icon {
+					line-height: unset;
+					font-size: 18px;
+					width: 18px;
+					height: 18px;
+				}
 			}
 		}
 		.search-input {

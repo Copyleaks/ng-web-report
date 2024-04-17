@@ -24,6 +24,9 @@ export class ReportViewService {
 	public get reportResponsiveMode$() {
 		return this._reportResponsiveMode$;
 	}
+	public get reportResponsiveMode() {
+		return this._reportResponsiveMode$.value;
+	}
 
 	private _selectedResult$ = new BehaviorSubject<ResultDetailItem | null>(null);
 	/** Emits matches that are relevant to source html one-to-many mode */

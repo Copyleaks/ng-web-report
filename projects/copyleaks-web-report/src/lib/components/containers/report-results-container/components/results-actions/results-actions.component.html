@@ -3,10 +3,10 @@
 		<ng-container
 			*ngIf="!resultsActions?.selectedResults || resultsActions?.selectedResults === 0; else highlightedResultsView">
 			<div *ngIf="!showSearchFiled" class="tootal-results-container">
-				<span class="tootal-results" web-report-title-font>
-					<ng-container i18n>Matching Text Results&nbsp;</ng-container>
+				<h6 class="tootal-results" web-report-title-font i18n>
+					Matching Text Results&nbsp;
 					<span *ngIf="!hideTotal">({{ resultsActions?.totalResults }})</span>
-				</span>
+				</h6>
 			</div>
 
 			<div *ngIf="showSearchFiled" fxLayout="row" fxLayoutAlign="start center" class="input-search-container">
@@ -18,42 +18,49 @@
 					matInput
 					[formControl]="searchFc"
 					i18n-placeholder />
-				<mat-icon
-					class="clear-icon"
-					fontSet="material-icons-outlined"
+				<button
+					mat-icon-button
+					class="icon-button clear-button"
 					(click)="showSearch()"
 					matTooltip="Clear"
 					matTooltipClass="web-report-mat-tooltip"
-					i18n-matTooltip>
-					cancel
-				</mat-icon>
+					i18n-matTooltip
+					aria-label="Clears entered text"
+					i18n-aria-label>
+					<mat-icon class="clear-icon" fontSet="material-icons-outlined">cancel</mat-icon>
+				</button>
 			</div>
 
 			<div fxLayout="row" fxLayoutAlign="start center" fxLayoutGap="8px" class="results-search-filter-container">
-				<mat-icon
-					*ngIf="!showSearchFiled"
-					class="open-search-icon"
-					(click)="showSearch()"
-					fontSet="material-icons-round"
+				<button
+					class="icon-button"
 					[ngClass]="{ 'disabled-icon': !resultsActions?.totalResults || resultsActions?.totalResults === 0 }"
-					matTooltip="Search matching text results"
+					mat-icon-button
+					*ngIf="!showSearchFiled"
+					(click)="!resultsActions?.totalResults || resultsActions?.totalResults === 0 ? '' : showSearch()"
+					matTooltip="Search Results"
 					matTooltipClass="web-report-mat-tooltip"
-					i18n-matTooltip>
-					search
-				</mat-icon>
-				<mat-icon
-					class="filter-search-icon"
-					(click)="showFilterDialog()"
-					fontSet="material-icons-round"
+					i18n-matTooltip
+					aria-label="Search Results"
+					i18n-aria-label>
+					<mat-icon class="open-search-icon" fontSet="material-icons-round">search</mat-icon>
+				</button>
+				<button
+					class="icon-button"
 					[ngClass]="{
 						'disabled-icon': !resultsActions?.totalResults || resultsActions?.totalResults === 0,
 						'selected-icon': isFilterOn || resultsActions?.totalFiltered != 0
 					}"
-					matTooltip="Filter matching text results"
+					mat-icon-button
+					(click)="!resultsActions?.totalResults || resultsActions?.totalResults === 0 ? '' : showFilterDialog()"
+					matTooltip="Filter Matching Results"
 					matTooltipClass="web-report-mat-tooltip"
-					i18n-matTooltip>
-					filter_list
-				</mat-icon>
+					i18n-matTooltip
+					aria-label="Filter Matching Results"
+					i18n-aria-label>
+					<mat-icon class="filter-search-icon" fontSet="material-icons-round">filter_list</mat-icon>
+				</button>
+
 				<mat-icon
 					*ngIf="isMobile"
 					class="expand-icon"
@@ -72,15 +79,17 @@
 					<span *ngIf="!hideTotal">({{ resultsActions?.selectedResults }})</span>
 				</span>
 			</div>
-			<mat-icon
-				class="diselect-match-icon"
-				fontSet="material-icons-outlined"
+			<button
+				class="icon-button"
+				mat-icon-button
 				(click)="deselectMatch()"
 				matTooltip="Deselect Match"
 				matTooltipClass="web-report-mat-tooltip"
-				i18n-matTooltip>
-				cancel
-			</mat-icon>
+				i18n-matTooltip
+				aria-label="Deselects a match result"
+				i18n-aria-label>
+				<mat-icon class="diselect-match-icon" fontSet="material-icons-outlined">cancel</mat-icon>
+			</button>
 		</ng-template>
 	</div>
 

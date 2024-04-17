@@ -36,6 +36,13 @@
 			color: $color-black;
 			font-size: 14px;
 			font-weight: 500;
+			&:focus-within:not(:hover) {
+				::ng-deep {
+					.mat-checkbox-ripple {
+						display: unset !important;
+					}
+				}
+			}
 		}
 	}
 

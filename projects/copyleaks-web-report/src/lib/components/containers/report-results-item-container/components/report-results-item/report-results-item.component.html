@@ -1,4 +1,4 @@
-<div
+<a
 	@fadeIn
 	class="result-item-container"
 	[ngClass]="{
@@ -6,7 +6,12 @@
 		'locked-result-item-container': isLocked
 	}"
 	fxLayout="column"
-	fxLayoutAlign="start center">
+	fxLayoutAlign="start center"
+	[tabIndex]="0"
+	role="link"
+	aria-label="Opens view of the selected result agianst the submitted text"
+	i18n-aria-label
+	(keyup.enter)="handleClick()">
 	<ng-container *ngIf="!isLocked">
 		<!--  -->
 		<div fxLayout="column" fxLayoutAlign="start" class="item-container">
@@ -109,18 +114,30 @@
 								<div
 									class="chips-container"
 									aria-label="This is a list of tags the are associated with the given results"
-									i18n-aria-label>
+									i18n-aria-label
+									role="list">
 									<mat-chip
 										*ngIf="firstTag"
 										class="first-tag"
 										[matTooltip]="firstTag.description | decodeUri"
 										matTooltipClass="web-report-mat-tooltip"
 										i18n-matTooltip
+										[tabIndex]="0"
+										role="listitem"
+										aria-label="Opens view of the selected result agianst the submitted text"
+										i18n-aria-label
 										(click)="handleClick()">
 										{{ firstTag.title | decodeUri }}
 									</mat-chip>
 
-									<mat-chip *ngIf="numberOfTags > 1" class="plus-chip" (click)="handleClick()">
+									<mat-chip
+										*ngIf="numberOfTags > 1"
+										class="plus-chip"
+										(click)="handleClick()"
+										[tabIndex]="0"
+										role="listitem"
+										aria-label="Opens view of the selected result agianst the submitted text"
+										i18n-aria-label>
 										{{ '+' + (numberOfTags - 1) }}
 									</mat-chip>
 								</div>
@@ -134,35 +151,46 @@
 				</div>
 				<ng-container *ngIf="!showLoader">
 					<ng-container *ngIf="!excludeView; else showExcludeResult">
-						<mat-icon class="item-menu" mat-icon [matMenuTriggerFor]="menu" (click)="$event.stopPropagation()">
+						<mat-icon
+							class="item-menu"
+							mat-icon
+							(click)="$event.stopPropagation()"
+							[matMenuTriggerFor]="menu"
+							matTooltip="More Options"
+							i18n-matTooltip
+							matTooltipClass="web-report-mat-tooltip"
+							aria-label="More Options"
+							i18n-aria-label>
 							more_vert
 						</mat-icon>
 					</ng-container>
 
 					<ng-template #showExcludeResult>
 						<ng-container *ngIf="isResultExcluded; else showResultRef">
-							<mat-icon
-								class="exclude-result"
-								mat-icon
-								fontSet="material-icons-round"
+							<button
+								mat-icon-button
 								(click)="showResult()"
+								class="icon-button"
 								matTooltip="Include result"
 								matTooltipClass="web-report-mat-tooltip"
-								i18n-matTooltip>
-								visibility
-							</mat-icon>
+								i18n-matTooltip
+								aria-label="Includes result in report"
+								i18n-aria-label>
+								<mat-icon class="exclude-result" mat-icon fontSet="material-icons-round">visibility</mat-icon>
+							</button>
 						</ng-container>
 						<ng-template #showResultRef>
-							<mat-icon
-								class="exclude-result"
-								mat-icon
-								fontSet="material-icons-round"
+							<button
+								mat-icon-button
 								(click)="hideResult()"
+								class="icon-button"
 								matTooltip="Exclude result"
 								matTooltipClass="web-report-mat-tooltip"
-								i18n-matTooltip>
-								visibility_off
-							</mat-icon>
+								i18n-matTooltip
+								aria-label="Exclude result in report"
+								i18n-aria-label>
+								<mat-icon class="exclude-result" mat-icon fontSet="material-icons-round">visibility_off</mat-icon>
+							</button>
 						</ng-template>
 					</ng-template>
 				</ng-container>
@@ -194,6 +222,7 @@
 				<cr-percentage-result-item
 					[percentageResult]="percentageResult"
 					[excludeResult]="excludeView"
+					[reportViewService]="reportViewSvc"
 					[reportDataSvc]="reportDataSvc"></cr-percentage-result-item>
 			</ng-container>
 			<ng-template #showPercentageSkeleton>
@@ -219,7 +248,7 @@
 				[ngTemplateOutletContext]="{ result: resultItem }"></ng-container>
 		</ng-container>
 	</ng-container>
-</div>
+</a>
 
 <mat-menu class="result-item-menu-list" #menu="matMenu" yPosition="below">
 	<button mat-menu-item (click)="hideResult()" [disableRipple]="true">
@@ -236,12 +265,17 @@
 		<mat-icon class="mat-menu-item-icon" fontSet="material-icons-round">delete</mat-icon>
 		<span class="mat-menu-item-text" i18n>Delete result</span>
 	</button>
-	<button *ngIf="previewResult?.url" mat-menu-item (click)="visitResultSource()" [disableRipple]="true">
+	<a
+		*ngIf="previewResult?.url"
+		mat-menu-item
+		(click)="visitResultSource()"
+		(keyup.enter)="visitResultSource()"
+		[disableRipple]="true">
 		<mat-icon class="mat-menu-item-icon" fontSet="material-icons-round">open_in_new</mat-icon>
 		<span class="mat-menu-item-text" i18n>Visit result source</span>
-	</button>
-	<button mat-menu-item (click)="comapreResult()" [disableRipple]="true">
+	</a>
+	<a mat-menu-item (click)="comapreResult()" (keyup.enter)="comapreResult()" [disableRipple]="true">
 		<mat-icon class="mat-menu-item-icon" fontSet="material-icons-round">compare_arrows</mat-icon>
 		<span class="mat-menu-item-text" i18n>Compare with submitted file</span>
-	</button>
+	</a>
 </mat-menu>

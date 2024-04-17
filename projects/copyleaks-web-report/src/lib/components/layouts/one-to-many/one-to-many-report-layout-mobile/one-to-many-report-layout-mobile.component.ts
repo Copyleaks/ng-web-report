@@ -19,6 +19,8 @@ export class OneToManyReportLayoutMobileComponent
 {
 	@Input() companyLogo: string = null;
 
+	@Input() hideWritingFeedback: boolean = false;
+
 	constructor(
 		reportDataSvc: ReportDataService,
 		reportViewSvc: ReportViewService,

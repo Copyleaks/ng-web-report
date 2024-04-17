@@ -13,6 +13,17 @@ const routes: Routes = [
 			import('./pages/demo-layouts-page/demo-layouts-page.module').then(mod => mod.DemoLayoutsPageModule),
 	},
 	{
+		path: 'accessibility/:type/:id',
+		loadChildren: () =>
+			import('./pages/demo-report-accessibility/demo-report-accessibility.module').then(
+				mod => mod.DemoReportAccessibilityModule
+			),
+	},
+	{
+		path: 'accessibility',
+		redirectTo: 'accessibility/bundle/sample-report',
+	},
+	{
 		path: '**',
 		redirectTo: 'previews/bundle/sample-report',
 	},

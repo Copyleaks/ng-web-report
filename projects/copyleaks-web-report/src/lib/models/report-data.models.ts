@@ -140,6 +140,7 @@ export interface ICompleteResultsFilters {
 	resultsMetaData?: IResultsMetaDataFilters;
 	includedTags?: string[];
 	writingFeedback?: IWritingFeedbackFilter;
+	isFilterEnabled?: boolean;
 }
 
 export interface IGeneralFilters {

@@ -205,9 +205,11 @@
 		</div>
 
 		<div mat-dialog-actions class="include-all-container">
-			<span class="include-all-btn" (click)="includeAllToggle()" i18n>
+			<span class="include-all-btn" (click)="includeAllToggle()">
 				<ng-container *ngIf="allIncluded; else includeAllRef" i18n>Exclude all</ng-container>
-				<ng-template #includeAllRef>Include all</ng-template>
+				<ng-template #includeAllRef>
+					<ng-container i18n>Include all</ng-container>
+				</ng-template>
 			</span>
 		</div>
 	</ng-container>

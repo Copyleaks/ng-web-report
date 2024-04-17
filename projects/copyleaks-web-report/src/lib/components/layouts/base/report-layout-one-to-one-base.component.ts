@@ -212,6 +212,16 @@ export abstract class OneToOneReportLayoutBaseComponent extends ReportLayoutBase
 					}
 				});
 			});
+
+		try {
+			// get the local storage hideMaskedContentDisclaimer property and set it to hideMaskedContentDisclaimer
+			const hideMaskedContentDisclaimer = JSON.parse(localStorage.getItem('hideMaskedContentDisclaimer')) as {
+				flag: boolean;
+			};
+			if (hideMaskedContentDisclaimer) this.hideMaskedContentDisclaimer = hideMaskedContentDisclaimer;
+		} catch (error) {
+			console.error('Error getting disclaimer hide flag from local storage: ', error);
+		}
 	}
 
 	onSourceIFrameMessage(message: PostMessageEvent) {

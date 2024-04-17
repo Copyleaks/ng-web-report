@@ -1,0 +1,12 @@
+<div class="title-container">
+	<ng-content select="cr-result-disclaimer-title"></ng-content>
+	<mat-icon
+		class="close-icon"
+		matTooltip="Close disclaimer"
+		matTooltipClass="web-report-mat-tooltip"
+		i18n-matTooltip
+		(click)="closeDisclaimer()">
+		close
+	</mat-icon>
+</div>
+<ng-content select="cr-result-disclaimer-description"></ng-content>

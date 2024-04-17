@@ -155,6 +155,13 @@ export class ReportDataService {
 			if (result.result?.statistics.relatedMeaning && result.result?.statistics.relatedMeaning > 0) totalParaphrased++;
 		});
 
+		let totalYourFiles = 0,
+			totalOthersFiles = 0;
+		this.scanResultsPreviews?.results.database.forEach((result: IDatabaseResultPreview) => {
+			if (result.scanId) totalYourFiles++;
+			else totalOthersFiles++;
+		});
+
 		return (
 			(totalIdentical > 0 && this._filterOptions$.value?.showIdentical === false) ||
 			(totalMinorChanges > 0 && this._filterOptions$.value?.showMinorChanges === false) ||
@@ -164,7 +171,8 @@ export class ReportDataService {
 			(this.scanResultsPreviews?.results.internet.length &&
 				this._filterOptions$.value?.showInternetResults === false) ||
 			(this.scanResultsPreviews?.results.database.length &&
-				this._filterOptions$.value?.showInternalDatabaseResults === false) ||
+				((this._filterOptions$.value?.showOthersResults === false && totalOthersFiles > 0) ||
+					(this._filterOptions$.value?.showYourResults === false && totalYourFiles > 0))) ||
 			(this.scanResultsPreviews?.results.batch.length && this._filterOptions$.value?.showBatchResults === false) ||
 			(!!this.scanResultsPreviews?.results.repositories?.length &&
 				!!this._filterOptions$.value?.hiddenRepositories?.length) ||
@@ -321,7 +329,9 @@ export class ReportDataService {
 						},
 						sourceType: {
 							batch: options?.showBatchResults ?? true,
-							internalDatabase: options?.showInternalDatabaseResults ?? true,
+							internalDatabase: options?.showYourResults || options?.showOthersResults,
+							yourResults: options?.showYourResults ?? true,
+							othersResults: options?.showOthersResults ?? true,
 							internet: options?.showInternetResults ?? true,
 							repositories: options?.hiddenRepositories ?? [],
 						},
@@ -789,6 +799,9 @@ export class ReportDataService {
 
 			showInternetResults: true,
 			showInternalDatabaseResults: true,
+			showYourResults: true,
+			showOthersResults: true,
+
 			showBatchResults: true,
 			hiddenRepositories: [],
 
@@ -1050,7 +1063,22 @@ export class ReportDataService {
 					? completeResultsRes.filters?.sourceType?.internet
 					: true,
 			showInternalDatabaseResults:
-				completeResultsRes.filters?.sourceType?.internalDatabase != undefined
+				completeResultsRes.filters?.sourceType?.yourResults != undefined &&
+				completeResultsRes.filters?.sourceType?.othersResults != undefined
+					? completeResultsRes.filters?.sourceType?.yourResults || completeResultsRes.filters?.sourceType?.othersResults
+					: completeResultsRes.filters?.sourceType?.internalDatabase != undefined
+					? completeResultsRes.filters?.sourceType?.internalDatabase
+					: true,
+			showYourResults:
+				completeResultsRes.filters?.sourceType?.yourResults != undefined
+					? completeResultsRes.filters?.sourceType?.yourResults
+					: completeResultsRes.filters?.sourceType?.internalDatabase != undefined
+					? completeResultsRes.filters?.sourceType?.internalDatabase
+					: true,
+			showOthersResults:
+				completeResultsRes.filters?.sourceType?.othersResults != undefined
+					? completeResultsRes.filters?.sourceType?.othersResults
+					: completeResultsRes.filters?.sourceType?.internalDatabase != undefined
 					? completeResultsRes.filters?.sourceType?.internalDatabase
 					: true,
 			showBatchResults:
@@ -1128,9 +1156,11 @@ export class ReportDataService {
 				},
 				sourceType: {
 					batch: this.filterOptions?.showBatchResults ?? true,
-					internalDatabase: this.filterOptions?.showInternalDatabaseResults ?? true,
+					internalDatabase: this.filterOptions?.showYourResults || this.filterOptions?.showOthersResults,
 					internet: this.filterOptions?.showInternetResults ?? true,
 					repositories: this.filterOptions?.hiddenRepositories ?? [],
+					yourResults: this.filterOptions?.showYourResults ?? true,
+					othersResults: this.filterOptions?.showOthersResults ?? true,
 				},
 				execludedResultIds: this.excludedResultsIds ?? [],
 				filteredResultIds: [],
@@ -1274,9 +1304,21 @@ export class ReportDataService {
 				completeResults.find(cr => cr.id === id && cr.type !== EResultPreviewType.Batch)
 			);
 
-		if (settings.showInternalDatabaseResults !== undefined && settings.showInternalDatabaseResults === false)
+		if (
+			settings.showInternalDatabaseResults !== undefined &&
+			settings.showYourResults === false &&
+			settings.showOthersResults === false
+		)
 			filteredResultsIds = filteredResultsIds.filter(id =>
 				completeResults.find(cr => cr.id === id && cr.type !== EResultPreviewType.Database)
+			);
+		else if (settings.showInternalDatabaseResults !== undefined && settings.showYourResults === false)
+			filteredResultsIds = filteredResultsIds.filter(id =>
+				completeResults.find(cr => cr.id === id && (cr.type !== EResultPreviewType.Database || !cr.scanId))
+			);
+		else if (settings.showInternalDatabaseResults !== undefined && settings.showOthersResults === false)
+			filteredResultsIds = filteredResultsIds.filter(id =>
+				completeResults.find(cr => cr.id === id && (cr.type !== EResultPreviewType.Database || !!cr.scanId))
 			);
 
 		if (settings.hiddenRepositories !== undefined && settings.hiddenRepositories.length > 0) {

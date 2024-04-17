@@ -39,6 +39,10 @@ export interface ICopyleaksReportOptions {
 	writingFeedback?: ICopyleaksReportWritingFeedbackOptions;
 	/** */
 	excludedDomains?: string[];
+	/** */
+	showYourResults?: boolean;
+	/** */
+	showOthersResults?: boolean;
 }
 
 export interface ICopyleaksReportWritingFeedbackOptions {

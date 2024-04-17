@@ -14,6 +14,8 @@ export class SourceTypeFilterResultComponent implements OnInit {
 		totalInternet: 0,
 		totalInternalDatabase: 0,
 		totalbatch: 0,
+		totalOthersFiles: 0,
+		totalYourFiles: 0,
 	};
 
 	eFilterResultForm = EFilterResultForm;

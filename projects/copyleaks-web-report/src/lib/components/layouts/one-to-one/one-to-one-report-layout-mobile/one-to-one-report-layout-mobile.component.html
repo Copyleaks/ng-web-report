@@ -12,7 +12,9 @@
 		[reportResponsive]="EResponsiveLayoutType.Mobile"
 		[showLoadingView]="isLoadingResultItem"
 		[flexGrow]="20"
-		[isMobile]="true"></copyleaks-report-results-item-container>
+		[isMobile]="true"
+		[hasMaskedContent]="isOthersFile && hasNonIdenticalMatchWords"
+		[hideMaskedContentDisclaimer]="hideMaskedContentDisclaimer"></copyleaks-report-results-item-container>
 
 	<div style="display: flex; flex-direction: column; flex-grow: 1; overflow-y: auto; gap: 8px">
 		<!--Report scan content viewer -->
@@ -41,8 +43,10 @@
 			[currentPage]="currentPageSuspect"
 			[reportResponsive]="EResponsiveLayoutType.Mobile"
 			[hidePoweredBy]="true"
+			[hasMaskedContent]="isOthersFile && hasNonIdenticalMatchWords"
 			viewMode="one-to-one"
 			reportOrigin="suspect"
+			(onOpenDisclaimer)="openDisclaimer()"
 			(iFrameMessageEvent)="onSuspectIFrameMessage($event)"
 			(viewChangeEvent)="onReportViewChange($event)"></copyleaks-content-viewer-container>
 	</div>

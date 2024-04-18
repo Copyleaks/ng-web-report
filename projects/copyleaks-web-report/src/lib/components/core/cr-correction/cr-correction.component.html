@@ -30,8 +30,11 @@
 				class="correction-type"
 				matTooltip="Show All Corrections by Category"
 				matTooltipClass="web-report-mat-tooltip"
+				role="button"
+				aria-label="Show All Corrections by Category"
 				(click)="$event.stopPropagation(); $event.preventDefault(); goToCorrectionCategoryView()"
-				i18n-matTooltip>
+				i18n-matTooltip
+				i18n-aria-label>
 				{{ correctionType }}
 			</mat-chip>
 		</div>
@@ -53,7 +56,12 @@
 				class="options-icon"
 				fontSet="material-icons-round"
 				(click)="$event.stopPropagation(); $event.preventDefault()"
-				[matMenuTriggerFor]="menu">
+				[matMenuTriggerFor]="menu"
+				matTooltip="More Options"
+				i18n-matTooltip
+				matTooltipClass="web-report-mat-tooltip"
+				aria-label="More Options"
+				i18n-aria-label>
 				more_vert
 			</mat-icon>
 		</ng-template>

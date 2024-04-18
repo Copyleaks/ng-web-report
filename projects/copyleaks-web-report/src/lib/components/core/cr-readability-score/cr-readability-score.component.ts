@@ -62,7 +62,7 @@ export class CrReadabilityScoreComponent implements OnInit, OnChanges {
 		}
 	}
 
-	EXPEND_TOOLTIP = $localize`Expend`;
+	EXPEND_TOOLTIP = $localize`Expand`;
 	COLLAPSE_TOOLTIP = $localize`Collapse`;
 
 	constructor() {}

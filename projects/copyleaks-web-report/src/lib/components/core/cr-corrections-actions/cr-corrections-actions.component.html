@@ -9,11 +9,22 @@
 			</ng-template>
 		</span>
 		<div *ngIf="totalIgnoredWritingFeedbackIssues || totalFilteredWritingFeedbackIssues" class="stats-chips-container">
-			<mat-chip *ngIf="totalIgnoredWritingFeedbackIssues" (click)="openFilterDialog(true)">
+			<mat-chip
+				*ngIf="totalIgnoredWritingFeedbackIssues"
+				(click)="openFilterDialog(true)"
+				role="button"
+				aria-label="View all excluded corrections"
+				i18n-aria-label>
 				{{ totalIgnoredWritingFeedbackIssues }}
 				<ng-container i18n>excluded</ng-container>
 			</mat-chip>
-			<mat-chip *ngIf="totalFilteredWritingFeedbackIssues" class="filter-chip" (click)="openFilterDialog()">
+			<mat-chip
+				*ngIf="totalFilteredWritingFeedbackIssues"
+				class="filter-chip"
+				(click)="openFilterDialog()"
+				role="button"
+				aria-label="Show corrections filter dialog"
+				i18n-aria-label>
 				<span>
 					{{ totalFilteredWritingFeedbackIssues }}
 					<ng-container i18n>filtered</ng-container>
@@ -24,6 +35,9 @@
 					(click)="$event.stopPropagation(); clearFilter()"
 					matTooltip="Clear Filter"
 					matTooltipClass="web-report-mat-tooltip"
+					role="button"
+					aria-label="Clear all filtered corrections"
+					i18n-aria-labe
 					i18n-matTooltip>
 					highlight_off
 				</mat-icon>

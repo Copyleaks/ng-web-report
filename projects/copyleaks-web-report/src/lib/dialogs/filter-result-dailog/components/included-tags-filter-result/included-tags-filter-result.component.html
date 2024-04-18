@@ -36,15 +36,22 @@
 			(click)="showMoreMenu = !showMoreMenu"
 			[matTooltip]="showMoreMenu ? COLLAPSE_TOOLTIP : EXPEND_TOOLTIP"
 			matTooltipClass="web-report-mat-tooltip"
+			role="button"
+			aria-label="Collapse or expand tags list"
+			i18n-aria-label
 			i18n-matTooltip>
 			<ng-container *ngIf="showMoreMenu; else showLessMenuIcon">
-				<mat-icon fontSet="material-icons-round">arrow_drop_up</mat-icon>
+				<mat-icon fontSet="material-icons-round" role="button" aria-label="Collapse tags list" i18n-aria-label>
+					arrow_drop_up
+				</mat-icon>
 			</ng-container>
 			<ng-template #showLessMenuIcon>
-				<mat-icon fontSet="material-icons-round">arrow_drop_down</mat-icon>
+				<mat-icon fontSet="material-icons-round" role="button" aria-label="Expand tags list" i18n-aria-label>
+					arrow_drop_down
+				</mat-icon>
 			</ng-template>
 		</button>
-		<mat-chip-list role="listbox">
+		<mat-chip-list role="listbox" aria-label="List of all the results tags" i18n-aria-label>
 			<ng-container *ngFor="let tag of selectedList; let idx = index">
 				<mat-chip class="selected-tag-mat-chip" *ngIf="idx < 2">
 					{{ tag | decodeUri }}

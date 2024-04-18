@@ -95,14 +95,20 @@
 
 	<div *ngIf="resultsActions?.totalExcluded || resultsActions?.totalFiltered" class="chips-container">
 		<ng-container *ngIf="resultsActions?.totalExcluded">
-			<mat-chip (click)="showFilterDialog(true)">
+			<mat-chip (click)="showFilterDialog(true)" role="button" aria-label="View ecxluded results" i18n-aria-label>
 				{{ resultsActions?.totalExcluded }}
 				<ng-container i18n>excluded</ng-container>
 			</mat-chip>
 		</ng-container>
 
 		<ng-container *ngIf="resultsActions?.totalFiltered">
-			<mat-chip class="filter-chip" [class.disabled]="loadingResults" (click)="showFilterDialog()">
+			<mat-chip
+				class="filter-chip"
+				[class.disabled]="loadingResults"
+				(click)="showFilterDialog()"
+				role="button"
+				aria-label="View results filter dialog"
+				i18n-aria-label>
 				<span>
 					{{ resultsActions?.totalFiltered }}
 					<ng-container i18n>filtered</ng-container>
@@ -114,6 +120,9 @@
 						(click)="$event.stopPropagation(); clearFilter()"
 						matTooltip="Clear Filter"
 						matTooltipClass="web-report-mat-tooltip"
+						role="button"
+						aria-label="Clear all filtered results"
+						i18n-aria-label
 						i18n-matTooltip>
 						highlight_off
 					</mat-icon>

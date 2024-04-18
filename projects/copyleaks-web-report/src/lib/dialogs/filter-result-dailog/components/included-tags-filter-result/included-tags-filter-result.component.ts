@@ -31,7 +31,7 @@ export class IncludedTagsFilterResultComponent implements OnInit, OnChanges {
 		return this.searchTagControl.value;
 	}
 
-	EXPEND_TOOLTIP = $localize`Expend`;
+	EXPEND_TOOLTIP = $localize`Expand`;
 	COLLAPSE_TOOLTIP = $localize`Collapse`;
 
 	constructor(private _filterService: FilterResultDailogService) {}

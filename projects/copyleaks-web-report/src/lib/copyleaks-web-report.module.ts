@@ -91,6 +91,7 @@ import {
 	CrResultDisclaimerDescriptionComponent,
 	CrResultDisclaimerTitleComponent,
 } from './components/core/cr-result-disclaimer/cr-result-disclaimer.component';
+import { CrReportMatchTooltipModule } from './directives/report-match-tooltip/cr-report-match-tooltip-content.module';
 
 @NgModule({
 	declarations: [
@@ -173,6 +174,7 @@ import {
 		DecodeUriPipeModule,
 		SecondsToTimePipeModule,
 		CrReportScoreTooltipModule,
+		CrReportMatchTooltipModule,
 		MatSlideToggleModule,
 		MatDividerModule,
 		MatSliderModule,

@@ -1,0 +1,28 @@
+<div @fade class="animation-container">
+	<span
+		*ngIf="correctionData?.wrongText != correctionData?.correctionText"
+		class="wrong-text"
+		[innerHtml]="correctionData.wrongText"
+		p></span>
+
+	<ng-container *ngIf="correctionData?.wrongText != correctionData?.correctionText && correctionData.correctionText">
+		<svg xmlns="http://www.w3.org/2000/svg" width="16" height="17" viewBox="0 0 16 17" fill="none">
+			<g clip-path="url(#clip0_8196_107591)">
+				<path
+					d="M9.52665 4.30633C9.26665 4.56633 9.26665 4.98633 9.52665 5.24633L12.1133 7.83299H1.99998C1.63331 7.83299 1.33331 8.133 1.33331 8.49966C1.33331 8.86633 1.63331 9.16633 1.99998 9.16633H12.12L9.53331 11.753C9.27331 12.013 9.27331 12.433 9.53331 12.693C9.79331 12.953 10.2133 12.953 10.4733 12.693L14.2 8.96633C14.46 8.70633 14.46 8.28633 14.2 8.02633L10.4666 4.30633C10.2133 4.04633 9.78665 4.04633 9.52665 4.30633Z"
+					fill="#A0A9BF" />
+			</g>
+			<defs>
+				<clipPath id="clip0_8196_107591">
+					<rect width="16" height="16" fill="white" transform="translate(0 0.5)" />
+				</clipPath>
+			</defs>
+		</svg>
+	</ng-container>
+
+	<span
+		*ngIf="correctionData.correctionText"
+		class="correction-text"
+		[style.max-width]="correctionData?.wrongText != correctionData?.correctionText ? '42%' : '100%'"
+		[innerHtml]="correctionData.correctionText"></span>
+</div>

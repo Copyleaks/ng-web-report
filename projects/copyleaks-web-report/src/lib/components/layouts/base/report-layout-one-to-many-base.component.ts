@@ -305,7 +305,22 @@ export abstract class OneToManyReportLayoutBaseComponent extends ReportLayoutBas
 			if (data != this.reportMatches) {
 				this.oneToManyRerendered = false;
 			}
+			if (this.reportViewSvc.reportViewMode?.viewMode === 'writing-feedback')
+				data?.forEach(match => {
+					if (
+						!match ||
+						match.type !== MatchType.writingFeedback ||
+						!this.allScanCorrectionsView ||
+						this.allScanCorrectionsView?.length <= 0
+					)
+						return;
+					const correction = this.allScanCorrectionsView[match.gid];
+					if (!correction) return;
+					match.wrongText = correction.wrongText;
+					match.correctionText = correction.correctionText;
+				});
 			this.reportMatches = data ?? [];
+
 			const updatedHtml = this._getRenderedMatches(data, this.reportDataSvc.crawledVersion?.html?.value);
 			if (updatedHtml && data) {
 				this.iframeHtml = updatedHtml;
@@ -344,6 +359,20 @@ export abstract class OneToManyReportLayoutBaseComponent extends ReportLayoutBas
 						(this.allScanCorrectionsView?.length ?? 0) -
 						(this.displayedScanCorrectionsView?.length ?? 0) -
 						(this.reportDataSvc.excludedCorrections?.length ?? 0);
+
+					// iterrate over contentTextMatches and update the wrong and correct text for each correction that is a writing-feedback type
+					this.contentTextMatches.forEach(row => {
+						row.forEach(correction => {
+							if (correction.match.type === MatchType.writingFeedback) {
+								correction.match.wrongText = this.displayedScanCorrectionsView.find(
+									c => c.start === correction.match.start && c.end === correction.match.end
+								)?.wrongText;
+								correction.match.correctionText = this.displayedScanCorrectionsView.find(
+									c => c.start === correction.match.start && c.end === correction.match.end
+								)?.correctionText;
+							}
+						});
+					});
 				}
 			}
 		});

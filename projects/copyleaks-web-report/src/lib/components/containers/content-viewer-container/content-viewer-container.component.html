@@ -221,7 +221,19 @@
 						<span
 							*ngIf="partial.match.type !== MatchType.none && partial.match.type !== MatchType.excluded"
 							[cr-match]="partial.match"
-							origin="original">
+							origin="original"
+							[crReportMatchTooltip]="
+								partial.match.type === MatchType.writingFeedback && reportResponsive !== EResponsiveLayoutType.Mobile
+									? {
+											wrongText: partial?.match?.wrongText,
+											correctionText: partial?.match?.correctionText
+									  }
+									: null
+							"
+							[crReportMatchTooltipType]="partial.match.type"
+							matTooltipClass="web-report-mat-tooltip-with-arrow above"
+							matTooltipPosition="above"
+							i18n-matTooltip>
 							{{ partial.content }}
 						</span>
 						<!--  -->

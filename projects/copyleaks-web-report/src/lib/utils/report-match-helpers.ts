@@ -606,7 +606,7 @@ export const generateWritingFeedbackMatchTooltip = (wrongText: string, correctio
 	}
 	// Adding SVG arrow
 	if (wrongText != correctionText && correctionText)
-		contentHTML += `<span style='font-size:14px !important; line-height: normal !important;'>&#8594;</span>`;
+		contentHTML += `<span style='font-size:14px !important; line-height: normal !important;'>&#129106;</span>`;
 
 	if (correctionText) {
 		contentHTML += `<span class="correction-text">${correctionText}</span>`;

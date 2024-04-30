@@ -46,7 +46,9 @@
 										role="presentation"
 										[src]="'https://www.google.com/s2/favicons?domain=' + faviconURL"
 										(error)="onFaviconError()"
-										(load)="onFaviconLoad()" />
+										(load)="onFaviconLoad()"
+										alt="Internet result icon"
+										i18n-alt />
 								</ng-container>
 								<ng-template #defaultInternetIcon>
 									<svg

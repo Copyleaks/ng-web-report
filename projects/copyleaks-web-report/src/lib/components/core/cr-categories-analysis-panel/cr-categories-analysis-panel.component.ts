@@ -117,7 +117,16 @@ export class CrCategoriesAnalysisTypePanelComponent implements OnInit, OnChanges
 	 * Handles the selection of a category.
 	 * @param type - The selected category type.
 	 */
-	onSelectCategory(type: EWritingFeedbackCategories | IMatchesCategoryStatistics): void {
-		this.selectCategory.emit(type);
+	onSelectCategory(type: EWritingFeedbackCategories | IMatchesCategoryStatistics, event?: KeyboardEvent): void {
+		if (!event || event.key === 'Enter') this.selectCategory.emit(type);
+	}
+
+	expandedChange(event): void {
+		setTimeout(() => {
+			this.expanded = event;
+		}, 100);
+	}
+	expandAccordion() {
+		this.expanded = true;
 	}
 }

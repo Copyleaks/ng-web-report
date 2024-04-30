@@ -1,5 +1,5 @@
-<mat-accordion #expansionPanel>
-	<mat-expansion-panel [expanded]="expanded" (afterExpand)="expanded = true" (afterCollapse)="expanded = false">
+<mat-accordion #expansionPanel [tabIndex]="0" (keydown)="expandAccordion()">
+	<mat-expansion-panel [expanded]="expanded" (expandedChange)="expandedChange($event)">
 		<mat-expansion-panel-header [ngClass]="{ 'mobile-results-panel-header': isMobile }">
 			<mat-panel-title>
 				<div class="container-title">
@@ -113,9 +113,11 @@
 					<mat-chip
 						*ngFor="let stat of matchesStats?.categories"
 						[style.display]="stat?.totalResults === 0 ? 'none' : 'flex'"
+						[tabindex]="0"
 						role="option"
 						aria-label="Category item"
 						i18n-aria-label
+						aria-hidden="false"
 						(click)="onSelectCategory(stat)">
 						{{ stat?.type }} ({{ stat?.totalResults }})
 					</mat-chip>
@@ -126,6 +128,10 @@
 						*ngFor="let stat of matchesStats?.categories"
 						[style.display]="stat?.totalResults === 0 ? 'none' : 'flex'"
 						role="option"
+						aria-label="Category item"
+						i18n-aria-label
+						aria-hidden="false"
+						[tabindex]="0"
 						(click)="onSelectCategory(stat)">
 						{{ stat?.type }} ({{ stat?.totalResults }})
 					</mat-chip>
@@ -136,6 +142,10 @@
 						*ngFor="let stat of writingFeedbackStats?.categories"
 						[style.display]="stat?.totalIssues === 0 ? 'none' : 'flex'"
 						role="option"
+						aria-label="Category item"
+						i18n-aria-label
+						aria-hidden="false"
+						[tabindex]="0"
 						(click)="onSelectCategory(stat?.type)">
 						{{ getCorrectionCategoryTitle(stat?.type) }} ({{ stat?.totalIssues }})
 					</mat-chip>

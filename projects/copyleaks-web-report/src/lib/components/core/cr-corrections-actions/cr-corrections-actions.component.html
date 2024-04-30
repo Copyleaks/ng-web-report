@@ -12,9 +12,11 @@
 			<mat-chip
 				*ngIf="totalIgnoredWritingFeedbackIssues"
 				(click)="openFilterDialog(true)"
+				(keydown)="openFilterDialog(true, $event)"
 				role="button"
 				aria-label="View all excluded corrections"
-				i18n-aria-label>
+				i18n-aria-label
+				[tabIndex]="0">
 				{{ totalIgnoredWritingFeedbackIssues }}
 				<ng-container i18n>excluded</ng-container>
 			</mat-chip>
@@ -22,9 +24,11 @@
 				*ngIf="totalFilteredWritingFeedbackIssues"
 				class="filter-chip"
 				(click)="openFilterDialog()"
+				(keydown)="openFilterDialog(false, $event)"
 				role="button"
 				aria-label="Show corrections filter dialog"
-				i18n-aria-label>
+				i18n-aria-label
+				[tabIndex]="0">
 				<span>
 					{{ totalFilteredWritingFeedbackIssues }}
 					<ng-container i18n>filtered</ng-container>

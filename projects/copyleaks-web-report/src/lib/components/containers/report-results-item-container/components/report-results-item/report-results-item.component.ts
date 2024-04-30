@@ -23,6 +23,7 @@ import { MatDialog } from '@angular/material/dialog';
 import { RemoveResultConfirmationDialogComponent } from '../../../../../dialogs/remove-result-confirmation-dialog/remove-result-confirmation-dialog.component';
 import { IRemoveResultConfirmationDialogData } from '../../../../../dialogs/remove-result-confirmation-dialog/models/remove-result-confirmation-dialog.models';
 import { ReportMatchHighlightService } from '../../../../../services/report-match-highlight.service';
+import { MatMenuTrigger } from '@angular/material/menu';
 
 @Component({
 	selector: 'cr-report-results-item',
@@ -206,6 +207,10 @@ export class ReportResultsItemComponent implements OnInit, OnChanges, OnDestroy 
 	visitResultSource() {
 		if (!this.previewResult.url) return;
 		window.open(this.previewResult.url, '_blank');
+	}
+
+	openResultMenu(menuTrigger: MatMenuTrigger): void {
+		menuTrigger?.openMenu();
 	}
 
 	ngOnDestroy(): void {}

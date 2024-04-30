@@ -37,6 +37,7 @@
 								<span *ngIf="!hideCategoriesSection" class="categorized-summery" i18n>Categorized Summary</span>
 								<cr-categories-analysis-panel
 									*ngFor="let stats of allMatchResultsStats"
+									[tabindex]="0"
 									[matchesStats]="stats"
 									[selectedView]="EReportViewType.PlagiarismView"
 									(selectCategory)="onSelectCategory($event)"></cr-categories-analysis-panel>
@@ -292,10 +293,10 @@
 <ng-template #selectedCategroyRef>
 	<div class="selected-category-container">
 		<div class="selected-category-toolbar">
-			<div class="total-corrections-container" (click)="goToAllResultsView()">
+			<button class="total-corrections-container" (click)="goToAllResultsView()" [tabIndex]="0">
 				<mat-icon class="left-arrow">chevron_left</mat-icon>
 				<span class="all-correction-title" i18n>All Matching Results ({{ resultsActions?.totalResults }})</span>
-			</div>
+			</button>
 			<div class="selected-correction-container">
 				<mat-icon class="right-arrow">chevron_right</mat-icon>
 				<span class="correction-title" web-report-title-font i18n>

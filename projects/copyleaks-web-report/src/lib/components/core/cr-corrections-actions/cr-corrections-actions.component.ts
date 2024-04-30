@@ -88,22 +88,24 @@ export class CrCorrectionsActionsComponent implements OnInit {
 	 * Opens the filter dialog.
 	 * @param excludedView Indicates if the excluded view is selected.
 	 */
-	openFilterDialog(excludedView: boolean = false): void {
-		this._matDialog.open(FilterCorrectionsDialogComponent, {
-			maxWidth: '95%',
-			width: '1050px',
-			panelClass: 'filter-corrections-dailog',
-			ariaLabel: $localize`Report Corrections Filter Options`,
-			autoFocus: false,
-			data: {
-				reportViewSvc: this._reportViewSvc,
-				reportDataSvc: this._reportDataSvc,
-				selectedView: excludedView ? EFilterCorrectionsDialogView.Exclude : EFilterCorrectionsDialogView.Filter,
-				totalCorrections: this.totalWritingFeedbackIssues,
-				totalFilteredCorrections: this.totalFilteredWritingFeedbackIssues,
-				writingFeedbackStats: this.writingFeedbackStats,
-			} as IFilterCorrectionsDialogData,
-		});
+	openFilterDialog(excludedView: boolean = false, event?: KeyboardEvent): void {
+		if (!event || event.key === 'Enter') {
+			this._matDialog.open(FilterCorrectionsDialogComponent, {
+				maxWidth: '95%',
+				width: '1050px',
+				panelClass: 'filter-corrections-dailog',
+				ariaLabel: $localize`Report Corrections Filter Options`,
+				autoFocus: false,
+				data: {
+					reportViewSvc: this._reportViewSvc,
+					reportDataSvc: this._reportDataSvc,
+					selectedView: excludedView ? EFilterCorrectionsDialogView.Exclude : EFilterCorrectionsDialogView.Filter,
+					totalCorrections: this.totalWritingFeedbackIssues,
+					totalFilteredCorrections: this.totalFilteredWritingFeedbackIssues,
+					writingFeedbackStats: this.writingFeedbackStats,
+				} as IFilterCorrectionsDialogData,
+			});
+		}
 	}
 
 	/**

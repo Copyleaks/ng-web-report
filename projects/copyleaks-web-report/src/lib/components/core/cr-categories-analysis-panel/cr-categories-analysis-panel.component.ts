@@ -56,6 +56,9 @@ export class CrCategoriesAnalysisTypePanelComponent implements OnInit, OnChanges
 	EReportViewType = EReportViewType;
 	EResultPreviewType = EResultPreviewType;
 
+	EXPAND_TOOLTIP = $localize`Expand`;
+	COLLAPSE_TOOLTIP = $localize`Collapse`;
+
 	constructor() {}
 
 	/**

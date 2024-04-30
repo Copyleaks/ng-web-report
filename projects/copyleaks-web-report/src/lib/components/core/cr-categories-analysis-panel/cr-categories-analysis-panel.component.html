@@ -1,5 +1,5 @@
 <mat-accordion #expansionPanel [tabIndex]="0" (keydown)="expandAccordion()">
-	<mat-expansion-panel [expanded]="expanded" (expandedChange)="expandedChange($event)">
+	<mat-expansion-panel #panel [expanded]="expanded" (expandedChange)="expandedChange($event)">
 		<mat-expansion-panel-header [ngClass]="{ 'mobile-results-panel-header': isMobile }">
 			<mat-panel-title>
 				<div class="container-title">
@@ -103,7 +103,13 @@
 					{{ totalCorrections }} CORRECTIONS
 				</span>
 
-				<mat-icon class="hide-alerts-icon" fontSet="material-icons-round">keyboard_arrow_down</mat-icon>
+				<mat-icon
+					class="hide-alerts-icon"
+					fontSet="material-icons-round"
+					matTooltipClass="web-report-mat-tooltip"
+					[matTooltip]="panel.expanded ? COLLAPSE_TOOLTIP : EXPAND_TOOLTIP">
+					keyboard_arrow_down
+				</mat-icon>
 			</mat-panel-description>
 		</mat-expansion-panel-header>
 

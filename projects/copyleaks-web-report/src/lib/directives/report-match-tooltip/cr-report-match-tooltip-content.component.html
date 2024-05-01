@@ -2,9 +2,7 @@
 	<span
 		*ngIf="correctionData?.wrongText != correctionData?.correctionText"
 		class="wrong-text"
-		[style.max-width]="!correctionData?.correctionText ? '100%' : ''"
-		[innerHtml]="correctionData.wrongText"
-		p></span>
+		[innerHtml]="correctionData.wrongText"></span>
 
 	<ng-container *ngIf="correctionData?.wrongText != correctionData?.correctionText && correctionData.correctionText">
 		<svg xmlns="http://www.w3.org/2000/svg" width="16" height="17" viewBox="0 0 16 17" fill="none">
@@ -24,6 +22,5 @@
 	<span
 		*ngIf="correctionData.correctionText"
 		class="correction-text"
-		[style.max-width]="correctionData?.wrongText != correctionData?.correctionText ? '42%' : '100%'"
 		[innerHtml]="correctionData.correctionText"></span>
 </div>

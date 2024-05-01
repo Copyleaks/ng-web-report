@@ -7,7 +7,7 @@ import { MatchType } from '../../models/report-matches.models';
 @Directive({
 	selector: '[crReportMatchTooltip]',
 })
-export class ReportMatchTooltipDirective {
+export class CrReportMatchTooltipDirective {
 	/**
 	 * Data to be passed to the tooltip component.
 	 */

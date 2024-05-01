@@ -2,6 +2,7 @@
 	<span
 		*ngIf="correctionData?.wrongText != correctionData?.correctionText"
 		class="wrong-text"
+		[style.max-width]="!correctionData?.correctionText ? '100%' : ''"
 		[innerHtml]="correctionData.wrongText"
 		p></span>
 

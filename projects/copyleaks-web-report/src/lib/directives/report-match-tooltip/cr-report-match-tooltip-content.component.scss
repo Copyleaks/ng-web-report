@@ -18,11 +18,13 @@
 		width: 100%;
 		box-shadow: 0px 0px 10px 0px rgba(11, 22, 62, 0.12);
 		min-width: 100px;
+		max-width: 500px;
 		.correction-text,
 		.wrong-text {
 			font-size: 14px;
 			font-style: normal;
 			font-weight: 500;
+			flex-grow: 1;
 		}
 		.wrong-text {
 			text-decoration: line-through;
@@ -42,7 +44,7 @@
 
 		.correction-text,
 		.wrong-text {
-			max-width: 42%;
+			text-align: center;
 			display: -webkit-box;
 			-webkit-line-clamp: 1;
 			-webkit-box-orient: vertical;

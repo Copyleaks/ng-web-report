@@ -5,6 +5,7 @@
 				<span
 					*ngIf="correction?.wrongText != correction?.correctionText"
 					class="wrong-text"
+					[style.max-width]="!correction.correctionText ? '100%' : ''"
 					[matTooltip]="correction?.wrongText ?? ''"
 					matTooltipClass="web-report-mat-tooltip"
 					[innerHtml]="correction.wrongText"

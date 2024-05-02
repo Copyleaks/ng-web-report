@@ -357,9 +357,8 @@ export class CopyleaksWebReportComponent implements OnInit, OnDestroy {
 				showDisabledProducts: this.showDisabledProducts,
 			} as IReportViewEvent);
 
-			if (alertCode) {
-				this._reportViewSvc.selectedAlert$.next(alertCode);
-			}
+			if (alertCode) this._reportViewSvc.selectedAlert$.next(alertCode);
+			else this._reportViewSvc.selectedAlert$.next(null);
 		});
 	}
 

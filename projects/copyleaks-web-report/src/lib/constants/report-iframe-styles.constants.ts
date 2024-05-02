@@ -186,12 +186,13 @@ span[match] .tooltip-match-content-container {
   justify-content: center;
   align-items: center;
   border-radius: 10px;
-  background: var(--Colors-Main-black, #0b163e);
-  color: var(--Main-White, var(--Colors-Main-White, #fbffff));
+  background: #0b163e;
+  color: #fbffff;
   flex-direction: row;
   gap: 16px;
   box-shadow: 0px 0px 10px 0px rgba(11, 22, 62, 0.12);
   border: none;
+  box-sizing: border-box;
 
   svg {
     display: block !important;

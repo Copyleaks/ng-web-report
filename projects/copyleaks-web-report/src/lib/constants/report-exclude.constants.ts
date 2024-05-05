@@ -13,5 +13,5 @@ export const EXCLUDE_MESSAGE: { [key: string]: string } = {
 	8: $localize`This text was not scanned because there were not enough pages. Please upgrade your plan in order to scan the entire document.`,
 	9: $localize`Citations are omitted according to your settings`,
 	10: $localize`Titles are omitted according to your settings`,
-	11: $localize`This text was not scanned because it matches content from your uploaded exclusion templates.`,
+	11: $localize`This text was not scanned because it matches content from the uploaded exclusion templates in your settings.`,
 };

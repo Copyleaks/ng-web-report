@@ -11,7 +11,7 @@ import {
 	ViewChild,
 } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
-import { filter, map, takeUntil } from 'rxjs/operators';
+import { distinctUntilChanged, filter, map, takeUntil } from 'rxjs/operators';
 import { IResultItem } from './components/containers/report-results-item-container/components/models/report-result-item.models';
 import { ALERTS } from './constants/report-alerts.constants';
 import { EReportLayoutType, EResponsiveLayoutType } from './enums/copyleaks-web-report.enums';
@@ -331,7 +331,7 @@ export class CopyleaksWebReportComponent implements OnInit, OnDestroy {
 	}
 
 	private _listenToRouteParamsChange() {
-		this._activatedRoute.queryParams.pipe(takeUntil(this.unsubscribe$)).subscribe(params => {
+		this._activatedRoute.queryParams.pipe(distinctUntilChanged(), takeUntil(this.unsubscribe$)).subscribe(params => {
 			const viewMode = params['viewMode'];
 			const contentMode = params['contentMode'];
 			const sourcePage = params['sourcePage'];

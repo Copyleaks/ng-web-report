@@ -123,6 +123,9 @@ export class CopyleaksWebReportComponent implements OnInit, OnDestroy {
 		// Initialize the report data
 		if (this.reportEndpointConfig) this._reportDataSvc.initReportData(this.reportEndpointConfig);
 
+		// Listen to route params changes
+		this._listenToRouteParamsChange();
+
 		// Handel report requests errors & emit it
 		this._reportErrorsSvc.reportHttpRequestError$
 			.pipe(takeUntil(this.unsubscribe$))
@@ -324,6 +327,38 @@ export class CopyleaksWebReportComponent implements OnInit, OnDestroy {
 				queryParams: updatedParams,
 				queryParamsHandling: 'merge', // remove to replace all query params by provided
 			});
+		});
+	}
+
+	private _listenToRouteParamsChange() {
+		this._activatedRoute.queryParams.pipe(takeUntil(this.unsubscribe$)).subscribe(params => {
+			const viewMode = params['viewMode'];
+			const contentMode = params['contentMode'];
+			const sourcePage = params['sourcePage'];
+			const suspectPage = params['suspectPage'];
+			const suspectId = params['suspectId'];
+			const alertCode = params['alertCode'];
+
+			this.reportLayoutType = viewMode ?? 'one-to-many';
+			if (viewMode === 'writing-feedback') {
+				this.reportLayoutType = EReportLayoutType.OneToMany;
+			}
+			if (suspectId) {
+				this.reportLayoutType = EReportLayoutType.OneToOne;
+			}
+
+			this._reportViewSvc.reportViewMode$.next({
+				viewMode: viewMode === 'writing-feedback' ? EReportLayoutType.WritingFeedback : this.reportLayoutType,
+				isHtmlView: (!contentMode || contentMode == 'html') && !alertCode,
+				sourcePageIndex: sourcePage ? Number(sourcePage) ?? 1 : 1,
+				suspectId: suspectId,
+				suspectPageIndex: suspectPage ? Number(suspectPage) ?? 1 : 1,
+				alertCode: alertCode,
+				showDisabledProducts: this.showDisabledProducts,
+			} as IReportViewEvent);
+
+			if (alertCode) this._reportViewSvc.selectedAlert$.next(alertCode);
+			else this._reportViewSvc.selectedAlert$.next(null);
 		});
 	}
 

@@ -45,6 +45,9 @@ export interface IReportScoreTooltipModel {
 
 	/** Human-assessed plagiarism score. */
 	humanPct?: IPercentageModel;
+
+	/** Total scan words */
+	totalWords?: number;
 }
 
 /**

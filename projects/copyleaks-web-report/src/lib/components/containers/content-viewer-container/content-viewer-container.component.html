@@ -20,115 +20,174 @@
 			({{ numberOfWords }}
 			{numberOfWords, plural, =1 {word} other {words}} )
 		</span>
+
+		<svg
+			*ngIf="reportOrigin != 'suspect' && scanSource?.metadata?.excluded > 0"
+			xmlns="http://www.w3.org/2000/svg"
+			width="2"
+			height="18"
+			viewBox="0 0 2 18"
+			fill="none">
+			<path d="M1 1.19699L0.999999 17.197" stroke="#EBF3F5" stroke-linecap="round" />
+		</svg>
+
+		<button
+			*ngIf="reportOrigin != 'suspect' && scanSource?.metadata?.excluded > 0"
+			class="omitted-text-btn"
+			[class.isOn]="showOmittedWords"
+			[matTooltip]="showOmittedWords ? HIDE_OMITTED_WORDS_TOOLTIP_MESSAGE : VIEW_OMITTED_WORDS_TOOLTIP_MESSAGE"
+			matTooltipClass="web-report-mat-tooltip"
+			i18n-matTooltip
+			(click)="toggleOmittedWordsView()">
+			<mat-icon fontSet="material-icons-outlined">fact_check</mat-icon>
+			<span>({{ scanSource?.metadata?.excluded ?? 0 }} Omitted)</span>
+		</button>
 	</div>
 	<div class="actions-container">
 		<ng-container *ngIf="!customTabContent">
-			<span
+			<div class="actions-pair-container">
+				<span
+					*ngIf="reportOrigin != 'suspect' && !(isHtmlView && !hasHtml)"
+					class="icon-tooltip-wrapper"
+					[matTooltip]="isMultiSelection ? MULTISELECT_IS_ON : ''"
+					matTooltipClass="web-report-mat-tooltip"
+					i18n-matTooltip>
+					<button
+						class="actions-container-icon-button"
+						[disabled]="isMultiSelection"
+						mat-icon-button
+						(click)="onJumpToNextMatchClick(false)"
+						matTooltip="Go to previous match"
+						matTooltipClass="web-report-mat-tooltip"
+						i18n-matTooltip
+						aria-label="Go to previous match"
+						i18n-aria-label>
+						<mat-icon
+							[ngClass]="{
+								'disabled-icon': isMultiSelection
+							}"
+							fontSet="material-icons-round">
+							arrow_upward
+						</mat-icon>
+					</button>
+				</span>
+
+				<span
+					*ngIf="reportOrigin != 'suspect' && !(isHtmlView && !hasHtml)"
+					class="icon-tooltip-wrapper"
+					[matTooltip]="isMultiSelection ? MULTISELECT_IS_ON : ''"
+					matTooltipClass="web-report-mat-tooltip"
+					i18n-matTooltip>
+					<button
+						class="actions-container-icon-button"
+						[disabled]="isMultiSelection"
+						mat-icon-button
+						(click)="onJumpToNextMatchClick()"
+						matTooltip="Go to next match"
+						matTooltipClass="web-report-mat-tooltip"
+						i18n-matTooltip
+						aria-label="Go to next match"
+						i18n-aria-label>
+						<mat-icon
+							[ngClass]="{
+								'disabled-icon': isMultiSelection
+							}"
+							fontSet="material-icons-round">
+							arrow_downward
+						</mat-icon>
+					</button>
+				</span>
+			</div>
+
+			<svg
 				*ngIf="reportOrigin != 'suspect' && !(isHtmlView && !hasHtml)"
-				class="icon-tooltip-wrapper"
-				[matTooltip]="isMultiSelection ? MULTISELECT_IS_ON : ''"
-				matTooltipClass="web-report-mat-tooltip"
-				i18n-matTooltip>
-				<button
-					class="actions-container-icon-button"
-					[disabled]="isMultiSelection"
-					mat-icon-button
-					(click)="onJumpToNextMatchClick(false)"
-					matTooltip="Go to previous match"
-					matTooltipClass="web-report-mat-tooltip"
-					i18n-matTooltip
-					aria-label="Go to previous match"
-					i18n-aria-label>
-					<mat-icon
-						[ngClass]="{
-							'disabled-icon': isMultiSelection
-						}"
-						fontSet="material-icons-round">
-						arrow_upward
-					</mat-icon>
-				</button>
-			</span>
+				xmlns="http://www.w3.org/2000/svg"
+				width="2"
+				height="18"
+				viewBox="0 0 2 18"
+				fill="none">
+				<path d="M1 0.696991L0.999999 16.697" stroke="#EBF3F5" stroke-linecap="round" />
+			</svg>
 
-			<span
-				*ngIf="reportOrigin != 'suspect' && !(isHtmlView && !hasHtml)"
-				class="icon-tooltip-wrapper"
-				[matTooltip]="isMultiSelection ? MULTISELECT_IS_ON : ''"
-				matTooltipClass="web-report-mat-tooltip"
-				i18n-matTooltip>
-				<button
-					class="actions-container-icon-button"
-					[disabled]="isMultiSelection"
-					mat-icon-button
-					(click)="onJumpToNextMatchClick()"
-					matTooltip="Go to next match"
-					matTooltipClass="web-report-mat-tooltip"
-					i18n-matTooltip
-					aria-label="Go to next match"
-					i18n-aria-label>
-					<mat-icon
-						[ngClass]="{
-							'disabled-icon': isMultiSelection
-						}"
-						fontSet="material-icons-round">
-						arrow_downward
-					</mat-icon>
-				</button>
-			</span>
-			<span class="icon-tooltip-wrapper" *ngIf="!isHtmlView || !hasHtml || isAlertsView">
-				<button
-					class="actions-container-icon-button"
-					mat-icon-button
-					(click)="changeContentDirection('ltr')"
-					matTooltip="Align left"
-					matTooltipClass="web-report-mat-tooltip"
-					i18n-matTooltip
-					aria-label="Align content to left"
-					i18n-aria-label>
-					<mat-icon fontSet="material-icons-round">format_align_left</mat-icon>
-				</button>
-			</span>
+			<div *ngIf="!isHtmlView || !hasHtml || isAlertsView" class="actions-pair-container">
+				<span class="icon-tooltip-wrapper" *ngIf="!isHtmlView || !hasHtml || isAlertsView">
+					<button
+						class="actions-container-icon-button"
+						mat-icon-button
+						(click)="changeContentDirection('ltr')"
+						matTooltip="Align left"
+						matTooltipClass="web-report-mat-tooltip"
+						i18n-matTooltip
+						aria-label="Align content to left"
+						i18n-aria-label>
+						<mat-icon fontSet="material-icons-round">format_align_left</mat-icon>
+					</button>
+				</span>
 
-			<span class="icon-tooltip-wrapper" *ngIf="!isHtmlView || !hasHtml || isAlertsView">
-				<button
-					class="actions-container-icon-button"
-					mat-icon-button
-					(click)="changeContentDirection('rtl')"
-					matTooltip="Align right"
-					matTooltipClass="web-report-mat-tooltip"
-					i18n-matTooltip
-					aria-label="Align content to right"
-					i18n-aria-label>
-					<mat-icon fontSet="material-icons-round">format_align_right</mat-icon>
-				</button>
-			</span>
+				<span class="icon-tooltip-wrapper" *ngIf="!isHtmlView || !hasHtml || isAlertsView">
+					<button
+						class="actions-container-icon-button"
+						mat-icon-button
+						(click)="changeContentDirection('rtl')"
+						matTooltip="Align right"
+						matTooltipClass="web-report-mat-tooltip"
+						i18n-matTooltip
+						aria-label="Align content to right"
+						i18n-aria-label>
+						<mat-icon fontSet="material-icons-round">format_align_right</mat-icon>
+					</button>
+				</span>
+			</div>
 
-			<span class="icon-tooltip-wrapper">
-				<button
-					class="actions-container-icon-button"
-					mat-icon-button
-					(click)="zoomIn()"
-					matTooltip="Zoom in"
-					matTooltipClass="web-report-mat-tooltip"
-					i18n-matTooltip
-					aria-label="Zoom in"
-					i18n-aria-label>
-					<mat-icon fontSet="material-icons-round">zoom_in</mat-icon>
-				</button>
-			</span>
+			<svg
+				*ngIf="!isHtmlView || !hasHtml || isAlertsView"
+				xmlns="http://www.w3.org/2000/svg"
+				width="2"
+				height="18"
+				viewBox="0 0 2 18"
+				fill="none">
+				<path d="M1 0.696991L0.999999 16.697" stroke="#EBF3F5" stroke-linecap="round" />
+			</svg>
 
-			<span class="icon-tooltip-wrapper">
-				<button
-					class="actions-container-icon-button"
-					mat-icon-button
-					(click)="zoomOut()"
-					matTooltip="Zoom out"
-					matTooltipClass="web-report-mat-tooltip"
-					i18n-matTooltip
-					aria-label="Zoom out"
-					i18n-aria-label>
-					<mat-icon>zoom_out</mat-icon>
-				</button>
-			</span>
+			<div class="actions-pair-container">
+				<span class="icon-tooltip-wrapper">
+					<button
+						class="actions-container-icon-button"
+						mat-icon-button
+						(click)="zoomIn()"
+						matTooltip="Zoom in"
+						matTooltipClass="web-report-mat-tooltip"
+						i18n-matTooltip
+						aria-label="Zoom in"
+						i18n-aria-label>
+						<mat-icon fontSet="material-icons-round">add</mat-icon>
+					</button>
+				</span>
+
+				<span class="icon-tooltip-wrapper">
+					<button
+						class="actions-container-icon-button"
+						mat-icon-button
+						(click)="zoomOut()"
+						matTooltip="Zoom out"
+						matTooltipClass="web-report-mat-tooltip"
+						i18n-matTooltip
+						aria-label="Zoom out"
+						i18n-aria-label>
+						<mat-icon fontSet="material-icons-round">remove</mat-icon>
+					</button>
+				</span>
+			</div>
+
+			<svg
+				*ngIf="hasHtml && !isAlertsView"
+				xmlns="http://www.w3.org/2000/svg"
+				width="2"
+				height="18"
+				viewBox="0 0 2 18"
+				fill="none">
+				<path d="M1 0.696991L0.999999 16.697" stroke="#EBF3F5" stroke-linecap="round" />
+			</svg>
 
 			<span
 				*ngIf="hasHtml && !isAlertsView"

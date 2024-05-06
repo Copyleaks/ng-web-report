@@ -33,7 +33,8 @@
 								totalWords: paraphrasedTotal ?? 0,
 								disabled: reportDataSvc.filterOptions?.showRelated === false
 							},
-							omittedPct: { percentage: excludedTotal / wordsTotal, disabled: false, totalWords: excludedTotal ?? 0 }
+							omittedPct: { percentage: excludedTotal / wordsTotal, disabled: false, totalWords: excludedTotal ?? 0 },
+							totalWords: wordsTotal
 					  }
 			"
 			[crReportScoreTooltipPosition]="EReportScoreTooltipPosition.BELOW"
@@ -133,7 +134,9 @@
 					? null
 					: {
 							aiPct: { percentage: aiScore, disabled: false, totalWords: totalAiWords ?? 0 },
-							humanPct: { percentage: 1 - aiScore, disabled: false, totalWords: wordsTotal - totalAiWords ?? 0 }
+							humanPct: { percentage: 1 - aiScore, disabled: false, totalWords: wordsTotal - totalAiWords ?? 0 },
+							omittedPct: { percentage: excludedTotal / wordsTotal, disabled: false, totalWords: excludedTotal ?? 0 },
+							totalWords: wordsTotal
 					  }
 			"
 			[crReportScoreTooltipPosition]="EReportScoreTooltipPosition.BELOW"

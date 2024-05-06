@@ -67,6 +67,15 @@ export class ReportMatchesService implements OnDestroy {
 		return this._correctionSelect$.value;
 	}
 
+	private _showOmittedWords$ = new BehaviorSubject<boolean>(false);
+	/** Emits a falg that indicates if the omitted words should be shown or not */
+	public get showOmittedWords$() {
+		return this._showOmittedWords$;
+	}
+	public get showOmittedWords() {
+		return this._showOmittedWords$.value;
+	}
+
 	constructor(private _reportDataSvc: ReportDataService, private _reportViewSvc: ReportViewService) {
 		this._initOneToManyMatchesHandler();
 		this._initOneToOneMatchesHandler();
@@ -82,58 +91,83 @@ export class ReportMatchesService implements OnDestroy {
 			this._reportViewSvc.selectedAlert$,
 			this._reportDataSvc.filterOptions$,
 			this._reportDataSvc.excludedResultsIds$,
+			this.showOmittedWords$,
 		])
 			.pipe(
 				untilDestroy(this),
 				filter(
-					([scanSource, , viewMode, selectedAlert]) =>
+					([scanSource, , viewMode, selectedAlert]: [
+						IScanSource,
+						ResultDetailItem[],
+						IReportViewEvent,
+						string,
+						ICopyleaksReportOptions,
+						string[],
+						boolean
+					]) =>
 						scanSource != undefined && viewMode != null && viewMode.viewMode === 'one-to-many' && selectedAlert === null
 				)
 			)
-			.subscribe(([scanSource, scanResults, viewMode, , filterOptions, excludedResultsIds]) => {
-				if (
-					(scanSource && this._reportViewSvc.progress$.value != 100) ||
-					(scanSource && (!scanResults || scanResults.length === 0))
-				) {
+			.subscribe(
+				([scanSource, scanResults, viewMode, , filterOptions, excludedResultsIds, showOmittedWords]: [
+					IScanSource,
+					ResultDetailItem[],
+					IReportViewEvent,
+					string,
+					ICopyleaksReportOptions,
+					string[],
+					boolean
+				]) => {
+					let modifiedScanSource = scanSource ? JSON.parse(JSON.stringify(scanSource)) : null;
+					if (!showOmittedWords && modifiedScanSource) {
+						modifiedScanSource.html.exclude = null;
+						modifiedScanSource.text.exclude = null;
+					}
+
+					if (
+						(modifiedScanSource && this._reportViewSvc.progress$.value != 100) ||
+						(modifiedScanSource && (!scanResults || scanResults.length === 0))
+					) {
+						// process the mathces according to the report view
+						if (viewMode.isHtmlView) {
+							this._processOneToManyMatchesHtml(scanResults ?? [], undefined, [], modifiedScanSource);
+						} else {
+							this._processOneToManyMatchesText(scanResults ?? [], undefined, [], modifiedScanSource);
+						}
+					}
+
+					if (!modifiedScanSource || !viewMode || !filterOptions || !excludedResultsIds) return;
+
+					if (!modifiedScanSource?.html?.value && viewMode.isHtmlView) {
+						this._reportViewSvc.reportViewMode$.next({
+							...this._reportViewSvc.reportViewMode,
+							isHtmlView: false,
+						});
+						return;
+					}
 					// process the mathces according to the report view
+					const isRealtimeInitView =
+						this._reportDataSvc.realTimeView &&
+						!this._reportDataSvc.isFilterOn &&
+						(!this._reportDataSvc.excludedResultsIds || this._reportDataSvc.excludedResultsIds.length === 0);
+
 					if (viewMode.isHtmlView) {
-						this._processOneToManyMatchesHtml(scanResults ?? [], undefined, [], scanSource);
+						this._processOneToManyMatchesHtml(
+							scanResults,
+							isRealtimeInitView ? undefined : filterOptions,
+							excludedResultsIds,
+							modifiedScanSource
+						);
 					} else {
-						this._processOneToManyMatchesText(scanResults ?? [], undefined, [], scanSource);
+						this._processOneToManyMatchesText(
+							scanResults,
+							isRealtimeInitView ? undefined : filterOptions,
+							excludedResultsIds,
+							modifiedScanSource
+						);
 					}
 				}
-
-				if (!scanSource || !viewMode || !filterOptions || !excludedResultsIds) return;
-
-				if (!scanSource?.html?.value && viewMode.isHtmlView) {
-					this._reportViewSvc.reportViewMode$.next({
-						...this._reportViewSvc.reportViewMode,
-						isHtmlView: false,
-					});
-					return;
-				}
-				// process the mathces according to the report view
-				const isRealtimeInitView =
-					this._reportDataSvc.realTimeView &&
-					!this._reportDataSvc.isFilterOn &&
-					(!this._reportDataSvc.excludedResultsIds || this._reportDataSvc.excludedResultsIds.length === 0);
-
-				if (viewMode.isHtmlView) {
-					this._processOneToManyMatchesHtml(
-						scanResults,
-						isRealtimeInitView ? undefined : filterOptions,
-						excludedResultsIds,
-						scanSource
-					);
-				} else {
-					this._processOneToManyMatchesText(
-						scanResults,
-						isRealtimeInitView ? undefined : filterOptions,
-						excludedResultsIds,
-						scanSource
-					);
-				}
-			});
+			);
 	}
 
 	private _initOneToOneMatchesHandler() {
@@ -143,6 +177,7 @@ export class ReportMatchesService implements OnDestroy {
 			this._reportViewSvc.reportViewMode$,
 			this._reportViewSvc.selectedAlert$,
 			this._reportDataSvc.filterOptions$,
+			this.showOmittedWords$,
 		])
 			.pipe(
 				untilDestroy(this),
@@ -155,9 +190,15 @@ export class ReportMatchesService implements OnDestroy {
 						selectedAlert === null
 				)
 			)
-			.subscribe(([scanSource, selectedResult, viewMode, , filterOptions]) => {
-				if (scanSource && selectedResult && this._reportViewSvc.progress$.value != 100) {
-					if (scanSource && this._reportViewSvc.progress$.value != 100) {
+			.subscribe(([scanSource, selectedResult, viewMode, , filterOptions, showOmittedWords]) => {
+				let modifiedScanSource = scanSource ? JSON.parse(JSON.stringify(scanSource)) : null;
+				if (!showOmittedWords && modifiedScanSource) {
+					modifiedScanSource.html.exclude = null;
+					modifiedScanSource.text.exclude = null;
+				}
+
+				if (modifiedScanSource && selectedResult && this._reportViewSvc.progress$.value != 100) {
+					if (modifiedScanSource && this._reportViewSvc.progress$.value != 100) {
 						this._processOneToOneMatches(
 							selectedResult,
 							{
@@ -165,15 +206,15 @@ export class ReportMatchesService implements OnDestroy {
 								showRelated: true,
 								showMinorChanges: true,
 							},
-							scanSource,
+							modifiedScanSource,
 							viewMode
 						);
 					}
 				}
 
-				if (!scanSource || !selectedResult || !viewMode || !filterOptions) return;
+				if (!modifiedScanSource || !selectedResult || !viewMode || !filterOptions) return;
 
-				this._processOneToOneMatches(selectedResult, filterOptions, scanSource, viewMode);
+				this._processOneToOneMatches(selectedResult, filterOptions, modifiedScanSource, viewMode);
 			});
 	}
 
@@ -183,6 +224,7 @@ export class ReportMatchesService implements OnDestroy {
 			this._reportViewSvc.selectedAlert$,
 			this._reportDataSvc.scanResultsPreviews$,
 			this._reportDataSvc.filterOptions$,
+			this.showOmittedWords$,
 		])
 			.pipe(
 				untilDestroy(this),
@@ -191,14 +233,22 @@ export class ReportMatchesService implements OnDestroy {
 						scanSource != null && scanSource != undefined && selectedAlert != null && selectedAlert != undefined
 				)
 			)
-			.subscribe(([scanSource, selectedAlert, completeResults, filterOptions]) => {
-				if ((scanSource && this._reportViewSvc.progress$.value != 100) || (scanSource && selectedAlert)) {
-					this._processAlertMatches(scanSource, selectedAlert, filterOptions, completeResults);
+			.subscribe(([scanSource, selectedAlert, completeResults, filterOptions, showOmittedWords]) => {
+				let modifiedScanSource = scanSource ? JSON.parse(JSON.stringify(scanSource)) : null;
+				if (!showOmittedWords && modifiedScanSource) {
+					modifiedScanSource.html.exclude = null;
+					modifiedScanSource.text.exclude = null;
+				}
+				if (
+					(modifiedScanSource && this._reportViewSvc.progress$.value != 100) ||
+					(modifiedScanSource && selectedAlert)
+				) {
+					this._processAlertMatches(modifiedScanSource, selectedAlert, filterOptions, completeResults);
 				}
 
-				if (!scanSource || !selectedAlert || !completeResults || !filterOptions) return;
+				if (!modifiedScanSource || !selectedAlert || !completeResults || !filterOptions) return;
 
-				this._processAlertMatches(scanSource, selectedAlert, filterOptions, completeResults);
+				this._processAlertMatches(modifiedScanSource, selectedAlert, filterOptions, completeResults);
 			});
 	}
 

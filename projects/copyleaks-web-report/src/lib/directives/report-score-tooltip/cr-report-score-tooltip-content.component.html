@@ -1,5 +1,5 @@
 <div [@fade] class="tooltip" [ngClass]="['tooltip--' + position]" [style.left]="left + 'px'" [style.top]="top + 'px'">
-	<div class="first-column-container">
+	<!-- <div class="first-column-container">
 		<span class="match-type-container" i18n>Match type</span>
 
 		<ng-container
@@ -173,9 +173,215 @@
 				</ng-container>
 			</ng-template>
 		</div>
+	</div> -->
+
+	<div class="tooltip-titles-container">
+		<span class="match-type-text" i18n>Match type</span>
+		<div class="text-coverage-container">
+			<span class="text-coverage-text" i18n>Text Coverage</span>
+			<div class="column-titles-container">
+				<span class="match-type-text" i18n>Match</span>
+				<span class="match-type-text" style="margin-left: auto" i18n>Words</span>
+			</div>
+		</div>
 	</div>
 
-	<svg xmlns="http://www.w3.org/2000/svg" width="15" height="13" viewBox="0 0 15 13" fill="none">
+	<ng-container
+		*ngIf="
+			scoreStats?.minorChangesPct != undefined &&
+				scoreStats?.identicalPct != undefined &&
+				scoreStats?.paraphrasedPct != undefined;
+			else aiPctWords
+		">
+		<div class="tooltip-stats-container">
+			<div class="match-type-stats-container">
+				<div class="match-type-stats-numbers-container">
+					<span class="match-type-title-text" i18n>Identical</span>
+					<div class="match-type-numbers-container" i18n>
+						<span class="match-type-numbers" style="width: 35px; text-align: end">
+							{{ scoreStats?.identicalPct?.percentage ?? 0 | similarity : '1.0-1' }}
+						</span>
+						<span class="match-type-numbers" style="margin-left: auto">
+							{{ scoreStats?.identicalPct?.totalWords ?? 0 | number }}
+						</span>
+					</div>
+				</div>
+				<div class="match-type-stats-bar-container identical">
+					<span
+						class="match-type-bar-pct"
+						[style.width]="(scoreStats?.identicalPct?.percentage ?? 0) * 100 + '%'"></span>
+				</div>
+			</div>
+		</div>
+
+		<div class="tooltip-stats-container">
+			<div class="match-type-stats-container">
+				<div class="match-type-stats-numbers-container">
+					<span class="match-type-title-text" i18n>Minor changes</span>
+					<div class="match-type-numbers-container" i18n>
+						<span class="match-type-numbers" style="width: 35px; text-align: end">
+							{{ scoreStats?.minorChangesPct?.percentage ?? 0 | similarity : '1.0-1' }}
+						</span>
+						<span class="match-type-numbers" style="margin-left: auto">
+							{{ scoreStats?.minorChangesPct?.totalWords ?? 0 | number }}
+						</span>
+					</div>
+				</div>
+				<div class="match-type-stats-bar-container minor-changes">
+					<span
+						class="match-type-bar-pct"
+						[style.width]="(scoreStats?.minorChangesPct?.percentage ?? 0) * 100 + '%'"></span>
+				</div>
+			</div>
+		</div>
+
+		<div class="tooltip-stats-container">
+			<div class="match-type-stats-container">
+				<div class="match-type-stats-numbers-container">
+					<span class="match-type-title-text" i18n>Paraphrased</span>
+					<div class="match-type-numbers-container" i18n>
+						<span class="match-type-numbers" style="width: 35px; text-align: end">
+							{{ scoreStats?.paraphrasedPct?.percentage ?? 0 | similarity : '1.0-1' }}
+						</span>
+						<span class="match-type-numbers" style="margin-left: auto">
+							{{ scoreStats?.paraphrasedPct?.totalWords ?? 0 | number }}
+						</span>
+					</div>
+				</div>
+				<div class="match-type-stats-bar-container paraphrased">
+					<span
+						class="match-type-bar-pct"
+						[style.width]="(scoreStats?.paraphrasedPct?.percentage ?? 0) * 100 + '%'"></span>
+				</div>
+			</div>
+		</div>
+
+		<div class="tooltip-stats-container">
+			<div class="match-type-stats-container">
+				<div class="match-type-stats-numbers-container">
+					<span class="match-type-title-text" i18n>Original text</span>
+					<div class="match-type-numbers-container" i18n>
+						<span class="match-type-numbers" style="width: 35px; text-align: end">
+							{{
+								1 -
+									((scoreStats?.omittedPct?.totalWords ?? 0) +
+										(scoreStats?.paraphrasedPct?.totalWords ?? 0) +
+										(scoreStats?.minorChangesPct?.totalWords ?? 0) +
+										(scoreStats?.identicalPct?.totalWords ?? 0)) /
+										scoreStats?.totalWords ??
+									0 | similarity : '1.0-1'
+							}}
+						</span>
+						<span class="match-type-numbers" style="margin-left: auto">
+							{{
+								scoreStats?.totalWords -
+									(scoreStats?.omittedPct?.totalWords ?? 0) -
+									(scoreStats?.paraphrasedPct?.totalWords ?? 0) -
+									(scoreStats?.minorChangesPct?.totalWords ?? 0) -
+									(scoreStats?.identicalPct?.totalWords ?? 0) ??
+									0 | number
+							}}
+						</span>
+					</div>
+				</div>
+				<div class="match-type-stats-bar-container original">
+					<span
+						*ngIf="
+							1 -
+								((scoreStats?.omittedPct?.totalWords ?? 0) +
+									(scoreStats?.paraphrasedPct?.totalWords ?? 0) +
+									(scoreStats?.minorChangesPct?.totalWords ?? 0) +
+									(scoreStats?.identicalPct?.totalWords ?? 0)) /
+									scoreStats?.totalWords >
+							0
+						"
+						class="match-type-bar-pct"
+						[style.width]="
+							(1 -
+								((scoreStats?.omittedPct?.totalWords ?? 0) +
+									(scoreStats?.paraphrasedPct?.totalWords ?? 0) +
+									(scoreStats?.minorChangesPct?.totalWords ?? 0) +
+									(scoreStats?.identicalPct?.totalWords ?? 0)) /
+									scoreStats?.totalWords ??
+								0) *
+								100 +
+							'%'
+						"></span>
+				</div>
+			</div>
+		</div>
+	</ng-container>
+	<ng-template #aiPctWords>
+		<div class="tooltip-stats-container">
+			<div class="match-type-stats-container">
+				<div class="match-type-stats-numbers-container">
+					<span class="match-type-title-text" i18n>AI content</span>
+					<div class="match-type-numbers-container" i18n>
+						<span class="match-type-numbers" style="width: 35px; text-align: end">
+							{{ scoreStats?.aiPct?.percentage ?? 0 | similarity : '1.0-1' }}
+						</span>
+						<span class="match-type-numbers" style="margin-left: auto">
+							{{ scoreStats?.aiPct?.totalWords ?? 0 | number }}
+						</span>
+					</div>
+				</div>
+				<div class="match-type-stats-bar-container ai">
+					<span class="match-type-bar-pct" [style.width]="(scoreStats?.aiPct?.percentage ?? 0) * 100 + '%'"></span>
+				</div>
+			</div>
+		</div>
+
+		<div class="tooltip-stats-container">
+			<div class="match-type-stats-container">
+				<div class="match-type-stats-numbers-container">
+					<span class="match-type-title-text" i18n>Human text</span>
+					<div class="match-type-numbers-container" i18n>
+						<span class="match-type-numbers" style="width: 35px; text-align: end">
+							{{ scoreStats?.humanPct?.percentage ?? 0 | similarity : '1.0-1' }}
+						</span>
+						<span class="match-type-numbers" style="margin-left: auto">
+							{{ scoreStats?.humanPct?.totalWords ?? 0 | number }}
+						</span>
+					</div>
+				</div>
+				<div class="match-type-stats-bar-container original">
+					<span class="match-type-bar-pct" [style.width]="(scoreStats?.humanPct?.percentage ?? 0) * 100 + '%'"></span>
+				</div>
+			</div>
+		</div>
+	</ng-template>
+
+	<ng-container *ngIf="!!scoreStats?.omittedPct">
+		<svg class="line-break" xmlns="http://www.w3.org/2000/svg" width="250" height="2" viewBox="0 0 250 2" fill="none">
+			<path d="M1 1H249" stroke="#EBF3F5" stroke-linecap="round" />
+		</svg>
+
+		<div class="tooltip-stats-container">
+			<div class="omitted-words-stats-container">
+				<div class="omitted-words-stats-numbers-container">
+					<span class="omitted-words-title-text" i18n>Omitted words</span>
+					<div class="omitted-words-numbers-container" i18n>
+						<span class="total-omitted-words">{{ scoreStats?.omittedPct?.totalWords ?? 0 | number }}/</span>
+						<span class="total-scan-words">{{ scoreStats?.totalWords ?? 0 | number }}</span>
+					</div>
+				</div>
+				<div class="omitted-words-stats-bar-container">
+					<span
+						*ngIf="scoreStats?.omittedPct?.percentage * 100 > 0"
+						class="omitted-words-bar-pct"
+						[style.width]="(scoreStats?.omittedPct?.percentage ?? 0) * 100 + '%'"></span>
+				</div>
+			</div>
+		</div>
+	</ng-container>
+
+	<svg
+		class="tooltip-indicator"
+		xmlns="http://www.w3.org/2000/svg"
+		width="15"
+		height="13"
+		viewBox="0 0 15 13"
+		fill="none">
 		<path d="M7.5 13L0.500001 0L14.5 0L7.5 13Z" fill="#FBFFFF" />
 	</svg>
 </div>

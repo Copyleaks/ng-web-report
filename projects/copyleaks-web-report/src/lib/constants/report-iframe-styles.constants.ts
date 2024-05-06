@@ -116,12 +116,13 @@ html {
 	}
 }
 span[exclude] {
-	font-style: italic;
-	opacity: 0.75;
-	background-color: #F6F6F6;
+	font-style: normal !important;
+	opacity: 1 !important;
 	color: #0b163e !important;
 	cursor: pointer;
-	-webkit-text-fill-color: #0b163e !important;
+	border-radius: 2px;
+	border: 2px dashed #3f9af5 !important;
+	background: rgba(63, 154, 245, 0.2) !important;
 }
 span[exclude-partial-scan] {
 	filter: blur(6px);

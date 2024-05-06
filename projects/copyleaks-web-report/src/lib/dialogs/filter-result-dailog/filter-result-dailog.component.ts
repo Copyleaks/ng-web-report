@@ -218,6 +218,11 @@ export class FilterResultDailogComponent implements OnInit {
 						.get(EFilterResultForm.fcInternalDatabase)
 						?.setValue(true, { emitEvent: false });
 
+				if (value && this.totalSourceType.totalYourFiles <= 0)
+					this._filterResultsSvc.sourceTypeFormGroup
+						.get(EFilterResultForm.fcYourResults)
+						?.setValue(false, { emitEvent: false });
+
 				// If both your results and others results are unselected, then the internal database should be unselected
 				if (!value && !this._filterResultsSvc.sourceTypeFormGroup.get(EFilterResultForm.fcOthersResults).value)
 					this._filterResultsSvc.sourceTypeFormGroup.get(EFilterResultForm.fcInternalDatabase)?.setValue(false);
@@ -232,6 +237,11 @@ export class FilterResultDailogComponent implements OnInit {
 					this._filterResultsSvc.sourceTypeFormGroup
 						.get(EFilterResultForm.fcInternalDatabase)
 						?.setValue(true, { emitEvent: false });
+
+				if (value && this.totalSourceType.totalOthersFiles <= 0)
+					this._filterResultsSvc.sourceTypeFormGroup
+						.get(EFilterResultForm.fcOthersResults)
+						?.setValue(false, { emitEvent: false });
 
 				// If both your results and others results are unselected, then the internal database should be unselected
 				if (!value && !this._filterResultsSvc.sourceTypeFormGroup.get(EFilterResultForm.fcYourResults).value)

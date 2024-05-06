@@ -150,6 +150,8 @@ export class FilterResultDailogService {
 			sourceType: {
 				internet: true,
 				internalDatabase: true,
+				yourResults: true,
+				othersResults: true,
 				batch: true,
 				repositories: {},
 			},

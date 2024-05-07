@@ -208,6 +208,7 @@ export abstract class OneToOneReportLayoutBaseComponent extends ReportLayoutBase
 							sourcePageIndex: data.sourcePageIndex,
 							suspectPageIndex: data.suspectPageIndex,
 							suspectId: undefined,
+							...this.reportViewSvc.reportViewMode,
 						});
 					}
 				});

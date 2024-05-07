@@ -54,6 +54,7 @@
 						<ng-container *ngIf="!loading">
 							<cr-source-type-filter-result
 								[totalSourceType]="totalSourceType"
+								[reportViewSvc]="data.reportViewSvc"
 								class="sources-type-container"></cr-source-type-filter-result>
 						</ng-container>
 					</section>
@@ -157,6 +158,7 @@
 					<ng-container *ngIf="!loading">
 						<cr-source-type-filter-result
 							[totalSourceType]="totalSourceType"
+							[reportViewSvc]="data.reportViewSvc"
 							class="sources-type-container"></cr-source-type-filter-result>
 					</ng-container>
 				</mat-expansion-panel>

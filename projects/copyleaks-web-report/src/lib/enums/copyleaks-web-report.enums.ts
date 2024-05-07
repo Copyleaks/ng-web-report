@@ -176,3 +176,11 @@ export enum EReadabilityLevel {
 	CollegeGraduate,
 	Professional,
 }
+
+/**
+ * Enum representing the platform that is using the report component
+ */
+export enum EPlatformType {
+	APP = 0,
+	LMS = 1,
+}

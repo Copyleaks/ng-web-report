@@ -14,7 +14,7 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { distinctUntilChanged, filter, map, takeUntil } from 'rxjs/operators';
 import { IResultItem } from './components/containers/report-results-item-container/components/models/report-result-item.models';
 import { ALERTS } from './constants/report-alerts.constants';
-import { EReportLayoutType, EResponsiveLayoutType } from './enums/copyleaks-web-report.enums';
+import { EPlatformType, EReportLayoutType, EResponsiveLayoutType } from './enums/copyleaks-web-report.enums';
 import { IClsReportEndpointConfigModel } from './models/report-config.models';
 import { ICompleteResults } from './models/report-data.models';
 import { ReportHttpRequestErrorModel } from './models/report-errors.models';
@@ -84,6 +84,11 @@ export class CopyleaksWebReportComponent implements OnInit, OnDestroy {
 	 * @Input {boolean} - Flag indicating whether to show the Grammar tab and content in the report.
 	 */
 	@Input() hideWritingFeedback: boolean = false;
+
+	/**
+	 * @Input {EPlatformType} - The type of the platform that the report is running on.
+	 */
+	@Input() platformType: EPlatformType = EPlatformType.APP;
 
 	/**
 	 * @Output {ReportHttpRequestErrorModel} - Emits HTTP request data, when any request to update & fetch report data fails.
@@ -289,6 +294,7 @@ export class CopyleaksWebReportComponent implements OnInit, OnDestroy {
 			suspectPageIndex: suspectPage ? Number(suspectPage) ?? 1 : 1,
 			alertCode: alertCode,
 			showDisabledProducts: this.showDisabledProducts,
+			platformType: this.platformType,
 		} as IReportViewEvent);
 
 		if (alertCode) this._reportViewSvc.selectedAlert$.next(alertCode);
@@ -355,6 +361,7 @@ export class CopyleaksWebReportComponent implements OnInit, OnDestroy {
 				suspectPageIndex: suspectPage ? Number(suspectPage) ?? 1 : 1,
 				alertCode: alertCode,
 				showDisabledProducts: this.showDisabledProducts,
+				platformType: this.platformType,
 			} as IReportViewEvent);
 
 			if (alertCode) this._reportViewSvc.selectedAlert$.next(alertCode);

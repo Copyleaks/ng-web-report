@@ -62,25 +62,34 @@
 			<div class="internal-database-checkboxes-container">
 				<mat-checkbox [formControlName]="eFilterResultForm.fcYourResults">
 					<div class="checkbox-content-container">
-						<span class="title" i18n>Your results</span>
+						<ng-container [ngSwitch]="platformType">
+							<ng-container *ngSwitchCase="ePlatformType.APP">
+								<span class="title" i18n>Your Results</span>
+							</ng-container>
+							<ng-container *ngSwitchCase="ePlatformType.LMS">
+								<span class="title" i18n>Your organization's results</span>
+							</ng-container>
+							<ng-container *ngSwitchDefault></ng-container>
+						</ng-container>
 						<span class="total" web-report-title-font>({{ totalSourceType.totalYourFiles }})</span>
 						<!-- TODO: add tooltip text here -->
-						<mat-icon matTooltip="Your organization's results" matTooltipClass="web-report-mat-tooltip" i18n-matTooltip>
-							info_outline
-						</mat-icon>
+						<mat-icon matTooltip="" matTooltipClass="web-report-mat-tooltip" i18n-matTooltip>info_outline</mat-icon>
 					</div>
 				</mat-checkbox>
 				<mat-checkbox [formControlName]="eFilterResultForm.fcOthersResults">
 					<div class="checkbox-content-container">
-						<span class="title" i18n>Others results</span>
+						<ng-container [ngSwitch]="platformType">
+							<ng-container *ngSwitchCase="ePlatformType.APP">
+								<span class="title" i18n>Others Results</span>
+							</ng-container>
+							<ng-container *ngSwitchCase="ePlatformType.LMS">
+								<span class="title" i18n>All other results</span>
+							</ng-container>
+							<ng-container *ngSwitchDefault></ng-container>
+						</ng-container>
 						<span class="total" web-report-title-font>({{ totalSourceType.totalOthersFiles }})</span>
 						<!-- TODO: add tooltip text here -->
-						<mat-icon
-							matTooltip="Others results = All other results"
-							matTooltipClass="web-report-mat-tooltip"
-							i18n-matTooltip>
-							info_outline
-						</mat-icon>
+						<mat-icon matTooltip="" matTooltipClass="web-report-mat-tooltip" i18n-matTooltip>info_outline</mat-icon>
 					</div>
 				</mat-checkbox>
 			</div>

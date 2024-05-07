@@ -116,13 +116,39 @@ html {
 	}
 }
 span[exclude] {
+  position: relative;
 	font-style: normal !important;
 	opacity: 1 !important;
 	color: #0b163e !important;
 	cursor: pointer;
 	border-radius: 2px;
-	border: 2px dashed #3f9af5 !important;
+	border-bottom: 2px dashed #3f9af5 !important;
 	background: rgba(63, 154, 245, 0.2) !important;
+  &:hover {
+		.omitted-text-title {
+			visibility: visible;
+		}
+	}
+  .omitted-text-title {
+    font-family: haboro-soft, sans-serif !important;
+		visibility: hidden;
+		width: 80px;
+		position: absolute;
+		top: 0;
+		left: 0;
+		display: flex;
+		padding: 2px;
+		align-items: flex-start;
+		gap: 10px;
+		border-radius: 2px;
+		background: #3F9AF5;
+		color: #FBFFFF;
+		font-size: 14px;
+		font-style: normal;
+		font-weight: 400;
+		line-height: normal;
+    z-index: 1000000;
+	}
 }
 span[exclude-partial-scan] {
 	filter: blur(6px);

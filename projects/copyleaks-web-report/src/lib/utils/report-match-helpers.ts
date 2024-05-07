@@ -578,8 +578,10 @@ export const getRenderedMatches = (matches: Match[] | null, originalHtml: string
 				if (curr.reason === EExcludeReason.PartialScan) {
 					slice = `<span exclude-partial-scan data-type="${curr.type}" data-index="${i}" title="${reason}">${slice}</span>`;
 				} else {
-					if (reason) slice = `<span exclude title="${reason}">${slice}</span>`;
-					else slice = `<span exclude title="UnKnown">${slice}</span>`;
+					if (reason)
+						slice = `<span exclude title="${reason}">${slice}<span class="omitted-text-title">Omitted text</span></span>`;
+					else
+						slice = `<span exclude title="UnKnown">${slice}<span class="omitted-text-title">Omitted text</span></span>`;
 				}
 				break;
 			case MatchType.none:

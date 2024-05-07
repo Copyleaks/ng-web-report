@@ -215,8 +215,34 @@
 			color: $color-black !important;
 			cursor: pointer;
 			border-radius: 2px;
-			border: 2px dashed $color-primary !important;
+			border-bottom: 2px dashed $color-primary !important;
 			background: rgba(63, 154, 245, 0.2) !important;
+			position: relative !important;
+
+			&:hover {
+				.omitted-text-title {
+					visibility: visible;
+				}
+			}
+
+			.omitted-text-title {
+				visibility: hidden;
+				width: 80px;
+				position: absolute;
+				top: 0;
+				left: 0;
+				display: flex;
+				padding: 2px;
+				align-items: flex-start;
+				gap: 10px;
+				border-radius: 2px;
+				background: $color-primary;
+				color: $color-white;
+				font-size: 14px;
+				font-style: normal;
+				font-weight: 400;
+				line-height: normal;
+			}
 		}
 	}
 

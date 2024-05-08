@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { ECustomResultsReportView } from 'projects/copyleaks-web-report/src/lib/components/core/cr-custom-results/models/cr-custom-results.enums';
 import {
+	EPlatformType,
 	EReportLayoutType,
 	EResultPreviewType,
 } from 'projects/copyleaks-web-report/src/lib/enums/copyleaks-web-report.enums';
@@ -42,6 +43,8 @@ export class DemoReportPreviewsComponent implements OnInit {
 	showCustomEmptyResults: boolean = true;
 	showCustomResults: boolean = true;
 	reportView: ECustomResultsReportView;
+
+	ePlatformType = EPlatformType;
 
 	constructor(private _route: ActivatedRoute, private _reportRealtimeSvc: ReportRealtimeResultsService) {}
 

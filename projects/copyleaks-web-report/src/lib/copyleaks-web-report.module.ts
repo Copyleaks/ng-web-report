@@ -1,5 +1,5 @@
 import { ScrollingModule } from '@angular/cdk/scrolling';
-import { CommonModule } from '@angular/common';
+import { CommonModule, DatePipe } from '@angular/common';
 import { NgModule } from '@angular/core';
 import { FlexLayoutModule } from '@angular/flex-layout';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
@@ -195,6 +195,6 @@ import { CrReportMatchTooltipModule } from './directives/report-match-tooltip/cr
 		CrCustomResultsBoxContentComponent,
 		EmptyResultStateComponent,
 	],
-	providers: [ReportRealtimeResultsService, FilterResultDailogService, FilterCorrectionsDialogService],
+	providers: [ReportRealtimeResultsService, FilterResultDailogService, FilterCorrectionsDialogService, DatePipe],
 })
 export class CopyleaksWebReportModule {}

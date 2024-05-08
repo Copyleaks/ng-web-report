@@ -82,6 +82,37 @@ export class ReportExpandResultItemComponent implements OnInit, OnChanges {
 	}
 
 	private _updateResultTags() {
+		// Add the date tag to the tags list if available which includes the creation date, last modification date and publish date
+		if (
+			(this.resultItem?.resultPreview?.metadata?.creationDate ||
+				this.resultItem?.resultPreview?.metadata?.lastModificationDate ||
+				this.resultItem?.resultPreview?.metadata?.publishDate) &&
+			!this.resultItem.resultPreview.tags.find(tag => tag.code === 'summary-date')
+		) {
+			const date =
+				this.resultItem.resultPreview.metadata.creationDate ||
+				this.resultItem.resultPreview.metadata.lastModificationDate ||
+				this.resultItem.resultPreview.metadata.publishDate;
+			this.resultItem.resultPreview.tags.push({
+				title: this._datePipe.transform(date, 'MMM d, y, HH:mm:ss'),
+				description: $localize`Published: ${
+					this._datePipe.transform(this.resultItem.resultPreview.metadata.publishDate, "MMM d, y 'at' h:mm a") ||
+					'not available'
+				}.\n
+            Created: ${
+							this._datePipe.transform(this.resultItem.resultPreview.metadata.creationDate, "MMM d, y 'at' h:mm a") ||
+							'not available'
+						}.\n
+            Last modification: ${
+							this._datePipe.transform(
+								this.resultItem.resultPreview.metadata.lastModificationDate,
+								"MMM d, y 'at' h:mm a"
+							) || 'not available'
+						}.`,
+				code: 'summary-date',
+			});
+		}
+
 		// Add the organization name to the tags list if available
 		if (!!this.resultItem?.resultPreview?.metadata?.organization) {
 			if (!this.resultItem.resultPreview.tags) this.resultItem.resultPreview.tags = [];
@@ -122,36 +153,6 @@ export class ReportExpandResultItemComponent implements OnInit, OnChanges {
 					tag.description.toLowerCase() !== 'submission date' &&
 					tag.description.toLowerCase() !== 'publish date'
 			);
-
-		if (
-			(this.resultItem?.resultPreview?.metadata?.creationDate ||
-				this.resultItem?.resultPreview?.metadata?.lastModificationDate ||
-				this.resultItem?.resultPreview?.metadata?.publishDate) &&
-			!this.resultItem.resultPreview.tags.find(tag => tag.code === 'summary-date')
-		) {
-			const date =
-				this.resultItem.resultPreview.metadata.creationDate ||
-				this.resultItem.resultPreview.metadata.lastModificationDate ||
-				this.resultItem.resultPreview.metadata.publishDate;
-			this.resultItem.resultPreview.tags.push({
-				title: this._datePipe.transform(date, 'MMM d, y, HH:mm:ss'),
-				description: $localize`Published: ${
-					this._datePipe.transform(this.resultItem.resultPreview.metadata.publishDate, "MMM d, y 'at' h:mm a") ||
-					'not available'
-				}.\n
-            Created: ${
-							this._datePipe.transform(this.resultItem.resultPreview.metadata.creationDate, "MMM d, y 'at' h:mm a") ||
-							'not available'
-						}.\n
-            Last modification: ${
-							this._datePipe.transform(
-								this.resultItem.resultPreview.metadata.lastModificationDate,
-								"MMM d, y 'at' h:mm a"
-							) || 'not available'
-						}.`,
-				code: 'summary-date',
-			});
-		}
 	}
 
 	clickBack() {

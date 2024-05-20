@@ -72,8 +72,12 @@
 							<ng-container *ngSwitchDefault></ng-container>
 						</ng-container>
 						<span class="total" web-report-title-font>({{ totalSourceType.totalYourFiles }})</span>
-						<!-- TODO: add tooltip text here -->
-						<mat-icon matTooltip="" matTooltipClass="web-report-mat-tooltip" i18n-matTooltip>info_outline</mat-icon>
+						<mat-icon
+							matTooltip="Results from files submitted by you or your organization. Content will likely be available to view."
+							matTooltipClass="web-report-mat-tooltip"
+							i18n-matTooltip>
+							info_outline
+						</mat-icon>
 					</div>
 				</mat-checkbox>
 				<mat-checkbox [formControlName]="eFilterResultForm.fcOthersResults">
@@ -88,8 +92,12 @@
 							<ng-container *ngSwitchDefault></ng-container>
 						</ng-container>
 						<span class="total" web-report-title-font>({{ totalSourceType.totalOthersFiles }})</span>
-						<!-- TODO: add tooltip text here -->
-						<mat-icon matTooltip="" matTooltipClass="web-report-mat-tooltip" i18n-matTooltip>info_outline</mat-icon>
+						<mat-icon
+							matTooltip="Results from files submitted by those outside you or your organization. You will receive a match alert; however, the content will be masked for privacy. "
+							matTooltipClass="web-report-mat-tooltip"
+							i18n-matTooltip>
+							info_outline
+						</mat-icon>
 					</div>
 				</mat-checkbox>
 			</div>

@@ -27,6 +27,7 @@ function ready() {
 	let currentMulti: HTMLSpanElement[] = [];
 	let matches: HTMLSpanElement[];
 	let currentZoom: number = 1;
+	let pdfZoom: number = 1;
 
 	(window as any).addEventListener(
 		'wheel',
@@ -47,6 +48,10 @@ function ready() {
 	});
 
 	let isPdf = document.querySelector('meta[content="pdf2htmlEX"]') !== null;
+	if (isPdf) pdfZoom = 0.4; // this is the default zoom for pdfs in the pdf2htmlEX format
+
+	modifyTooltipsStyles();
+
 	(window as any).addEventListener('message', onMessageFromParent);
 
 	init();
@@ -305,6 +310,20 @@ function ready() {
 			document.body.style.setProperty('transform', `scale(${currentZoom})`);
 			document.body.style.setProperty('transform-origin', '0 0');
 		}
+
+		modifyTooltipsStyles();
+	}
+
+	function modifyTooltipsStyles() {
+		// modify the tooltips styles to fit the new zoom level of the iframe
+		const tooltips = document.querySelectorAll('.tooltip-match-content-container');
+		tooltips?.forEach(tooltip => {
+			if (tooltip instanceof HTMLElement) {
+				// for pdf iframe, update the tooltip style to fit the new zoom level
+				tooltip.style.transform = `translate(-50%, 0) scale(${1 / (currentZoom * pdfZoom)})`;
+				tooltip.style.transformOrigin = '50% 100%';
+			}
+		});
 	}
 }
 

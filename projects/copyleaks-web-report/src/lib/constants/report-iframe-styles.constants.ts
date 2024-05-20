@@ -179,10 +179,10 @@ span[match] .tooltip-match-content-container {
   bottom: 160%;
   left: 50%;
   opacity: 0;
-  transition: opacity 0.3s;
+  transition: opacity 0.3s, transform 0.3s;
   display: flex;
   padding: 10px 18px;
-  transform: translateX(-50%);
+  transform: translate(-50%, 0);
   justify-content: center;
   align-items: center;
   border-radius: 10px;
@@ -193,6 +193,7 @@ span[match] .tooltip-match-content-container {
   box-shadow: 0px 0px 10px 0px rgba(11, 22, 62, 0.12);
   border: none;
   box-sizing: border-box;
+  transform-origin: 50% 100%;
 
   svg {
     display: block !important;

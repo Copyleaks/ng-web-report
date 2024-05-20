@@ -88,6 +88,7 @@ export abstract class OneToManyReportLayoutBaseComponent extends ReportLayoutBas
 	authorAlert: IAuthorAlertCard | null = null;
 
 	customResultsTemplate: TemplateRef<any> | undefined = undefined;
+	customBannerSectionTemplate: TemplateRef<any> | undefined = undefined;
 	writingFeedback: IWritingFeedback;
 	writingFeedbackStats: IWritingFeedbackTypeStatistics[];
 	correctionClicked: boolean = false;
@@ -428,6 +429,12 @@ export abstract class OneToManyReportLayoutBaseComponent extends ReportLayoutBas
 			if (refs?.customResultsTemplate !== undefined && this.customResultsTemplate === undefined) {
 				setTimeout(() => {
 					this.customResultsTemplate = refs?.customResultsTemplate;
+				});
+			}
+
+			if (refs?.customBannerSectionTemplate !== undefined && this.customBannerSectionTemplate === undefined) {
+				setTimeout(() => {
+					this.customBannerSectionTemplate = refs?.customBannerSectionTemplate;
 				});
 			}
 		});

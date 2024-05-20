@@ -13,6 +13,11 @@
 	<ng-content select="cr-custom-results"></ng-content>
 </ng-template>
 
+<!-- Custom report bannner section reference -->
+<ng-template #customBannerSectionTemplate>
+	<ng-content select="cr-banner-section"></ng-content>
+</ng-template>
+
 <!-- Report layout type switch case -->
 <ng-container [ngSwitch]="reportLayoutType">
 	<!-- One to many layout - start -->

@@ -1,5 +1,6 @@
 <!-- Left side section -->
 <div class="left-section">
+	<ng-container *ngTemplateOutlet="customBannerSectionTemplate ?? null"></ng-container>
 	<!-- Report tabs container --->
 	<copyleaks-report-tabs-container
 		[hideAiTap]="hideAiTap"

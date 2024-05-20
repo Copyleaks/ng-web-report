@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 
 @Component({
-	selector: 'lib-cr-banner-section',
+	selector: 'cr-banner-section',
 	templateUrl: './cr-banner-section.component.html',
 	styleUrls: ['./cr-banner-section.component.scss'],
 })

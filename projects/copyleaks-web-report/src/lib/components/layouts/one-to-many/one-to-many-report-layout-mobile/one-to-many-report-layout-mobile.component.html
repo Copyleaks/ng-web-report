@@ -1,4 +1,6 @@
 <div style="display: flex; flex-direction: column; flex-grow: 1; overflow-y: auto; gap: 8px">
+	<ng-container *ngTemplateOutlet="customBannerSectionTemplate ?? null"></ng-container>
+
 	<!-- Report actions -->
 	<copyleaks-report-actions-container
 		class="report-actions-container"

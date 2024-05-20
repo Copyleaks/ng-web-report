@@ -151,7 +151,7 @@ import { CrBannerSectionComponent } from './components/core/cr-banner-section/cr
 		CrResultDisclaimerComponent,
 		CrResultDisclaimerDescriptionComponent,
 		CrResultDisclaimerTitleComponent,
-  CrBannerSectionComponent,
+		CrBannerSectionComponent,
 	],
 	imports: [
 		CommonModule,
@@ -195,6 +195,7 @@ import { CrBannerSectionComponent } from './components/core/cr-banner-section/cr
 		CrCustomEmptyResultsComponent,
 		CrCustomResultsComponent,
 		CrCustomResultsBoxContentComponent,
+		CrBannerSectionComponent,
 		EmptyResultStateComponent,
 	],
 	providers: [ReportRealtimeResultsService, FilterResultDailogService, FilterCorrectionsDialogService, DatePipe],

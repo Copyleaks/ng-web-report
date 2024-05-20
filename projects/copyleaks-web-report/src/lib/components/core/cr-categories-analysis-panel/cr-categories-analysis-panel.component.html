@@ -1,0 +1,163 @@
+<mat-accordion #expansionPanel [tabIndex]="0" (keydown)="expandAccordion()">
+	<mat-expansion-panel #panel [expanded]="expanded" (expandedChange)="expandedChange($event)">
+		<mat-expansion-panel-header [ngClass]="{ 'mobile-results-panel-header': isMobile }">
+			<mat-panel-title>
+				<div class="container-title">
+					<ng-container [ngSwitch]="selectedView">
+						<ng-container *ngSwitchCase="EReportViewType.PlagiarismView">
+							<div
+								class="matches-category-title-container"
+								[style.flex-direction]="expanded ? 'column' : 'row'"
+								[style.gap]="expanded ? '2px' : '16px'">
+								<div class="title-percentage-container">
+									<span class="title" i18n>{{ getResultsTypeTitle(matchesStats?.type) }}</span>
+									<span class="percentage" i18n>{{ matchesStats?.totalResultsPct | percent }}</span>
+								</div>
+								<div class="stats-container">
+									<ng-container *ngIf="expanded">
+										<mat-icon>swap_vert</mat-icon>
+										<span i18n>Top results first</span>
+										<svg xmlns="http://www.w3.org/2000/svg" width="5" height="5" viewBox="0 0 5 5" fill="none">
+											<ellipse cx="2.07075" cy="2.83008" rx="2.07075" ry="2" fill="#9DA9BF" />
+										</svg>
+									</ng-container>
+
+									<span style="font-weight: 700" i18n>{{ matchesStats?.totalResults ?? 0 }} Results</span>
+									<ng-container *ngIf="expanded">
+										<ng-container
+											*ngIf="
+												matchesStats?.type === EResultPreviewType.Internet ||
+												matchesStats?.type === EResultPreviewType.Batch
+											">
+											<svg xmlns="http://www.w3.org/2000/svg" width="5" height="5" viewBox="0 0 5 5" fill="none">
+												<ellipse cx="2.07075" cy="2.83008" rx="2.07075" ry="2" fill="#9DA9BF" />
+											</svg>
+											<span *ngIf="matchesStats?.type === EResultPreviewType.Internet" style="font-weight: 700" i18n>
+												{{ matchesStats?.categories?.length ?? 0 }} Domains
+											</span>
+											<span *ngIf="matchesStats?.type === EResultPreviewType.Batch" style="font-weight: 700" i18n>
+												{{ matchesStats?.categories?.length ?? 0 }} Authors
+											</span>
+											<span *ngIf="matchesStats?.type === EResultPreviewType.Repositroy" style="font-weight: 700" i18n>
+												{{ matchesStats?.categories?.length ?? 0 }} Repositroies
+											</span>
+										</ng-container>
+									</ng-container>
+								</div>
+							</div>
+						</ng-container>
+
+						<ng-container *ngSwitchCase="EReportViewType.AIView">
+							<div
+								class="matches-category-title-container"
+								[style.flex-direction]="expanded ? 'column' : 'row'"
+								[style.gap]="expanded ? '2px' : '16px'">
+								<div class="title-percentage-container">
+									<span class="title" i18n>{{ getResultsTypeTitle(matchesStats?.type) }}</span>
+									<span class="percentage" i18n>{{ matchesStats?.totalResultsPct | percent }}</span>
+								</div>
+								<div class="stats-container">
+									<ng-container *ngIf="expanded">
+										<mat-icon>swap_vert</mat-icon>
+										<span i18n>Top results first</span>
+										<svg xmlns="http://www.w3.org/2000/svg" width="5" height="5" viewBox="0 0 5 5" fill="none">
+											<ellipse cx="2.07075" cy="2.83008" rx="2.07075" ry="2" fill="#9DA9BF" />
+										</svg>
+									</ng-container>
+
+									<span style="font-weight: 700" i18n>{{ matchesStats?.totalResults ?? 0 }} Results</span>
+									<ng-container *ngIf="expanded">
+										<ng-container
+											*ngIf="
+												matchesStats?.type === EResultPreviewType.Internet ||
+												matchesStats?.type === EResultPreviewType.Batch
+											">
+											<svg xmlns="http://www.w3.org/2000/svg" width="5" height="5" viewBox="0 0 5 5" fill="none">
+												<ellipse cx="2.07075" cy="2.83008" rx="2.07075" ry="2" fill="#9DA9BF" />
+											</svg>
+											<span *ngIf="matchesStats?.type === EResultPreviewType.Internet" style="font-weight: 700" i18n>
+												{{ matchesStats?.categories?.length ?? 0 }} Domains
+											</span>
+											<span *ngIf="matchesStats?.type === EResultPreviewType.Batch" style="font-weight: 700" i18n>
+												{{ matchesStats?.categories?.length ?? 0 }} Authors
+											</span>
+											<span *ngIf="matchesStats?.type === EResultPreviewType.Repositroy" style="font-weight: 700" i18n>
+												{{ matchesStats?.categories?.length ?? 0 }} Repositroies
+											</span>
+										</ng-container>
+									</ng-container>
+								</div>
+							</div>
+						</ng-container>
+
+						<ng-container *ngSwitchCase="EReportViewType.WritingFeedbackTabView">
+							<span class="title" i18n>{{ getCorrectionTypeTitle(writingFeedbackStats?.type) }}</span>
+						</ng-container>
+						<ng-container *ngSwitchDefault></ng-container>
+					</ng-container>
+				</div>
+			</mat-panel-title>
+
+			<mat-panel-description>
+				<span *ngIf="selectedView === EReportViewType.WritingFeedbackTabView" class="description" i18n>
+					{{ totalCorrections }} CORRECTIONS
+				</span>
+
+				<mat-icon
+					class="hide-alerts-icon"
+					fontSet="material-icons-round"
+					matTooltipClass="web-report-mat-tooltip"
+					[matTooltip]="panel.expanded ? COLLAPSE_TOOLTIP : EXPAND_TOOLTIP">
+					keyboard_arrow_down
+				</mat-icon>
+			</mat-panel-description>
+		</mat-expansion-panel-header>
+
+		<div class="categories-container" role="listbox" aria-label="List of categories" i18n-aria-label>
+			<ng-container [ngSwitch]="selectedView">
+				<ng-container *ngSwitchCase="EReportViewType.PlagiarismView">
+					<mat-chip
+						*ngFor="let stat of matchesStats?.categories"
+						[style.display]="stat?.totalResults === 0 ? 'none' : 'flex'"
+						[tabindex]="0"
+						role="option"
+						aria-label="Category item"
+						i18n-aria-label
+						aria-hidden="false"
+						(click)="onSelectCategory(stat)">
+						{{ stat?.type }} ({{ stat?.totalResults }})
+					</mat-chip>
+				</ng-container>
+
+				<ng-container *ngSwitchCase="EReportViewType.AIView">
+					<mat-chip
+						*ngFor="let stat of matchesStats?.categories"
+						[style.display]="stat?.totalResults === 0 ? 'none' : 'flex'"
+						role="option"
+						aria-label="Category item"
+						i18n-aria-label
+						aria-hidden="false"
+						[tabindex]="0"
+						(click)="onSelectCategory(stat)">
+						{{ stat?.type }} ({{ stat?.totalResults }})
+					</mat-chip>
+				</ng-container>
+
+				<ng-container *ngSwitchCase="EReportViewType.WritingFeedbackTabView">
+					<mat-chip
+						*ngFor="let stat of writingFeedbackStats?.categories"
+						[style.display]="stat?.totalIssues === 0 ? 'none' : 'flex'"
+						role="option"
+						aria-label="Category item"
+						i18n-aria-label
+						aria-hidden="false"
+						[tabindex]="0"
+						(click)="onSelectCategory(stat?.type)">
+						{{ getCorrectionCategoryTitle(stat?.type) }} ({{ stat?.totalIssues }})
+					</mat-chip>
+				</ng-container>
+				<ng-container *ngSwitchDefault></ng-container>
+			</ng-container>
+		</div>
+	</mat-expansion-panel>
+</mat-accordion>

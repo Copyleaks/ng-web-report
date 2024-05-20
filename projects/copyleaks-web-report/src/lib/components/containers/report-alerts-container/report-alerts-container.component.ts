@@ -36,7 +36,7 @@ export class ReportAlertsContainerComponent implements OnInit {
 	addPaddingToContainer: boolean;
 	stopPaddingCheck: boolean;
 
-	EXPEND_TOOLTIP = $localize`Expend`;
+	EXPEND_TOOLTIP = $localize`Expand`;
 	COLLAPSE_TOOLTIP = $localize`Collapse`;
 
 	ngOnInit(): void {

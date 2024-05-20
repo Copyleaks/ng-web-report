@@ -10,7 +10,7 @@ import {
 	SimpleChanges,
 	TemplateRef,
 } from '@angular/core';
-import { EResultPreviewType } from '../../../../../enums/copyleaks-web-report.enums';
+import { EPlatformType, EResultPreviewType } from '../../../../../enums/copyleaks-web-report.enums';
 import { IResultPreviewBase } from '../../../../../models/report-data.models';
 import { ReportViewService } from '../../../../../services/report-view.service';
 import { IResultItem } from '../models/report-result-item.models';
@@ -23,6 +23,8 @@ import { MatDialog } from '@angular/material/dialog';
 import { RemoveResultConfirmationDialogComponent } from '../../../../../dialogs/remove-result-confirmation-dialog/remove-result-confirmation-dialog.component';
 import { IRemoveResultConfirmationDialogData } from '../../../../../dialogs/remove-result-confirmation-dialog/models/remove-result-confirmation-dialog.models';
 import { ReportMatchHighlightService } from '../../../../../services/report-match-highlight.service';
+import { MatMenuTrigger } from '@angular/material/menu';
+import { DatePipe } from '@angular/common';
 
 @Component({
 	selector: 'cr-report-results-item',
@@ -57,6 +59,7 @@ export class ReportResultsItemComponent implements OnInit, OnChanges, OnDestroy 
 
 	faviconExists: boolean = true;
 	faviconURL: string;
+	platformType: EPlatformType;
 
 	@HostListener('click', ['$event'])
 	handleClick() {
@@ -80,12 +83,17 @@ export class ReportResultsItemComponent implements OnInit, OnChanges, OnDestroy 
 	}
 
 	get authorName() {
+		if (
+			this.previewResult?.metadata?.author &&
+			!(this.previewResult?.scanId && this.resultItem?.resultPreview?.type === EResultPreviewType.Database)
+		)
+			return this.previewResult.metadata?.author;
+
+		return null;
+	}
+
+	get resultType() {
 		if (this.previewResult) {
-			if (
-				this.previewResult.metadata?.author &&
-				!(this.previewResult.scanId && this.resultItem.resultPreview.type === EResultPreviewType.Database)
-			)
-				return this.previewResult.metadata?.author;
 			switch (this.previewResult.type) {
 				case EResultPreviewType.Internet:
 					return 'Internet Result';
@@ -113,16 +121,17 @@ export class ReportResultsItemComponent implements OnInit, OnChanges, OnDestroy 
 	}
 
 	get numberOfTags() {
-		return this.resultItem?.resultPreview?.tags?.length ?? 0;
+		return this.previewResult?.tags?.length ?? 0;
 	}
 
-	constructor(private _matDialog: MatDialog) {}
+	constructor(private _matDialog: MatDialog, private _datePipe: DatePipe) {}
 
 	ngOnInit(): void {
 		if (this.resultItem) {
 			this.previewResult = this.resultItem.resultPreview;
-			if (this.resultItem.resultPreview.scanId && this.resultItem.resultPreview.type === EResultPreviewType.Database)
-				this.previewResult.title = $localize`Your File`;
+
+			this._updateResultTags();
+
 			this.percentageResult = {
 				resultItem: this.resultItem,
 				showTooltip: true,
@@ -142,8 +151,6 @@ export class ReportResultsItemComponent implements OnInit, OnChanges, OnDestroy 
 		if ('resultItem' in changes)
 			if (this.resultItem) {
 				this.previewResult = this.resultItem.resultPreview;
-				if (this.resultItem.resultPreview.scanId && this.resultItem.resultPreview.type === EResultPreviewType.Database)
-					this.previewResult.title = $localize`Your File`;
 				this.percentageResult = {
 					resultItem: this.resultItem,
 					showTooltip: true,
@@ -153,7 +160,80 @@ export class ReportResultsItemComponent implements OnInit, OnChanges, OnDestroy 
 					const url = new URL(this.resultItem.resultPreview.url);
 					this.faviconURL = url.host;
 				}
+
+				// Add the organization name to the tags list if available
+				this._updateResultTags();
 			}
+	}
+
+	private _updateResultTags() {
+		// Add the date tag to the tags list if available which includes the creation date, last modification date and publish date
+		if (
+			(this.previewResult.metadata.creationDate ||
+				this.previewResult.metadata.lastModificationDate ||
+				this.previewResult.metadata.publishDate) &&
+			!this.previewResult.tags.find(tag => tag.code === 'summary-date')
+		) {
+			const date =
+				this.previewResult.metadata.creationDate ||
+				this.previewResult.metadata.lastModificationDate ||
+				this.previewResult.metadata.publishDate;
+			this.previewResult.tags.unshift({
+				title: this._datePipe.transform(date, 'MMM d, y, HH:mm:ss'),
+				description: $localize`Published: ${
+					this._datePipe.transform(this.previewResult.metadata.publishDate, "MMM d, y 'at' h:mm a") || 'not available'
+				}.\n
+            Created: ${
+							this._datePipe.transform(this.previewResult.metadata.creationDate, "MMM d, y 'at' h:mm a") ||
+							'not available'
+						}.\n
+            Last modification: ${
+							this._datePipe.transform(this.previewResult.metadata.lastModificationDate, "MMM d, y 'at' h:mm a") ||
+							'not available'
+						}.`,
+				code: 'summary-date',
+			});
+		}
+
+		if (!!this.resultItem?.resultPreview?.metadata?.organization) {
+			if (!this.previewResult.tags) this.previewResult.tags = [];
+			if (this.previewResult.tags.find(tag => tag.code === 'organization') === undefined)
+				this.previewResult.tags.unshift({
+					title: this.resultItem?.resultPreview?.metadata?.organization,
+					description: $localize`Organization Name`,
+					code: 'organization',
+				});
+		}
+
+		// Add the 'Your File' tag to the start of the tags array if the result is a database result and has a scanId and the platofrm that runs the report is APP
+		if (
+			this.resultItem?.resultPreview?.scanId &&
+			this.resultItem?.resultPreview?.type === EResultPreviewType.Database
+		) {
+			if (!this.previewResult.tags) this.previewResult.tags = [];
+			// push 'Your File' tag to the start of tags array
+			if (this.previewResult.tags.find(tag => tag.code === 'your-file') === undefined)
+				this.previewResult.tags.unshift({
+					title:
+						this.reportViewSvc?.reportViewMode?.platformType === EPlatformType.APP
+							? $localize`Your File`
+							: $localize`Your Organization's File`,
+					description:
+						this.reportViewSvc?.reportViewMode?.platformType === EPlatformType.APP
+							? $localize`This is your file`
+							: $localize`This is uploaded by your organization`,
+					code: 'your-file',
+				});
+		}
+
+		if (this.previewResult.tags)
+			this.previewResult.tags = this.previewResult.tags.filter(
+				tag =>
+					tag.description !== 'File Name' &&
+					tag.description.toLowerCase() !== 'last modification date' &&
+					tag.description.toLowerCase() !== 'submission date' &&
+					tag.description.toLowerCase() !== 'publish date'
+			);
 	}
 
 	onFaviconError() {
@@ -206,6 +286,10 @@ export class ReportResultsItemComponent implements OnInit, OnChanges, OnDestroy 
 	visitResultSource() {
 		if (!this.previewResult.url) return;
 		window.open(this.previewResult.url, '_blank');
+	}
+
+	openResultMenu(menuTrigger: MatMenuTrigger): void {
+		menuTrigger?.openMenu();
 	}
 
 	ngOnDestroy(): void {}

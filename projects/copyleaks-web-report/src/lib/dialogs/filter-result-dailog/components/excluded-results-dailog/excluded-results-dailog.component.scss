@@ -1,6 +1,7 @@
 @import '../../../../styles/website-colors.styles.scss';
 @import '../../../../styles/styles.scss';
 @import '../../../../styles/cls-mat-components-overrides/cls-scroll-bar-overrides.scss';
+@import '../../../../styles/cls-mat-components-overrides/cls-mat-inputs-overrides.scss';
 
 :host {
 	background-color: $color-white;
@@ -22,6 +23,35 @@
 		.close-icon {
 			cursor: pointer;
 			color: rgba(17, 41, 96, 0.4);
+		}
+	}
+
+	.search-input {
+		::ng-deep {
+			.mat-form-field-infix {
+				padding: 7px 0px 7px 0px !important;
+			}
+			.mat-form-field-flex {
+				padding-left: 8px !important;
+				padding-right: 8px !important;
+			}
+			.mat-form-field-wrapper {
+				padding-bottom: 0px !important;
+			}
+		}
+	}
+
+	.search-input-search-icon,
+	.clear-input-search-icon {
+		font-size: 18px !important;
+		width: 18px !important;
+		height: 18px !important;
+		padding: 2px !important;
+	}
+	.clear-input-search-icon {
+		cursor: pointer;
+		&:hover {
+			color: $color-primary !important;
 		}
 	}
 

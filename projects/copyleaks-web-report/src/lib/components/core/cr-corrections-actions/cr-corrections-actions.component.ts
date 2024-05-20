@@ -5,8 +5,8 @@ import { IFilterCorrectionsDialogData } from '../../../dialogs/filter-correction
 import { ReportDataService } from '../../../services/report-data.service';
 import { ReportViewService } from '../../../services/report-view.service';
 import { EFilterCorrectionsDialogView } from '../../../dialogs/filter-corrections-dialog/enums/filter-corrections-dialog.enums';
-import { IWritingFeedbackTypeStatistics } from '../../../models/report-data.models';
 import { ReportMatchHighlightService } from '../../../services/report-match-highlight.service';
+import { IWritingFeedbackTypeStatistics } from '../../../models/report-statistics.models';
 
 @Component({
 	selector: 'cr-corrections-actions',
@@ -88,22 +88,24 @@ export class CrCorrectionsActionsComponent implements OnInit {
 	 * Opens the filter dialog.
 	 * @param excludedView Indicates if the excluded view is selected.
 	 */
-	openFilterDialog(excludedView: boolean = false): void {
-		this._matDialog.open(FilterCorrectionsDialogComponent, {
-			maxWidth: '95%',
-			width: '1050px',
-			panelClass: 'filter-corrections-dailog',
-			ariaLabel: $localize`Report Corrections Filter Options`,
-			autoFocus: false,
-			data: {
-				reportViewSvc: this._reportViewSvc,
-				reportDataSvc: this._reportDataSvc,
-				selectedView: excludedView ? EFilterCorrectionsDialogView.Exclude : EFilterCorrectionsDialogView.Filter,
-				totalCorrections: this.totalWritingFeedbackIssues,
-				totalFilteredCorrections: this.totalFilteredWritingFeedbackIssues,
-				writingFeedbackStats: this.writingFeedbackStats,
-			} as IFilterCorrectionsDialogData,
-		});
+	openFilterDialog(excludedView: boolean = false, event?: KeyboardEvent): void {
+		if (!event || event.key === 'Enter') {
+			this._matDialog.open(FilterCorrectionsDialogComponent, {
+				maxWidth: '95%',
+				width: '1050px',
+				panelClass: 'filter-corrections-dailog',
+				ariaLabel: $localize`Report Corrections Filter Options`,
+				autoFocus: false,
+				data: {
+					reportViewSvc: this._reportViewSvc,
+					reportDataSvc: this._reportDataSvc,
+					selectedView: excludedView ? EFilterCorrectionsDialogView.Exclude : EFilterCorrectionsDialogView.Filter,
+					totalCorrections: this.totalWritingFeedbackIssues,
+					totalFilteredCorrections: this.totalFilteredWritingFeedbackIssues,
+					writingFeedbackStats: this.writingFeedbackStats,
+				} as IFilterCorrectionsDialogData,
+			});
+		}
 	}
 
 	/**

@@ -1,5 +1,5 @@
 import { ScrollingModule } from '@angular/cdk/scrolling';
-import { CommonModule } from '@angular/common';
+import { CommonModule, DatePipe } from '@angular/common';
 import { NgModule } from '@angular/core';
 import { FlexLayoutModule } from '@angular/flex-layout';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
@@ -79,12 +79,19 @@ import { DecodeUriPipeModule } from './pipes/decode-uri/decode-uri.module';
 import { ReportCorrectionsContainerComponent } from './components/containers/report-corrections-container/report-corrections-container.component';
 import { CrCorrectionComponent } from './components/core/cr-correction/cr-correction.component';
 import { CrReadabilityScoreComponent } from './components/core/cr-readability-score/cr-readability-score.component';
-import { CrCorrectionTypePanelComponent } from './components/core/cr-correction-type-panel/cr-correction-type-panel.component';
+import { CrCategoriesAnalysisTypePanelComponent } from './components/core/cr-categories-analysis-panel/cr-categories-analysis-panel.component';
 import { CrCorrectionsActionsComponent } from './components/core/cr-corrections-actions/cr-corrections-actions.component';
 import { FilterCorrectionsDialogComponent } from './dialogs/filter-corrections-dialog/filter-corrections-dialog.component';
 import { FilterCorrectionsDialogService } from './dialogs/filter-corrections-dialog/services/filter-corrections-dialog.service';
 import { NgxChartsModule } from '@swimlane/ngx-charts';
 import { SecondsToTimePipeModule } from './pipes/seconds-to-time/seconds-to-time.module';
+import { ExcludedDomainsInputComponent } from './dialogs/filter-result-dailog/components/excluded-domains-input/excluded-domains-input.component';
+import {
+	CrResultDisclaimerComponent,
+	CrResultDisclaimerDescriptionComponent,
+	CrResultDisclaimerTitleComponent,
+} from './components/core/cr-result-disclaimer/cr-result-disclaimer.component';
+import { CrReportMatchTooltipModule } from './directives/report-match-tooltip/cr-report-match-tooltip-content.module';
 
 @NgModule({
 	declarations: [
@@ -136,9 +143,13 @@ import { SecondsToTimePipeModule } from './pipes/seconds-to-time/seconds-to-time
 		ExcludedResultsDailogComponent,
 		CrCorrectionComponent,
 		CrReadabilityScoreComponent,
-		CrCorrectionTypePanelComponent,
+		CrCategoriesAnalysisTypePanelComponent,
 		CrCorrectionsActionsComponent,
 		FilterCorrectionsDialogComponent,
+		ExcludedDomainsInputComponent,
+		CrResultDisclaimerComponent,
+		CrResultDisclaimerDescriptionComponent,
+		CrResultDisclaimerTitleComponent,
 	],
 	imports: [
 		CommonModule,
@@ -163,6 +174,7 @@ import { SecondsToTimePipeModule } from './pipes/seconds-to-time/seconds-to-time
 		DecodeUriPipeModule,
 		SecondsToTimePipeModule,
 		CrReportScoreTooltipModule,
+		CrReportMatchTooltipModule,
 		MatSlideToggleModule,
 		MatDividerModule,
 		MatSliderModule,
@@ -183,6 +195,6 @@ import { SecondsToTimePipeModule } from './pipes/seconds-to-time/seconds-to-time
 		CrCustomResultsBoxContentComponent,
 		EmptyResultStateComponent,
 	],
-	providers: [ReportRealtimeResultsService, FilterResultDailogService, FilterCorrectionsDialogService],
+	providers: [ReportRealtimeResultsService, FilterResultDailogService, FilterCorrectionsDialogService, DatePipe],
 })
 export class CopyleaksWebReportModule {}

@@ -1,0 +1,50 @@
+@import '../../../styles/website-colors.styles.scss';
+@import '../../../styles/styles.scss';
+
+:host {
+	display: flex;
+	padding: 16px;
+	flex-direction: column;
+	align-items: flex-start;
+	gap: 4px;
+	align-self: stretch;
+	border-radius: 8px;
+	border: 1px solid $color-primary;
+	background: $color-container-background;
+
+	.title-container {
+		display: flex;
+		justify-content: center;
+		gap: 4px;
+		align-self: stretch;
+		flex-grow: 1;
+		.close-icon {
+			width: 16px;
+			height: 16px;
+			font-size: 16px;
+			color: $color-medium-dark;
+			cursor: pointer;
+			&:hover {
+				color: $color-primary;
+			}
+		}
+	}
+
+	::ng-deep {
+		cr-result-disclaimer-title {
+			color: $color-black;
+			font-size: 18px;
+			font-style: normal;
+			font-weight: 700;
+			line-height: normal;
+			flex-grow: 1;
+		}
+		cr-result-disclaimer-description {
+			color: $color-medium-dark;
+			font-size: 14px;
+			font-style: normal;
+			font-weight: 500;
+			line-height: normal;
+		}
+	}
+}

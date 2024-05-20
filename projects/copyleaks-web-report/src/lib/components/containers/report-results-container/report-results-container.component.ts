@@ -13,7 +13,7 @@ import {
 } from '@angular/core';
 import { Observable, combineLatest, fromEvent } from 'rxjs';
 import { distinctUntilChanged, filter, map, pairwise } from 'rxjs/operators';
-import { EResponsiveLayoutType, EResultPreviewType } from '../../../enums/copyleaks-web-report.enums';
+import { EReportViewType, EResponsiveLayoutType, EResultPreviewType } from '../../../enums/copyleaks-web-report.enums';
 import { ICopyleaksReportOptions } from '../../../models/report-options.models';
 import { ReportDataService } from '../../../services/report-data.service';
 import { ReportNgTemplatesService } from '../../../services/report-ng-templates.service';
@@ -24,6 +24,7 @@ import { EnumNavigateMobileButton } from '../report-results-item-container/compo
 import { IResultItem } from '../report-results-item-container/components/models/report-result-item.models';
 import { IResultsActions } from './components/results-actions/models/results-actions.models';
 import { ReportMatchHighlightService } from '../../../services/report-match-highlight.service';
+import { IMatchesCategoryStatistics, IMatchesTypeStatistics } from '../../../models/report-statistics.models';
 
 @Component({
 	selector: 'copyleaks-report-results-container',
@@ -66,6 +67,7 @@ export class ReportResultsContainerComponent implements OnInit, OnChanges {
 
 	navigateMobileButton: EnumNavigateMobileButton;
 	enumNavigateMobileButton = EnumNavigateMobileButton;
+	EReportViewType = EReportViewType;
 	searchedValue: string;
 
 	customEmptyResultsTemplate: TemplateRef<any> | undefined = undefined;
@@ -81,7 +83,12 @@ export class ReportResultsContainerComponent implements OnInit, OnChanges {
 
 	ECustomResultsReportView = ECustomResultsReportView;
 
+	allMatchResultsStats: IMatchesTypeStatistics[];
+	selectedCategory: IMatchesCategoryStatistics | null;
+	selectedCategoryResults: IResultItem[];
+
 	private _resizeObserver: ResizeObserver;
+	hideCategoriesSection: boolean;
 
 	get allResultsItemLength() {
 		return this.allResults?.length;
@@ -93,6 +100,13 @@ export class ReportResultsContainerComponent implements OnInit, OnChanges {
 
 	get showCustomResults() {
 		return this.reportViewMode === ECustomResultsReportView.Full;
+	}
+
+	get getSelectedCategoryResults() {
+		const results = this.selectedCategory?.results.filter(result =>
+			this.displayedResults.find(r => r?.resultPreview?.id === result?.resultPreview?.id)
+		);
+		return results;
 	}
 
 	constructor(
@@ -108,7 +122,12 @@ export class ReportResultsContainerComponent implements OnInit, OnChanges {
 		if (changes['allResults']?.currentValue) {
 			this.searchedValue = '';
 			setTimeout(() => {
-				if (!this.filterIsOn) this.displayedResults = this.allResults;
+				if (!this.filterIsOn) {
+					this.displayedResults = this.allResults;
+					this.selectedCategoryResults = this.getSelectedCategoryResults;
+					this._updateMatchesResultsStats();
+					if (this.selectedCategoryResults?.length === 0) this.selectedCategory = null;
+				}
 				if (this.reportDataSvc.filterOptions && this.reportDataSvc.excludedResultsIds)
 					this._filterResults(this.reportDataSvc.filterOptions, this.reportDataSvc.excludedResultsIds);
 			});
@@ -385,12 +404,153 @@ export class ReportResultsContainerComponent implements OnInit, OnChanges {
 		if (!filterOptions.showIdentical || !filterOptions.showMinorChanges || !filterOptions.showRelated)
 			this.filterIsOn = true;
 
+		this._updateMatchesResultsStats();
+		this.selectedCategoryResults = this.getSelectedCategoryResults;
+		if (this.selectedCategoryResults?.length === 0) this.selectedCategory = null;
+
 		setTimeout(() => {
 			this.checkAndApplyPadding();
 		});
 	}
 
 	//#endregion
+	goToAllResultsView() {
+		this.selectedCategory = null;
+	}
+
+	onSelectCategory(selectedCategory: IMatchesCategoryStatistics) {
+		this.selectedCategory = selectedCategory;
+		this.selectedCategoryResults = this.getSelectedCategoryResults;
+		if (this.selectedCategoryResults?.length === 0) this.selectedCategory = null;
+	}
+
+	private _updateMatchesResultsStats() {
+		this.allMatchResultsStats = this._initMatchResultsStatistics();
+		this.displayedResults.forEach(result => {
+			switch (result.resultPreview.type) {
+				case EResultPreviewType.Internet:
+					if (result.resultPreview.url)
+						this._increaseMatchResultsCategoryTotal(
+							this.allMatchResultsStats,
+							EResultPreviewType.Internet,
+							result.resultPreview.url,
+							result
+						);
+					this.allMatchResultsStats[0].totalResults += 1;
+					this.allMatchResultsStats[0].totalResultsPct = this.allMatchResultsStats[0].totalResultsPct =
+						this.allMatchResultsStats[0].totalResults / (this.displayedResults?.length ?? 0);
+					break;
+				case EResultPreviewType.Batch:
+					if (result?.resultPreview?.metadata?.author)
+						this._increaseMatchResultsCategoryTotal(
+							this.allMatchResultsStats,
+							EResultPreviewType.Batch,
+							result.resultPreview.metadata.author,
+							result
+						);
+					this.allMatchResultsStats[1].totalResults += 1;
+					this.allMatchResultsStats[1].totalResultsPct =
+						this.allMatchResultsStats[1].totalResults / (this.displayedResults?.length ?? 0);
+
+					break;
+				case EResultPreviewType.Database:
+					if (result?.resultPreview?.scanId)
+						this._increaseMatchResultsCategoryTotal(
+							this.allMatchResultsStats,
+							EResultPreviewType.Database,
+							'Your files',
+							result
+						);
+					else {
+						this._increaseMatchResultsCategoryTotal(
+							this.allMatchResultsStats,
+							EResultPreviewType.Database,
+							'Others files',
+							result
+						);
+					}
+					this.allMatchResultsStats[2].totalResults += 1;
+					this.allMatchResultsStats[2].totalResultsPct =
+						this.allMatchResultsStats[2].totalResults / (this.displayedResults?.length ?? 0);
+					break;
+				case EResultPreviewType.Repositroy:
+					this._increaseMatchResultsCategoryTotal(
+						this.allMatchResultsStats,
+						EResultPreviewType.Repositroy,
+						result.resultPreview.title,
+						result
+					);
+					this.allMatchResultsStats[3].totalResults += 1;
+					this.allMatchResultsStats[3].totalResultsPct =
+						this.allMatchResultsStats[3].totalResults / (this.displayedResults?.length ?? 0);
+					break;
+				default:
+					break;
+			}
+		});
+		// check if all allMatchResultsStats categories are empty
+		if (this.allMatchResultsStats.every(r => r.categories.length === 0)) this.hideCategoriesSection = true;
+		else this.hideCategoriesSection = false;
+	}
+
+	private _initMatchResultsStatistics(): IMatchesTypeStatistics[] {
+		return [
+			{
+				type: EResultPreviewType.Internet,
+				categories: [],
+				totalResults: 0,
+				totalResultsPct: 0,
+			},
+			{
+				type: EResultPreviewType.Batch,
+				categories: [],
+				totalResults: 0,
+				totalResultsPct: 0,
+			},
+			{
+				type: EResultPreviewType.Database,
+				categories: [],
+				totalResults: 0,
+				totalResultsPct: 0,
+			},
+			{
+				type: EResultPreviewType.Repositroy,
+				categories: [],
+				totalResults: 0,
+				totalResultsPct: 0,
+			},
+		];
+	}
+
+	private _increaseMatchResultsCategoryTotal(
+		writingFeedbackStats: IMatchesTypeStatistics[],
+		resultType: EResultPreviewType,
+		category: string,
+		resultItem: IResultItem
+	) {
+		const index = writingFeedbackStats.findIndex(r => r.type === resultType);
+		if (index === -1) return;
+
+		const resultStats = writingFeedbackStats[index];
+		if (resultType === EResultPreviewType.Internet) {
+			const urlObj = new URL(category);
+			category = urlObj.hostname;
+		}
+		const categoryIndex = resultStats.categories.findIndex(c => c.type === category);
+		if (categoryIndex > -1) {
+			resultStats.categories[categoryIndex].totalResults++;
+			// check if the results array is not undefined and create it if it is
+			if (!resultStats.categories[categoryIndex].results) resultStats.categories[categoryIndex].results = [];
+			if (!resultStats.categories[categoryIndex].results.find(r => r.resultPreview.id === resultItem.resultPreview.id))
+				resultStats.categories[categoryIndex].results.push(resultItem);
+		} else {
+			resultStats.categories.push({
+				type: category,
+				totalResults: 1,
+				results: [resultItem],
+			});
+		}
+	}
 
 	ngOnDestroy() {
 		this._resizeObserver.disconnect();

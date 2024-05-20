@@ -2,13 +2,14 @@ import { Component, Inject, OnDestroy, OnInit } from '@angular/core';
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
 import { IFilterCorrectionsDialogData } from './models/filter-corrections-dialog.models';
 import { EFilterCorrectionsDialogView } from './enums/filter-corrections-dialog.enums';
-import { IWritingFeedbackCorrectionViewModel, IWritingFeedbackTypeStatistics } from '../../models/report-data.models';
+import { IWritingFeedbackCorrectionViewModel } from '../../models/report-data.models';
 import { untilDestroy } from '../../utils/until-destroy';
 import { EResponsiveLayoutType } from '../../enums/copyleaks-web-report.enums';
 import { FilterCorrectionsDialogService } from './services/filter-corrections-dialog.service';
 import { FormControl, FormGroup } from '@angular/forms';
 import { startWith } from 'rxjs/operators';
 import { getCorrectionCategoryDescription, getCorrectionCategoryTitle } from '../../utils/enums-helpers';
+import { IWritingFeedbackTypeStatistics } from '../../models/report-statistics.models';
 
 @Component({
 	selector: 'cr-filter-corrections-dialog',

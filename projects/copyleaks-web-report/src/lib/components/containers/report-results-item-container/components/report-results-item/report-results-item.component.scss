@@ -102,6 +102,10 @@
 								overflow: hidden;
 								text-overflow: ellipsis;
 								max-width: calc(100% - 30px);
+
+								&.one-tag {
+									max-width: 100%;
+								}
 							}
 
 							mat-chip {

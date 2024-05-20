@@ -36,6 +36,10 @@ export class FilterResultDailogService {
 		return this._filterResultForm?.get(EFilterResultForm.fcIncludedTags) as FormControl;
 	}
 
+	get excludedDomainsFormControl() {
+		return this._filterResultForm?.get(EFilterResultForm.fcExcludedDomains) as FormControl;
+	}
+
 	get repositoriesFormGroup() {
 		return this.sourceTypeFormGroup.get(EFilterResultForm.fgRepositories) as FormGroup;
 	}
@@ -66,6 +70,8 @@ export class FilterResultDailogService {
 			sourceType: this._formBuilder.group({
 				internet: new FormControl(this.getFormControlValue(EFilterResultForm.fcInternet)),
 				internalDatabase: new FormControl(this.getFormControlValue(EFilterResultForm.fcInternalDatabase)),
+				yourResults: new FormControl(this.getFormControlValue(EFilterResultForm.fcYourResults)),
+				othersResults: new FormControl(this.getFormControlValue(EFilterResultForm.fcOthersResults)),
 				batch: new FormControl(this.getFormControlValue(EFilterResultForm.fcBatch)),
 				repositories: this._formBuilder.group({}),
 			}),
@@ -91,6 +97,7 @@ export class FilterResultDailogService {
 				authorSubmissions: new FormControl(this.getFormControlValue(EFilterResultForm.fcAuthorSubmissions)),
 			}),
 			includedTags: new FormControl(this.getFormControlValue(EFilterResultForm.fcIncludedTags)),
+			excludedDomains: new FormControl(this.getFormControlValue(EFilterResultForm.fcExcludedDomains)),
 		});
 
 		this.addRepositoriesToForm(this.reposIds);
@@ -143,6 +150,8 @@ export class FilterResultDailogService {
 			sourceType: {
 				internet: true,
 				internalDatabase: true,
+				yourResults: true,
+				othersResults: true,
 				batch: true,
 				repositories: {},
 			},
@@ -168,6 +177,7 @@ export class FilterResultDailogService {
 				authorSubmissions: true,
 			},
 			includedTags: this.selectedTagItem ?? ([] as ITagItem[]),
+			excludedDomains: [],
 		});
 
 		this.initFormRepositories();
@@ -181,8 +191,18 @@ export class FilterResultDailogService {
 					? this._completeResults.filters?.sourceType?.internet
 					: true;
 			case EFilterResultForm.fcInternalDatabase:
-				return this._completeResults.filters?.sourceType?.internalDatabase != undefined
-					? this._completeResults.filters?.sourceType?.internalDatabase
+				return this._completeResults.filters?.sourceType?.othersResults != undefined &&
+					this._completeResults.filters?.sourceType?.yourResults != undefined
+					? this._completeResults.filters?.sourceType?.othersResults ||
+							this._completeResults.filters?.sourceType?.yourResults
+					: true;
+			case EFilterResultForm.fcYourResults:
+				return this._completeResults.filters?.sourceType?.yourResults != undefined
+					? this._completeResults.filters?.sourceType?.yourResults
+					: true;
+			case EFilterResultForm.fcOthersResults:
+				return this._completeResults.filters?.sourceType?.othersResults != undefined
+					? this._completeResults.filters?.sourceType?.othersResults
 					: true;
 			case EFilterResultForm.fcBatch:
 				return this._completeResults.filters?.sourceType?.batch != undefined
@@ -237,6 +257,10 @@ export class FilterResultDailogService {
 					: true;
 			case EFilterResultForm.fcIncludedTags:
 				return this.selectedTagItem ?? ([] as ITagItem[]);
+			case EFilterResultForm.fcExcludedDomains:
+				return this._completeResults.filters?.excludedDomains != undefined
+					? this._completeResults.filters?.excludedDomains
+					: [];
 			default:
 				return null;
 		}

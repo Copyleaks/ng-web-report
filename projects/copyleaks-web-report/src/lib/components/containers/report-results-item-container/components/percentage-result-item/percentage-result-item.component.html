@@ -22,7 +22,8 @@
 						totalWords: iStatisticsResult?.relatedMeaning ?? 0,
 						disabled: excludeResult ? false : reportDataSvc.filterOptions?.showRelated === false
 					},
-					omittedPct: undefined
+					omittedPct: undefined,
+					totalWords: metadataSource?.words ?? 0
 			  }
 			: null
 	">

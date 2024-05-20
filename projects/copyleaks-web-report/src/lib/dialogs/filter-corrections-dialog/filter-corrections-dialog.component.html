@@ -4,11 +4,28 @@
 			<div class="title-container">
 				<span web-report-title-font class="dialog-title" i18n>Filter Writing Assistant Corrections</span>
 				<span web-report-title-font class="corrections-stats" i18n>Corrections ({{ totalCorrections }})</span>
-				<div class="stats-chips-container">
-					<mat-chip *ngIf="totalFilteredCorrections > 0" class="filtered-chip" i18n>
+				<div
+					class="stats-chips-container"
+					aria-label="This is a list of tags the are associated with the given corrections"
+					i18n-aria-label
+					role="list">
+					<mat-chip
+						*ngIf="totalFilteredCorrections > 0"
+						class="filtered-chip"
+						role="listitem"
+						aria-label="Shows the total number of filtered corrections"
+						i18n-aria-label
+						i18n>
 						{{ totalFilteredCorrections }} filtered
 					</mat-chip>
-					<mat-chip *ngIf="totalExcludedCorrections > 0" class="excluded-chip" (click)="viewExcludedDialog()" i18n>
+					<mat-chip
+						*ngIf="totalExcludedCorrections > 0"
+						class="excluded-chip"
+						(click)="viewExcludedDialog()"
+						role="listitem"
+						aria-label="Opens list of the excluded corrections"
+						i18n-aria-label
+						i18n>
 						{{ totalExcludedCorrections }} excluded
 					</mat-chip>
 				</div>
@@ -183,7 +200,7 @@
 				[outlined]="true"
 				[padding]="isMobile ? '3px 17px' : '3px 24px'"
 				(click)="onDiscardChanges()"
-				[width]="isMobile ? '151px' : '170px'"
+				[width]="isMobile ? '151px' : '180px'"
 				color="primary"
 				ariaLabel="Discard changes and closes filters dialog">
 				<span class="discard-changes-button" i18n>Discard changes</span>
@@ -240,7 +257,9 @@
 		<div mat-dialog-actions class="include-all-container">
 			<button mat-icon-button class="icon-button include-all-btn" (click)="includeAllToggle()">
 				<ng-container *ngIf="allIncluded; else includeAllRef" i18n>Exclude all</ng-container>
-				<ng-template #includeAllRef>Include all</ng-template>
+				<ng-template #includeAllRef>
+					<ng-container i18n>Include all</ng-container>
+				</ng-template>
 			</button>
 		</div>
 	</ng-container>

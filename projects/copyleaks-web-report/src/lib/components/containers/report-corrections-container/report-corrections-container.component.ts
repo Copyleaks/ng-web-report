@@ -10,11 +10,8 @@ import {
 	ViewChild,
 } from '@angular/core';
 import { trigger, state, transition, animate, style } from '@angular/animations';
-import {
-	IWritingFeedbackCorrectionViewModel,
-	IWritingFeedbackTypeStatistics,
-} from '../../../models/report-data.models';
-import { EWritingFeedbackCategories } from '../../../enums/copyleaks-web-report.enums';
+import { IWritingFeedbackCorrectionViewModel } from '../../../models/report-data.models';
+import { EReportViewType, EWritingFeedbackCategories } from '../../../enums/copyleaks-web-report.enums';
 import {
 	getCorrectionCategoryDescription,
 	getCorrectionCategoryTitle,
@@ -28,6 +25,7 @@ import { Observable, fromEvent } from 'rxjs';
 import { untilDestroy } from '../../../utils/until-destroy';
 import { ReportMatchesService } from '../../../services/report-matches.service';
 import { ReportMatchHighlightService } from '../../../services/report-match-highlight.service';
+import { IWritingFeedbackTypeStatistics } from '../../../models/report-statistics.models';
 
 @Component({
 	selector: 'copyleaks-report-corrections-container',
@@ -106,6 +104,7 @@ export class ReportCorrectionsContainerComponent implements OnInit, OnDestroy, O
 	currentViewedIndex: number = 0;
 	navigateMobileButton: EnumNavigateMobileButton;
 	enumNavigateMobileButton = EnumNavigateMobileButton;
+	EReportViewType = EReportViewType;
 	showResultsSection: boolean = true;
 	filterIndicatorOn: boolean;
 

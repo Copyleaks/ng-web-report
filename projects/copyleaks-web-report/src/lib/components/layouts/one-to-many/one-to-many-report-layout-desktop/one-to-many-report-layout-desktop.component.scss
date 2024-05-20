@@ -74,12 +74,14 @@
 copyleaks-report-alerts-container {
 	max-height: 50% !important;
 	flex-grow: 0 !important;
+	padding-bottom: 6px;
 }
 
 .custom-results-container {
 	display: flex;
 	width: 100%;
 	overflow-y: hidden;
+	margin-top: 8px;
 }
 
 .container-with-custom-results {

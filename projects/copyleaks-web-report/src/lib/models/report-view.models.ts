@@ -1,4 +1,4 @@
-import { EResponsiveLayoutType } from '../enums/copyleaks-web-report.enums';
+import { EPlatformType, EResponsiveLayoutType } from '../enums/copyleaks-web-report.enums';
 import { ViewMode } from './report-config.models';
 
 export interface IReportViewEvent {
@@ -9,6 +9,7 @@ export interface IReportViewEvent {
 	suspectId?: string;
 	alertCode?: string;
 	showDisabledProducts?: boolean;
+	platformType?: EPlatformType;
 }
 
 export interface IReportViewQueryParams {
@@ -45,6 +46,9 @@ export interface IReportScoreTooltipModel {
 
 	/** Human-assessed plagiarism score. */
 	humanPct?: IPercentageModel;
+
+	/** Total scan words */
+	totalWords?: number;
 }
 
 /**

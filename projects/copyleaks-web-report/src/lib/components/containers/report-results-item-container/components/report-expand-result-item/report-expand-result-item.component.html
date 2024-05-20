@@ -41,6 +41,7 @@
 								<ng-container *ngIf="faviconExists; else defaultInternetIcon">
 									<img
 										alt="Source image"
+										i18n-alt
 										class="internet-result-favicon"
 										[src]="'https://www.google.com/s2/favicons?domain=' + faviconURL"
 										(error)="onFaviconError()"
@@ -92,7 +93,7 @@
 								<mat-icon *ngIf="!exclude" fontSet="material-icons-round">visibility_off</mat-icon>
 							</button>
 							<span class="result-title" [title]="resultItem?.resultPreview?.title">
-								{{ resultItem?.resultPreview?.title }}
+								{{ resultItem?.resultPreview?.metadata?.filename ?? resultItem?.resultPreview?.title }}
 							</span>
 						</div>
 						<ng-container *ngIf="resultItem?.resultPreview?.url; else resultSource">

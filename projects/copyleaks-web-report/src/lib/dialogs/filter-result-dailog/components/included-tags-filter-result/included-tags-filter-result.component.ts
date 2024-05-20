@@ -31,14 +31,14 @@ export class IncludedTagsFilterResultComponent implements OnInit, OnChanges {
 		return this.searchTagControl.value;
 	}
 
-	EXPEND_TOOLTIP = $localize`Expend`;
+	EXPEND_TOOLTIP = $localize`Expand`;
 	COLLAPSE_TOOLTIP = $localize`Collapse`;
 
-	constructor(private filterService: FilterResultDailogService) {}
+	constructor(private _filterService: FilterResultDailogService) {}
 
 	ngOnInit(): void {
 		this.isSearchInputDisabled();
-		this.includedTagsForm = this.filterService.includedTagsFormControl;
+		this.includedTagsForm = this._filterService.includedTagsFormControl;
 
 		this.filteredTagList = this.searchTagControl.valueChanges.pipe(
 			untilDestroy(this),

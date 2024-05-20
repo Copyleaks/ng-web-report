@@ -37,14 +37,16 @@
 						maxBufferPx="1000">
 						<div class="corrections-types-container">
 							<span class="categorized-summery" i18n>Categorized Summary</span>
-							<cr-correction-type-panel
+							<cr-categories-analysis-panel
 								*ngFor="let correctionTypeStats of writingFeedbackStats"
-								[stats]="correctionTypeStats"
-								(selectCategory)="onSelectCategory($event)"></cr-correction-type-panel>
+								[writingFeedbackStats]="correctionTypeStats"
+								[selectedView]="EReportViewType.WritingFeedbackTabView"
+								(selectCategory)="onSelectCategory($event)"></cr-categories-analysis-panel>
 							<span class="categorized-summery" i18n>Chronological</span>
 						</div>
 						<cr-correction
 							*cdkVirtualFor="let correction of displayedScanCorrectionsView"
+							[tabIndex]="0"
 							[correction]="correction"
 							[reportDataSvc]="reportDataSvc"
 							[reportMatchesSvc]="reportMatchesSvc"
@@ -61,6 +63,7 @@
 						(scrolledIndexChange)="onScroll($event)">
 						<cr-correction
 							*cdkVirtualFor="let correction of displayedScanCorrectionsView"
+							[tabIndex]="0"
 							[correction]="correction"
 							[reportDataSvc]="reportDataSvc"
 							[reportMatchesSvc]="reportMatchesSvc"
@@ -187,6 +190,7 @@
 	<cdk-virtual-scroll-viewport class="all-corrections-info-container" itemSize="40">
 		<cr-correction
 			*cdkVirtualFor="let correction of selectedCategroyCorrections"
+			[tabIndex]="0"
 			[correction]="correction"
 			[hideDescription]="true"
 			[reportDataSvc]="reportDataSvc"

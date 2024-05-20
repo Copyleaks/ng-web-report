@@ -6,6 +6,8 @@ export enum EFilterResultForm {
 	fgSourceType = 'sourceType',
 	fcInternet = 'internet',
 	fcInternalDatabase = 'internalDatabase',
+	fcYourResults = 'yourResults',
+	fcOthersResults = 'othersResults',
 	fcBatch = 'batch',
 	fgRepositories = 'repositories',
 
@@ -32,6 +34,17 @@ export enum EFilterResultForm {
 	fcAuthorSubmissions = 'authorSubmissions',
 
 	fcIncludedTags = 'includedTags',
+
+	fcExcludedDomains = 'excludedDomains',
+}
+
+export enum EFilterResultSection {
+	SourceTypes = 0,
+	MatchTypes,
+	GeneralFilters,
+	AdvancedFilterSettings,
+	ExcludeDomains,
+	IncludedTags,
 }
 
 export interface IFilterResultDailogData {

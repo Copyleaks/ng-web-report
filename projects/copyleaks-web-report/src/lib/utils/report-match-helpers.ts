@@ -578,18 +578,41 @@ export const getRenderedMatches = (matches: Match[] | null, originalHtml: string
 				if (curr.reason === EExcludeReason.PartialScan) {
 					slice = `<span exclude-partial-scan data-type="${curr.type}" data-index="${i}" title="${reason}">${slice}</span>`;
 				} else {
-					if (reason) slice = `<span exclude title="${reason}">${slice}</span>`;
-					else slice = `<span exclude title="UnKnown">${slice}</span>`;
+					if (reason)
+						slice = `<span exclude title="${reason}">${slice}<span class="omitted-text-title">Omitted text</span></span>`;
+					else
+						slice = `<span exclude title="UnKnown">${slice}<span class="omitted-text-title">Omitted text</span></span>`;
 				}
 				break;
 			case MatchType.none:
 				break;
 			default:
-				slice = `<span match data-type="${curr.type}" data-index="${i}" data-gid="${curr.gid}">${slice}</span>`;
+				if (curr.type === MatchType.writingFeedback) {
+					// Build the tooltip HTML content
+					const tooltipContent = generateWritingFeedbackMatchTooltip(curr.wrongText, curr.correctionText);
+
+					slice = `<span match data-type="${curr.type}" data-index="${i}" data-gid="${curr.gid}" >${slice} ${tooltipContent}</span>`;
+				} else slice = `<span match data-type="${curr.type}" data-index="${i}" data-gid="${curr.gid}">${slice}</span>`;
 				break;
 		}
 		return slice ? slice?.concat(prev) : '';
 	}, '');
 
 	return html;
+};
+export const generateWritingFeedbackMatchTooltip = (wrongText: string, correctionText: string): string => {
+	var contentHTML = '<span class="tooltip-match-content-container">';
+
+	if (wrongText !== correctionText) {
+		contentHTML += `<span class="wrong-text">${wrongText}</span>`;
+	}
+	// Adding SVG arrow
+	if (wrongText != correctionText && correctionText)
+		contentHTML += `<span style='font-size:14px !important; line-height: normal !important;'>&#129106;</span>`;
+
+	if (correctionText) {
+		contentHTML += `<span class="correction-text">${correctionText}</span>`;
+	}
+	contentHTML += `</span>`;
+	return contentHTML;
 };

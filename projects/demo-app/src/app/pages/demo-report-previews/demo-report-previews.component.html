@@ -1,0 +1,133 @@
+<ng-container *ngIf="endpointsConfig">
+	<copyleaks-web-report
+		class="desktop-view"
+		[lockedResultTemplateRef]="lockedResultTemplateRef"
+		[reportEndpointConfig]="endpointsConfig"
+		[showDisabledProducts]="showCustomResults && reportView === 1"
+		[platformType]="0"
+		(onCompleteResultUpdate)="onCompleteResultUpdate($event)"
+		(onReportRequestError)="onReportRequestError($event)">
+		<!-- Custom Actions -->
+		<cr-actions>
+			<div style="padding: 8px 0 4px; display: flex; flex-direction: row; margin-left: auto; gap: 8px">
+				<mat-icon fontSet="material-icons-round">download</mat-icon>
+				<mat-icon fontSet="material-icons-round">share</mat-icon>
+				<mat-icon fontSet="material-icons-round">info</mat-icon>
+			</div>
+		</cr-actions>
+		<!-- Custom results empty state -->
+		<cr-custom-empty-results *ngIf="showCustomEmptyResults">
+			<div class="custom-empty-state-container" style="display: flex; flex-direction: column; gap: 8px">
+				<cr-empty-result-state></cr-empty-result-state>
+				<div class="text-container" style="display: flex; flex-direction: column; gap: 4px">
+					<span style="font-size: 18px; font-style: normal; font-weight: 700">Why am I not seeing anything here?</span>
+					<span>
+						With Copyleaks, you can rest assured you're getting unprecedented search results​. Every scan searches
+						across:
+					</span>
+					<div>
+						<div style="display: flex; flex-direction: row; gap: 8px">
+							<svg xmlns="http://www.w3.org/2000/svg" width="28" height="24" viewBox="0 0 28 24" fill="none">
+								<path
+									d="M22.5784 12.1271C22.5784 18.3619 17.524 23.4163 11.2892 23.4163C5.05434 23.4163 0 18.3619 0 12.1271C0 5.89223 5.05434 0.837891 11.2892 0.837891C17.524 0.837891 22.5784 5.89223 22.5784 12.1271Z"
+									fill="#052D8B" />
+								<path
+									fill-rule="evenodd"
+									clip-rule="evenodd"
+									d="M26.6726 1.77315C27.5819 2.76634 27.5139 4.30861 26.5207 5.2179L13.5662 17.0781C12.5938 17.9684 11.0899 17.9244 10.1712 16.979L5.21562 11.8792C4.2772 10.9135 4.29933 9.36991 5.26505 8.4315C6.23077 7.49308 7.77438 7.51521 8.71279 8.48093L12.019 11.8833L23.2278 1.62125C24.221 0.711955 25.7633 0.779965 26.6726 1.77315Z"
+									fill="#00DB9B" />
+							</svg>
+							<span>16,000+ open-access journals</span>
+						</div>
+						<div style="display: flex; flex-direction: row; gap: 8px">
+							<svg xmlns="http://www.w3.org/2000/svg" width="28" height="24" viewBox="0 0 28 24" fill="none">
+								<path
+									d="M22.5784 12.1271C22.5784 18.3619 17.524 23.4163 11.2892 23.4163C5.05434 23.4163 0 18.3619 0 12.1271C0 5.89223 5.05434 0.837891 11.2892 0.837891C17.524 0.837891 22.5784 5.89223 22.5784 12.1271Z"
+									fill="#052D8B" />
+								<path
+									fill-rule="evenodd"
+									clip-rule="evenodd"
+									d="M26.6726 1.77315C27.5819 2.76634 27.5139 4.30861 26.5207 5.2179L13.5662 17.0781C12.5938 17.9684 11.0899 17.9244 10.1712 16.979L5.21562 11.8792C4.2772 10.9135 4.29933 9.36991 5.26505 8.4315C6.23077 7.49308 7.77438 7.51521 8.71279 8.48093L12.019 11.8833L23.2278 1.62125C24.221 0.711955 25.7633 0.779965 26.6726 1.77315Z"
+									fill="#00DB9B" />
+							</svg>
+							<span>20+ code data repositories</span>
+						</div>
+						<div style="display: flex; flex-direction: row; gap: 8px">
+							<svg xmlns="http://www.w3.org/2000/svg" width="28" height="24" viewBox="0 0 28 24" fill="none">
+								<path
+									d="M22.5784 12.1271C22.5784 18.3619 17.524 23.4163 11.2892 23.4163C5.05434 23.4163 0 18.3619 0 12.1271C0 5.89223 5.05434 0.837891 11.2892 0.837891C17.524 0.837891 22.5784 5.89223 22.5784 12.1271Z"
+									fill="#052D8B" />
+								<path
+									fill-rule="evenodd"
+									clip-rule="evenodd"
+									d="M26.6726 1.77315C27.5819 2.76634 27.5139 4.30861 26.5207 5.2179L13.5662 17.0781C12.5938 17.9684 11.0899 17.9244 10.1712 16.979L5.21562 11.8792C4.2772 10.9135 4.29933 9.36991 5.26505 8.4315C6.23077 7.49308 7.77438 7.51521 8.71279 8.48093L12.019 11.8833L23.2278 1.62125C24.221 0.711955 25.7633 0.779965 26.6726 1.77315Z"
+									fill="#00DB9B" />
+							</svg>
+							<span>60 trillion websites</span>
+						</div>
+						<div style="display: flex; flex-direction: row; gap: 8px">
+							<svg xmlns="http://www.w3.org/2000/svg" width="28" height="24" viewBox="0 0 28 24" fill="none">
+								<path
+									d="M22.5784 12.1271C22.5784 18.3619 17.524 23.4163 11.2892 23.4163C5.05434 23.4163 0 18.3619 0 12.1271C0 5.89223 5.05434 0.837891 11.2892 0.837891C17.524 0.837891 22.5784 5.89223 22.5784 12.1271Z"
+									fill="#052D8B" />
+								<path
+									fill-rule="evenodd"
+									clip-rule="evenodd"
+									d="M26.6726 1.77315C27.5819 2.76634 27.5139 4.30861 26.5207 5.2179L13.5662 17.0781C12.5938 17.9684 11.0899 17.9244 10.1712 16.979L5.21562 11.8792C4.2772 10.9135 4.29933 9.36991 5.26505 8.4315C6.23077 7.49308 7.77438 7.51521 8.71279 8.48093L12.019 11.8833L23.2278 1.62125C24.221 0.711955 25.7633 0.779965 26.6726 1.77315Z"
+									fill="#00DB9B" />
+							</svg>
+							<span>1M+ internal documents</span>
+						</div>
+					</div>
+					<span>
+						So when no results are found, that simply means after a thorough search, we found no matching results.
+					</span>
+				</div>
+			</div>
+		</cr-custom-empty-results>
+		<!-- Custom report tab with content -->
+		<cr-custom-tabs *ngIf="showCustomAiTab || showCustomPlagiairsmTab">
+			<cr-custom-tab-item [flexGrow]="0.3">
+				<cr-custom-tab-item-title>
+					<div style="display: flex; flex-direction: row; justify-content: space-between; align-items: center">
+						<span class="custom-tab-title">Check for {{ showCustomAiTab ? 'plagiarism' : 'AI' }}</span>
+						<img src="../../../assets/images/icons/crown.svg" alt="" />
+					</div>
+				</cr-custom-tab-item-title>
+				<cr-custom-tab-item-content>
+					<demo-custom-results-box-item [lockResultItem]="lockResultItem"></demo-custom-results-box-item>
+				</cr-custom-tab-item-content>
+			</cr-custom-tab-item>
+			<cr-custom-tab-item [flexGrow]="0.3">
+				<cr-custom-tab-item-title>
+					<div style="display: flex; flex-direction: row; justify-content: space-between; align-items: center">
+						<span class="custom-tab-title">Writing Assistant</span>
+						<img src="../../../assets/images/icons/crown.svg" alt="" />
+					</div>
+				</cr-custom-tab-item-title>
+				<cr-custom-tab-item-content>
+					<demo-custom-results-box-item [lockResultItem]="lockResultItem"></demo-custom-results-box-item>
+				</cr-custom-tab-item-content>
+			</cr-custom-tab-item>
+		</cr-custom-tabs>
+		<!-- custom results -->
+		<cr-custom-results *ngIf="showCustomResults" [reportView]="reportView">
+			<cr-custom-results-box-content>
+				<demo-custom-results-box-item [lockResultItem]="lockResultItem"></demo-custom-results-box-item>
+			</cr-custom-results-box-content>
+		</cr-custom-results>
+	</copyleaks-web-report>
+</ng-container>
+<!-- Custom locked results template ref -->
+<ng-template #lockedResultTemplateRef let-result="result">
+	<div class="locked-result-container">
+		<div class="locked-result-container-header">
+			<mat-icon>lock</mat-icon>
+			<span>Locked Result</span>
+		</div>
+		<div class="locked-result-container-body">Locked results are only viewable after report has been saved.</div>
+		<div class="locked-result-container-actions">
+			<cr-button (click)="lockedResultClick(result)">Save Report</cr-button>
+		</div>
+	</div>
+</ng-template>

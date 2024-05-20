@@ -11,10 +11,10 @@ import {
 	ViewChild,
 } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
-import { filter, map, takeUntil } from 'rxjs/operators';
+import { distinctUntilChanged, filter, map, takeUntil } from 'rxjs/operators';
 import { IResultItem } from './components/containers/report-results-item-container/components/models/report-result-item.models';
 import { ALERTS } from './constants/report-alerts.constants';
-import { EReportLayoutType, EResponsiveLayoutType } from './enums/copyleaks-web-report.enums';
+import { EPlatformType, EReportLayoutType, EResponsiveLayoutType } from './enums/copyleaks-web-report.enums';
 import { IClsReportEndpointConfigModel } from './models/report-config.models';
 import { ICompleteResults } from './models/report-data.models';
 import { ReportHttpRequestErrorModel } from './models/report-errors.models';
@@ -86,6 +86,11 @@ export class CopyleaksWebReportComponent implements OnInit, OnDestroy {
 	@Input() hideWritingFeedback: boolean = false;
 
 	/**
+	 * @Input {EPlatformType} - The type of the platform that the report is running on.
+	 */
+	@Input() platformType: EPlatformType = EPlatformType.APP;
+
+	/**
 	 * @Output {ReportHttpRequestErrorModel} - Emits HTTP request data, when any request to update & fetch report data fails.
 	 */
 	@Output() onReportRequestError = new EventEmitter<ReportHttpRequestErrorModel>();
@@ -122,6 +127,9 @@ export class CopyleaksWebReportComponent implements OnInit, OnDestroy {
 
 		// Initialize the report data
 		if (this.reportEndpointConfig) this._reportDataSvc.initReportData(this.reportEndpointConfig);
+
+		// Listen to route params changes
+		this._listenToRouteParamsChange();
 
 		// Handel report requests errors & emit it
 		this._reportErrorsSvc.reportHttpRequestError$
@@ -286,6 +294,7 @@ export class CopyleaksWebReportComponent implements OnInit, OnDestroy {
 			suspectPageIndex: suspectPage ? Number(suspectPage) ?? 1 : 1,
 			alertCode: alertCode,
 			showDisabledProducts: this.showDisabledProducts,
+			platformType: this.platformType,
 		} as IReportViewEvent);
 
 		if (alertCode) this._reportViewSvc.selectedAlert$.next(alertCode);
@@ -324,6 +333,39 @@ export class CopyleaksWebReportComponent implements OnInit, OnDestroy {
 				queryParams: updatedParams,
 				queryParamsHandling: 'merge', // remove to replace all query params by provided
 			});
+		});
+	}
+
+	private _listenToRouteParamsChange() {
+		this._activatedRoute.queryParams.pipe(distinctUntilChanged(), takeUntil(this.unsubscribe$)).subscribe(params => {
+			const viewMode = params['viewMode'];
+			const contentMode = params['contentMode'];
+			const sourcePage = params['sourcePage'];
+			const suspectPage = params['suspectPage'];
+			const suspectId = params['suspectId'];
+			const alertCode = params['alertCode'];
+
+			this.reportLayoutType = viewMode ?? 'one-to-many';
+			if (viewMode === 'writing-feedback') {
+				this.reportLayoutType = EReportLayoutType.OneToMany;
+			}
+			if (suspectId) {
+				this.reportLayoutType = EReportLayoutType.OneToOne;
+			}
+
+			this._reportViewSvc.reportViewMode$.next({
+				viewMode: viewMode === 'writing-feedback' ? EReportLayoutType.WritingFeedback : this.reportLayoutType,
+				isHtmlView: (!contentMode || contentMode == 'html') && !alertCode,
+				sourcePageIndex: sourcePage ? Number(sourcePage) ?? 1 : 1,
+				suspectId: suspectId,
+				suspectPageIndex: suspectPage ? Number(suspectPage) ?? 1 : 1,
+				alertCode: alertCode,
+				showDisabledProducts: this.showDisabledProducts,
+				platformType: this.platformType,
+			} as IReportViewEvent);
+
+			if (alertCode) this._reportViewSvc.selectedAlert$.next(alertCode);
+			else this._reportViewSvc.selectedAlert$.next(null);
 		});
 	}
 

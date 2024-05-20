@@ -106,7 +106,7 @@
 				line-height: normal;
 			}
 			.options-icon:hover {
-				color: $color-primary;
+				color: $color-primary !important;
 			}
 			&:focus-visible {
 				.options-icon {
@@ -186,6 +186,10 @@
 
 mat-icon:hover {
 	transition: 0.2s;
+}
+
+.options-icon:hover {
+	color: $color-primary !important;
 }
 
 .icon-button {

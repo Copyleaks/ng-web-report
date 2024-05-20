@@ -1,3 +1,10 @@
+import { IResultItem } from '../components/containers/report-results-item-container/components/models/report-result-item.models';
+import {
+	EResultPreviewType,
+	EWritingFeedbackCategories,
+	EWritingFeedbackTypes,
+} from '../enums/copyleaks-web-report.enums';
+
 /**
  * Type that holds the statistic for a scan process
  */
@@ -22,4 +29,27 @@ export interface ReportStatistics {
 	writingFeedbackOverallScore?: number;
 	/** Writing Feedback total issues */
 	writingFeedbackOverallIssues?: number;
+}
+
+export interface IWritingFeedbackTypeStatistics {
+	type: EWritingFeedbackTypes;
+	categories: IWritingFeedbackCategoryStatistics[];
+}
+
+export interface IWritingFeedbackCategoryStatistics {
+	type: EWritingFeedbackCategories;
+	totalIssues: number;
+}
+
+export interface IMatchesTypeStatistics {
+	type: EResultPreviewType;
+	totalResults: number;
+	totalResultsPct: number;
+	categories: IMatchesCategoryStatistics[];
+}
+
+export interface IMatchesCategoryStatistics {
+	type: string;
+	totalResults: number;
+	results: IResultItem[];
 }

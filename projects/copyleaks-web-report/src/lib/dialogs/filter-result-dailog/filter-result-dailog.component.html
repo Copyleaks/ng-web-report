@@ -14,19 +14,12 @@
 				<span i18n>Clear filter</span>
 			</button>
 		</div>
-		<div
-			class="result-container"
-			fxLayout="column"
-			fxLayoutAlign="start start"
-			fxLayoutGap="4px"
-			fxLayout.lt-md="column"
-			fxLayoutAlign.lt-md="start start"
-			fxLayoutGap.lt-md="10px">
-			<span class="total-results" web-report-title-font>
+		<div class="result-container" [class.mobile]="isMobile">
+			<span class="total-results" [class.mobile]="isMobile" web-report-title-font>
 				<ng-container i18n>Matching Results</ng-container>
 				({{ resultsActions.totalResults }})
 			</span>
-			<div class="chips-stats-container">
+			<div class="chips-stats-container" *ngIf="!!resultsActions.totalFiltered || !!resultsActions?.totalExcluded">
 				<ng-container *ngIf="!!resultsActions?.totalExcluded">
 					<mat-chip
 						class="total-excluded"
@@ -47,96 +40,258 @@
 		</div>
 	</div>
 	<div mat-dialog-content fxLayoutAlign="start start" [class.mobile-body-top-container]="isMobile">
-		<div
-			class="body-container"
-			[class.mobile-body-container]="isMobile"
-			fxLayout="row"
-			fxLayoutGap="32px"
-			fxLayout.lt-md="column"
-			fxLayoutGap.lt-md="16px">
-			<div class="left-side-container" [class.mobile]="isMobile" fxLayout="column" fxLayoutGap="16px">
-				<!-- source type -->
-				<section class="section-container sources-type-top-container" fxLayout="column" fxLayoutGap="16px">
-					<div class="body-title-container">
-						<span class="body-title" web-report-title-font i18n>Source Type</span>
-						<span *ngIf="sourceTypeErrorMessage" @errorAnimation class="dialog-error-message">
-							{{ sourceTypeErrorMessage }}
+		<ng-container *ngIf="!isMobile; else contentMobileViewRef">
+			<div class="body-container" [class.mobile-body-container]="isMobile" fxLayout="row" fxLayoutGap="32px">
+				<div class="left-side-container" [class.mobile]="isMobile" fxLayout="column" fxLayoutGap="16px">
+					<!-- source type -->
+					<section class="section-container sources-type-top-container" fxLayout="column" fxLayoutGap="16px">
+						<div class="body-title-container">
+							<span class="body-title" web-report-title-font i18n>Source Type</span>
+							<span *ngIf="sourceTypeErrorMessage" @errorAnimation class="dialog-error-message">
+								{{ sourceTypeErrorMessage }}
+							</span>
+						</div>
+						<ng-container *ngIf="!loading">
+							<cr-source-type-filter-result
+								[totalSourceType]="totalSourceType"
+								[reportViewSvc]="data.reportViewSvc"
+								class="sources-type-container"></cr-source-type-filter-result>
+						</ng-container>
+					</section>
+					<mat-divider></mat-divider>
+
+					<!-- results meta -->
+					<section class="section-container" fxLayout="column" fxLayoutGap="16px">
+						<span class="body-title" web-report-title-font i18n>Advanced Filter Settings</span>
+						<cr-meta-filter-result
+							[publicationDates]="publicationDates"
+							[totalResultsWithoutDate]="totalResultsWithoutDate"
+							[minWordLimit]="minWordLimit"
+							[maxWordLimit]="maxWordLimit"
+							class="meta-filter-container"></cr-meta-filter-result>
+					</section>
+				</div>
+
+				<mat-divider [vertical]="!isMobile" class="vertical-divider"></mat-divider>
+
+				<div class="right-side-conatier" [class.mobile]="isMobile" fxLayout="column" fxLayoutGap="16px">
+					<!-- match type -->
+					<section class="match-type-container" fxLayout="column" fxLayoutGap="16px">
+						<div class="body-title-container">
+							<span class="body-title" web-report-title-font i18n>Match Types</span>
+
+							<span *ngIf="matchTypeErrorMessage" @errorAnimation class="dialog-error-message">
+								{{ matchTypeErrorMessage }}
+							</span>
+						</div>
+
+						<cr-match-type-filter-result
+							[identicalTotal]="totalIdentical"
+							[minorChangesTotal]="totalMinorChanges"
+							[paraphrasedTotal]="totalParaphrased"
+							class="match-type-filter-container"></cr-match-type-filter-result>
+					</section>
+					<mat-divider></mat-divider>
+					<section class="exclude-domains-container" fxLayout="column" fxLayoutGap="16px">
+						<div class="body-title-container">
+							<span class="body-title included-tags-container" i18n>
+								<span web-report-title-font>Exclude domains</span>
+								<span *ngIf="allExcludedDomains && allExcludedDomains?.length > 0" class="total-stat">
+									({{ allExcludedDomains?.length }})
+								</span>
+							</span>
+						</div>
+						<cr-excluded-domains-input></cr-excluded-domains-input>
+					</section>
+				</div>
+
+				<mat-divider [vertical]="!isMobile" class="vertical-divider"></mat-divider>
+
+				<div class="right-side-conatier" [class.mobile]="isMobile" fxLayout="column" fxLayoutGap="16px">
+					<!--General filters-->
+					<section class="general-filters-container" fxLayout="column" fxLayoutGap="16px">
+						<span class="body-title" web-report-title-font i18n>General Filters</span>
+						<cr-general-filter-result
+							class="general-filter-container"
+							[totalAlerts]="totalAlerts"
+							[totalSameAuthor]="totalSameAuthor"></cr-general-filter-result>
+					</section>
+					<mat-divider></mat-divider>
+					<!-- Included Tags -->
+					<section
+						class="included-tags-container"
+						fxLayout="column"
+						fxLayoutGap="8px"
+						[ngClass]="{
+							'disabled-section': !allTagItem || allTagItem.length === 0
+						}">
+						<span class="body-title included-tags-container" i18n>
+							<span web-report-title-font>Included Tags</span>
+							<span *ngIf="allTagItem && allTagItem.length > 0" class="total-stat">({{ allTagItem.length }})</span>
 						</span>
-					</div>
+						<cr-included-tags-filter-result
+							[allTagItem]="allTagItem"
+							class="included-tags-filter-result"></cr-included-tags-filter-result>
+					</section>
+				</div>
+			</div>
+		</ng-container>
+
+		<ng-template #contentMobileViewRef>
+			<mat-accordion #expansionPanel>
+				<mat-expansion-panel
+					[expanded]="selectedFilter === EFilterResultSection.SourceTypes"
+					(opened)="expandSettings(EFilterResultSection.SourceTypes)">
+					<mat-expansion-panel-header>
+						<mat-panel-title>
+							<span class="mobile-option-title" web-report-title-font i18n>Source type</span>
+						</mat-panel-title>
+
+						<mat-panel-description>
+							<mat-icon class="expand-icon" fontSet="material-icons-round">arrow_drop_down</mat-icon>
+						</mat-panel-description>
+					</mat-expansion-panel-header>
+
+					<span *ngIf="sourceTypeErrorMessage" @errorAnimation class="dialog-error-message">
+						{{ sourceTypeErrorMessage }}
+					</span>
 					<ng-container *ngIf="!loading">
 						<cr-source-type-filter-result
 							[totalSourceType]="totalSourceType"
+							[reportViewSvc]="data.reportViewSvc"
 							class="sources-type-container"></cr-source-type-filter-result>
 					</ng-container>
-				</section>
-				<mat-divider></mat-divider>
+				</mat-expansion-panel>
+			</mat-accordion>
 
-				<!-- results meta -->
-				<section class="section-container" fxLayout="column" fxLayoutGap="16px">
-					<span class="body-title" web-report-title-font i18n>Advanced Filter Settings</span>
+			<mat-accordion #expansionPanel>
+				<mat-expansion-panel
+					[expanded]="selectedFilter === EFilterResultSection.AdvancedFilterSettings"
+					(opened)="expandSettings(EFilterResultSection.AdvancedFilterSettings)">
+					<mat-expansion-panel-header>
+						<mat-panel-title>
+							<span class="mobile-option-title" web-report-title-font i18n>Advanced Filter Settings</span>
+						</mat-panel-title>
+
+						<mat-panel-description>
+							<mat-icon class="expand-icon" fontSet="material-icons-round">arrow_drop_down</mat-icon>
+						</mat-panel-description>
+					</mat-expansion-panel-header>
+
 					<cr-meta-filter-result
 						[publicationDates]="publicationDates"
 						[totalResultsWithoutDate]="totalResultsWithoutDate"
 						[minWordLimit]="minWordLimit"
 						[maxWordLimit]="maxWordLimit"
 						class="meta-filter-container"></cr-meta-filter-result>
-				</section>
-			</div>
+				</mat-expansion-panel>
+			</mat-accordion>
 
-			<mat-divider [vertical]="!isMobile" class="vertical-divider"></mat-divider>
+			<mat-accordion #expansionPanel>
+				<mat-expansion-panel
+					[expanded]="selectedFilter === EFilterResultSection.MatchTypes"
+					(opened)="expandSettings(EFilterResultSection.MatchTypes)">
+					<mat-expansion-panel-header>
+						<mat-panel-title>
+							<span class="mobile-option-title" web-report-title-font i18n>Match types</span>
+						</mat-panel-title>
 
-			<div class="right-side-conatier" [class.mobile]="isMobile" fxLayout="column" fxLayoutGap="16px">
-				<!-- match type -->
-				<section class="match-type-container" fxLayout="column" fxLayoutGap="16px">
-					<div class="body-title-container">
-						<span class="body-title" web-report-title-font i18n>Match Types</span>
-
-						<span *ngIf="matchTypeErrorMessage" @errorAnimation class="dialog-error-message">
-							{{ matchTypeErrorMessage }}
-						</span>
-					</div>
-
+						<mat-panel-description>
+							<mat-icon class="expand-icon" fontSet="material-icons-round">arrow_drop_down</mat-icon>
+						</mat-panel-description>
+					</mat-expansion-panel-header>
+					<span *ngIf="matchTypeErrorMessage" @errorAnimation class="dialog-error-message">
+						{{ matchTypeErrorMessage }}
+					</span>
 					<cr-match-type-filter-result
 						[identicalTotal]="totalIdentical"
 						[minorChangesTotal]="totalMinorChanges"
 						[paraphrasedTotal]="totalParaphrased"
 						class="match-type-filter-container"></cr-match-type-filter-result>
-				</section>
-				<mat-divider></mat-divider>
-				<!--General filters-->
-				<section class="general-filters-container" fxLayout="column" fxLayoutGap="16px">
-					<span class="body-title" web-report-title-font i18n>General Filters</span>
+				</mat-expansion-panel>
+			</mat-accordion>
+
+			<mat-accordion #expansionPanel>
+				<mat-expansion-panel
+					[expanded]="selectedFilter === EFilterResultSection.ExcludeDomains"
+					(opened)="expandSettings(EFilterResultSection.ExcludeDomains)">
+					<mat-expansion-panel-header>
+						<mat-panel-title>
+							<span class="mobile-option-title" i18n>
+								<span web-report-title-font>Exclude domains</span>
+								<span *ngIf="allExcludedDomains && allExcludedDomains?.length > 0" class="total-stat">
+									({{ allExcludedDomains?.length }})
+								</span>
+							</span>
+						</mat-panel-title>
+
+						<mat-panel-description>
+							<mat-icon class="expand-icon" fontSet="material-icons-round">arrow_drop_down</mat-icon>
+						</mat-panel-description>
+					</mat-expansion-panel-header>
+
+					<cr-excluded-domains-input></cr-excluded-domains-input>
+				</mat-expansion-panel>
+			</mat-accordion>
+
+			<mat-accordion #expansionPanel>
+				<mat-expansion-panel
+					[expanded]="selectedFilter === EFilterResultSection.GeneralFilters"
+					(opened)="expandSettings(EFilterResultSection.GeneralFilters)">
+					<mat-expansion-panel-header>
+						<mat-panel-title>
+							<span class="mobile-option-title" web-report-title-font i18n>General filters</span>
+						</mat-panel-title>
+
+						<mat-panel-description>
+							<mat-icon class="expand-icon" fontSet="material-icons-round">arrow_drop_down</mat-icon>
+						</mat-panel-description>
+					</mat-expansion-panel-header>
 					<cr-general-filter-result
 						class="general-filter-container"
 						[totalAlerts]="totalAlerts"
 						[totalSameAuthor]="totalSameAuthor"></cr-general-filter-result>
-				</section>
-				<mat-divider></mat-divider>
-				<!-- Included Tags -->
-				<section
-					class="included-tags-container"
-					fxLayout="column"
-					fxLayoutGap="8px"
-					[ngClass]="{
-						'disabled-section': !allTagItem || allTagItem.length === 0
-					}">
-					<span class="body-title included-tags-container" web-report-title-font i18n>
-						<span>Included Tags</span>
-						<span *ngIf="allTagItem && allTagItem.length > 0" class="total-stat">({{ allTagItem.length }})</span>
-					</span>
+				</mat-expansion-panel>
+			</mat-accordion>
+
+			<mat-accordion
+				#expansionPanel
+				[ngClass]="{
+					disabled: !allTagItem || allTagItem.length === 0
+				}">
+				<mat-expansion-panel
+					[expanded]="selectedFilter === EFilterResultSection.IncludedTags"
+					(opened)="expandSettings(EFilterResultSection.IncludedTags)"
+					[disabled]="!allTagItem || allTagItem.length === 0">
+					<mat-expansion-panel-header>
+						<mat-panel-title>
+							<span class="mobile-option-title" web-report-title-font i18n>
+								<span web-report-title-font>Included Tags</span>
+								<span *ngIf="allTagItem && allTagItem.length > 0" class="total-stat">({{ allTagItem.length }})</span>
+							</span>
+						</mat-panel-title>
+
+						<mat-panel-description>
+							<mat-icon class="expand-icon" fontSet="material-icons-round">arrow_drop_down</mat-icon>
+						</mat-panel-description>
+					</mat-expansion-panel-header>
 					<cr-included-tags-filter-result
 						[allTagItem]="allTagItem"
 						class="included-tags-filter-result"></cr-included-tags-filter-result>
-				</section>
-			</div>
-		</div>
+				</mat-expansion-panel>
+			</mat-accordion>
+		</ng-template>
 	</div>
-	<div mat-dialog-actions class="apply-and-discard-button-contaier">
+	<div
+		mat-dialog-actions
+		class="apply-and-discard-button-contaier"
+		[style.padding-top]="isMobile ? '16px !important' : ''">
 		<cr-button
 			[outlined]="true"
 			[padding]="isMobile ? '3px 17px' : '3px 24px'"
-			(click)="onDiscardChanges()"
-			[width]="isMobile ? '151px' : '170px'"
+			(click)="$event.stopPropagation(); $event.preventDefault(); onDiscardChanges()"
+			[width]="isMobile ? '151px' : '180px'"
+			[isLink]="isMobile"
 			color="primary">
 			<span class="discard-changes-button" i18n>Discard changes</span>
 		</cr-button>

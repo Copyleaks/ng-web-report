@@ -8,9 +8,10 @@
 	align-items: flex-start;
 	justify-content: center;
 	gap: 4px;
-	padding: 0px 6px;
+	padding: 0px 6px 6px 0px;
 	box-sizing: border-box;
 	min-height: 38px;
+	border-bottom: 1px solid $color-container-background;
 }
 
 .actions-container {

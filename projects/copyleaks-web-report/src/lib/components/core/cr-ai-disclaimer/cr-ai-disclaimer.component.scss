@@ -1,0 +1,39 @@
+@import '../../../styles/website-colors.styles.scss';
+
+:host {
+	border-radius: 10px;
+	border: 2px solid $color-container-background;
+	background: $color-white;
+	display: flex;
+	padding: 8px;
+	flex-direction: column;
+	align-items: center;
+	gap: 4px;
+	align-self: stretch;
+
+	.title {
+		color: $color-black;
+		text-align: center;
+		font-size: 16px;
+		font-style: normal;
+		font-weight: 700;
+		line-height: normal;
+	}
+
+	.description {
+		color: $color-black;
+		text-align: center;
+		font-size: 14px;
+		font-style: normal;
+		font-weight: 500;
+		line-height: normal;
+		a {
+			color: $color-primary;
+			font-size: 14px;
+			font-style: normal;
+			font-weight: 500;
+			line-height: normal;
+			text-decoration-line: underline;
+		}
+	}
+}

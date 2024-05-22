@@ -1,5 +1,5 @@
 import { ScrollingModule } from '@angular/cdk/scrolling';
-import { CommonModule } from '@angular/common';
+import { CommonModule, DatePipe } from '@angular/common';
 import { NgModule } from '@angular/core';
 import { FlexLayoutModule } from '@angular/flex-layout';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
@@ -92,6 +92,8 @@ import {
 	CrResultDisclaimerTitleComponent,
 } from './components/core/cr-result-disclaimer/cr-result-disclaimer.component';
 import { CrReportMatchTooltipModule } from './directives/report-match-tooltip/cr-report-match-tooltip-content.module';
+import { CrBannerSectionComponent } from './components/core/cr-banner-section/cr-banner-section.component';
+import { CrAiDisclaimerComponent } from './components/core/cr-ai-disclaimer/cr-ai-disclaimer.component';
 
 @NgModule({
 	declarations: [
@@ -150,6 +152,8 @@ import { CrReportMatchTooltipModule } from './directives/report-match-tooltip/cr
 		CrResultDisclaimerComponent,
 		CrResultDisclaimerDescriptionComponent,
 		CrResultDisclaimerTitleComponent,
+		CrBannerSectionComponent,
+		CrAiDisclaimerComponent,
 	],
 	imports: [
 		CommonModule,
@@ -193,8 +197,9 @@ import { CrReportMatchTooltipModule } from './directives/report-match-tooltip/cr
 		CrCustomEmptyResultsComponent,
 		CrCustomResultsComponent,
 		CrCustomResultsBoxContentComponent,
+		CrBannerSectionComponent,
 		EmptyResultStateComponent,
 	],
-	providers: [ReportRealtimeResultsService, FilterResultDailogService, FilterCorrectionsDialogService],
+	providers: [ReportRealtimeResultsService, FilterResultDailogService, FilterCorrectionsDialogService, DatePipe],
 })
 export class CopyleaksWebReportModule {}

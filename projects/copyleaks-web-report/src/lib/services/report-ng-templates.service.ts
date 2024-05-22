@@ -69,6 +69,16 @@ export class ReportNgTemplatesService {
 	}
 
 	/**
+	 * Setter for the custom report banner section references
+	 */
+	public setReportCustomBannerSectionTemplateRef(template: TemplateRef<any>) {
+		this._reportTemplatesRefs$.next({
+			...this._reportTemplatesRefs$.value,
+			customBannerSectionTemplate: template,
+		} as ICustomClsReportTemplatesRefs);
+	}
+
+	/**
 	 * Setter for the custom report results section template reference.
 	 */
 	public setLockedResultItemTemplateRef(template: TemplateRef<IResultItem>) {

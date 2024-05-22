@@ -1,8 +1,11 @@
 <!-- Left side section -->
-<div class="left-section">
+<div
+	[class.web-report-left-section]="reportMode === EReportMode.WebReport"
+	[class.assessment-tool-left-section]="reportMode === EReportMode.AssessmentTool">
 	<ng-container *ngTemplateOutlet="customBannerSectionTemplate ?? null"></ng-container>
 	<!-- Report tabs container --->
 	<copyleaks-report-tabs-container
+		*ngIf="reportMode === EReportMode.WebReport"
 		[hideAiTap]="hideAiTap"
 		[hidePlagarismTap]="hidePlagarismTap"
 		[forceWritingFeedbackTapHide]="hideWritingFeedback"
@@ -49,7 +52,11 @@
 </div>
 
 <!-- Right side section -->
-<div *ngIf="!hideRightSection" class="right-section" id="one-to-many-report-right-section">
+<div
+	*ngIf="!hideRightSection"
+	[class.web-report-right-section]="reportMode === EReportMode.WebReport"
+	[class.assessment-tool-middle-section]="reportMode === EReportMode.AssessmentTool"
+	id="one-to-many-report-right-section">
 	<!-- Report actions container -->
 	<copyleaks-report-actions-container [showLoadingView]="isLoadingScanContent"></copyleaks-report-actions-container>
 
@@ -117,3 +124,31 @@
 		</div>
 	</div>
 </div>
+
+<copyleaks-report-tabs-container
+	*ngIf="reportMode === EReportMode.AssessmentTool"
+	[reportMode]="reportMode"
+	[hideAiTap]="hideAiTap"
+	[hidePlagarismTap]="hidePlagarismTap"
+	[forceWritingFeedbackTapHide]="hideWritingFeedback"
+	[hideWritingFeedbackTap]="hideWritingFeedbackTap"
+	[selectedTap]="selectedTap"
+	[plagarismScore]="plagiarismScore"
+	[aiScore]="reportStatistics?.aiScore ?? 0"
+	[writingFeedbackScore]="reportStatistics?.writingFeedbackOverallScore"
+	[totalWritingFeedbackIssues]="reportStatistics?.writingFeedbackOverallIssues"
+	[wordsTotal]="reportStatistics?.total ?? 0"
+	[identicalTotal]="reportStatistics?.identical ?? 0"
+	[minorChangesTotal]="reportStatistics?.minorChanges ?? 0"
+	[paraphrasedTotal]="reportStatistics?.relatedMeaning ?? 0"
+	[excludedTotal]="reportStatistics?.omittedWords ?? 0"
+	[showLoadingView]="
+		selectedTap === EReportViewType.WritingFeedbackTabView
+			? isLoadingScanCorrections
+			: isLoadingScanContent || isLoadingScanResults
+	"
+	[hideAiTap]="hideAiTap"
+	[hidePlagarismTap]="hidePlagarismTap"
+	[showDisabledProducts]="showDisabledProducts"
+	[loadingProgressPct]="loadingProgressPct"
+	[companyLogo]="companyLogo"></copyleaks-report-tabs-container>

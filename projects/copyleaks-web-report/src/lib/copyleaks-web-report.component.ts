@@ -14,7 +14,12 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { distinctUntilChanged, filter, map, takeUntil } from 'rxjs/operators';
 import { IResultItem } from './components/containers/report-results-item-container/components/models/report-result-item.models';
 import { ALERTS } from './constants/report-alerts.constants';
-import { EPlatformType, EReportLayoutType, EResponsiveLayoutType } from './enums/copyleaks-web-report.enums';
+import {
+	EPlatformType,
+	EReportLayoutType,
+	EReportMode,
+	EResponsiveLayoutType,
+} from './enums/copyleaks-web-report.enums';
 import { IClsReportEndpointConfigModel } from './models/report-config.models';
 import { ICompleteResults } from './models/report-data.models';
 import { ReportHttpRequestErrorModel } from './models/report-errors.models';
@@ -49,6 +54,16 @@ export class CopyleaksWebReportComponent implements OnInit, OnDestroy {
 	@ViewChild('customEmptyResultsTemplate', { static: true }) customEmptyResultsTemplate: TemplateRef<any>;
 	@ViewChild('customResultsTemplate', { static: true }) customResultsTemplate: TemplateRef<any>;
 	@ViewChild('customBannerSectionTemplate', { static: true }) customBannerSectionTemplate: TemplateRef<any>;
+
+	// add doc like the other inputs
+	/**
+	 * @Input {EReportMode} - The copyleaks report view type.
+	 * @Default value: EReportMode.WebReport
+	 * @Description: The type of the report view.
+	 * @Example: EReportMode.WebReport
+	 * @Example: EReportMode.AssessmentTool
+	 */
+	@Input() reportMode: EReportMode = EReportMode.WebReport;
 
 	/**
 	 * @Input {ReportLayoutType} - The copyleaks report layout type.
@@ -104,6 +119,7 @@ export class CopyleaksWebReportComponent implements OnInit, OnDestroy {
 	// Layout realated properties
 	ReportLayoutType = EReportLayoutType;
 	ResponsiveLayoutType = EResponsiveLayoutType;
+	EReportMode = EReportMode;
 
 	// Subject for destroying all the subscriptions in the main library component
 	private unsubscribe$ = new Subject();

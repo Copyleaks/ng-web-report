@@ -7,7 +7,7 @@
 	gap: 8px;
 }
 
-.web-report-left-section {
+.left-section {
 	flex: 70%;
 	width: 70%;
 	display: flex;
@@ -24,7 +24,7 @@
 	}
 }
 
-.web-report-right-section {
+.right-section {
 	flex: 30%;
 	width: 30%;
 	display: flex;
@@ -66,7 +66,7 @@
 	}
 }
 
-.web-report-left-section {
+.left-section {
 	box-shadow: -2px -2px 8px 0px rgba(255, 255, 255, 0.5), 2px 2px 4px 0px rgba(0, 0, 0, 0.15);
 	border-radius: 10px;
 }

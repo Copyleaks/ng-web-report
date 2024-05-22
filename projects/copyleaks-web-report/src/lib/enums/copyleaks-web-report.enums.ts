@@ -1,18 +1,4 @@
 /**
- * Enum for all the copyleaks report view types.
- */
-export enum EReportMode {
-	/**
-	 * The normal web reoprt view.
-	 */
-	WebReport = 'web-report',
-	/**
-	 * The Assessment tool view.
-	 */
-	AssessmentTool = 'assessment-tool',
-}
-
-/**
  * Enum for all the copyleaks report layouts types.
  */
 export enum EReportLayoutType {

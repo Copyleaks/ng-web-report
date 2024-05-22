@@ -169,10 +169,10 @@ export class ReportResultsItemComponent implements OnInit, OnChanges, OnDestroy 
 	private _updateResultTags() {
 		// Add the date tag to the tags list if available which includes the creation date, last modification date and publish date
 		if (
-			(this.previewResult.metadata.creationDate ||
-				this.previewResult.metadata.lastModificationDate ||
-				this.previewResult.metadata.publishDate) &&
-			!this.previewResult.tags.find(tag => tag.code === 'summary-date')
+			(this.previewResult?.metadata?.creationDate ||
+				this.previewResult?.metadata?.lastModificationDate ||
+				this.previewResult?.metadata?.publishDate) &&
+			!this.previewResult?.tags?.find(tag => tag.code === 'summary-date')
 		) {
 			const date =
 				this.previewResult.metadata.creationDate ||

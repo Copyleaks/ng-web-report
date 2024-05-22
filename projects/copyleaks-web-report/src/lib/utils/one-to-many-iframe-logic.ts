@@ -360,7 +360,6 @@ function ready() {
 			if (isPdf) {
 				let pageContainer = document.querySelector('#page-container') as HTMLElement;
 				iframeWidth = pageContainer.clientWidth;
-				console.log('iframeWidth', iframeWidth);
 			} else iframeWidth = window.innerWidth;
 
 			let matchRect = match.getBoundingClientRect();

@@ -4,7 +4,7 @@ import { IResultItem } from '../../components/containers/report-results-item-con
 import { ITotalSourceType } from './components/source-type-filter-result/models/source-type-filter-result.models';
 import { FilterResultDailogService } from './services/filter-result-dailog.service';
 import { ITagItem } from './components/included-tags-filter-result/models/included-tags-filter-result.models';
-import { EFilterResultForm, IFilterResultDailogData } from './models/filter-result-dailog.enum';
+import { EFilterResultForm, EFilterResultSection, IFilterResultDailogData } from './models/filter-result-dailog.enum';
 import { FormGroup } from '@angular/forms';
 import { untilDestroy } from '../../utils/until-destroy';
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
@@ -39,6 +39,7 @@ import { EResponsiveLayoutType } from '../../enums/copyleaks-web-report.enums';
 })
 export class FilterResultDailogComponent implements OnInit {
 	allTagItem: ITagItem[] = [];
+	allExcludedDomains: string[] = [];
 	isMobile: boolean = false;
 	resultsActions: IResultsActions = {
 		totalResults: 0,
@@ -68,6 +69,9 @@ export class FilterResultDailogComponent implements OnInit {
 	initFormData: boolean = false;
 	totalResultsWithoutDate: number;
 
+	EFilterResultSection = EFilterResultSection;
+	selectedFilter: EFilterResultSection;
+
 	get totalFiltered() {
 		return this.totalSourceType ? this.getTotalFilterdResult() : 0;
 	}
@@ -94,6 +98,8 @@ export class FilterResultDailogComponent implements OnInit {
 			if (
 				!formData.showInternetResults &&
 				!formData.showBatchResults &&
+				!formData.showYourResults &&
+				!formData.showOthersResults &&
 				!formData.showInternalDatabaseResults &&
 				formData.hiddenRepositories &&
 				formData.hiddenRepositories.length === this._filterResultsSvc.reposIds.length &&
@@ -110,12 +116,21 @@ export class FilterResultDailogComponent implements OnInit {
 							?.get(EFilterResultForm.fgSourceType)
 							?.get(EFilterResultForm.fcInternet)
 							?.setValue(true, { emitEvent: false });
-					else if (this.totalSourceType.totalInternalDatabase > 0)
+					else if (this.totalSourceType.totalInternalDatabase > 0) {
 						this._filterResultsSvc.filterResultFormGroup
 							?.get(EFilterResultForm.fgSourceType)
 							?.get(EFilterResultForm.fcInternalDatabase)
 							?.setValue(true, { emitEvent: false });
-					else if (this.totalSourceType.totalbatch > 0)
+						if (this.totalSourceType.totalYourFiles > 0)
+							this._filterResultsSvc.sourceTypeFormGroup
+								.get(EFilterResultForm.fcYourResults)
+								?.setValue(true, { emitEvent: false });
+
+						if (this.totalSourceType.totalOthersFiles > 0)
+							this._filterResultsSvc.sourceTypeFormGroup
+								.get(EFilterResultForm.fcOthersResults)
+								?.setValue(true, { emitEvent: false });
+					} else if (this.totalSourceType.totalbatch > 0)
 						this._filterResultsSvc.filterResultFormGroup
 							?.get(EFilterResultForm.fgSourceType)
 							?.get(EFilterResultForm.fcBatch)
@@ -156,6 +171,82 @@ export class FilterResultDailogComponent implements OnInit {
 				this.matchTypeErrorMessage = $localize`At least one match type needs to be activated.`;
 			} else this.matchTypeErrorMessage = this.sourceTypeErrorMessage = null;
 		});
+
+		this._filterResultsSvc.sourceTypeFormGroup
+			.get(EFilterResultForm.fcInternalDatabase)
+			.valueChanges.pipe(untilDestroy(this))
+			.subscribe(value => {
+				// If the internal database is selected, then the your results and others results should be selected
+				if (
+					value &&
+					!this._filterResultsSvc.sourceTypeFormGroup.get(EFilterResultForm.fcYourResults).value &&
+					!this._filterResultsSvc.sourceTypeFormGroup.get(EFilterResultForm.fcOthersResults).value
+				) {
+					if (this.totalSourceType.totalYourFiles > 0)
+						this._filterResultsSvc.sourceTypeFormGroup
+							.get(EFilterResultForm.fcYourResults)
+							?.setValue(true, { emitEvent: false });
+
+					if (this.totalSourceType.totalOthersFiles > 0)
+						this._filterResultsSvc.sourceTypeFormGroup
+							.get(EFilterResultForm.fcOthersResults)
+							?.setValue(true, { emitEvent: false });
+				}
+
+				// If the internal database is unselected, then the your results and others results should be unselected
+				if (
+					!value &&
+					(this._filterResultsSvc.sourceTypeFormGroup.get(EFilterResultForm.fcYourResults).value ||
+						this._filterResultsSvc.sourceTypeFormGroup.get(EFilterResultForm.fcOthersResults).value)
+				) {
+					this._filterResultsSvc.sourceTypeFormGroup
+						.get(EFilterResultForm.fcYourResults)
+						?.setValue(false, { emitEvent: false });
+					this._filterResultsSvc.sourceTypeFormGroup
+						.get(EFilterResultForm.fcOthersResults)
+						?.setValue(false, { emitEvent: false });
+				}
+			});
+
+		this._filterResultsSvc.sourceTypeFormGroup
+			.get(EFilterResultForm.fcYourResults)
+			.valueChanges.pipe(untilDestroy(this))
+			.subscribe(value => {
+				// If the your results is selected, then the internal database should be selected
+				if (value && !this._filterResultsSvc.sourceTypeFormGroup.get(EFilterResultForm.fcInternalDatabase).value)
+					this._filterResultsSvc.sourceTypeFormGroup
+						.get(EFilterResultForm.fcInternalDatabase)
+						?.setValue(true, { emitEvent: false });
+
+				if (value && this.totalSourceType.totalYourFiles <= 0)
+					this._filterResultsSvc.sourceTypeFormGroup
+						.get(EFilterResultForm.fcYourResults)
+						?.setValue(false, { emitEvent: false });
+
+				// If both your results and others results are unselected, then the internal database should be unselected
+				if (!value && !this._filterResultsSvc.sourceTypeFormGroup.get(EFilterResultForm.fcOthersResults).value)
+					this._filterResultsSvc.sourceTypeFormGroup.get(EFilterResultForm.fcInternalDatabase)?.setValue(false);
+			});
+
+		this._filterResultsSvc.sourceTypeFormGroup
+			.get(EFilterResultForm.fcOthersResults)
+			.valueChanges.pipe(untilDestroy(this))
+			.subscribe(value => {
+				// If the your results is selected, then the internal database should be selected
+				if (value && !this._filterResultsSvc.sourceTypeFormGroup.get(EFilterResultForm.fcInternalDatabase).value)
+					this._filterResultsSvc.sourceTypeFormGroup
+						.get(EFilterResultForm.fcInternalDatabase)
+						?.setValue(true, { emitEvent: false });
+
+				if (value && this.totalSourceType.totalOthersFiles <= 0)
+					this._filterResultsSvc.sourceTypeFormGroup
+						.get(EFilterResultForm.fcOthersResults)
+						?.setValue(false, { emitEvent: false });
+
+				// If both your results and others results are unselected, then the internal database should be unselected
+				if (!value && !this._filterResultsSvc.sourceTypeFormGroup.get(EFilterResultForm.fcYourResults).value)
+					this._filterResultsSvc.sourceTypeFormGroup.get(EFilterResultForm.fcInternalDatabase)?.setValue(false);
+			});
 	}
 
 	getTotalFilterdResult() {
@@ -275,6 +366,8 @@ export class FilterResultDailogComponent implements OnInit {
 						totalInternalDatabase: results.database.length,
 						totalbatch: results.batch.length,
 						repository: this._filterResultsSvc.reposIds,
+						totalYourFiles: results.database.filter(r => !!r.scanId).length,
+						totalOthersFiles: results.database.filter(r => !r.scanId).length,
 					};
 
 					const allResults = [
@@ -319,6 +412,24 @@ export class FilterResultDailogComponent implements OnInit {
 					this.setResultsWordsLimit();
 
 					this.allTagItem = this._filterResultsSvc.selectedTagItem;
+
+					this.allExcludedDomains = this._filterResultsSvc.excludedDomainsFormControl.value;
+					this._filterResultsSvc.excludedDomainsFormControl.valueChanges.pipe(untilDestroy(this)).subscribe(value => {
+						this.allExcludedDomains = value;
+					});
+
+					if (this.totalSourceType.totalYourFiles == 0) {
+						this._filterResultsSvc.sourceTypeFormGroup
+							.get(EFilterResultForm.fcYourResults)
+							?.setValue(false, { emitEvent: false });
+						this._filterResultsSvc.sourceTypeFormGroup.get(EFilterResultForm.fcYourResults)?.disable();
+					}
+					if (this.totalSourceType.totalOthersFiles == 0) {
+						this._filterResultsSvc.sourceTypeFormGroup
+							.get(EFilterResultForm.fcOthersResults)
+							?.setValue(false, { emitEvent: false });
+						this._filterResultsSvc.sourceTypeFormGroup.get(EFilterResultForm.fcOthersResults)?.disable();
+					}
 
 					this.loading = false;
 					this.initFormData = true;
@@ -375,7 +486,16 @@ export class FilterResultDailogComponent implements OnInit {
 			showInternalDatabaseResults:
 				this.totalSourceType.totalInternalDatabase === 0
 					? false
-					: this._filterResultsSvc.sourceTypeFormGroup.get(EFilterResultForm.fcInternalDatabase)?.value,
+					: this._filterResultsSvc.sourceTypeFormGroup.get(EFilterResultForm.fcYourResults)?.value ||
+					  this._filterResultsSvc.sourceTypeFormGroup.get(EFilterResultForm.fcOthersResults)?.value,
+			showYourResults:
+				this.totalSourceType.totalInternalDatabase === 0
+					? false
+					: this._filterResultsSvc.sourceTypeFormGroup.get(EFilterResultForm.fcYourResults)?.value,
+			showOthersResults:
+				this.totalSourceType.totalInternalDatabase === 0
+					? false
+					: this._filterResultsSvc.sourceTypeFormGroup.get(EFilterResultForm.fcOthersResults)?.value,
 			showBatchResults:
 				this.totalSourceType.totalbatch === 0
 					? false
@@ -402,7 +522,12 @@ export class FilterResultDailogComponent implements OnInit {
 			writingFeedback: {
 				hiddenCategories: this.data.reportDataSvc.filterOptions.writingFeedback?.hiddenCategories ?? [],
 			},
+			excludedDomains: this._filterResultsSvc.excludedDomainsFormControl?.value ?? [],
 		} as ICopyleaksReportOptions;
+	}
+
+	expandSettings(selectedFilter?: EFilterResultSection) {
+		this.selectedFilter = selectedFilter;
 	}
 
 	ngOnDestroy() {}

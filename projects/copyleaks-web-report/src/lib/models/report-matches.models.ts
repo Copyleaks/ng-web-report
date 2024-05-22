@@ -35,6 +35,10 @@ export interface Match extends Range {
 	reason?: EExcludeReason;
 	/** associated writing feedback type - relevant to **WritingFeedback** match type */
 	writingFeedbackType?: EWritingFeedbackCategories;
+	/** The original text that was scanned */
+	wrongText?: string;
+	/** The corrected text */
+	correctionText?: string;
 }
 
 /**

@@ -26,7 +26,9 @@
 		[isMobile]="false"
 		[resultItem]="resultItem"
 		[reportResponsive]="EResponsiveLayoutType.Desktop"
-		[showLoadingView]="isLoadingResultItem"></copyleaks-report-results-item-container>
+		[showLoadingView]="isLoadingResultItem"
+		[hasMaskedContent]="isOthersFile && hasNonIdenticalMatchWords"
+		[hideMaskedContentDisclaimer]="hideMaskedContentDisclaimer"></copyleaks-report-results-item-container>
 
 	<!-- Report result content viewer -->
 	<copyleaks-content-viewer-container
@@ -40,8 +42,10 @@
 		[currentPage]="currentPageSuspect"
 		[reportResponsive]="EResponsiveLayoutType.Desktop"
 		[hidePoweredBy]="true"
+		[hasMaskedContent]="isOthersFile && hasNonIdenticalMatchWords"
 		viewMode="one-to-one"
 		reportOrigin="suspect"
+		(onOpenDisclaimer)="openDisclaimer()"
 		(iFrameMessageEvent)="onSuspectIFrameMessage($event)"
 		(viewChangeEvent)="onReportViewChange($event)"></copyleaks-content-viewer-container>
 </div>

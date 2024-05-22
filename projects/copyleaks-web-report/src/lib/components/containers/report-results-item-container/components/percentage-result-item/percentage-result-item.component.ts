@@ -22,7 +22,7 @@ export class PercentageResultItemComponent implements OnInit, OnChanges {
 	similarWords: number;
 	eMatchType = EMatchType;
 
-	PERCENTAGE_BTN_EXPEND_TOOLTIP = $localize`Expend`;
+	PERCENTAGE_BTN_EXPEND_TOOLTIP = $localize`Expand`;
 	PERCENTAGE_BTN_COLLAPSE_TOOLTIP = $localize`Collapse`;
 
 	constructor() {}

@@ -2,7 +2,19 @@
 	<div class="title-container">
 		<span class="title" web-report-title-font>
 			<ng-container *ngIf="reportOrigin != 'suspect'" i18n>Submitted text</ng-container>
-			<ng-container *ngIf="reportOrigin === 'suspect'" i18n>Found text</ng-container>
+			<ng-container *ngIf="reportOrigin === 'suspect'" i18n>
+				<div class="has-masked-content-title">
+					<mat-icon
+						*ngIf="hasMaskedContent"
+						matTooltip="Open disclaimer"
+						matTooltipClass="web-report-mat-tooltip"
+						i18n-matTooltip
+						(click)="openDisclaimer()">
+						info_outline
+					</mat-icon>
+					<span web-report-title-font>Found text</span>
+				</div>
+			</ng-container>
 		</span>
 		<span *ngIf="numberOfWords" class="number-of-words" i18n>
 			({{ numberOfWords }}
@@ -209,7 +221,16 @@
 						<span
 							*ngIf="partial.match.type !== MatchType.none && partial.match.type !== MatchType.excluded"
 							[cr-match]="partial.match"
-							origin="original">
+							origin="original"
+							[crReportMatchTooltip]="
+								partial.match.type === MatchType.writingFeedback && reportResponsive !== EResponsiveLayoutType.Mobile
+									? {
+											wrongText: partial?.match?.wrongText,
+											correctionText: partial?.match?.correctionText
+									  }
+									: null
+							"
+							[crReportMatchTooltipType]="partial.match.type">
 							{{ partial.content }}
 						</span>
 						<!--  -->

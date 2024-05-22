@@ -150,6 +150,11 @@ export class ContentViewerContainerComponent implements OnInit, AfterViewInit, O
 	@Input() contentDirection: ReportContentDirectionMode = 'ltr';
 
 	/**
+	 * @Input Flag indicating whether the content has masked text or not.
+	 */
+	@Input() hasMaskedContent: boolean;
+
+	/**
 	 * @Input Sets the zoom level for the content of the source/result text document.
 	 *
 	 * @description
@@ -267,6 +272,14 @@ export class ContentViewerContainerComponent implements OnInit, AfterViewInit, O
 	 * @see IReportViewEvent
 	 */
 	@Output() viewChangeEvent = new EventEmitter<IReportViewEvent>();
+
+	/**
+	 * Event emitter for Opening the disclaimer.
+	 *
+	 * @event onOpenDisclaimer
+	 * @type {EventEmitter<any>}
+	 */
+	@Output() onOpenDisclaimer: EventEmitter<any> = new EventEmitter<any>();
 
 	isShiftClicked: boolean;
 	iframeLoaded: boolean;
@@ -428,6 +441,10 @@ export class ContentViewerContainerComponent implements OnInit, AfterViewInit, O
 	 */
 	onJumpToNextMatchClick(next: boolean = true) {
 		this._highlightService.jump(next);
+	}
+
+	openDisclaimer() {
+		this.onOpenDisclaimer.emit(null);
 	}
 
 	private _adjustZoom() {

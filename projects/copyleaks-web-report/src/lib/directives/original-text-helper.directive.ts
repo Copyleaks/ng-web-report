@@ -63,9 +63,9 @@ export class OriginalTextHelperDirective implements AfterContentInit, OnDestroy 
 			correctionSelect.start,
 			correctionSelect.end
 		);
+		if (foundCorrectionInfo.page === -1) return;
 
 		setTimeout(() => {
-			// this.host.currentPage = foundCorrectionInfo.page;
 			if (this.host.currentPage === foundCorrectionInfo.page + 1) {
 				const components = this.children.toArray();
 				components?.forEach(component => {

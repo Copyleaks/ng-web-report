@@ -4,7 +4,6 @@ import {
 	EResultPreviewType,
 	EScanStatus,
 	EWritingFeedbackCategories,
-	EWritingFeedbackTypes,
 } from '../enums/copyleaks-web-report.enums';
 
 //#region Crawled version related models
@@ -128,7 +127,7 @@ export interface IResultPreviews {
 	score: IScore;
 }
 
-/**
+/*
  * A results filters for report view
  */
 export interface ICompleteResultsFilters {
@@ -140,6 +139,7 @@ export interface ICompleteResultsFilters {
 	resultsMetaData?: IResultsMetaDataFilters;
 	includedTags?: string[];
 	writingFeedback?: IWritingFeedbackFilter;
+	excludedDomains?: string[];
 	isFilterEnabled?: boolean;
 }
 
@@ -160,6 +160,8 @@ export interface ISourceTypeFilters {
 	internalDatabase: boolean;
 	batch: boolean;
 	repositories: string[];
+	yourResults?: boolean;
+	othersResults?: boolean;
 }
 
 export interface IResultsMetaDataFilters {
@@ -429,16 +431,6 @@ export interface IWritingFeedbackCorrections {
 	wordChoiceCorrectionsScore: number;
 	wordChoiceScoreWeight: number;
 	overallScore: number;
-}
-
-export interface IWritingFeedbackTypeStatistics {
-	type: EWritingFeedbackTypes;
-	categories: IWritingFeedbackCategoryStatistics[];
-}
-
-export interface IWritingFeedbackCategoryStatistics {
-	type: EWritingFeedbackCategories;
-	totalIssues: number;
 }
 
 export interface IWritingFeedbackScanScource {

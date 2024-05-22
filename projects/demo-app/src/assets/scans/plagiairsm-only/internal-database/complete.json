@@ -1,0 +1,483 @@
+{
+    "scannedDocument": {
+        "scanId": "g2cwkzvtsix277qw",
+        "totalWords": 1626,
+        "totalExcluded": 154,
+        "credits": 7,
+        "expectedCredits": 7,
+        "creationTime": "2024-04-15T09:12:31.676707Z",
+        "metadata": {
+            "finalUrl": null,
+            "canonicalUrl": null,
+            "author": "Kovid Goyal",
+            "organization": null,
+            "filename": "sample1.docx",
+            "publishDate": null,
+            "creationDate": "2013-06-05T07:56:00Z",
+            "lastModificationDate": "2013-06-20T06:14:00Z",
+            "submissionDate": null,
+            "submittedBy": null,
+            "submitterAuthorId": null,
+            "customMetadata": null
+        },
+        "enabled": {
+            "plagiarismDetection": true,
+            "aiDetection": false
+        }
+    },
+    "results": {
+        "internet": [],
+        "database": [
+            {
+                "isLocked": false,
+                "scanId": null,
+                "id": "13a93599ea",
+                "title": "Copyleaks Internal Database",
+                "introduction": "This document demonstrates the ability of the calibre DOCX Input plugin to convert the various typographic features in a Microsoft Word",
+                "matchedWords": 1446,
+                "identicalWords": 1308,
+                "similarWords": 138,
+                "paraphrasedWords": 0,
+                "metadata": {
+                    "finalUrl": null,
+                    "canonicalUrl": null,
+                    "author": null,
+                    "organization": null,
+                    "filename": null,
+                    "publishDate": null,
+                    "creationDate": null,
+                    "lastModificationDate": null,
+                    "submissionDate": null,
+                    "submittedBy": null,
+                    "submitterAuthorId": null,
+                    "customMetadata": []
+                },
+                "tags": []
+            },
+            {
+                "isLocked": false,
+                "scanId": null,
+                "id": "3aa0124a64",
+                "title": "Copyleaks Internal Database",
+                "introduction": "This document demonstrates the ability of the calibre DOCX Input plugin to \nconvert the various typographic features in a Microsoft Word",
+                "matchedWords": 1423,
+                "identicalWords": 1370,
+                "similarWords": 53,
+                "paraphrasedWords": 0,
+                "metadata": {
+                    "finalUrl": null,
+                    "canonicalUrl": null,
+                    "author": null,
+                    "organization": null,
+                    "filename": null,
+                    "publishDate": null,
+                    "creationDate": null,
+                    "lastModificationDate": null,
+                    "submissionDate": null,
+                    "submittedBy": null,
+                    "submitterAuthorId": null,
+                    "customMetadata": []
+                },
+                "tags": []
+            },
+            {
+                "isLocked": false,
+                "scanId": "lvhzxot2iuwdp55g-c44a-4376-2721-b9b4",
+                "id": "3c9a6fa364",
+                "title": "Copyleaks Internal Database",
+                "introduction": "This document demonstrates the ability of the calibre DOCX Input plugin to convert the various typographic features in a Microsoft Word",
+                "matchedWords": 1468,
+                "identicalWords": 1468,
+                "similarWords": 0,
+                "paraphrasedWords": 0,
+                "metadata": {
+                    "finalUrl": null,
+                    "canonicalUrl": null,
+                    "author": "Kovid Goyal",
+                    "organization": null,
+                    "filename": "sample1..docx",
+                    "publishDate": null,
+                    "creationDate": "2013-06-05T07:56:00Z",
+                    "lastModificationDate": "2013-06-20T06:14:00Z",
+                    "submissionDate": "2023-08-15T11:18:26.355713Z",
+                    "submittedBy": null,
+                    "submitterAuthorId": "9e-89ef-4d43-94d4-dbe44879b9b4-3b025ddf7a9646abdddb7a43a1c44a",
+                    "customMetadata": []
+                },
+                "tags": [
+                    {
+                        "code": null,
+                        "title": "sample1..docx",
+                        "description": "File Name",
+                        "helpLink": null,
+                        "data": null
+                    },
+                    {
+                        "code": null,
+                        "title": "Aug 15, 2023, 11:18:26",
+                        "description": "Submission Date",
+                        "helpLink": null,
+                        "data": null
+                    },
+                    {
+                        "code": null,
+                        "title": "Kovid Goyal",
+                        "description": "Author",
+                        "helpLink": null,
+                        "data": null
+                    }
+                ]
+            },
+            {
+                "isLocked": false,
+                "scanId": "8x2h7b12x10q1i5k-dmin-t:15--101-a5e5",
+                "id": "3cd7c6e0c5",
+                "title": "Copyleaks Internal Database",
+                "introduction": "This document demonstrates the ability of the calibre DOCX Input plugin to convert the various typographic features in a Microsoft Word",
+                "matchedWords": 1468,
+                "identicalWords": 1468,
+                "similarWords": 0,
+                "paraphrasedWords": 0,
+                "metadata": {
+                    "finalUrl": null,
+                    "canonicalUrl": null,
+                    "author": "Kovid Goyal",
+                    "organization": null,
+                    "filename": "sample1..docx",
+                    "publishDate": null,
+                    "creationDate": "2013-06-05T07:56:00Z",
+                    "lastModificationDate": "2013-06-20T06:14:00Z",
+                    "submissionDate": "2023-08-20T13:20:53.285517Z",
+                    "submittedBy": null,
+                    "submitterAuthorId": null,
+                    "customMetadata": []
+                },
+                "tags": [
+                    {
+                        "code": null,
+                        "title": "sample1..docx",
+                        "description": "File Name",
+                        "helpLink": null,
+                        "data": null
+                    },
+                    {
+                        "code": null,
+                        "title": "Aug 20, 2023, 13:20:53",
+                        "description": "Submission Date",
+                        "helpLink": null,
+                        "data": null
+                    },
+                    {
+                        "code": null,
+                        "title": "Kovid Goyal",
+                        "description": "Author",
+                        "helpLink": null,
+                        "data": null
+                    }
+                ]
+            },
+            {
+                "isLocked": false,
+                "scanId": null,
+                "id": "3da395215e",
+                "title": "Copyleaks Internal Database",
+                "introduction": "This document demonstrates the ability of the calibre DOCX Input plugin to convert the various typographic features in a Microsoft Word",
+                "matchedWords": 1446,
+                "identicalWords": 1308,
+                "similarWords": 138,
+                "paraphrasedWords": 0,
+                "metadata": {
+                    "finalUrl": null,
+                    "canonicalUrl": null,
+                    "author": null,
+                    "organization": null,
+                    "filename": null,
+                    "publishDate": null,
+                    "creationDate": null,
+                    "lastModificationDate": null,
+                    "submissionDate": null,
+                    "submittedBy": null,
+                    "submitterAuthorId": null,
+                    "customMetadata": []
+                },
+                "tags": []
+            },
+            {
+                "isLocked": false,
+                "scanId": null,
+                "id": "692f7ae9f6",
+                "title": "Copyleaks Internal Database",
+                "introduction": "This document demonstrates the ability of the calibre DOCX Input plugin to convert the various typographic features in a Microsoft Word",
+                "matchedWords": 1446,
+                "identicalWords": 1308,
+                "similarWords": 138,
+                "paraphrasedWords": 0,
+                "metadata": {
+                    "finalUrl": null,
+                    "canonicalUrl": null,
+                    "author": null,
+                    "organization": null,
+                    "filename": null,
+                    "publishDate": null,
+                    "creationDate": null,
+                    "lastModificationDate": null,
+                    "submissionDate": null,
+                    "submittedBy": null,
+                    "submitterAuthorId": null,
+                    "customMetadata": []
+                },
+                "tags": []
+            },
+            {
+                "isLocked": false,
+                "scanId": "806yrkfsnqirjkpa-c44a-6187-7581-1477",
+                "id": "7edcf6a1f3",
+                "title": "Copyleaks Internal Database",
+                "introduction": "This document demonstrates the ability of the calibre DOCX Input plugin to convert the various typographic features in a Microsoft Word",
+                "matchedWords": 1468,
+                "identicalWords": 1468,
+                "similarWords": 0,
+                "paraphrasedWords": 0,
+                "metadata": {
+                    "finalUrl": null,
+                    "canonicalUrl": null,
+                    "author": "Kovid Goyal",
+                    "organization": null,
+                    "filename": "sample1..docx",
+                    "publishDate": null,
+                    "creationDate": "2013-06-05T07:56:00Z",
+                    "lastModificationDate": "2013-06-20T06:14:00Z",
+                    "submissionDate": "2023-08-28T10:08:05.693329Z",
+                    "submittedBy": null,
+                    "submitterAuthorId": "ea-5ab2-40c8-a0cd-2de3be741477-3b025ddf7a9646abdddb7a43a1c44a",
+                    "customMetadata": []
+                },
+                "tags": [
+                    {
+                        "code": null,
+                        "title": "sample1..docx",
+                        "description": "File Name",
+                        "helpLink": null,
+                        "data": null
+                    },
+                    {
+                        "code": null,
+                        "title": "Aug 28, 2023, 10:08:05",
+                        "description": "Submission Date",
+                        "helpLink": null,
+                        "data": null
+                    },
+                    {
+                        "code": null,
+                        "title": "Kovid Goyal",
+                        "description": "Author",
+                        "helpLink": null,
+                        "data": null
+                    }
+                ]
+            },
+            {
+                "isLocked": false,
+                "scanId": "9r6heyosyxjrvyz3-_355-6785-6785-5eb8",
+                "id": "91085fa0a0",
+                "title": "Copyleaks Internal Database",
+                "introduction": "This document demonstrates the ability of the calibre DOCX Input plugin to convert the various typographic features in a Microsoft Word",
+                "matchedWords": 1468,
+                "identicalWords": 1468,
+                "similarWords": 0,
+                "paraphrasedWords": 0,
+                "metadata": {
+                    "finalUrl": null,
+                    "canonicalUrl": null,
+                    "author": "Kovid Goyal",
+                    "organization": null,
+                    "filename": "sample1..docx",
+                    "publishDate": null,
+                    "creationDate": "2013-06-05T07:56:00Z",
+                    "lastModificationDate": "2013-06-20T06:14:00Z",
+                    "submissionDate": "2023-09-07T11:14:50.327147Z",
+                    "submittedBy": null,
+                    "submitterAuthorId": "91-ea2c-464e-9a94-3152dec35eb8-498-42e5-91e1-4fb0beac74eb_355",
+                    "customMetadata": [
+                        {
+                            "key": "userId",
+                            "value": "8ef2803e-c498-42e5-91e1-4fb0beac74eb_355"
+                        },
+                        {
+                            "key": "platformId",
+                            "value": "7543ee89-6aa4-4337-8a21-c57053465620"
+                        },
+                        {
+                            "key": "toolId",
+                            "value": "1537_6785"
+                        },
+                        {
+                            "key": "assignmentName",
+                            "value": "Test - 07 09 2023 09 12"
+                        },
+                        {
+                            "key": "courseId",
+                            "value": "6785"
+                        },
+                        {
+                            "key": "courseName",
+                            "value": "Developers Course"
+                        }
+                    ]
+                },
+                "tags": [
+                    {
+                        "code": null,
+                        "title": "sample1..docx",
+                        "description": "File Name",
+                        "helpLink": null,
+                        "data": null
+                    },
+                    {
+                        "code": null,
+                        "title": "Sep 7, 2023, 11:14:50",
+                        "description": "Submission Date",
+                        "helpLink": null,
+                        "data": null
+                    },
+                    {
+                        "code": null,
+                        "title": "Kovid Goyal",
+                        "description": "Author",
+                        "helpLink": null,
+                        "data": null
+                    }
+                ]
+            },
+            {
+                "isLocked": false,
+                "scanId": null,
+                "id": "bc41032fd7",
+                "title": "Copyleaks Internal Database",
+                "introduction": "This document demonstrates the ability of the calibre DOCX Input plugin to \nconvert the various typographic features in a Microsoft Word",
+                "matchedWords": 1423,
+                "identicalWords": 1370,
+                "similarWords": 53,
+                "paraphrasedWords": 0,
+                "metadata": {
+                    "finalUrl": null,
+                    "canonicalUrl": null,
+                    "author": null,
+                    "organization": null,
+                    "filename": null,
+                    "publishDate": null,
+                    "creationDate": null,
+                    "lastModificationDate": null,
+                    "submissionDate": null,
+                    "submittedBy": null,
+                    "submitterAuthorId": null,
+                    "customMetadata": []
+                },
+                "tags": []
+            },
+            {
+                "isLocked": false,
+                "scanId": null,
+                "id": "ca97ccafbc",
+                "title": "Copyleaks Internal Database",
+                "introduction": "This document demonstrates the ability of the calibre DOCX Input plugin to convert the various typographic features in a Microsoft Word",
+                "matchedWords": 1446,
+                "identicalWords": 1308,
+                "similarWords": 138,
+                "paraphrasedWords": 0,
+                "metadata": {
+                    "finalUrl": null,
+                    "canonicalUrl": null,
+                    "author": null,
+                    "organization": null,
+                    "filename": null,
+                    "publishDate": null,
+                    "creationDate": null,
+                    "lastModificationDate": null,
+                    "submissionDate": null,
+                    "submittedBy": null,
+                    "submitterAuthorId": null,
+                    "customMetadata": []
+                },
+                "tags": []
+            },
+            {
+                "isLocked": false,
+                "scanId": null,
+                "id": "ef59e7a69a",
+                "title": "Copyleaks Internal Database",
+                "introduction": "This document demonstrates the ability of the calibre DOCX Input plugin to convert the various typographic features in a Microsoft Word",
+                "matchedWords": 1446,
+                "identicalWords": 1308,
+                "similarWords": 138,
+                "paraphrasedWords": 0,
+                "metadata": {
+                    "finalUrl": null,
+                    "canonicalUrl": null,
+                    "author": null,
+                    "organization": null,
+                    "filename": null,
+                    "publishDate": null,
+                    "creationDate": null,
+                    "lastModificationDate": null,
+                    "submissionDate": null,
+                    "submittedBy": null,
+                    "submitterAuthorId": null,
+                    "customMetadata": []
+                },
+                "tags": []
+            }
+        ],
+        "batch": [],
+        "repositories": [],
+        "score": {
+            "identicalWords": 1468,
+            "minorChangedWords": 0,
+            "relatedMeaningWords": 0,
+            "aggregatedScore": 99.7
+        }
+    },
+    "notifications": {
+        "alerts": []
+    },
+    "hasPdfReport": true,
+    "filters": {
+        "isNewModel": true,
+        "execludedResultIds": [],
+        "filteredResultsIds": [],
+        "general": {
+            "topResult": true,
+            "alerts": true,
+            "authorSubmissions": true
+        },
+        "sourceType": {
+            "internet": false,
+            "internalDatabase": true,
+            "batch": false,
+            "repositories": [],
+            "yourResults": true,
+            "othersResults": true
+        },
+        "matchType": {
+            "identicalText": true,
+            "minorChanges": true,
+            "paraphrased": false
+        },
+        "resultsMetaData": {
+            "wordLimit": {
+                "wordLimitEnabled": false,
+                "totalWordLimit": null
+            },
+            "publicationDate": {
+                "publicationEnabled": false,
+                "startDate": null,
+                "resultsWithNoDates": true
+            }
+        },
+        "includedTags": [],
+        "excludedDomains": []
+    },
+    "status": 0,
+    "error": null,
+    "developerPayload": ""
+}

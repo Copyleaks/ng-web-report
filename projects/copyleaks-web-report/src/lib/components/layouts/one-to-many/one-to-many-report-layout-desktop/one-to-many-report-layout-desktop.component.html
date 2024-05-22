@@ -74,7 +74,7 @@
 				reportTemplateMode !== ECustomResultsReportView.Full &&
 				!(
 					reportTemplateMode === ECustomResultsReportView.Partial &&
-					(!scanResultsView || scanResultsView?.length === 0) &&
+					scanResultsActions.totalResults === 0 &&
 					!isLoadingScanResults
 				) &&
 				viewMode === 'one-to-many'

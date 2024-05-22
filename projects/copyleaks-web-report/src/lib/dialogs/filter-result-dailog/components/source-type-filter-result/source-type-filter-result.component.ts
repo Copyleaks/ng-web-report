@@ -3,6 +3,8 @@ import { FormControl, FormGroup } from '@angular/forms';
 import { ITotalSourceType } from './models/source-type-filter-result.models';
 import { FilterResultDailogService } from '../../services/filter-result-dailog.service';
 import { EFilterResultForm } from '../../models/filter-result-dailog.enum';
+import { ReportViewService } from '../../../../services/report-view.service';
+import { EPlatformType } from '../../../../enums/copyleaks-web-report.enums';
 
 @Component({
 	selector: 'cr-source-type-filter-result',
@@ -14,13 +16,20 @@ export class SourceTypeFilterResultComponent implements OnInit {
 		totalInternet: 0,
 		totalInternalDatabase: 0,
 		totalbatch: 0,
+		totalOthersFiles: 0,
+		totalYourFiles: 0,
 	};
 
+	@Input() reportViewSvc: ReportViewService;
+
 	eFilterResultForm = EFilterResultForm;
+	ePlatformType = EPlatformType;
 
 	INTERNET_SOURCE = $localize`Internet Source`;
 	IINTERNAL_DATABASE = $localize`Internal Database`;
 	THIS_BACTCH = $localize`This batch`;
+
+	platformType: EPlatformType;
 
 	get repositoriesForm() {
 		return this.filterService.sourceTypeFormGroup?.get(EFilterResultForm.fgRepositories) as FormGroup;
@@ -36,6 +45,14 @@ export class SourceTypeFilterResultComponent implements OnInit {
 		if (this.totalSourceType?.repository) {
 			this.totalSourceType?.repository.forEach(repo => {
 				this.addRepositoryControl(repo.id);
+			});
+		}
+
+		if (this.reportViewSvc) {
+			this.platformType = this.reportViewSvc.reportViewMode.platformType;
+			this.reportViewSvc.reportViewMode$.subscribe(data => {
+				if (!data) return;
+				this.platformType = data.platformType;
 			});
 		}
 	}

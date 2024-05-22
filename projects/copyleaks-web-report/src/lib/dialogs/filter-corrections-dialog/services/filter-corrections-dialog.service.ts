@@ -1,8 +1,8 @@
 import { Injectable } from '@angular/core';
 import { EWritingFeedbackCategories } from '../../../enums/copyleaks-web-report.enums';
 import { FormBuilder, FormControl, FormGroup } from '@angular/forms';
-import { IWritingFeedbackTypeStatistics } from '../../../models/report-data.models';
 import { getSelectedCategoryStats } from '../../../utils/enums-helpers';
+import { IWritingFeedbackTypeStatistics } from '../../../models/report-statistics.models';
 
 @Injectable()
 export class FilterCorrectionsDialogService {

@@ -585,7 +585,9 @@ export const getRenderedMatches = (matches: Match[] | null, originalHtml: string
 			case MatchType.none:
 				break;
 			default:
-				slice = `<span match data-type="${curr.type}" data-index="${i}" data-gid="${curr.gid}">${slice}</span>`;
+				if (curr.type === MatchType.writingFeedback) {
+					slice = `<span match data-type="${curr.type}" data-index="${i}" data-gid="${curr.gid}" data-correction-text="${curr.correctionText}" data-wrong-text="${curr.wrongText}">${slice}</span>`;
+				} else slice = `<span match data-type="${curr.type}" data-index="${i}" data-gid="${curr.gid}">${slice}</span>`;
 				break;
 		}
 		return slice ? slice?.concat(prev) : '';

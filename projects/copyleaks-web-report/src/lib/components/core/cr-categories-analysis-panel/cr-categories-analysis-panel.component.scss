@@ -84,6 +84,14 @@
 		mat-panel-description {
 			margin-right: 0px !important;
 			justify-content: end;
+			gap: 16px !important;
+		}
+
+		.chip-button {
+			border: none !important;
+			background: transparent !important;
+			padding: 0px !important;
+			margin: 0px !important;
 		}
 
 		.mat-expansion-panel-header[aria-expanded='true'] .hide-alerts-icon {
@@ -135,6 +143,42 @@
 			text-transform: capitalize;
 			cursor: pointer;
 			border: none !important;
+		}
+	}
+
+	.title-percentage-container {
+		display: flex;
+		flex-direction: row;
+		gap: 16px;
+		align-items: center;
+
+		.percentage {
+			font-weight: 700;
+		}
+	}
+
+	.matches-category-title-container {
+		display: flex;
+		flex-direction: column;
+		gap: 2px;
+		.stats-container {
+			display: flex;
+			flex-direction: row;
+			gap: 8px;
+			align-items: center;
+			span {
+				font-size: 14px;
+				font-style: normal;
+				font-weight: 500;
+				line-height: normal;
+				color: $grayed-out-disabled;
+			}
+			mat-icon {
+				width: 16px;
+				height: 16px;
+				font-size: 16px;
+				color: $grayed-out-disabled;
+			}
 		}
 	}
 }

@@ -1,10 +1,11 @@
 <ng-container *ngIf="!showLoadingView; else loadingViewRef">
-	<div class="correction-container" [tabIndex]="0" (keyup.enter)="handleClick($event)">
+	<div class="correction-container" (keyup.enter)="handleClick($event)">
 		<div class="correction-info-container">
 			<div class="correction-description-container">
 				<span
 					*ngIf="correction?.wrongText != correction?.correctionText"
 					class="wrong-text"
+					[style.max-width]="!correction.correctionText ? '100%' : ''"
 					[matTooltip]="correction?.wrongText ?? ''"
 					matTooltipClass="web-report-mat-tooltip"
 					[innerHtml]="correction.wrongText"
@@ -27,17 +28,23 @@
 
 			<mat-chip
 				*ngIf="!hideDescription"
+				[tabIndex]="0"
 				class="correction-type"
 				matTooltip="Show All Corrections by Category"
 				matTooltipClass="web-report-mat-tooltip"
+				role="button"
+				aria-label="Show All Corrections by Category"
 				(click)="$event.stopPropagation(); $event.preventDefault(); goToCorrectionCategoryView()"
-				i18n-matTooltip>
+				(keydown)="goToCorrectionCategoryView($event)"
+				i18n-matTooltip
+				i18n-aria-label>
 				{{ correctionType }}
 			</mat-chip>
 		</div>
 		<button
 			mat-icon-button
 			*ngIf="isExcludeView; else excludedIconRef"
+			[tabIndex]="0"
 			class="icon-button exclude-toggle-btn"
 			(click)="excludeToggle()"
 			[matTooltip]="excludedTooltipText"
@@ -50,10 +57,20 @@
 		</button>
 		<ng-template #excludedIconRef>
 			<mat-icon
+				#menuTrigger="matMenuTrigger"
+				(keydown)="$event.stopPropagation(); $event.preventDefault(); openResultMenu(menuTrigger)"
 				class="options-icon"
 				fontSet="material-icons-round"
 				(click)="$event.stopPropagation(); $event.preventDefault()"
-				[matMenuTriggerFor]="menu">
+				[matMenuTriggerFor]="menu"
+				matTooltip="More Options"
+				i18n-matTooltip
+				matTooltipClass="web-report-mat-tooltip"
+				aria-label="More Options"
+				role="button"
+				i18n-aria-label
+				[tabIndex]="isMenuAccessible ? 0 : -1"
+				[attr.aria-hidden]="!isMenuAccessible">
 				more_vert
 			</mat-icon>
 		</ng-template>

@@ -73,6 +73,7 @@ export class CrCorrectionComponent implements OnInit, OnDestroy {
 
 	isExcluded: boolean = false;
 	excludedTooltipText: string;
+	isMenuAccessible: boolean = true;
 
 	get getCorrectionType(): string {
 		return getCorrectionCategoryTitle(this.correction?.type);
@@ -157,8 +158,19 @@ export class CrCorrectionComponent implements OnInit, OnDestroy {
 			]);
 	}
 
-	goToCorrectionCategoryView() {
-		this.selectCategory.emit(this.correction?.type);
+	goToCorrectionCategoryView(event?: KeyboardEvent) {
+		if (!event) this.selectCategory.emit(this.correction?.type);
+		else {
+			if (event.key === 'Enter') {
+				this.selectCategory.emit(this.correction?.type);
+			}
+		}
+	}
+
+	openResultMenu(menuTrigger: any): void {
+		if (this.isMenuAccessible) {
+			menuTrigger?.openMenu();
+		}
 	}
 
 	ngOnDestroy(): void {}

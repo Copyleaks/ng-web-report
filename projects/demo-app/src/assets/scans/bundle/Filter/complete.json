@@ -229,6 +229,7 @@
       "identicalText": false,
       "minorChanges": true,
       "paraphrased": true
-    }
+    },
+    "excludedDomains": ["copyleaks.com", "example.com", "example.org", "example.net"]
   }
 }

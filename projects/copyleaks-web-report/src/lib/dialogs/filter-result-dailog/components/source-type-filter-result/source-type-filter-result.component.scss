@@ -1,4 +1,5 @@
 @import '../../../../styles/website-colors.styles.scss';
+@import '../../../../styles/styles.scss';
 @import '../../../../styles/cls-mat-components-overrides/cls-scroll-bar-overrides.scss';
 
 :host {
@@ -41,5 +42,50 @@
 	.container {
 		overflow-y: auto;
 		overflow-x: hidden;
+	}
+}
+
+.internal-database-checkboxes-container {
+	display: flex;
+	flex-direction: column;
+	padding-left: 32px;
+	gap: 4px;
+
+	::ng-deep {
+		.checkbox-content-container {
+			display: flex;
+			flex-direction: row;
+			gap: 8px;
+			align-items: center;
+
+			.title {
+				font-size: 14px;
+				font-weight: 500;
+				line-height: normal;
+				color: $color-black;
+			}
+			.total {
+				font-size: 12px;
+				font-style: normal;
+				font-weight: 700;
+				line-height: normal;
+				text-transform: uppercase;
+			}
+
+			mat-icon {
+				font-size: 16px;
+				height: 16px;
+				width: 16px;
+				color: $grayed-out-disabled;
+				cursor: help;
+			}
+		}
+		.mat-checkbox-inner-container {
+			width: 15px !important;
+			height: 15px !important;
+		}
+		mat-checkbox {
+			display: flex;
+		}
 	}
 }

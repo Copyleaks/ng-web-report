@@ -26,6 +26,11 @@ export interface ICustomClsReportTemplatesRefs {
 	customTabsTemplates: ICustomClsReportTabTemplatesRefs[] | undefined;
 
 	/**
+	 * @property {ICustomClsReportTabTemplatesRefs[] | undefined} customBannerSectionTemplate - Custom report banner section references.
+	 */
+	customBannerSectionTemplate: TemplateRef<any> | undefined;
+
+	/**
 	 * @property {TemplateRef<IResultItem> | undefined} lockedResultItemTemplateRef - Custom locked result item section references.
 	 */
 	lockedResultItemTemplateRef: TemplateRef<IResultItem> | undefined;

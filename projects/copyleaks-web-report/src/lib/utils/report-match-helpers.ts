@@ -586,10 +586,7 @@ export const getRenderedMatches = (matches: Match[] | null, originalHtml: string
 				break;
 			default:
 				if (curr.type === MatchType.writingFeedback) {
-					// Build the tooltip HTML content
-					const tooltipContent = generateWritingFeedbackMatchTooltip(curr.wrongText, curr.correctionText);
-
-					slice = `<span match data-type="${curr.type}" data-index="${i}" data-gid="${curr.gid}" >${slice} ${tooltipContent}</span>`;
+					slice = `<span match data-type="${curr.type}" data-index="${i}" data-gid="${curr.gid}" data-correction-text="${curr.correctionText}" data-wrong-text="${curr.wrongText}">${slice}</span>`;
 				} else slice = `<span match data-type="${curr.type}" data-index="${i}" data-gid="${curr.gid}">${slice}</span>`;
 				break;
 		}
@@ -597,20 +594,4 @@ export const getRenderedMatches = (matches: Match[] | null, originalHtml: string
 	}, '');
 
 	return html;
-};
-export const generateWritingFeedbackMatchTooltip = (wrongText: string, correctionText: string): string => {
-	var contentHTML = '<span class="tooltip-match-content-container">';
-
-	if (wrongText !== correctionText) {
-		contentHTML += `<span class="wrong-text">${wrongText}</span>`;
-	}
-	// Adding SVG arrow
-	if (wrongText != correctionText && correctionText)
-		contentHTML += `<span style='font-size:14px !important; line-height: normal !important;'>&#129106;</span>`;
-
-	if (correctionText) {
-		contentHTML += `<span class="correction-text">${correctionText}</span>`;
-	}
-	contentHTML += `</span>`;
-	return contentHTML;
 };

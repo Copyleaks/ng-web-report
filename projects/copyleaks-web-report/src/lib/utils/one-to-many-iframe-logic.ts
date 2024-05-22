@@ -50,9 +50,30 @@ function ready() {
 	let isPdf = document.querySelector('meta[content="pdf2htmlEX"]') !== null;
 	if (isPdf) pdfZoom = 0.4; // this is the default zoom for pdfs in the pdf2htmlEX format
 
-	modifyTooltipsStyles();
-
 	(window as any).addEventListener('message', onMessageFromParent);
+
+	document.querySelectorAll('span[match]').forEach(match => {
+		match.addEventListener('mouseenter', (_: MouseEvent) => {
+			const tooltipSpanContent = generateWritingFeedbackMatchTooltip(
+				(match as HTMLSpanElement).dataset?.['wrongText'],
+				(match as HTMLSpanElement).dataset?.['correctionText']
+			);
+
+			// create a span element with the class name tooltip-match-content-container and style the color to red
+			const tooltipSpan = document.createElement('span');
+			tooltipSpan.classList.add('tooltip-match-content-container');
+			tooltipSpan.innerHTML = tooltipSpanContent;
+			tooltipSpan.style.transform = `translate(-50%, 0) scale(${1 / (currentZoom * pdfZoom)})`;
+			tooltipSpan.style.transformOrigin = '50% 100%';
+			match.appendChild(tooltipSpan);
+			modifyTooltipsStyles(match);
+		});
+
+		match.addEventListener('mouseleave', () => {
+			// remove span with class name tooltip-match-content-container
+			document.querySelectorAll('.tooltip-match-content-container').forEach(e => e.remove());
+		});
+	});
 
 	init();
 
@@ -310,20 +331,58 @@ function ready() {
 			document.body.style.setProperty('transform', `scale(${currentZoom})`);
 			document.body.style.setProperty('transform-origin', '0 0');
 		}
-
-		modifyTooltipsStyles();
 	}
 
-	function modifyTooltipsStyles() {
-		// modify the tooltips styles to fit the new zoom level of the iframe
-		const tooltips = document.querySelectorAll('.tooltip-match-content-container');
-		tooltips?.forEach(tooltip => {
-			if (tooltip instanceof HTMLElement) {
-				// for pdf iframe, update the tooltip style to fit the new zoom level
-				tooltip.style.transform = `translate(-50%, 0) scale(${1 / (currentZoom * pdfZoom)})`;
-				tooltip.style.transformOrigin = '50% 100%';
+	function generateWritingFeedbackMatchTooltip(wrongText: string, correctionText: string): string {
+		var contentHTML = '';
+
+		if (wrongText !== correctionText) {
+			contentHTML += `<span class="wrong-text">${wrongText}</span>`;
+		}
+		// Adding SVG arrow
+		if (wrongText != correctionText && correctionText)
+			contentHTML += `<span style='font-size:14px !important; line-height: normal !important;'>&#129106;</span>`;
+
+		if (correctionText) {
+			contentHTML += `<span class="correction-text">${correctionText}</span>`;
+		}
+		return contentHTML;
+	}
+
+	function modifyTooltipsStyles(match?: Element) {
+		const tooltip = match.querySelector('.tooltip-match-content-container') as HTMLElement;
+
+		if (tooltip instanceof HTMLElement) {
+			let tooltipRect = tooltip.getBoundingClientRect();
+			let tooltipWidth = tooltipRect.width;
+
+			let iframeWidth: number;
+			if (isPdf) {
+				let pageContainer = document.querySelector('#page-container') as HTMLElement;
+				iframeWidth = pageContainer.clientWidth;
+				console.log('iframeWidth', iframeWidth);
+			} else iframeWidth = window.innerWidth;
+
+			let matchRect = match.getBoundingClientRect();
+
+			// Move tooltip to the right side if it exceeds the iframe left boundary
+			if (matchRect.left + tooltipWidth > iframeWidth) {
+				tooltip.style.transform = `translate(-100%, 0) scale(${1 / (currentZoom * pdfZoom)})`;
+				tooltip.style.transformOrigin = `calc(100% + ${matchRect.width + 10}px) -50%`;
+				tooltip.classList.add('right-arrow');
 			}
-		});
+			// Move tooltip to the left side if it exceeds the iframe left boundary
+			else if (matchRect.right - tooltipWidth < 0) {
+				tooltip.style.transform = `translate(0, 0) scale(${1 / (currentZoom * pdfZoom)})`; // Move tooltip to the right side of the match
+				tooltip.style.transformOrigin = `-${matchRect.width + 10}px -50%`;
+				tooltip.classList.add('left-arrow');
+			}
+
+			// if (matchRect.top - tooltipHeight < 0) {
+			// 	tooltip.style.transform = `translate(-50%, 100%) scale(${1 / (currentZoom * pdfZoom)})`; // Move tooltip under the match
+			// 	tooltip.style.transformOrigin = `0 -${2 * matchRect.height}px`;
+			// }
+		}
 	}
 }
 

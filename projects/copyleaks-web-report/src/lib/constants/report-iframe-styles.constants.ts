@@ -171,14 +171,12 @@ span[match][on] {
 }
 
 span[match] .tooltip-match-content-container {
-  visibility: hidden;
   min-width: 120px;
   max-width: 300px !important;
   position: absolute;
   z-index: 1;
   bottom: 160%;
   left: 50%;
-  opacity: 0;
   transition: opacity 0.3s, transform 0.3s;
   display: flex;
   padding: 10px 18px;
@@ -194,6 +192,7 @@ span[match] .tooltip-match-content-container {
   border: none;
   box-sizing: border-box;
   transform-origin: 50% 100%;
+  z-index: 999999999;
 
   svg {
     display: block !important;
@@ -235,8 +234,28 @@ span[match] .tooltip-match-content-container::after {
   border-color: #112960 transparent transparent transparent;
 }
 
-span[match]:hover .tooltip-match-content-container {
-  visibility: visible;
-  opacity: 1;
-}
+  span[match] .tooltip-match-content-container.right-arrow::after {
+    content: "";
+    position: absolute;
+    top: 50% !important;
+    left: 100% !important;
+    margin: 0px !important;
+    margin-top: -5px !important;
+    border-width: 7px;
+    border-style: solid;
+    border-color: transparent transparent transparent #112960;
+  }
+
+  span[match] .tooltip-match-content-container.left-arrow::after {
+    content: "";
+    position: absolute;
+    top: 50% !important;
+    right: 100% !important;
+    left: auto !important;
+    margin: 0px !important;
+    margin-top: -5px !important;
+    border-width: 7px;
+    border-style: solid;
+    border-color: transparent #112960 transparent transparent;
+  }
 `;

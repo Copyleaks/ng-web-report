@@ -1,310 +1,504 @@
-<ng-container *ngIf="loadingProgressPct === 100; else realTimeView">
-	<ng-container *ngIf="!showLoadingView; else loadingViewRef">
-		<ng-container *ngIf="companyLogo">
-			<div @fadeIn class="custom-company-logo-cotainer">
-				<img class="custom-company-logo" [src]="companyLogo" alt="Company Logo" i18n-alt />
+<ng-container [ngSwitch]="reportMode">
+	<ng-container *ngSwitchCase="EReportMode.WebReport">
+		<ng-container *ngIf="loadingProgressPct === 100; else realTimeView">
+			<ng-container *ngIf="!showLoadingView; else loadingViewRef">
+				<ng-container *ngIf="companyLogo">
+					<div @fadeIn class="custom-company-logo-cotainer">
+						<img class="custom-company-logo" [src]="companyLogo" alt="Company Logo" i18n-alt />
+					</div>
+				</ng-container>
+
+				<a
+					*ngIf="!hidePlagarismTap || showDisabledProducts"
+					tabindex="0"
+					role="button"
+					aria-describedby="plagiarism-view-text"
+					@fadeIn
+					class="tab-plagiarism"
+					[reportViewService]="reportViewSvc"
+					[crReportScoreTooltip]="
+						hidePlagarismTap && showDisabledProducts
+							? null
+							: {
+									identicalPct: {
+										percentage: wordsTotal - excludedTotal === 0 ? 0 : identicalTotal / (wordsTotal - excludedTotal),
+										totalWords: identicalTotal ?? 0,
+										disabled: reportDataSvc.filterOptions?.showIdentical === false
+									},
+									minorChangesPct: {
+										percentage: wordsTotal - excludedTotal === 0 ? 0 : minorChangesTotal / (wordsTotal - excludedTotal),
+										totalWords: minorChangesTotal ?? 0,
+										disabled: reportDataSvc.filterOptions?.showMinorChanges === false
+									},
+									paraphrasedPct: {
+										percentage: wordsTotal - excludedTotal === 0 ? 0 : paraphrasedTotal / (wordsTotal - excludedTotal),
+										totalWords: paraphrasedTotal ?? 0,
+										disabled: reportDataSvc.filterOptions?.showRelated === false
+									},
+									omittedPct: {
+										percentage: excludedTotal / wordsTotal,
+										disabled: false,
+										totalWords: excludedTotal ?? 0
+									},
+									totalWords: wordsTotal
+							  }
+					"
+					[crReportScoreTooltipPosition]="EReportScoreTooltipPosition.BELOW"
+					[style.flex-grow]="1"
+					[class.tab-selected]="selectedTap === EReportViewType.PlagiarismView && !hidePlagarismTap"
+					[class.tab-disabled]="hidePlagarismTap && showDisabledProducts"
+					[class.with-company-logo]="selectedTap === EReportViewType.PlagiarismView && !hidePlagarismTap && companyLogo"
+					[class.mobile]="isMobile"
+					[matTooltip]="hidePlagarismTap && showDisabledProducts ? DISABLED : ''"
+					matTooltipClass="web-report-mat-tooltip"
+					(click)="selectTap(EReportViewType.PlagiarismView)"
+					(keyup.enter)="selectTap(EReportViewType.PlagiarismView)">
+					<ng-container *ngIf="!isMobile; else mobileViewRef">
+						<div class="bar-title-container">
+							<span id="plagiarism-view-text" class="bar-title" web-report-title-font i18n>Matched Text</span>
+							<span *ngIf="!isMobile" class="bar-score" web-report-title-font>
+								{{ hidePlagarismTap && showDisabledProducts ? 'N/A' : (plagarismScore | percent : '1.0-1') }}
+							</span>
+						</div>
+						<div class="grade-bar">
+							<div class="bar plagiarism" [style.width.%]="100">
+								<div
+									class="identical"
+									[class.first-percentage]="!!identicalTotal"
+									[class.last-percentage]="!minorChangesTotal && !paraphrasedTotal"
+									[style.width.%]="
+										wordsTotal - excludedTotal === 0 ? 0 : (identicalTotal / (wordsTotal - excludedTotal)) * 100
+									"
+									[style.border]="!identicalTotal ? 'none' : ''"></div>
+								<div
+									class="minor-changes"
+									[class.first-percentage]="!identicalTotal"
+									[class.last-percentage]="!paraphrasedTotal"
+									[style.width.%]="
+										wordsTotal - excludedTotal === 0 ? 0 : (minorChangesTotal / (wordsTotal - excludedTotal)) * 100
+									"
+									[style.border]="!minorChangesTotal ? 'none' : ''"></div>
+								<div
+									class="paraphrased last-percentage"
+									[class.first-percentage]="!identicalTotal && !minorChangesTotal"
+									[style.width.%]="
+										wordsTotal - excludedTotal === 0 ? 0 : (paraphrasedTotal / (wordsTotal - excludedTotal)) * 100
+									"
+									[style.border]="!paraphrasedTotal ? 'none' : ''"></div>
+							</div>
+						</div>
+					</ng-container>
+					<ng-template #mobileViewRef>
+						<div class="mobile-tab-container">
+							<div class="charts-container">
+								<ng-container *ngIf="!hidePlagarismTap; else NaViewRef">
+									<ngx-charts-pie-chart
+										[results]="plagarismScoreChartData"
+										[view]="[90, 90]"
+										[legend]="false"
+										[labels]="false"
+										[arcWidth]="0.2"
+										[scheme]="plagarismScoreChartColorScheme"
+										[tooltipDisabled]="true"
+										[doughnut]="true"
+										[gradient]="true"
+										[explodeSlices]="true"></ngx-charts-pie-chart>
+									<span class="mobile-tab-score" web-report-title-font i18n>
+										{{ plagarismScore | percent : '1.0-1' }}
+									</span>
+								</ng-container>
+
+								<ng-template #NaViewRef>
+									<svg
+										class="na-border-pic"
+										xmlns="http://www.w3.org/2000/svg"
+										width="51"
+										height="50"
+										viewBox="0 0 51 50"
+										fill="none">
+										<path
+											d="M25.6665 3.5C22.8431 3.5 20.0473 4.05611 17.4388 5.13659C14.8303 6.21706 12.4602 7.80074 10.4637 9.7972C8.46726 11.7937 6.88358 14.1638 5.8031 16.7723C4.72262 19.3808 4.16651 22.1766 4.1665 25C4.1665 27.8234 4.72262 30.6192 5.80309 33.2277C6.88357 35.8362 8.46724 38.2063 10.4637 40.2028C12.4602 42.1992 14.8303 43.7829 17.4388 44.8634C20.0473 45.9439 22.8431 46.5 25.6665 46.5C28.4899 46.5 31.2857 45.9439 33.8942 44.8634C36.5027 43.7829 38.8728 42.1993 40.8693 40.2028C42.8658 38.2063 44.4494 35.8362 45.5299 33.2277C46.6104 30.6192 47.1665 27.8234 47.1665 25C47.1665 22.1766 46.6104 19.3808 45.5299 16.7723C44.4494 14.1638 42.8658 11.7937 40.8693 9.7972C38.8728 7.80075 36.5027 6.21707 33.8942 5.13659C31.2857 4.05611 28.4899 3.5 25.6665 3.5ZM16.2908 2.36495C19.2633 1.13371 22.4491 0.499998 25.6665 0.5C28.8839 0.5 32.0698 1.13371 35.0422 2.36495C38.0147 3.59619 40.7156 5.40085 42.9906 7.67589C45.2657 9.95092 47.0703 12.6518 48.3016 15.6243C49.5328 18.5967 50.1665 21.7826 50.1665 25C50.1665 28.2174 49.5328 31.4033 48.3015 34.3757C47.0703 37.3482 45.2657 40.0491 42.9906 42.3241C40.7156 44.5992 38.0147 46.4038 35.0422 47.6351C32.0698 48.8663 28.8839 49.5 25.6665 49.5C22.4491 49.5 19.2632 48.8663 16.2908 47.635C13.3183 46.4038 10.6174 44.5991 8.34238 42.3241C6.06735 40.0491 4.26269 37.3482 3.03145 34.3757C1.80021 31.4033 1.1665 28.2174 1.1665 25C1.1665 21.7826 1.80022 18.5967 3.03146 15.6242C4.2627 12.6518 6.06736 9.95091 8.3424 7.67587C10.6174 5.40084 13.3183 3.59618 16.2908 2.36495Z"
+											fill="#FBFFFF"
+											stroke="#9DA9BF" />
+									</svg>
+									<span class="na-border-text" web-report-title-font i18n>N/A</span>
+								</ng-template>
+							</div>
+							<span class="mobile-tab-title" web-report-title-font>Matched Text</span>
+						</div>
+					</ng-template>
+				</a>
+
+				<a
+					*ngIf="!hideAiTap || showDisabledProducts"
+					@fadeIn
+					role="button"
+					aria-describedby="AI-view-text"
+					class="tab-ai"
+					tabindex="0"
+					[reportViewService]="reportViewSvc"
+					[crReportScoreTooltip]="
+						hideAiTap && showDisabledProducts
+							? null
+							: {
+									aiPct: { percentage: aiScore, disabled: false, totalWords: totalAiWords ?? 0 },
+									humanPct: { percentage: 1 - aiScore, disabled: false, totalWords: wordsTotal - totalAiWords ?? 0 },
+									omittedPct: {
+										percentage: excludedTotal / wordsTotal,
+										disabled: false,
+										totalWords: excludedTotal ?? 0
+									},
+									totalWords: wordsTotal
+							  }
+					"
+					[crReportScoreTooltipPosition]="EReportScoreTooltipPosition.BELOW"
+					[style.flex-grow]="1"
+					[class.tab-selected]="selectedTap === EReportViewType.AIView && !hideAiTap"
+					[class.tab-disabled]="hideAiTap && showDisabledProducts"
+					[class.with-company-logo]="
+						selectedTap === EReportViewType.AIView && !hideAiTap && hidePlagarismTap && companyLogo
+					"
+					[class.mobile]="isMobile"
+					[matTooltip]="hideAiTap && showDisabledProducts ? DISABLED : ''"
+					matTooltipClass="web-report-mat-tooltip"
+					(click)="selectTap(EReportViewType.AIView)"
+					(keyup.enter)="selectTap(EReportViewType.AIView)">
+					<ng-container *ngIf="!isMobile; else mobileViewRef">
+						<div class="bar-title-container">
+							<span id="AI-view-text" class="bar-title" web-report-title-font i18n>AI Content</span>
+							<span *ngIf="!isMobile" class="bar-score" web-report-title-font>
+								{{ hideAiTap && showDisabledProducts ? 'N/A' : (aiScore | percent : '1.0-1') }}
+							</span>
+						</div>
+						<div *ngIf="!isMobile" class="grade-bar">
+							<div class="bar ai-content" [style.width.%]="aiScore * 100" [style.border]="!aiScore ? 'none' : ''"></div>
+						</div>
+					</ng-container>
+					<ng-template #mobileViewRef>
+						<div class="mobile-tab-container">
+							<div class="charts-container">
+								<ng-container *ngIf="!hideAiTap; else NaViewRef">
+									<ngx-charts-pie-chart
+										[results]="aiScoreChartData"
+										[view]="[90, 90]"
+										[legend]="false"
+										[labels]="false"
+										[arcWidth]="0.2"
+										[scheme]="aiScoreChartColorScheme"
+										[tooltipDisabled]="true"
+										[doughnut]="true"></ngx-charts-pie-chart>
+									<span class="mobile-tab-score" web-report-title-font i18n>{{ aiScore | percent : '1.0-1' }}</span>
+								</ng-container>
+								<ng-template #NaViewRef>
+									<svg
+										class="na-border-pic"
+										xmlns="http://www.w3.org/2000/svg"
+										width="51"
+										height="50"
+										viewBox="0 0 51 50"
+										fill="none">
+										<path
+											d="M25.6665 3.5C22.8431 3.5 20.0473 4.05611 17.4388 5.13659C14.8303 6.21706 12.4602 7.80074 10.4637 9.7972C8.46726 11.7937 6.88358 14.1638 5.8031 16.7723C4.72262 19.3808 4.16651 22.1766 4.1665 25C4.1665 27.8234 4.72262 30.6192 5.80309 33.2277C6.88357 35.8362 8.46724 38.2063 10.4637 40.2028C12.4602 42.1992 14.8303 43.7829 17.4388 44.8634C20.0473 45.9439 22.8431 46.5 25.6665 46.5C28.4899 46.5 31.2857 45.9439 33.8942 44.8634C36.5027 43.7829 38.8728 42.1993 40.8693 40.2028C42.8658 38.2063 44.4494 35.8362 45.5299 33.2277C46.6104 30.6192 47.1665 27.8234 47.1665 25C47.1665 22.1766 46.6104 19.3808 45.5299 16.7723C44.4494 14.1638 42.8658 11.7937 40.8693 9.7972C38.8728 7.80075 36.5027 6.21707 33.8942 5.13659C31.2857 4.05611 28.4899 3.5 25.6665 3.5ZM16.2908 2.36495C19.2633 1.13371 22.4491 0.499998 25.6665 0.5C28.8839 0.5 32.0698 1.13371 35.0422 2.36495C38.0147 3.59619 40.7156 5.40085 42.9906 7.67589C45.2657 9.95092 47.0703 12.6518 48.3016 15.6243C49.5328 18.5967 50.1665 21.7826 50.1665 25C50.1665 28.2174 49.5328 31.4033 48.3015 34.3757C47.0703 37.3482 45.2657 40.0491 42.9906 42.3241C40.7156 44.5992 38.0147 46.4038 35.0422 47.6351C32.0698 48.8663 28.8839 49.5 25.6665 49.5C22.4491 49.5 19.2632 48.8663 16.2908 47.635C13.3183 46.4038 10.6174 44.5991 8.34238 42.3241C6.06735 40.0491 4.26269 37.3482 3.03145 34.3757C1.80021 31.4033 1.1665 28.2174 1.1665 25C1.1665 21.7826 1.80022 18.5967 3.03146 15.6242C4.2627 12.6518 6.06736 9.95091 8.3424 7.67587C10.6174 5.40084 13.3183 3.59618 16.2908 2.36495Z"
+											fill="#FBFFFF"
+											stroke="#9DA9BF" />
+									</svg>
+									<span class="na-border-text" web-report-title-font i18n>N/A</span>
+								</ng-template>
+							</div>
+							<span class="mobile-tab-title" web-report-title-font>AI Content</span>
+						</div>
+					</ng-template>
+				</a>
+
+				<a
+					*ngIf="(!hideWritingFeedbackTap || showDisabledProducts) && !forceWritingFeedbackTapHide"
+					@fadeIn
+					class="tab-grammar"
+					tabindex="0"
+					role="button"
+					aria-describedby="WritingFeedback-view-text"
+					[style.flex-grow]="1"
+					[class.tab-selected]="selectedTap === EReportViewType.WritingFeedbackTabView && !hideWritingFeedbackTap"
+					[class.tab-disabled]="hideWritingFeedbackTap && showDisabledProducts"
+					[class.with-company-logo]="
+						selectedTap === EReportViewType.WritingFeedbackTabView &&
+						!hideWritingFeedbackTap &&
+						hideAiTap &&
+						hidePlagarismTap &&
+						companyLogo
+					"
+					[class.mobile]="isMobile"
+					[matTooltip]="hideWritingFeedbackTap && showDisabledProducts ? DISABLED : ''"
+					matTooltipClass="web-report-mat-tooltip"
+					(click)="selectTap(EReportViewType.WritingFeedbackTabView)"
+					(keyup.enter)="selectTap(EReportViewType.WritingFeedbackTabView)">
+					<ng-container *ngIf="!isMobile; else mobileViewRef">
+						<div class="bar-title-container">
+							<span id="WritingFeedback-view-text" class="bar-title" web-report-title-font i18n>Writing Assistant</span>
+							<span class="bar-score" web-report-title-font>
+								<ng-container *ngIf="showWritingFeedbackIssues; else pctRef" i18n>
+									{{ hideWritingFeedbackTap && showDisabledProducts ? 'N/A' : totalWritingFeedbackIssues }}
+								</ng-container>
+								<ng-template #pctRef>
+									{{
+										hideWritingFeedbackTap && showDisabledProducts ? 'N/A' : (writingFeedbackScore | percent : '1.0-1')
+									}}
+								</ng-template>
+							</span>
+						</div>
+						<div class="grade-bar" [style.visibility]="showWritingFeedbackIssues || !isMobile ? 'hidden' : 'auto'">
+							<div
+								class="bar grammar-check"
+								[style.width.%]="writingFeedbackScore * 100"
+								[style.border]="!writingFeedbackScore ? 'none' : ''"></div>
+						</div>
+					</ng-container>
+					<ng-template #mobileViewRef>
+						<div class="mobile-tab-container">
+							<div class="mobile-tab-score-container">
+								<ng-container *ngIf="!hideWritingFeedbackTap; else NaViewRef">
+									<span class="mobile-tab-score" web-report-title-font>{{ totalWritingFeedbackIssues }}</span>
+								</ng-container>
+								<ng-template #NaViewRef>
+									<span class="na-border-text" web-report-title-font i18n>N/A</span>
+								</ng-template>
+							</div>
+							<span class="mobile-tab-title" web-report-title-font>Assistant</span>
+						</div>
+					</ng-template>
+				</a>
+
+				<ng-container *ngFor="let ref of customTabsTemplateRef">
+					<ng-container *ngTemplateOutlet="ref"></ng-container>
+				</ng-container>
+			</ng-container>
+
+			<ng-template #loadingViewRef>
+				<div class="loading-tab first">
+					<div class="bar-title-container">
+						<ngx-skeleton-loader class="skeleton" [appearance]="'line'" style="width: 40%"></ngx-skeleton-loader>
+						<ngx-skeleton-loader class="skeleton" [appearance]="'line'" style="width: 20%"></ngx-skeleton-loader>
+					</div>
+					<ngx-skeleton-loader class="bar skeleton" [appearance]="'line'" style="width: 100%"></ngx-skeleton-loader>
+				</div>
+
+				<div class="loading-tab">
+					<div class="bar-title-container">
+						<ngx-skeleton-loader class="skeleton" [appearance]="'line'" style="width: 40%"></ngx-skeleton-loader>
+						<ngx-skeleton-loader class="skeleton" [appearance]="'line'" style="width: 20%"></ngx-skeleton-loader>
+					</div>
+					<ngx-skeleton-loader class="bar skeleton" [appearance]="'line'" style="width: 100%"></ngx-skeleton-loader>
+				</div>
+
+				<div class="loading-tab">
+					<div class="bar-title-container">
+						<ngx-skeleton-loader class="skeleton" [appearance]="'line'" style="width: 40%"></ngx-skeleton-loader>
+						<ngx-skeleton-loader class="skeleton" [appearance]="'line'" style="width: 20%"></ngx-skeleton-loader>
+					</div>
+					<ngx-skeleton-loader class="bar skeleton" [appearance]="'line'" style="width: 100%"></ngx-skeleton-loader>
+				</div>
+			</ng-template>
+		</ng-container>
+
+		<ng-template #realTimeView>
+			<div
+				class="tab-plagiarism"
+				@fadeIn
+				[style.flex-grow]="1"
+				[class.tab-selected]="selectedTap === EReportViewType.PlagiarismView && !hidePlagarismTap"
+				[class.tab-disabled]="hidePlagarismTap && showDisabledProducts"
+				matTooltipClass="web-report-mat-tooltip">
+				<div class="bar-title-container">
+					<ngx-skeleton-loader
+						class="skeleton real-time-view"
+						[appearance]="'line'"
+						style="width: 20%"></ngx-skeleton-loader>
+					<span class="bar-score real-time-view" web-report-title-font>
+						<ng-container i18n>Loading...</ng-container>
+						&nbsp;
+						{{ loadingProgressPct + '%' }}
+					</span>
+				</div>
+				<mat-progress-bar mode="indeterminate"></mat-progress-bar>
 			</div>
-		</ng-container>
-
-		<a
-			*ngIf="!hidePlagarismTap || showDisabledProducts"
-			tabindex="0"
-			role="button"
-			aria-describedby="plagiarism-view-text"
-			@fadeIn
-			class="tab-plagiarism"
-			[reportViewService]="reportViewSvc"
-			[crReportScoreTooltip]="
-				hidePlagarismTap && showDisabledProducts
-					? null
-					: {
-							identicalPct: {
-								percentage: wordsTotal - excludedTotal === 0 ? 0 : identicalTotal / (wordsTotal - excludedTotal),
-								totalWords: identicalTotal ?? 0,
-								disabled: reportDataSvc.filterOptions?.showIdentical === false
-							},
-							minorChangesPct: {
-								percentage: wordsTotal - excludedTotal === 0 ? 0 : minorChangesTotal / (wordsTotal - excludedTotal),
-								totalWords: minorChangesTotal ?? 0,
-								disabled: reportDataSvc.filterOptions?.showMinorChanges === false
-							},
-							paraphrasedPct: {
-								percentage: wordsTotal - excludedTotal === 0 ? 0 : paraphrasedTotal / (wordsTotal - excludedTotal),
-								totalWords: paraphrasedTotal ?? 0,
-								disabled: reportDataSvc.filterOptions?.showRelated === false
-							},
-							omittedPct: { percentage: excludedTotal / wordsTotal, disabled: false, totalWords: excludedTotal ?? 0 },
-							totalWords: wordsTotal
-					  }
-			"
-			[crReportScoreTooltipPosition]="EReportScoreTooltipPosition.BELOW"
-			[style.flex-grow]="1"
-			[class.tab-selected]="selectedTap === EReportViewType.PlagiarismView && !hidePlagarismTap"
-			[class.tab-disabled]="hidePlagarismTap && showDisabledProducts"
-			[class.with-company-logo]="selectedTap === EReportViewType.PlagiarismView && !hidePlagarismTap && companyLogo"
-			[class.mobile]="isMobile"
-			[matTooltip]="hidePlagarismTap && showDisabledProducts ? DISABLED : ''"
-			matTooltipClass="web-report-mat-tooltip"
-			(click)="selectTap(EReportViewType.PlagiarismView)"
-			(keyup.enter)="selectTap(EReportViewType.PlagiarismView)">
-			<ng-container *ngIf="!isMobile; else mobileViewRef">
-				<div class="bar-title-container">
-					<span id="plagiarism-view-text" class="bar-title" web-report-title-font i18n>Matched Text</span>
-					<span *ngIf="!isMobile" class="bar-score" web-report-title-font>
-						{{ hidePlagarismTap && showDisabledProducts ? 'N/A' : (plagarismScore | percent : '1.0-1') }}
-					</span>
-				</div>
-				<div class="grade-bar">
-					<div class="bar plagiarism" [style.width.%]="100">
-						<div
-							class="identical"
-							[class.first-percentage]="!!identicalTotal"
-							[class.last-percentage]="!minorChangesTotal && !paraphrasedTotal"
-							[style.width.%]="
-								wordsTotal - excludedTotal === 0 ? 0 : (identicalTotal / (wordsTotal - excludedTotal)) * 100
-							"
-							[style.border]="!identicalTotal ? 'none' : ''"></div>
-						<div
-							class="minor-changes"
-							[class.first-percentage]="!identicalTotal"
-							[class.last-percentage]="!paraphrasedTotal"
-							[style.width.%]="
-								wordsTotal - excludedTotal === 0 ? 0 : (minorChangesTotal / (wordsTotal - excludedTotal)) * 100
-							"
-							[style.border]="!minorChangesTotal ? 'none' : ''"></div>
-						<div
-							class="paraphrased last-percentage"
-							[class.first-percentage]="!identicalTotal && !minorChangesTotal"
-							[style.width.%]="
-								wordsTotal - excludedTotal === 0 ? 0 : (paraphrasedTotal / (wordsTotal - excludedTotal)) * 100
-							"
-							[style.border]="!paraphrasedTotal ? 'none' : ''"></div>
-					</div>
-				</div>
-			</ng-container>
-			<ng-template #mobileViewRef>
-				<div class="mobile-tab-container">
-					<div class="charts-container">
-						<ng-container *ngIf="!hidePlagarismTap; else NaViewRef">
-							<ngx-charts-pie-chart
-								[results]="plagarismScoreChartData"
-								[view]="[90, 90]"
-								[legend]="false"
-								[labels]="false"
-								[arcWidth]="0.2"
-								[scheme]="plagarismScoreChartColorScheme"
-								[tooltipDisabled]="true"
-								[doughnut]="true"
-								[gradient]="true"
-								[explodeSlices]="true"></ngx-charts-pie-chart>
-							<span class="mobile-tab-score" web-report-title-font i18n>{{ plagarismScore | percent : '1.0-1' }}</span>
-						</ng-container>
-
-						<ng-template #NaViewRef>
-							<svg
-								class="na-border-pic"
-								xmlns="http://www.w3.org/2000/svg"
-								width="51"
-								height="50"
-								viewBox="0 0 51 50"
-								fill="none">
-								<path
-									d="M25.6665 3.5C22.8431 3.5 20.0473 4.05611 17.4388 5.13659C14.8303 6.21706 12.4602 7.80074 10.4637 9.7972C8.46726 11.7937 6.88358 14.1638 5.8031 16.7723C4.72262 19.3808 4.16651 22.1766 4.1665 25C4.1665 27.8234 4.72262 30.6192 5.80309 33.2277C6.88357 35.8362 8.46724 38.2063 10.4637 40.2028C12.4602 42.1992 14.8303 43.7829 17.4388 44.8634C20.0473 45.9439 22.8431 46.5 25.6665 46.5C28.4899 46.5 31.2857 45.9439 33.8942 44.8634C36.5027 43.7829 38.8728 42.1993 40.8693 40.2028C42.8658 38.2063 44.4494 35.8362 45.5299 33.2277C46.6104 30.6192 47.1665 27.8234 47.1665 25C47.1665 22.1766 46.6104 19.3808 45.5299 16.7723C44.4494 14.1638 42.8658 11.7937 40.8693 9.7972C38.8728 7.80075 36.5027 6.21707 33.8942 5.13659C31.2857 4.05611 28.4899 3.5 25.6665 3.5ZM16.2908 2.36495C19.2633 1.13371 22.4491 0.499998 25.6665 0.5C28.8839 0.5 32.0698 1.13371 35.0422 2.36495C38.0147 3.59619 40.7156 5.40085 42.9906 7.67589C45.2657 9.95092 47.0703 12.6518 48.3016 15.6243C49.5328 18.5967 50.1665 21.7826 50.1665 25C50.1665 28.2174 49.5328 31.4033 48.3015 34.3757C47.0703 37.3482 45.2657 40.0491 42.9906 42.3241C40.7156 44.5992 38.0147 46.4038 35.0422 47.6351C32.0698 48.8663 28.8839 49.5 25.6665 49.5C22.4491 49.5 19.2632 48.8663 16.2908 47.635C13.3183 46.4038 10.6174 44.5991 8.34238 42.3241C6.06735 40.0491 4.26269 37.3482 3.03145 34.3757C1.80021 31.4033 1.1665 28.2174 1.1665 25C1.1665 21.7826 1.80022 18.5967 3.03146 15.6242C4.2627 12.6518 6.06736 9.95091 8.3424 7.67587C10.6174 5.40084 13.3183 3.59618 16.2908 2.36495Z"
-									fill="#FBFFFF"
-									stroke="#9DA9BF" />
-							</svg>
-							<span class="na-border-text" web-report-title-font i18n>N/A</span>
-						</ng-template>
-					</div>
-					<span class="mobile-tab-title" web-report-title-font>Matched Text</span>
-				</div>
-			</ng-template>
-		</a>
-
-		<a
-			*ngIf="!hideAiTap || showDisabledProducts"
-			@fadeIn
-			role="button"
-			aria-describedby="AI-view-text"
-			class="tab-ai"
-			tabindex="0"
-			[reportViewService]="reportViewSvc"
-			[crReportScoreTooltip]="
-				hideAiTap && showDisabledProducts
-					? null
-					: {
-							aiPct: { percentage: aiScore, disabled: false, totalWords: totalAiWords ?? 0 },
-							humanPct: { percentage: 1 - aiScore, disabled: false, totalWords: wordsTotal - totalAiWords ?? 0 },
-							omittedPct: { percentage: excludedTotal / wordsTotal, disabled: false, totalWords: excludedTotal ?? 0 },
-							totalWords: wordsTotal
-					  }
-			"
-			[crReportScoreTooltipPosition]="EReportScoreTooltipPosition.BELOW"
-			[style.flex-grow]="1"
-			[class.tab-selected]="selectedTap === EReportViewType.AIView && !hideAiTap"
-			[class.tab-disabled]="hideAiTap && showDisabledProducts"
-			[class.with-company-logo]="
-				selectedTap === EReportViewType.AIView && !hideAiTap && hidePlagarismTap && companyLogo
-			"
-			[class.mobile]="isMobile"
-			[matTooltip]="hideAiTap && showDisabledProducts ? DISABLED : ''"
-			matTooltipClass="web-report-mat-tooltip"
-			(click)="selectTap(EReportViewType.AIView)"
-			(keyup.enter)="selectTap(EReportViewType.AIView)">
-			<ng-container *ngIf="!isMobile; else mobileViewRef">
-				<div class="bar-title-container">
-					<span id="AI-view-text" class="bar-title" web-report-title-font i18n>AI Content</span>
-					<span *ngIf="!isMobile" class="bar-score" web-report-title-font>
-						{{ hideAiTap && showDisabledProducts ? 'N/A' : (aiScore | percent : '1.0-1') }}
-					</span>
-				</div>
-				<div *ngIf="!isMobile" class="grade-bar">
-					<div class="bar ai-content" [style.width.%]="aiScore * 100" [style.border]="!aiScore ? 'none' : ''"></div>
-				</div>
-			</ng-container>
-			<ng-template #mobileViewRef>
-				<div class="mobile-tab-container">
-					<div class="charts-container">
-						<ng-container *ngIf="!hideAiTap; else NaViewRef">
-							<ngx-charts-pie-chart
-								[results]="aiScoreChartData"
-								[view]="[90, 90]"
-								[legend]="false"
-								[labels]="false"
-								[arcWidth]="0.2"
-								[scheme]="aiScoreChartColorScheme"
-								[tooltipDisabled]="true"
-								[doughnut]="true"></ngx-charts-pie-chart>
-							<span class="mobile-tab-score" web-report-title-font i18n>{{ aiScore | percent : '1.0-1' }}</span>
-						</ng-container>
-						<ng-template #NaViewRef>
-							<svg
-								class="na-border-pic"
-								xmlns="http://www.w3.org/2000/svg"
-								width="51"
-								height="50"
-								viewBox="0 0 51 50"
-								fill="none">
-								<path
-									d="M25.6665 3.5C22.8431 3.5 20.0473 4.05611 17.4388 5.13659C14.8303 6.21706 12.4602 7.80074 10.4637 9.7972C8.46726 11.7937 6.88358 14.1638 5.8031 16.7723C4.72262 19.3808 4.16651 22.1766 4.1665 25C4.1665 27.8234 4.72262 30.6192 5.80309 33.2277C6.88357 35.8362 8.46724 38.2063 10.4637 40.2028C12.4602 42.1992 14.8303 43.7829 17.4388 44.8634C20.0473 45.9439 22.8431 46.5 25.6665 46.5C28.4899 46.5 31.2857 45.9439 33.8942 44.8634C36.5027 43.7829 38.8728 42.1993 40.8693 40.2028C42.8658 38.2063 44.4494 35.8362 45.5299 33.2277C46.6104 30.6192 47.1665 27.8234 47.1665 25C47.1665 22.1766 46.6104 19.3808 45.5299 16.7723C44.4494 14.1638 42.8658 11.7937 40.8693 9.7972C38.8728 7.80075 36.5027 6.21707 33.8942 5.13659C31.2857 4.05611 28.4899 3.5 25.6665 3.5ZM16.2908 2.36495C19.2633 1.13371 22.4491 0.499998 25.6665 0.5C28.8839 0.5 32.0698 1.13371 35.0422 2.36495C38.0147 3.59619 40.7156 5.40085 42.9906 7.67589C45.2657 9.95092 47.0703 12.6518 48.3016 15.6243C49.5328 18.5967 50.1665 21.7826 50.1665 25C50.1665 28.2174 49.5328 31.4033 48.3015 34.3757C47.0703 37.3482 45.2657 40.0491 42.9906 42.3241C40.7156 44.5992 38.0147 46.4038 35.0422 47.6351C32.0698 48.8663 28.8839 49.5 25.6665 49.5C22.4491 49.5 19.2632 48.8663 16.2908 47.635C13.3183 46.4038 10.6174 44.5991 8.34238 42.3241C6.06735 40.0491 4.26269 37.3482 3.03145 34.3757C1.80021 31.4033 1.1665 28.2174 1.1665 25C1.1665 21.7826 1.80022 18.5967 3.03146 15.6242C4.2627 12.6518 6.06736 9.95091 8.3424 7.67587C10.6174 5.40084 13.3183 3.59618 16.2908 2.36495Z"
-									fill="#FBFFFF"
-									stroke="#9DA9BF" />
-							</svg>
-							<span class="na-border-text" web-report-title-font i18n>N/A</span>
-						</ng-template>
-					</div>
-					<span class="mobile-tab-title" web-report-title-font>AI Content</span>
-				</div>
-			</ng-template>
-		</a>
-
-		<a
-			*ngIf="(!hideWritingFeedbackTap || showDisabledProducts) && !forceWritingFeedbackTapHide"
-			@fadeIn
-			class="tab-grammar"
-			tabindex="0"
-			role="button"
-			aria-describedby="WritingFeedback-view-text"
-			[style.flex-grow]="1"
-			[class.tab-selected]="selectedTap === EReportViewType.WritingFeedbackTabView && !hideWritingFeedbackTap"
-			[class.tab-disabled]="hideWritingFeedbackTap && showDisabledProducts"
-			[class.with-company-logo]="
-				selectedTap === EReportViewType.WritingFeedbackTabView &&
-				!hideWritingFeedbackTap &&
-				hideAiTap &&
-				hidePlagarismTap &&
-				companyLogo
-			"
-			[class.mobile]="isMobile"
-			[matTooltip]="hideWritingFeedbackTap && showDisabledProducts ? DISABLED : ''"
-			matTooltipClass="web-report-mat-tooltip"
-			(click)="selectTap(EReportViewType.WritingFeedbackTabView)"
-			(keyup.enter)="selectTap(EReportViewType.WritingFeedbackTabView)">
-			<ng-container *ngIf="!isMobile; else mobileViewRef">
-				<div class="bar-title-container">
-					<span id="WritingFeedback-view-text" class="bar-title" web-report-title-font i18n>Writing Assistant</span>
-					<span class="bar-score" web-report-title-font>
-						<ng-container *ngIf="showWritingFeedbackIssues; else pctRef" i18n>
-							{{ hideWritingFeedbackTap && showDisabledProducts ? 'N/A' : totalWritingFeedbackIssues }}
-						</ng-container>
-						<ng-template #pctRef>
-							{{ hideWritingFeedbackTap && showDisabledProducts ? 'N/A' : (writingFeedbackScore | percent : '1.0-1') }}
-						</ng-template>
-					</span>
-				</div>
-				<div class="grade-bar" [style.visibility]="showWritingFeedbackIssues || !isMobile ? 'hidden' : 'auto'">
-					<div
-						class="bar grammar-check"
-						[style.width.%]="writingFeedbackScore * 100"
-						[style.border]="!writingFeedbackScore ? 'none' : ''"></div>
-				</div>
-			</ng-container>
-			<ng-template #mobileViewRef>
-				<div class="mobile-tab-container">
-					<div class="mobile-tab-score-container">
-						<ng-container *ngIf="!hideWritingFeedbackTap; else NaViewRef">
-							<span class="mobile-tab-score" web-report-title-font>{{ totalWritingFeedbackIssues }}</span>
-						</ng-container>
-						<ng-template #NaViewRef>
-							<span class="na-border-text" web-report-title-font i18n>N/A</span>
-						</ng-template>
-					</div>
-					<span class="mobile-tab-title" web-report-title-font>Assistant</span>
-				</div>
-			</ng-template>
-		</a>
-
-		<ng-container *ngFor="let ref of customTabsTemplateRef">
-			<ng-container *ngTemplateOutlet="ref"></ng-container>
-		</ng-container>
+		</ng-template>
 	</ng-container>
+	<ng-container *ngSwitchCase="EReportMode.AssessmentTool">
+		<div class="assessment-tool-container">
+			<a
+				class="matched-text-tab"
+				*ngIf="!hidePlagarismTap || showDisabledProducts"
+				tabindex="0"
+				role="button"
+				aria-describedby="plagiarism-view-text"
+				@fadeIn
+				[class.tab-selected]="selectedTap === EReportViewType.PlagiarismView && !hidePlagarismTap"
+				[class.tab-disabled]="hidePlagarismTap && showDisabledProducts"
+				[class.mobile]="isMobile"
+				[matTooltip]="hidePlagarismTap && showDisabledProducts ? DISABLED : ''"
+				matTooltipClass="web-report-mat-tooltip"
+				(click)="selectTap(EReportViewType.PlagiarismView)"
+				(keyup.enter)="selectTap(EReportViewType.PlagiarismView)">
+				<div class="icon-container">
+					<svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 18 18" fill="none">
+						<g clip-path="url(#clip0_4484_12191)">
+							<path
+								d="M16.1053 17.1534H16.1195C16.3932 17.1534 16.651 17.0478 16.8474 16.8564C17.2595 16.4545 17.2684 15.7903 16.8668 15.377L13.5878 12.0042L13.413 12.2914L13.1658 12.6103L12.7114 13.0614L12.4777 13.2411L12.0918 13.4636L15.3708 16.8365C15.5654 17.0371 15.8262 17.1491 16.1053 17.1534Z"
+								fill="#FD7366" />
+							<path
+								d="M11.7273 11.9227C9.1251 14.4624 4.94624 14.4075 2.41109 11.7999C-0.124067 9.19226 -0.069288 5.00568 2.5329 2.46604C5.1351 -0.0735905 9.31395 -0.0187077 11.8491 2.58889C14.3845 5.19649 14.3295 9.3831 11.7273 11.9227ZM3.3339 3.28993C1.18539 5.38683 1.14017 8.84451 3.23342 10.9974C5.32667 13.1503 8.77778 13.1958 10.9263 11.0988C13.0748 9.00195 13.12 5.54431 11.0268 3.39141C8.93352 1.23851 5.48241 1.19304 3.3339 3.28993Z"
+								fill="#FD7366" />
+							<path
+								d="M7.13121 11.2688C9.37721 11.2688 11.198 9.4446 11.198 7.19433C11.198 4.94407 9.37721 3.11987 7.13121 3.11987C4.88521 3.11987 3.06445 4.94407 3.06445 7.19433C3.06445 9.4446 4.88521 11.2688 7.13121 11.2688Z"
+								fill="#FFC5BF" />
+						</g>
+						<defs>
+							<clipPath id="clip0_4484_12191">
+								<rect width="17" height="17.7727" fill="white" transform="translate(0.5 0.113525)" />
+							</clipPath>
+						</defs>
+					</svg>
+				</div>
 
-	<ng-template #loadingViewRef>
-		<div class="loading-tab first">
-			<div class="bar-title-container">
-				<ngx-skeleton-loader class="skeleton" [appearance]="'line'" style="width: 40%"></ngx-skeleton-loader>
-				<ngx-skeleton-loader class="skeleton" [appearance]="'line'" style="width: 20%"></ngx-skeleton-loader>
-			</div>
-			<ngx-skeleton-loader class="bar skeleton" [appearance]="'line'" style="width: 100%"></ngx-skeleton-loader>
+				<div class="tab-title-container">
+					<span class="title">Matching</span>
+					<div class="score-container">
+						<svg xmlns="http://www.w3.org/2000/svg" width="8" height="9" viewBox="0 0 8 9" fill="none">
+							<circle cx="4" cy="4.5" r="4" fill="#F44336" />
+						</svg>
+						<span class="score">
+							{{ hidePlagarismTap && showDisabledProducts ? 'N/A' : (plagarismScore | percent : '1.0-1') }}
+						</span>
+					</div>
+				</div>
+			</a>
+			<a
+				class="ai-tab"
+				*ngIf="!hideAiTap || showDisabledProducts"
+				@fadeIn
+				role="button"
+				aria-describedby="AI-view-text"
+				tabindex="0"
+				[class.tab-selected]="selectedTap === EReportViewType.AIView && !hideAiTap"
+				[class.tab-disabled]="hideAiTap && showDisabledProducts"
+				[class.with-company-logo]="
+					selectedTap === EReportViewType.AIView && !hideAiTap && hidePlagarismTap && companyLogo
+				"
+				[class.mobile]="isMobile"
+				[matTooltip]="hideAiTap && showDisabledProducts ? DISABLED : ''"
+				matTooltipClass="web-report-mat-tooltip"
+				(click)="selectTap(EReportViewType.AIView)"
+				(keyup.enter)="selectTap(EReportViewType.AIView)">
+				<div class="icon-container">
+					<svg xmlns="http://www.w3.org/2000/svg" width="22" height="16" viewBox="0 0 22 16" fill="none">
+						<g clip-path="url(#clip0_4484_11317)">
+							<path
+								fill-rule="evenodd"
+								clip-rule="evenodd"
+								d="M10.8346 0.962097C15.1459 0.962097 19.0455 3.33985 20.7696 7.01967L21.204 7.9472L20.7696 8.87468C19.0455 12.5545 15.1459 14.9322 10.8346 14.9322C8.64293 14.9322 6.52812 14.3234 4.71853 13.1718C2.90893 12.0203 1.53165 10.4063 0.735461 8.50472L0.501953 7.9472L0.735461 7.3896C1.53165 5.48801 2.90912 3.87404 4.71853 2.72247C6.52792 1.57091 8.64293 0.962097 10.8346 0.962097ZM4.5983 7.9472C4.5983 11.1641 7.39862 13.772 10.853 13.772C14.3074 13.772 17.1077 11.1641 17.1077 7.9472C17.1077 4.73026 14.3074 2.12241 10.853 2.12241C7.39862 2.12241 4.5983 4.73026 4.5983 7.9472Z"
+								fill="#6512D2" />
+							<path
+								fill-rule="evenodd"
+								clip-rule="evenodd"
+								d="M6.97669 6.24113C6.4128 7.41023 6.44365 8.80611 7.15062 9.97874L9.44021 8.43504C9.3368 8.16247 9.32507 7.86997 9.39784 7.5969L6.97669 6.24113ZM12.0612 7.12805C11.6864 6.61987 11.0273 6.41713 10.4352 6.57791L8.91854 4.3172C10.7738 3.4162 13.088 3.9297 14.3226 5.60337C14.7782 6.22089 15.0287 6.91776 15.0877 7.62009L12.2986 7.64014C12.2571 7.46127 12.1786 7.28714 12.0612 7.12805ZM12.294 8.27705C12.2133 8.6043 12.012 8.90567 11.7021 9.11467C11.1596 9.48035 10.4501 9.45148 9.94667 9.08968L7.64657 10.6405C9.06452 12.1837 11.5013 12.4872 13.2968 11.2767C14.3774 10.5481 14.9956 9.42621 15.0889 8.25697L12.294 8.27705ZM7.40903 5.53987C7.63051 5.2515 7.89518 4.98716 8.2015 4.75607L9.52044 6.72219L7.40903 5.53987Z"
+								fill="#C1ADDC" />
+						</g>
+						<defs>
+							<clipPath id="clip0_4484_11317">
+								<rect width="21" height="14.5385" fill="white" transform="translate(0.5 0.730774)" />
+							</clipPath>
+						</defs>
+					</svg>
+				</div>
+				<div class="tab-title-container">
+					<span class="title">AI Content</span>
+					<div class="score-container">
+						<svg xmlns="http://www.w3.org/2000/svg" width="8" height="9" viewBox="0 0 8 9" fill="none">
+							<circle cx="4" cy="4.5" r="4" fill="#F44336" />
+						</svg>
+						<span class="score">{{ hideAiTap && showDisabledProducts ? 'N/A' : (aiScore | percent : '1.0-1') }}</span>
+					</div>
+				</div>
+			</a>
+			<a
+				class="writing-assistant-tab"
+				*ngIf="(!hideWritingFeedbackTap || showDisabledProducts) && !forceWritingFeedbackTapHide"
+				@fadeIn
+				tabindex="0"
+				role="button"
+				aria-describedby="WritingFeedback-view-text"
+				[style.flex-grow]="1"
+				[class.tab-selected]="selectedTap === EReportViewType.WritingFeedbackTabView && !hideWritingFeedbackTap"
+				[class.tab-disabled]="hideWritingFeedbackTap && showDisabledProducts"
+				[class.with-company-logo]="
+					selectedTap === EReportViewType.WritingFeedbackTabView &&
+					!hideWritingFeedbackTap &&
+					hideAiTap &&
+					hidePlagarismTap &&
+					companyLogo
+				"
+				[class.mobile]="isMobile"
+				[matTooltip]="hideWritingFeedbackTap && showDisabledProducts ? DISABLED : ''"
+				matTooltipClass="web-report-mat-tooltip"
+				(click)="selectTap(EReportViewType.WritingFeedbackTabView)"
+				(keyup.enter)="selectTap(EReportViewType.WritingFeedbackTabView)">
+				<div class="icon-container">
+					<svg xmlns="http://www.w3.org/2000/svg" width="20" height="13" viewBox="0 0 20 13" fill="none">
+						<g clip-path="url(#clip0_4484_11335)">
+							<path
+								fill-rule="evenodd"
+								clip-rule="evenodd"
+								d="M0.548828 1.80615C0.548828 1.19654 1.06372 0.711182 1.68758 0.711182H5.28834C5.9122 0.711182 6.42709 1.19654 6.42709 1.80615C6.42709 2.41577 5.9122 2.90142 5.28834 2.90142H1.68758C1.06372 2.90142 0.548828 2.41577 0.548828 1.80615Z"
+								fill="#FF9A02" />
+							<path
+								d="M18.5067 1.04102H9.67247C9.23099 1.04102 8.87305 1.38357 8.87305 1.80613C8.87305 2.22869 9.23099 2.57153 9.67247 2.57153H18.5067C18.9482 2.57153 19.3062 2.22898 19.3062 1.80642C19.3062 1.38386 18.9482 1.04102 18.5067 1.04102Z"
+								fill="#FFCB8E" />
+							<path
+								fill-rule="evenodd"
+								clip-rule="evenodd"
+								d="M12.0625 4.84277C12.0625 4.21202 12.5952 3.70953 13.2412 3.70953H18.1257C18.7716 3.70953 19.3044 4.21202 19.3044 4.84277C19.3044 5.47353 18.7716 5.97632 18.1257 5.97632H13.2412C12.5952 5.97632 12.0625 5.47352 12.0625 4.84277Z"
+								fill="#FF9A02" />
+							<path
+								d="M9.17989 4.07764H1.34829C0.906761 4.07764 0.548828 4.42018 0.548828 4.84275C0.548828 5.26531 0.906761 5.60815 1.34829 5.60815H9.17989C9.62144 5.60815 9.97938 5.2656 9.97938 4.84304C9.97938 4.42047 9.62144 4.07764 9.17989 4.07764Z"
+								fill="#FFCB8E" />
+							<path
+								d="M12.9493 7.11414H8.29747C7.85593 7.11414 7.49805 7.45666 7.49805 7.87928C7.49805 8.30183 7.85593 8.64462 8.29747 8.64462H12.9493C13.3908 8.64462 13.7488 8.30209 13.7488 7.87954C13.7488 7.45692 13.3908 7.11414 12.9493 7.11414Z"
+								fill="#FFCB8E" />
+							<path
+								d="M18.5056 7.11414H17.3502C16.9087 7.11414 16.5508 7.45666 16.5508 7.87928C16.5508 8.30183 16.9087 8.64462 17.3502 8.64462H18.5056C18.9471 8.64462 19.305 8.30209 19.305 7.87954C19.305 7.45692 18.9471 7.11414 18.5056 7.11414Z"
+								fill="#FFCB8E" />
+							<path
+								fill-rule="evenodd"
+								clip-rule="evenodd"
+								d="M0.548828 7.8793C0.548828 7.26965 1.06372 6.7843 1.68758 6.7843H4.4946C5.11846 6.7843 5.63335 7.26965 5.63335 7.8793C5.63335 8.48889 5.11846 8.97451 4.4946 8.97451H1.68758C1.06372 8.97451 0.548828 8.48889 0.548828 7.8793Z"
+								fill="#FF9A02" />
+							<path
+								fill-rule="evenodd"
+								clip-rule="evenodd"
+								d="M9.97852 10.9157C9.97852 10.3062 10.4934 9.8208 11.1172 9.8208H18.166C18.7898 9.8208 19.3047 10.3062 19.3047 10.9157C19.3047 11.5253 18.7898 12.011 18.166 12.011H11.1172C10.4934 12.011 9.97852 11.5253 9.97852 10.9157Z"
+								fill="#FF9A02" />
+							<path
+								d="M7.34686 10.1506H1.34829C0.906761 10.1506 0.548828 10.4932 0.548828 10.9157C0.548828 11.3383 0.906761 11.6811 1.34829 11.6811H7.34686C7.78834 11.6811 8.14629 11.3386 8.14629 10.916C8.14629 10.4935 7.78834 10.1506 7.34686 10.1506Z"
+								fill="#FFCB8E" />
+						</g>
+						<defs>
+							<clipPath id="clip0_4484_11335">
+								<rect width="19" height="11.875" fill="white" transform="translate(0.5 0.5625)" />
+							</clipPath>
+						</defs>
+					</svg>
+				</div>
+				<div class="tab-title-container">
+					<span class="title">Matching</span>
+					<div class="score-container">
+						<svg xmlns="http://www.w3.org/2000/svg" width="8" height="9" viewBox="0 0 8 9" fill="none">
+							<circle cx="4" cy="4.5" r="4" fill="#F44336" />
+						</svg>
+						<span class="score">100%</span>
+					</div>
+				</div>
+			</a>
 		</div>
-
-		<div class="loading-tab">
-			<div class="bar-title-container">
-				<ngx-skeleton-loader class="skeleton" [appearance]="'line'" style="width: 40%"></ngx-skeleton-loader>
-				<ngx-skeleton-loader class="skeleton" [appearance]="'line'" style="width: 20%"></ngx-skeleton-loader>
-			</div>
-			<ngx-skeleton-loader class="bar skeleton" [appearance]="'line'" style="width: 100%"></ngx-skeleton-loader>
-		</div>
-
-		<div class="loading-tab">
-			<div class="bar-title-container">
-				<ngx-skeleton-loader class="skeleton" [appearance]="'line'" style="width: 40%"></ngx-skeleton-loader>
-				<ngx-skeleton-loader class="skeleton" [appearance]="'line'" style="width: 20%"></ngx-skeleton-loader>
-			</div>
-			<ngx-skeleton-loader class="bar skeleton" [appearance]="'line'" style="width: 100%"></ngx-skeleton-loader>
-		</div>
-	</ng-template>
+	</ng-container>
+	<ng-container *ngSwitchDefault></ng-container>
 </ng-container>
-
-<ng-template #realTimeView>
-	<div
-		class="tab-plagiarism"
-		@fadeIn
-		[style.flex-grow]="1"
-		[class.tab-selected]="selectedTap === EReportViewType.PlagiarismView && !hidePlagarismTap"
-		[class.tab-disabled]="hidePlagarismTap && showDisabledProducts"
-		matTooltipClass="web-report-mat-tooltip">
-		<div class="bar-title-container">
-			<ngx-skeleton-loader
-				class="skeleton real-time-view"
-				[appearance]="'line'"
-				style="width: 20%"></ngx-skeleton-loader>
-			<span class="bar-score real-time-view" web-report-title-font>
-				<ng-container i18n>Loading...</ng-container>
-				&nbsp;
-				{{ loadingProgressPct + '%' }}
-			</span>
-		</div>
-		<mat-progress-bar mode="indeterminate"></mat-progress-bar>
-	</div>
-</ng-template>

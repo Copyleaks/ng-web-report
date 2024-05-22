@@ -93,6 +93,7 @@ import {
 } from './components/core/cr-result-disclaimer/cr-result-disclaimer.component';
 import { CrReportMatchTooltipModule } from './directives/report-match-tooltip/cr-report-match-tooltip-content.module';
 import { CrBannerSectionComponent } from './components/core/cr-banner-section/cr-banner-section.component';
+import { CrAiDisclaimerComponent } from './components/core/cr-ai-disclaimer/cr-ai-disclaimer.component';
 
 @NgModule({
 	declarations: [
@@ -152,6 +153,7 @@ import { CrBannerSectionComponent } from './components/core/cr-banner-section/cr
 		CrResultDisclaimerDescriptionComponent,
 		CrResultDisclaimerTitleComponent,
 		CrBannerSectionComponent,
+		CrAiDisclaimerComponent,
 	],
 	imports: [
 		CommonModule,

@@ -79,6 +79,8 @@
 </div>
 
 <div style="display: flex; flex-direction: column; flex-shrink: 0; gap: 8px">
+	<cr-ai-disclaimer *ngIf="selectedTap === EReportViewType.AIView"></cr-ai-disclaimer>
+
 	<!-- Report results -->
 	<copyleaks-report-results-container
 		*ngIf="

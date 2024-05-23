@@ -15,6 +15,22 @@
 		align-items: flex-start;
 		gap: 8px;
 
+		.matched-text-tab,
+		.ai-tab,
+		.writing-assistant-tab {
+			cursor: pointer;
+			box-sizing: border-box;
+			.tab-disabled {
+				opacity: 0.5 !important;
+				cursor: not-allowed !important;
+			}
+		}
+
+		.title,
+		svg {
+			transition: all 0.3s ease-in-out;
+		}
+
 		.matched-text-tab {
 			display: flex;
 			width: 72px;
@@ -28,7 +44,13 @@
 			border: 1px solid $color-white;
 			background: $color-container-background;
 			box-shadow: 2px 2px 4px 0px rgba(0, 0, 0, 0.15), -2px -2px 8px 0px rgba(255, 255, 255, 0.5);
-			&:hover {
+			border-top: 1px solid transparent;
+			border-right: 1px solid transparent;
+			border-bottom: 2px solid transparent;
+			border-left: 1px solid transparent;
+			transition: 0.4s ease-in-out;
+			&:hover,
+			.tab-selected {
 				border-radius: 10px;
 				border-top: 1px solid $color-plagiarism-identical;
 				border-right: 1px solid $color-plagiarism-identical;
@@ -36,10 +58,22 @@
 				border-left: 1px solid $color-plagiarism-identical;
 				background: $color-white;
 				box-shadow: -4px -4px 4px 0px rgba(236, 119, 116, 0.1) inset, 4px 4px 4px 0px rgba(251, 115, 103, 0.1) inset;
-				color: var(--Colors-Detection-Plagiarism---identical, $color-plagiarism-identical);
+				.title {
+					color: $color-plagiarism-identical;
+					font-weight: 800;
+				}
+
+				.icon-container {
+					svg {
+						width: 22px;
+						height: 23px;
+						flex-shrink: 0;
+					}
+				}
 			}
 
 			.icon-container {
+				box-sizing: border-box;
 				display: flex;
 				width: 32px;
 				height: 32px;
@@ -67,6 +101,15 @@
 					height: 8px;
 					fill: $plag-score-top-level;
 				}
+				.score {
+					color: $color-black;
+					text-align: center;
+					font-family: 'Haboro Soft';
+					font-size: 12px;
+					font-style: normal;
+					font-weight: 800;
+					line-height: normal;
+				}
 			}
 		}
 
@@ -83,7 +126,13 @@
 			border: 1px solid $color-white;
 			background: $color-container-background;
 			box-shadow: 2px 2px 4px 0px rgba(0, 0, 0, 0.15), -2px -2px 8px 0px rgba(255, 255, 255, 0.5);
-			&:hover {
+			border-top: 1px solid transparent;
+			border-right: 1px solid transparent;
+			border-bottom: 2px solid transparent;
+			border-left: 1px solid transparent;
+			transition: 0.4s ease-in-out;
+			&:hover,
+			.tab-selected {
 				border-radius: 10px;
 				border-top: 1px solid $color-ai-tab;
 				border-right: 1px solid $color-ai-tab;
@@ -91,10 +140,22 @@
 				border-left: 1px solid $color-ai-tab;
 				background: $color-white;
 				box-shadow: -4px -4px 4px 0px rgba(236, 119, 116, 0.1) inset, 4px 4px 4px 0px rgba(251, 115, 103, 0.1) inset;
-				color: $color-ai-tab;
+				.title {
+					color: $color-ai-tab;
+					font-weight: 800;
+				}
+
+				.icon-container {
+					svg {
+						width: 28px;
+						height: 20px;
+						flex-shrink: 0;
+					}
+				}
 			}
 
 			.icon-container {
+				box-sizing: border-box;
 				display: flex;
 				width: 32px;
 				height: 32px;
@@ -122,6 +183,15 @@
 					height: 8px;
 					fill: $plag-score-mid-level;
 				}
+				.score {
+					color: $color-black;
+					text-align: center;
+					font-family: 'Haboro Soft';
+					font-size: 12px;
+					font-style: normal;
+					font-weight: 800;
+					line-height: normal;
+				}
 			}
 		}
 
@@ -138,7 +208,13 @@
 			border: 1px solid $color-white;
 			background: $color-container-background;
 			box-shadow: 2px 2px 4px 0px rgba(0, 0, 0, 0.15), -2px -2px 8px 0px rgba(255, 255, 255, 0.5);
-			&:hover {
+			border-top: 1px solid transparent;
+			border-right: 1px solid transparent;
+			border-bottom: 2px solid transparent;
+			border-left: 1px solid transparent;
+			transition: 0.4s ease-in-out;
+			&:hover,
+			.tab-selected {
 				border-radius: 10px;
 				border-top: 1px solid $color-grammar-dark;
 				border-right: 1px solid $color-grammar-dark;
@@ -146,10 +222,22 @@
 				border-left: 1px solid $color-grammar-dark;
 				background: var(--Colors-Main-White, #fbffff);
 				box-shadow: -4px -4px 4px 0px rgba(255, 165, 3, 0.14) inset, 4px 4px 4px 0px rgba(255, 165, 3, 0.14) inset;
-				color: $color-grammar-dark;
+				.title {
+					color: $color-grammar-dark;
+					font-weight: 800;
+				}
+
+				.icon-container {
+					svg {
+						width: 24px;
+						height: 15px;
+						flex-shrink: 0;
+					}
+				}
 			}
 
 			.icon-container {
+				box-sizing: border-box;
 				display: flex;
 				width: 32px;
 				height: 32px;
@@ -161,7 +249,6 @@
 				border-radius: 14px;
 				border: 1px solid rgba(255, 165, 3, 0.4);
 				background: linear-gradient(121deg, rgba(255, 165, 3, 0.2) 0%, rgba(251, 255, 255, 0) 100.14%);
-				background: linear-gradient(125deg, rgba(101, 18, 210, 0.2) 0%, rgba(251, 255, 255, 0) 99.92%);
 				svg {
 					width: 19px;
 					height: 11.875px;
@@ -177,6 +264,15 @@
 					width: 8px;
 					height: 8px;
 					fill: $plag-score-mid-level;
+				}
+				.score {
+					color: $color-black;
+					text-align: center;
+					font-family: 'Haboro Soft';
+					font-size: 12px;
+					font-style: normal;
+					font-weight: 800;
+					line-height: normal;
 				}
 			}
 		}

@@ -6,6 +6,7 @@
 	<!-- Report tabs container --->
 	<copyleaks-report-tabs-container
 		*ngIf="reportMode === EReportMode.WebReport"
+		[reportMode]="reportMode"
 		[hideAiTap]="hideAiTap"
 		[hidePlagarismTap]="hidePlagarismTap"
 		[forceWritingFeedbackTapHide]="hideWritingFeedback"
@@ -127,6 +128,7 @@
 
 <copyleaks-report-tabs-container
 	*ngIf="reportMode === EReportMode.AssessmentTool"
+	class="assessment-tool-tabs"
 	[reportMode]="reportMode"
 	[hideAiTap]="hideAiTap"
 	[hidePlagarismTap]="hidePlagarismTap"

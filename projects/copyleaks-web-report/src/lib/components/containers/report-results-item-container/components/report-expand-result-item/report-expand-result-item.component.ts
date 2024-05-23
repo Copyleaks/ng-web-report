@@ -112,13 +112,11 @@ export class ReportExpandResultItemComponent implements OnInit, OnChanges {
 							) || 'not available'
 						}.\n
             ${
-							!!this.resultItem.resultPreview.metadata.submissionDate
-								? 'Submission Date: ' +
-										this._datePipe.transform(
-											this.resultItem.resultPreview.metadata.submissionDate,
-											"MMM d, y 'at' h:mm a"
-										) || 'not available'
-								: ''
+							'Submission Date: ' +
+								this._datePipe.transform(
+									this.resultItem.resultPreview.metadata.submissionDate,
+									"MMM d, y 'at' h:mm a"
+								) || 'not available'
 						}`,
 				code: 'summary-date',
 			});

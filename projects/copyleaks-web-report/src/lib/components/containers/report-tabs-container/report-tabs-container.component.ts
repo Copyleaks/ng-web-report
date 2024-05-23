@@ -8,7 +8,7 @@ import {
 	SimpleChanges,
 	TemplateRef,
 } from '@angular/core';
-import { EReportMode, EReportScoreTooltipPosition, EReportViewType } from '../../../enums/copyleaks-web-report.enums';
+import { EReportScoreTooltipPosition, EReportViewType } from '../../../enums/copyleaks-web-report.enums';
 import { ReportViewService } from '../../../services/report-view.service';
 import { ALERTS } from '../../../constants/report-alerts.constants';
 import { ReportNgTemplatesService } from '../../../services/report-ng-templates.service';
@@ -125,9 +125,6 @@ export class ReportTabsContainerComponent implements OnInit, OnDestroy, OnChange
 	 * @Input {boolean} Flag indicating whether to force the Writing Feedback tab to hide or not.
 	 */
 	@Input() forceWritingFeedbackTapHide = false;
-
-	@Input() reportMode: EReportMode;
-	EReportMode = EReportMode;
 
 	EReportViewType = EReportViewType;
 	EReportScoreTooltipPosition = EReportScoreTooltipPosition;

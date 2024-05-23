@@ -86,13 +86,15 @@ export class ReportExpandResultItemComponent implements OnInit, OnChanges {
 		if (
 			(this.resultItem?.resultPreview?.metadata?.creationDate ||
 				this.resultItem?.resultPreview?.metadata?.lastModificationDate ||
-				this.resultItem?.resultPreview?.metadata?.publishDate) &&
+				this.resultItem?.resultPreview?.metadata?.publishDate ||
+				this.resultItem?.resultPreview?.metadata?.submissionDate) &&
 			!this.resultItem.resultPreview.tags.find(tag => tag.code === 'summary-date')
 		) {
 			const date =
 				this.resultItem.resultPreview.metadata.creationDate ||
 				this.resultItem.resultPreview.metadata.lastModificationDate ||
-				this.resultItem.resultPreview.metadata.publishDate;
+				this.resultItem.resultPreview.metadata.publishDate ||
+				this.resultItem.resultPreview.metadata.submissionDate;
 			this.resultItem.resultPreview.tags.push({
 				title: this._datePipe.transform(date, 'MMM d, y, HH:mm:ss'),
 				description: $localize`Published: ${
@@ -108,6 +110,10 @@ export class ReportExpandResultItemComponent implements OnInit, OnChanges {
 								this.resultItem.resultPreview.metadata.lastModificationDate,
 								"MMM d, y 'at' h:mm a"
 							) || 'not available'
+						}.\n
+						Submission Date: ${
+							this._datePipe.transform(this.resultItem.resultPreview.metadata.submissionDate, "MMM d, y 'at' h:mm a") ||
+							'not available'
 						}.`,
 				code: 'summary-date',
 			});

@@ -52,7 +52,7 @@ function ready() {
 
 	(window as any).addEventListener('message', onMessageFromParent);
 
-	document.querySelectorAll('span[match]').forEach(match => {
+	document.querySelectorAll('span[match][data-type="3"]').forEach(match => {
 		match.addEventListener('mouseenter', (_: MouseEvent) => {
 			const tooltipSpanContent = generateWritingFeedbackMatchTooltip(
 				(match as HTMLSpanElement).dataset?.['wrongText'],

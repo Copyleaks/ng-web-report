@@ -171,13 +171,15 @@ export class ReportResultsItemComponent implements OnInit, OnChanges, OnDestroy 
 		if (
 			(this.previewResult?.metadata?.creationDate ||
 				this.previewResult?.metadata?.lastModificationDate ||
-				this.previewResult?.metadata?.publishDate) &&
+				this.previewResult?.metadata?.publishDate ||
+				this.previewResult?.metadata?.submissionDate) &&
 			!this.previewResult?.tags?.find(tag => tag.code === 'summary-date')
 		) {
 			const date =
 				this.previewResult.metadata.creationDate ||
 				this.previewResult.metadata.lastModificationDate ||
-				this.previewResult.metadata.publishDate;
+				this.previewResult.metadata.publishDate ||
+				this.previewResult.metadata.submissionDate;
 			this.previewResult.tags.unshift({
 				title: this._datePipe.transform(date, 'MMM d, y, HH:mm:ss'),
 				description: $localize`Published: ${
@@ -190,7 +192,14 @@ export class ReportResultsItemComponent implements OnInit, OnChanges, OnDestroy 
             Last modification: ${
 							this._datePipe.transform(this.previewResult.metadata.lastModificationDate, "MMM d, y 'at' h:mm a") ||
 							'not available'
-						}.`,
+						}.\n
+            ${
+							!!this.previewResult.metadata.submissionDate
+								? 'Submission Date: ' +
+										this._datePipe.transform(this.previewResult.metadata.submissionDate, "MMM d, y 'at' h:mm a") ||
+								  'not available'
+								: ''
+						}`,
 				code: 'summary-date',
 			});
 		}

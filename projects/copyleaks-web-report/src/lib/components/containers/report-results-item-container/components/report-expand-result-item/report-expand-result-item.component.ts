@@ -111,13 +111,10 @@ export class ReportExpandResultItemComponent implements OnInit, OnChanges {
 								"MMM d, y 'at' h:mm a"
 							) || 'not available'
 						}.\n
-            ${
-							'Submission Date: ' +
-								this._datePipe.transform(
-									this.resultItem.resultPreview.metadata.submissionDate,
-									"MMM d, y 'at' h:mm a"
-								) || 'not available'
-						}`,
+						Submission Date: ${
+							this._datePipe.transform(this.resultItem.resultPreview.metadata.submissionDate, "MMM d, y 'at' h:mm a") ||
+							'not available'
+						}.`,
 				code: 'summary-date',
 			});
 		}

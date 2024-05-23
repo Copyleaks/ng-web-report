@@ -193,11 +193,11 @@ export class ReportResultsItemComponent implements OnInit, OnChanges, OnDestroy 
 							this._datePipe.transform(this.previewResult.metadata.lastModificationDate, "MMM d, y 'at' h:mm a") ||
 							'not available'
 						}.\n
-            ${
-							'Submission Date: ' +
-								this._datePipe.transform(this.previewResult.metadata.submissionDate, "MMM d, y 'at' h:mm a") ||
+
+						Submission Date: ${
+							this._datePipe.transform(this.previewResult.metadata.submissionDate, "MMM d, y 'at' h:mm a") ||
 							'not available'
-						}`,
+						}.`,
 				code: 'summary-date',
 			});
 		}

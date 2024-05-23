@@ -93,6 +93,10 @@
 	}
 }
 
+.assessment-tool-view {
+	border-radius: 10px !important;
+	box-shadow: 2px 2px 4px 0px rgba(0, 0, 0, 0.15), -2px -2px 8px 0px rgba(255, 255, 255, 0.5) !important;
+}
 .web-report-right-section {
 	flex: 30%;
 	width: 30%;
@@ -177,4 +181,8 @@ copyleaks-report-alerts-container {
 	font-style: normal;
 	font-weight: 500;
 	line-height: normal;
+}
+
+cr-assessment-tool-tab-score-panel {
+	flex-grow: initial !important;
 }

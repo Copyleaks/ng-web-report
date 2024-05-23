@@ -34,6 +34,9 @@
 
 	<!-- Report content container  -->
 	<copyleaks-content-viewer-container
+		[ngClass]="{
+			'assessment-tool-view': reportMode === EReportMode.AssessmentTool
+		}"
 		[isHtmlView]="isHtmlView"
 		[isAlertsView]="isAlertsMode"
 		[contentHtml]="iframeHtml"
@@ -63,6 +66,18 @@
 
 	<!-- Report results & alerts container -->
 	<div class="results-alerts-container" [style.overflow]="isLoadingScanResults ? 'hidden' : ''">
+		<cr-assessment-tool-tab-score-panel
+			*ngIf="reportMode === EReportMode.AssessmentTool && selectedTap !== EReportViewType.WritingFeedbackTabView"
+			[selectedTap]="selectedTap"
+			[plagarismScore]="plagiarismScore"
+			[aiScore]="reportStatistics?.aiScore ?? 0"
+			[writingFeedbackScore]="reportStatistics?.writingFeedbackOverallScore"
+			[totalWritingFeedbackIssues]="reportStatistics?.writingFeedbackOverallIssues"
+			[wordsTotal]="reportStatistics?.total ?? 0"
+			[identicalTotal]="reportStatistics?.identical ?? 0"
+			[minorChangesTotal]="reportStatistics?.minorChanges ?? 0"
+			[paraphrasedTotal]="reportStatistics?.relatedMeaning ?? 0"
+			[excludedTotal]="reportStatistics?.omittedWords ?? 0"></cr-assessment-tool-tab-score-panel>
 		<!-- Report alerts container -->
 		<copyleaks-report-alerts-container
 			*ngIf="

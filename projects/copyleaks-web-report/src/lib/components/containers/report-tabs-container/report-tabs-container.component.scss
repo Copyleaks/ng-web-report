@@ -50,7 +50,7 @@
 			border-left: 1px solid transparent;
 			transition: 0.4s ease-in-out;
 			&:hover,
-			.tab-selected {
+			&.tab-selected {
 				border-radius: 10px;
 				border-top: 1px solid $color-plagiarism-identical;
 				border-right: 1px solid $color-plagiarism-identical;
@@ -132,7 +132,7 @@
 			border-left: 1px solid transparent;
 			transition: 0.4s ease-in-out;
 			&:hover,
-			.tab-selected {
+			&.tab-selected {
 				border-radius: 10px;
 				border-top: 1px solid $color-ai-tab;
 				border-right: 1px solid $color-ai-tab;
@@ -214,7 +214,7 @@
 			border-left: 1px solid transparent;
 			transition: 0.4s ease-in-out;
 			&:hover,
-			.tab-selected {
+			&.tab-selected {
 				border-radius: 10px;
 				border-top: 1px solid $color-grammar-dark;
 				border-right: 1px solid $color-grammar-dark;

@@ -1,4 +1,10 @@
-<div [@fade] class="tooltip" [ngClass]="['tooltip--' + position]" [style.left]="left + 'px'" [style.top]="top + 'px'">
+<div
+	[@fade]
+	class="tooltip"
+	[class.inline]="viewType === EReportScoreTooltipView.Inline"
+	[ngClass]="['tooltip--' + position]"
+	[style.left]="left + 'px'"
+	[style.top]="top + 'px'">
 	<div class="tooltip-titles-container">
 		<span class="match-type-text" i18n>Match type</span>
 		<div class="text-coverage-container">

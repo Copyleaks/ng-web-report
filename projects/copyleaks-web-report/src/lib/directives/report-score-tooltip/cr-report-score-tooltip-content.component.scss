@@ -457,3 +457,16 @@
 		width: 0%;
 	}
 }
+
+.inline {
+	position: static;
+	transform: initial;
+	transform-origin: initial;
+	box-shadow: none !important;
+	margin-bottom: 0px;
+	padding: 2px !important;
+
+	svg {
+		display: none;
+	}
+}

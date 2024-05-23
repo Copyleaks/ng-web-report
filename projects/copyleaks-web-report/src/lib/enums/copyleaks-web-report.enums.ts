@@ -67,6 +67,11 @@ export enum EReportScoreTooltipPosition {
 	DEFAULT = 'above',
 }
 
+export enum EReportScoreTooltipView {
+	Tooltip = 'tooltip',
+	Inline = 'inline',
+}
+
 /**
  * Enum representing reasons for exclusion
  */

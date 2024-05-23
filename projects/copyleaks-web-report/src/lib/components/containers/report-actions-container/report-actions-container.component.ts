@@ -49,6 +49,7 @@ export class ReportActionsContainerComponent implements OnInit, AfterViewInit, O
 
 	ngAfterViewInit(): void {
 		this._initCustomActionsTemplatesRefs();
+		this.updateComponentDisplay();
 	}
 
 	/**
@@ -61,6 +62,7 @@ export class ReportActionsContainerComponent implements OnInit, AfterViewInit, O
 			setTimeout(() => {
 				this.customActionsTemplateRef = this._reportNgTemplatesSvc.reportTemplatesRefs
 					?.customActionsTemplate as TemplateRef<any>;
+				this.updateComponentDisplay();
 			});
 
 		// Starts a subscription for the custom actions reference changes
@@ -68,6 +70,7 @@ export class ReportActionsContainerComponent implements OnInit, AfterViewInit, O
 			if (refs?.customActionsTemplate !== undefined && this.customActionsTemplateRef == undefined)
 				setTimeout(() => {
 					this.customActionsTemplateRef = refs?.customActionsTemplate as TemplateRef<any>;
+					this.updateComponentDisplay();
 				});
 		});
 	}
@@ -75,6 +78,11 @@ export class ReportActionsContainerComponent implements OnInit, AfterViewInit, O
 	get showReportActions() {
 		const containerDiv = this.actionsContainer?.nativeElement;
 		return containerDiv?.children?.length > 0;
+	}
+
+	updateComponentDisplay() {
+		if (this.showReportActions) this.display = 'flex';
+		else this.display = 'none';
 	}
 
 	ngOnDestroy(): void {}

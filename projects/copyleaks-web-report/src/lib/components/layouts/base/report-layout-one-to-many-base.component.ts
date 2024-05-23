@@ -97,6 +97,7 @@ export abstract class OneToManyReportLayoutBaseComponent extends ReportLayoutBas
 	showReadabilityLoadingView: boolean = true;
 	allWritingFeedbacksStats: IWritingFeedbackTypeStatistics[];
 	allMatchResultsStats: IMatchesTypeStatistics[];
+	customActionsTemplate: TemplateRef<any>;
 
 	override get rerendered(): boolean {
 		return this.oneToManyRerendered;

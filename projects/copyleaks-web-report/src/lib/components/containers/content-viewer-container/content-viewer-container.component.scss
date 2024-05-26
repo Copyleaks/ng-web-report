@@ -17,6 +17,26 @@
 		margin-bottom: 8px;
 	}
 
+	.submitted-doc-name-container {
+		display: flex;
+		align-items: center;
+		gap: 4px;
+		mat-icon {
+			width: 18px;
+			height: 18px;
+			font-size: 18px;
+			color: $grayed-out-disabled;
+		}
+		span {
+			color: $color-black;
+			text-align: center;
+			font-size: 14px;
+			font-style: normal;
+			font-weight: 700;
+			line-height: normal;
+		}
+	}
+
 	.title-and-actions-container {
 		width: 100%;
 		display: flex;

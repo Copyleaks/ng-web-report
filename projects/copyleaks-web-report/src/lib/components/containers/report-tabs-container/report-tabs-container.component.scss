@@ -435,6 +435,20 @@
 		}
 	}
 
+	.assessment-tool-skeleton {
+		width: fit-content;
+		display: flex;
+		height: fit-content !important;
+		width: 40px;
+		::ng-deep .loader {
+			height: 15px !important;
+			margin-bottom: 0px !important;
+			border-radius: 10px !important;
+			opacity: 0.2;
+			background-color: $color-medium-dark;
+		}
+	}
+
 	.skeleton.real-time-view {
 		::ng-deep .loader {
 			height: 14px !important;
@@ -461,6 +475,10 @@
 	.tab-disabled {
 		opacity: 0.5 !important;
 		cursor: not-allowed !important;
+	}
+
+	.tab-loading {
+		pointer-events: none !important;
 	}
 
 	.identical.real-time-view {

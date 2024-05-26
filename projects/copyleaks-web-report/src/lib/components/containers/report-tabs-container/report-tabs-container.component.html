@@ -334,6 +334,7 @@
 				@fadeIn
 				[class.tab-selected]="selectedTap === EReportViewType.PlagiarismView && !hidePlagarismTap"
 				[class.tab-disabled]="hidePlagarismTap && showDisabledProducts"
+				[class.tab-loading]="showLoadingView"
 				[class.mobile]="isMobile"
 				[matTooltip]="hidePlagarismTap && showDisabledProducts ? DISABLED : ''"
 				matTooltipClass="web-report-mat-tooltip"
@@ -363,11 +364,22 @@
 				<div class="tab-title-container">
 					<span class="title">Matching</span>
 					<div class="score-container">
-						<svg xmlns="http://www.w3.org/2000/svg" width="8" height="9" viewBox="0 0 8 9" fill="none">
+						<svg
+							*ngIf="!showLoadingView"
+							xmlns="http://www.w3.org/2000/svg"
+							width="8"
+							height="9"
+							viewBox="0 0 8 9"
+							fill="none">
 							<circle cx="4" cy="4.5" r="4" fill="#F44336" />
 						</svg>
 						<span class="score">
-							{{ hidePlagarismTap && showDisabledProducts ? 'N/A' : (plagarismScore | percent : '1.0-1') }}
+							<ng-container *ngIf="!showLoadingView; else loadingViewRef">
+								{{ hidePlagarismTap && showDisabledProducts ? 'N/A' : (plagarismScore | percent : '1.0-1') }}
+							</ng-container>
+							<ng-template #loadingViewRef>
+								<ngx-skeleton-loader class="assessment-tool-skeleton" [appearance]="'line'"></ngx-skeleton-loader>
+							</ng-template>
 						</span>
 					</div>
 				</div>
@@ -381,6 +393,7 @@
 				tabindex="0"
 				[class.tab-selected]="selectedTap === EReportViewType.AIView && !hideAiTap"
 				[class.tab-disabled]="hideAiTap && showDisabledProducts"
+				[class.tab-loading]="showLoadingView"
 				[class.with-company-logo]="
 					selectedTap === EReportViewType.AIView && !hideAiTap && hidePlagarismTap && companyLogo
 				"
@@ -413,10 +426,21 @@
 				<div class="tab-title-container">
 					<span class="title">AI Content</span>
 					<div class="score-container">
-						<svg xmlns="http://www.w3.org/2000/svg" width="9" height="9" viewBox="0 0 9 9" fill="none">
+						<svg
+							*ngIf="!showLoadingView"
+							xmlns="http://www.w3.org/2000/svg"
+							width="9"
+							height="9"
+							viewBox="0 0 9 9"
+							fill="none">
 							<circle cx="4.5" cy="4.5" r="4" fill="#FFA503" />
 						</svg>
-						<span class="score">{{ hideAiTap && showDisabledProducts ? 'N/A' : (aiScore | percent : '1.0-1') }}</span>
+						<ng-container *ngIf="!showLoadingView; else loadingViewRef">
+							<span class="score">{{ hideAiTap && showDisabledProducts ? 'N/A' : (aiScore | percent : '1.0-1') }}</span>
+						</ng-container>
+						<ng-template #loadingViewRef>
+							<ngx-skeleton-loader class="assessment-tool-skeleton" [appearance]="'line'"></ngx-skeleton-loader>
+						</ng-template>
 					</div>
 				</div>
 			</a>
@@ -429,6 +453,7 @@
 				aria-describedby="WritingFeedback-view-text"
 				[class.tab-selected]="selectedTap === EReportViewType.WritingFeedbackTabView && !hideWritingFeedbackTap"
 				[class.tab-disabled]="hideWritingFeedbackTap && showDisabledProducts"
+				[class.tab-loading]="showLoadingView"
 				[class.with-company-logo]="
 					selectedTap === EReportViewType.WritingFeedbackTabView &&
 					!hideWritingFeedbackTap &&
@@ -491,7 +516,12 @@
 					<span class="title">Writing Assist.</span>
 					<div class="score-container">
 						<span class="score">
-							{{ hideWritingFeedbackTap && showDisabledProducts ? 'N/A' : totalWritingFeedbackIssues }}
+							<ng-container *ngIf="!showLoadingView; else loadingViewRef">
+								{{ hideWritingFeedbackTap && showDisabledProducts ? 'N/A' : totalWritingFeedbackIssues }}
+							</ng-container>
+							<ng-template #loadingViewRef>
+								<ngx-skeleton-loader class="assessment-tool-skeleton" [appearance]="'line'"></ngx-skeleton-loader>
+							</ng-template>
 						</span>
 					</div>
 				</div>

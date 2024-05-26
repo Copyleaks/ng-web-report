@@ -327,7 +327,7 @@
 		<div class="assessment-tool-container">
 			<a
 				class="matched-text-tab"
-				*ngIf="!hidePlagarismTap || showDisabledProducts"
+				*ngIf="!hidePlagarismTap || showDisabledProducts || showLoadingView"
 				tabindex="0"
 				role="button"
 				aria-describedby="plagiarism-view-text"
@@ -386,7 +386,7 @@
 			</a>
 			<a
 				class="ai-tab"
-				*ngIf="!hideAiTap || showDisabledProducts"
+				*ngIf="!hideAiTap || showDisabledProducts || showLoadingView"
 				@fadeIn
 				role="button"
 				aria-describedby="AI-view-text"
@@ -446,7 +446,7 @@
 			</a>
 			<a
 				class="writing-assistant-tab"
-				*ngIf="(!hideWritingFeedbackTap || showDisabledProducts) && !forceWritingFeedbackTapHide"
+				*ngIf="((!hideWritingFeedbackTap || showDisabledProducts) && !forceWritingFeedbackTapHide) || showLoadingView"
 				@fadeIn
 				tabindex="0"
 				role="button"

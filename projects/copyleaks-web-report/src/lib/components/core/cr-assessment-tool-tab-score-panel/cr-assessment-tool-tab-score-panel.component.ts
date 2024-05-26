@@ -63,6 +63,11 @@ export class CrAssessmentToolTabScorePanelComponent implements OnInit, OnChanges
 	 */
 	@Input() totalWritingFeedbackIssues: number = 0;
 
+	/**
+	 * @Input {boolean} Flag indicating whether to show the loading view or not.
+	 */
+	@Input() showLoadingView: boolean = false;
+
 	expanded: boolean = false;
 	totalAiWords = 0;
 

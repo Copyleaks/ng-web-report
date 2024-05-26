@@ -77,7 +77,8 @@
 			[identicalTotal]="reportStatistics?.identical ?? 0"
 			[minorChangesTotal]="reportStatistics?.minorChanges ?? 0"
 			[paraphrasedTotal]="reportStatistics?.relatedMeaning ?? 0"
-			[excludedTotal]="reportStatistics?.omittedWords ?? 0"></cr-assessment-tool-tab-score-panel>
+			[excludedTotal]="reportStatistics?.omittedWords ?? 0"
+			[showLoadingView]="isLoadingScanContent || isLoadingScanResults"></cr-assessment-tool-tab-score-panel>
 		<!-- Report alerts container -->
 		<copyleaks-report-alerts-container
 			*ngIf="

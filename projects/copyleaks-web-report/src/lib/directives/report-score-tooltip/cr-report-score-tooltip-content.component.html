@@ -79,75 +79,73 @@
 				</div>
 			</div>
 		</div>
-		<ng-container *ngIf="!scoreStats?.isResult">
-			<div class="tooltip-stats-container">
-				<div class="match-type-stats-container">
-					<div class="match-type-stats-numbers-container">
-						<span class="match-type-title-text" i18n>Original text</span>
-						<div class="match-type-numbers-container" i18n>
-							<span class="match-type-numbers" style="width: 35px; text-align: end">
-								{{
-									(1 -
-										((scoreStats?.omittedPct?.totalWords ?? 0) +
-											(scoreStats?.paraphrasedPct?.totalWords ?? 0) +
-											(scoreStats?.minorChangesPct?.totalWords ?? 0) +
-											(scoreStats?.identicalPct?.totalWords ?? 0)) /
-											scoreStats?.totalWords >=
-									0
-										? 1 -
-										  ((scoreStats?.omittedPct?.totalWords ?? 0) +
-												(scoreStats?.paraphrasedPct?.totalWords ?? 0) +
-												(scoreStats?.minorChangesPct?.totalWords ?? 0) +
-												(scoreStats?.identicalPct?.totalWords ?? 0)) /
-												scoreStats?.totalWords
-										: 0) ?? 0 | similarity : '1.0-1'
-								}}
-							</span>
-							<span class="match-type-numbers" style="margin-left: auto">
-								{{
-									(scoreStats?.totalWords -
-										(scoreStats?.omittedPct?.totalWords ?? 0) -
-										(scoreStats?.paraphrasedPct?.totalWords ?? 0) -
-										(scoreStats?.minorChangesPct?.totalWords ?? 0) -
-										(scoreStats?.identicalPct?.totalWords ?? 0) >=
-									0
-										? scoreStats?.totalWords -
-										  (scoreStats?.omittedPct?.totalWords ?? 0) -
-										  (scoreStats?.paraphrasedPct?.totalWords ?? 0) -
-										  (scoreStats?.minorChangesPct?.totalWords ?? 0) -
-										  (scoreStats?.identicalPct?.totalWords ?? 0)
-										: 0) ?? 0 | number
-								}}
-							</span>
-						</div>
-					</div>
-					<div class="match-type-stats-bar-container original">
-						<span
-							*ngIf="
-								1 -
-									((scoreStats?.omittedPct?.totalWords ?? 0) +
-										(scoreStats?.paraphrasedPct?.totalWords ?? 0) +
-										(scoreStats?.minorChangesPct?.totalWords ?? 0) +
-										(scoreStats?.identicalPct?.totalWords ?? 0)) /
-										scoreStats?.totalWords >
-								0
-							"
-							class="match-type-bar-pct"
-							[style.width]="
+		<div class="tooltip-stats-container">
+			<div class="match-type-stats-container">
+				<div class="match-type-stats-numbers-container">
+					<span class="match-type-title-text" i18n>Original text</span>
+					<div class="match-type-numbers-container" i18n>
+						<span class="match-type-numbers" style="width: 35px; text-align: end">
+							{{
 								(1 -
 									((scoreStats?.omittedPct?.totalWords ?? 0) +
 										(scoreStats?.paraphrasedPct?.totalWords ?? 0) +
 										(scoreStats?.minorChangesPct?.totalWords ?? 0) +
 										(scoreStats?.identicalPct?.totalWords ?? 0)) /
-										scoreStats?.totalWords ??
-									0) *
-									100 +
-								'%'
-							"></span>
+										scoreStats?.totalWords >=
+								0
+									? 1 -
+									  ((scoreStats?.omittedPct?.totalWords ?? 0) +
+											(scoreStats?.paraphrasedPct?.totalWords ?? 0) +
+											(scoreStats?.minorChangesPct?.totalWords ?? 0) +
+											(scoreStats?.identicalPct?.totalWords ?? 0)) /
+											scoreStats?.totalWords
+									: 0) ?? 0 | similarity : '1.0-1'
+							}}
+						</span>
+						<span class="match-type-numbers" style="margin-left: auto">
+							{{
+								(scoreStats?.totalWords -
+									(scoreStats?.omittedPct?.totalWords ?? 0) -
+									(scoreStats?.paraphrasedPct?.totalWords ?? 0) -
+									(scoreStats?.minorChangesPct?.totalWords ?? 0) -
+									(scoreStats?.identicalPct?.totalWords ?? 0) >=
+								0
+									? scoreStats?.totalWords -
+									  (scoreStats?.omittedPct?.totalWords ?? 0) -
+									  (scoreStats?.paraphrasedPct?.totalWords ?? 0) -
+									  (scoreStats?.minorChangesPct?.totalWords ?? 0) -
+									  (scoreStats?.identicalPct?.totalWords ?? 0)
+									: 0) ?? 0 | number
+							}}
+						</span>
 					</div>
 				</div>
+				<div class="match-type-stats-bar-container original">
+					<span
+						*ngIf="
+							1 -
+								((scoreStats?.omittedPct?.totalWords ?? 0) +
+									(scoreStats?.paraphrasedPct?.totalWords ?? 0) +
+									(scoreStats?.minorChangesPct?.totalWords ?? 0) +
+									(scoreStats?.identicalPct?.totalWords ?? 0)) /
+									scoreStats?.totalWords >
+							0
+						"
+						class="match-type-bar-pct"
+						[style.width]="
+							(1 -
+								((scoreStats?.omittedPct?.totalWords ?? 0) +
+									(scoreStats?.paraphrasedPct?.totalWords ?? 0) +
+									(scoreStats?.minorChangesPct?.totalWords ?? 0) +
+									(scoreStats?.identicalPct?.totalWords ?? 0)) /
+									scoreStats?.totalWords ??
+								0) *
+								100 +
+							'%'
+						"></span>
+				</div>
 			</div>
-		</ng-container>
+		</div>
 	</ng-container>
 	<ng-template #aiPctWords>
 		<div class="tooltip-stats-container">

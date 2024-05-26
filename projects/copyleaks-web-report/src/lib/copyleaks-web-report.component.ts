@@ -63,7 +63,7 @@ export class CopyleaksWebReportComponent implements OnInit, OnDestroy {
 	 * @Example: EReportMode.WebReport
 	 * @Example: EReportMode.AssessmentTool
 	 */
-	@Input() reportMode: EReportMode = EReportMode.AssessmentTool;
+	@Input() reportMode: EReportMode = EReportMode.WebReport;
 
 	/**
 	 * @Input {ReportLayoutType} - The copyleaks report layout type.

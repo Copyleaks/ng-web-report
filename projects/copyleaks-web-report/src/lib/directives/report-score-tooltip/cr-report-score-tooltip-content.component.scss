@@ -373,7 +373,6 @@
 					border-radius: 10px;
 					border: 1px solid rgba(63, 154, 245, 0.6);
 					background: $color-primary;
-					margin-left: auto;
 				}
 			}
 
@@ -391,42 +390,28 @@
 
 	.omitted-words-stats-container {
 		display: flex;
-		flex-direction: column;
-		align-items: flex-start;
-		gap: 2px;
-		align-self: stretch;
-		.omitted-words-stats-numbers-container {
-			display: flex;
-			align-items: center;
-			gap: 8px;
-			align-self: stretch;
-			.omitted-words-title-text {
-				color: $grayed-out-disabled;
-				text-align: right;
-				font-family: Almarai, haboro-soft, sans-serif !important;
-				font-size: 12px;
-				font-style: normal;
-				font-weight: 400;
-				line-height: normal;
-			}
-			.omitted-words-numbers-container {
-				.total-scan-words,
-				.total-omitted-words {
-					font-family: Almarai, haboro-soft, sans-serif !important;
-					font-size: 12px;
-					font-style: normal;
-					line-height: normal;
-					text-transform: uppercase;
-				}
-				.total-omitted-words {
-					color: $color-black;
-					font-weight: 700;
-				}
-				.total-scan-words {
-					color: $grayed-out-disabled;
-					font-weight: 400;
-				}
-			}
+		flex-direction: row;
+		justify-content: space-between;
+		align-items: center;
+		width: 100%;
+		// gap: 2px;
+		.omitted-words-title-text {
+			font-family: haboro-soft, Almarai, sans-serif !important;
+			color: $color-medium-dark;
+			text-align: center;
+			font-size: 14px;
+			font-style: normal;
+			font-weight: 500;
+			line-height: normal;
+		}
+		.total-omitted-words {
+			font-family: Almarai, haboro-soft, sans-serif !important;
+			color: $color-black;
+			font-size: 12px;
+			font-style: normal;
+			font-weight: 700;
+			line-height: normal;
+			text-transform: uppercase;
 		}
 
 		.omitted-words-stats-bar-container {

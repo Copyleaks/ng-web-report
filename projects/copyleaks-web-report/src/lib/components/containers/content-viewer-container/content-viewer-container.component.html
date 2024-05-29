@@ -296,14 +296,15 @@
 						<i
 							*ngIf="partial.match.type === MatchType.excluded && partial.match.reason != 8"
 							exclude-match
-							[title]="
+							[matTooltip]="
 								partial.match.reason != undefined && partial.match.reason != null
 									? EXCLUDE_MESSAGE[partial.match.reason]
 									: ''
-							">
+							"
+							matTooltipClass="web-report-mat-tooltip"
+							matTooltipPosition="above"
+							i18n-matTooltip>
 							{{ partial.content }}
-
-							<span class="omitted-text-title" i18n>Omitted text</span>
 						</i>
 						<!--  -->
 						<span
@@ -359,11 +360,14 @@
 						<i
 							*ngIf="partial.match.type === MatchType.excluded && partial.match.reason != 8"
 							exclude-match
-							[title]="
+							[matTooltip]="
 								partial.match.reason != undefined && partial.match.reason != null
 									? EXCLUDE_MESSAGE[partial.match.reason]
 									: ''
-							">
+							"
+							matTooltipPosition="above"
+							matTooltipClass="web-report-mat-tooltip"
+							i18n-matTooltip>
 							{{ partial.content }}
 						</i>
 						<!--  -->

@@ -137,9 +137,25 @@
 		</div>
 
 		<div class="plagiarism-detection-container">
-			<cr-percentage-result-item
+			<!-- <cr-percentage-result-item
 				[reportViewService]="reportViewSvc"
-				[percentageResult]="percentageResult"></cr-percentage-result-item>
+				[percentageResult]="percentageResult"></cr-percentage-result-item> -->
+
+			<cr-assessment-tool-tab-score-panel
+				[selectedTap]="EReportViewType.PlagiarismView"
+				[plagarismScore]="
+					(percentageResult?.resultItem?.iStatisticsResult?.identical +
+						percentageResult?.resultItem?.iStatisticsResult?.minorChanges +
+						percentageResult?.resultItem?.iStatisticsResult?.relatedMeaning) /
+					(percentageResult?.resultItem?.metadataSource?.words - percentageResult?.resultItem?.metadataSource?.excluded)
+				"
+				[wordsTotal]="percentageResult?.resultItem?.metadataSource?.words ?? 0"
+				[identicalTotal]="percentageResult?.resultItem?.iStatisticsResult?.identical ?? 0"
+				[minorChangesTotal]="percentageResult?.resultItem?.iStatisticsResult?.minorChanges ?? 0"
+				[paraphrasedTotal]="percentageResult?.resultItem?.iStatisticsResult?.relatedMeaning ?? 0"
+				[excludedTotal]="
+					percentageResult?.resultItem?.metadataSource?.excluded ?? 0
+				"></cr-assessment-tool-tab-score-panel>
 		</div>
 	</div>
 </ng-container>

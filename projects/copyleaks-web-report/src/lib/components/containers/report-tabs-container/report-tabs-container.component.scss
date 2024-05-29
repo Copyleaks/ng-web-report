@@ -15,6 +15,24 @@
 		align-items: flex-start;
 		gap: 8px;
 
+		&.mobile {
+			flex-direction: row;
+			width: 100%;
+			box-sizing: border-box;
+			background: $color-white;
+			box-shadow: 0px -4px 4px 0px rgba(0, 0, 0, 0.05);
+			padding: 4px 6px 2px 6px;
+			align-items: flex-end;
+			gap: 2px;
+
+			.matched-text-tab,
+			.ai-tab,
+			.writing-assistant-tab {
+				flex-grow: 1;
+				box-sizing: border-box;
+			}
+		}
+
 		.matched-text-tab,
 		.ai-tab,
 		.writing-assistant-tab {

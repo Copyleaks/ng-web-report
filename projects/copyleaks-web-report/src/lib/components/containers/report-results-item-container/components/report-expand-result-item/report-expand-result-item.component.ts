@@ -1,5 +1,5 @@
 import { Component, EventEmitter, Input, OnChanges, OnInit, Output, SimpleChanges } from '@angular/core';
-import { EPlatformType, EResultPreviewType } from '../../../../../enums/copyleaks-web-report.enums';
+import { EPlatformType, EReportViewType, EResultPreviewType } from '../../../../../enums/copyleaks-web-report.enums';
 import { ReportViewService } from '../../../../../services/report-view.service';
 import { IResultItem } from '../models/report-result-item.models';
 import { IPercentageResult } from '../percentage-result-item/models/percentage-result-item.models';
@@ -27,6 +27,8 @@ export class ReportExpandResultItemComponent implements OnInit, OnChanges {
 
 	faviconExists: boolean = true;
 	faviconURL: string;
+
+	EReportViewType = EReportViewType;
 
 	get authorName() {
 		if (this.resultItem?.resultPreview) {

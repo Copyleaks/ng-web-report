@@ -90,11 +90,6 @@
 		.mat-expansion-panel-content {
 			display: flex;
 			overflow-y: hidden;
-			@media screen and (max-width: 960px) {
-				min-height: 100%;
-				height: 100%;
-				overflow-y: auto !important;
-			}
 		}
 
 		/* Hide default toggle icon */

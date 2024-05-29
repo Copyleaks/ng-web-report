@@ -51,6 +51,7 @@
 		[isMultiSelection]="isMultiSelection"
 		[viewMode]="viewMode"
 		reportOrigin="original"
+		[hidePoweredBy]="reportMode === EReportMode.AssessmentTool"
 		(iFrameMessageEvent)="onIFrameMessage($event)"
 		(viewChangeEvent)="onReportViewChange($event)"></copyleaks-content-viewer-container>
 </div>

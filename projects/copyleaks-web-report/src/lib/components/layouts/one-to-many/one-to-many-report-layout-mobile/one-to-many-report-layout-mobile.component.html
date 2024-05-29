@@ -9,6 +9,19 @@
 		[companyLogo]="companyLogo"></copyleaks-report-actions-container>
 
 	<div class="middle-section">
+		<cr-assessment-tool-tab-score-panel
+			*ngIf="reportMode === EReportMode.AssessmentTool && selectedTap !== EReportViewType.WritingFeedbackTabView"
+			[selectedTap]="selectedTap"
+			[plagarismScore]="plagiarismScore"
+			[aiScore]="reportStatistics?.aiScore ?? 0"
+			[writingFeedbackScore]="reportStatistics?.writingFeedbackOverallScore"
+			[totalWritingFeedbackIssues]="reportStatistics?.writingFeedbackOverallIssues"
+			[wordsTotal]="reportStatistics?.total ?? 0"
+			[identicalTotal]="reportStatistics?.identical ?? 0"
+			[minorChangesTotal]="reportStatistics?.minorChanges ?? 0"
+			[paraphrasedTotal]="reportStatistics?.relatedMeaning ?? 0"
+			[excludedTotal]="reportStatistics?.omittedWords ?? 0"
+			[showLoadingView]="isLoadingScanContent || isLoadingScanResults"></cr-assessment-tool-tab-score-panel>
 		<!-- Report alerts -->
 		<copyleaks-report-alerts-container
 			*ngIf="
@@ -33,6 +46,8 @@
 		<div class="content-section">
 			<!-- Report scan content tabs -->
 			<copyleaks-report-tabs-container
+				*ngIf="reportMode === EReportMode.WebReport"
+				[reportMode]="reportMode"
 				[hideAiTap]="hideAiTap"
 				[hidePlagarismTap]="hidePlagarismTap"
 				[forceWritingFeedbackTapHide]="hideWritingFeedback"
@@ -114,5 +129,33 @@
 		[showLoadingView]="showCorrectionsLoadingView || isLoadingScanCorrections"></copyleaks-report-corrections-container>
 
 	<!-- Powered by Copyleaks image section -->
-	<div class="powered-by-copyleaks-container"><cr-powered-by></cr-powered-by></div>
+	<div *ngIf="reportMode === EReportMode.WebReport" class="powered-by-copyleaks-container">
+		<cr-powered-by></cr-powered-by>
+	</div>
+
+	<copyleaks-report-tabs-container
+		*ngIf="reportMode === EReportMode.AssessmentTool"
+		[reportMode]="reportMode"
+		[hideAiTap]="hideAiTap"
+		[hidePlagarismTap]="hidePlagarismTap"
+		[forceWritingFeedbackTapHide]="hideWritingFeedback"
+		[hideWritingFeedbackTap]="hideWritingFeedbackTap"
+		[writingFeedbackScore]="reportStatistics?.writingFeedbackOverallScore"
+		[totalWritingFeedbackIssues]="reportStatistics?.writingFeedbackOverallIssues"
+		[selectedTap]="selectedTap"
+		[plagarismScore]="plagiarismScore"
+		[aiScore]="reportStatistics?.aiScore ?? 0"
+		[wordsTotal]="reportStatistics?.total ?? 0"
+		[identicalTotal]="reportStatistics?.identical ?? 0"
+		[minorChangesTotal]="reportStatistics?.minorChanges ?? 0"
+		[paraphrasedTotal]="reportStatistics?.relatedMeaning ?? 0"
+		[excludedTotal]="reportStatistics?.omittedWords ?? 0"
+		[showLoadingView]="
+			selectedTap === EReportViewType.WritingFeedbackTabView
+				? isLoadingScanCorrections
+				: isLoadingScanContent || isLoadingScanResults
+		"
+		[showDisabledProducts]="showDisabledProducts"
+		[loadingProgressPct]="loadingProgressPct"
+		[isMobile]="true"></copyleaks-report-tabs-container>
 </div>

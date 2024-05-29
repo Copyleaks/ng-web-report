@@ -324,7 +324,7 @@
 		</ng-template>
 	</ng-container>
 	<ng-container *ngSwitchCase="EReportMode.AssessmentTool">
-		<div class="assessment-tool-container">
+		<div class="assessment-tool-container" [class.mobile]="isMobile">
 			<a
 				class="matched-text-tab"
 				*ngIf="!hidePlagarismTap || showDisabledProducts || showLoadingView"

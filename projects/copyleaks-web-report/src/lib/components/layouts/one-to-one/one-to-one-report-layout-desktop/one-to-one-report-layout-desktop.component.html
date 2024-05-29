@@ -12,6 +12,7 @@
 		[reportResponsive]="EResponsiveLayoutType.Desktop"
 		viewMode="one-to-one"
 		reportOrigin="source"
+		[hidePoweredBy]="reportMode === EReportMode.AssessmentTool"
 		(iFrameMessageEvent)="onSourceIFrameMessage($event)"
 		(viewChangeEvent)="onReportViewChange($event)"></copyleaks-content-viewer-container>
 </div>

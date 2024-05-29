@@ -35,6 +35,26 @@
 		}
 	}
 
+	.expand-icon-container {
+		display: flex;
+		justify-content: center;
+		align-items: center;
+		gap: 10px;
+		align-self: stretch;
+		width: 100%;
+
+		.line {
+			background: $color-white;
+			width: 30%;
+			height: 1px;
+		}
+
+		svg:hover {
+			color: $color-primary;
+			fill: $color-primary;
+		}
+	}
+
 	.content-section {
 		flex-grow: 70;
 		height: 70%;

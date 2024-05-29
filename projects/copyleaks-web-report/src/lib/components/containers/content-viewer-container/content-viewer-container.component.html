@@ -32,7 +32,7 @@
 		</svg>
 
 		<button
-			*ngIf="reportOrigin != 'suspect' && scanSource?.metadata?.excluded > 0"
+			*ngIf="reportOrigin != 'suspect' && scanSource?.metadata?.excluded > 0 && !isPartitalScan"
 			class="omitted-text-btn"
 			[class.isOn]="showOmittedWords"
 			[matTooltip]="showOmittedWords ? HIDE_OMITTED_WORDS_TOOLTIP_MESSAGE : VIEW_OMITTED_WORDS_TOOLTIP_MESSAGE"
@@ -296,14 +296,11 @@
 						<i
 							*ngIf="partial.match.type === MatchType.excluded && partial.match.reason != 8"
 							exclude-match
-							[matTooltip]="
+							[title]="
 								partial.match.reason != undefined && partial.match.reason != null
 									? EXCLUDE_MESSAGE[partial.match.reason]
 									: ''
-							"
-							matTooltipClass="web-report-mat-tooltip"
-							matTooltipPosition="above"
-							i18n-matTooltip>
+							">
 							{{ partial.content }}
 						</i>
 						<!--  -->
@@ -360,14 +357,11 @@
 						<i
 							*ngIf="partial.match.type === MatchType.excluded && partial.match.reason != 8"
 							exclude-match
-							[matTooltip]="
+							[title]="
 								partial.match.reason != undefined && partial.match.reason != null
 									? EXCLUDE_MESSAGE[partial.match.reason]
 									: ''
-							"
-							matTooltipPosition="above"
-							matTooltipClass="web-report-mat-tooltip"
-							i18n-matTooltip>
+							">
 							{{ partial.content }}
 						</i>
 						<!--  -->

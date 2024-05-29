@@ -336,23 +336,23 @@ function ready() {
 			});
 		});
 
-		document.querySelectorAll('span[exclude]').forEach(excludedMatch => {
-			excludedMatch.addEventListener('mouseenter', (_: MouseEvent) => {
-				const tooltipSpanContent = (excludedMatch as HTMLSpanElement).dataset?.['reason'];
+		// document.querySelectorAll('span[exclude]').forEach(excludedMatch => {
+		// 	excludedMatch.addEventListener('mouseenter', (_: MouseEvent) => {
+		// 		const tooltipSpanContent = (excludedMatch as HTMLSpanElement).dataset?.['reason'];
 
-				const tooltipSpan = document.createElement('span');
-				tooltipSpan.classList.add('excluded-reason-tooltip');
-				tooltipSpan.innerHTML = tooltipSpanContent;
-				tooltipSpan.style.transform = `translate(-50%, 0) scale(${1 / (currentZoom * pdfZoom)})`;
-				tooltipSpan.style.transformOrigin = '50% 100%';
-				excludedMatch.appendChild(tooltipSpan);
-				modifyTooltipsStyles(excludedMatch, '.excluded-reason-tooltip');
-			});
+		// 		const tooltipSpan = document.createElement('span');
+		// 		tooltipSpan.classList.add('excluded-reason-tooltip');
+		// 		tooltipSpan.innerHTML = tooltipSpanContent;
+		// 		tooltipSpan.style.transform = `translate(-50%, 0) scale(${1 / (currentZoom * pdfZoom)})`;
+		// 		tooltipSpan.style.transformOrigin = '50% 100%';
+		// 		excludedMatch.appendChild(tooltipSpan);
+		// 		modifyTooltipsStyles(excludedMatch, '.excluded-reason-tooltip');
+		// 	});
 
-			excludedMatch.addEventListener('mouseleave', () => {
-				document.querySelectorAll('.excluded-reason-tooltip').forEach(e => e.remove());
-			});
-		});
+		// 	excludedMatch.addEventListener('mouseleave', () => {
+		// 		document.querySelectorAll('.excluded-reason-tooltip').forEach(e => e.remove());
+		// 	});
+		// });
 	}
 
 	function generateWritingFeedbackMatchTooltip(wrongText: string, correctionText: string): string {

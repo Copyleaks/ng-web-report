@@ -52,28 +52,7 @@ function ready() {
 
 	(window as any).addEventListener('message', onMessageFromParent);
 
-	document.querySelectorAll('span[match][data-type="3"]').forEach(match => {
-		match.addEventListener('mouseenter', (_: MouseEvent) => {
-			const tooltipSpanContent = generateWritingFeedbackMatchTooltip(
-				(match as HTMLSpanElement).dataset?.['wrongText'],
-				(match as HTMLSpanElement).dataset?.['correctionText']
-			);
-
-			// create a span element with the class name tooltip-match-content-container and style the color to red
-			const tooltipSpan = document.createElement('span');
-			tooltipSpan.classList.add('tooltip-match-content-container');
-			tooltipSpan.innerHTML = tooltipSpanContent;
-			tooltipSpan.style.transform = `translate(-50%, 0) scale(${1 / (currentZoom * pdfZoom)})`;
-			tooltipSpan.style.transformOrigin = '50% 100%';
-			match.appendChild(tooltipSpan);
-			modifyTooltipsStyles(match);
-		});
-
-		match.addEventListener('mouseleave', () => {
-			// remove span with class name tooltip-match-content-container
-			document.querySelectorAll('.tooltip-match-content-container').forEach(e => e.remove());
-		});
-	});
+	addMatchTooltipEventListeners();
 
 	init();
 
@@ -333,6 +312,49 @@ function ready() {
 		}
 	}
 
+	function addMatchTooltipEventListeners() {
+		document.querySelectorAll('span[match][data-type="3"]').forEach(match => {
+			match.addEventListener('mouseenter', (_: MouseEvent) => {
+				const tooltipSpanContent = generateWritingFeedbackMatchTooltip(
+					(match as HTMLSpanElement).dataset?.['wrongText'],
+					(match as HTMLSpanElement).dataset?.['correctionText']
+				);
+
+				// create a span element with the class name tooltip-match-content-container and style the color to red
+				const tooltipSpan = document.createElement('span');
+				tooltipSpan.classList.add('tooltip-match-content-container');
+				tooltipSpan.innerHTML = tooltipSpanContent;
+				tooltipSpan.style.transform = `translate(-50%, 0) scale(${1 / (currentZoom * pdfZoom)})`;
+				tooltipSpan.style.transformOrigin = '50% 100%';
+				match.appendChild(tooltipSpan);
+				modifyTooltipsStyles(match);
+			});
+
+			match.addEventListener('mouseleave', () => {
+				// remove span with class name tooltip-match-content-container
+				document.querySelectorAll('.tooltip-match-content-container').forEach(e => e.remove());
+			});
+		});
+
+		// document.querySelectorAll('span[exclude]').forEach(excludedMatch => {
+		// 	excludedMatch.addEventListener('mouseenter', (_: MouseEvent) => {
+		// 		const tooltipSpanContent = (excludedMatch as HTMLSpanElement).dataset?.['reason'];
+
+		// 		const tooltipSpan = document.createElement('span');
+		// 		tooltipSpan.classList.add('excluded-reason-tooltip');
+		// 		tooltipSpan.innerHTML = tooltipSpanContent;
+		// 		tooltipSpan.style.transform = `translate(-50%, 0) scale(${1 / (currentZoom * pdfZoom)})`;
+		// 		tooltipSpan.style.transformOrigin = '50% 100%';
+		// 		excludedMatch.appendChild(tooltipSpan);
+		// 		modifyTooltipsStyles(excludedMatch, '.excluded-reason-tooltip');
+		// 	});
+
+		// 	excludedMatch.addEventListener('mouseleave', () => {
+		// 		document.querySelectorAll('.excluded-reason-tooltip').forEach(e => e.remove());
+		// 	});
+		// });
+	}
+
 	function generateWritingFeedbackMatchTooltip(wrongText: string, correctionText: string): string {
 		var contentHTML = '';
 
@@ -349,8 +371,8 @@ function ready() {
 		return contentHTML;
 	}
 
-	function modifyTooltipsStyles(match?: Element) {
-		const tooltip = match.querySelector('.tooltip-match-content-container') as HTMLElement;
+	function modifyTooltipsStyles(match?: Element, tooltipClass: string = 'tooltip-match-content-container') {
+		const tooltip = match.querySelector(tooltipClass) as HTMLElement;
 
 		if (tooltip instanceof HTMLElement) {
 			let tooltipRect = tooltip.getBoundingClientRect();

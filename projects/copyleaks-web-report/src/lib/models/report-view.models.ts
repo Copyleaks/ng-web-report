@@ -49,6 +49,8 @@ export interface IReportScoreTooltipModel {
 
 	/** Total scan words */
 	totalWords?: number;
+
+	isResult?: boolean;
 }
 
 /**

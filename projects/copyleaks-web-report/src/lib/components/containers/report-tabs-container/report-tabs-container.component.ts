@@ -256,7 +256,7 @@ export class ReportTabsContainerComponent implements OnInit, OnDestroy, OnChange
 
 		if (this.isMobile && 'selectedTap' in changes) this._updateSelectedTabColors();
 
-		this.totalAiWords = Math.ceil(this.aiScore * this.wordsTotal ?? 0);
+		this.totalAiWords = Math.ceil(this.aiScore * ((this.wordsTotal ?? 0) - (this.excludedTotal ?? 0)));
 
 		if (
 			this.isMobile &&

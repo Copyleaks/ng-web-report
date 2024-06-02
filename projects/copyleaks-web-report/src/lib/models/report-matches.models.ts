@@ -50,13 +50,11 @@ export enum MatchType {
 	minorChanges = 1,
 	relatedMeaning = 2,
 	writingFeedback = 3,
-	none = 4,
+	aiText = 4,
+	none = 5,
 
 	// custom
 	suspectedCharacterReplacement = 100,
-	// custom
-	aiText = 101,
-	// custom
 }
 
 /**

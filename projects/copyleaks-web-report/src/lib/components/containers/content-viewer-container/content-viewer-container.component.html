@@ -40,7 +40,12 @@
 		</svg>
 
 		<button
-			*ngIf="reportOrigin != 'suspect' && scanSource?.metadata?.excluded > 0 && !isPartitalScan"
+			*ngIf="
+				reportOrigin != 'suspect' &&
+				scanSource?.metadata?.excluded > 0 &&
+				!isPartitalScan &&
+				viewMode != 'writing-feedback'
+			"
 			class="omitted-text-btn"
 			[class.isOn]="showOmittedWords"
 			[matTooltip]="showOmittedWords ? HIDE_OMITTED_WORDS_TOOLTIP_MESSAGE : VIEW_OMITTED_WORDS_TOOLTIP_MESSAGE"

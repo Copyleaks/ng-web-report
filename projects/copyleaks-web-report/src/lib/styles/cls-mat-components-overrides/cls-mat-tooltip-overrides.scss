@@ -9,5 +9,11 @@
 		border-radius: 4px !important;
 		padding: 8px !important;
 		font-family: haboro-soft, sans-serif !important;
+		white-space: pre-line !important;
+	}
+
+	.mat-tooltip.web-report-mat-tooltip.date-tooltip {
+		white-space: pre-line !important;
+		max-width: 400px !important;
 	}
 }

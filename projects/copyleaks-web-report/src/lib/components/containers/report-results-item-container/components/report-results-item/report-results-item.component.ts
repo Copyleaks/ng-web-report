@@ -184,20 +184,15 @@ export class ReportResultsItemComponent implements OnInit, OnChanges, OnDestroy 
 				title: this._datePipe.transform(date, 'MMM d, y, HH:mm:ss'),
 				description: $localize`Published: ${
 					this._datePipe.transform(this.previewResult.metadata.publishDate, "MMM d, y 'at' h:mm a") || 'not available'
-				}.\n
-            Created: ${
-							this._datePipe.transform(this.previewResult.metadata.creationDate, "MMM d, y 'at' h:mm a") ||
-							'not available'
-						}.\n
-            Last modification: ${
-							this._datePipe.transform(this.previewResult.metadata.lastModificationDate, "MMM d, y 'at' h:mm a") ||
-							'not available'
-						}.\n
-
-						Submission Date: ${
-							this._datePipe.transform(this.previewResult.metadata.submissionDate, "MMM d, y 'at' h:mm a") ||
-							'not available'
-						}.`,
+				}.\nCreated: ${
+					this._datePipe.transform(this.previewResult.metadata.creationDate, "MMM d, y 'at' h:mm a") || 'not available'
+				}.\nLast modification: ${
+					this._datePipe.transform(this.previewResult.metadata.lastModificationDate, "MMM d, y 'at' h:mm a") ||
+					'not available'
+				}.\nSubmission Date: ${
+					this._datePipe.transform(this.previewResult.metadata.submissionDate, "MMM d, y 'at' h:mm a") ||
+					'not available'
+				}.`,
 				code: 'summary-date',
 			});
 		}

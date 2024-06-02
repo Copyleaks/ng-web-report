@@ -102,21 +102,18 @@ export class ReportExpandResultItemComponent implements OnInit, OnChanges {
 				description: $localize`Published: ${
 					this._datePipe.transform(this.resultItem.resultPreview.metadata.publishDate, "MMM d, y 'at' h:mm a") ||
 					'not available'
-				}.\n
-            Created: ${
-							this._datePipe.transform(this.resultItem.resultPreview.metadata.creationDate, "MMM d, y 'at' h:mm a") ||
-							'not available'
-						}.\n
-            Last modification: ${
-							this._datePipe.transform(
-								this.resultItem.resultPreview.metadata.lastModificationDate,
-								"MMM d, y 'at' h:mm a"
-							) || 'not available'
-						}.\n
-						Submission Date: ${
-							this._datePipe.transform(this.resultItem.resultPreview.metadata.submissionDate, "MMM d, y 'at' h:mm a") ||
-							'not available'
-						}.`,
+				}.\nCreated: ${
+					this._datePipe.transform(this.resultItem.resultPreview.metadata.creationDate, "MMM d, y 'at' h:mm a") ||
+					'not available'
+				}.\nLast modification: ${
+					this._datePipe.transform(
+						this.resultItem.resultPreview.metadata.lastModificationDate,
+						"MMM d, y 'at' h:mm a"
+					) || 'not available'
+				}.\nSubmission Date: ${
+					this._datePipe.transform(this.resultItem.resultPreview.metadata.submissionDate, "MMM d, y 'at' h:mm a") ||
+					'not available'
+				}.`,
 				code: 'summary-date',
 			});
 		}

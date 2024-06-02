@@ -187,7 +187,12 @@
 					</div>
 				</div>
 				<div class="match-type-stats-bar-container original">
-					<span class="match-type-bar-pct" [style.width]="(scoreStats?.humanPct?.percentage ?? 0) * 100 + '%'"></span>
+					<span
+						class="match-type-bar-pct"
+						[style.width]="(scoreStats?.humanPct?.percentage ?? 0) * 100 + '%'"
+						[style.display]="
+							!scoreStats?.humanPct?.percentage || scoreStats?.humanPct?.percentage === 0 ? 'none' : ''
+						"></span>
 				</div>
 			</div>
 		</div>

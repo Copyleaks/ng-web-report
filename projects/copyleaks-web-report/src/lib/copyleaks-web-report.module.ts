@@ -95,6 +95,11 @@ import { CrReportMatchTooltipModule } from './directives/report-match-tooltip/cr
 import { CrBannerSectionComponent } from './components/core/cr-banner-section/cr-banner-section.component';
 import { CrAiDisclaimerComponent } from './components/core/cr-ai-disclaimer/cr-ai-disclaimer.component';
 import { CrAssessmentToolTabScorePanelComponent } from './components/core/cr-assessment-tool-tab-score-panel/cr-assessment-tool-tab-score-panel.component';
+import { ReportMatchHighlightService } from './services/report-match-highlight.service';
+import { ReportMatchesService } from './services/report-matches.service';
+import { ReportViewService } from './services/report-view.service';
+import { ReportDataService } from './services/report-data.service';
+import { ReportErrorsService } from './services/report-errors.service';
 
 @NgModule({
 	declarations: [
@@ -201,7 +206,18 @@ import { CrAssessmentToolTabScorePanelComponent } from './components/core/cr-ass
 		CrCustomResultsBoxContentComponent,
 		CrBannerSectionComponent,
 		EmptyResultStateComponent,
+		ContentViewerContainerComponent,
 	],
-	providers: [ReportRealtimeResultsService, FilterResultDailogService, FilterCorrectionsDialogService, DatePipe],
+	providers: [
+		ReportRealtimeResultsService,
+		FilterResultDailogService,
+		FilterCorrectionsDialogService,
+		DatePipe,
+		ReportViewService,
+		ReportMatchHighlightService,
+		ReportMatchesService,
+		ReportDataService,
+		ReportErrorsService,
+	],
 })
 export class CopyleaksWebReportModule {}

@@ -8,7 +8,7 @@ import { ReportMatchHighlightService } from '../../../services/report-match-high
 import { ReportStatisticsService } from '../../../services/report-statistics.service';
 import { filter } from 'rxjs/operators';
 import { EResponsiveLayoutType, EResultPreviewType } from '../../../enums/copyleaks-web-report.enums';
-import { IScanSource } from '../../../models/report-data.models';
+import { ICompleteResults, IScanSource } from '../../../models/report-data.models';
 import { PostMessageEvent } from '../../../models/report-iframe-events.models';
 import { untilDestroy } from '../../../utils/until-destroy';
 import { ReportLayoutBaseComponent } from './report-layout-base.component';
@@ -27,6 +27,8 @@ export abstract class OneToOneReportLayoutBaseComponent extends ReportLayoutBase
 
 	suspectCrawledVersion: IScanSource;
 	sourceCrawledVersion: IScanSource;
+
+	scanResultsPreviews: ICompleteResults | undefined;
 
 	suspectIframeHtml: string;
 	sourceIframeHtml: string;
@@ -128,6 +130,7 @@ export abstract class OneToOneReportLayoutBaseComponent extends ReportLayoutBase
 		combineLatest([this.reportDataSvc.scanResultsPreviews$, this.reportViewSvc.selectedResult$])
 			.pipe(untilDestroy(this))
 			.subscribe(([previews, resultData]) => {
+				this.scanResultsPreviews = previews;
 				if (this.reportViewSvc.progress$.value != 100 && resultData) {
 					this.numberOfPagesSuspect = resultData.result?.text?.pages?.startPosition?.length ?? 1;
 					this.resultData = resultData;

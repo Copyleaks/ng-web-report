@@ -1,4 +1,5 @@
 import { ReportDataService } from '../../../services/report-data.service';
+import { ReportMatchHighlightService } from '../../../services/report-match-highlight.service';
 import { ReportViewService } from '../../../services/report-view.service';
 
 export enum EFilterResultForm {
@@ -50,6 +51,7 @@ export enum EFilterResultSection {
 export interface IFilterResultDailogData {
 	reportDataSvc: ReportDataService;
 	reportViewSvc: ReportViewService;
+	highlightService: ReportMatchHighlightService;
 	showExcludedDailog: boolean;
 	isMobile: boolean;
 }

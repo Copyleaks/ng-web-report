@@ -52,6 +52,7 @@
 		[viewMode]="viewMode"
 		reportOrigin="original"
 		[hidePoweredBy]="reportMode === EReportMode.AssessmentTool"
+		[submittedDocumentName]="scanResultsPreviews?.scannedDocument?.metadata?.filename"
 		(iFrameMessageEvent)="onIFrameMessage($event)"
 		(viewChangeEvent)="onReportViewChange($event)"></copyleaks-content-viewer-container>
 </div>

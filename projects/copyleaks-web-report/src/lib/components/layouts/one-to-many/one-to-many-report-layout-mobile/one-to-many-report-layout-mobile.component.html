@@ -87,6 +87,7 @@
 				[hidePoweredBy]="true"
 				[isMultiSelection]="isMultiSelection"
 				[viewMode]="viewMode"
+				[submittedDocumentName]="scanResultsPreviews?.scannedDocument?.metadata?.filename"
 				reportOrigin="original"
 				(iFrameMessageEvent)="onIFrameMessage($event)"
 				(viewChangeEvent)="onReportViewChange($event)"></copyleaks-content-viewer-container>

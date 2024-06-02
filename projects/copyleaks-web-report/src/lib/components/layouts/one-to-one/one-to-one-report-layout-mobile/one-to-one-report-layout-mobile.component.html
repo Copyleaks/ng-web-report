@@ -33,6 +33,7 @@
 			[reportResponsive]="EResponsiveLayoutType.Mobile"
 			viewMode="one-to-one"
 			reportOrigin="source"
+			[submittedDocumentName]="scanResultsPreviews?.scannedDocument?.metadata?.filename"
 			[hidePoweredBy]="true"
 			(iFrameMessageEvent)="onSourceIFrameMessage($event)"
 			(viewChangeEvent)="onReportViewChange($event)"></copyleaks-content-viewer-container>

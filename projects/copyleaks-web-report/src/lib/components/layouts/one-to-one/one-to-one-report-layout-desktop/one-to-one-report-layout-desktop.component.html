@@ -12,6 +12,7 @@
 		[reportResponsive]="EResponsiveLayoutType.Desktop"
 		viewMode="one-to-one"
 		reportOrigin="source"
+		[submittedDocumentName]="scanResultsPreviews?.scannedDocument?.metadata?.filename"
 		[hidePoweredBy]="reportMode === EReportMode.AssessmentTool"
 		(iFrameMessageEvent)="onSourceIFrameMessage($event)"
 		(viewChangeEvent)="onReportViewChange($event)"></copyleaks-content-viewer-container>

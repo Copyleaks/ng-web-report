@@ -20,6 +20,7 @@ export * from './lib/components/core/cr-custom-tabs/components/cr-custom-tab-ite
 export * from './lib/components/core/cr-custom-tabs/cr-custom-tabs.component';
 export * from './lib/components/core/cr-report-actions/cr-actions.component';
 export * from './lib/components/core/cr-banner-section/cr-banner-section.component';
+export * from './lib/components/containers/content-viewer-container/content-viewer-container.component';
 export * from './lib/copyleaks-web-report.component';
 
 // Exported services

@@ -245,7 +245,7 @@ export class ContentViewerContainerComponent implements OnInit, AfterViewInit, O
 	/**
 	 * @Input {string} Submitted document name.
 	 */
-	@Input() submittedDocumentName = '{Submitted doc name}.pdf'; // TODO: remove this default value (replace with empty string)
+	@Input() submittedDocumentName = null;
 
 	@Input() authorAlert: IAuthorAlertCard | null;
 

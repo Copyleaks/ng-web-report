@@ -106,6 +106,7 @@ export class ResultsActionsComponent implements OnInit, OnChanges, OnDestroy {
 			data: {
 				reportDataSvc: this._reportDataSvc,
 				reportViewSvc: this._reportViewSvc,
+				highlightService: this._highlightService,
 				showExcludedDailog: showExcludedDailog,
 				isMobile: this.isMobile,
 			} as IFilterResultDailogData,

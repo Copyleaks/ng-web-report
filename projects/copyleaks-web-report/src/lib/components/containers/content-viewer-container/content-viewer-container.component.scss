@@ -168,6 +168,12 @@
 				}
 			}
 
+			&.cr-m-4 {
+				background-color: $color-ai-detected-text;
+				transition: 0.2s;
+				cursor: auto !important;
+			}
+
 			&.cr-m-100 {
 				background: transparent;
 				color: red;

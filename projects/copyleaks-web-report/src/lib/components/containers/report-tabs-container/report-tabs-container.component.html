@@ -139,8 +139,12 @@
 				hideAiTap && showDisabledProducts
 					? null
 					: {
-							aiPct: { percentage: aiScore, disabled: false, totalWords: totalAiWords ?? 0 },
-							humanPct: { percentage: 1 - aiScore, disabled: false, totalWords: wordsTotal - totalAiWords ?? 0 },
+							aiPct: { percentage: totalAiWords / wordsTotal, disabled: false, totalWords: totalAiWords ?? 0 },
+							humanPct: {
+								percentage: 1 - totalAiWords / wordsTotal,
+								disabled: false,
+								totalWords: wordsTotal - totalAiWords ?? 0
+							},
 							omittedPct: {
 								percentage: excludedTotal / wordsTotal,
 								disabled: false,

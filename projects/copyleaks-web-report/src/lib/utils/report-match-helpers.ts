@@ -125,7 +125,7 @@ const mergeMatchesInNest = (matches: Match[]): Match[] => {
 
 	const subMatches: Match[] = [];
 	const idMap: { [key: string]: number } = {};
-	const types: number[] = [0, 0, 0, 0];
+	const types: number[] = [0, 0, 0, 0, 0, 0];
 	let start: number | undefined = undefined;
 	for (const { index, type, ids, kind, gid, reason } of endpoints) {
 		if (kind === EndpointKind.start) {
@@ -484,7 +484,8 @@ export const processAICheatingMatches = (
 		});
 	});
 
-	const grouped = matches;
+	const excluded = sourceTextExcluded(source);
+	const grouped = mergeMatches([...matches, ...excluded]);
 	const filled = fillMissingGaps(grouped, source.text.value.length);
 	return paginateMatches(source.text.value, source.text.pages.startPosition, filled);
 };

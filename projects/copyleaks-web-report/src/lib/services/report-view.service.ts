@@ -58,9 +58,21 @@ export class ReportViewService {
 		return this._selectedCustomTabContent$.value;
 	}
 
+	private _selectedCustomTabResultSectionContent$ = new BehaviorSubject<TemplateRef<any> | null>(null);
+	/** Emits matches that are relevant to source html one-to-many mode */
+	public get selectedCustomTabResultSectionContent$() {
+		return this._selectedCustomTabResultSectionContent$;
+	}
+	/** Getter for the report selected result. */
+	public get selectedCustomTabResultSectionContent() {
+		return this._selectedCustomTabResultSectionContent$.value;
+	}
+
 	private _progress$ = new BehaviorSubject<number>(0);
 	public get progress$() {
 		return this._progress$;
 	}
 	constructor() {}
+
+	ngOnDestroy(): void {}
 }

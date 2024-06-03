@@ -10,6 +10,7 @@ import { untilDestroy } from '../../../../../utils/until-destroy';
 export class CrCustomTabItemComponent implements OnInit {
 	@ViewChild('tabTemplateTitle', { static: true }) tabTemplateTitle: TemplateRef<any>;
 	@ViewChild('tabTemplateContent', { static: true }) tabTemplateContent: TemplateRef<any>;
+	@ViewChild('tabTemplateResultSectionContent', { static: true }) tabTemplateResultSectionContent: TemplateRef<any>;
 
 	/**
 	 * @Input Flex grow property - flex-grow
@@ -28,6 +29,7 @@ export class CrCustomTabItemComponent implements OnInit {
 
 	clickEvent() {
 		this._reportViewSvc.selectedCustomTabContent$.next(this.tabTemplateContent);
+		this._reportViewSvc.selectedCustomTabResultSectionContent$.next(this.tabTemplateResultSectionContent);
 	}
 
 	ngOnDestroy(): void {}
@@ -54,6 +56,19 @@ export class CrCustomTabItemTitleComponent implements OnInit {
 	styleUrls: ['./cr-custom-tab-item.component.scss'],
 })
 export class CrCustomTabItemContentComponent implements OnInit {
+	constructor() {}
+
+	ngOnInit(): void {}
+}
+
+@Component({
+	selector: 'cr-custom-tab-item-result-section-content',
+	template: `
+		<ng-content></ng-content>
+	`,
+	styleUrls: ['./cr-custom-tab-item.component.scss'],
+})
+export class CrCustomTabItemResultSectionComponent implements OnInit {
 	constructor() {}
 
 	ngOnInit(): void {}

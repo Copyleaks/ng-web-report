@@ -38,6 +38,7 @@ import { CrCustomResultsComponent } from './components/core/cr-custom-results/cr
 import {
 	CrCustomTabItemComponent,
 	CrCustomTabItemContentComponent,
+	CrCustomTabItemResultSectionComponent,
 	CrCustomTabItemTitleComponent,
 } from './components/core/cr-custom-tabs/components/cr-custom-tab-item/cr-custom-tab-item.component';
 import { CrCustomTabsComponent } from './components/core/cr-custom-tabs/cr-custom-tabs.component';
@@ -109,6 +110,7 @@ import { ReportErrorsService } from './services/report-errors.service';
 		CrCustomTabItemComponent,
 		CrCustomTabItemContentComponent,
 		CrCustomTabItemTitleComponent,
+		CrCustomTabItemResultSectionComponent,
 		CrCustomEmptyResultsComponent,
 		CrCustomResultsComponent,
 		CrCustomResultsBoxContentComponent,
@@ -200,6 +202,7 @@ import { ReportErrorsService } from './services/report-errors.service';
 		CrCustomTabsComponent,
 		CrCustomTabItemComponent,
 		CrCustomTabItemContentComponent,
+		CrCustomTabItemResultSectionComponent,
 		CrCustomTabItemTitleComponent,
 		CrCustomEmptyResultsComponent,
 		CrCustomResultsComponent,

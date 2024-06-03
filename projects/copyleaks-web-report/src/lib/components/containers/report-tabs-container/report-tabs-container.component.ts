@@ -340,6 +340,7 @@ export class ReportTabsContainerComponent implements OnInit, OnDestroy, OnChange
 				});
 				this.reportViewSvc.selectedAlert$.next(ALERTS.SUSPECTED_AI_TEXT_DETECTED);
 				this.reportViewSvc.selectedCustomTabContent$.next(null);
+				this.reportViewSvc.selectedCustomTabResultSectionContent$.next(null);
 
 				break;
 			case EReportViewType.PlagiarismView:
@@ -352,6 +353,7 @@ export class ReportTabsContainerComponent implements OnInit, OnDestroy, OnChange
 				});
 				this.reportViewSvc.selectedAlert$.next(null);
 				this.reportViewSvc.selectedCustomTabContent$.next(null);
+				this.reportViewSvc.selectedCustomTabResultSectionContent$.next(null);
 				break;
 			case EReportViewType.WritingFeedbackTabView:
 				this.reportViewSvc.reportViewMode$.next({
@@ -363,6 +365,7 @@ export class ReportTabsContainerComponent implements OnInit, OnDestroy, OnChange
 				});
 				this.reportViewSvc.selectedAlert$.next(null);
 				this.reportViewSvc.selectedCustomTabContent$.next(null);
+				this.reportViewSvc.selectedCustomTabResultSectionContent$.next(null);
 				break;
 			default:
 				break;

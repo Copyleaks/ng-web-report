@@ -98,6 +98,7 @@ export abstract class OneToManyReportLayoutBaseComponent extends ReportLayoutBas
 	allWritingFeedbacksStats: IWritingFeedbackTypeStatistics[];
 	allMatchResultsStats: IMatchesTypeStatistics[];
 	customActionsTemplate: TemplateRef<any>;
+	selectedCustomTabResultSectionContentTemplate: TemplateRef<any>;
 
 	override get rerendered(): boolean {
 		return this.oneToManyRerendered;
@@ -220,6 +221,10 @@ export abstract class OneToManyReportLayoutBaseComponent extends ReportLayoutBas
 
 		this.reportViewSvc.progress$.pipe(untilDestroy(this)).subscribe(progress => {
 			this.loadingProgressPct = progress;
+		});
+
+		this.reportViewSvc.selectedCustomTabResultSectionContent$.pipe(untilDestroy(this)).subscribe(content => {
+			this.selectedCustomTabResultSectionContentTemplate = content;
 		});
 
 		this.reportDataSvc.newResults$.pipe(untilDestroy(this)).subscribe(data => {

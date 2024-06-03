@@ -402,6 +402,10 @@ export class ContentViewerContainerComponent implements OnInit, AfterViewInit, O
 				this.isPartitalScan = true;
 			}
 		}
+
+		if ('submittedDocumentName' in changes) {
+			this.submittedDocumentName = decodeURIComponent(this.submittedDocumentName);
+		}
 	}
 
 	onViewChange() {

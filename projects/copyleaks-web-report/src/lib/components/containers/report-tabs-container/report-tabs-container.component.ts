@@ -136,7 +136,8 @@ export class ReportTabsContainerComponent implements OnInit, OnDestroy, OnChange
 	// constants
 	DISABLED: string = $localize`Disabled`;
 
-	totalAiWords = 0;
+	totalAiWords: number = 0;
+	totalHumanWords: number = 0;
 
 	plagarismScoreChartColorScheme = {
 		domain: ['#fd7366', '#ffb1b1', '#fed5a9', '#EBF3F5'],
@@ -257,6 +258,7 @@ export class ReportTabsContainerComponent implements OnInit, OnDestroy, OnChange
 		if (this.isMobile && 'selectedTap' in changes) this._updateSelectedTabColors();
 
 		this.totalAiWords = Math.ceil(this.aiScore * ((this.wordsTotal ?? 0) - (this.excludedTotal ?? 0)));
+		this.totalHumanWords = Math.ceil((this.wordsTotal ?? 0) - (this.excludedTotal ?? 0) - (this.totalAiWords ?? 0));
 
 		if (
 			this.isMobile &&

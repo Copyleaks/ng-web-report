@@ -230,7 +230,7 @@ export class ContentViewerContainerComponent implements OnInit, AfterViewInit, O
 	 *
 	 * @see EResponsiveLayoutType
 	 */
-	@Input() reportResponsive: EResponsiveLayoutType;
+	@Input() reportResponsive: EResponsiveLayoutType = EResponsiveLayoutType.Desktop;
 
 	/**
 	 * @Input {boolean} Flag indicating whether to show the loading view or not.
@@ -310,12 +310,12 @@ export class ContentViewerContainerComponent implements OnInit, AfterViewInit, O
 		if (this.viewMode === 'writing-feedback')
 			return (
 				!!this.writingFeedback?.corrections?.html &&
-				!!this.writingFeedback.corrections.html.chars &&
-				!!this.writingFeedback.corrections.html.chars.groupIds &&
-				!!this.writingFeedback.corrections.html.chars.lengths &&
-				!!this.writingFeedback.corrections.html.chars.starts &&
-				!!this.writingFeedback.corrections.html.chars.operationTexts &&
-				!!this.writingFeedback.corrections.html.chars.types
+				!!this.writingFeedback?.corrections.html.chars &&
+				!!this.writingFeedback?.corrections.html.chars.groupIds &&
+				!!this.writingFeedback?.corrections.html.chars.lengths &&
+				!!this.writingFeedback?.corrections.html.chars.starts &&
+				!!this.writingFeedback?.corrections.html.chars.operationTexts &&
+				!!this.writingFeedback?.corrections.html.chars.types
 			);
 		if (this.reportOrigin === 'original' || this.reportOrigin === 'source') return !!this.scanSource?.html?.value;
 		return !!this.contentHtml;

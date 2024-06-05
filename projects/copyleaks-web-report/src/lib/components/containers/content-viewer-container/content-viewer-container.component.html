@@ -24,6 +24,7 @@
 				</div>
 			</ng-container>
 		</span>
+
 		<span *ngIf="numberOfWords" class="number-of-words" i18n>
 			({{ numberOfWords }}
 			{numberOfWords, plural, =1 {word} other {words}} )
@@ -274,6 +275,7 @@
 				sandbox="allow-scripts"
 				crOriginalHtmlHelper
 				title="Submitted text"></iframe>
+
 			<div
 				class="text-container"
 				#contentText

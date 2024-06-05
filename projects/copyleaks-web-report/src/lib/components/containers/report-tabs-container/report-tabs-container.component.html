@@ -325,8 +325,10 @@
 	</ng-container>
 	<ng-container *ngSwitchCase="EReportMode.AssessmentTool">
 		<div class="assessment-tool-container" [class.mobile]="isMobile">
-			<ng-container *ngFor="let ref of customTabsTemplateRef">
-				<ng-container *ngTemplateOutlet="ref"></ng-container>
+			<ng-container *ngIf="!showLoadingView">
+				<ng-container *ngFor="let ref of customTabsTemplateRef">
+					<ng-container *ngTemplateOutlet="ref"></ng-container>
+				</ng-container>
 			</ng-container>
 
 			<a

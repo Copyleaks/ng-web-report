@@ -1,6 +1,5 @@
 import { Renderer2 } from '@angular/core';
 import { ReportDataService } from '../../../services/report-data.service';
-import iframeJsScript from '../../../utils/one-to-one-iframe-logic';
 import { Match, MatchType, ResultDetailItem, SlicedMatch } from '../../../models/report-matches.models';
 import { ReportMatchesService } from '../../../services/report-matches.service';
 import { ReportViewService } from '../../../services/report-view.service';
@@ -55,6 +54,7 @@ export abstract class OneToOneReportLayoutBaseComponent extends ReportLayoutBase
 	hideMaskedContentDisclaimer: { flag: boolean } = {
 		flag: false,
 	};
+	showOmittedWords: boolean;
 
 	get isLoadingScanContent(): boolean {
 		return (!this.suspectIframeHtml && !this.suspectTextMatches) || (!this.sourceIframeHtml && !this.sourceTextMatches);
@@ -62,10 +62,6 @@ export abstract class OneToOneReportLayoutBaseComponent extends ReportLayoutBase
 
 	get numberOfWords(): number | undefined {
 		return this.reportDataSvc.scanResultsPreviews?.scannedDocument?.totalWords;
-	}
-
-	override get rerendered(): boolean {
-		return this.rerenderedSource && this.rerenderedSuspect;
 	}
 
 	constructor(
@@ -88,7 +84,6 @@ export abstract class OneToOneReportLayoutBaseComponent extends ReportLayoutBase
 			templatesSvc,
 			realTimeResultsSvc
 		);
-		this.iframeJsScript = iframeJsScript;
 	}
 
 	initOneToOneViewData(): void {
@@ -115,10 +110,7 @@ export abstract class OneToOneReportLayoutBaseComponent extends ReportLayoutBase
 		});
 
 		this.matchSvc.sourceHtmlMatches$.pipe(untilDestroy(this)).subscribe(data => {
-			const rerenderedMatches = this._getRenderedMatches(data, this.sourceCrawledVersion?.html?.value);
-			if (rerenderedMatches && data) {
-				this.sourceIframeHtml = rerenderedMatches;
-				this.rerenderedSource = true;
+			if (data) {
 				this.sourceHtmlMatches = data;
 			}
 		});
@@ -142,10 +134,7 @@ export abstract class OneToOneReportLayoutBaseComponent extends ReportLayoutBase
 
 					this.matchSvc.suspectHtmlMatches$.pipe(untilDestroy(this)).subscribe(data => {
 						if (!resultData?.result?.html.value) return;
-						const rerenderedMatches = this._getRenderedMatches(data, resultData?.result?.html?.value);
-						if (rerenderedMatches && data) {
-							this.suspectIframeHtml = rerenderedMatches;
-							this.rerenderedSuspect = true;
+						if (data) {
 							this.suspectHtmlMatches = data;
 						}
 					});
@@ -180,10 +169,7 @@ export abstract class OneToOneReportLayoutBaseComponent extends ReportLayoutBase
 
 				this.matchSvc.suspectHtmlMatches$.pipe(untilDestroy(this)).subscribe(data => {
 					if (!resultData?.result?.html.value) return;
-					const rerenderedMatches = this._getRenderedMatches(data, resultData?.result?.html?.value);
-					if (rerenderedMatches && data) {
-						this.suspectIframeHtml = rerenderedMatches;
-						this.rerenderedSuspect = true;
+					if (data) {
 						this.suspectHtmlMatches = data;
 					}
 				});
@@ -206,16 +192,20 @@ export abstract class OneToOneReportLayoutBaseComponent extends ReportLayoutBase
 					else {
 						// if the result is not found, then change the view to one-to-many
 						this.reportViewSvc.reportViewMode$.next({
+							...this.reportViewSvc.reportViewMode,
 							isHtmlView: data.isHtmlView,
 							viewMode: 'one-to-many',
 							sourcePageIndex: data.sourcePageIndex,
 							suspectPageIndex: data.suspectPageIndex,
 							suspectId: undefined,
-							...this.reportViewSvc.reportViewMode,
 						});
 					}
 				});
 			});
+
+		this.matchSvc.showOmittedWords$.pipe(untilDestroy(this)).subscribe(data => {
+			this.showOmittedWords = data;
+		});
 
 		this._initMaskedContentFlags();
 	}

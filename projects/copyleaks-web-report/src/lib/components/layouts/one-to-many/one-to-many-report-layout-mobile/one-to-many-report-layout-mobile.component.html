@@ -75,22 +75,31 @@
 			<copyleaks-content-viewer-container
 				[isHtmlView]="isHtmlView"
 				[isAlertsView]="isAlertsMode"
-				[contentHtml]="iframeHtml"
 				[scanSource]="reportCrawledVersion"
-				[writingFeedback]="writingFeedback"
+				[hasHtml]="
+					viewMode === 'writing-feedback'
+						? !!writingFeedback?.corrections?.html &&
+						  !!writingFeedback?.corrections.html.chars &&
+						  !!writingFeedback?.corrections.html.chars.groupIds &&
+						  !!writingFeedback?.corrections.html.chars.lengths &&
+						  !!writingFeedback?.corrections.html.chars.starts &&
+						  !!writingFeedback?.corrections.html.chars.operationTexts &&
+						  !!writingFeedback?.corrections.html.chars.types
+						: !!reportCrawledVersion?.html?.value
+				"
 				[contentTextMatches]="contentTextMatches"
 				[contentHtmlMatches]="reportMatches"
-				[numberOfPages]="numberOfPages"
-				[numberOfWords]="numberOfWords"
 				[currentPage]="currentPageSource"
 				[reportResponsive]="EResponsiveLayoutType.Mobile"
 				[hidePoweredBy]="true"
 				[isMultiSelection]="isMultiSelection"
+				[showOmittedWords]="showOmittedWords"
 				[viewMode]="viewMode"
 				[submittedDocumentName]="scanResultsPreviews?.scannedDocument?.metadata?.filename"
 				reportOrigin="original"
 				(iFrameMessageEvent)="onIFrameMessage($event)"
-				(viewChangeEvent)="onReportViewChange($event)"></copyleaks-content-viewer-container>
+				(viewChangeEvent)="onReportViewChange($event)"
+				(onShowOmittedWords)="onShowOmittedWords($event)"></copyleaks-content-viewer-container>
 		</div>
 	</div>
 </div>

@@ -22,14 +22,18 @@ import { DirectionMode as ReportContentDirectionMode, ViewMode } from '../../../
 import { TEXT_FONT_SIZE_UNIT, MIN_TEXT_ZOOM, MAX_TEXT_ZOOM } from '../../../constants/report-content.constants';
 import { PageEvent } from '../../core/cr-paginator/models/cr-paginator.models';
 import { ReportMatchHighlightService } from '../../../services/report-match-highlight.service';
-import { IScanSource, IWritingFeedback } from '../../../models/report-data.models';
+import { IScanSource } from '../../../models/report-data.models';
 import { EExcludeReason, EResponsiveLayoutType } from '../../../enums/copyleaks-web-report.enums';
 import { ReportViewService } from '../../../services/report-view.service';
 import { untilDestroy } from '../../../utils/until-destroy';
 import { EXCLUDE_MESSAGE } from '../../../constants/report-exclude.constants';
 import { IAuthorAlertCard } from '../report-alerts-container/components/author-alert-card/models/author-alert-card.models';
 import { animate, state, style, transition, trigger } from '@angular/animations';
-import { ReportMatchesService } from '../../../services/report-matches.service';
+import * as helpers from '../../../utils/report-match-helpers';
+import { COPYLEAKS_REPORT_IFRAME_STYLES } from '../../../constants/report-iframe-styles.constants';
+
+import oneToManyIframeJsScript from '../../../utils/one-to-many-iframe-logic';
+import oneToOneIframeJsScript from '../../../utils/one-to-one-iframe-logic';
 
 @Component({
 	selector: 'copyleaks-content-viewer-container',
@@ -45,6 +49,7 @@ import { ReportMatchesService } from '../../../services/report-matches.service';
 export class ContentViewerContainerComponent implements OnInit, AfterViewInit, OnChanges {
 	@HostBinding('style.flex-grow')
 	flexGrowProp: number;
+	rerendered: boolean = false;
 
 	@HostListener('click', ['$event'])
 	handleClick(event: MouseEvent): void {
@@ -81,6 +86,17 @@ export class ContentViewerContainerComponent implements OnInit, AfterViewInit, O
 	@Input() isHtmlView: boolean;
 
 	/**
+	 * @Input Determines if the view should be rendered as HTML.
+	 *
+	 * @description
+	 * When set to `true`, the component will view the source/result conent as HTML `only` if the source/result has such content.
+	 * When set to `false`, the text view will be showed.
+	 *
+	 * @default `false`
+	 */
+	@Input() isExportedComponent: boolean = false;
+
+	/**
 	 * @Input Determines if the view is for alerts or not.
 	 *
 	 * @description
@@ -100,25 +116,12 @@ export class ContentViewerContainerComponent implements OnInit, AfterViewInit, O
 	@Input() scanSource: IScanSource;
 
 	/**
-	 * @Input The writing feedback data
-	 *
-	 * @description
-	 * Includes data about the text & Html views.
-	 */
-	@Input() writingFeedback: IWritingFeedback;
-
-	/**
 	 * @Input The scan result data
 	 *
 	 * @description
 	 * Includes data about the text & Html views of the result.
 	 */
 	@Input() resultData: ResultDetailItem;
-
-	/**
-	 * @Input The rerendered content HTML which includes the scan matches
-	 */
-	@Input() contentHtml: string;
 
 	/**
 	 * @Input The source/result text view matches.
@@ -177,16 +180,6 @@ export class ContentViewerContainerComponent implements OnInit, AfterViewInit, O
 	@Input() currentPage: number = 1;
 
 	/**
-	 * @Input The total number of pages in the text view document.
-	 */
-	@Input() numberOfPages: number = 1;
-
-	/**
-	 * @Input The total number of words in the source/result document content.
-	 */
-	@Input() numberOfWords: number | undefined = undefined;
-
-	/**
 	 * Sets the report view mode.
 	 *
 	 * @description
@@ -238,6 +231,11 @@ export class ContentViewerContainerComponent implements OnInit, AfterViewInit, O
 	@Input() showLoadingView = true;
 
 	/**
+	 * @Input {boolean} Flag indicating whether to show the omitted words or not.
+	 */
+	@Input() showOmittedWords = false;
+
+	/**
 	 * @Input {boolean} Flag indicating whether the match selection is multiple or not.
 	 */
 	@Input() isMultiSelection = false;
@@ -248,6 +246,11 @@ export class ContentViewerContainerComponent implements OnInit, AfterViewInit, O
 	@Input() submittedDocumentName = null;
 
 	@Input() authorAlert: IAuthorAlertCard | null;
+
+	/**
+	 * `true` if the source document has an `html` section
+	 */
+	@Input() hasHtml: boolean;
 
 	/**
 	 * Emits iFrame messages to the parent layout component.
@@ -287,38 +290,35 @@ export class ContentViewerContainerComponent implements OnInit, AfterViewInit, O
 	 */
 	@Output() onOpenDisclaimer: EventEmitter<any> = new EventEmitter<any>();
 
+	/**
+	 * Event emitter for Opening the disclaimer.
+	 *
+	 * @event onOpenDisclaimer
+	 * @type {EventEmitter<any>}
+	 */
+	@Output() onShowOmittedWords: EventEmitter<boolean> = new EventEmitter<boolean>();
+
 	isShiftClicked: boolean;
 	iframeLoaded: boolean;
-	showOmittedWords: boolean;
 	isPartitalScan: boolean;
+
+	numberOfPages: number = 1;
+	numberOfWords: number | undefined = undefined;
+
+	contentHtml: string;
 
 	EXCLUDE_MESSAGE = EXCLUDE_MESSAGE;
 	VIEW_OMITTED_WORDS_TOOLTIP_MESSAGE = $localize`Show omitted words`;
 	HIDE_OMITTED_WORDS_TOOLTIP_MESSAGE = $localize`Hide omitted words`;
+
+	iframeStyle: string = COPYLEAKS_REPORT_IFRAME_STYLES;
+	iframeJsScript: string;
 
 	get pages(): number[] {
 		if (this.scanSource) return this.scanSource && this.scanSource.text.pages.startPosition;
 		if (this.resultData.result) return this.resultData.result?.text.pages.startPosition;
 
 		return [];
-	}
-
-	/**
-	 * `true` if the source document has an `html` section
-	 */
-	get hasHtml(): boolean {
-		if (this.viewMode === 'writing-feedback')
-			return (
-				!!this.writingFeedback?.corrections?.html &&
-				!!this.writingFeedback?.corrections.html.chars &&
-				!!this.writingFeedback?.corrections.html.chars.groupIds &&
-				!!this.writingFeedback?.corrections.html.chars.lengths &&
-				!!this.writingFeedback?.corrections.html.chars.starts &&
-				!!this.writingFeedback?.corrections.html.chars.operationTexts &&
-				!!this.writingFeedback?.corrections.html.chars.types
-			);
-		if (this.reportOrigin === 'original' || this.reportOrigin === 'source') return !!this.scanSource?.html?.value;
-		return !!this.contentHtml;
 	}
 
 	iFrameWindow: Window | null; // IFrame nativeElement reference
@@ -337,7 +337,6 @@ export class ContentViewerContainerComponent implements OnInit, AfterViewInit, O
 		private _renderer: Renderer2,
 		private _cdr: ChangeDetectorRef,
 		private _highlightService: ReportMatchHighlightService,
-		private _matchesService: ReportMatchesService,
 		private _viewSvc: ReportViewService
 	) {}
 
@@ -345,13 +344,10 @@ export class ContentViewerContainerComponent implements OnInit, AfterViewInit, O
 		if (this.flexGrow !== undefined && this.flexGrow !== null) this.flexGrowProp = this.flexGrow;
 		if (this.currentPage > this.numberOfPages) this.currentPage = 1;
 
-		this._viewSvc.selectedCustomTabContent$.pipe(untilDestroy(this)).subscribe(content => {
-			if (this.viewMode !== 'one-to-one') this.customTabContent = content;
-		});
-
-		this._matchesService.showOmittedWords$.pipe(untilDestroy(this)).subscribe(value => {
-			this.showOmittedWords = value;
-		});
+		if (!this.isExportedComponent)
+			this._viewSvc.selectedCustomTabContent$.pipe(untilDestroy(this)).subscribe(content => {
+				if (this.viewMode !== 'one-to-one') this.customTabContent = content;
+			});
 	}
 
 	ngAfterViewInit() {
@@ -373,12 +369,6 @@ export class ContentViewerContainerComponent implements OnInit, AfterViewInit, O
 	}
 
 	ngOnChanges(changes: SimpleChanges): void {
-		if (changes['contentHtml'] && changes['contentHtml'].currentValue && this.contentIFrame?.nativeElement) {
-			this._renderer.setAttribute(this.contentIFrame.nativeElement, 'srcdoc', changes['contentHtml'].currentValue);
-			this._cdr.detectChanges();
-			this.showLoadingView = true;
-		}
-
 		if ('currentPage' in changes || ('numberOfPages' in changes && this.currentPage && this.numberOfPages)) {
 			this.currentPage = this.currentPage > this.numberOfPages || this.currentPage <= 0 ? 1 : this.currentPage;
 		}
@@ -387,23 +377,78 @@ export class ContentViewerContainerComponent implements OnInit, AfterViewInit, O
 			'contentTextMatches' in changes &&
 			changes['contentTextMatches'].currentValue != undefined &&
 			(!this.isHtmlView || !this.hasHtml)
-		)
+		) {
 			this.showLoadingView = false;
+		}
 
 		if ('isAlertsView' in changes && !changes['isAlertsView'].currentValue && !changes['isAlertsView'].firstChange)
 			this.iframeLoaded = false;
 
-		if ('scanSource' in changes) {
+		if (
+			'scanSource' in changes ||
+			'reportOrigin' in changes ||
+			'resultData' in changes ||
+			'contentHtmlMatches' in changes ||
+			'isHtmlView' in changes
+		) {
 			if (
 				this.scanSource?.html?.exclude?.reasons?.filter(r => r === EExcludeReason.PartialScan).length > 0 ||
 				this.scanSource?.text?.exclude?.reasons?.filter(r => r === EExcludeReason.PartialScan).length > 0
 			) {
-				this._matchesService.showOmittedWords$.next(true);
+				this.onShowOmittedWords.emit(true);
 				this.isPartitalScan = true;
+			}
+
+			this.iframeJsScript = this.reportOrigin === 'original' ? oneToManyIframeJsScript : oneToOneIframeJsScript;
+
+			if ((this.reportOrigin === 'source' || this.reportOrigin === 'original') && !!this.scanSource) {
+				this.numberOfWords = this.scanSource?.metadata?.words ?? 0;
+				this.numberOfPages = this.scanSource?.text?.pages?.startPosition?.length ?? 1;
+			}
+
+			if (this.reportOrigin === 'suspect' && !!this.resultData) {
+				this.numberOfPages = this.resultData.result?.text?.pages?.startPosition?.length ?? 1;
+			}
+
+			if (!!this.contentHtmlMatches && this.isHtmlView) {
+				if (
+					this.contentHtmlMatches &&
+					changes['contentHtmlMatches']?.previousValue != changes['contentHtmlMatches']?.currentValue
+				) {
+					this.showLoadingView = true;
+					this.rerendered = false;
+				}
+
+				if (this.reportOrigin === 'original' || this.reportOrigin === 'source') {
+					const updatedHtml = this._getRenderedMatches(this.contentHtmlMatches, this.scanSource?.html?.value);
+					if (updatedHtml && this.contentHtmlMatches) {
+						this.contentHtml = updatedHtml;
+						this.rerendered = true;
+					}
+				}
+
+				if (this.reportOrigin === 'suspect') {
+					const updatedHtml = this._getRenderedMatches(this.contentHtmlMatches, this.resultData?.result?.html?.value);
+					if (updatedHtml && this.contentHtmlMatches) {
+						this.contentHtml = updatedHtml;
+						this.rerendered = true;
+					}
+				}
 			}
 		}
 
-		if ('submittedDocumentName' in changes) {
+		if (
+			changes['contentHtmlMatches'] &&
+			changes['contentHtmlMatches'].currentValue &&
+			this.contentIFrame?.nativeElement &&
+			this.isHtmlView
+		) {
+			this._renderer.setAttribute(this.contentIFrame.nativeElement, 'srcdoc', this.contentHtml);
+			this._cdr.detectChanges();
+			this.showLoadingView = true;
+		}
+
+		if ('submittedDocumentName' in changes && this.submittedDocumentName) {
 			this.submittedDocumentName = decodeURIComponent(this.submittedDocumentName);
 		}
 	}
@@ -477,7 +522,7 @@ export class ContentViewerContainerComponent implements OnInit, AfterViewInit, O
 	}
 
 	toggleOmittedWordsView() {
-		this._matchesService.showOmittedWords$.next(!this._matchesService.showOmittedWords);
+		this.onShowOmittedWords.emit(!this.showOmittedWords);
 	}
 
 	private _adjustZoom() {
@@ -499,6 +544,27 @@ export class ContentViewerContainerComponent implements OnInit, AfterViewInit, O
 			else if (event.deltaY > 0) this.zoomOut();
 		}
 	};
+
+	/**
+	 * Render list of matches in the iframe's HTML
+	 * @param matches the matches to render
+	 */
+	protected _getRenderedMatches(matches: Match[] | null, originalHtml?: string) {
+		if (this.rerendered == true || !matches || !originalHtml) return null;
+
+		const html = helpers.getRenderedMatches(matches, originalHtml);
+		if (!html) return null;
+
+		const css = this._renderer.createElement('style') as HTMLStyleElement;
+		css.textContent = this.iframeStyle;
+		const iframeStyle = css.outerHTML;
+
+		const js = this._renderer.createElement('script') as HTMLScriptElement;
+		js.textContent = this.iframeJsScript;
+		const iframeJsScript = js.outerHTML;
+
+		return html + iframeStyle + iframeJsScript;
+	}
 
 	ngOnDestroy(): void {}
 }

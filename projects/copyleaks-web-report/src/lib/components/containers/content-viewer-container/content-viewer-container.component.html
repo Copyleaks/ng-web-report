@@ -277,6 +277,7 @@
 				title="Submitted text"></iframe>
 
 			<div
+				*ngIf="!customTabContent"
 				class="text-container"
 				#contentText
 				[ngStyle]="{

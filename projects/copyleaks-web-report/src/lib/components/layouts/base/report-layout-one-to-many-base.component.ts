@@ -40,7 +40,6 @@ export abstract class OneToManyReportLayoutBaseComponent extends ReportLayoutBas
 	hideRightSection: boolean = false;
 
 	reportCrawledVersion: IScanSource;
-	iframeHtml: string;
 	reportMatches: Match[];
 
 	contentTextMatches: SlicedMatch[][];
@@ -99,10 +98,7 @@ export abstract class OneToManyReportLayoutBaseComponent extends ReportLayoutBas
 	allMatchResultsStats: IMatchesTypeStatistics[];
 	customActionsTemplate: TemplateRef<any>;
 	selectedCustomTabResultSectionContentTemplate: TemplateRef<any>;
-
-	override get rerendered(): boolean {
-		return this.oneToManyRerendered;
-	}
+	showOmittedWords: boolean;
 
 	get combined() {
 		if (!this.reportStatistics) return 0;
@@ -327,12 +323,6 @@ export abstract class OneToManyReportLayoutBaseComponent extends ReportLayoutBas
 					match.correctionText = correction.correctionText;
 				});
 			this.reportMatches = data ?? [];
-
-			const updatedHtml = this._getRenderedMatches(data, this.reportDataSvc.crawledVersion?.html?.value);
-			if (updatedHtml && data) {
-				this.iframeHtml = updatedHtml;
-				this.oneToManyRerendered = true;
-			}
 		});
 
 		this.matchSvc.originalTextMatches$.pipe(untilDestroy(this)).subscribe(data => {
@@ -382,6 +372,10 @@ export abstract class OneToManyReportLayoutBaseComponent extends ReportLayoutBas
 					});
 				}
 			}
+		});
+
+		this.matchSvc.showOmittedWords$.pipe(untilDestroy(this)).subscribe(data => {
+			this.showOmittedWords = data;
 		});
 
 		this.statisticsSvc.statistics$.pipe(untilDestroy(this)).subscribe(data => {

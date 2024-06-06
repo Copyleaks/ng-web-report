@@ -478,15 +478,16 @@ export class ReportDataService {
 	}
 
 	public async initAsync() {
-		const ENABLE_REALTIME_MOCK_TESTING = false;
+		const ENABLE_REALTIME_MOCK_TESTING = true;
 		let testCounter = 25;
 
 		// Set the layout view to: one-to-many plagiarism with no selected alerts
 		this._viewSvc.selectedAlert$.next(null);
 		this._viewSvc.reportViewMode$.next({
-			...this._viewSvc.reportViewMode,
-			alertCode: undefined,
 			viewMode: 'one-to-many',
+			alertCode: undefined,
+			suspectId: undefined,
+			...this._viewSvc.reportViewMode,
 		});
 
 		this.realTimeView = true;

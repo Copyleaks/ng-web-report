@@ -21,7 +21,7 @@ import {
 	EResponsiveLayoutType,
 } from './enums/copyleaks-web-report.enums';
 import { IClsReportEndpointConfigModel } from './models/report-config.models';
-import { ICompleteResults } from './models/report-data.models';
+import { ICompleteResults, IScanSource } from './models/report-data.models';
 import { ReportHttpRequestErrorModel } from './models/report-errors.models';
 import { IReportViewEvent, IReportViewQueryParams } from './models/report-view.models';
 import { ReportDataService } from './services/report-data.service';
@@ -112,9 +112,14 @@ export class CopyleaksWebReportComponent implements OnInit, OnDestroy {
 	@Output() onReportRequestError = new EventEmitter<ReportHttpRequestErrorModel>();
 
 	/**
-	 * @Output {ReportHttpRequestErrorModel} - Emits complete request updates.
+	 * @Output {ICompleteResults} - Emits complete request updates.
 	 */
 	@Output() onCompleteResultUpdate = new EventEmitter<ICompleteResults>();
+
+	/**
+	 * @Output {IScanSource} - Emits crawled version updates.
+	 */
+	@Output() onCrawledVersionUpdate = new EventEmitter<IScanSource>();
 
 	// Layout realated properties
 	ReportLayoutType = EReportLayoutType;
@@ -183,6 +188,11 @@ export class CopyleaksWebReportComponent implements OnInit, OnDestroy {
 
 				if (this._reportDataSvc.scanResultsDetails) this.onCompleteResultUpdate.emit(scanResultsPreviews);
 			});
+
+		this._reportDataSvc.crawledVersion$.pipe(takeUntil(this.unsubscribe$)).subscribe(crawledVersion => {
+			if (!crawledVersion) return;
+			this.onCrawledVersionUpdate.emit(crawledVersion);
+		});
 
 		this._reportRealtimeResultsSvc.onNewResults$.pipe(takeUntil(this.unsubscribe$)).subscribe(data => {
 			this._reportDataSvc.pushNewResults(data);

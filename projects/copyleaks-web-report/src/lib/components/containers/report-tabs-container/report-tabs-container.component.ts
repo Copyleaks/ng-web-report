@@ -218,6 +218,7 @@ export class ReportTabsContainerComponent implements OnInit, OnDestroy, OnChange
 			if (!this.showLoadingView && this.hidePlagarismTap && this.hideAiTap && !this.hideWritingFeedbackTap) {
 				this.selectedTap = EReportViewType.WritingFeedbackTabView;
 				this.reportViewSvc.selectedAlert$.next(null);
+
 				this.reportViewSvc.reportViewMode$.next({
 					...this.reportViewSvc.reportViewMode,
 					alertCode: undefined,
@@ -235,6 +236,7 @@ export class ReportTabsContainerComponent implements OnInit, OnDestroy, OnChange
 					: !this.hideAiTap
 					? EReportViewType.AIView
 					: null;
+
 				this.reportViewSvc.reportViewMode$.next({
 					...this.reportViewSvc.reportViewMode,
 					viewMode:

@@ -39,22 +39,31 @@
 		}"
 		[isHtmlView]="isHtmlView"
 		[isAlertsView]="isAlertsMode"
-		[contentHtml]="iframeHtml"
 		[scanSource]="reportCrawledVersion"
-		[writingFeedback]="writingFeedback"
 		[contentTextMatches]="contentTextMatches"
 		[contentHtmlMatches]="reportMatches"
-		[numberOfPages]="numberOfPages"
-		[numberOfWords]="numberOfWords"
 		[currentPage]="currentPageSource"
 		[reportResponsive]="EResponsiveLayoutType.Desktop"
 		[isMultiSelection]="isMultiSelection"
+		[showOmittedWords]="showOmittedWords"
+		[hasHtml]="
+			viewMode === 'writing-feedback'
+				? !!writingFeedback?.corrections?.html &&
+				  !!writingFeedback?.corrections.html.chars &&
+				  !!writingFeedback?.corrections.html.chars.groupIds &&
+				  !!writingFeedback?.corrections.html.chars.lengths &&
+				  !!writingFeedback?.corrections.html.chars.starts &&
+				  !!writingFeedback?.corrections.html.chars.operationTexts &&
+				  !!writingFeedback?.corrections.html.chars.types
+				: !!reportCrawledVersion?.html?.value
+		"
 		[viewMode]="viewMode"
 		reportOrigin="original"
 		[hidePoweredBy]="reportMode === EReportMode.AssessmentTool"
 		[submittedDocumentName]="scanResultsPreviews?.scannedDocument?.metadata?.filename"
 		(iFrameMessageEvent)="onIFrameMessage($event)"
-		(viewChangeEvent)="onReportViewChange($event)"></copyleaks-content-viewer-container>
+		(viewChangeEvent)="onReportViewChange($event)"
+		(onShowOmittedWords)="onShowOmittedWords($event)"></copyleaks-content-viewer-container>
 </div>
 
 <!-- Right side section -->

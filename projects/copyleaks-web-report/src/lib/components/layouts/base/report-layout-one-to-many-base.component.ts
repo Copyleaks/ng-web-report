@@ -2,7 +2,7 @@ import { Renderer2, TemplateRef } from '@angular/core';
 import { combineLatest } from 'rxjs';
 import { filter } from 'rxjs/operators';
 import { ALERTS } from '../../../constants/report-alerts.constants';
-import { EReportViewType, EResponsiveLayoutType } from '../../../enums/copyleaks-web-report.enums';
+import { EExcludeReason, EReportViewType, EResponsiveLayoutType } from '../../../enums/copyleaks-web-report.enums';
 import {
 	ICompleteResultNotificationAlert,
 	ICompleteResults,
@@ -99,6 +99,7 @@ export abstract class OneToManyReportLayoutBaseComponent extends ReportLayoutBas
 	customActionsTemplate: TemplateRef<any>;
 	selectedCustomTabResultSectionContentTemplate: TemplateRef<any>;
 	showOmittedWords: boolean;
+	isPartitalScan: boolean;
 
 	get combined() {
 		if (!this.reportStatistics) return 0;
@@ -153,10 +154,11 @@ export abstract class OneToManyReportLayoutBaseComponent extends ReportLayoutBas
 			if (data.viewMode === 'writing-feedback') {
 				this.selectedTap = EReportViewType.WritingFeedbackTabView;
 			} else
-				this.selectedTap =
-					data.alertCode === ALERTS.SUSPECTED_AI_TEXT_DETECTED
-						? EReportViewType.AIView
-						: EReportViewType.PlagiarismView;
+				this.selectedTap = data.selectedCustomTabId
+					? EReportViewType.CustomTabView
+					: data.alertCode === ALERTS.SUSPECTED_AI_TEXT_DETECTED
+					? EReportViewType.AIView
+					: EReportViewType.PlagiarismView;
 
 			this.showDisabledProducts = data.showDisabledProducts ?? false;
 
@@ -231,6 +233,17 @@ export abstract class OneToManyReportLayoutBaseComponent extends ReportLayoutBas
 			if (data) {
 				this.reportCrawledVersion = data;
 				this.numberOfPages = data.text?.pages?.startPosition?.length ?? 1;
+				if (
+					(this.reportCrawledVersion?.html?.exclude?.reasons?.filter(r => r === EExcludeReason.PartialScan).length >
+						0 ||
+						this.reportCrawledVersion?.text?.exclude?.reasons?.filter(r => r === EExcludeReason.PartialScan).length >
+							0) &&
+					(!this.isPartitalScan || !this.showOmittedWords)
+				) {
+					this.matchSvc.showOmittedWords$.next(true);
+					this.isPartitalScan = true;
+					this.showOmittedWords = true;
+				}
 			}
 		});
 

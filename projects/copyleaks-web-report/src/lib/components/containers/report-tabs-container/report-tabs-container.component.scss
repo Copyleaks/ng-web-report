@@ -27,9 +27,10 @@
 
 			.matched-text-tab,
 			.ai-tab,
-			.writing-assistant-tab {
-				flex-grow: 1;
-				box-sizing: border-box;
+			.writing-assistant-tab,
+			::ng-deep .custom-tab {
+				flex-grow: 1 !important;
+				box-sizing: border-box !important;
 			}
 		}
 

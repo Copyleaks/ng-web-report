@@ -10,7 +10,11 @@
 
 	<div class="middle-section">
 		<cr-assessment-tool-tab-score-panel
-			*ngIf="reportMode === EReportMode.AssessmentTool && selectedTap !== EReportViewType.WritingFeedbackTabView"
+			*ngIf="
+				reportMode === EReportMode.AssessmentTool &&
+				selectedTap !== EReportViewType.WritingFeedbackTabView &&
+				!selectedCustomTabResultSectionContentTemplate
+			"
 			[selectedTap]="selectedTap"
 			[plagarismScore]="plagiarismScore"
 			[aiScore]="reportStatistics?.aiScore ?? 0"
@@ -41,6 +45,8 @@
 			[statisticsInfo]="writingFeedback?.score?.statistics"
 			[readabilityInfo]="writingFeedback?.score?.readability"
 			[isMobile]="true"></cr-readability-score>
+
+		<cr-ai-disclaimer *ngIf="selectedTap === EReportViewType.AIView"></cr-ai-disclaimer>
 
 		<!-- Report scan content section -->
 		<div class="content-section">
@@ -94,6 +100,7 @@
 				[hidePoweredBy]="true"
 				[isMultiSelection]="isMultiSelection"
 				[showOmittedWords]="showOmittedWords"
+				[isPartitalScan]="isPartitalScan"
 				[viewMode]="viewMode"
 				[submittedDocumentName]="scanResultsPreviews?.scannedDocument?.metadata?.filename"
 				reportOrigin="original"
@@ -105,43 +112,51 @@
 </div>
 
 <div style="display: flex; flex-direction: column; flex-shrink: 0; gap: 8px">
-	<cr-ai-disclaimer *ngIf="selectedTap === EReportViewType.AIView"></cr-ai-disclaimer>
+	<ng-container *ngIf="!selectedCustomTabResultSectionContentTemplate; else customResultSectionRef">
+		<!-- Report results -->
+		<copyleaks-report-results-container
+			*ngIf="
+				((selectedTap !== EReportViewType.AIView && selectedTap !== EReportViewType.WritingFeedbackTabView) ||
+					reportTemplateMode === ECustomResultsReportView.Partial ||
+					reportTemplateMode === ECustomResultsReportView.Full) &&
+				viewMode === 'one-to-many'
+			"
+			class="results-container"
+			[flexGrow]="15"
+			[allResults]="scanResultsView"
+			[newResults]="newScanResultsView"
+			[resultsActions]="scanResultsActions"
+			[isMobile]="true"
+			[showLoadingView]="isLoadingScanResults || isLoadingScanCorrections"
+			[filterOptions]="filterOptions"
+			[reportViewMode]="reportTemplateMode"
+			[customResultsTemplate]="customResultsTemplate"></copyleaks-report-results-container>
 
-	<!-- Report results -->
-	<copyleaks-report-results-container
-		*ngIf="
-			((selectedTap !== EReportViewType.AIView && selectedTap !== EReportViewType.WritingFeedbackTabView) ||
-				reportTemplateMode === ECustomResultsReportView.Partial ||
-				reportTemplateMode === ECustomResultsReportView.Full) &&
-			viewMode === 'one-to-many'
-		"
-		class="results-container"
-		[flexGrow]="15"
-		[allResults]="scanResultsView"
-		[newResults]="newScanResultsView"
-		[resultsActions]="scanResultsActions"
-		[isMobile]="true"
-		[showLoadingView]="isLoadingScanResults || isLoadingScanCorrections"
-		[filterOptions]="filterOptions"
-		[reportViewMode]="reportTemplateMode"
-		[customResultsTemplate]="customResultsTemplate"></copyleaks-report-results-container>
+		<copyleaks-report-corrections-container
+			*ngIf="viewMode === 'writing-feedback'"
+			[totalWritingFeedbackIssues]="allScanCorrectionsView?.length ?? 0"
+			[totalFilteredCorrections]="totalFilteredCorrections"
+			[writingFeedbackStats]="writingFeedbackStats"
+			[allWritingFeedbacksStats]="allWritingFeedbacksStats"
+			[allScanCorrectionsView]="allScanCorrectionsView"
+			[displayedScanCorrectionsView]="displayedScanCorrectionsView"
+			[correctionClicked]="correctionClicked"
+			[isMobile]="true"
+			[showLoadingView]="
+				showCorrectionsLoadingView || isLoadingScanCorrections
+			"></copyleaks-report-corrections-container>
 
-	<copyleaks-report-corrections-container
-		*ngIf="viewMode === 'writing-feedback'"
-		[totalWritingFeedbackIssues]="allScanCorrectionsView?.length ?? 0"
-		[totalFilteredCorrections]="totalFilteredCorrections"
-		[writingFeedbackStats]="writingFeedbackStats"
-		[allWritingFeedbacksStats]="allWritingFeedbacksStats"
-		[allScanCorrectionsView]="allScanCorrectionsView"
-		[displayedScanCorrectionsView]="displayedScanCorrectionsView"
-		[correctionClicked]="correctionClicked"
-		[isMobile]="true"
-		[showLoadingView]="showCorrectionsLoadingView || isLoadingScanCorrections"></copyleaks-report-corrections-container>
+		<!-- Powered by Copyleaks image section -->
+		<div *ngIf="reportMode === EReportMode.WebReport" class="powered-by-copyleaks-container">
+			<cr-powered-by></cr-powered-by>
+		</div>
+	</ng-container>
 
-	<!-- Powered by Copyleaks image section -->
-	<div *ngIf="reportMode === EReportMode.WebReport" class="powered-by-copyleaks-container">
-		<cr-powered-by></cr-powered-by>
-	</div>
+	<ng-template #customResultSectionRef>
+		<div class="custom-tab-item-results-section" [style.flex-grow]="'1'">
+			<ng-container *ngTemplateOutlet="selectedCustomTabResultSectionContentTemplate ?? null"></ng-container>
+		</div>
+	</ng-template>
 
 	<copyleaks-report-tabs-container
 		*ngIf="reportMode === EReportMode.AssessmentTool"

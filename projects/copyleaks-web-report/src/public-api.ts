@@ -11,6 +11,8 @@ export * from './lib/models/report-config.models';
 export * from './lib/models/report-data.models';
 export * from './lib/models/report-errors.models';
 export * from './lib/models/report-matches.models';
+export * from './lib/models/report-iframe-events.models';
+export * from './lib/models/report-view.models';
 
 // Exported components
 export * from './lib/components/containers/report-results-container/components/empty-result-state/empty-result-state.component';

@@ -17,6 +17,11 @@ export class CrCustomTabItemComponent implements OnInit {
 	 */
 	@Input() flexGrow: number;
 
+	/**
+	 * @Input Flex grow property - flex-grow
+	 */
+	@Input() tabId: string;
+
 	selected: boolean = false;
 
 	constructor(private _reportViewSvc: ReportViewService) {}
@@ -25,11 +30,24 @@ export class CrCustomTabItemComponent implements OnInit {
 		this._reportViewSvc.selectedCustomTabContent$.pipe(untilDestroy(this)).subscribe(content => {
 			this.selected = content === this.tabTemplateContent;
 		});
+
+		if (!!this.tabId)
+			this._reportViewSvc.reportViewMode$.pipe(untilDestroy(this)).subscribe(data => {
+				if (data.selectedCustomTabId !== this.tabId) return;
+				this._reportViewSvc.selectedCustomTabContent$.next(this.tabTemplateContent);
+				this._reportViewSvc.selectedCustomTabResultSectionContent$.next(this.tabTemplateResultSectionContent);
+			});
 	}
 
 	clickEvent() {
 		this._reportViewSvc.selectedCustomTabContent$.next(this.tabTemplateContent);
 		this._reportViewSvc.selectedCustomTabResultSectionContent$.next(this.tabTemplateResultSectionContent);
+		this._reportViewSvc.reportViewMode$.next({
+			...this._reportViewSvc.reportViewMode,
+			selectedCustomTabId: this.tabId,
+			suspectId: null,
+			alertCode: null,
+		});
 	}
 
 	ngOnDestroy(): void {}

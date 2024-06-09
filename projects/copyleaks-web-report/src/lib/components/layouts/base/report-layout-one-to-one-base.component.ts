@@ -6,7 +6,7 @@ import { ReportViewService } from '../../../services/report-view.service';
 import { ReportMatchHighlightService } from '../../../services/report-match-highlight.service';
 import { ReportStatisticsService } from '../../../services/report-statistics.service';
 import { filter } from 'rxjs/operators';
-import { EResponsiveLayoutType, EResultPreviewType } from '../../../enums/copyleaks-web-report.enums';
+import { EExcludeReason, EResponsiveLayoutType, EResultPreviewType } from '../../../enums/copyleaks-web-report.enums';
 import { ICompleteResults, IScanSource } from '../../../models/report-data.models';
 import { PostMessageEvent } from '../../../models/report-iframe-events.models';
 import { untilDestroy } from '../../../utils/until-destroy';
@@ -55,6 +55,7 @@ export abstract class OneToOneReportLayoutBaseComponent extends ReportLayoutBase
 		flag: false,
 	};
 	showOmittedWords: boolean;
+	isPartitalScan: boolean;
 
 	get isLoadingScanContent(): boolean {
 		return (!this.suspectIframeHtml && !this.suspectTextMatches) || (!this.sourceIframeHtml && !this.sourceTextMatches);
@@ -91,6 +92,17 @@ export abstract class OneToOneReportLayoutBaseComponent extends ReportLayoutBase
 			if (data) {
 				this.sourceCrawledVersion = data;
 				this.numberOfPagesSource = data.text?.pages?.startPosition?.length ?? 1;
+				if (
+					(this.sourceCrawledVersion?.html?.exclude?.reasons?.filter(r => r === EExcludeReason.PartialScan).length >
+						0 ||
+						this.sourceCrawledVersion?.text?.exclude?.reasons?.filter(r => r === EExcludeReason.PartialScan).length >
+							0) &&
+					(!this.isPartitalScan || !this.showOmittedWords)
+				) {
+					this.matchSvc.showOmittedWords$.next(true);
+					this.isPartitalScan = true;
+					this.showOmittedWords = true;
+				}
 			}
 		});
 

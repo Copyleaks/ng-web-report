@@ -17,13 +17,20 @@ import {
 } from '@angular/core';
 import { PostMessageEvent, ZoomEvent } from '../../../models/report-iframe-events.models';
 import { IReportViewEvent } from '../../../models/report-view.models';
-import { Match, MatchType, ReportOrigin, ResultDetailItem, SlicedMatch } from '../../../models/report-matches.models';
+import {
+	Match,
+	MatchType,
+	ReportOrigin,
+	ResultDetailItem,
+	SlicedMatch,
+	TextMatchHighlightEvent,
+} from '../../../models/report-matches.models';
 import { DirectionMode as ReportContentDirectionMode, ViewMode } from '../../../models/report-config.models';
 import { TEXT_FONT_SIZE_UNIT, MIN_TEXT_ZOOM, MAX_TEXT_ZOOM } from '../../../constants/report-content.constants';
 import { PageEvent } from '../../core/cr-paginator/models/cr-paginator.models';
 import { ReportMatchHighlightService } from '../../../services/report-match-highlight.service';
 import { IScanSource } from '../../../models/report-data.models';
-import { EExcludeReason, EResponsiveLayoutType } from '../../../enums/copyleaks-web-report.enums';
+import { EResponsiveLayoutType } from '../../../enums/copyleaks-web-report.enums';
 import { ReportViewService } from '../../../services/report-view.service';
 import { untilDestroy } from '../../../utils/until-destroy';
 import { EXCLUDE_MESSAGE } from '../../../constants/report-exclude.constants';
@@ -34,6 +41,7 @@ import { COPYLEAKS_REPORT_IFRAME_STYLES } from '../../../constants/report-iframe
 
 import oneToManyIframeJsScript from '../../../utils/one-to-many-iframe-logic';
 import oneToOneIframeJsScript from '../../../utils/one-to-one-iframe-logic';
+import { filter } from 'rxjs/operators';
 
 @Component({
 	selector: 'copyleaks-content-viewer-container',
@@ -236,6 +244,11 @@ export class ContentViewerContainerComponent implements OnInit, AfterViewInit, O
 	@Input() showOmittedWords = false;
 
 	/**
+	 * @Input {boolean} Flag indicating whether the scan is a partital scan or not.
+	 */
+	@Input() isPartitalScan: boolean = false;
+
+	/**
 	 * @Input {boolean} Flag indicating whether the match selection is multiple or not.
 	 */
 	@Input() isMultiSelection = false;
@@ -266,6 +279,11 @@ export class ContentViewerContainerComponent implements OnInit, AfterViewInit, O
 	 * @see PostMessageEvent
 	 */
 	@Output() iFrameMessageEvent = new EventEmitter<PostMessageEvent>();
+
+	/**
+	 * Emits events when a match is selected.
+	 */
+	@Output() onTextMatchSelectionEvent = new EventEmitter<TextMatchHighlightEvent>();
 
 	/**
 	 * Emits events when there are changes to the component's view.
@@ -300,7 +318,6 @@ export class ContentViewerContainerComponent implements OnInit, AfterViewInit, O
 
 	isShiftClicked: boolean;
 	iframeLoaded: boolean;
-	isPartitalScan: boolean;
 
 	numberOfPages: number = 1;
 	numberOfWords: number | undefined = undefined;
@@ -342,18 +359,26 @@ export class ContentViewerContainerComponent implements OnInit, AfterViewInit, O
 
 	ngOnInit(): void {
 		if (this.flexGrow !== undefined && this.flexGrow !== null) this.flexGrowProp = this.flexGrow;
-		if (this.currentPage > this.numberOfPages) this.currentPage = 1;
 
 		if (!this.isExportedComponent)
 			this._viewSvc.selectedCustomTabContent$.pipe(untilDestroy(this)).subscribe(content => {
 				if (this.viewMode !== 'one-to-one') this.customTabContent = content;
 			});
+
+		this._highlightService.textMatchClick$
+			.pipe(
+				filter(event => event.origin === this.reportOrigin),
+				untilDestroy(this)
+			)
+			.subscribe(event => {
+				this.onTextMatchSelectionEvent.emit(event);
+			});
 	}
 
 	ngAfterViewInit() {
-		if (this.contentHtml) this._renderer.setAttribute(this.contentIFrame.nativeElement, 'srcdoc', this.contentHtml);
+		if (this.contentHtml) this._renderer.setAttribute(this.contentIFrame?.nativeElement, 'srcdoc', this.contentHtml);
 
-		this.contentIFrame.nativeElement.addEventListener(
+		this.contentIFrame?.nativeElement?.addEventListener(
 			'load',
 			() => {
 				if (this.contentHtml) {
@@ -365,14 +390,10 @@ export class ContentViewerContainerComponent implements OnInit, AfterViewInit, O
 			false
 		);
 
-		this.contentText.nativeElement.addEventListener('wheel', this._handleScroll, { passive: false });
+		this.contentText?.nativeElement?.addEventListener('wheel', this._handleScroll, { passive: false });
 	}
 
 	ngOnChanges(changes: SimpleChanges): void {
-		if ('currentPage' in changes || ('numberOfPages' in changes && this.currentPage && this.numberOfPages)) {
-			this.currentPage = this.currentPage > this.numberOfPages || this.currentPage <= 0 ? 1 : this.currentPage;
-		}
-
 		if (
 			'contentTextMatches' in changes &&
 			changes['contentTextMatches'].currentValue != undefined &&
@@ -391,14 +412,6 @@ export class ContentViewerContainerComponent implements OnInit, AfterViewInit, O
 			'contentHtmlMatches' in changes ||
 			'isHtmlView' in changes
 		) {
-			if (
-				this.scanSource?.html?.exclude?.reasons?.filter(r => r === EExcludeReason.PartialScan).length > 0 ||
-				this.scanSource?.text?.exclude?.reasons?.filter(r => r === EExcludeReason.PartialScan).length > 0
-			) {
-				this.onShowOmittedWords.emit(true);
-				this.isPartitalScan = true;
-			}
-
 			this.iframeJsScript = this.reportOrigin === 'original' ? oneToManyIframeJsScript : oneToOneIframeJsScript;
 
 			if ((this.reportOrigin === 'source' || this.reportOrigin === 'original') && !!this.scanSource) {
@@ -438,8 +451,7 @@ export class ContentViewerContainerComponent implements OnInit, AfterViewInit, O
 		}
 
 		if (
-			changes['contentHtmlMatches'] &&
-			changes['contentHtmlMatches'].currentValue &&
+			((changes['contentHtmlMatches'] && changes['contentHtmlMatches'].currentValue) || this.contentHtmlMatches) &&
 			this.contentIFrame?.nativeElement &&
 			this.isHtmlView
 		) {

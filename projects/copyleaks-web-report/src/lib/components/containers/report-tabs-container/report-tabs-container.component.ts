@@ -341,6 +341,7 @@ export class ReportTabsContainerComponent implements OnInit, OnDestroy, OnChange
 					alertCode: ALERTS.SUSPECTED_AI_TEXT_DETECTED,
 					sourcePageIndex: 1,
 					suspectPageIndex: 1,
+					selectedCustomTabId: undefined,
 				});
 				this.reportViewSvc.selectedAlert$.next(ALERTS.SUSPECTED_AI_TEXT_DETECTED);
 				this.reportViewSvc.selectedCustomTabContent$.next(null);
@@ -354,6 +355,7 @@ export class ReportTabsContainerComponent implements OnInit, OnDestroy, OnChange
 					alertCode: undefined,
 					sourcePageIndex: 1,
 					suspectPageIndex: 1,
+					selectedCustomTabId: undefined,
 				});
 				this.reportViewSvc.selectedAlert$.next(null);
 				this.reportViewSvc.selectedCustomTabContent$.next(null);
@@ -366,6 +368,7 @@ export class ReportTabsContainerComponent implements OnInit, OnDestroy, OnChange
 					alertCode: undefined,
 					sourcePageIndex: 1,
 					suspectPageIndex: 1,
+					selectedCustomTabId: undefined,
 				});
 				this.reportViewSvc.selectedAlert$.next(null);
 				this.reportViewSvc.selectedCustomTabContent$.next(null);

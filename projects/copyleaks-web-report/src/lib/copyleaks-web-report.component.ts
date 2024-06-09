@@ -310,6 +310,7 @@ export class CopyleaksWebReportComponent implements OnInit, OnDestroy {
 		const suspectPage = params['suspectPage'];
 		const suspectId = params['suspectId'];
 		const alertCode = params['alertCode'];
+		const selectedCustomTabId = params['selectedCustomTabId'];
 
 		this.reportLayoutType = viewMode ?? 'one-to-many';
 		if (viewMode === 'writing-feedback') this.reportLayoutType = EReportLayoutType.OneToMany;
@@ -326,6 +327,7 @@ export class CopyleaksWebReportComponent implements OnInit, OnDestroy {
 			alertCode: alertCode,
 			showDisabledProducts: this.showDisabledProducts,
 			platformType: this.platformType,
+			selectedCustomTabId: selectedCustomTabId,
 		} as IReportViewEvent);
 
 		if (alertCode) this._reportViewSvc.selectedAlert$.next(alertCode);
@@ -339,6 +341,7 @@ export class CopyleaksWebReportComponent implements OnInit, OnDestroy {
 				suspectPage: String(data.suspectPageIndex) ?? '1',
 				suspectId: data.suspectId,
 				alertCode: data.alertCode,
+				selectedCustomTabId: data.selectedCustomTabId,
 			};
 
 			if (data.viewMode == 'one-to-many' || data.viewMode == 'writing-feedback')
@@ -375,6 +378,7 @@ export class CopyleaksWebReportComponent implements OnInit, OnDestroy {
 			const suspectPage = params['suspectPage'];
 			const suspectId = params['suspectId'];
 			const alertCode = params['alertCode'];
+			const selectedCustomTabId = params['selectedCustomTabId'];
 
 			this.reportLayoutType = viewMode ?? 'one-to-many';
 			if (viewMode === 'writing-feedback') {
@@ -393,6 +397,7 @@ export class CopyleaksWebReportComponent implements OnInit, OnDestroy {
 				alertCode: alertCode,
 				showDisabledProducts: this.showDisabledProducts,
 				platformType: this.platformType,
+				selectedCustomTabId: selectedCustomTabId,
 			} as IReportViewEvent);
 
 			if (alertCode) this._reportViewSvc.selectedAlert$.next(alertCode);

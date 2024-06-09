@@ -122,7 +122,7 @@ export class ReportExpandResultItemComponent implements OnInit, OnChanges {
 		if (!!this.resultItem?.resultPreview?.metadata?.organization) {
 			if (!this.resultItem.resultPreview.tags) this.resultItem.resultPreview.tags = [];
 			if (this.resultItem.resultPreview.tags.find(tag => tag.code === 'organization') === undefined)
-				this.resultItem.resultPreview.tags.unshift({
+				this.resultItem.resultPreview?.tags?.unshift({
 					title: this.resultItem?.resultPreview?.metadata?.organization,
 					description: $localize`Organization Name`,
 					code: 'organization',
@@ -137,7 +137,7 @@ export class ReportExpandResultItemComponent implements OnInit, OnChanges {
 			if (!this.resultItem.resultPreview.tags) this.resultItem.resultPreview.tags = [];
 			// push 'Your File' tag to the start of tags array
 			if (this.resultItem.resultPreview.tags.find(tag => tag.code === 'your-file') === undefined)
-				this.resultItem.resultPreview.tags.unshift({
+				this.resultItem?.resultPreview?.tags?.unshift({
 					title:
 						this.reportViewSvc?.reportViewMode?.platformType === EPlatformType.APP
 							? $localize`Your File`

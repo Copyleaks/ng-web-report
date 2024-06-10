@@ -17,7 +17,6 @@
 					"configurations": {
 						"production": {
 							"tsConfig": "projects/copyleaks-web-report/tsconfig.lib.prod.json"
-							
 						},
 						"development": {
 							"tsConfig": "projects/copyleaks-web-report/tsconfig.lib.json"
@@ -29,75 +28,6 @@
 					"builder": "@angular-devkit/build-angular:karma",
 					"options": {
 						"tsConfig": "projects/copyleaks-web-report/tsconfig.spec.json"
-					}
-				}
-			}
-		},
-		"demo-app": {
-			"projectType": "application",
-			"schematics": {
-				"@schematics/angular:component": {
-					"style": "scss"
-				}
-			},
-			"root": "projects/demo-app",
-			"sourceRoot": "projects/demo-app/src",
-			"prefix": "app",
-			"architect": {
-				"build": {
-					"builder": "@angular-devkit/build-angular:browser",
-					"options": {
-						"outputPath": "dist/demo-app",
-						"index": "projects/demo-app/src/index.html",
-						"main": "projects/demo-app/src/main.ts",
-						"tsConfig": "projects/demo-app/tsconfig.app.json",
-						"polyfills": "projects/demo-app/src/polyfills.ts",
-						"inlineStyleLanguage": "scss",
-						"assets": ["projects/demo-app/src/favicon.ico", "projects/demo-app/src/assets"],
-						"styles": ["projects/demo-app/src/styles.scss", "projects/demo-app/src/mat-theme.scss"],
-						"scripts": []
-					},
-					"configurations": {
-						"production": {
-							"outputHashing": "all"
-						},
-						"development": {
-							"buildOptimizer": false,
-							"optimization": false,
-							"vendorChunk": true,
-							"extractLicenses": false,
-							"sourceMap": true,
-							"namedChunks": true
-						}
-					},
-					"defaultConfiguration": "production"
-				},
-				"serve": {
-					"builder": "@angular-devkit/build-angular:dev-server",
-					"configurations": {
-						"production": {
-							"browserTarget": "demo-app:build:production"
-						},
-						"development": {
-							"browserTarget": "demo-app:build:development"
-						}
-					},
-					"defaultConfiguration": "development"
-				},
-				"extract-i18n": {
-					"builder": "@angular-devkit/build-angular:extract-i18n",
-					"options": {
-						"browserTarget": "demo-app:build"
-					}
-				},
-				"test": {
-					"builder": "@angular-devkit/build-angular:karma",
-					"options": {
-						"tsConfig": "projects/demo-app/tsconfig.spec.json",
-						"inlineStyleLanguage": "scss",
-						"assets": ["projects/demo-app/src/favicon.ico", "projects/demo-app/src/assets"],
-						"styles": ["projects/demo-app/src/styles.scss", "projects/demo-app/src/mat-theme.scss"],
-						"scripts": []
 					}
 				}
 			}

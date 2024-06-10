@@ -33,7 +33,12 @@
 								totalWords: paraphrasedTotal ?? 0,
 								disabled: reportDataSvc.filterOptions?.showRelated === false
 							},
-							omittedPct: { percentage: excludedTotal / wordsTotal, disabled: false, totalWords: excludedTotal ?? 0 }
+							omittedPct: {
+								percentage: excludedTotal / wordsTotal,
+								disabled: false,
+								totalWords: excludedTotal ?? 0
+							},
+							totalWords: wordsTotal
 					  }
 			"
 			[crReportScoreTooltipPosition]="EReportScoreTooltipPosition.BELOW"
@@ -96,7 +101,9 @@
 								[doughnut]="true"
 								[gradient]="true"
 								[explodeSlices]="true"></ngx-charts-pie-chart>
-							<span class="mobile-tab-score" web-report-title-font i18n>{{ plagarismScore | percent : '1.0-1' }}</span>
+							<span class="mobile-tab-score" web-report-title-font i18n>
+								{{ plagarismScore | percent : '1.0-1' }}
+							</span>
 						</ng-container>
 
 						<ng-template #NaViewRef>
@@ -132,8 +139,18 @@
 				hideAiTap && showDisabledProducts
 					? null
 					: {
-							aiPct: { percentage: aiScore, disabled: false, totalWords: totalAiWords ?? 0 },
-							humanPct: { percentage: 1 - aiScore, disabled: false, totalWords: wordsTotal - totalAiWords ?? 0 }
+							aiPct: { percentage: totalAiWords / wordsTotal, disabled: false, totalWords: totalAiWords ?? 0 },
+							humanPct: {
+								percentage: totalHumanWords / wordsTotal,
+								disabled: false,
+								totalWords: totalHumanWords
+							},
+							omittedPct: {
+								percentage: excludedTotal / wordsTotal,
+								disabled: false,
+								totalWords: excludedTotal ?? 0
+							},
+							totalWords: wordsTotal
 					  }
 			"
 			[crReportScoreTooltipPosition]="EReportScoreTooltipPosition.BELOW"
@@ -152,11 +169,14 @@
 				<div class="bar-title-container">
 					<span id="AI-view-text" class="bar-title" web-report-title-font i18n>AI Content</span>
 					<span *ngIf="!isMobile" class="bar-score" web-report-title-font>
-						{{ hideAiTap && showDisabledProducts ? 'N/A' : (aiScore | percent : '1.0-1') }}
+						{{ hideAiTap && showDisabledProducts ? 'N/A' : (totalAiWords / wordsTotal | percent : '1.0-1') }}
 					</span>
 				</div>
 				<div *ngIf="!isMobile" class="grade-bar">
-					<div class="bar ai-content" [style.width.%]="aiScore * 100" [style.border]="!aiScore ? 'none' : ''"></div>
+					<div
+						class="bar ai-content"
+						[style.width.%]="(totalAiWords / wordsTotal) * 100"
+						[style.border]="!(totalAiWords / wordsTotal) ? 'none' : ''"></div>
 				</div>
 			</ng-container>
 			<ng-template #mobileViewRef>
@@ -172,7 +192,9 @@
 								[scheme]="aiScoreChartColorScheme"
 								[tooltipDisabled]="true"
 								[doughnut]="true"></ngx-charts-pie-chart>
-							<span class="mobile-tab-score" web-report-title-font i18n>{{ aiScore | percent : '1.0-1' }}</span>
+							<span class="mobile-tab-score" web-report-title-font i18n>
+								{{ totalAiWords / wordsTotal | percent : '1.0-1' }}
+							</span>
 						</ng-container>
 						<ng-template #NaViewRef>
 							<svg

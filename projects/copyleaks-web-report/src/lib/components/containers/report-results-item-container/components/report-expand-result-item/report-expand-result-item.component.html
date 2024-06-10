@@ -93,7 +93,7 @@
 								<mat-icon *ngIf="!exclude" fontSet="material-icons-round">visibility_off</mat-icon>
 							</button>
 							<span class="result-title" [title]="resultItem?.resultPreview?.title">
-								{{ resultItem?.resultPreview?.title }}
+								{{ resultItem?.resultPreview?.metadata?.filename ?? resultItem?.resultPreview?.title }}
 							</span>
 						</div>
 						<ng-container *ngIf="resultItem?.resultPreview?.url; else resultSource">
@@ -128,7 +128,9 @@
 					<mat-chip
 						*ngFor="let tag of resultItem?.resultPreview?.tags"
 						[matTooltip]="tag?.description ?? ''"
-						matTooltipClass="web-report-mat-tooltip"
+						[matTooltipClass]="
+							tag?.code === 'summary-date' ? ['web-report-mat-tooltip', 'date-tooltip'] : 'web-report-mat-tooltip'
+						"
 						i18n-matTooltip>
 						{{ tag?.title ?? '' | decodeUri }}
 					</mat-chip>

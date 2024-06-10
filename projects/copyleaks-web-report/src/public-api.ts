@@ -19,6 +19,7 @@ export * from './lib/components/core/cr-custom-results/cr-custom-results.compone
 export * from './lib/components/core/cr-custom-tabs/components/cr-custom-tab-item/cr-custom-tab-item.component';
 export * from './lib/components/core/cr-custom-tabs/cr-custom-tabs.component';
 export * from './lib/components/core/cr-report-actions/cr-actions.component';
+export * from './lib/components/core/cr-banner-section/cr-banner-section.component';
 export * from './lib/copyleaks-web-report.component';
 
 // Exported services

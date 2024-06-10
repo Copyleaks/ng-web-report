@@ -66,6 +66,12 @@
 			mat-icon:hover {
 				color: $color-primary;
 			}
+
+			.actions-pair-container {
+				display: flex;
+				align-items: flex-start;
+				gap: 8px;
+			}
 		}
 	}
 
@@ -162,6 +168,12 @@
 				}
 			}
 
+			&.cr-m-4 {
+				background-color: $color-ai-detected-text;
+				transition: 0.2s;
+				cursor: auto !important;
+			}
+
 			&.cr-m-100 {
 				background: transparent;
 				color: red;
@@ -204,11 +216,14 @@
 		}
 
 		i[exclude-match] {
-			font-style: italic;
-			opacity: 0.75;
-			background-color: $color-plagiarism-omitted-words;
+			font-style: normal !important;
+			opacity: 1 !important;
 			color: $color-black !important;
 			cursor: pointer;
+			border-radius: 2px;
+			border-bottom: 2px dashed $color-primary !important;
+			background: rgba(63, 154, 245, 0.2) !important;
+			position: relative !important;
 		}
 	}
 
@@ -334,5 +349,37 @@
 				color: $color-primary;
 			}
 		}
+	}
+}
+
+.omitted-text-btn {
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	gap: 4px;
+	cursor: pointer;
+	background: transparent;
+	border: none;
+	padding: 0px;
+	&:hover,
+	&.isOn {
+		mat-icon,
+		span {
+			color: $color-primary !important;
+		}
+	}
+	mat-icon {
+		width: 16px;
+		height: 16px;
+		font-size: 16px;
+		color: $grayed-out-disabled;
+	}
+	span {
+		color: $color-black;
+		text-align: center;
+		font-size: 14px;
+		font-style: normal;
+		font-weight: 500;
+		line-height: normal;
 	}
 }

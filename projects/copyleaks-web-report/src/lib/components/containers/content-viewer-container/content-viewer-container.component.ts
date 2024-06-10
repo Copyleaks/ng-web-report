@@ -23,12 +23,13 @@ import { TEXT_FONT_SIZE_UNIT, MIN_TEXT_ZOOM, MAX_TEXT_ZOOM } from '../../../cons
 import { PageEvent } from '../../core/cr-paginator/models/cr-paginator.models';
 import { ReportMatchHighlightService } from '../../../services/report-match-highlight.service';
 import { IScanSource, IWritingFeedback } from '../../../models/report-data.models';
-import { EResponsiveLayoutType } from '../../../enums/copyleaks-web-report.enums';
+import { EExcludeReason, EResponsiveLayoutType } from '../../../enums/copyleaks-web-report.enums';
 import { ReportViewService } from '../../../services/report-view.service';
 import { untilDestroy } from '../../../utils/until-destroy';
 import { EXCLUDE_MESSAGE } from '../../../constants/report-exclude.constants';
 import { IAuthorAlertCard } from '../report-alerts-container/components/author-alert-card/models/author-alert-card.models';
 import { animate, state, style, transition, trigger } from '@angular/animations';
+import { ReportMatchesService } from '../../../services/report-matches.service';
 
 @Component({
 	selector: 'copyleaks-content-viewer-container',
@@ -283,8 +284,12 @@ export class ContentViewerContainerComponent implements OnInit, AfterViewInit, O
 
 	isShiftClicked: boolean;
 	iframeLoaded: boolean;
+	showOmittedWords: boolean;
+	isPartitalScan: boolean;
 
 	EXCLUDE_MESSAGE = EXCLUDE_MESSAGE;
+	VIEW_OMITTED_WORDS_TOOLTIP_MESSAGE = $localize`Show omitted words`;
+	HIDE_OMITTED_WORDS_TOOLTIP_MESSAGE = $localize`Hide omitted words`;
 
 	get pages(): number[] {
 		if (this.scanSource) return this.scanSource && this.scanSource.text.pages.startPosition;
@@ -327,6 +332,7 @@ export class ContentViewerContainerComponent implements OnInit, AfterViewInit, O
 		private _renderer: Renderer2,
 		private _cdr: ChangeDetectorRef,
 		private _highlightService: ReportMatchHighlightService,
+		private _matchesService: ReportMatchesService,
 		private _viewSvc: ReportViewService
 	) {}
 
@@ -336,6 +342,10 @@ export class ContentViewerContainerComponent implements OnInit, AfterViewInit, O
 
 		this._viewSvc.selectedCustomTabContent$.pipe(untilDestroy(this)).subscribe(content => {
 			if (this.viewMode !== 'one-to-one') this.customTabContent = content;
+		});
+
+		this._matchesService.showOmittedWords$.pipe(untilDestroy(this)).subscribe(value => {
+			this.showOmittedWords = value;
 		});
 	}
 
@@ -377,6 +387,16 @@ export class ContentViewerContainerComponent implements OnInit, AfterViewInit, O
 
 		if ('isAlertsView' in changes && !changes['isAlertsView'].currentValue && !changes['isAlertsView'].firstChange)
 			this.iframeLoaded = false;
+
+		if ('scanSource' in changes) {
+			if (
+				this.scanSource?.html?.exclude?.reasons?.filter(r => r === EExcludeReason.PartialScan).length > 0 ||
+				this.scanSource?.text?.exclude?.reasons?.filter(r => r === EExcludeReason.PartialScan).length > 0
+			) {
+				this._matchesService.showOmittedWords$.next(true);
+				this.isPartitalScan = true;
+			}
+		}
 	}
 
 	onViewChange() {
@@ -445,6 +465,10 @@ export class ContentViewerContainerComponent implements OnInit, AfterViewInit, O
 
 	openDisclaimer() {
 		this.onOpenDisclaimer.emit(null);
+	}
+
+	toggleOmittedWordsView() {
+		this._matchesService.showOmittedWords$.next(!this._matchesService.showOmittedWords);
 	}
 
 	private _adjustZoom() {

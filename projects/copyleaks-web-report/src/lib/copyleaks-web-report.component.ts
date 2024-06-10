@@ -48,6 +48,7 @@ export class CopyleaksWebReportComponent implements OnInit, OnDestroy {
 	@ViewChild('customActionsTemplate', { static: true }) customActionsTemplate: TemplateRef<any>;
 	@ViewChild('customEmptyResultsTemplate', { static: true }) customEmptyResultsTemplate: TemplateRef<any>;
 	@ViewChild('customResultsTemplate', { static: true }) customResultsTemplate: TemplateRef<any>;
+	@ViewChild('customBannerSectionTemplate', { static: true }) customBannerSectionTemplate: TemplateRef<any>;
 
 	/**
 	 * @Input {ReportLayoutType} - The copyleaks report layout type.
@@ -205,6 +206,10 @@ export class CopyleaksWebReportComponent implements OnInit, OnDestroy {
 		// Read the report custom results template reference.
 		if (this.customResultsTemplate)
 			this._reportNgTemplatesSvc.setReportCustomResultsTemplateRef(this.customResultsTemplate);
+
+		// Read the report custom results template reference.
+		if (this.customBannerSectionTemplate)
+			this._reportNgTemplatesSvc.setReportCustomBannerSectionTemplateRef(this.customBannerSectionTemplate);
 
 		if (this.lockedResultTemplateRef)
 			this._reportNgTemplatesSvc.setLockedResultItemTemplateRef(this.lockedResultTemplateRef);

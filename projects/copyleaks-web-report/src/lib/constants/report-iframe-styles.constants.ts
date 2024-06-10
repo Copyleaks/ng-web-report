@@ -116,14 +116,17 @@ html {
 	}
 }
 span[exclude] {
-	font-style: italic;
-	opacity: 0.75;
-	background-color: #F6F6F6;
+  position: relative;
+	font-style: normal !important;
+	opacity: 1 !important;
 	color: #0b163e !important;
 	cursor: pointer;
-	-webkit-text-fill-color: #0b163e !important;
+	border-radius: 2px;
+	border-bottom: 2px dashed #3f9af5 !important;
+	background: rgba(63, 154, 245, 0.2) !important;
 }
 span[exclude-partial-scan] {
+  position: relative;
 	filter: blur(6px);
 	cursor: pointer;
 }
@@ -174,7 +177,7 @@ span[match] .tooltip-match-content-container {
   min-width: 120px;
   max-width: 300px !important;
   position: absolute;
-  z-index: 1;
+  z-index: 111111111111;
   bottom: 160%;
   left: 50%;
   transition: opacity 0.3s, transform 0.3s;
@@ -193,6 +196,8 @@ span[match] .tooltip-match-content-container {
   box-sizing: border-box;
   transform-origin: 50% 100%;
   z-index: 999999999;
+  word-spacing: normal !important;
+  letter-spacing: normal !important;
 
   svg {
     display: block !important;
@@ -213,6 +218,8 @@ span[match] .tooltip-match-content-container {
     text-overflow: ellipsis;
     overflow: hidden;
     max-width: 100%;
+    word-spacing: normal !important;
+    letter-spacing: normal !important;
   }
   .wrong-text {
     text-decoration: line-through;
@@ -221,6 +228,33 @@ span[match] .tooltip-match-content-container {
   .correction-text {
     color: #ff9a02;
   }
+}
+
+span[exclude] .excluded-reason-tooltip,
+span[exclude-partial-scan] .excluded-reason-tooltip {
+  position: absolute;
+  width: 220px;
+  height: auto;
+  display: flex;
+  justify-content: center;
+  opacity: 1;
+  transition: opacity 0.3s, transform 0.3s;
+  z-index: 111111111111;
+  bottom: 160%;
+  left: 50%;
+  border-radius: 4px;
+  background: #112960;
+  padding: 8px;
+  color: #FBFFFF;
+  font-family: haboro-soft, sans-serif !important;
+  font-size: 14px;
+  font-style: normal;
+  font-weight: 500;
+  line-height: normal;
+  word-spacing: normal !important;
+  letter-spacing: normal !important;
+  line-break: normal ;
+  white-space: normal ;
 }
 
 span[match] .tooltip-match-content-container::after {

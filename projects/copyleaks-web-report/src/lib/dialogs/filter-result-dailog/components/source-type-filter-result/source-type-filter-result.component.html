@@ -105,6 +105,7 @@
 		<!-- Batch -->
 		<ng-container>
 			<cr-mat-slide-filter-result
+				*ngIf="platformType === ePlatformType.APP"
 				[formControlName]="eFilterResultForm.fcBatch"
 				class="mat-slide-filter-result"
 				[title]="THIS_BACTCH"

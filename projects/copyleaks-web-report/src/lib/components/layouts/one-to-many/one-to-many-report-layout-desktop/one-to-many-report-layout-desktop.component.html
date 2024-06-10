@@ -1,5 +1,6 @@
 <!-- Left side section -->
 <div class="left-section">
+	<ng-container *ngTemplateOutlet="customBannerSectionTemplate ?? null"></ng-container>
 	<!-- Report tabs container --->
 	<copyleaks-report-tabs-container
 		[hideAiTap]="hideAiTap"
@@ -69,6 +70,9 @@
 			[flexGrow]="25"></copyleaks-report-alerts-container>
 
 		<!-- Report results container -->
+
+		<cr-ai-disclaimer *ngIf="selectedTap === EReportViewType.AIView"></cr-ai-disclaimer>
+
 		<copyleaks-report-results-container
 			*ngIf="
 				reportTemplateMode !== ECustomResultsReportView.Full &&
@@ -77,7 +81,8 @@
 					scanResultsActions.totalResults === 0 &&
 					!isLoadingScanResults
 				) &&
-				viewMode === 'one-to-many'
+				viewMode === 'one-to-many' &&
+				selectedTap === EReportViewType.PlagiarismView
 			"
 			[class.container-with-custom-results]="reportTemplateMode != undefined"
 			[flexGrow]="65"

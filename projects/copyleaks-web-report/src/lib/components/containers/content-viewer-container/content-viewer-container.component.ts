@@ -58,6 +58,8 @@ export class ContentViewerContainerComponent implements OnInit, AfterViewInit, O
 	@HostBinding('style.flex-grow')
 	flexGrowProp: number;
 	rerendered: boolean = false;
+	textStartIndex: number | null = null;
+	textEndIndex: number | null = null;
 
 	@HostListener('click', ['$event'])
 	handleClick(event: MouseEvent): void {
@@ -373,6 +375,36 @@ export class ContentViewerContainerComponent implements OnInit, AfterViewInit, O
 			.subscribe(event => {
 				this.onTextMatchSelectionEvent.emit(event);
 			});
+	}
+
+	iconPosition = { top: 0, left: 0 };
+	iconVisible = false;
+
+	showIcon(_: MouseEvent): void {
+		const selection = window.getSelection();
+		if (selection && selection.rangeCount > 0) {
+			console.log(selection);
+
+			const range = selection.getRangeAt(0);
+			if (!range.collapsed) {
+				const rect = range.getBoundingClientRect();
+				this.iconPosition.top = rect.bottom - this.contentText.nativeElement.getBoundingClientRect().top;
+				this.iconPosition.left = rect.right - this.contentText.nativeElement.getBoundingClientRect().left;
+				this.iconVisible = true;
+
+				const preSelectionRange = range.cloneRange();
+				preSelectionRange.selectNodeContents(this.contentText.nativeElement);
+				preSelectionRange.setEnd(range.startContainer, range.startOffset);
+				this.textStartIndex = preSelectionRange.toString().length;
+				this.textEndIndex = this.textStartIndex + range.toString().length;
+
+				console.log(this.textStartIndex, this.textEndIndex);
+			} else {
+				this.iconVisible = false;
+			}
+		} else {
+			this.iconVisible = false;
+		}
 	}
 
 	ngAfterViewInit() {

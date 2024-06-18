@@ -288,7 +288,8 @@
 				[dir]="contentDirection"
 				crOriginalTextHelper
 				[host]="this"
-				text-container>
+				text-container
+				(mouseup)="showIcon($event)">
 				<ng-container *ngIf="contentTextMatches; else clean">
 					<ng-container *ngFor="let partial of contentTextMatches[currentPage - 1]">
 						<span *ngIf="partial.match.type === MatchType.none">{{ partial.content }}</span>
@@ -335,6 +336,15 @@
 				<ng-template #clean>
 					{{ scanSource && (scanSource.text.value | slice : pages[currentPage - 1] : pages[currentPage]) }}
 				</ng-template>
+				<div
+					id="highlight-icon"
+					[ngStyle]="{
+						'top.px': iconPosition.top,
+						'left.px': iconPosition.left,
+						display: iconVisible ? 'flex' : 'none'
+					}">
+					<mat-icon fontSet="material-icons-round">add</mat-icon>
+				</div>
 			</div>
 		</ng-container>
 

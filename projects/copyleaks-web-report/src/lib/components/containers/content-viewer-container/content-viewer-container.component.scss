@@ -103,6 +103,7 @@
 		padding-top: 4px;
 		outline: none !important;
 		border: 0 !important;
+		position: relative;
 
 		iframe {
 			width: 100%;
@@ -145,6 +146,7 @@
 		word-break: break-word;
 		padding: 4px;
 		line-height: normal;
+		position: relative;
 		i {
 			opacity: 0.7;
 		}
@@ -401,5 +403,35 @@
 		font-style: normal;
 		font-weight: 500;
 		line-height: normal;
+	}
+}
+
+#highlight-icon {
+	position: absolute;
+	display: flex;
+	width: 40px;
+	height: 40px;
+	padding: 8px;
+	box-sizing: border-box;
+	justify-content: center;
+	align-items: center;
+	flex-shrink: 0;
+	border-radius: 56px;
+	background: $color-primary;
+	box-shadow: 0px 0px 4px 0px rgba(63, 154, 245, 0.4), 0px 2px 4px 0px rgba(0, 0, 0, 0.25);
+	cursor: pointer;
+	transition: 0.4s ease-in-out;
+	mat-icon {
+		width: 24px;
+		height: 24px;
+		font-size: 24px;
+		color: $color-white;
+	}
+
+	&:hover {
+		background: $color-white;
+		mat-icon {
+			color: $color-primary;
+		}
 	}
 }

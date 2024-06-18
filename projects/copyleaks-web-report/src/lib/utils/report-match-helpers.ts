@@ -571,28 +571,79 @@ export const getRenderedMatches = (matches: Match[] | null, originalHtml: string
 	if (!matches || !originalHtml) return originalHtml;
 
 	// Add the matches to the html and return the updated html
-	const html = matches.reduceRight((prev: string, curr: Match, i: number) => {
+
+	//#region old code
+	// const html = matches.reduceRight((prev: string, curr: Match, i: number) => {
+	// 	let slice = originalHtml?.substring(curr.start, curr.end);
+	// 	switch (curr.type) {
+	// 		case MatchType.excluded:
+	// 			var reason = curr.reason != undefined && curr.reason != null ? EXCLUDE_MESSAGE[curr.reason] : null;
+	// 			if (curr.reason === EExcludeReason.PartialScan) {
+	// 				slice = `<span exclude-partial-scan data-type="${curr.type}" data-index="${i}" title="${reason}">${slice}</span>`;
+	// 			} else {
+	// 				if (reason) slice = `<span exclude title="${reason}">${slice}</span>`;
+	// 				else slice = `<span exclude title="UnKnown">${slice}</span>`;
+	// 			}
+	// 			break;
+	// 		case MatchType.none:
+	// 			break;
+	// 		default:
+	// 			if (curr.type === MatchType.writingFeedback) {
+	// 				slice = `<span match data-type="${curr.type}" data-index="${i}" data-gid="${curr.gid}" data-correction-text="${curr.correctionText}" data-wrong-text="${curr.wrongText}">${slice}</span>`;
+	// 			} else slice = `<span match data-type="${curr.type}" data-index="${i}" data-gid="${curr.gid}">${slice}</span>`;
+	// 			break;
+	// 	}
+	// 	return slice ? slice?.concat(prev) : '';
+	// }, '');
+	//#endregion old code
+
+	const stringBuilder: string[] = [];
+	let lastIndex = 0;
+
+	matches.forEach((curr: Match, i: number) => {
+		// Add the part of the original HTML before the current match
+		if (curr.start > lastIndex) {
+			stringBuilder.push(originalHtml?.substring(lastIndex, curr.start));
+		}
+
 		let slice = originalHtml?.substring(curr.start, curr.end);
 		switch (curr.type) {
 			case MatchType.excluded:
-				var reason = curr.reason != undefined && curr.reason != null ? EXCLUDE_MESSAGE[curr.reason] : null;
+				const reason = curr.reason != undefined && curr.reason != null ? EXCLUDE_MESSAGE[curr.reason] : null;
 				if (curr.reason === EExcludeReason.PartialScan) {
-					slice = `<span exclude-partial-scan data-type="${curr.type}" data-index="${i}" title="${reason}">${slice}</span>`;
+					stringBuilder.push(
+						`<span exclude-partial-scan data-type="${curr.type}" data-index="${i}" title="${reason}">${slice}</span>`
+					);
 				} else {
-					if (reason) slice = `<span exclude title="${reason}">${slice}</span>`;
-					else slice = `<span exclude title="UnKnown">${slice}</span>`;
+					if (reason) stringBuilder.push(`<span exclude title="${reason}">${slice}</span>`);
+					else stringBuilder.push(`<span exclude title="UnKnown">${slice}</span>`);
 				}
 				break;
 			case MatchType.none:
+				stringBuilder.push(slice);
 				break;
 			default:
 				if (curr.type === MatchType.writingFeedback) {
-					slice = `<span match data-type="${curr.type}" data-index="${i}" data-gid="${curr.gid}" data-correction-text="${curr.correctionText}" data-wrong-text="${curr.wrongText}">${slice}</span>`;
-				} else slice = `<span match data-type="${curr.type}" data-index="${i}" data-gid="${curr.gid}">${slice}</span>`;
+					stringBuilder.push(
+						`<span match data-type="${curr.type}" data-index="${i}" data-gid="${curr.gid}" data-correction-text="${curr.correctionText}" data-wrong-text="${curr.wrongText}">${slice}</span>`
+					);
+				} else {
+					stringBuilder.push(
+						`<span match data-type="${curr.type}" data-index="${i}" data-gid="${curr.gid}">${slice}</span>`
+					);
+				}
 				break;
 		}
-		return slice ? slice?.concat(prev) : '';
-	}, '');
+
+		lastIndex = curr.end;
+	});
+
+	// Add the remaining part of the original HTML after the last match
+	if (lastIndex < originalHtml?.length) {
+		stringBuilder.push(originalHtml?.substring(lastIndex));
+	}
+
+	const html = stringBuilder.join('');
 
 	return html;
 };

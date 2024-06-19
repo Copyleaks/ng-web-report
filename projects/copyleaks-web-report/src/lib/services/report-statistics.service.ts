@@ -1,6 +1,6 @@
 import { Injectable, OnDestroy } from '@angular/core';
 import { BehaviorSubject, combineLatest } from 'rxjs';
-import { distinct, filter } from 'rxjs/operators';
+import { distinct, distinctUntilChanged, filter } from 'rxjs/operators';
 import {
 	ICompleteResults,
 	IExcludedCorrection,
@@ -33,7 +33,11 @@ export class ReportStatisticsService implements OnDestroy {
 		} = this._reportDataSvc;
 		const { selectedResult$, reportViewMode$ } = this._reportViewSvc;
 
-		combineLatest([scanResultsPreviews$, selectedResult$, reportViewMode$])
+		combineLatest([
+			scanResultsPreviews$.pipe(distinctUntilChanged()),
+			selectedResult$.pipe(distinctUntilChanged()),
+			reportViewMode$.pipe(distinctUntilChanged()),
+		])
 			.pipe(
 				untilDestroy(this),
 				filter(([, suspect, viewModeData]) => viewModeData?.viewMode === 'one-to-one' && !!suspect)
@@ -51,13 +55,13 @@ export class ReportStatisticsService implements OnDestroy {
 			});
 
 		combineLatest([
-			scanResultsPreviews$,
-			scanResultsDetails$,
-			reportViewMode$,
-			excludedResultsIds$,
-			filterOptions$,
-			writingFeedback$,
-			excludedCorrections$,
+			scanResultsPreviews$.pipe(distinctUntilChanged()),
+			scanResultsDetails$.pipe(distinctUntilChanged()),
+			reportViewMode$.pipe(distinctUntilChanged()),
+			excludedResultsIds$.pipe(distinctUntilChanged()),
+			filterOptions$.pipe(distinctUntilChanged()),
+			writingFeedback$.pipe(distinctUntilChanged()),
+			excludedCorrections$.pipe(distinctUntilChanged()),
 		])
 			.pipe(
 				untilDestroy(this),

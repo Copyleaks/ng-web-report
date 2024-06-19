@@ -184,10 +184,11 @@ export class CopyleaksWebReportComponent implements OnInit, OnDestroy {
 		}
 
 		if ('showDisabledProducts' in changes) {
-			this._reportViewSvc.reportViewMode$.next({
-				...this._reportViewSvc.reportViewMode,
-				showDisabledProducts: this.showDisabledProducts,
-			} as IReportViewEvent);
+			if (!!this._reportViewSvc.reportViewMode)
+				this._reportViewSvc.reportViewMode$.next({
+					...this._reportViewSvc.reportViewMode,
+					showDisabledProducts: this.showDisabledProducts,
+				} as IReportViewEvent);
 		}
 	}
 
@@ -304,7 +305,7 @@ export class CopyleaksWebReportComponent implements OnInit, OnDestroy {
 
 		if (alertCode) this._reportViewSvc.selectedAlert$.next(alertCode);
 
-		this._reportViewSvc.reportViewMode$.pipe(takeUntil(this.unsubscribe$)).subscribe(data => {
+		this._reportViewSvc.reportViewMode$.pipe(distinctUntilChanged(), takeUntil(this.unsubscribe$)).subscribe(data => {
 			if (!data) return;
 			let updatedParams: IReportViewQueryParams = {
 				viewMode: data.viewMode,
@@ -358,19 +359,34 @@ export class CopyleaksWebReportComponent implements OnInit, OnDestroy {
 				this.reportLayoutType = EReportLayoutType.OneToOne;
 			}
 
-			this._reportViewSvc.reportViewMode$.next({
-				viewMode: viewMode === 'writing-feedback' ? EReportLayoutType.WritingFeedback : this.reportLayoutType,
-				isHtmlView: (!contentMode || contentMode == 'html') && !alertCode,
-				sourcePageIndex: sourcePage ? Number(sourcePage) ?? 1 : 1,
-				suspectId: suspectId,
-				suspectPageIndex: suspectPage ? Number(suspectPage) ?? 1 : 1,
-				alertCode: alertCode,
-				showDisabledProducts: this.showDisabledProducts,
-				platformType: this.platformType,
-			} as IReportViewEvent);
-
-			if (alertCode) this._reportViewSvc.selectedAlert$.next(alertCode);
-			else this._reportViewSvc.selectedAlert$.next(null);
+			// check if the reportViewMode$ value is the same as new value
+			if (
+				!(
+					this._reportViewSvc.reportViewMode?.viewMode ==
+						(viewMode === 'writing-feedback' ? EReportLayoutType.WritingFeedback : this.reportLayoutType) &&
+					this._reportViewSvc.reportViewMode?.isHtmlView == ((!contentMode || contentMode == 'html') && !alertCode) &&
+					this._reportViewSvc.reportViewMode?.sourcePageIndex == (sourcePage ? Number(sourcePage) ?? 1 : 1) &&
+					this._reportViewSvc.reportViewMode?.suspectId == suspectId &&
+					this._reportViewSvc.reportViewMode?.suspectPageIndex == (suspectPage ? Number(suspectPage) ?? 1 : 1) &&
+					this._reportViewSvc.reportViewMode?.alertCode == alertCode &&
+					this._reportViewSvc.reportViewMode?.showDisabledProducts == this.showDisabledProducts &&
+					this._reportViewSvc.reportViewMode?.platformType == this.platformType
+				)
+			)
+				this._reportViewSvc.reportViewMode$.next({
+					viewMode: viewMode === 'writing-feedback' ? EReportLayoutType.WritingFeedback : this.reportLayoutType,
+					isHtmlView: (!contentMode || contentMode == 'html') && !alertCode,
+					sourcePageIndex: sourcePage ? Number(sourcePage) ?? 1 : 1,
+					suspectId: suspectId,
+					suspectPageIndex: suspectPage ? Number(suspectPage) ?? 1 : 1,
+					alertCode: alertCode,
+					showDisabledProducts: this.showDisabledProducts,
+					platformType: this.platformType,
+				} as IReportViewEvent);
+			if (alertCode && this._reportViewSvc.selectedAlert != alertCode)
+				this._reportViewSvc.selectedAlert$.next(alertCode);
+			else if (alertCode === null && this._reportViewSvc.selectedAlert != null)
+				this._reportViewSvc.selectedAlert$.next(null);
 		});
 	}
 

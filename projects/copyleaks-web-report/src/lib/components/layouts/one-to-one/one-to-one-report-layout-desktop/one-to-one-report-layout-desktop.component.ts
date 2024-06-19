@@ -43,5 +43,7 @@ export class OneToOneReportLayoutDesktopComponent
 		this.initOneToOneViewData();
 	}
 
-	ngOnDestroy(): void {}
+	ngOnDestroy(): void {
+		this.onComponentDestroy();
+	}
 }

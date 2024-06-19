@@ -2,7 +2,7 @@ import { PercentPipe } from '@angular/common';
 import { HttpClient, HttpErrorResponse, HttpHeaders } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { BehaviorSubject, EMPTY, Subject, combineLatest, forkJoin, from, interval } from 'rxjs';
-import { concatMap, filter, take, takeUntil } from 'rxjs/operators';
+import { concatMap, distinctUntilChanged, filter, take, takeUntil } from 'rxjs/operators';
 import { IResultItem } from '../components/containers/report-results-item-container/components/models/report-result-item.models';
 import { ALERTS } from '../constants/report-alerts.constants';
 import { EResultPreviewType, EScanStatus } from '../enums/copyleaks-web-report.enums';
@@ -32,6 +32,7 @@ import { untilDestroy } from '../utils/until-destroy';
 import { ReportErrorsService } from './report-errors.service';
 import { ReportViewService } from './report-view.service';
 import { ReportStatistics } from '../models/report-statistics.models';
+import { retryWithDelay } from '../utils/retry-with-delay';
 
 @Injectable()
 export class ReportDataService {
@@ -224,11 +225,11 @@ export class ReportDataService {
 		private _percentPipe: PercentPipe
 	) {
 		combineLatest([
-			this.filterOptions$,
-			this.excludedResultsIds$,
-			this.scanResultsDetails$,
-			this.excludedCorrections$,
-			this.writingFeedback$,
+			this.filterOptions$.pipe(distinctUntilChanged()),
+			this.excludedResultsIds$.pipe(distinctUntilChanged()),
+			this.scanResultsDetails$.pipe(distinctUntilChanged()),
+			this.excludedCorrections$.pipe(distinctUntilChanged()),
+			this.writingFeedback$.pipe(distinctUntilChanged()),
 		])
 			.pipe(
 				untilDestroy(this),
@@ -369,7 +370,7 @@ export class ReportDataService {
 			const progressResult$ = this._http.get<IAPIProgress>(endpointsConfig.progress.url, {
 				headers: this._createHeaders(endpointsConfig.progress),
 			});
-			progressResult$.pipe(take(1), untilDestroy(this)).subscribe(
+			progressResult$.pipe(retryWithDelay(), take(1), untilDestroy(this)).subscribe(
 				progress => {
 					if (progress?.percents == 100) this.initSync(endpointsConfig);
 					else {
@@ -399,7 +400,7 @@ export class ReportDataService {
 			.get<IScanSource>(endpointsConfig.crawledVersion.url, {
 				headers: this._createHeaders(endpointsConfig.crawledVersion),
 			})
-			.pipe(untilDestroy(this))
+			.pipe(retryWithDelay(), untilDestroy(this))
 			.subscribe(
 				crawledVersionRes => {
 					this._crawledVersion$.next(crawledVersionRes);
@@ -419,7 +420,7 @@ export class ReportDataService {
 			.get<ICompleteResults>(endpointsConfig.completeResults.url, {
 				headers: this._createHeaders(endpointsConfig.completeResults),
 			})
-			.pipe(untilDestroy(this))
+			.pipe(retryWithDelay(), untilDestroy(this))
 			.subscribe(
 				completeResultsRes => {
 					this.completeResultsSnapshot = JSON.parse(JSON.stringify(completeResultsRes));
@@ -430,7 +431,7 @@ export class ReportDataService {
 							.get<IWritingFeedback>(endpointsConfig.writingFeedback?.url, {
 								headers: this._createHeaders(endpointsConfig.writingFeedback),
 							})
-							.pipe(untilDestroy(this))
+							.pipe(retryWithDelay(), untilDestroy(this))
 							.subscribe(
 								writingFeedbackVersionRes => {
 									this._writingFeedback$.next(writingFeedbackVersionRes);
@@ -601,6 +602,7 @@ export class ReportDataService {
 				.get<IResultDetailResponse>(requestUrl, {
 					headers: this._createHeaders(this._reportEndpointConfig$?.value.result),
 				})
+				.pipe(retryWithDelay())
 				.toPromise();
 
 			return {
@@ -864,6 +866,7 @@ export class ReportDataService {
 				.patch(requestUrl, requestModel, {
 					headers: this._createHeaders(this._reportEndpointConfig$.value.deleteResult),
 				})
+				.pipe(retryWithDelay())
 				.toPromise();
 
 			// Function to find and remove an result by ID from a the give results list
@@ -1246,9 +1249,11 @@ export class ReportDataService {
 	private _getReportScanProgress() {
 		if (!this._reportEndpointConfig$.value || !this._reportEndpointConfig$.value.progress?.url) return EMPTY;
 
-		return this._http.get<IAPIProgress>(this._reportEndpointConfig$.value.progress.url, {
-			headers: this._createHeaders(this._reportEndpointConfig$.value.progress),
-		});
+		return this._http
+			.get<IAPIProgress>(this._reportEndpointConfig$.value.progress.url, {
+				headers: this._createHeaders(this._reportEndpointConfig$.value.progress),
+			})
+			.pipe(retryWithDelay());
 	}
 
 	private async _getReportCrawledVersion() {
@@ -1258,6 +1263,7 @@ export class ReportDataService {
 			.get<IScanSource>(this._reportEndpointConfig$.value.crawledVersion.url, {
 				headers: this._createHeaders(this._reportEndpointConfig$.value.crawledVersion),
 			})
+			.pipe(retryWithDelay())
 			.toPromise();
 	}
 
@@ -1268,6 +1274,7 @@ export class ReportDataService {
 			.get<ICompleteResults>(this._reportEndpointConfig$.value.completeResults.url, {
 				headers: this._createHeaders(this._reportEndpointConfig$.value.completeResults),
 			})
+			.pipe(retryWithDelay())
 			.toPromise();
 	}
 
@@ -1278,6 +1285,7 @@ export class ReportDataService {
 			.get<IWritingFeedback>(this._reportEndpointConfig$.value.writingFeedback.url, {
 				headers: this._createHeaders(this._reportEndpointConfig$.value.writingFeedback),
 			})
+			.pipe(retryWithDelay())
 			.toPromise();
 	}
 

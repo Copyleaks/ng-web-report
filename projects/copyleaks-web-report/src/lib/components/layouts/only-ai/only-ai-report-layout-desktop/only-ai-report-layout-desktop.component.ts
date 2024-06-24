@@ -47,5 +47,7 @@ export class OnlyAiReportLayoutDesktopComponent
 		this.initOneToManyViewData();
 	}
 
-	ngOnDestroy(): void {}
+	ngOnDestroy(): void {
+		this.onComponentDestroy();
+	}
 }

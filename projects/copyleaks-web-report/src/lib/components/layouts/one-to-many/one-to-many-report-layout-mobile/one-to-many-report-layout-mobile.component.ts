@@ -47,5 +47,7 @@ export class OneToManyReportLayoutMobileComponent
 		this.initOneToManyViewData();
 	}
 
-	ngOnDestroy(): void {}
+	ngOnDestroy(): void {
+		this.onComponentDestroy();
+	}
 }

@@ -43,5 +43,7 @@ export class OneToOneReportLayoutMobileComponent
 		this.initOneToOneViewData();
 	}
 
-	ngOnDestroy(): void {}
+	ngOnDestroy(): void {
+		this.onComponentDestroy();
+	}
 }

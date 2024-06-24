@@ -14,6 +14,7 @@ import { ICompleteResults } from '../../models/report-data.models';
 import { ICopyleaksReportOptions } from '../../models/report-options.models';
 import { trigger, transition, animate, keyframes, style } from '@angular/animations';
 import { EResponsiveLayoutType } from '../../enums/copyleaks-web-report.enums';
+import { distinctUntilChanged } from 'rxjs/operators';
 
 @Component({
 	selector: 'cr-filter-result-dailog',
@@ -354,7 +355,10 @@ export class FilterResultDailogComponent implements OnInit {
 	}
 
 	initResultItem() {
-		combineLatest([this.data.reportDataSvc.scanResultsPreviews$, this.data.reportDataSvc.scanResultsDetails$])
+		combineLatest([
+			this.data.reportDataSvc.scanResultsPreviews$.pipe(distinctUntilChanged()),
+			this.data.reportDataSvc.scanResultsDetails$.pipe(distinctUntilChanged()),
+		])
 			.pipe(untilDestroy(this))
 			.subscribe(([completeResults, resultsDetails]) => {
 				if (completeResults) {

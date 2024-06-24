@@ -6,14 +6,14 @@ import { ReportMatchesService } from '../../../services/report-matches.service';
 import { ReportViewService } from '../../../services/report-view.service';
 import { ReportMatchHighlightService } from '../../../services/report-match-highlight.service';
 import { ReportStatisticsService } from '../../../services/report-statistics.service';
-import { filter } from 'rxjs/operators';
+import { distinctUntilChanged, filter, takeUntil } from 'rxjs/operators';
 import { EResponsiveLayoutType, EResultPreviewType } from '../../../enums/copyleaks-web-report.enums';
 import { IScanSource } from '../../../models/report-data.models';
 import { PostMessageEvent } from '../../../models/report-iframe-events.models';
 import { untilDestroy } from '../../../utils/until-destroy';
 import { ReportLayoutBaseComponent } from './report-layout-base.component';
 import { IResultItem } from '../../containers/report-results-item-container/components/models/report-result-item.models';
-import { combineLatest } from 'rxjs';
+import { Subject, combineLatest } from 'rxjs';
 import { ReportNgTemplatesService } from '../../../services/report-ng-templates.service';
 import { ReportRealtimeResultsService } from '../../../services/report-realtime-results.service';
 
@@ -54,6 +54,9 @@ export abstract class OneToOneReportLayoutBaseComponent extends ReportLayoutBase
 		flag: false,
 	};
 
+	// Subject for destroying all the subscriptions in base component
+	private unsubscribe$ = new Subject();
+
 	get isLoadingScanContent(): boolean {
 		return (!this.suspectIframeHtml && !this.suspectTextMatches) || (!this.sourceIframeHtml && !this.sourceTextMatches);
 	}
@@ -90,14 +93,16 @@ export abstract class OneToOneReportLayoutBaseComponent extends ReportLayoutBase
 	}
 
 	initOneToOneViewData(): void {
-		this.reportDataSvc.crawledVersion$.pipe(untilDestroy(this)).subscribe(data => {
+		this.unsubscribe$ = new Subject();
+		
+		this.reportDataSvc.crawledVersion$.pipe(untilDestroy(this), takeUntil(this.unsubscribe$)).subscribe(data => {
 			if (data) {
 				this.sourceCrawledVersion = data;
 				this.numberOfPagesSource = data.text?.pages?.startPosition?.length ?? 1;
 			}
 		});
 
-		this.matchSvc.suspectTextMatches$.pipe(untilDestroy(this)).subscribe(data => {
+		this.matchSvc.suspectTextMatches$.pipe(untilDestroy(this), takeUntil(this.unsubscribe$)).subscribe(data => {
 			if (data) {
 				this.suspectTextMatches = data;
 				this.hasNonIdenticalMatchWords =
@@ -112,7 +117,7 @@ export abstract class OneToOneReportLayoutBaseComponent extends ReportLayoutBase
 			}
 		});
 
-		this.matchSvc.sourceHtmlMatches$.pipe(untilDestroy(this)).subscribe(data => {
+		this.matchSvc.sourceHtmlMatches$.pipe(untilDestroy(this), takeUntil(this.unsubscribe$)).subscribe(data => {
 			const rerenderedMatches = this._getRenderedMatches(data, this.sourceCrawledVersion?.html?.value);
 			if (rerenderedMatches && data) {
 				this.sourceIframeHtml = rerenderedMatches;
@@ -121,12 +126,15 @@ export abstract class OneToOneReportLayoutBaseComponent extends ReportLayoutBase
 			}
 		});
 
-		this.matchSvc.sourceTextMatches$.pipe(untilDestroy(this)).subscribe(data => {
+		this.matchSvc.sourceTextMatches$.pipe(untilDestroy(this), takeUntil(this.unsubscribe$)).subscribe(data => {
 			if (data) this.sourceTextMatches = data;
 		});
 
-		combineLatest([this.reportDataSvc.scanResultsPreviews$, this.reportViewSvc.selectedResult$])
-			.pipe(untilDestroy(this))
+		combineLatest([
+			this.reportDataSvc.scanResultsPreviews$.pipe(distinctUntilChanged()),
+			this.reportViewSvc.selectedResult$.pipe(distinctUntilChanged()),
+		])
+			.pipe(untilDestroy(this), takeUntil(this.unsubscribe$))
 			.subscribe(([previews, resultData]) => {
 				if (this.reportViewSvc.progress$.value != 100 && resultData) {
 					this.numberOfPagesSuspect = resultData.result?.text?.pages?.startPosition?.length ?? 1;
@@ -137,7 +145,7 @@ export abstract class OneToOneReportLayoutBaseComponent extends ReportLayoutBase
 						this.resultItem?.resultPreview?.type === EResultPreviewType.Database &&
 						!this.resultItem?.resultPreview?.scanId;
 
-					this.matchSvc.suspectHtmlMatches$.pipe(untilDestroy(this)).subscribe(data => {
+					this.matchSvc.suspectHtmlMatches$.pipe(untilDestroy(this), takeUntil(this.unsubscribe$)).subscribe(data => {
 						if (!resultData?.result?.html.value) return;
 						const rerenderedMatches = this._getRenderedMatches(data, resultData?.result?.html?.value);
 						if (rerenderedMatches && data) {
@@ -175,7 +183,7 @@ export abstract class OneToOneReportLayoutBaseComponent extends ReportLayoutBase
 						!this.resultItem?.resultPreview?.scanId;
 				}
 
-				this.matchSvc.suspectHtmlMatches$.pipe(untilDestroy(this)).subscribe(data => {
+				this.matchSvc.suspectHtmlMatches$.pipe(untilDestroy(this), takeUntil(this.unsubscribe$)).subscribe(data => {
 					if (!resultData?.result?.html.value) return;
 					const rerenderedMatches = this._getRenderedMatches(data, resultData?.result?.html?.value);
 					if (rerenderedMatches && data) {
@@ -189,29 +197,32 @@ export abstract class OneToOneReportLayoutBaseComponent extends ReportLayoutBase
 		this.reportViewSvc.reportViewMode$
 			.pipe(
 				filter(data => data.viewMode === 'one-to-one'),
-				untilDestroy(this)
+				untilDestroy(this),
+				takeUntil(this.unsubscribe$)
 			)
 			.subscribe(data => {
 				if (!data) return;
 				this.isHtmlView = data.isHtmlView;
 				this.currentPageSource = data.sourcePageIndex;
 				if (data.suspectPageIndex) this.currentPageSuspect = data.suspectPageIndex;
-				this.reportDataSvc.scanResultsDetails$.pipe(untilDestroy(this)).subscribe(results => {
-					if (!results) return;
-					const foundSuspect = results?.find(result => result.id === data.suspectId);
-					if (foundSuspect) this.reportViewSvc.selectedResult$.next(foundSuspect);
-					else {
-						// if the result is not found, then change the view to one-to-many
-						this.reportViewSvc.reportViewMode$.next({
-							isHtmlView: data.isHtmlView,
-							viewMode: 'one-to-many',
-							sourcePageIndex: data.sourcePageIndex,
-							suspectPageIndex: data.suspectPageIndex,
-							suspectId: undefined,
-							...this.reportViewSvc.reportViewMode,
-						});
-					}
-				});
+				this.reportDataSvc.scanResultsDetails$
+					.pipe(untilDestroy(this), takeUntil(this.unsubscribe$))
+					.subscribe(results => {
+						if (!results) return;
+						const foundSuspect = results?.find(result => result.id === data.suspectId);
+						if (foundSuspect) this.reportViewSvc.selectedResult$.next(foundSuspect);
+						else {
+							// if the result is not found, then change the view to one-to-many
+							this.reportViewSvc.reportViewMode$.next({
+								isHtmlView: data.isHtmlView,
+								viewMode: 'one-to-many',
+								sourcePageIndex: data.sourcePageIndex,
+								suspectPageIndex: data.suspectPageIndex,
+								suspectId: undefined,
+								...this.reportViewSvc.reportViewMode,
+							});
+						}
+					});
 			});
 
 		this._initMaskedContentFlags();
@@ -264,5 +275,10 @@ export abstract class OneToOneReportLayoutBaseComponent extends ReportLayoutBase
 		} catch (error) {
 			console.error('Error getting disclaimer hide flag from local storage: ', error);
 		}
+	}
+
+	protected onComponentDestroy(): void {
+		this.unsubscribe$.next();
+		this.unsubscribe$.complete();
 	}
 }

@@ -1,6 +1,6 @@
 import { Renderer2, TemplateRef } from '@angular/core';
-import { combineLatest } from 'rxjs';
-import { filter } from 'rxjs/operators';
+import { Subject, combineLatest } from 'rxjs';
+import { distinctUntilChanged, filter, takeUntil } from 'rxjs/operators';
 import { ALERTS } from '../../../constants/report-alerts.constants';
 import { EReportViewType, EResponsiveLayoutType } from '../../../enums/copyleaks-web-report.enums';
 import {
@@ -26,7 +26,6 @@ import { ReportMatchesService } from '../../../services/report-matches.service';
 import { ReportNgTemplatesService } from '../../../services/report-ng-templates.service';
 import { ReportStatisticsService } from '../../../services/report-statistics.service';
 import { ReportViewService } from '../../../services/report-view.service';
-import { untilDestroy } from '../../../utils/until-destroy';
 import { IAuthorAlertCard } from '../../containers/report-alerts-container/components/author-alert-card/models/author-alert-card.models';
 import { IResultsActions } from '../../containers/report-results-container/components/results-actions/models/results-actions.models';
 import { IResultItem } from '../../containers/report-results-item-container/components/models/report-result-item.models';
@@ -98,6 +97,9 @@ export abstract class OneToManyReportLayoutBaseComponent extends ReportLayoutBas
 	allWritingFeedbacksStats: IWritingFeedbackTypeStatistics[];
 	allMatchResultsStats: IMatchesTypeStatistics[];
 
+	// Subject for destroying all the subscriptions in base component
+	private unsubscribe$ = new Subject();
+
 	override get rerendered(): boolean {
 		return this.oneToManyRerendered;
 	}
@@ -146,7 +148,10 @@ export abstract class OneToManyReportLayoutBaseComponent extends ReportLayoutBas
 	}
 
 	initOneToManyViewData(): void {
-		this.reportViewSvc.reportViewMode$.pipe(untilDestroy(this)).subscribe(data => {
+		// Init the subscriptions for the one-to-many view
+		this.unsubscribe$ = new Subject();
+
+		this.reportViewSvc.reportViewMode$.pipe(takeUntil(this.unsubscribe$)).subscribe(data => {
 			if (!data) return;
 			this.isHtmlView = data.isHtmlView;
 			this.currentPageSource = data.sourcePageIndex;
@@ -162,8 +167,11 @@ export abstract class OneToManyReportLayoutBaseComponent extends ReportLayoutBas
 
 			this.showDisabledProducts = data.showDisabledProducts ?? false;
 
-			combineLatest([this.reportDataSvc.scanResultsPreviews$, this.reportDataSvc.scanResultsDetails$])
-				.pipe(untilDestroy(this))
+			combineLatest([
+				this.reportDataSvc.scanResultsPreviews$.pipe(distinctUntilChanged()),
+				this.reportDataSvc.scanResultsDetails$.pipe(distinctUntilChanged()),
+			])
+				.pipe(takeUntil(this.unsubscribe$))
 				.subscribe(([previews, details]) => {
 					if (data?.alertCode && this.selectedTap === EReportViewType.AIView) {
 						this.isHtmlView = false;
@@ -212,29 +220,32 @@ export abstract class OneToManyReportLayoutBaseComponent extends ReportLayoutBas
 					}
 				});
 		});
-		this.reportDataSvc.writingFeedback$.pipe(untilDestroy(this)).subscribe(data => {
+		this.reportDataSvc.writingFeedback$.pipe(takeUntil(this.unsubscribe$)).subscribe(data => {
 			if (data) this.writingFeedback = data;
 			this.showReadabilityLoadingView = !data;
 		});
 
-		this.reportViewSvc.progress$.pipe(untilDestroy(this)).subscribe(progress => {
+		this.reportViewSvc.progress$.pipe(takeUntil(this.unsubscribe$)).subscribe(progress => {
 			this.loadingProgressPct = progress;
 		});
 
-		this.reportDataSvc.newResults$.pipe(untilDestroy(this)).subscribe(data => {
+		this.reportDataSvc.newResults$.pipe(takeUntil(this.unsubscribe$)).subscribe(data => {
 			if (data) this.newScanResultsView = data;
 		});
 
-		this.reportDataSvc.crawledVersion$.pipe(untilDestroy(this)).subscribe(data => {
+		this.reportDataSvc.crawledVersion$.pipe(takeUntil(this.unsubscribe$)).subscribe(data => {
 			if (data) {
 				this.reportCrawledVersion = data;
 				this.numberOfPages = data.text?.pages?.startPosition?.length ?? 1;
 			}
 		});
 
-		combineLatest([this.reportDataSvc.crawledVersion$, this.reportDataSvc.writingFeedback$])
+		combineLatest([
+			this.reportDataSvc.crawledVersion$.pipe(distinctUntilChanged()),
+			this.reportDataSvc.writingFeedback$.pipe(distinctUntilChanged()),
+		])
 			.pipe(
-				untilDestroy(this),
+				takeUntil(this.unsubscribe$),
 				filter(([scanSource, writingFeedback]) => !!writingFeedback && !!scanSource)
 			)
 			.subscribe(([scanSource, writingFeedback]) => {
@@ -290,7 +301,7 @@ export abstract class OneToManyReportLayoutBaseComponent extends ReportLayoutBas
 				this.isLoadingScanCorrections = false;
 			});
 
-		this.reportDataSvc.filterOptions$.pipe(untilDestroy(this)).subscribe(data => {
+		this.reportDataSvc.filterOptions$.pipe(takeUntil(this.unsubscribe$)).subscribe(data => {
 			if (!data) return;
 			if (data.showAlerts === false) {
 				this.alerts = [];
@@ -301,7 +312,7 @@ export abstract class OneToManyReportLayoutBaseComponent extends ReportLayoutBas
 				this.scanResultsPreviews?.notifications?.alerts?.filter(a => a.code != ALERTS.SUSPECTED_AI_TEXT_DETECTED) ?? [];
 		});
 
-		this.matchSvc.originalHtmlMatches$.pipe(untilDestroy(this)).subscribe(data => {
+		this.matchSvc.originalHtmlMatches$.pipe(takeUntil(this.unsubscribe$)).subscribe(data => {
 			this.isLoadingScanContent = data === null;
 			if (data != this.reportMatches) {
 				this.oneToManyRerendered = false;
@@ -329,7 +340,7 @@ export abstract class OneToManyReportLayoutBaseComponent extends ReportLayoutBas
 			}
 		});
 
-		this.matchSvc.originalTextMatches$.pipe(untilDestroy(this)).subscribe(data => {
+		this.matchSvc.originalTextMatches$.pipe(takeUntil(this.unsubscribe$)).subscribe(data => {
 			if (data) {
 				this.isLoadingScanContent = false;
 				this.contentTextMatches = data;
@@ -378,7 +389,7 @@ export abstract class OneToManyReportLayoutBaseComponent extends ReportLayoutBas
 			}
 		});
 
-		this.statisticsSvc.statistics$.pipe(untilDestroy(this)).subscribe(data => {
+		this.statisticsSvc.statistics$.pipe(takeUntil(this.unsubscribe$)).subscribe(data => {
 			if (data) this.reportStatistics = data;
 			const res = Math.min(
 				1,
@@ -389,14 +400,14 @@ export abstract class OneToManyReportLayoutBaseComponent extends ReportLayoutBas
 
 		const { originalText$, originalHtml$, multiOriginalText$ } = this.highlightSvc;
 		combineLatest([
-			originalText$,
-			originalHtml$,
-			multiOriginalText$,
-			this.reportViewSvc.reportViewMode$,
-			this.reportDataSvc.crawledVersion$,
+			originalText$.pipe(distinctUntilChanged()),
+			originalHtml$.pipe(distinctUntilChanged()),
+			multiOriginalText$.pipe(distinctUntilChanged()),
+			this.reportViewSvc.reportViewMode$.pipe(distinctUntilChanged()),
+			this.reportDataSvc.crawledVersion$.pipe(distinctUntilChanged()),
 		])
 			.pipe(
-				untilDestroy(this),
+				takeUntil(this.unsubscribe$),
 				filter(([, , , content, crawledVersion]) => !content.alertCode && !!crawledVersion)
 			)
 			.subscribe(([text, html, multiText, content]) => {
@@ -425,7 +436,7 @@ export abstract class OneToManyReportLayoutBaseComponent extends ReportLayoutBas
 				}
 			});
 
-		this.templatesSvc.reportTemplatesSubject$.pipe(untilDestroy(this)).subscribe(refs => {
+		this.templatesSvc.reportTemplatesSubject$.pipe(takeUntil(this.unsubscribe$)).subscribe(refs => {
 			if (refs?.customResultsTemplate !== undefined && this.customResultsTemplate === undefined) {
 				setTimeout(() => {
 					this.customResultsTemplate = refs?.customResultsTemplate;
@@ -439,7 +450,7 @@ export abstract class OneToManyReportLayoutBaseComponent extends ReportLayoutBas
 			}
 		});
 
-		this.templatesSvc.reportTemplatesMode$.pipe(untilDestroy(this)).subscribe(mode => {
+		this.templatesSvc.reportTemplatesMode$.pipe(takeUntil(this.unsubscribe$)).subscribe(mode => {
 			if (mode === undefined) return;
 			this.reportTemplateMode = mode;
 		});
@@ -647,5 +658,10 @@ export abstract class OneToManyReportLayoutBaseComponent extends ReportLayoutBas
 			}
 		}
 		return viewedCorrections;
+	}
+
+	protected onComponentDestroy(): void {
+		this.unsubscribe$.next();
+		this.unsubscribe$.complete();
 	}
 }

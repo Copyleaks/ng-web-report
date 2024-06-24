@@ -178,7 +178,10 @@ export class ReportResultsContainerComponent implements OnInit, OnChanges {
 		if (this.reportDataSvc.filterOptions && this.reportDataSvc.excludedResultsIds)
 			this._filterResults(this.reportDataSvc.filterOptions, this.reportDataSvc.excludedResultsIds);
 
-		combineLatest([this.reportDataSvc.filterOptions$, this.reportDataSvc.excludedResultsIds$])
+		combineLatest([
+			this.reportDataSvc.filterOptions$.pipe(distinctUntilChanged()),
+			this.reportDataSvc.excludedResultsIds$.pipe(distinctUntilChanged()),
+		])
 			.pipe(untilDestroy(this))
 			.subscribe(([filterOptions, excludedResultsIds]) => {
 				if (this.showLoadingView || !filterOptions || !excludedResultsIds) return;

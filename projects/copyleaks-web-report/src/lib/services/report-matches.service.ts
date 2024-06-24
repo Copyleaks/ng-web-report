@@ -1,6 +1,6 @@
 import { Injectable, OnDestroy } from '@angular/core';
 import { BehaviorSubject, combineLatest } from 'rxjs';
-import { filter } from 'rxjs/operators';
+import { distinctUntilChanged, filter } from 'rxjs/operators';
 import { ALERTS } from '../constants/report-alerts.constants';
 import {
 	ICompleteResults,
@@ -85,13 +85,13 @@ export class ReportMatchesService implements OnDestroy {
 
 	private _initOneToManyMatchesHandler() {
 		combineLatest([
-			this._reportDataSvc.crawledVersion$,
-			this._reportDataSvc.scanResultsDetails$,
-			this._reportViewSvc.reportViewMode$,
-			this._reportViewSvc.selectedAlert$,
-			this._reportDataSvc.filterOptions$,
-			this._reportDataSvc.excludedResultsIds$,
-			this.showOmittedWords$,
+			this._reportDataSvc.crawledVersion$.pipe(distinctUntilChanged()),
+			this._reportDataSvc.scanResultsDetails$.pipe(distinctUntilChanged()),
+			this._reportViewSvc.reportViewMode$.pipe(distinctUntilChanged()),
+			this._reportViewSvc.selectedAlert$.pipe(distinctUntilChanged()),
+			this._reportDataSvc.filterOptions$.pipe(distinctUntilChanged()),
+			this._reportDataSvc.excludedResultsIds$.pipe(distinctUntilChanged()),
+			this.showOmittedWords$.pipe(distinctUntilChanged()),
 		])
 			.pipe(
 				untilDestroy(this),
@@ -172,12 +172,12 @@ export class ReportMatchesService implements OnDestroy {
 
 	private _initOneToOneMatchesHandler() {
 		combineLatest([
-			this._reportDataSvc.crawledVersion$,
-			this._reportViewSvc.selectedResult$,
-			this._reportViewSvc.reportViewMode$,
-			this._reportViewSvc.selectedAlert$,
-			this._reportDataSvc.filterOptions$,
-			this.showOmittedWords$,
+			this._reportDataSvc.crawledVersion$.pipe(distinctUntilChanged()),
+			this._reportViewSvc.selectedResult$.pipe(distinctUntilChanged()),
+			this._reportViewSvc.reportViewMode$.pipe(distinctUntilChanged()),
+			this._reportViewSvc.selectedAlert$.pipe(distinctUntilChanged()),
+			this._reportDataSvc.filterOptions$.pipe(distinctUntilChanged()),
+			this.showOmittedWords$.pipe(distinctUntilChanged()),
 		])
 			.pipe(
 				untilDestroy(this),
@@ -220,11 +220,11 @@ export class ReportMatchesService implements OnDestroy {
 
 	private _initAlertMatchesHandler() {
 		combineLatest([
-			this._reportDataSvc.crawledVersion$,
-			this._reportViewSvc.selectedAlert$,
-			this._reportDataSvc.scanResultsPreviews$,
-			this._reportDataSvc.filterOptions$,
-			this.showOmittedWords$,
+			this._reportDataSvc.crawledVersion$.pipe(distinctUntilChanged()),
+			this._reportViewSvc.selectedAlert$.pipe(distinctUntilChanged()),
+			this._reportDataSvc.scanResultsPreviews$.pipe(distinctUntilChanged()),
+			this._reportDataSvc.filterOptions$.pipe(distinctUntilChanged()),
+			this.showOmittedWords$.pipe(distinctUntilChanged()),
 		])
 			.pipe(
 				untilDestroy(this),
@@ -254,12 +254,12 @@ export class ReportMatchesService implements OnDestroy {
 
 	private _initWritingFeedbackCorrectionsHandler() {
 		combineLatest([
-			this._reportDataSvc.crawledVersion$,
-			this._reportViewSvc.selectedAlert$,
-			this._reportDataSvc.writingFeedback$,
-			this._reportViewSvc.reportViewMode$,
-			this._reportDataSvc.filterOptions$,
-			this._reportDataSvc.excludedCorrections$,
+			this._reportDataSvc.crawledVersion$.pipe(distinctUntilChanged()),
+			this._reportViewSvc.selectedAlert$.pipe(distinctUntilChanged()),
+			this._reportDataSvc.writingFeedback$.pipe(distinctUntilChanged()),
+			this._reportViewSvc.reportViewMode$.pipe(distinctUntilChanged()),
+			this._reportDataSvc.filterOptions$.pipe(distinctUntilChanged()),
+			this._reportDataSvc.excludedCorrections$.pipe(distinctUntilChanged()),
 		])
 			.pipe(
 				untilDestroy(this),

@@ -51,5 +51,7 @@ export class OneToManyReportLayoutDesktopComponent
 		this.initOneToManyViewData();
 	}
 
-	ngOnDestroy(): void {}
+	ngOnDestroy(): void {
+		this.onComponentDestroy();
+	}
 }

@@ -1,17 +1,18 @@
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, Input, OnDestroy, OnInit } from '@angular/core';
 import { FormControl, FormGroup } from '@angular/forms';
 import { ITotalSourceType } from './models/source-type-filter-result.models';
 import { FilterResultDailogService } from '../../services/filter-result-dailog.service';
 import { EFilterResultForm } from '../../models/filter-result-dailog.enum';
 import { ReportViewService } from '../../../../services/report-view.service';
 import { EPlatformType } from '../../../../enums/copyleaks-web-report.enums';
+import { untilDestroy } from '../../../../utils/until-destroy';
 
 @Component({
 	selector: 'cr-source-type-filter-result',
 	templateUrl: './source-type-filter-result.component.html',
 	styleUrls: ['./source-type-filter-result.component.scss'],
 })
-export class SourceTypeFilterResultComponent implements OnInit {
+export class SourceTypeFilterResultComponent implements OnInit, OnDestroy {
 	@Input() totalSourceType: ITotalSourceType = {
 		totalInternet: 0,
 		totalInternalDatabase: 0,
@@ -50,7 +51,7 @@ export class SourceTypeFilterResultComponent implements OnInit {
 
 		if (this.reportViewSvc) {
 			this.platformType = this.reportViewSvc.reportViewMode.platformType;
-			this.reportViewSvc.reportViewMode$.subscribe(data => {
+			this.reportViewSvc.reportViewMode$.pipe(untilDestroy(this)).subscribe(data => {
 				if (!data) return;
 				this.platformType = data.platformType;
 			});
@@ -61,4 +62,6 @@ export class SourceTypeFilterResultComponent implements OnInit {
 		const repositories = this.repositoriesForm;
 		repositories.addControl(repoId, new FormControl(this.filterService.getRepositoryValueById()));
 	}
+
+	ngOnDestroy(): void {}
 }

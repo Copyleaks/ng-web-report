@@ -42,6 +42,8 @@ import { COPYLEAKS_REPORT_IFRAME_STYLES } from '../../../constants/report-iframe
 import oneToManyIframeJsScript from '../../../utils/one-to-many-iframe-logic';
 import oneToOneIframeJsScript from '../../../utils/one-to-one-iframe-logic';
 import { filter } from 'rxjs/operators';
+import * as rangy from 'rangy';
+import * as rangyclassapplier from 'rangy/lib/rangy-classapplier';
 
 @Component({
 	selector: 'copyleaks-content-viewer-container',
@@ -60,6 +62,7 @@ export class ContentViewerContainerComponent implements OnInit, AfterViewInit, O
 	rerendered: boolean = false;
 	textStartIndex: number | null = null;
 	textEndIndex: number | null = null;
+	observer: MutationObserver;
 
 	@HostListener('click', ['$event'])
 	handleClick(event: MouseEvent): void {
@@ -340,6 +343,27 @@ export class ContentViewerContainerComponent implements OnInit, AfterViewInit, O
 		return [];
 	}
 
+	annotations = [
+		{
+			id: 'annotation-mhc1vj5h5',
+			start: 191,
+			end: 371,
+			text: 'Brought into the world in 1732 into a Virginia grower family, he took in the ethics, habits, and\ngroup of information essential for an eighteenth century Virginia courteous fellow.',
+		},
+		{
+			id: 'annotation-phk24i0a5',
+			start: 2506,
+			end: 2944,
+			text: "One of Washington's greatest contributions was his commitment to establishing a strong central\ngovernment while respecting the principles of democracy. As President, he shaped the powers\nand responsibilities of the executive branch, providing a framework that has guided subsequent\nadministrations. Washington's leadership during the formative years of the United States helped\nstabilize the nation and solidify its standing in the world.",
+		},
+		{
+			id: 'annotation-d3q5fgm9s',
+			start: 4088,
+			end: 4231,
+			text: "Additionally, Washington's reputation for integrity and moral character has had a lasting impact\non the expectations placed on public officials",
+		},
+	];
+
 	iFrameWindow: Window | null; // IFrame nativeElement reference
 
 	MatchType = MatchType; // Match type enum
@@ -383,22 +407,12 @@ export class ContentViewerContainerComponent implements OnInit, AfterViewInit, O
 	showIcon(_: MouseEvent): void {
 		const selection = window.getSelection();
 		if (selection && selection.rangeCount > 0) {
-			console.log(selection);
-
 			const range = selection.getRangeAt(0);
 			if (!range.collapsed) {
 				const rect = range.getBoundingClientRect();
 				this.iconPosition.top = rect.bottom - this.contentText.nativeElement.getBoundingClientRect().top;
 				this.iconPosition.left = rect.right - this.contentText.nativeElement.getBoundingClientRect().left;
 				this.iconVisible = true;
-
-				const preSelectionRange = range.cloneRange();
-				preSelectionRange.selectNodeContents(this.contentText.nativeElement);
-				preSelectionRange.setEnd(range.startContainer, range.startOffset);
-				this.textStartIndex = preSelectionRange.toString().length;
-				this.textEndIndex = this.textStartIndex + range.toString().length;
-
-				console.log(this.textStartIndex, this.textEndIndex);
 			} else {
 				this.iconVisible = false;
 			}
@@ -423,6 +437,37 @@ export class ContentViewerContainerComponent implements OnInit, AfterViewInit, O
 		);
 
 		this.contentText?.nativeElement?.addEventListener('wheel', this._handleScroll, { passive: false });
+
+		// Mutation observer to handle DOM changes
+		this.observer = new MutationObserver(() => {
+			// Temporarily disconnect the observer to prevent infinite loop
+			this.observer.disconnect();
+
+			// Reconnect the observer
+			this.observer.observe(this.contentText?.nativeElement, {
+				childList: true,
+				subtree: true,
+				characterData: true,
+			});
+		});
+
+		this.observer.observe(this.contentText?.nativeElement, {
+			childList: true,
+			subtree: true,
+			characterData: true,
+		});
+
+		// Apply existing annotations on page load
+		setTimeout(() => {
+			this.annotations.forEach(annotation => {
+				this.highlightText(annotation);
+			});
+		}, 1000);
+	}
+
+	addAnnotation() {
+		this.createAnnotation();
+		this.iconVisible = false;
 	}
 
 	ngOnChanges(changes: SimpleChanges): void {
@@ -608,6 +653,146 @@ export class ContentViewerContainerComponent implements OnInit, AfterViewInit, O
 		const iframeJsScript = js.outerHTML;
 
 		return html + iframeStyle + iframeJsScript;
+	}
+
+	// Generate a unique ID for each annotation
+	generateAnnotationId() {
+		return 'annotation-' + Math.random().toString(36).substr(2, 9);
+	}
+
+	// Function to get the text content and compute start and end indices
+	getAnnotationData(range) {
+		var preSelectionRange = range.cloneRange();
+		preSelectionRange.selectNodeContents(this.contentText?.nativeElement);
+		preSelectionRange.setEnd(range.startContainer, range.startOffset);
+		var start = preSelectionRange.toString().length;
+
+		var selectedText = range.toString();
+		if (!selectedText) return;
+		var end = start + selectedText.length;
+
+		return { id: this.generateAnnotationId(), start: start, end: end, text: selectedText };
+	}
+
+	// Function to create and display annotation
+	createAnnotation() {
+		var selection = rangy.getSelection();
+		if (selection.rangeCount > 0) {
+			var range = selection.getRangeAt(0);
+
+			// Get annotation data
+			var annotationData = this.getAnnotationData(range);
+			if (!annotationData) return;
+			// Add annotation to the list
+			this.annotations.push(annotationData);
+
+			// Display annotation
+
+			// Highlight the selected text
+			this.highlightText(annotationData);
+		}
+	}
+
+	// Function to delete an annotation
+	deleteAnnotation(annotation, annotationItem) {
+		// Temporarily disconnect the observer to prevent infinite loop
+		this.observer.disconnect();
+
+		// Remove the highlight
+		this.highlightText(annotation, true);
+
+		// Remove the annotation from the list
+		this.annotations = this.annotations.filter(ann => ann.id !== annotation.id);
+
+		// Remove the annotation item from the DOM
+		annotationItem.remove();
+
+		// Reconnect the this.observer
+		this.observer.observe(this.contentText?.nativeElement, {
+			childList: true,
+			subtree: true,
+			characterData: true,
+		});
+	}
+
+	// Function to highlight or remove highlight of the selected text
+	highlightText(annotation, remove = false) {
+		var range = rangy.createRange();
+		var container = this.contentText?.nativeElement;
+		var startContainer, endContainer;
+		var startOffset = annotation.start;
+		var endOffset = annotation.end;
+		var offset = 0;
+
+		function findNodeAndOffset(node, targetOffset) {
+			if (node.nodeType === Node.TEXT_NODE) {
+				if (offset + node.length >= targetOffset) {
+					return { node: node, offset: targetOffset - offset };
+				}
+				offset += node.length;
+			} else if (node.nodeType === Node.ELEMENT_NODE) {
+				for (var i = 0; i < node.childNodes.length; i++) {
+					var result = findNodeAndOffset(node.childNodes[i], targetOffset);
+					if (result) {
+						return result;
+					}
+				}
+			}
+			return null;
+		}
+
+		var startNodeInfo = findNodeAndOffset(container, startOffset);
+		startContainer = startNodeInfo.node;
+		startOffset = startNodeInfo.offset;
+
+		offset = 0; // Reset offset for end node search
+		var endNodeInfo = findNodeAndOffset(container, endOffset);
+		endContainer = endNodeInfo.node;
+		endOffset = endNodeInfo.offset;
+
+		// Set the range
+		if (startContainer && endContainer) {
+			range.setStart(startContainer, startOffset);
+			range.setEnd(endContainer, endOffset);
+
+			var highlight = rangyclassapplier.createClassApplier('highlight', {
+				elementTagName: 'span',
+				elementProperties: {
+					className: 'highlight',
+				},
+				normalize: true, // This ensures that overlapping highlights are merged
+			});
+			if (remove) {
+				highlight.undoToRange(range);
+			} else {
+				highlight.applyToRange(range);
+				this.attachHighlightClickEvent(annotation.id);
+			}
+
+			// Ensure the data-id attribute is set after applying the highlight
+			document.querySelectorAll('.highlight').forEach(element => {
+				if (!element.getAttribute('data-id')) {
+					element.setAttribute('data-id', annotation.id);
+				}
+			});
+		}
+	}
+
+	// Function to attach click event to highlight
+	attachHighlightClickEvent(annotationId) {
+		console.log('.highlight[data-id="' + annotationId + '"]');
+
+		document.querySelectorAll('.highlight[data-id="' + annotationId + '"]').forEach(element => {
+			element.addEventListener('click', event => {
+				event.stopPropagation(); // Prevent event bubbling
+				const annotation = this.annotations.find(ann => ann.id === annotationId);
+				if (annotation) {
+					alert(
+						`Annotation ID: ${annotation.id}\nText: ${annotation.text}\nStart: ${annotation.start}\nEnd: ${annotation.end}`
+					);
+				}
+			});
+		});
 	}
 
 	ngOnDestroy(): void {}

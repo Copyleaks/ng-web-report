@@ -17,6 +17,26 @@
 		margin-bottom: 8px;
 	}
 
+	::-moz-selection {
+		background: #b4d7fe;
+	}
+
+	::selection {
+		background: #b4d7fe;
+	}
+
+	::ng-deep {
+		.highlight {
+			background-color: #ffdf54 !important;
+			cursor: pointer;
+			transition: 0.2s ease-in-out;
+
+			&:hover {
+				background-color: #b4d7fe !important;
+			}
+		}
+	}
+
 	.submitted-doc-name-container {
 		display: flex;
 		align-items: center;

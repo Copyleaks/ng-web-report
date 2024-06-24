@@ -94,7 +94,7 @@ export abstract class OneToOneReportLayoutBaseComponent extends ReportLayoutBase
 
 	initOneToOneViewData(): void {
 		this.unsubscribe$ = new Subject();
-		
+
 		this.reportDataSvc.crawledVersion$.pipe(untilDestroy(this), takeUntil(this.unsubscribe$)).subscribe(data => {
 			if (data) {
 				this.sourceCrawledVersion = data;

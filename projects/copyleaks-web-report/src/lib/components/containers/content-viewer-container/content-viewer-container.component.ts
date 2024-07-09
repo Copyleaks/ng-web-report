@@ -270,6 +270,8 @@ export class ContentViewerContainerComponent implements OnInit, AfterViewInit, O
 	 */
 	@Input() hasHtml: boolean;
 
+	@Input() customIframeScript: string;
+
 	/**
 	 * Emits iFrame messages to the parent layout component.
 	 *
@@ -288,7 +290,7 @@ export class ContentViewerContainerComponent implements OnInit, AfterViewInit, O
 	/**
 	 * Emits events when a match is selected.
 	 */
-	@Output() onTextMatchSelectionEvent = new EventEmitter<TextMatchHighlightEvent>();
+	@Output() onTextMatchSelectionEvent = new EventEmitter<TextMatchHighlightEvent | any>();
 
 	/**
 	 * Emits events when there are changes to the component's view.
@@ -343,26 +345,7 @@ export class ContentViewerContainerComponent implements OnInit, AfterViewInit, O
 		return [];
 	}
 
-	annotations = [
-		{
-			id: 'annotation-mhc1vj5h5',
-			start: 191,
-			end: 371,
-			text: 'Brought into the world in 1732 into a Virginia grower family, he took in the ethics, habits, and\ngroup of information essential for an eighteenth century Virginia courteous fellow.',
-		},
-		{
-			id: 'annotation-phk24i0a5',
-			start: 2506,
-			end: 2944,
-			text: "One of Washington's greatest contributions was his commitment to establishing a strong central\ngovernment while respecting the principles of democracy. As President, he shaped the powers\nand responsibilities of the executive branch, providing a framework that has guided subsequent\nadministrations. Washington's leadership during the formative years of the United States helped\nstabilize the nation and solidify its standing in the world.",
-		},
-		{
-			id: 'annotation-d3q5fgm9s',
-			start: 4088,
-			end: 4231,
-			text: "Additionally, Washington's reputation for integrity and moral character has had a lasting impact\non the expectations placed on public officials",
-		},
-	];
+	annotations = [];
 
 	iFrameWindow: Window | null; // IFrame nativeElement reference
 
@@ -370,6 +353,8 @@ export class ContentViewerContainerComponent implements OnInit, AfterViewInit, O
 	EResponsiveLayoutType = EResponsiveLayoutType;
 
 	customTabContent: TemplateRef<any> | null;
+
+	annotationData = null;
 
 	ONLY_TEXT_VIEW_IS_AVAILABLE = $localize`Only text view is available`;
 	MULTISELECT_IS_ON = $localize`Can't navigate between matches when multiple matches are selected`;
@@ -413,11 +398,28 @@ export class ContentViewerContainerComponent implements OnInit, AfterViewInit, O
 				this.iconPosition.top = rect.bottom - this.contentText.nativeElement.getBoundingClientRect().top;
 				this.iconPosition.left = rect.right - this.contentText.nativeElement.getBoundingClientRect().left;
 				this.iconVisible = true;
+
+				const contentTextRect = this.contentText?.nativeElement.getBoundingClientRect();
+
+				// Adjust left position if overflowing on the right
+				if (this.iconPosition.left + 40 > contentTextRect.width) {
+					this.iconPosition.left = contentTextRect.width - 40;
+				}
+
+				this.saveRangySelectionData();
 			} else {
 				this.iconVisible = false;
 			}
 		} else {
 			this.iconVisible = false;
+		}
+	}
+
+	private saveRangySelectionData() {
+		var rangySelection = rangy.getSelection();
+		if (rangySelection.rangeCount > 0) {
+			var range = rangySelection.getRangeAt(0);
+			this.annotationData = this.getAnnotationData(range);
 		}
 	}
 
@@ -650,7 +652,16 @@ export class ContentViewerContainerComponent implements OnInit, AfterViewInit, O
 
 		const js = this._renderer.createElement('script') as HTMLScriptElement;
 		js.textContent = this.iframeJsScript;
-		const iframeJsScript = js.outerHTML;
+		let iframeJsScript = js.outerHTML;
+
+		if (this.isExportedComponent && this.customIframeScript) {
+			const customScript = this._renderer.createElement('script') as HTMLScriptElement;
+			customScript.textContent = this.customIframeScript;
+			iframeJsScript +=
+				customScript.outerHTML +
+				`<script await src="https://cdnjs.cloudflare.com/ajax/libs/rangy/1.3.0/rangy-core.min.js"></script>
+        <script await src="https://cdnjs.cloudflare.com/ajax/libs/rangy/1.3.0/rangy-classapplier.min.js"></script>`;
+		}
 
 		return html + iframeStyle + iframeJsScript;
 	}
@@ -676,43 +687,13 @@ export class ContentViewerContainerComponent implements OnInit, AfterViewInit, O
 
 	// Function to create and display annotation
 	createAnnotation() {
-		var selection = rangy.getSelection();
-		if (selection.rangeCount > 0) {
-			var range = selection.getRangeAt(0);
-
-			// Get annotation data
-			var annotationData = this.getAnnotationData(range);
-			if (!annotationData) return;
-			// Add annotation to the list
-			this.annotations.push(annotationData);
-
+		if (this.annotationData) {
+			this.annotations.push(this.annotationData);
 			// Display annotation
 
 			// Highlight the selected text
-			this.highlightText(annotationData);
+			this.highlightText(this.annotationData);
 		}
-	}
-
-	// Function to delete an annotation
-	deleteAnnotation(annotation, annotationItem) {
-		// Temporarily disconnect the observer to prevent infinite loop
-		this.observer.disconnect();
-
-		// Remove the highlight
-		this.highlightText(annotation, true);
-
-		// Remove the annotation from the list
-		this.annotations = this.annotations.filter(ann => ann.id !== annotation.id);
-
-		// Remove the annotation item from the DOM
-		annotationItem.remove();
-
-		// Reconnect the this.observer
-		this.observer.observe(this.contentText?.nativeElement, {
-			childList: true,
-			subtree: true,
-			characterData: true,
-		});
 	}
 
 	// Function to highlight or remove highlight of the selected text
@@ -755,6 +736,8 @@ export class ContentViewerContainerComponent implements OnInit, AfterViewInit, O
 			range.setStart(startContainer, startOffset);
 			range.setEnd(endContainer, endOffset);
 
+			// Apply or remove highlight
+
 			var highlight = rangyclassapplier.createClassApplier('highlight', {
 				elementTagName: 'span',
 				elementProperties: {
@@ -766,7 +749,9 @@ export class ContentViewerContainerComponent implements OnInit, AfterViewInit, O
 				highlight.undoToRange(range);
 			} else {
 				highlight.applyToRange(range);
-				this.attachHighlightClickEvent(annotation.id);
+				setTimeout(() => {
+					this.attachHighlightClickEvent(annotation.id);
+				});
 			}
 
 			// Ensure the data-id attribute is set after applying the highlight
@@ -780,19 +765,45 @@ export class ContentViewerContainerComponent implements OnInit, AfterViewInit, O
 
 	// Function to attach click event to highlight
 	attachHighlightClickEvent(annotationId) {
-		console.log('.highlight[data-id="' + annotationId + '"]');
-
 		document.querySelectorAll('.highlight[data-id="' + annotationId + '"]').forEach(element => {
 			element.addEventListener('click', event => {
 				event.stopPropagation(); // Prevent event bubbling
-				const annotation = this.annotations.find(ann => ann.id === annotationId);
-				if (annotation) {
-					alert(
-						`Annotation ID: ${annotation.id}\nText: ${annotation.text}\nStart: ${annotation.start}\nEnd: ${annotation.end}`
-					);
+				const selectedAnnotation = this.annotations.find(annotation => annotation.id === annotationId);
+				if (!selectedAnnotation) return;
+
+				// check if element has attribute 'on'
+				const isOn = element.getAttribute('on');
+				if (isOn) {
+					const annotationEvent = {
+						type: 'annotation-click',
+						id: null,
+						start: null,
+						end: null,
+						text: null,
+						offsetTop: null,
+					};
+					this.onTextMatchSelectionEvent.emit(annotationEvent);
+					return;
 				}
+
+				// add attribute 'on' to the element
+				element.setAttribute('on', '');
+				const annotationEvent = {
+					type: 'annotation-click',
+					id: selectedAnnotation.id,
+					start: selectedAnnotation.start,
+					end: selectedAnnotation.end,
+					text: selectedAnnotation.selectedText,
+					offsetTop: this.getElementDistanceFromTop(element) + 'px',
+				};
+				this.onTextMatchSelectionEvent.emit(annotationEvent);
 			});
 		});
+	}
+
+	getElementDistanceFromTop(element) {
+		const rect = element.getBoundingClientRect();
+		return rect.top;
 	}
 
 	ngOnDestroy(): void {}

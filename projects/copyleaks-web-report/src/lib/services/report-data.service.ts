@@ -426,22 +426,12 @@ export class ReportDataService {
 					this.completeResultsSnapshot = JSON.parse(JSON.stringify(completeResultsRes));
 					this._scanResultsPreviews$.next(completeResultsRes);
 					// if the writing feedback endpoint is passed & is enabled in the complete results response then fetch its data
-					if (endpointsConfig.writingFeedback && endpointsConfig.writingFeedback.url && this.isWritingFeedbackEnabled())
-						this._http
-							.get<IWritingFeedback>(endpointsConfig.writingFeedback?.url, {
-								headers: this._createHeaders(endpointsConfig.writingFeedback),
-							})
-							.pipe(retryWithDelay(), untilDestroy(this))
-							.subscribe(
-								writingFeedbackVersionRes => {
-									this._writingFeedback$.next(writingFeedbackVersionRes);
-									this._updateCompleteResults(completeResultsRes);
-								},
-								(error: HttpErrorResponse) => {
-									this._reportErrorsSvc.handleHttpError(error, 'initSync - writingFeedback');
-								}
-							);
-					else this._updateCompleteResults(completeResultsRes);
+					if (
+						!!endpointsConfig.writingFeedback ||
+						!endpointsConfig.writingFeedback.url ||
+						!this.isWritingFeedbackEnabled()
+					)
+						this._updateCompleteResults(completeResultsRes);
 				},
 				(error: HttpErrorResponse) => {
 					this._reportErrorsSvc.handleHttpError(error, 'initSync - completeResults');
@@ -476,6 +466,33 @@ export class ReportDataService {
 					});
 				}
 			);
+
+		combineLatest([this._crawledVersion$, this._scanResultsPreviews$])
+			.pipe(
+				untilDestroy(this),
+				filter(
+					([crawledVersion, scanResultsPreviews]) => crawledVersion !== undefined && scanResultsPreviews !== undefined
+				)
+			)
+			.subscribe(([crawledVersion, scanResultsPreviews]) => {
+				if (!crawledVersion || !scanResultsPreviews || !!this.writingFeedback) return;
+				if (endpointsConfig.writingFeedback && endpointsConfig.writingFeedback.url && this.isWritingFeedbackEnabled()) {
+					this._http
+						.get<IWritingFeedback>(endpointsConfig.writingFeedback?.url, {
+							headers: this._createHeaders(endpointsConfig.writingFeedback),
+						})
+						.pipe(retryWithDelay(), untilDestroy(this))
+						.subscribe(
+							writingFeedbackVersionRes => {
+								this._writingFeedback$.next(writingFeedbackVersionRes);
+								this._updateCompleteResults(scanResultsPreviews);
+							},
+							(error: HttpErrorResponse) => {
+								this._reportErrorsSvc.handleHttpError(error, 'initSync - writingFeedback');
+							}
+						);
+				}
+			});
 	}
 
 	public async initAsync() {

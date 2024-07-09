@@ -371,7 +371,7 @@ function ready() {
 		return contentHTML;
 	}
 
-	function modifyTooltipsStyles(match?: Element, tooltipClass: string = 'tooltip-match-content-container') {
+	function modifyTooltipsStyles(match?: Element, tooltipClass: string = '.tooltip-match-content-container') {
 		const tooltip = match.querySelector(tooltipClass) as HTMLElement;
 
 		if (tooltip instanceof HTMLElement) {

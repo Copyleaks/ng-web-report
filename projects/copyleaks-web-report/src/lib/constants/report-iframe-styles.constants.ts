@@ -270,7 +270,7 @@ span[exclude-partial-scan] .excluded-reason-tooltip {
 			cursor: pointer;
 			transition: 0.2s ease-in-out;
 
-			&:hover {
+			&:hover, &.hover, &.selected {
 				background-color: #00e2a2 ;
 			}
 		}

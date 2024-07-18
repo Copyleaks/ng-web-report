@@ -272,6 +272,12 @@ export class ContentViewerContainerComponent implements OnInit, AfterViewInit, O
 
 	@Input() customIframeScript: string;
 
+	@Input() customViewMatchesData: { id: string; start: number; end: number; text: string; pageNumber: number }[][];
+
+	@Input() customViewMatcheClassName: string = 'highlight';
+
+	@Input() allowCustomViewAddBtn: boolean = false;
+
 	/**
 	 * Emits iFrame messages to the parent layout component.
 	 *
@@ -318,8 +324,8 @@ export class ContentViewerContainerComponent implements OnInit, AfterViewInit, O
 	/**
 	 * Event emitter for Opening the disclaimer.
 	 *
-	 * @event onOpenDisclaimer
-	 * @type {EventEmitter<any>}
+	 * @event onShowOmittedWords
+	 * @type {EventEmitter<boolean>}
 	 */
 	@Output() onShowOmittedWords: EventEmitter<boolean> = new EventEmitter<boolean>();
 
@@ -345,8 +351,6 @@ export class ContentViewerContainerComponent implements OnInit, AfterViewInit, O
 		return [];
 	}
 
-	annotations = [];
-
 	iFrameWindow: Window | null; // IFrame nativeElement reference
 
 	MatchType = MatchType; // Match type enum
@@ -359,13 +363,19 @@ export class ContentViewerContainerComponent implements OnInit, AfterViewInit, O
 	ONLY_TEXT_VIEW_IS_AVAILABLE = $localize`Only text view is available`;
 	MULTISELECT_IS_ON = $localize`Can't navigate between matches when multiple matches are selected`;
 
+	iconPosition = { top: 0, left: 0 };
+	iconVisible = false;
+
+	customMatchesWithEventListenersIds: string[] = [];
+
 	private _zoomIn: boolean;
 
 	constructor(
 		private _renderer: Renderer2,
 		private _cdr: ChangeDetectorRef,
 		private _highlightService: ReportMatchHighlightService,
-		private _viewSvc: ReportViewService
+		private _viewSvc: ReportViewService,
+		private _el: ElementRef
 	) {}
 
 	ngOnInit(): void {
@@ -386,43 +396,6 @@ export class ContentViewerContainerComponent implements OnInit, AfterViewInit, O
 			});
 	}
 
-	iconPosition = { top: 0, left: 0 };
-	iconVisible = false;
-
-	showIcon(_: MouseEvent): void {
-		const selection = window.getSelection();
-		if (selection && selection.rangeCount > 0) {
-			const range = selection.getRangeAt(0);
-			if (!range.collapsed) {
-				const rect = range.getBoundingClientRect();
-				this.iconPosition.top = rect.bottom - this.contentText.nativeElement.getBoundingClientRect().top;
-				this.iconPosition.left = rect.right - this.contentText.nativeElement.getBoundingClientRect().left;
-				this.iconVisible = true;
-
-				const contentTextRect = this.contentText?.nativeElement.getBoundingClientRect();
-
-				// Adjust left position if overflowing on the right
-				if (this.iconPosition.left + 40 > contentTextRect.width) {
-					this.iconPosition.left = contentTextRect.width - 40;
-				}
-
-				this.saveRangySelectionData();
-			} else {
-				this.iconVisible = false;
-			}
-		} else {
-			this.iconVisible = false;
-		}
-	}
-
-	private saveRangySelectionData() {
-		var rangySelection = rangy.getSelection();
-		if (rangySelection.rangeCount > 0) {
-			var range = rangySelection.getRangeAt(0);
-			this.annotationData = this.getAnnotationData(range);
-		}
-	}
-
 	ngAfterViewInit() {
 		if (this.contentHtml) this._renderer.setAttribute(this.contentIFrame?.nativeElement, 'srcdoc', this.contentHtml);
 
@@ -438,38 +411,46 @@ export class ContentViewerContainerComponent implements OnInit, AfterViewInit, O
 			false
 		);
 
-		this.contentText?.nativeElement?.addEventListener('wheel', this._handleScroll, { passive: false });
+		if (this.allowCustomViewAddBtn) {
+			this.contentText?.nativeElement?.addEventListener('wheel', this._handleScroll, { passive: false });
+			document.addEventListener('selectionchange', () => {
+				// check if document.getSelection().toString() is empty string
+				const selection = window.getSelection();
+				if (selection && selection.rangeCount > 0) {
+					const range = selection.getRangeAt(0);
+					if (this._el.nativeElement.contains(range.commonAncestorContainer) && !document.getSelection().toString()) {
+						this.hideIcon();
+					}
+				} else this.hideIcon();
+			});
 
-		// Mutation observer to handle DOM changes
-		this.observer = new MutationObserver(() => {
-			// Temporarily disconnect the observer to prevent infinite loop
-			this.observer.disconnect();
+			// Mutation observer to handle DOM changes
+			this.observer = new MutationObserver(() => {
+				// Temporarily disconnect the observer to prevent infinite loop
+				this.observer.disconnect();
 
-			// Reconnect the observer
+				// Reconnect the observer
+				this.observer.observe(this.contentText?.nativeElement, {
+					childList: true,
+					subtree: true,
+					characterData: true,
+				});
+			});
+
 			this.observer.observe(this.contentText?.nativeElement, {
 				childList: true,
 				subtree: true,
 				characterData: true,
 			});
-		});
 
-		this.observer.observe(this.contentText?.nativeElement, {
-			childList: true,
-			subtree: true,
-			characterData: true,
-		});
-
-		// Apply existing annotations on page load
-		setTimeout(() => {
-			this.annotations.forEach(annotation => {
-				this.highlightText(annotation);
-			});
-		}, 1000);
-	}
-
-	addAnnotation() {
-		this.createAnnotation();
-		this.iconVisible = false;
+			// Apply existing annotations on page load
+			if (this.customViewMatchesData)
+				setTimeout(() => {
+					this.customViewMatchesData[this.currentPage - 1].forEach(annotation => {
+						this.highlightText(annotation);
+					});
+				}, 1000);
+		}
 	}
 
 	ngOnChanges(changes: SimpleChanges): void {
@@ -484,6 +465,15 @@ export class ContentViewerContainerComponent implements OnInit, AfterViewInit, O
 		if ('isAlertsView' in changes && !changes['isAlertsView'].currentValue && !changes['isAlertsView'].firstChange)
 			this.iframeLoaded = false;
 
+		if (this.allowCustomViewAddBtn && 'customViewMatchesData' in changes) {
+			// Apply existing annotations on page load
+			if (this.customViewMatchesData)
+				setTimeout(() => {
+					this.customViewMatchesData[this.currentPage - 1].forEach(annotation => {
+						this.highlightText(annotation);
+					});
+				}, 1000);
+		}
 		if (
 			'scanSource' in changes ||
 			'reportOrigin' in changes ||
@@ -496,6 +486,11 @@ export class ContentViewerContainerComponent implements OnInit, AfterViewInit, O
 			if ((this.reportOrigin === 'source' || this.reportOrigin === 'original') && !!this.scanSource) {
 				this.numberOfWords = this.scanSource?.metadata?.words ?? 0;
 				this.numberOfPages = this.scanSource?.text?.pages?.startPosition?.length ?? 1;
+				if (
+					this.allowCustomViewAddBtn &&
+					(!this.customViewMatchesData || this.customViewMatchesData.length != this.numberOfPages)
+				)
+					this.customViewMatchesData = Array.from({ length: this.numberOfPages }, () => []);
 			}
 
 			if (this.reportOrigin === 'suspect' && !!this.resultData) {
@@ -598,6 +593,16 @@ export class ContentViewerContainerComponent implements OnInit, AfterViewInit, O
 				...this._viewSvc.reportViewMode,
 				suspectPageIndex: this.currentPage,
 			});
+
+		// Apply existing annotations on page load
+		if (this.allowCustomViewAddBtn && this.customViewMatchesData)
+			setTimeout(() => {
+				this.customMatchesWithEventListenersIds = [];
+				this.hideIcon();
+				this.customViewMatchesData[this.currentPage - 1].forEach(annotation => {
+					this.highlightText(annotation);
+				});
+			});
 	}
 
 	/**
@@ -654,7 +659,7 @@ export class ContentViewerContainerComponent implements OnInit, AfterViewInit, O
 		js.textContent = this.iframeJsScript;
 		let iframeJsScript = js.outerHTML;
 
-		if (this.isExportedComponent && this.customIframeScript) {
+		if (this.customIframeScript) {
 			const customScript = this._renderer.createElement('script') as HTMLScriptElement;
 			customScript.textContent = this.customIframeScript;
 			iframeJsScript +=
@@ -664,6 +669,30 @@ export class ContentViewerContainerComponent implements OnInit, AfterViewInit, O
 		}
 
 		return html + iframeStyle + iframeJsScript;
+	}
+
+	addAnnotationBtnClick(event) {
+		if (!this.allowCustomViewAddBtn) return;
+		event.preventDefault();
+		event.stopPropagation();
+
+		// get the current selection top offset
+		const contentContainer = document.querySelector('.content-container')?.querySelector('.content-container');
+		if (!contentContainer) return;
+		const rect = window.getSelection().getRangeAt(0).getBoundingClientRect();
+
+		const scrollY = contentContainer.scrollTop;
+		const top = rect.top + scrollY;
+		const selectTextEvent = {
+			type: 'annotation-select',
+			id: this.annotationData.id,
+			start: this.annotationData.start,
+			end: this.annotationData.end,
+			text: this.annotationData.selectedText,
+			offsetTop: top + 'px',
+			scrollViewOffsetTop: rect.top + 'px',
+		};
+		this.onTextMatchSelectionEvent.emit(selectTextEvent);
 	}
 
 	// Generate a unique ID for each annotation
@@ -682,13 +711,13 @@ export class ContentViewerContainerComponent implements OnInit, AfterViewInit, O
 		if (!selectedText) return;
 		var end = start + selectedText.length;
 
-		return { id: this.generateAnnotationId(), start: start, end: end, text: selectedText };
+		return { id: this.generateAnnotationId(), start: start, end: end, text: selectedText, pageNumber: 0 };
 	}
 
 	// Function to create and display annotation
 	createAnnotation() {
 		if (this.annotationData) {
-			this.annotations.push(this.annotationData);
+			this.customViewMatchesData[this.currentPage - 1].push(this.annotationData);
 			// Display annotation
 
 			// Highlight the selected text
@@ -698,6 +727,7 @@ export class ContentViewerContainerComponent implements OnInit, AfterViewInit, O
 
 	// Function to highlight or remove highlight of the selected text
 	highlightText(annotation, remove = false) {
+		if (!this.allowCustomViewAddBtn) return;
 		var range = rangy.createRange();
 		var container = this.contentText?.nativeElement;
 		var startContainer, endContainer;
@@ -738,10 +768,10 @@ export class ContentViewerContainerComponent implements OnInit, AfterViewInit, O
 
 			// Apply or remove highlight
 
-			var highlight = rangyclassapplier.createClassApplier('highlight', {
+			var highlight = rangyclassapplier.createClassApplier(this.customViewMatcheClassName, {
 				elementTagName: 'span',
 				elementProperties: {
-					className: 'highlight',
+					className: this.customViewMatcheClassName,
 				},
 				normalize: true, // This ensures that overlapping highlights are merged
 			});
@@ -755,7 +785,7 @@ export class ContentViewerContainerComponent implements OnInit, AfterViewInit, O
 			}
 
 			// Ensure the data-id attribute is set after applying the highlight
-			document.querySelectorAll('.highlight').forEach(element => {
+			document.querySelectorAll('.' + this.customViewMatcheClassName).forEach(element => {
 				if (!element.getAttribute('data-id')) {
 					element.setAttribute('data-id', annotation.id);
 				}
@@ -765,14 +795,16 @@ export class ContentViewerContainerComponent implements OnInit, AfterViewInit, O
 
 	// Function to attach click event to highlight
 	attachHighlightClickEvent(annotationId) {
+		if (this.customMatchesWithEventListenersIds.includes(annotationId)) return;
 		document.querySelectorAll('.highlight[data-id="' + annotationId + '"]').forEach(element => {
 			element.addEventListener('click', event => {
 				event.stopPropagation(); // Prevent event bubbling
-				const selectedAnnotation = this.annotations.find(annotation => annotation.id === annotationId);
+				const flattenedArray = this.customViewMatchesData.reduce((acc, curr) => acc.concat(curr), []);
+				const selectedAnnotation = flattenedArray.find(annotation => annotation.id === annotationId);
 				if (!selectedAnnotation) return;
 
 				// check if element has attribute 'on'
-				const isOn = element.getAttribute('on');
+				const isOn = element.classList.contains('selected');
 				if (isOn) {
 					const annotationEvent = {
 						type: 'annotation-click',
@@ -782,28 +814,90 @@ export class ContentViewerContainerComponent implements OnInit, AfterViewInit, O
 						text: null,
 						offsetTop: null,
 					};
+					element.classList.remove('selected');
 					this.onTextMatchSelectionEvent.emit(annotationEvent);
 					return;
 				}
 
 				// add attribute 'on' to the element
-				element.setAttribute('on', '');
+				element.classList.add('selected');
+
+				const contentContainer = document.querySelector('.content-container')?.querySelector('.content-container');
+				if (!contentContainer) return;
+
+				const rect = element.getBoundingClientRect();
+				let scrollY = contentContainer.scrollTop;
+
+				const top = rect.top + scrollY;
+
 				const annotationEvent = {
 					type: 'annotation-click',
 					id: selectedAnnotation.id,
 					start: selectedAnnotation.start,
 					end: selectedAnnotation.end,
-					text: selectedAnnotation.selectedText,
-					offsetTop: this.getElementDistanceFromTop(element) + 'px',
+					text: selectedAnnotation.text,
+					offsetTop: top + 'px',
+					scrollViewOffsetTop: rect.top + 'px',
 				};
 				this.onTextMatchSelectionEvent.emit(annotationEvent);
 			});
+			this.customMatchesWithEventListenersIds.push(annotationId);
 		});
 	}
 
-	getElementDistanceFromTop(element) {
-		const rect = element.getBoundingClientRect();
-		return rect.top;
+	showIcon(_: MouseEvent): void {
+		if (!this.allowCustomViewAddBtn) return;
+		const selection = window.getSelection();
+		if (selection && selection.rangeCount > 0) {
+			const range = selection.getRangeAt(0);
+			if (!range.collapsed) {
+				if (!document.getSelection().toString()) {
+					this.hideIcon(false);
+					return;
+				}
+
+				const rect = range.getBoundingClientRect();
+				this.iconPosition.top = rect.bottom - this.contentText.nativeElement.getBoundingClientRect().top;
+				this.iconPosition.left = rect.right - this.contentText.nativeElement.getBoundingClientRect().left;
+				this.iconVisible = true;
+
+				const contentTextRect = this.contentText?.nativeElement.getBoundingClientRect();
+
+				// Adjust left position if overflowing on the right
+				if (this.iconPosition.left + 40 > contentTextRect.width) {
+					this.iconPosition.left = contentTextRect.width - 40;
+				}
+
+				this._saveRangySelectionData();
+			} else {
+				this.hideIcon();
+			}
+		} else {
+			this.hideIcon();
+		}
+	}
+
+	hideIcon(emitEvent = true): void {
+		if (!this.allowCustomViewAddBtn) return;
+		this.iconVisible = false;
+		const selectTextEvent = {
+			type: 'annotation-select',
+			id: null,
+			start: null,
+			end: null,
+			text: null,
+			offsetTop: null,
+			scrollViewOffsetTop: null,
+		};
+		if (emitEvent) this.onTextMatchSelectionEvent.emit(selectTextEvent);
+	}
+
+	private _saveRangySelectionData() {
+		var rangySelection = rangy.getSelection();
+		if (rangySelection.rangeCount > 0) {
+			var range = rangySelection.getRangeAt(0);
+			this.annotationData = this.getAnnotationData(range);
+		}
 	}
 
 	ngOnDestroy(): void {}

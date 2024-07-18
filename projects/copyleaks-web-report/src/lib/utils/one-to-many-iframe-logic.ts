@@ -86,19 +86,6 @@ function ready() {
 	 * Message event handler
 	 */
 	function onMessageFromParent(nativeEvent: any) {
-		matches = Array.from(document.querySelectorAll('span[match]'));
-		// clear all previous event listeners to avoid duplicate events
-		matches.forEach(elem => {
-			elem.removeEventListener('click', onMatchClick);
-			elem.removeEventListener('mouseenter', onMatchHover);
-			elem.removeEventListener('mouseleave', onMatchHover);
-		});
-		matches.forEach(elem => {
-			elem.addEventListener('click', onMatchClick);
-			elem.addEventListener('mouseenter', onMatchHover);
-			elem.addEventListener('mouseleave', onMatchHover);
-		});
-
 		if (nativeEvent.source !== (window as any).parent) {
 			return;
 		}
@@ -117,12 +104,24 @@ function ready() {
 			case 'multi-match-select':
 				// do nothing
 				break;
-
+			case 'matches-refresh':
+				matches = Array.from(document.querySelectorAll('span[match]'));
+				// clear all previous event listeners to avoid duplicate events
+				matches.forEach(elem => {
+					elem.removeEventListener('click', onMatchClick);
+					elem.removeEventListener('mouseenter', onMatchHover);
+					elem.removeEventListener('mouseleave', onMatchHover);
+				});
+				matches.forEach(elem => {
+					elem.addEventListener('click', onMatchClick);
+					elem.addEventListener('mouseenter', onMatchHover);
+					elem.addEventListener('mouseleave', onMatchHover);
+				});
+				break;
 			case 'correction-select':
 				handelCorrectionSelect(event);
 				break;
 			default:
-				console.error('unknown event in frame', nativeEvent);
 		}
 	}
 

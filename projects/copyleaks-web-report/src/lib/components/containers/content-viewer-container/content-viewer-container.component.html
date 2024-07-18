@@ -337,13 +337,14 @@
 					{{ scanSource && (scanSource.text.value | slice : pages[currentPage - 1] : pages[currentPage]) }}
 				</ng-template>
 				<div
+					*ngIf="isExportedComponent"
 					id="highlight-icon"
 					[ngStyle]="{
 						'top.px': iconPosition.top,
 						'left.px': iconPosition.left,
 						display: iconVisible ? 'flex' : 'none'
 					}"
-					(click)="addAnnotation()">
+					(mouseup)="addAnnotationBtnClick($event)">
 					<mat-icon fontSet="material-icons-round">add</mat-icon>
 				</div>
 			</div>

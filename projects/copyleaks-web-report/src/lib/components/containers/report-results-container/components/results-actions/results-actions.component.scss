@@ -1,6 +1,7 @@
 @import '../../../../../styles/website-colors.styles.scss';
 @import '../../../../../styles/cls-mat-components-overrides/cls-mat-chip-overrides.scss';
 @import '../../../../../styles/styles.scss';
+@import '../../../../../styles/cls-accessibility-overrides/cls-accessibility-overrides.scss';
 
 :host {
 	display: flex;
@@ -238,4 +239,9 @@ cr-spinner {
 	height: unset;
 	line-height: unset;
 	min-width: unset;
+	&:focus {
+		mat-icon {
+			color: $color-primary;
+		}
+	}
 }

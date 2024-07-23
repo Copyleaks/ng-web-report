@@ -2,6 +2,8 @@
 @import '../../../../styles/styles.scss';
 @import '../../../../styles/cls-mat-components-overrides/cls-scroll-bar-overrides.scss';
 @import '../../../../styles/cls-mat-components-overrides/cls-mat-expansion-panel-overrides.scss';
+@import '../../../../styles/cls-mat-components-overrides/cls-mat-tooltip-overrides.scss';
+@import '../../../../styles/cls-accessibility-overrides/cls-accessibility-overrides.scss';
 
 :host {
 	display: flex;
@@ -26,6 +28,11 @@
 		background-color: $color-container-background;
 		transition: 0.4s ease-in-out;
 
+		&:focus-within {
+			transition: none;
+			border: 1px solid $color-primary;
+		}
+
 		input {
 			height: 20px;
 			color: $color-black;
@@ -45,16 +52,22 @@
 			opacity: 0.4;
 		}
 
-		mat-icon {
-			margin-left: auto;
-			width: 18px;
-			height: 18px;
-			font-size: 18px;
-			color: $grayed-out-disabled;
-			cursor: pointer;
-			transition: 0.4s ease-in-out;
-			&:hover {
-				color: $color-primary;
+		.add-domain-btn {
+			mat-icon {
+				margin-left: auto;
+				width: 18px;
+				height: 18px;
+				font-size: 18px;
+				color: $grayed-out-disabled;
+				cursor: pointer;
+				transition: 0.4s ease-in-out;
+				line-height: 17px !important;
+			}
+			&:hover,
+			&:focus {
+				mat-icon {
+					color: $color-primary;
+				}
 			}
 		}
 	}
@@ -146,15 +159,21 @@
 			gap: 10px;
 			align-items: center;
 			width: 100%;
-			.remove-domain-icon {
-				width: 18px;
-				height: 18px;
-				font-size: 18px;
-				color: $color-grayed-out;
-				cursor: pointer;
-				transition: 0.4s ease-in-out;
-				&:hover {
-					color: $color-primary;
+			.remove-doamin-btn {
+				.remove-domain-icon {
+					width: 18px;
+					height: 18px;
+					font-size: 18px;
+					color: $color-grayed-out;
+					cursor: pointer;
+					transition: 0.4s ease-in-out;
+					line-height: 17px !important;
+				}
+				&:hover,
+				&:focus {
+					mat-icon.remove-domain-icon {
+						color: $color-primary;
+					}
 				}
 			}
 			.domain {

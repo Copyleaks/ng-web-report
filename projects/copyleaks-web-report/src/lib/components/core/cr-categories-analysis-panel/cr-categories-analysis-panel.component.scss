@@ -107,6 +107,10 @@
 		.mat-expansion-panel:not(.mat-expanded) .mat-expansion-panel-header:hover:not([aria-disabled='true']) {
 			background: $color-container-background !important;
 		}
+
+		.mat-expansion-panel:focus-within {
+			outline: 2px solid black !important;
+		}
 	}
 
 	mat-accordion {
@@ -180,11 +184,5 @@
 				color: $grayed-out-disabled;
 			}
 		}
-	}
-}
-
-.focus-indicator {
-	:focus-visible {
-		border: 2px solid black !important;
 	}
 }

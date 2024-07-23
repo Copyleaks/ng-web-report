@@ -1,3 +1,4 @@
+@import '../../../../../styles/cls-accessibility-overrides/cls-accessibility-overrides.scss';
 .custom-tab {
 	::ng-deep cr-custom-tab-item-title {
 		width: 100%;
@@ -5,6 +6,7 @@
 		display: flex;
 		:first-child {
 			width: 100%;
+			text-align: start;
 		}
 	}
 }

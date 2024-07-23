@@ -6,6 +6,12 @@
 		padding: 4px 8px;
 		border-radius: 10px;
 		background-color: $color-container-background;
+		border: 1px solid transparent;
+
+		&:focus-within {
+			border: 1px solid $color-primary;
+		}
+
 		.included-tags-input {
 			height: 20px;
 			color: $color-black;

@@ -42,7 +42,16 @@
 					<span i18n>show</span>
 				</ng-template>
 			</button>
-			<a *ngIf="alert?.helpLink" class="disclamer" [href]="alert.helpLink" target="_blank" i18n>Disclaimer</a>
+			<a
+				*ngIf="alert?.helpLink"
+				class="disclamer"
+				[href]="alert.helpLink"
+				target="_blank"
+				aria-label="Open disclaimer in new tab"
+				i18n-aria-label
+				i18n>
+				Disclaimer
+			</a>
 		</div>
 	</div>
 	<span class="alert-card-message">

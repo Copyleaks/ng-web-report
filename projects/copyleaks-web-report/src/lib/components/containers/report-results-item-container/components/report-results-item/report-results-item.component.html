@@ -187,7 +187,7 @@
 								i18n-matTooltip
 								aria-label="Includes result in report"
 								i18n-aria-label>
-								<mat-icon class="exclude-result" mat-icon fontSet="material-icons-round">visibility</mat-icon>
+								<mat-icon class="exclude-result" mat-icon fontSet="material-icons-outlined">visibility</mat-icon>
 							</button>
 						</ng-container>
 						<ng-template #showResultRef>
@@ -200,7 +200,7 @@
 								i18n-matTooltip
 								aria-label="Exclude result in report"
 								i18n-aria-label>
-								<mat-icon class="exclude-result" mat-icon fontSet="material-icons-round">visibility_off</mat-icon>
+								<mat-icon class="exclude-result" mat-icon fontSet="material-icons-outlined">visibility_off</mat-icon>
 							</button>
 						</ng-template>
 					</ng-template>
@@ -263,7 +263,7 @@
 
 <mat-menu class="result-item-menu-list" #menu="matMenu" yPosition="below">
 	<button mat-menu-item (click)="$event.stopPropagation(); hideResult()" [disableRipple]="true">
-		<mat-icon class="mat-menu-item-icon" fontSet="material-icons-round">visibility_off</mat-icon>
+		<mat-icon class="mat-menu-item-icon" fontSet="material-icons-outlined">visibility_off</mat-icon>
 		<span class="mat-menu-item-text" i18n>Exclude result</span>
 	</button>
 	<a

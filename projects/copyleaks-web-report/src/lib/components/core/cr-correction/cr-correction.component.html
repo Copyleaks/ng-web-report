@@ -51,7 +51,7 @@
 			matTooltipClass="web-report-mat-tooltip"
 			aria-label="Include or exclude correction in report"
 			i18n-aria-label>
-			<mat-icon class="options-icon" fontSet="material-icons-round">
+			<mat-icon class="options-icon" fontSet="material-icons-outlined">
 				{{ isExcluded ? 'visibility' : 'visibility_off' }}
 			</mat-icon>
 		</button>
@@ -107,7 +107,7 @@
 
 <mat-menu class="result-item-menu-list" #menu="matMenu" yPosition="below">
 	<button mat-menu-item [disableRipple]="true" (click)="ignoreCorrection()">
-		<mat-icon class="mat-menu-item-icon" fontSet="material-icons-round">visibility_off</mat-icon>
+		<mat-icon class="mat-menu-item-icon" fontSet="material-icons-outlined">visibility_off</mat-icon>
 		<span class="mat-menu-item-text" i18n>Ignore Correction</span>
 	</button>
 </mat-menu>

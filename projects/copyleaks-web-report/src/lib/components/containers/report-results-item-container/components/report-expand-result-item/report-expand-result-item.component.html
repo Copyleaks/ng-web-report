@@ -90,8 +90,8 @@
 								matTooltipClass="web-report-mat-tooltip"
 								i18n-matTooltip
 								[matTooltip]="exclude ? INCLUDE_RESULT_TOOLTIP : EXCLUDE_RESULT_TOOLTIP">
-								<mat-icon *ngIf="exclude" fontSet="material-icons-round">visibility</mat-icon>
-								<mat-icon *ngIf="!exclude" fontSet="material-icons-round">visibility_off</mat-icon>
+								<mat-icon *ngIf="exclude" fontSet="material-icons-outlined">visibility</mat-icon>
+								<mat-icon *ngIf="!exclude" fontSet="material-icons-outlined">visibility_off</mat-icon>
 							</button>
 							<span class="result-title" [title]="resultItem?.resultPreview?.title">
 								{{ resultItem?.resultPreview?.metadata?.filename ?? resultItem?.resultPreview?.title }}

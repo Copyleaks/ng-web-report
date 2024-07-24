@@ -34,11 +34,11 @@
 				class="alert-card-preview"
 				(click)="toggleAlertPreview()">
 				<ng-container *ngIf="isSelected; else notSelected">
-					<mat-icon fontSet="material-icons-round">visibility_off</mat-icon>
+					<mat-icon fontSet="material-icons-outlined">visibility_off</mat-icon>
 					<span i18n>hide</span>
 				</ng-container>
 				<ng-template #notSelected>
-					<mat-icon fontSet="material-icons-round">visibility</mat-icon>
+					<mat-icon fontSet="material-icons-outlined">visibility</mat-icon>
 					<span i18n>show</span>
 				</ng-template>
 			</button>

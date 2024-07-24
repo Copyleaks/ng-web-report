@@ -2,6 +2,7 @@
 @import '../../../../styles/styles.scss';
 @import '../../../../styles/cls-mat-components-overrides/cls-scroll-bar-overrides.scss';
 @import '../../../../styles/cls-mat-components-overrides/cls-mat-inputs-overrides.scss';
+@import '../../../../styles/cls-accessibility-overrides/cls-accessibility-overrides.scss';
 
 :host {
 	background-color: $color-white;
@@ -26,33 +27,24 @@
 		}
 	}
 
-	.search-input {
-		::ng-deep {
-			.mat-form-field-infix {
-				padding: 7px 0px 7px 0px !important;
-			}
-			.mat-form-field-flex {
-				padding-left: 8px !important;
-				padding-right: 8px !important;
-			}
-			.mat-form-field-wrapper {
-				padding-bottom: 0px !important;
+	.clear-input-search-btn {
+		width: unset !important;
+		height: unset !important;
+		&:hover,
+		&:focus {
+			.clear-input-search-icon {
+				color: $color-primary !important;
 			}
 		}
 	}
 
 	.search-input-search-icon,
 	.clear-input-search-icon {
-		font-size: 18px !important;
-		width: 18px !important;
-		height: 18px !important;
+		font-size: 24px !important;
+		width: 24px !important;
+		height: 24px !important;
 		padding: 2px !important;
-	}
-	.clear-input-search-icon {
-		cursor: pointer;
-		&:hover {
-			color: $color-primary !important;
-		}
+		line-height: unset;
 	}
 
 	.search-container {
@@ -71,38 +63,14 @@
 				mat-icon {
 					color: $color-white;
 				}
-				.serach-input-clear-button {
-					mat-icon {
-						color: $color-white;
-					}
-				}
 			}
 			mat-icon {
 				font-size: 18px;
 				width: 18px;
 				height: 18px;
 			}
-			.serach-input-clear-button {
-				line-height: unset;
-				width: unset;
-				height: unset;
-				&:focus {
-					::ng-deep {
-						.mat-button-focus-overlay {
-							background-color: transparent;
-						}
-					}
-				}
-				mat-icon {
-					line-height: unset;
-					font-size: 18px;
-					width: 18px;
-					height: 18px;
-				}
-			}
 		}
 		.search-input {
-			height: 20px;
 			color: $color-black;
 			font-weight: 500;
 			font-size: 16px;
@@ -111,7 +79,6 @@
 			background-color: $color-container-background;
 		}
 		.included-tags-input::placeholder {
-			color: $color-grayed-out;
 			font-size: 16px;
 			font-weight: 500;
 		}

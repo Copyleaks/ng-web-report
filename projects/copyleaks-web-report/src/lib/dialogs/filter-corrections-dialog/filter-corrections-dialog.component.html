@@ -235,17 +235,16 @@
 					<mat-icon class="exit-filter-button-icon">close</mat-icon>
 				</button>
 			</div>
-			<mat-form-field class="search-input" appearance="fill">
+			<mat-form-field class="search-input with-label" appearance="fill">
 				<div class="search-input-icon-container" fxLayoutAlign="center center" style="margin-right: 8px" matPrefix>
 					<mat-icon class="search-input-search-icon" fontSet="material-icons-round">search</mat-icon>
 				</div>
+				<mat-label i18n>Search correction</mat-label>
 				<input
 					aria-label="Search correction"
 					i18n-aria-label
 					matInput
-					placeholder="Search correction"
 					[spellcheck]="false"
-					i18n-placeholder
 					[formControl]="searchControl" />
 			</mat-form-field>
 		</div>

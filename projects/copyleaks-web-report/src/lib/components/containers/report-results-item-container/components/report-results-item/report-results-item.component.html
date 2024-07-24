@@ -43,7 +43,7 @@
 								<ng-container *ngIf="faviconExists; else defaultInternetIcon">
 									<img
 										class="internet-result-favicon"
-										role="presentation"
+										role="img"
 										[src]="'https://www.google.com/s2/favicons?domain=' + faviconURL"
 										(error)="onFaviconError()"
 										(load)="onFaviconLoad()"

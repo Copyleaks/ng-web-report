@@ -1,7 +1,10 @@
 <div class="input-container">
-	<span class="input-message">Enter domain to exclude from results</span>
+	<label for="excluded-domain-input" class="input-message" i18n>Enter domain to exclude from results</label>
 	<div class="excluded-domains-input">
 		<input
+			aria-label="Enter domain to be excluded from results"
+			i18n-aria-label
+			id="excluded-domain-input"
 			[formControl]="addDomainControl"
 			[type]="'text'"
 			placeholder="domain.com"

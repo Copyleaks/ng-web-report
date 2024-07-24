@@ -17,30 +17,31 @@
 </div>
 
 <div mat-dialog-content>
-	<mat-form-field class="search-input" appearance="fill">
+	<mat-form-field class="search-input mat-input-no-bottom-padding with-label" appearance="fill">
 		<div class="search-input-icon-container" fxLayoutAlign="center center" style="margin-right: 8px" matPrefix>
 			<ng-container *ngIf="!searchValue; else clearSearchIcon">
 				<mat-icon class="search-input-search-icon" fontSet="material-icons-round">search</mat-icon>
 			</ng-container>
 			<ng-template #clearSearchIcon>
-				<mat-icon
-					class="clear-input-search-icon"
-					fontSet="material-icons-round"
-					(click)="!!searchValue ? clearSearch() : ''"
+				<button
+					class="mat-icon-button-override clear-input-search-btn"
+					mat-icon-button
 					matTooltip="Clear"
 					matTooltipClass="web-report-mat-tooltip"
 					i18n-matTooltip
 					aria-label="Clears entered text"
-					i18n-aria-label>
-					close
-				</mat-icon>
+					i18n-aria-label
+					(click)="!!searchValue ? clearSearch() : ''">
+					<mat-icon class="clear-input-search-icon" fontSet="material-icons-round">close</mat-icon>
+				</button>
 			</ng-template>
 		</div>
-		<input matInput placeholder="Search result" [spellcheck]="false" i18n-placeholder [formControl]="searchControl" />
+		<mat-label i18n>Search result</mat-label>
+		<input matInput [spellcheck]="false" [formControl]="searchControl" aria-label="Search results" />
 	</mat-form-field>
 
 	<div class="results-top-container">
-		<div #resultsContainer class="results-container" tabindex="0">
+		<div #resultsContainer class="results-container">
 			<ng-container *ngFor="let item of filteredList">
 				<cr-report-results-item
 					[resultItem]="item"

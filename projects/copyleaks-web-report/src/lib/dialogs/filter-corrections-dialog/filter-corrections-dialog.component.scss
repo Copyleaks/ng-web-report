@@ -239,6 +239,13 @@
 				width: 18px;
 				height: 18px;
 
+				&:hover,
+				&:focus {
+					.exit-filter-button-icon {
+						color: $color-primary;
+					}
+				}
+
 				.exit-filter-button-icon {
 					width: 18px;
 					height: 18px;
@@ -250,12 +257,6 @@
 
 				.exit-filter-button-icon:hover {
 					color: $color-primary;
-				}
-				&:focus-visible {
-					outline: none !important;
-					.exit-filter-button-icon {
-						color: $color-primary;
-					}
 				}
 			}
 		}
@@ -330,23 +331,12 @@
 		}
 	}
 
-	.search-input {
-		::ng-deep {
-			.mat-form-field-infix {
-				padding: 7px 0px 7px 0px !important;
-			}
-			.mat-form-field-flex {
-				padding-left: 8px !important;
-				padding-right: 8px !important;
-			}
-		}
-	}
-
 	.search-input-search-icon {
-		font-size: 18px !important;
-		width: 18px !important;
-		height: 18px !important;
+		font-size: 24px !important;
+		width: 24px !important;
+		height: 24px !important;
 		padding: 2px !important;
+		line-height: unset !important;
 	}
 }
 

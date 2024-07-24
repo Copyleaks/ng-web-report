@@ -9,16 +9,21 @@
 				</h6>
 			</div>
 
-			<div *ngIf="showSearchFiled" fxLayout="row" fxLayoutAlign="start center" class="input-search-container">
-				<mat-icon class="search-icon" fontSet="material-icons-round">search</mat-icon>
+			<mat-form-field
+				*ngIf="showSearchFiled"
+				class="input-search-container mat-input-no-bottom-padding with-label"
+				appearance="fill">
+				<mat-icon class="search-icon" fontSet="material-icons-round" matPrefix>search</mat-icon>
+				<mat-label i18n>Search by: Title, Intro, URL, Result type...</mat-label>
 				<input
 					class="search-input"
-					placeholder="Search by: Title, Intro, URL, Result type..."
+					aria-label="Search results"
+					i18n-aria-label
 					type="text"
 					matInput
-					[formControl]="searchFc"
-					i18n-placeholder />
+					[formControl]="searchFc" />
 				<button
+					matSuffix
 					mat-icon-button
 					class="icon-button clear-button"
 					(click)="showSearch()"
@@ -29,7 +34,7 @@
 					i18n-aria-label>
 					<mat-icon class="clear-icon" fontSet="material-icons-outlined">cancel</mat-icon>
 				</button>
-			</div>
+			</mat-form-field>
 
 			<div fxLayout="row" fxLayoutAlign="start center" fxLayoutGap="8px" class="results-search-filter-container">
 				<button

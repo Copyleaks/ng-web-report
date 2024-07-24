@@ -104,12 +104,13 @@
 			background-color: $color-container-background !important;
 		}
 
-		.mat-expansion-panel:not(.mat-expanded) .mat-expansion-panel-header:hover:not([aria-disabled='true']) {
-			background: $color-container-background !important;
+		.mat-expansion-panel .mat-expansion-panel-header.cdk-keyboard-focused {
+			border: 2px solid black !important;
+			outline: unset !important;
 		}
 
-		.mat-expansion-panel:focus-within {
-			outline: 2px solid black !important;
+		.mat-expansion-panel:not(.mat-expanded) .mat-expansion-panel-header:hover:not([aria-disabled='true']) {
+			background: $color-container-background !important;
 		}
 	}
 

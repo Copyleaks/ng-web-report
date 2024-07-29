@@ -9,6 +9,7 @@ import {
 	Output,
 	SimpleChanges,
 	TemplateRef,
+	ViewChild,
 } from '@angular/core';
 import { EPlatformType, EResultPreviewType } from '../../../../../enums/copyleaks-web-report.enums';
 import { IResultPreviewBase } from '../../../../../models/report-data.models';
@@ -38,6 +39,8 @@ import { DatePipe } from '@angular/common';
 	],
 })
 export class ReportResultsItemComponent implements OnInit, OnChanges, OnDestroy {
+	@ViewChild(MatMenuTrigger) public resultItemMenuTrigger: MatMenuTrigger;
+
 	@Input() resultItem: IResultItem;
 	@Input() showLoader: boolean = false;
 	@Input() showItemBody: boolean = true;
@@ -255,6 +258,7 @@ export class ReportResultsItemComponent implements OnInit, OnChanges, OnDestroy 
 		this.hiddenResultEvent.emit(this.previewResult.id);
 		this.isResultExcluded = true;
 		this.highlightService.clearAllMatchs();
+		this.resultItemMenuTrigger?.closeMenu();
 	}
 
 	deleteResult() {

@@ -1,12 +1,14 @@
 <div class="contaienr" fxLayout="column" fxLayoutAlign="start start" fxLayoutGap="4px">
-	<div class="search-tag-container" fxLayout="row" fxLayoutAlign="start center" fxLayoutGap="8px">
-		<div class="search-icon" fxLayout="column" fxLayoutAlign="center center">
+	<mat-form-field class="mat-input-no-bottom-padding with-label" appearance="fill">
+		<div class="search-icon" fxLayout="column" fxLayoutAlign="center center" matPrefix>
 			<ng-container *ngIf="!searchValue; else clearSearchIcon">
 				<mat-icon>search</mat-icon>
 			</ng-container>
 			<ng-template #clearSearchIcon>
 				<button
 					mat-icon-button
+					aria-label="Clear search"
+					i18n-aria-label
 					class="clear-icon-button"
 					(click)="searchValue ? clearSearch() : ''"
 					matTooltip="Clear"
@@ -16,14 +18,15 @@
 				</button>
 			</ng-template>
 		</div>
+		<mat-label i18n>Search Tag</mat-label>
 		<input
+			aria-label="Search Tag"
+			i18n-aria-label
 			[formControl]="searchTagControl"
 			class="included-tags-input"
 			[type]="'text'"
-			placeholder="Search Tag"
-			i18n-placeholder
 			matInput />
-	</div>
+	</mat-form-field>
 	<div
 		*ngIf="selectedList.length != 0"
 		class="mat-chip-container"

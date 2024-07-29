@@ -246,7 +246,8 @@
 			padding: 0px 8px;
 			display: flex;
 			align-items: center;
-			&:hover {
+			&:hover,
+			&:focus {
 				background-color: $color-container-background !important;
 			}
 			.mat-menu-item-icon {

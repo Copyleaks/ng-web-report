@@ -43,7 +43,7 @@
 								<ng-container *ngIf="faviconExists; else defaultInternetIcon">
 									<img
 										class="internet-result-favicon"
-										role="presentation"
+										role="img"
 										[src]="'https://www.google.com/s2/favicons?domain=' + faviconURL"
 										(error)="onFaviconError()"
 										(load)="onFaviconLoad()"
@@ -170,7 +170,7 @@
 							i18n-aria-label
 							[tabIndex]="0"
 							[attr.aria-hidden]="false"
-							(keydown)="$event.stopPropagation(); $event.preventDefault(); openResultMenu(menuTrigger)"
+							(keyup.enter)="$event.stopPropagation(); $event.preventDefault(); openResultMenu(menuTrigger)"
 							(click)="$event.stopPropagation()">
 							more_vert
 						</mat-icon>
@@ -187,7 +187,7 @@
 								i18n-matTooltip
 								aria-label="Includes result in report"
 								i18n-aria-label>
-								<mat-icon class="exclude-result" mat-icon fontSet="material-icons-round">visibility</mat-icon>
+								<mat-icon class="exclude-result" mat-icon fontSet="material-icons-outlined">visibility</mat-icon>
 							</button>
 						</ng-container>
 						<ng-template #showResultRef>
@@ -200,7 +200,7 @@
 								i18n-matTooltip
 								aria-label="Exclude result in report"
 								i18n-aria-label>
-								<mat-icon class="exclude-result" mat-icon fontSet="material-icons-round">visibility_off</mat-icon>
+								<mat-icon class="exclude-result" mat-icon fontSet="material-icons-outlined">visibility_off</mat-icon>
 							</button>
 						</ng-template>
 					</ng-template>
@@ -262,10 +262,10 @@
 </a>
 
 <mat-menu class="result-item-menu-list" #menu="matMenu" yPosition="below">
-	<a mat-menu-item (click)="hideResult()" [disableRipple]="true" [tabIndex]="0">
-		<mat-icon class="mat-menu-item-icon" fontSet="material-icons-round">visibility_off</mat-icon>
+	<button mat-menu-item (click)="$event.stopPropagation(); hideResult()" [disableRipple]="true">
+		<mat-icon class="mat-menu-item-icon" fontSet="material-icons-outlined">visibility_off</mat-icon>
 		<span class="mat-menu-item-text" i18n>Exclude result</span>
-	</a>
+	</button>
 	<a
 		*ngIf="
 			reportDataSvc?.reportEndpointConfig?.deleteResult && previewResult?.type != eResultPreviewType.Internet && isOwner

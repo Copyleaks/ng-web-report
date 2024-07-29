@@ -1,6 +1,8 @@
 @import '../../../../../styles/website-colors.styles.scss';
 @import '../../../../../styles/cls-mat-components-overrides/cls-mat-chip-overrides.scss';
 @import '../../../../../styles/styles.scss';
+@import '../../../../../styles/cls-mat-components-overrides/cls-mat-inputs-overrides.scss';
+@import '../../../../../styles/cls-accessibility-overrides/cls-accessibility-overrides.scss';
 
 :host {
 	display: flex;
@@ -96,12 +98,8 @@
 }
 
 .input-search-container {
-	border: 1px solid;
-	border-color: $color-primary;
-	background-color: $color-container-background;
-	border-radius: 30px;
-	padding: 2px;
 	width: 100%;
+
 	mat-icon {
 		color: $color-black;
 		cursor: pointer;
@@ -130,7 +128,13 @@
 	}
 
 	.clear-button {
-		margin-right: 4px;
+		width: 24px !important;
+		height: 24px !important;
+		mat-icon {
+			width: 24px !important;
+			height: 24px !important;
+			font-size: 24px !important;
+		}
 	}
 	.clear-button:focus,
 	.clear-button:hover {
@@ -178,10 +182,15 @@ mat-icon {
 }
 
 .search-icon {
+	margin-right: 8px !important;
 	background-color: $color-white;
 	border-radius: 50%;
 	padding: 4px;
 	cursor: auto !important;
+	width: 24px !important;
+	height: 24px !important;
+	font-size: 24px !important;
+	line-height: unset !important;
 }
 
 .search-icon:hover {
@@ -189,12 +198,12 @@ mat-icon {
 }
 
 .clear-icon {
+	background-color: transparent !important;
 	color: $color-black;
 }
 
 .search-input {
 	margin: 0px !important;
-	margin-left: 8px !important;
 }
 
 .diselect-match-icon {
@@ -238,4 +247,18 @@ cr-spinner {
 	height: unset;
 	line-height: unset;
 	min-width: unset;
+	&:focus {
+		mat-icon {
+			color: $color-primary;
+		}
+	}
+}
+
+::ng-deep .input-search-container {
+	.mat-form-field-wrapper {
+		.mat-form-field-flex {
+			border-radius: 30px !important;
+			padding: 0px 4px 0px 3px;
+		}
+	}
 }

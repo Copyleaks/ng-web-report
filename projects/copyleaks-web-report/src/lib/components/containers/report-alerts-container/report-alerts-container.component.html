@@ -1,6 +1,9 @@
 <mat-accordion #expansionPanel>
 	<mat-expansion-panel #panel [expanded]="!isMobile" (opened)="showAlertsClick()" (closed)="hideAlertsClick()">
-		<mat-expansion-panel-header [ngClass]="{ 'mobile-results-panel-header': isMobile }">
+		<mat-expansion-panel-header
+			[ngClass]="{ 'mobile-results-panel-header': isMobile }"
+			aria-label="Hide or show alerts"
+			i18n-aria-label>
 			<mat-panel-title>
 				<div class="container-title">
 					<mat-icon fontSet="material-icons-round">warning_amber</mat-icon>

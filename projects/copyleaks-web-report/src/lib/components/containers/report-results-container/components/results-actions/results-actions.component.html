@@ -9,16 +9,21 @@
 				</h6>
 			</div>
 
-			<div *ngIf="showSearchFiled" fxLayout="row" fxLayoutAlign="start center" class="input-search-container">
-				<mat-icon class="search-icon" fontSet="material-icons-round">search</mat-icon>
+			<mat-form-field
+				*ngIf="showSearchFiled"
+				class="input-search-container mat-input-no-bottom-padding with-label"
+				appearance="fill">
+				<mat-icon class="search-icon" fontSet="material-icons-round" matPrefix>search</mat-icon>
+				<mat-label i18n>Search by: Title, Intro, URL, Result type...</mat-label>
 				<input
 					class="search-input"
-					placeholder="Search by: Title, Intro, URL, Result type..."
+					aria-label="Search results"
+					i18n-aria-label
 					type="text"
 					matInput
-					[formControl]="searchFc"
-					i18n-placeholder />
+					[formControl]="searchFc" />
 				<button
+					matSuffix
 					mat-icon-button
 					class="icon-button clear-button"
 					(click)="showSearch()"
@@ -29,7 +34,7 @@
 					i18n-aria-label>
 					<mat-icon class="clear-icon" fontSet="material-icons-outlined">cancel</mat-icon>
 				</button>
-			</div>
+			</mat-form-field>
 
 			<div fxLayout="row" fxLayoutAlign="start center" fxLayoutGap="8px" class="results-search-filter-container">
 				<button
@@ -97,7 +102,13 @@
 
 	<div *ngIf="resultsActions?.totalExcluded || resultsActions?.totalFiltered" class="chips-container">
 		<ng-container *ngIf="resultsActions?.totalExcluded">
-			<mat-chip (click)="showFilterDialog(true)" role="button" aria-label="View ecxluded results" i18n-aria-label>
+			<mat-chip
+				(click)="showFilterDialog(true)"
+				(keyup.enter)="showFilterDialog(true)"
+				role="button"
+				aria-label="View ecxluded results"
+				i18n-aria-label
+				tabIndex="0">
 				{{ resultsActions?.totalExcluded }}
 				<ng-container i18n>excluded</ng-container>
 			</mat-chip>
@@ -108,6 +119,8 @@
 				class="filter-chip"
 				[class.disabled]="loadingResults"
 				(click)="showFilterDialog()"
+				(keyup.enter)="showFilterDialog()"
+				tabIndex="0"
 				role="button"
 				aria-label="View results filter dialog"
 				i18n-aria-label>
@@ -117,10 +130,13 @@
 				</span>
 				<ng-container *ngIf="!loadingResults; else loadingResultsViewRef">
 					<mat-icon
+						tabIndex="0"
 						class="clear-filter-icon"
 						fontSet="material-icons-round"
 						(click)="$event.stopPropagation(); clearFilter()"
+						(keyup.enter)="clearFilter()"
 						matTooltip="Clear Filter"
+						aria-hidden="false"
 						matTooltipClass="web-report-mat-tooltip"
 						role="button"
 						aria-label="Clear all filtered results"

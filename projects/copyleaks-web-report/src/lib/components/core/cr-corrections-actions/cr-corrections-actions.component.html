@@ -12,7 +12,7 @@
 			<mat-chip
 				*ngIf="totalIgnoredWritingFeedbackIssues"
 				(click)="openFilterDialog(true)"
-				(keydown)="openFilterDialog(true, $event)"
+				(keyup.enter)="openFilterDialog(true, $event)"
 				role="button"
 				aria-label="View all excluded corrections"
 				i18n-aria-label
@@ -24,7 +24,7 @@
 				*ngIf="totalFilteredWritingFeedbackIssues"
 				class="filter-chip"
 				(click)="openFilterDialog()"
-				(keydown)="openFilterDialog(false, $event)"
+				(keyup.enter)="openFilterDialog(false, $event)"
 				role="button"
 				aria-label="Show corrections filter dialog"
 				i18n-aria-label
@@ -37,6 +37,9 @@
 					class="clear-filter-icon"
 					fontSet="material-icons-round"
 					(click)="$event.stopPropagation(); clearFilter()"
+					(keyup.enter)="clearFilter()"
+					[tabIndex]="0"
+					aria-hidden="false"
 					matTooltip="Clear Filter"
 					matTooltipClass="web-report-mat-tooltip"
 					role="button"
@@ -73,15 +76,17 @@
 		</ng-container>
 
 		<ng-template #highlightedCorrectioniconRef>
-			<mat-icon
-				class="diselect-match-icon"
-				fontSet="material-icons-outlined"
+			<button
+				mat-icon-button
+				class="mat-icon-button-override deselect-match-btn"
 				(click)="deselectMatch()"
 				matTooltip="Deselect Match"
 				matTooltipClass="web-report-mat-tooltip"
-				i18n-matTooltip>
-				cancel
-			</mat-icon>
+				i18n-matTooltip
+				aria-label="Deselect Match"
+				i18n-aria-label>
+				<mat-icon class="diselect-match-icon" fontSet="material-icons-outlined">cancel</mat-icon>
+			</button>
 		</ng-template>
 
 		<mat-icon

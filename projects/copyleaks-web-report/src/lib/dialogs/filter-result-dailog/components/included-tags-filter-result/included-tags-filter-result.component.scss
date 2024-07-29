@@ -1,11 +1,10 @@
 @import '../../../../styles/website-colors.styles.scss';
 @import '../../../../styles/cls-mat-components-overrides/cls-scroll-bar-overrides.scss';
+@import '../../../../styles/cls-mat-components-overrides/cls-mat-inputs-overrides.scss';
+
 .contaienr {
-	.search-tag-container {
+	mat-form-field.with-label {
 		width: 100%;
-		padding: 4px 8px;
-		border-radius: 10px;
-		background-color: $color-container-background;
 		.included-tags-input {
 			height: 20px;
 			color: $color-black;
@@ -17,7 +16,6 @@
 			background-color: $color-container-background;
 		}
 		.included-tags-input::placeholder {
-			color: $color-black;
 			font-weight: 500;
 			font-size: 16px;
 		}
@@ -25,6 +23,7 @@
 		.search-icon {
 			border-radius: 50%;
 			background-color: $color-white;
+			margin-right: 8px;
 			cursor: pointer;
 			&:hover {
 				background-color: $color-primary;
@@ -33,21 +32,24 @@
 				}
 			}
 			mat-icon {
+				background-color: transparent;
 				color: $color-black;
 				font-size: 24px;
 				width: 24px;
 				height: 24px;
 				padding: 4px;
+				line-height: unset;
 			}
 
 			.clear-icon-button {
-				width: unset;
-				height: unset;
+				width: 32px !important;
+				height: 32px !important;
 				line-height: unset;
-				&:focus {
+				&:focus,
+				&:hover {
 					background-color: $color-primary;
 					mat-icon {
-						color: $color-white;
+						color: $color-white !important;
 					}
 					::ng-deep {
 						.mat-button-focus-overlay {

@@ -2,6 +2,8 @@
 	<button
 		class="custom-tab"
 		(click)="clickEvent()"
+		[tabindex]="0"
+		(keyup.enter)="clickEvent()"
 		[style.flex-grow]="flexGrow"
 		[class.tab-selected]="selected"
 		aria-label="Click to switch to tab"

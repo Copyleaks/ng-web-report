@@ -94,6 +94,13 @@ export const COPYLEAKS_REPORT_IFRAME_STYLES: string = `
 		background: #b4d7fe !important;
 	}
 
+  body, html {
+    user-select: text;
+    -webkit-user-select: text;
+    -moz-user-select: text;
+    -ms-user-select: text;
+}
+
 html {
 	padding: 4px;
 }

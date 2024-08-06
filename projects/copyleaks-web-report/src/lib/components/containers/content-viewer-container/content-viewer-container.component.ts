@@ -45,6 +45,8 @@ import { filter } from 'rxjs/operators';
 import * as rangy from 'rangy';
 import * as rangyclassapplier from 'rangy/lib/rangy-classapplier';
 
+import { MD5 } from 'crypto-js';
+
 @Component({
 	selector: 'copyleaks-content-viewer-container',
 	templateUrl: './content-viewer-container.component.html',
@@ -59,10 +61,6 @@ import * as rangyclassapplier from 'rangy/lib/rangy-classapplier';
 export class ContentViewerContainerComponent implements OnInit, AfterViewInit, OnChanges {
 	@HostBinding('style.flex-grow')
 	flexGrowProp: number;
-	rerendered: boolean = false;
-	textStartIndex: number | null = null;
-	textEndIndex: number | null = null;
-	observer: MutationObserver;
 
 	@HostListener('click', ['$event'])
 	handleClick(event: MouseEvent): void {
@@ -329,6 +327,11 @@ export class ContentViewerContainerComponent implements OnInit, AfterViewInit, O
 	 */
 	@Output() onShowOmittedWords: EventEmitter<boolean> = new EventEmitter<boolean>();
 
+	rerendered: boolean = false;
+	textStartIndex: number | null = null;
+	textEndIndex: number | null = null;
+	observer: MutationObserver;
+
 	isShiftClicked: boolean;
 	iframeLoaded: boolean;
 
@@ -358,7 +361,7 @@ export class ContentViewerContainerComponent implements OnInit, AfterViewInit, O
 
 	customTabContent: TemplateRef<any> | null;
 
-	annotationData = null;
+	customMatchTobeAddedData = null;
 
 	ONLY_TEXT_VIEW_IS_AVAILABLE = $localize`Only text view is available`;
 	MULTISELECT_IS_ON = $localize`Can't navigate between matches when multiple matches are selected`;
@@ -367,6 +370,7 @@ export class ContentViewerContainerComponent implements OnInit, AfterViewInit, O
 	iconVisible = false;
 
 	customMatchesWithEventListenersIds: string[] = [];
+	customMatchesWithAvatarsIds: string[] = [];
 
 	private _zoomIn: boolean;
 
@@ -411,17 +415,21 @@ export class ContentViewerContainerComponent implements OnInit, AfterViewInit, O
 			false
 		);
 
+		this.contentText?.nativeElement?.addEventListener('wheel', this._handleScroll, { passive: false });
 		if (this.allowCustomViewAddBtn) {
-			this.contentText?.nativeElement?.addEventListener('wheel', this._handleScroll, { passive: false });
 			document.addEventListener('selectionchange', () => {
-				// check if document.getSelection().toString() is empty string
 				const selection = window.getSelection();
 				if (selection && selection.rangeCount > 0) {
 					const range = selection.getRangeAt(0);
 					if (this._el.nativeElement.contains(range.commonAncestorContainer) && !document.getSelection().toString()) {
-						this.hideIcon();
+						this.hideAddCustomMatchIcon();
+					} else if (
+						this._el.nativeElement.contains(range.commonAncestorContainer) &&
+						this.reportResponsive === EResponsiveLayoutType.Mobile
+					) {
+						this.showAddCustomMatchIcon(null);
 					}
-				} else this.hideIcon();
+				} else this.hideAddCustomMatchIcon();
 			});
 
 			// Mutation observer to handle DOM changes
@@ -443,11 +451,11 @@ export class ContentViewerContainerComponent implements OnInit, AfterViewInit, O
 				characterData: true,
 			});
 
-			// Apply existing annotations on page load
+			// Apply existing customMatches on page load
 			if (this.customViewMatchesData)
 				setTimeout(() => {
-					this.customViewMatchesData[this.currentPage - 1].forEach(annotation => {
-						this.highlightText(annotation);
+					this.customViewMatchesData[this.currentPage - 1].forEach(customMatch => {
+						this.highlightCustomMatchText(customMatch);
 					});
 				}, 1000);
 		}
@@ -466,11 +474,11 @@ export class ContentViewerContainerComponent implements OnInit, AfterViewInit, O
 			this.iframeLoaded = false;
 
 		if (this.allowCustomViewAddBtn && 'customViewMatchesData' in changes) {
-			// Apply existing annotations on page load
+			// Apply existing customMatches on page load
 			if (this.customViewMatchesData)
 				setTimeout(() => {
-					this.customViewMatchesData[this.currentPage - 1].forEach(annotation => {
-						this.highlightText(annotation);
+					this.customViewMatchesData[this.currentPage - 1].forEach(customMatch => {
+						this.highlightCustomMatchText(customMatch);
 					});
 				}, 1000);
 		}
@@ -565,6 +573,12 @@ export class ContentViewerContainerComponent implements OnInit, AfterViewInit, O
 			this._zoomIn = false;
 			this._adjustZoom();
 		} else this.contentZoom = Math.max(this.contentZoom - amount, MIN_TEXT_ZOOM);
+
+		this._cdr.detectChanges();
+
+		setTimeout(() => {
+			this.refreshCustomMatchesAvatars();
+		}, 500);
 	}
 
 	/**
@@ -576,6 +590,29 @@ export class ContentViewerContainerComponent implements OnInit, AfterViewInit, O
 			this._zoomIn = true;
 			this._adjustZoom();
 		} else this.contentZoom = Math.min(this.contentZoom + amount, MAX_TEXT_ZOOM);
+
+		this._cdr.detectChanges();
+
+		setTimeout(() => {
+			this.refreshCustomMatchesAvatars();
+		}, 500);
+	}
+
+	refreshCustomMatchesAvatars() {
+		this.customViewMatchesData.forEach(page => {
+			page.forEach(customMatch => {
+				this.deleteCustomMatchesAvatars(customMatch.id);
+			});
+		});
+		this.customMatchesWithAvatarsIds = [];
+		this.customViewMatchesData[this.currentPage - 1].forEach(customMatch => {
+			this.attachHighlightAvatar(customMatch.id);
+		});
+	}
+
+	deleteCustomMatchesAvatars(customMatchId: string) {
+		const avatar = document.querySelectorAll('.custom-view-avatar-container[data-id="' + customMatchId + '"]');
+		avatar.forEach(element => element.remove());
 	}
 
 	onPaginationEvent(event: PageEvent) {
@@ -594,13 +631,15 @@ export class ContentViewerContainerComponent implements OnInit, AfterViewInit, O
 				suspectPageIndex: this.currentPage,
 			});
 
-		// Apply existing annotations on page load
+		// Apply existing customMatches on page load
 		if (this.allowCustomViewAddBtn && this.customViewMatchesData)
 			setTimeout(() => {
 				this.customMatchesWithEventListenersIds = [];
-				this.hideIcon();
-				this.customViewMatchesData[this.currentPage - 1].forEach(annotation => {
-					this.highlightText(annotation);
+				this.customMatchesWithAvatarsIds = [];
+				this.hideAddCustomMatchIcon();
+				this.refreshCustomMatchesAvatars();
+				this.customViewMatchesData[this.currentPage - 1].forEach(customMatch => {
+					this.highlightCustomMatchText(customMatch);
 				});
 			});
 	}
@@ -665,13 +704,14 @@ export class ContentViewerContainerComponent implements OnInit, AfterViewInit, O
 			iframeJsScript +=
 				customScript.outerHTML +
 				`<script await src="https://cdnjs.cloudflare.com/ajax/libs/rangy/1.3.0/rangy-core.min.js"></script>
-        <script await src="https://cdnjs.cloudflare.com/ajax/libs/rangy/1.3.0/rangy-classapplier.min.js"></script>`;
+        <script await src="https://cdnjs.cloudflare.com/ajax/libs/rangy/1.3.0/rangy-classapplier.min.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/crypto-js/4.1.1/crypto-js.min.js"></script> `;
 		}
 
 		return html + iframeStyle + iframeJsScript;
 	}
 
-	addAnnotationBtnClick(event) {
+	addCustomMatchBtnClick(event) {
 		if (!this.allowCustomViewAddBtn) return;
 		event.preventDefault();
 		event.stopPropagation();
@@ -685,23 +725,29 @@ export class ContentViewerContainerComponent implements OnInit, AfterViewInit, O
 		const top = rect.top + scrollY;
 		const selectTextEvent = {
 			type: 'annotation-select',
-			id: this.annotationData.id,
-			start: this.annotationData.start,
-			end: this.annotationData.end,
-			text: this.annotationData.selectedText,
+			id: this.customMatchTobeAddedData.id,
+			start: this.customMatchTobeAddedData.start,
+			end: this.customMatchTobeAddedData.end,
+			text: this.customMatchTobeAddedData.selectedText,
 			offsetTop: top + 'px',
 			scrollViewOffsetTop: rect.top + 'px',
 		};
 		this.onTextMatchSelectionEvent.emit(selectTextEvent);
 	}
 
-	// Generate a unique ID for each annotation
-	generateAnnotationId() {
+	getCustomMatchGravatarUrlByEmailAddress(email: string = 'safaa@copyleaks.com'): string {
+		const emailHash = MD5(email.trim().toLowerCase()).toString();
+		// TODO add default image
+		return `https://www.gravatar.com/avatar/${emailHash}`;
+	}
+
+	// Generate a unique ID for each customMatch
+	generateCustomMatchId() {
 		return 'annotation-' + Math.random().toString(36).substr(2, 9);
 	}
 
 	// Function to get the text content and compute start and end indices
-	getAnnotationData(range) {
+	getCustomMatchData(range) {
 		var preSelectionRange = range.cloneRange();
 		preSelectionRange.selectNodeContents(this.contentText?.nativeElement);
 		preSelectionRange.setEnd(range.startContainer, range.startOffset);
@@ -711,28 +757,28 @@ export class ContentViewerContainerComponent implements OnInit, AfterViewInit, O
 		if (!selectedText) return;
 		var end = start + selectedText.length;
 
-		return { id: this.generateAnnotationId(), start: start, end: end, text: selectedText, pageNumber: 0 };
+		return { id: this.generateCustomMatchId(), start: start, end: end, text: selectedText, pageNumber: 0 };
 	}
 
-	// Function to create and display annotation
-	createAnnotation() {
-		if (this.annotationData) {
-			this.customViewMatchesData[this.currentPage - 1].push(this.annotationData);
-			// Display annotation
+	// Function to create and display customMatch
+	createCustomMatch() {
+		if (this.customMatchTobeAddedData) {
+			this.customViewMatchesData[this.currentPage - 1].push(this.customMatchTobeAddedData);
+			// Display customMatch
 
 			// Highlight the selected text
-			this.highlightText(this.annotationData);
+			this.highlightCustomMatchText(this.customMatchTobeAddedData);
 		}
 	}
 
 	// Function to highlight or remove highlight of the selected text
-	highlightText(annotation, remove = false) {
+	highlightCustomMatchText(customMatch, remove = false) {
 		if (!this.allowCustomViewAddBtn) return;
 		var range = rangy.createRange();
 		var container = this.contentText?.nativeElement;
 		var startContainer, endContainer;
-		var startOffset = annotation.start;
-		var endOffset = annotation.end;
+		var startOffset = customMatch.start;
+		var endOffset = customMatch.end;
 		var offset = 0;
 
 		function findNodeAndOffset(node, targetOffset) {
@@ -780,33 +826,35 @@ export class ContentViewerContainerComponent implements OnInit, AfterViewInit, O
 			} else {
 				highlight.applyToRange(range);
 				setTimeout(() => {
-					this.attachHighlightClickEvent(annotation.id);
+					this.attachHighlightClickEvent(customMatch.id);
+					this.attachHighlightAvatar(customMatch.id);
 				});
 			}
 
 			// Ensure the data-id attribute is set after applying the highlight
 			document.querySelectorAll('.' + this.customViewMatcheClassName).forEach(element => {
 				if (!element.getAttribute('data-id')) {
-					element.setAttribute('data-id', annotation.id);
+					element.setAttribute('data-id', customMatch.id);
 				}
 			});
 		}
 	}
 
 	// Function to attach click event to highlight
-	attachHighlightClickEvent(annotationId) {
-		if (this.customMatchesWithEventListenersIds.includes(annotationId)) return;
-		document.querySelectorAll('.highlight[data-id="' + annotationId + '"]').forEach(element => {
+	attachHighlightClickEvent(customMatchId) {
+		if (this.customMatchesWithEventListenersIds.includes(customMatchId)) return;
+		const elements = document.querySelectorAll('.highlight[data-id="' + customMatchId + '"]');
+		elements.forEach(element => {
 			element.addEventListener('click', event => {
 				event.stopPropagation(); // Prevent event bubbling
 				const flattenedArray = this.customViewMatchesData.reduce((acc, curr) => acc.concat(curr), []);
-				const selectedAnnotation = flattenedArray.find(annotation => annotation.id === annotationId);
-				if (!selectedAnnotation) return;
+				const selectedCustomMatch = flattenedArray.find(customMatch => customMatch.id === customMatchId);
+				if (!selectedCustomMatch) return;
 
 				// check if element has attribute 'on'
 				const isOn = element.classList.contains('selected');
 				if (isOn) {
-					const annotationEvent = {
+					const customMatchEvent = {
 						type: 'annotation-click',
 						id: null,
 						start: null,
@@ -815,7 +863,7 @@ export class ContentViewerContainerComponent implements OnInit, AfterViewInit, O
 						offsetTop: null,
 					};
 					element.classList.remove('selected');
-					this.onTextMatchSelectionEvent.emit(annotationEvent);
+					this.onTextMatchSelectionEvent.emit(customMatchEvent);
 					return;
 				}
 
@@ -830,29 +878,77 @@ export class ContentViewerContainerComponent implements OnInit, AfterViewInit, O
 
 				const top = rect.top + scrollY;
 
-				const annotationEvent = {
+				const customMatchEvent = {
 					type: 'annotation-click',
-					id: selectedAnnotation.id,
-					start: selectedAnnotation.start,
-					end: selectedAnnotation.end,
-					text: selectedAnnotation.text,
+					id: selectedCustomMatch.id,
+					start: selectedCustomMatch.start,
+					end: selectedCustomMatch.end,
+					text: selectedCustomMatch.text,
 					offsetTop: top + 'px',
 					scrollViewOffsetTop: rect.top + 'px',
 				};
-				this.onTextMatchSelectionEvent.emit(annotationEvent);
+				this.onTextMatchSelectionEvent.emit(customMatchEvent);
 			});
-			this.customMatchesWithEventListenersIds.push(annotationId);
+			this.customMatchesWithEventListenersIds.push(customMatchId);
 		});
 	}
 
-	showIcon(_: MouseEvent): void {
+	attachHighlightAvatar(customMatchId) {
+		if (this.customMatchesWithAvatarsIds.includes(customMatchId)) return;
+		const elements = document.querySelectorAll('.highlight[data-id="' + customMatchId + '"]');
+
+		if (elements.length > 0) {
+			// create a div element and put the avatar inside it
+			const avatarContainer = document.createElement('div');
+			// add data-id attribute to the avatar container
+			avatarContainer.setAttribute('data-id', customMatchId);
+			avatarContainer.className = 'custom-view-avatar-container';
+			const spanRect = elements[elements.length - 1].getBoundingClientRect();
+			const contentTextRect = this.contentText?.nativeElement.getBoundingClientRect();
+
+			let left = spanRect.right - this.contentText.nativeElement.getBoundingClientRect().left;
+			let top = spanRect.top - this.contentText.nativeElement.getBoundingClientRect().top;
+
+			if (left + 40 > contentTextRect.width) {
+				left = contentTextRect.width - 40;
+			}
+			avatarContainer.style.left = `${left}px`;
+			avatarContainer.style.top = `${top}px`;
+
+			avatarContainer.addEventListener('mouseover', () => {
+				const highlightedElements = document.querySelectorAll('.highlight[data-id="' + customMatchId + '"]');
+				highlightedElements.forEach(e => e?.classList?.toggle('hover'));
+			});
+			avatarContainer.addEventListener('mouseout', () => {
+				const highlightedElements = document.querySelectorAll('.highlight[data-id="' + customMatchId + '"]');
+				highlightedElements.forEach(e => e?.classList?.toggle('hover'));
+			});
+			avatarContainer.addEventListener('click', () => {
+				// send click event to document.querySelectorAll('.highlight[data-id="' + customMatchId + '"]')
+				const highlightedElements = document.querySelectorAll('.highlight[data-id="' + customMatchId + '"]');
+				highlightedElements.forEach(e => (e as HTMLElement)?.click());
+			});
+
+			const img = document.createElement('img');
+			img.src = this.getCustomMatchGravatarUrlByEmailAddress();
+			img.alt = 'User Avatar';
+			img.className = 'custom-view-avatar';
+			avatarContainer.appendChild(img);
+
+			this.contentText.nativeElement.appendChild(avatarContainer);
+
+			this.customMatchesWithAvatarsIds.push(customMatchId);
+		}
+	}
+
+	showAddCustomMatchIcon(_: MouseEvent): void {
 		if (!this.allowCustomViewAddBtn) return;
 		const selection = window.getSelection();
 		if (selection && selection.rangeCount > 0) {
 			const range = selection.getRangeAt(0);
 			if (!range.collapsed) {
 				if (!document.getSelection().toString()) {
-					this.hideIcon(false);
+					this.hideAddCustomMatchIcon(false);
 					return;
 				}
 
@@ -870,14 +966,14 @@ export class ContentViewerContainerComponent implements OnInit, AfterViewInit, O
 
 				this._saveRangySelectionData();
 			} else {
-				this.hideIcon();
+				this.hideAddCustomMatchIcon();
 			}
 		} else {
-			this.hideIcon();
+			this.hideAddCustomMatchIcon();
 		}
 	}
 
-	hideIcon(emitEvent = true): void {
+	hideAddCustomMatchIcon(emitEvent = true): void {
 		if (!this.allowCustomViewAddBtn) return;
 		this.iconVisible = false;
 		const selectTextEvent = {
@@ -896,7 +992,7 @@ export class ContentViewerContainerComponent implements OnInit, AfterViewInit, O
 		var rangySelection = rangy.getSelection();
 		if (rangySelection.rangeCount > 0) {
 			var range = rangySelection.getRangeAt(0);
-			this.annotationData = this.getAnnotationData(range);
+			this.customMatchTobeAddedData = this.getCustomMatchData(range);
 		}
 	}
 

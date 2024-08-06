@@ -289,7 +289,7 @@
 				crOriginalTextHelper
 				[host]="this"
 				text-container
-				(mouseup)="showIcon($event)">
+				(mouseup)="showAddCustomMatchIcon($event)">
 				<ng-container *ngIf="contentTextMatches; else clean">
 					<ng-container *ngFor="let partial of contentTextMatches[currentPage - 1]">
 						<span *ngIf="partial.match.type === MatchType.none">{{ partial.content }}</span>
@@ -344,7 +344,7 @@
 						'left.px': iconPosition.left,
 						display: iconVisible ? 'flex' : 'none'
 					}"
-					(mouseup)="addAnnotationBtnClick($event)">
+					(mouseup)="addCustomMatchBtnClick($event)">
 					<mat-icon fontSet="material-icons-round">add</mat-icon>
 				</div>
 			</div>

@@ -4,7 +4,10 @@
 			<ng-container *ngIf="reportOrigin != 'suspect'" i18n>
 				<ng-container *ngIf="!submittedDocumentName; else submittedDocumentNameRef">Submitted text</ng-container>
 				<ng-template #submittedDocumentNameRef>
-					<div class="submitted-doc-name-container">
+					<div
+						class="submitted-doc-name-container"
+						[matTooltip]="submittedDocumentName"
+						matTooltipClass="web-report-mat-tooltip">
 						<mat-icon>description</mat-icon>
 						<span>{{ submittedDocumentName }}</span>
 					</div>

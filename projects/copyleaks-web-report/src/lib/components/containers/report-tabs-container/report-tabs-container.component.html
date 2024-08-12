@@ -350,7 +350,8 @@
 				aria-describedby="plagiarism-view-text"
 				@fadeIn
 				[class.tab-selected]="selectedTap === EReportViewType.PlagiarismView && !hidePlagarismTap"
-				[class.tab-disabled]="hidePlagarismTap && showDisabledProducts"
+				[class.at-tab-disabled]="hidePlagarismTap && showDisabledProducts"
+				[class.at-tab-enabled]="!(hidePlagarismTap && showDisabledProducts)"
 				[class.tab-loading]="showLoadingView"
 				[class.mobile]="isMobile"
 				[matTooltip]="hidePlagarismTap && showDisabledProducts ? DISABLED : ''"
@@ -409,7 +410,8 @@
 				aria-describedby="AI-view-text"
 				tabindex="0"
 				[class.tab-selected]="selectedTap === EReportViewType.AIView && !hideAiTap"
-				[class.tab-disabled]="hideAiTap && showDisabledProducts"
+				[class.at-tab-disabled]="hideAiTap && showDisabledProducts"
+				[class.at-tab-enabled]="!(hideAiTap && showDisabledProducts)"
 				[class.tab-loading]="showLoadingView"
 				[class.with-company-logo]="
 					selectedTap === EReportViewType.AIView && !hideAiTap && hidePlagarismTap && companyLogo
@@ -469,7 +471,8 @@
 				role="button"
 				aria-describedby="WritingFeedback-view-text"
 				[class.tab-selected]="selectedTap === EReportViewType.WritingFeedbackTabView && !hideWritingFeedbackTap"
-				[class.tab-disabled]="hideWritingFeedbackTap && showDisabledProducts"
+				[class.at-tab-disabled]="hideWritingFeedbackTap && showDisabledProducts"
+				[class.at-tab-enabled]="!(hideWritingFeedbackTap && showDisabledProducts)"
 				[class.tab-loading]="showLoadingView"
 				[class.with-company-logo]="
 					selectedTap === EReportViewType.WritingFeedbackTabView &&

@@ -81,8 +81,10 @@ export class ReportActionsContainerComponent implements OnInit, AfterViewInit, O
 	}
 
 	updateComponentDisplay() {
-		if (this.showReportActions) this.display = 'flex';
-		else this.display = 'none';
+		setTimeout(() => {
+			if (this.showReportActions) this.display = 'flex';
+			else this.display = 'none';
+		});
 	}
 
 	ngOnDestroy(): void {}

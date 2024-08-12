@@ -64,8 +64,8 @@
 			padding: 2px;
 			border-radius: 32px 32px 32px 0px;
 			background: $color-dark-blue;
-			border: 1px solid $color-container-background;
-
+			border: 1px solid $color-white;
+			box-shadow: 0px 4px 4px 0px rgba(0, 0, 0, 0.15);
 			box-sizing: border-box;
 			height: 32px;
 
@@ -75,6 +75,11 @@
 				border: 1px solid $color-primary;
 				width: 24px;
 				height: 24px;
+			}
+
+			&:hover,
+			&.hover {
+				background: $color-primary !important;
 			}
 		}
 	}
@@ -96,6 +101,11 @@
 			font-style: normal;
 			font-weight: 700;
 			line-height: normal;
+			max-width: 200px;
+			width: 100%;
+			text-overflow: ellipsis;
+			white-space: nowrap;
+			overflow: hidden;
 		}
 	}
 

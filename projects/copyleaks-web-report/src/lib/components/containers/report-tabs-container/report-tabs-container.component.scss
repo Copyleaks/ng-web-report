@@ -39,8 +39,7 @@
 		.writing-assistant-tab {
 			cursor: pointer;
 			box-sizing: border-box;
-			.tab-disabled {
-				opacity: 0.5 !important;
+			&.at-tab-disabled {
 				cursor: not-allowed !important;
 			}
 		}
@@ -68,25 +67,27 @@
 			border-bottom: 2px solid transparent;
 			border-left: 1px solid transparent;
 			transition: 0.4s ease-in-out;
-			&:hover,
-			&.tab-selected {
-				border-radius: 10px;
-				border-top: 1px solid $color-plagiarism-identical;
-				border-right: 1px solid $color-plagiarism-identical;
-				border-bottom: 2px solid $color-plagiarism-identical;
-				border-left: 1px solid $color-plagiarism-identical;
-				background: $color-white;
-				box-shadow: -4px -4px 4px 0px rgba(236, 119, 116, 0.1) inset, 4px 4px 4px 0px rgba(251, 115, 103, 0.1) inset;
-				.title {
-					color: $color-plagiarism-identical;
-					font-weight: 800;
-				}
+			&.at-tab-enabled {
+				&:hover,
+				&.tab-selected {
+					border-radius: 10px;
+					border-top: 1px solid $color-plagiarism-identical;
+					border-right: 1px solid $color-plagiarism-identical;
+					border-bottom: 2px solid $color-plagiarism-identical;
+					border-left: 1px solid $color-plagiarism-identical;
+					background: $color-white;
+					box-shadow: -4px -4px 4px 0px rgba(236, 119, 116, 0.1) inset, 4px 4px 4px 0px rgba(251, 115, 103, 0.1) inset;
+					.title {
+						color: $color-plagiarism-identical;
+						font-weight: 800;
+					}
 
-				.icon-container {
-					svg {
-						width: 22px;
-						height: 23px;
-						flex-shrink: 0;
+					.icon-container {
+						svg {
+							width: 22px;
+							height: 23px;
+							flex-shrink: 0;
+						}
 					}
 				}
 			}
@@ -150,25 +151,28 @@
 			border-bottom: 2px solid transparent;
 			border-left: 1px solid transparent;
 			transition: 0.4s ease-in-out;
-			&:hover,
-			&.tab-selected {
-				border-radius: 10px;
-				border-top: 1px solid $color-ai-tab;
-				border-right: 1px solid $color-ai-tab;
-				border-bottom: 2px solid $color-ai-tab;
-				border-left: 1px solid $color-ai-tab;
-				background: $color-white;
-				box-shadow: -4px -4px 4px 0px rgba(236, 119, 116, 0.1) inset, 4px 4px 4px 0px rgba(251, 115, 103, 0.1) inset;
-				.title {
-					color: $color-ai-tab;
-					font-weight: 800;
-				}
 
-				.icon-container {
-					svg {
-						width: 28px;
-						height: 20px;
-						flex-shrink: 0;
+			&.at-tab-enabled {
+				&:hover,
+				&.tab-selected {
+					border-radius: 10px;
+					border-top: 1px solid $color-ai-tab;
+					border-right: 1px solid $color-ai-tab;
+					border-bottom: 2px solid $color-ai-tab;
+					border-left: 1px solid $color-ai-tab;
+					background: $color-white;
+					box-shadow: -4px -4px 4px 0px rgba(236, 119, 116, 0.1) inset, 4px 4px 4px 0px rgba(251, 115, 103, 0.1) inset;
+					.title {
+						color: $color-ai-tab;
+						font-weight: 800;
+					}
+
+					.icon-container {
+						svg {
+							width: 28px;
+							height: 20px;
+							flex-shrink: 0;
+						}
 					}
 				}
 			}
@@ -232,25 +236,27 @@
 			border-bottom: 2px solid transparent;
 			border-left: 1px solid transparent;
 			transition: 0.4s ease-in-out;
-			&:hover,
-			&.tab-selected {
-				border-radius: 10px;
-				border-top: 1px solid $color-grammar-dark;
-				border-right: 1px solid $color-grammar-dark;
-				border-bottom: 2px solid $color-grammar-dark;
-				border-left: 1px solid $color-grammar-dark;
-				background: var(--Colors-Main-White, #fbffff);
-				box-shadow: -4px -4px 4px 0px rgba(255, 165, 3, 0.14) inset, 4px 4px 4px 0px rgba(255, 165, 3, 0.14) inset;
-				.title {
-					color: $color-grammar-dark;
-					font-weight: 800;
-				}
+			&.at-tab-enabled {
+				&:hover,
+				&.tab-selected {
+					border-radius: 10px;
+					border-top: 1px solid $color-grammar-dark;
+					border-right: 1px solid $color-grammar-dark;
+					border-bottom: 2px solid $color-grammar-dark;
+					border-left: 1px solid $color-grammar-dark;
+					background: var(--Colors-Main-White, #fbffff);
+					box-shadow: -4px -4px 4px 0px rgba(255, 165, 3, 0.14) inset, 4px 4px 4px 0px rgba(255, 165, 3, 0.14) inset;
+					.title {
+						color: $color-grammar-dark;
+						font-weight: 800;
+					}
 
-				.icon-container {
-					svg {
-						width: 24px;
-						height: 15px;
-						flex-shrink: 0;
+					.icon-container {
+						svg {
+							width: 24px;
+							height: 15px;
+							flex-shrink: 0;
+						}
 					}
 				}
 			}

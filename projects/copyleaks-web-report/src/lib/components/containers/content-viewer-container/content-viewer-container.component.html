@@ -15,14 +15,18 @@
 			</ng-container>
 			<ng-container *ngIf="reportOrigin === 'suspect'" i18n>
 				<div class="has-masked-content-title">
-					<mat-icon
+					<button
+						mat-icon-button
+						class="mat-icon-button-override open-disclaimer-btn"
 						*ngIf="hasMaskedContent"
 						matTooltip="Open disclaimer"
 						matTooltipClass="web-report-mat-tooltip"
+						(click)="openDisclaimer()"
 						i18n-matTooltip
-						(click)="openDisclaimer()">
-						info_outline
-					</mat-icon>
+						aria-label="Opens a disclaimer"
+						i18n-aria-label>
+						<mat-icon>info_outline</mat-icon>
+					</button>
 					<span web-report-title-font>Found text</span>
 				</div>
 			</ng-container>
@@ -55,7 +59,8 @@
 			[matTooltip]="showOmittedWords ? HIDE_OMITTED_WORDS_TOOLTIP_MESSAGE : VIEW_OMITTED_WORDS_TOOLTIP_MESSAGE"
 			matTooltipClass="web-report-mat-tooltip"
 			i18n-matTooltip
-			(click)="toggleOmittedWordsView()">
+			(click)="toggleOmittedWordsView()"
+			[attr.aria-label]="showOmittedWords ? HIDE_OMITTED_WORDS_TOOLTIP_MESSAGE : VIEW_OMITTED_WORDS_TOOLTIP_MESSAGE">
 			<mat-icon fontSet="material-icons-outlined">fact_check</mat-icon>
 			<span>({{ scanSource?.metadata?.excluded ?? 0 }} Omitted)</span>
 		</button>
@@ -244,7 +249,7 @@
 						[ngClass]="{
 							'disabled-icon': !hasHtml || isAlertsView
 						}"
-						fontSet="material-icons-round">
+						fontSet="material-icons-outlined">
 						image
 					</mat-icon>
 				</button>

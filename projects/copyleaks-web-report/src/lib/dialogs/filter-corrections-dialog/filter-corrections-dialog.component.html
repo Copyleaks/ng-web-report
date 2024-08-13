@@ -22,6 +22,8 @@
 						*ngIf="totalExcludedCorrections > 0"
 						class="excluded-chip"
 						(click)="viewExcludedDialog()"
+						(keyup.enter)="viewExcludedDialog()"
+						tabIndex="0"
 						role="listitem"
 						aria-label="Opens list of the excluded corrections"
 						i18n-aria-label
@@ -34,6 +36,8 @@
 			<button
 				mat-icon-button
 				class="clear-filter-btn clear-filter-button-text icon-button"
+				aria-label="Reset filters"
+				i18n-aria-label
 				(click)="onClearFilter()"
 				i18n>
 				<mat-icon class="clear-filter-button-icon">refresh</mat-icon>
@@ -231,15 +235,16 @@
 					<mat-icon class="exit-filter-button-icon">close</mat-icon>
 				</button>
 			</div>
-			<mat-form-field class="search-input" appearance="fill">
+			<mat-form-field class="search-input with-label" appearance="fill">
 				<div class="search-input-icon-container" fxLayoutAlign="center center" style="margin-right: 8px" matPrefix>
 					<mat-icon class="search-input-search-icon" fontSet="material-icons-round">search</mat-icon>
 				</div>
+				<mat-label i18n>Search correction</mat-label>
 				<input
+					aria-label="Search correction"
+					i18n-aria-label
 					matInput
-					placeholder="Search correction"
 					[spellcheck]="false"
-					i18n-placeholder
 					[formControl]="searchControl" />
 			</mat-form-field>
 		</div>
@@ -255,7 +260,12 @@
 		</div>
 
 		<div mat-dialog-actions class="include-all-container">
-			<button mat-icon-button class="icon-button include-all-btn" (click)="includeAllToggle()">
+			<button
+				mat-icon-button
+				class="icon-button include-all-btn"
+				aria-label="Includes or excludes previously excluded results"
+				i18n-aria-label
+				(click)="includeAllToggle()">
 				<ng-container *ngIf="allIncluded; else includeAllRef" i18n>Exclude all</ng-container>
 				<ng-template #includeAllRef>
 					<ng-container i18n>Include all</ng-container>

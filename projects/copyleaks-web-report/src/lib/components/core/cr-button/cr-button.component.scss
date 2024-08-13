@@ -1,4 +1,5 @@
 @import '../../../styles/cls-mat-components-overrides/cls-mat-buttons-overrides.scss';
+@import '../../../styles/cls-accessibility-overrides/cls-accessibility-overrides.scss';
 
 @mixin cls-button-design-v2-shadow {
 	box-shadow: 2px 2px 4px rgba(0, 0, 0, 0.15), -2px -2px 8px rgba(255, 255, 255, 0.25) !important;

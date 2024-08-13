@@ -32,3 +32,11 @@
 [web-report-title-font] {
 	font-family: Almarai, haboro-soft, sans-serif !important;
 }
+
+.cdk-keyboard-focused {
+	outline: 2px solid black !important;
+}
+
+input::placeholder {
+	color: $color-black-opacity-60 !important;
+}

@@ -37,7 +37,6 @@
 								<span *ngIf="!hideCategoriesSection" class="categorized-summery" i18n>Categorized Summary</span>
 								<cr-categories-analysis-panel
 									*ngFor="let stats of allMatchResultsStats"
-									[tabindex]="0"
 									[matchesStats]="stats"
 									[selectedView]="EReportViewType.PlagiarismView"
 									(selectCategory)="onSelectCategory($event)"></cr-categories-analysis-panel>

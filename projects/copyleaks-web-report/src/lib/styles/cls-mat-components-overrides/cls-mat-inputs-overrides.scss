@@ -170,3 +170,43 @@
 ::ng-deep .mat-form-field.form-field-dialog .mat-form-field-flex {
 	background-color: $color-container-background !important;
 }
+
+::ng-deep {
+	mat-form-field.with-label {
+		.mat-form-field-label-wrapper {
+			overflow: visible !important;
+		}
+		&.mat-form-field-appearance-outline.mat-form-field-can-float.mat-form-field-should-float .mat-form-field-label,
+		.mat-form-field-appearance-outline.mat-form-field-can-float
+			.mat-input-server:focus
+			+ .mat-form-field-label-wrapper
+			.mat-form-field-label {
+			overflow: visible !important;
+			font-weight: 700 !important;
+			line-height: 12.47px !important;
+			color: $color-black !important;
+			transform: translateY(-0.6em) scale(0.7) !important;
+		}
+
+		&.mat-form-field-appearance-fill .mat-form-field-label {
+			top: 1.6em !important;
+			margin-top: 0px !important;
+		}
+
+		&.mat-form-field-appearance-fill.mat-form-field-can-float.mat-form-field-should-float .mat-form-field-label,
+		.mat-form-field-appearance-fill.mat-form-field-can-float
+			.mat-input-server:focus
+			+ .mat-form-field-label-wrapper
+			.mat-form-field-label {
+			overflow: visible !important;
+			font-weight: 700 !important;
+			line-height: 12.47px !important;
+			color: $color-black !important;
+			transform: translateY(-0.6em) scale(0.7) !important;
+		}
+	}
+}
+
+::ng-deep .mat-form-field-label {
+	color: $color-black-opacity-60 !important;
+}

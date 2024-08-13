@@ -1,7 +1,10 @@
 <div class="input-container">
-	<span class="input-message">Enter domain to exclude from results</span>
+	<label for="excluded-domain-input" class="input-message" i18n>Enter domain to exclude from results</label>
 	<div class="excluded-domains-input">
 		<input
+			aria-label="Enter domain to be excluded from results"
+			i18n-aria-label
+			id="excluded-domain-input"
 			[formControl]="addDomainControl"
 			[type]="'text'"
 			placeholder="domain.com"
@@ -9,13 +12,23 @@
 			i18n-placeholder
 			matInput
 			(keyup.enter)="addDomain()" />
-		<mat-icon (click)="addDomain()" [style.color]="addDomainControl?.value ? '#052D8B' : ''">add_link</mat-icon>
+		<button
+			mat-icon-button
+			class="mat-icon-button-override add-domain-btn"
+			(click)="addDomain()"
+			aria-label="Click to add domain"
+			i18n-aria-label
+			matTooltipClass="web-report-mat-tooltip"
+			matTooltip="Add domain"
+			i18n-matTooltip>
+			<mat-icon [style.color]="addDomainControl?.value ? '#052D8B' : ''">add_link</mat-icon>
+		</button>
 	</div>
 	<mat-error *ngIf="errorMessage" @errorAnimation>{{ errorMessage }}</mat-error>
 </div>
 
 <mat-accordion *ngIf="excludedDomainsFormValue?.length > 0" #expansionPanel>
-	<mat-expansion-panel [expanded]="true">
+	<mat-expansion-panel [expanded]="true" aria-label="Click to show or hide excluded domains" i18n-aria-label>
 		<mat-expansion-panel-header>
 			<mat-panel-title>
 				<span class="expansion-title" i18n>
@@ -31,7 +44,17 @@
 
 		<div #alertsContainer class="excluded-domains-container">
 			<div *ngFor="let domain of excludedDomainsFormValue" @fadeIn class="excluded-domain">
-				<mat-icon class="remove-domain-icon" (click)="removeDomain(domain)">highlight_off</mat-icon>
+				<button
+					mat-icon-button
+					class="mat-icon-button-override remove-doamin-btn"
+					(click)="removeDomain(domain)"
+					aria-label="Click to remove domain"
+					i18n-aria-label
+					matTooltipClass="web-report-mat-tooltip"
+					matTooltip="Remove domain"
+					i18n-matTooltip>
+					<mat-icon class="remove-domain-icon">highlight_off</mat-icon>
+				</button>
 				<span class="domain" [title]="domain">{{ domain }}</span>
 			</div>
 		</div>

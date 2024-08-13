@@ -1,0 +1,13 @@
+.mat-icon-button-override,
+.mat-button-override {
+	height: unset !important;
+	width: unset !important;
+	min-height: unset !important;
+	min-width: unset !important;
+	line-height: unset !important;
+	padding: 0 !important;
+}
+
+.cdk-keyboard-focused {
+	outline: 2px solid black;
+}

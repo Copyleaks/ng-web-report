@@ -1,6 +1,7 @@
 @import '../../../styles/styles.scss';
 @import '../../../styles/website-colors.styles.scss';
 @import '../../../styles/cls-mat-components-overrides/cls-mat-chip-overrides.scss';
+@import '../../../styles/cls-accessibility-overrides/cls-accessibility-overrides.scss';
 
 :host {
 	display: flex;
@@ -62,14 +63,19 @@
 		align-items: center;
 	}
 
-	.diselect-match-icon {
-		cursor: pointer;
-		color: $color-dark-blue;
-		width: 24px !important;
-		height: 24px !important;
-		font-size: 24px !important;
-		&:hover {
-			color: $color-primary;
+	.deselect-match-btn {
+		.diselect-match-icon {
+			cursor: pointer;
+			color: $color-dark-blue;
+			width: 24px !important;
+			height: 24px !important;
+			font-size: 24px !important;
+		}
+		&:hover,
+		&:focus {
+			.diselect-match-icon {
+				color: $color-primary;
+			}
 		}
 	}
 

@@ -22,8 +22,12 @@
 			<div class="chips-stats-container" *ngIf="!!resultsActions.totalFiltered || !!resultsActions?.totalExcluded">
 				<ng-container *ngIf="!!resultsActions?.totalExcluded">
 					<mat-chip
+						tabIndex="0"
 						class="total-excluded"
 						role="button"
+						aria-label="View excluded results"
+						i18n-aria-label
+						(keyup.enter)="!!resultsActions.totalExcluded ? (data.showExcludedDailog = !data.showExcludedDailog) : ''"
 						(click)="!!resultsActions.totalExcluded ? (data.showExcludedDailog = !data.showExcludedDailog) : ''">
 						{{ resultsActions.totalExcluded }}
 						<ng-container i18n>excluded</ng-container>

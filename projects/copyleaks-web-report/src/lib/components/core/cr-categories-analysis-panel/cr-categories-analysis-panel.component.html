@@ -1,6 +1,9 @@
-<mat-accordion #expansionPanel [tabIndex]="0" (keydown)="expandAccordion()">
-	<mat-expansion-panel #panel [expanded]="expanded" (expandedChange)="expandedChange($event)">
-		<mat-expansion-panel-header [ngClass]="{ 'mobile-results-panel-header': isMobile }">
+<mat-accordion #expansionPanel [tabIndex]="-1">
+	<mat-expansion-panel #panel [expanded]="expanded" (expandedChange)="expandedChange($event)" [tabIndex]="-1">
+		<mat-expansion-panel-header
+			[ngClass]="{ 'mobile-results-panel-header': isMobile }"
+			[tabIndex]="0"
+			(keydown.enter)="expandAccordion()">
 			<mat-panel-title>
 				<div class="container-title">
 					<ng-container [ngSwitch]="selectedView">
@@ -107,6 +110,7 @@
 					class="hide-alerts-icon"
 					fontSet="material-icons-round"
 					matTooltipClass="web-report-mat-tooltip"
+					[attr.aria-label]="panel.expanded ? COLLAPSE_TOOLTIP : EXPAND_TOOLTIP"
 					[matTooltip]="panel.expanded ? COLLAPSE_TOOLTIP : EXPAND_TOOLTIP">
 					keyboard_arrow_down
 				</mat-icon>
@@ -119,11 +123,12 @@
 					<mat-chip
 						*ngFor="let stat of matchesStats?.categories"
 						[style.display]="stat?.totalResults === 0 ? 'none' : 'flex'"
-						[tabindex]="0"
+						[tabIndex]="0"
 						role="option"
 						aria-label="Category item"
 						i18n-aria-label
 						aria-hidden="false"
+						(keyup.enter)="onSelectCategory(stat)"
 						(click)="onSelectCategory(stat)">
 						{{ stat?.type }} ({{ stat?.totalResults }})
 					</mat-chip>
@@ -137,7 +142,8 @@
 						aria-label="Category item"
 						i18n-aria-label
 						aria-hidden="false"
-						[tabindex]="0"
+						[tabIndex]="0"
+						(keyup.enter)="onSelectCategory(stat)"
 						(click)="onSelectCategory(stat)">
 						{{ stat?.type }} ({{ stat?.totalResults }})
 					</mat-chip>
@@ -151,7 +157,8 @@
 						aria-label="Category item"
 						i18n-aria-label
 						aria-hidden="false"
-						[tabindex]="0"
+						[tabIndex]="0"
+						(keyup.enter)="onSelectCategory(stat?.type)"
 						(click)="onSelectCategory(stat?.type)">
 						{{ getCorrectionCategoryTitle(stat?.type) }} ({{ stat?.totalIssues }})
 					</mat-chip>

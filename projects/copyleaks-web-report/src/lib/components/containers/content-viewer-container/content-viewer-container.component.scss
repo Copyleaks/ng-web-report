@@ -1,6 +1,7 @@
 @import '../../../styles/containers.styles.scss';
 @import '../../../styles/styles.scss';
 @import '../../../styles/website-colors.styles.scss';
+@import '../../../styles/cls-accessibility-overrides/cls-accessibility-overrides.scss';
 
 :host {
 	height: 100%;
@@ -433,14 +434,20 @@
 		justify-content: center;
 		align-items: center;
 		gap: 8px;
-		mat-icon {
-			width: 16px;
-			height: 16px;
-			font-size: 16px;
-			color: $grayed-out-disabled;
-			cursor: pointer;
-			&:hover {
-				color: $color-primary;
+		.open-disclaimer-btn {
+			mat-icon {
+				width: 16px;
+				height: 16px;
+				font-size: 16px;
+				color: $grayed-out-disabled;
+				cursor: pointer;
+				line-height: 14px;
+			}
+			&:hover,
+			&:focus {
+				mat-icon {
+					color: $color-primary;
+				}
 			}
 		}
 	}
@@ -456,7 +463,8 @@
 	border: none;
 	padding: 0px;
 	&:hover,
-	&.isOn {
+	&.isOn,
+	&:focus {
 		mat-icon,
 		span {
 			color: $color-primary !important;

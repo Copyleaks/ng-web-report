@@ -1,7 +1,15 @@
 <ng-template #tabTemplateTitle>
-	<div class="custom-tab" (click)="clickEvent()" [style.flex-grow]="flexGrow" [class.tab-selected]="selected">
+	<button
+		class="custom-tab"
+		(click)="clickEvent()"
+		[tabindex]="0"
+		(keyup.enter)="clickEvent()"
+		[style.flex-grow]="flexGrow"
+		[class.tab-selected]="selected"
+		aria-label="Click to switch to tab"
+		i18n-aria-label>
 		<ng-content select="cr-custom-tab-item-title"></ng-content>
-	</div>
+	</button>
 </ng-template>
 
 <ng-template #tabTemplateContent>

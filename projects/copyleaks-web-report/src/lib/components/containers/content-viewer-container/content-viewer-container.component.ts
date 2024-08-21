@@ -272,7 +272,7 @@ export class ContentViewerContainerComponent implements OnInit, AfterViewInit, O
 
 	@Input() customViewMatchesData: { id: string; start: number; end: number; text: string; pageNumber: number }[][];
 
-	@Input() customViewMatcheClassName: string = 'highlight';
+	@Input() customViewMatcheClassName: string = 'copyleaks-highlight';
 
 	@Input() allowCustomViewAddBtn: boolean = false;
 
@@ -843,7 +843,9 @@ export class ContentViewerContainerComponent implements OnInit, AfterViewInit, O
 	// Function to attach click event to highlight
 	attachHighlightClickEvent(customMatchId) {
 		if (this.customMatchesWithEventListenersIds.includes(customMatchId)) return;
-		const elements = document.querySelectorAll('.highlight[data-id="' + customMatchId + '"]');
+		const elements = document.querySelectorAll(
+			'.' + this.customViewMatcheClassName + '[data-id="' + customMatchId + '"]'
+		);
 		elements.forEach(element => {
 			element.addEventListener('click', event => {
 				event.stopPropagation(); // Prevent event bubbling
@@ -895,7 +897,9 @@ export class ContentViewerContainerComponent implements OnInit, AfterViewInit, O
 
 	attachHighlightAvatar(customMatchId) {
 		if (this.customMatchesWithAvatarsIds.includes(customMatchId)) return;
-		const elements = document.querySelectorAll('.highlight[data-id="' + customMatchId + '"]');
+		const elements = document.querySelectorAll(
+			'.' + this.customViewMatcheClassName + '[data-id="' + customMatchId + '"]'
+		);
 
 		if (elements.length > 0) {
 			// create a div element and put the avatar inside it
@@ -916,16 +920,22 @@ export class ContentViewerContainerComponent implements OnInit, AfterViewInit, O
 			avatarContainer.style.top = `${top}px`;
 
 			avatarContainer.addEventListener('mouseover', () => {
-				const highlightedElements = document.querySelectorAll('.highlight[data-id="' + customMatchId + '"]');
+				const highlightedElements = document.querySelectorAll(
+					'.' + this.customViewMatcheClassName + '[data-id="' + customMatchId + '"]'
+				);
 				highlightedElements.forEach(e => e?.classList?.toggle('hover'));
 			});
 			avatarContainer.addEventListener('mouseout', () => {
-				const highlightedElements = document.querySelectorAll('.highlight[data-id="' + customMatchId + '"]');
+				const highlightedElements = document.querySelectorAll(
+					'.' + this.customViewMatcheClassName + '[data-id="' + customMatchId + '"]'
+				);
 				highlightedElements.forEach(e => e?.classList?.toggle('hover'));
 			});
 			avatarContainer.addEventListener('click', () => {
-				// send click event to document.querySelectorAll('.highlight[data-id="' + customMatchId + '"]')
-				const highlightedElements = document.querySelectorAll('.highlight[data-id="' + customMatchId + '"]');
+				// send click event to document.querySelectorAll('.' + this.customViewMatcheClassName + '[data-id="' + customMatchId + '"]')
+				const highlightedElements = document.querySelectorAll(
+					'.' + this.customViewMatcheClassName + '[data-id="' + customMatchId + '"]'
+				);
 				highlightedElements.forEach(e => (e as HTMLElement)?.click());
 			});
 

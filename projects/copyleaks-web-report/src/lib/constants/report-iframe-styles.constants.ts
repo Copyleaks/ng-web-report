@@ -272,7 +272,7 @@ span[exclude-partial-scan] .excluded-reason-tooltip {
   white-space: normal ;
 }
 
-		span.highlight {
+		span.copyleaks-highlight {
 			background-color: #ffdf54 ;
 			cursor: pointer;
 			transition: 0.2s ease-in-out;

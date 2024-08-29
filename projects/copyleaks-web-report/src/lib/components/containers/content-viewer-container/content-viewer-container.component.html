@@ -33,7 +33,7 @@
 		</span>
 
 		<span *ngIf="numberOfWords" class="number-of-words" i18n>
-			({{ numberOfWords }}
+			({{ numberOfWords | number }}
 			{numberOfWords, plural, =1 {word} other {words}})
 		</span>
 

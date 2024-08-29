@@ -356,7 +356,7 @@ export class ReportTabsContainerComponent implements OnInit, OnDestroy, OnChange
 					sourcePageIndex: 1,
 					suspectPageIndex: 1,
 					selectedCustomTabId: undefined,
-					isHtmlView: true,
+					isHtmlView: !!this.reportDataSvc.crawledVersion?.html?.value,
 				});
 				this.reportViewSvc.selectedAlert$.next(null);
 				this.reportViewSvc.selectedCustomTabContent$.next(null);
@@ -370,7 +370,7 @@ export class ReportTabsContainerComponent implements OnInit, OnDestroy, OnChange
 					sourcePageIndex: 1,
 					suspectPageIndex: 1,
 					selectedCustomTabId: undefined,
-					isHtmlView: true,
+					isHtmlView: !!this.reportDataSvc.crawledVersion?.html?.value,
 				});
 				this.reportViewSvc.selectedAlert$.next(null);
 				this.reportViewSvc.selectedCustomTabContent$.next(null);

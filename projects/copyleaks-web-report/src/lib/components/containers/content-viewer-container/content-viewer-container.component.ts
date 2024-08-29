@@ -535,7 +535,8 @@ export class ContentViewerContainerComponent implements OnInit, AfterViewInit, O
 		if (
 			((changes['contentHtmlMatches'] && changes['contentHtmlMatches'].currentValue) || this.contentHtmlMatches) &&
 			this.contentIFrame?.nativeElement &&
-			this.isHtmlView
+			this.isHtmlView &&
+			!changes['isMultiSelection']
 		) {
 			this._renderer.setAttribute(this.contentIFrame.nativeElement, 'srcdoc', this.contentHtml);
 			this._cdr.detectChanges();

@@ -2,7 +2,7 @@
 <div class="left-section">
 	<!--Report scan content viewer -->
 	<copyleaks-content-viewer-container
-		[isHtmlView]="isHtmlView"
+		[isHtmlView]="!!sourceCrawledVersion?.html?.value ? isHtmlView : false"
 		[scanSource]="sourceCrawledVersion"
 		[contentTextMatches]="sourceTextMatches"
 		[contentHtmlMatches]="sourceHtmlMatches"
@@ -38,7 +38,7 @@
 	<copyleaks-content-viewer-container
 		style="display: flex; flex-direction: column; flex-grow: 1; overflow-y: auto; gap: 8px"
 		[flexGrow]="80"
-		[isHtmlView]="isHtmlView"
+		[isHtmlView]="!!suspectHtmlMatches ? isHtmlView : false"
 		[resultData]="resultData"
 		[contentTextMatches]="suspectTextMatches"
 		[contentHtmlMatches]="suspectHtmlMatches"

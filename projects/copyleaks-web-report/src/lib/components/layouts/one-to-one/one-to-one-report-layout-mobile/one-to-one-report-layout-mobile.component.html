@@ -23,7 +23,7 @@
 		<copyleaks-content-viewer-container
 			[style.height.%]="topHeightPercent"
 			[style.flex-grow]="topHeightPercent"
-			[isHtmlView]="isHtmlView"
+			[isHtmlView]="!!sourceCrawledVersion?.html?.value ? isHtmlView : false"
 			[scanSource]="sourceCrawledVersion"
 			[contentTextMatches]="sourceTextMatches"
 			[contentHtmlMatches]="sourceHtmlMatches"

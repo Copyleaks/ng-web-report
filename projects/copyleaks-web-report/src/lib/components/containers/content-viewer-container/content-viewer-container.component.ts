@@ -550,12 +550,20 @@ export class ContentViewerContainerComponent implements OnInit, AfterViewInit, O
 
 	onViewChange() {
 		if (!this.iframeLoaded) this.showLoadingView = true;
-		this.viewChangeEvent.emit({
-			...this._viewSvc.reportViewMode,
-			isHtmlView: !this.isHtmlView,
-			viewMode: this.viewMode,
-			sourcePageIndex: this.currentPage,
-		});
+		if (this.reportOrigin === 'original' || this.reportOrigin === 'source')
+			this.viewChangeEvent.emit({
+				...this._viewSvc.reportViewMode,
+				isHtmlView: !this.isHtmlView,
+				viewMode: this.viewMode,
+				sourcePageIndex: this.currentPage,
+			});
+		else
+			this.viewChangeEvent.emit({
+				...this._viewSvc.reportViewMode,
+				isHtmlView: !this.isHtmlView,
+				viewMode: this.viewMode,
+				suspectPageIndex: this.currentPage,
+			});
 		this._highlightService.clear();
 		this._highlightService.clearAllMatchs();
 		this._cdr.detectChanges();

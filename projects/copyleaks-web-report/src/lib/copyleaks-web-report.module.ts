@@ -101,6 +101,7 @@ import { ReportMatchesService } from './services/report-matches.service';
 import { ReportViewService } from './services/report-view.service';
 import { ReportDataService } from './services/report-data.service';
 import { ReportErrorsService } from './services/report-errors.service';
+import { FileNamePipeModule } from './pipes/file-name/file-name.module';
 
 @NgModule({
 	declarations: [
@@ -185,6 +186,7 @@ import { ReportErrorsService } from './services/report-errors.service';
 		MatExpansionModule,
 		SimilarityPipeModule,
 		DecodeUriPipeModule,
+		FileNamePipeModule,
 		SecondsToTimePipeModule,
 		CrReportScoreTooltipModule,
 		CrReportMatchTooltipModule,

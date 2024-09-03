@@ -6,10 +6,10 @@
 				<ng-template #submittedDocumentNameRef>
 					<div
 						class="submitted-doc-name-container"
-						[matTooltip]="submittedDocumentName"
+						[matTooltip]="submittedDocumentName | fileName"
 						matTooltipClass="web-report-mat-tooltip">
 						<mat-icon>description</mat-icon>
-						<span>{{ submittedDocumentName }}</span>
+						<span>{{ submittedDocumentName | fileName }}</span>
 					</div>
 				</ng-template>
 			</ng-container>

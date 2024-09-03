@@ -23,6 +23,7 @@ export class CrCustomTabItemComponent implements OnInit {
 	@Input() tabId: string;
 
 	selected: boolean = false;
+	isTabResultSectionContentNotEmpty: boolean;
 
 	constructor(private _reportViewSvc: ReportViewService) {}
 
@@ -35,19 +36,33 @@ export class CrCustomTabItemComponent implements OnInit {
 			this._reportViewSvc.reportViewMode$.pipe(untilDestroy(this)).subscribe(data => {
 				if (data.selectedCustomTabId !== this.tabId) return;
 				this._reportViewSvc.selectedCustomTabContent$.next(this.tabTemplateContent);
-				this._reportViewSvc.selectedCustomTabResultSectionContent$.next(this.tabTemplateResultSectionContent);
+				this.checkIfTabResultSectionContentNotEmpty();
+				if (this.isTabResultSectionContentNotEmpty)
+					this._reportViewSvc.selectedCustomTabResultSectionContent$.next(this.tabTemplateResultSectionContent);
+				else this._reportViewSvc.selectedCustomTabResultSectionContent$.next(null);
 			});
 	}
 
 	clickEvent() {
 		this._reportViewSvc.selectedCustomTabContent$.next(this.tabTemplateContent);
-		this._reportViewSvc.selectedCustomTabResultSectionContent$.next(this.tabTemplateResultSectionContent);
+		this.checkIfTabResultSectionContentNotEmpty();
+		if (this.isTabResultSectionContentNotEmpty)
+			this._reportViewSvc.selectedCustomTabResultSectionContent$.next(this.tabTemplateResultSectionContent);
+		else this._reportViewSvc.selectedCustomTabResultSectionContent$.next(null);
 		this._reportViewSvc.reportViewMode$.next({
 			...this._reportViewSvc.reportViewMode,
 			selectedCustomTabId: this.tabId,
 			suspectId: null,
 			alertCode: null,
 		});
+	}
+
+	checkIfTabResultSectionContentNotEmpty() {
+		// Create an embedded view to inspect the content
+		const embeddedView = this.tabTemplateResultSectionContent.createEmbeddedView(null);
+		// Check if the embedded view contains any nodes
+		this.isTabResultSectionContentNotEmpty = embeddedView.rootNodes.length > 0;
+		embeddedView.destroy();
 	}
 
 	ngOnDestroy(): void {}

@@ -1,8 +1,12 @@
 <!-- Left side section -->
-<div class="left-section">
+<div
+	[class.web-report-left-section]="reportMode === EReportMode.WebReport"
+	[class.assessment-tool-left-section]="reportMode === EReportMode.AssessmentTool">
 	<ng-container *ngTemplateOutlet="customBannerSectionTemplate ?? null"></ng-container>
 	<!-- Report tabs container --->
 	<copyleaks-report-tabs-container
+		*ngIf="reportMode === EReportMode.WebReport"
+		[reportMode]="reportMode"
 		[hideAiTap]="hideAiTap"
 		[hidePlagarismTap]="hidePlagarismTap"
 		[forceWritingFeedbackTapHide]="hideWritingFeedback"
@@ -30,90 +34,158 @@
 
 	<!-- Report content container  -->
 	<copyleaks-content-viewer-container
+		[ngClass]="{
+			'assessment-tool-view': reportMode === EReportMode.AssessmentTool
+		}"
 		[isHtmlView]="isHtmlView"
 		[isAlertsView]="isAlertsMode"
-		[contentHtml]="iframeHtml"
 		[scanSource]="reportCrawledVersion"
-		[writingFeedback]="writingFeedback"
 		[contentTextMatches]="contentTextMatches"
 		[contentHtmlMatches]="reportMatches"
-		[numberOfPages]="numberOfPages"
-		[numberOfWords]="numberOfWords"
 		[currentPage]="currentPageSource"
 		[reportResponsive]="EResponsiveLayoutType.Desktop"
 		[isMultiSelection]="isMultiSelection"
+		[showOmittedWords]="showOmittedWords"
+		[isPartitalScan]="isPartitalScan"
+		[hasHtml]="
+			viewMode === 'writing-feedback'
+				? !!writingFeedback?.corrections?.html &&
+				  !!writingFeedback?.corrections.html.chars &&
+				  !!writingFeedback?.corrections.html.chars.groupIds &&
+				  !!writingFeedback?.corrections.html.chars.lengths &&
+				  !!writingFeedback?.corrections.html.chars.starts &&
+				  !!writingFeedback?.corrections.html.chars.operationTexts &&
+				  !!writingFeedback?.corrections.html.chars.types
+				: !!reportCrawledVersion?.html?.value
+		"
 		[viewMode]="viewMode"
 		reportOrigin="original"
+		[hidePoweredBy]="reportMode === EReportMode.AssessmentTool"
+		[submittedDocumentName]="scanResultsPreviews?.scannedDocument?.metadata?.filename"
 		(iFrameMessageEvent)="onIFrameMessage($event)"
-		(viewChangeEvent)="onReportViewChange($event)"></copyleaks-content-viewer-container>
+		(viewChangeEvent)="onReportViewChange($event)"
+		(onShowOmittedWords)="onShowOmittedWords($event)"></copyleaks-content-viewer-container>
 </div>
 
 <!-- Right side section -->
-<div *ngIf="!hideRightSection" class="right-section" id="one-to-many-report-right-section">
+<div
+	*ngIf="!hideRightSection"
+	[class.web-report-right-section]="reportMode === EReportMode.WebReport"
+	[class.assessment-tool-middle-section]="reportMode === EReportMode.AssessmentTool"
+	id="one-to-many-report-right-section">
 	<!-- Report actions container -->
 	<copyleaks-report-actions-container [showLoadingView]="isLoadingScanContent"></copyleaks-report-actions-container>
 
 	<!-- Report results & alerts container -->
 	<div class="results-alerts-container" [style.overflow]="isLoadingScanResults ? 'hidden' : ''">
-		<!-- Report alerts container -->
-		<copyleaks-report-alerts-container
-			*ngIf="
-				alerts &&
-				alerts.length > 0 &&
-				!isLoadingScanResults &&
-				reportTemplateMode !== ECustomResultsReportView.Full &&
-				reportTemplateMode !== ECustomResultsReportView.Partial &&
-				viewMode === 'one-to-many'
-			"
-			[class.container-with-custom-results]="reportTemplateMode != undefined"
-			[alerts]="alerts"
-			[flexGrow]="25"></copyleaks-report-alerts-container>
+		<ng-container *ngIf="!selectedCustomTabResultSectionContentTemplate; else customResultSectionRef">
+			<cr-assessment-tool-tab-score-panel
+				*ngIf="reportMode === EReportMode.AssessmentTool && selectedTap !== EReportViewType.WritingFeedbackTabView"
+				[selectedTap]="selectedTap"
+				[plagarismScore]="plagiarismScore"
+				[aiScore]="reportStatistics?.aiScore ?? 0"
+				[writingFeedbackScore]="reportStatistics?.writingFeedbackOverallScore"
+				[totalWritingFeedbackIssues]="reportStatistics?.writingFeedbackOverallIssues"
+				[wordsTotal]="reportStatistics?.total ?? 0"
+				[identicalTotal]="reportStatistics?.identical ?? 0"
+				[minorChangesTotal]="reportStatistics?.minorChanges ?? 0"
+				[paraphrasedTotal]="reportStatistics?.relatedMeaning ?? 0"
+				[excludedTotal]="reportStatistics?.omittedWords ?? 0"
+				[showLoadingView]="isLoadingScanContent || isLoadingScanResults"></cr-assessment-tool-tab-score-panel>
+			<!-- Report alerts container -->
+			<copyleaks-report-alerts-container
+				*ngIf="
+					alerts &&
+					alerts.length > 0 &&
+					!isLoadingScanResults &&
+					reportTemplateMode !== ECustomResultsReportView.Full &&
+					reportTemplateMode !== ECustomResultsReportView.Partial &&
+					viewMode === 'one-to-many'
+				"
+				[class.container-with-custom-results]="reportTemplateMode != undefined"
+				[alerts]="alerts"
+				[flexGrow]="25"></copyleaks-report-alerts-container>
 
-		<!-- Report results container -->
+			<!-- Report results container -->
 
-		<cr-ai-disclaimer *ngIf="selectedTap === EReportViewType.AIView"></cr-ai-disclaimer>
+			<cr-ai-disclaimer *ngIf="selectedTap === EReportViewType.AIView"></cr-ai-disclaimer>
 
-		<copyleaks-report-results-container
-			*ngIf="
-				reportTemplateMode !== ECustomResultsReportView.Full &&
-				!(
-					reportTemplateMode === ECustomResultsReportView.Partial &&
-					scanResultsActions.totalResults === 0 &&
-					!isLoadingScanResults
-				) &&
-				viewMode === 'one-to-many' &&
-				selectedTap === EReportViewType.PlagiarismView
-			"
-			[class.container-with-custom-results]="reportTemplateMode != undefined"
-			[flexGrow]="65"
-			[allResults]="scanResultsView"
-			[resultsActions]="scanResultsActions"
-			[showLoadingView]="isLoadingScanResults || isLoadingScanCorrections"
-			[filterOptions]="filterOptions"
-			[newResults]="newScanResultsView"></copyleaks-report-results-container>
+			<copyleaks-report-results-container
+				*ngIf="
+					reportTemplateMode !== ECustomResultsReportView.Full &&
+					!(
+						reportTemplateMode === ECustomResultsReportView.Partial &&
+						scanResultsActions.totalResults === 0 &&
+						!isLoadingScanResults
+					) &&
+					viewMode === 'one-to-many' &&
+					selectedTap === EReportViewType.PlagiarismView
+				"
+				[class.container-with-custom-results]="reportTemplateMode != undefined"
+				[flexGrow]="65"
+				[allResults]="scanResultsView"
+				[resultsActions]="scanResultsActions"
+				[showLoadingView]="isLoadingScanResults || isLoadingScanCorrections"
+				[filterOptions]="filterOptions"
+				[newResults]="newScanResultsView"></copyleaks-report-results-container>
 
-		<ng-container *ngIf="viewMode === 'writing-feedback'">
-			<cr-readability-score
-				*ngIf="!showReadabilityLoadingView"
-				[statisticsInfo]="writingFeedback?.score?.statistics"
-				[readabilityInfo]="writingFeedback?.score?.readability"
-				[showLoadingView]="showReadabilityLoadingView"></cr-readability-score>
+			<ng-container *ngIf="viewMode === 'writing-feedback'">
+				<cr-readability-score
+					*ngIf="!showReadabilityLoadingView"
+					[statisticsInfo]="writingFeedback?.score?.statistics"
+					[readabilityInfo]="writingFeedback?.score?.readability"
+					[showLoadingView]="showReadabilityLoadingView"></cr-readability-score>
 
-			<copyleaks-report-corrections-container
-				[totalWritingFeedbackIssues]="allScanCorrectionsView?.length ?? 0"
-				[totalFilteredCorrections]="totalFilteredCorrections"
-				[writingFeedbackStats]="writingFeedbackStats"
-				[allWritingFeedbacksStats]="allWritingFeedbacksStats"
-				[allScanCorrectionsView]="allScanCorrectionsView"
-				[displayedScanCorrectionsView]="displayedScanCorrectionsView"
-				[correctionClicked]="correctionClicked"
-				[showLoadingView]="
-					showCorrectionsLoadingView || isLoadingScanCorrections
-				"></copyleaks-report-corrections-container>
+				<copyleaks-report-corrections-container
+					[totalWritingFeedbackIssues]="allScanCorrectionsView?.length ?? 0"
+					[totalFilteredCorrections]="totalFilteredCorrections"
+					[writingFeedbackStats]="writingFeedbackStats"
+					[allWritingFeedbacksStats]="allWritingFeedbacksStats"
+					[allScanCorrectionsView]="allScanCorrectionsView"
+					[displayedScanCorrectionsView]="displayedScanCorrectionsView"
+					[correctionClicked]="correctionClicked"
+					[showLoadingView]="
+						showCorrectionsLoadingView || isLoadingScanCorrections
+					"></copyleaks-report-corrections-container>
+			</ng-container>
+
+			<div class="custom-results-container" #customResultView [style.flex-grow]="'1'">
+				<ng-container *ngTemplateOutlet="customResultsTemplate ?? null"></ng-container>
+			</div>
 		</ng-container>
-
-		<div class="custom-results-container" #customResultView [style.flex-grow]="'1'">
-			<ng-container *ngTemplateOutlet="customResultsTemplate ?? null"></ng-container>
-		</div>
+		<ng-template #customResultSectionRef>
+			<div class="custom-tab-item-results-section" [style.flex-grow]="'1'">
+				<ng-container *ngTemplateOutlet="selectedCustomTabResultSectionContentTemplate ?? null"></ng-container>
+			</div>
+		</ng-template>
 	</div>
 </div>
+
+<copyleaks-report-tabs-container
+	*ngIf="reportMode === EReportMode.AssessmentTool"
+	class="assessment-tool-tabs"
+	[reportMode]="reportMode"
+	[hideAiTap]="hideAiTap"
+	[hidePlagarismTap]="hidePlagarismTap"
+	[forceWritingFeedbackTapHide]="hideWritingFeedback"
+	[hideWritingFeedbackTap]="hideWritingFeedbackTap"
+	[selectedTap]="selectedTap"
+	[plagarismScore]="plagiarismScore"
+	[aiScore]="reportStatistics?.aiScore ?? 0"
+	[writingFeedbackScore]="reportStatistics?.writingFeedbackOverallScore"
+	[totalWritingFeedbackIssues]="reportStatistics?.writingFeedbackOverallIssues"
+	[wordsTotal]="reportStatistics?.total ?? 0"
+	[identicalTotal]="reportStatistics?.identical ?? 0"
+	[minorChangesTotal]="reportStatistics?.minorChanges ?? 0"
+	[paraphrasedTotal]="reportStatistics?.relatedMeaning ?? 0"
+	[excludedTotal]="reportStatistics?.omittedWords ?? 0"
+	[showLoadingView]="
+		selectedTap === EReportViewType.WritingFeedbackTabView
+			? isLoadingScanCorrections
+			: isLoadingScanContent || isLoadingScanResults
+	"
+	[hideAiTap]="hideAiTap"
+	[hidePlagarismTap]="hidePlagarismTap"
+	[showDisabledProducts]="showDisabledProducts"
+	[loadingProgressPct]="loadingProgressPct"
+	[companyLogo]="companyLogo"></copyleaks-report-tabs-container>

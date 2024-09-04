@@ -1,4 +1,4 @@
-import { AfterContentInit, ContentChildren, Directive, Input, OnDestroy, QueryList } from '@angular/core';
+import { AfterContentInit, ContentChildren, Directive, EventEmitter, Input, OnDestroy, QueryList } from '@angular/core';
 import { Subject } from 'rxjs';
 import { distinctUntilChanged, filter, take, takeUntil, withLatestFrom } from 'rxjs/operators';
 import { CrTextMatchComponent } from '../components/core/cr-text-match/cr-text-match.component';
@@ -9,12 +9,20 @@ import * as helpers from '../utils/highlight-helpers';
 import { untilDestroy } from '../utils/until-destroy';
 import { ReportMatchesService } from '../services/report-matches.service';
 import { IWritingFeedbackCorrectionViewModel } from '../models/report-data.models';
+import { PageEvent } from '../components/core/cr-paginator/models/cr-paginator.models';
 
 @Directive({
 	selector: '[crOriginalTextHelper]',
 })
 export class OriginalTextHelperDirective implements AfterContentInit, OnDestroy {
-	@Input() public host: { contentTextMatches: any; currentPage: number };
+	@Input() public host: {
+		contentTextMatches: any;
+		currentPage: number;
+		customViewMatchesData: { id: string; start: number; end: number; pageNumber: number }[][];
+		customViewMatcheClassName;
+		onTextMatchSelectionEvent: EventEmitter<TextMatchHighlightEvent | any>;
+		onPaginationEvent(event: PageEvent): void;
+	};
 	private unsubscribe$ = new Subject();
 
 	private lastSelectedOriginalTextMatch: TextMatchHighlightEvent;
@@ -27,30 +35,110 @@ export class OriginalTextHelperDirective implements AfterContentInit, OnDestroy 
 
 	@ContentChildren(CrTextMatchComponent)
 	private children: QueryList<CrTextMatchComponent>;
-	private current: CrTextMatchComponent | null;
+	private current: CrTextMatchComponent | Element | null;
 
 	/**
 	 * Handles the jump logic
 	 * @param forward the direction of the jump
 	 */
 	handleJump(forward: boolean) {
-		if (this.canJumpInCurrentPage(forward)) {
-			const components = this.children.toArray();
-			const nextIndex = this.current ? components.indexOf(this.current) + (forward ? 1 : -1) : 0;
-			this.highlightService.textMatchClicked({ elem: components[nextIndex], broadcast: true, origin: 'original' });
+		if (this.host.customViewMatchesData) {
+			let customMatches = document.querySelectorAll('.' + this.host.customViewMatcheClassName);
+			if (customMatches.length === 0) return;
+			const canJump = forward
+				? this.current !== customMatches[customMatches.length - 1]
+				: this.current !== customMatches[0];
+
+			if (canJump) {
+				const components = Array.from(customMatches);
+				const nextIndex = this.current ? components.indexOf(this.current as Element) + (forward ? 1 : -1) : 0;
+				const selectedElementId = (components[nextIndex] as HTMLElement)?.dataset?.['id'];
+				this.selecteCustomElementById(selectedElementId, components, nextIndex);
+			} else {
+				let nextPage = null;
+				if (forward) {
+					for (let i = this.host.currentPage; i < this.host.customViewMatchesData.length; i++) {
+						if (this.host.customViewMatchesData[i].length > 0) {
+							nextPage = i + 1;
+							break;
+						}
+					}
+				} else {
+					for (let i = this.host.currentPage - 2; i >= 0; i--) {
+						if (this.host.customViewMatchesData[i].length > 0) {
+							nextPage = i + 1;
+							break;
+						}
+					}
+				}
+				if (nextPage === null) nextPage = this.host.currentPage;
+
+				if (this.host.currentPage !== nextPage) {
+					this.host.currentPage = nextPage;
+					this.host.onPaginationEvent({
+						pageIndex: nextPage,
+						preIndex: nextPage,
+					});
+					setTimeout(() => {
+						customMatches = document.querySelectorAll('.' + this.host.customViewMatcheClassName);
+						const components = Array.from(customMatches);
+						const nextIndex = forward ? 0 : customMatches.length - 1;
+						const selectedElementId = (components[nextIndex] as HTMLElement)?.dataset?.['id'];
+						this.selecteCustomElementById(selectedElementId, components, nextIndex);
+					});
+				}
+			}
 		} else {
-			const page = (forward ? helpers.findNextPageWithMatch : helpers.findPrevPageWithMatch)(
-				this.host.contentTextMatches,
-				this.host.currentPage
-			);
-			if (this.host.currentPage !== page) {
-				this.children.changes.pipe(take(1)).subscribe(() => {
-					const comp = forward ? this.children.first : this.children.last;
-					this.highlightService.textMatchClicked({ elem: comp, broadcast: true, origin: 'original' });
-				});
-				this.host.currentPage = page;
+			if (this.canJumpInCurrentPage(forward)) {
+				const components = this.children.toArray();
+				const nextIndex = this.current
+					? components.indexOf(this.current as CrTextMatchComponent) + (forward ? 1 : -1)
+					: 0;
+				this.highlightService.textMatchClicked({ elem: components[nextIndex], broadcast: true, origin: 'original' });
+			} else {
+				const page = (forward ? helpers.findNextPageWithMatch : helpers.findPrevPageWithMatch)(
+					this.host.contentTextMatches,
+					this.host.currentPage
+				);
+				if (this.host.currentPage !== page) {
+					this.children.changes.pipe(take(1)).subscribe(() => {
+						const comp = forward ? this.children.first : this.children.last;
+						this.highlightService.textMatchClicked({ elem: comp, broadcast: true, origin: 'original' });
+					});
+					this.host.currentPage = page;
+				}
 			}
 		}
+	}
+
+	selecteCustomElementById(selectedElementId: string, components: Element[], nextIndex: number) {
+		const contentContainer = document.querySelector('.content-container')?.querySelector('.content-container');
+		if (!contentContainer) return;
+
+		const rect = components[nextIndex].getBoundingClientRect();
+		let scrollY = contentContainer.scrollTop;
+
+		const top = rect.top + scrollY;
+
+		const selectedAnnotation = this.host.customViewMatchesData[this.host.currentPage - 1].find(
+			cvm => cvm.id === selectedElementId
+		);
+		const annotationEvent = {
+			type: 'annotation-click',
+			id: selectedAnnotation.id,
+			start: selectedAnnotation.start,
+			end: selectedAnnotation.end,
+			offsetTop: top + 'px',
+			scrollViewOffsetTop: rect.top + 'px',
+		};
+		this.host.onTextMatchSelectionEvent.emit(annotationEvent);
+
+		this.current = components[nextIndex];
+		components.forEach(c => {
+			c.classList.remove('selected');
+		});
+		(this.current as HTMLElement).scrollIntoView({ behavior: 'smooth', block: 'center' });
+		(this.current as HTMLElement).classList.add('selected');
 	}
 
 	/**
@@ -233,6 +321,21 @@ export class OriginalTextHelperDirective implements AfterContentInit, OnDestroy 
 			.subscribe(([correctionSelect, _]) => {
 				this.handleCorrectionSelect(correctionSelect);
 			});
+
+		this.host.onTextMatchSelectionEvent.subscribe((event: any) => {
+			if (event.type === 'annotation-click') {
+				const customMatches = document.querySelectorAll('.' + this.host.customViewMatcheClassName);
+				const components = Array.from(customMatches);
+				const clickedElement = components.find(c => (c as HTMLElement)?.dataset?.['id'] === event.id);
+				this.current = clickedElement;
+				components.forEach(c => {
+					c.classList.remove('selected');
+				});
+				if (!clickedElement) return;
+
+				(this.current as HTMLElement).classList.add('selected');
+			}
+		});
 	}
 
 	ngOnDestroy() {

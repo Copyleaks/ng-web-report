@@ -1,5 +1,5 @@
 import { Component, EventEmitter, Input, OnChanges, OnInit, Output, SimpleChanges } from '@angular/core';
-import { EPlatformType, EResultPreviewType } from '../../../../../enums/copyleaks-web-report.enums';
+import { EPlatformType, EReportViewType, EResultPreviewType } from '../../../../../enums/copyleaks-web-report.enums';
 import { ReportViewService } from '../../../../../services/report-view.service';
 import { IResultItem } from '../models/report-result-item.models';
 import { IPercentageResult } from '../percentage-result-item/models/percentage-result-item.models';
@@ -27,6 +27,8 @@ export class ReportExpandResultItemComponent implements OnInit, OnChanges {
 
 	faviconExists: boolean = true;
 	faviconURL: string;
+
+	EReportViewType = EReportViewType;
 
 	get authorName() {
 		if (this.resultItem?.resultPreview) {
@@ -120,7 +122,7 @@ export class ReportExpandResultItemComponent implements OnInit, OnChanges {
 		if (!!this.resultItem?.resultPreview?.metadata?.organization) {
 			if (!this.resultItem.resultPreview.tags) this.resultItem.resultPreview.tags = [];
 			if (this.resultItem.resultPreview.tags.find(tag => tag.code === 'organization') === undefined)
-				this.resultItem.resultPreview.tags.unshift({
+				this.resultItem.resultPreview?.tags?.unshift({
 					title: this.resultItem?.resultPreview?.metadata?.organization,
 					description: $localize`Organization Name`,
 					code: 'organization',
@@ -135,7 +137,7 @@ export class ReportExpandResultItemComponent implements OnInit, OnChanges {
 			if (!this.resultItem.resultPreview.tags) this.resultItem.resultPreview.tags = [];
 			// push 'Your File' tag to the start of tags array
 			if (this.resultItem.resultPreview.tags.find(tag => tag.code === 'your-file') === undefined)
-				this.resultItem.resultPreview.tags.unshift({
+				this.resultItem?.resultPreview?.tags?.unshift({
 					title:
 						this.reportViewSvc?.reportViewMode?.platformType === EPlatformType.APP
 							? $localize`Your File`

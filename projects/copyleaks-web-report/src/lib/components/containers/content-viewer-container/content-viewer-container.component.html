@@ -1,7 +1,18 @@
 <div @fadeIn *ngIf="!hideTitleContainer && !customTabContent && !showLoadingView" class="title-and-actions-container">
 	<div class="title-container">
 		<span class="title" web-report-title-font>
-			<ng-container *ngIf="reportOrigin != 'suspect'" i18n>Submitted text</ng-container>
+			<ng-container *ngIf="reportOrigin != 'suspect'" i18n>
+				<ng-container *ngIf="!submittedDocumentName; else submittedDocumentNameRef">Submitted text</ng-container>
+				<ng-template #submittedDocumentNameRef>
+					<div
+						class="submitted-doc-name-container"
+						[matTooltip]="submittedDocumentName | fileName"
+						matTooltipClass="web-report-mat-tooltip">
+						<mat-icon>description</mat-icon>
+						<span>{{ submittedDocumentName | fileName }}</span>
+					</div>
+				</ng-template>
+			</ng-container>
 			<ng-container *ngIf="reportOrigin === 'suspect'" i18n>
 				<div class="has-masked-content-title">
 					<button
@@ -20,9 +31,10 @@
 				</div>
 			</ng-container>
 		</span>
+
 		<span *ngIf="numberOfWords" class="number-of-words" i18n>
-			({{ numberOfWords }}
-			{numberOfWords, plural, =1 {word} other {words}} )
+			({{ numberOfWords | number }}
+			{numberOfWords, plural, =1 {word} other {words}})
 		</span>
 
 		<svg
@@ -271,7 +283,9 @@
 				sandbox="allow-scripts"
 				crOriginalHtmlHelper
 				title="Submitted text"></iframe>
+
 			<div
+				*ngIf="!customTabContent"
 				class="text-container"
 				#contentText
 				[ngStyle]="{
@@ -282,7 +296,8 @@
 				[dir]="contentDirection"
 				crOriginalTextHelper
 				[host]="this"
-				text-container>
+				text-container
+				(mouseup)="showAddCustomMatchIcon($event)">
 				<ng-container *ngIf="contentTextMatches; else clean">
 					<ng-container *ngFor="let partial of contentTextMatches[currentPage - 1]">
 						<span *ngIf="partial.match.type === MatchType.none">{{ partial.content }}</span>
@@ -329,6 +344,17 @@
 				<ng-template #clean>
 					{{ scanSource && (scanSource.text.value | slice : pages[currentPage - 1] : pages[currentPage]) }}
 				</ng-template>
+				<div
+					*ngIf="isExportedComponent"
+					id="highlight-icon"
+					[ngStyle]="{
+						'top.px': iconPosition.top,
+						'left.px': iconPosition.left,
+						display: iconVisible ? 'flex' : 'none'
+					}"
+					(mouseup)="addCustomMatchBtnClick($event)">
+					<mat-icon fontSet="material-icons-round">add</mat-icon>
+				</div>
 			</div>
 		</ng-container>
 

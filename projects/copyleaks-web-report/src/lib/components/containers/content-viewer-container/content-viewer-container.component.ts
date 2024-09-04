@@ -17,19 +17,35 @@ import {
 } from '@angular/core';
 import { PostMessageEvent, ZoomEvent } from '../../../models/report-iframe-events.models';
 import { IReportViewEvent } from '../../../models/report-view.models';
-import { Match, MatchType, ReportOrigin, ResultDetailItem, SlicedMatch } from '../../../models/report-matches.models';
+import {
+	Match,
+	MatchType,
+	ReportOrigin,
+	ResultDetailItem,
+	SlicedMatch,
+	TextMatchHighlightEvent,
+} from '../../../models/report-matches.models';
 import { DirectionMode as ReportContentDirectionMode, ViewMode } from '../../../models/report-config.models';
 import { TEXT_FONT_SIZE_UNIT, MIN_TEXT_ZOOM, MAX_TEXT_ZOOM } from '../../../constants/report-content.constants';
 import { PageEvent } from '../../core/cr-paginator/models/cr-paginator.models';
 import { ReportMatchHighlightService } from '../../../services/report-match-highlight.service';
-import { IScanSource, IWritingFeedback } from '../../../models/report-data.models';
-import { EExcludeReason, EResponsiveLayoutType } from '../../../enums/copyleaks-web-report.enums';
+import { IScanSource } from '../../../models/report-data.models';
+import { EResponsiveLayoutType } from '../../../enums/copyleaks-web-report.enums';
 import { ReportViewService } from '../../../services/report-view.service';
 import { untilDestroy } from '../../../utils/until-destroy';
 import { EXCLUDE_MESSAGE } from '../../../constants/report-exclude.constants';
 import { IAuthorAlertCard } from '../report-alerts-container/components/author-alert-card/models/author-alert-card.models';
 import { animate, state, style, transition, trigger } from '@angular/animations';
-import { ReportMatchesService } from '../../../services/report-matches.service';
+import * as helpers from '../../../utils/report-match-helpers';
+import { COPYLEAKS_REPORT_IFRAME_STYLES } from '../../../constants/report-iframe-styles.constants';
+
+import oneToManyIframeJsScript from '../../../utils/one-to-many-iframe-logic';
+import oneToOneIframeJsScript from '../../../utils/one-to-one-iframe-logic';
+import { filter } from 'rxjs/operators';
+import * as rangy from 'rangy';
+import * as rangyclassapplier from 'rangy/lib/rangy-classapplier';
+
+import { MD5 } from 'crypto-js';
 
 @Component({
 	selector: 'copyleaks-content-viewer-container',
@@ -81,6 +97,17 @@ export class ContentViewerContainerComponent implements OnInit, AfterViewInit, O
 	@Input() isHtmlView: boolean;
 
 	/**
+	 * @Input Determines if the view should be rendered as HTML.
+	 *
+	 * @description
+	 * When set to `true`, the component will view the source/result conent as HTML `only` if the source/result has such content.
+	 * When set to `false`, the text view will be showed.
+	 *
+	 * @default `false`
+	 */
+	@Input() isExportedComponent: boolean = false;
+
+	/**
 	 * @Input Determines if the view is for alerts or not.
 	 *
 	 * @description
@@ -100,25 +127,12 @@ export class ContentViewerContainerComponent implements OnInit, AfterViewInit, O
 	@Input() scanSource: IScanSource;
 
 	/**
-	 * @Input The writing feedback data
-	 *
-	 * @description
-	 * Includes data about the text & Html views.
-	 */
-	@Input() writingFeedback: IWritingFeedback;
-
-	/**
 	 * @Input The scan result data
 	 *
 	 * @description
 	 * Includes data about the text & Html views of the result.
 	 */
 	@Input() resultData: ResultDetailItem;
-
-	/**
-	 * @Input The rerendered content HTML which includes the scan matches
-	 */
-	@Input() contentHtml: string;
 
 	/**
 	 * @Input The source/result text view matches.
@@ -177,16 +191,6 @@ export class ContentViewerContainerComponent implements OnInit, AfterViewInit, O
 	@Input() currentPage: number = 1;
 
 	/**
-	 * @Input The total number of pages in the text view document.
-	 */
-	@Input() numberOfPages: number = 1;
-
-	/**
-	 * @Input The total number of words in the source/result document content.
-	 */
-	@Input() numberOfWords: number | undefined = undefined;
-
-	/**
 	 * Sets the report view mode.
 	 *
 	 * @description
@@ -230,7 +234,7 @@ export class ContentViewerContainerComponent implements OnInit, AfterViewInit, O
 	 *
 	 * @see EResponsiveLayoutType
 	 */
-	@Input() reportResponsive: EResponsiveLayoutType;
+	@Input() reportResponsive: EResponsiveLayoutType = EResponsiveLayoutType.Desktop;
 
 	/**
 	 * @Input {boolean} Flag indicating whether to show the loading view or not.
@@ -238,11 +242,39 @@ export class ContentViewerContainerComponent implements OnInit, AfterViewInit, O
 	@Input() showLoadingView = true;
 
 	/**
+	 * @Input {boolean} Flag indicating whether to show the omitted words or not.
+	 */
+	@Input() showOmittedWords = false;
+
+	/**
+	 * @Input {boolean} Flag indicating whether the scan is a partital scan or not.
+	 */
+	@Input() isPartitalScan: boolean = false;
+
+	/**
 	 * @Input {boolean} Flag indicating whether the match selection is multiple or not.
 	 */
 	@Input() isMultiSelection = false;
 
+	/**
+	 * @Input {string} Submitted document name.
+	 */
+	@Input() submittedDocumentName = null;
+
 	@Input() authorAlert: IAuthorAlertCard | null;
+
+	/**
+	 * `true` if the source document has an `html` section
+	 */
+	@Input() hasHtml: boolean;
+
+	@Input() customIframeScript: string;
+
+	@Input() customViewMatchesData: { id: string; start: number; end: number; text: string; pageNumber: number }[][];
+
+	@Input() customViewMatcheClassName: string = 'copyleaks-highlight';
+
+	@Input() allowCustomViewAddBtn: boolean = false;
 
 	/**
 	 * Emits iFrame messages to the parent layout component.
@@ -258,6 +290,11 @@ export class ContentViewerContainerComponent implements OnInit, AfterViewInit, O
 	 * @see PostMessageEvent
 	 */
 	@Output() iFrameMessageEvent = new EventEmitter<PostMessageEvent>();
+
+	/**
+	 * Emits events when a match is selected.
+	 */
+	@Output() onTextMatchSelectionEvent = new EventEmitter<TextMatchHighlightEvent | any>();
 
 	/**
 	 * Emits events when there are changes to the component's view.
@@ -282,38 +319,39 @@ export class ContentViewerContainerComponent implements OnInit, AfterViewInit, O
 	 */
 	@Output() onOpenDisclaimer: EventEmitter<any> = new EventEmitter<any>();
 
+	/**
+	 * Event emitter for Opening the disclaimer.
+	 *
+	 * @event onShowOmittedWords
+	 * @type {EventEmitter<boolean>}
+	 */
+	@Output() onShowOmittedWords: EventEmitter<boolean> = new EventEmitter<boolean>();
+
+	rerendered: boolean = false;
+	textStartIndex: number | null = null;
+	textEndIndex: number | null = null;
+	observer: MutationObserver;
+
 	isShiftClicked: boolean;
 	iframeLoaded: boolean;
-	showOmittedWords: boolean;
-	isPartitalScan: boolean;
+
+	numberOfPages: number = 1;
+	numberOfWords: number | undefined = undefined;
+
+	contentHtml: string;
 
 	EXCLUDE_MESSAGE = EXCLUDE_MESSAGE;
 	VIEW_OMITTED_WORDS_TOOLTIP_MESSAGE = $localize`Show omitted words`;
 	HIDE_OMITTED_WORDS_TOOLTIP_MESSAGE = $localize`Hide omitted words`;
+
+	iframeStyle: string = COPYLEAKS_REPORT_IFRAME_STYLES;
+	iframeJsScript: string;
 
 	get pages(): number[] {
 		if (this.scanSource) return this.scanSource && this.scanSource.text.pages.startPosition;
 		if (this.resultData.result) return this.resultData.result?.text.pages.startPosition;
 
 		return [];
-	}
-
-	/**
-	 * `true` if the source document has an `html` section
-	 */
-	get hasHtml(): boolean {
-		if (this.viewMode === 'writing-feedback')
-			return (
-				!!this.writingFeedback?.corrections?.html &&
-				!!this.writingFeedback.corrections.html.chars &&
-				!!this.writingFeedback.corrections.html.chars.groupIds &&
-				!!this.writingFeedback.corrections.html.chars.lengths &&
-				!!this.writingFeedback.corrections.html.chars.starts &&
-				!!this.writingFeedback.corrections.html.chars.operationTexts &&
-				!!this.writingFeedback.corrections.html.chars.types
-			);
-		if (this.reportOrigin === 'original' || this.reportOrigin === 'source') return !!this.scanSource?.html?.value;
-		return !!this.contentHtml;
 	}
 
 	iFrameWindow: Window | null; // IFrame nativeElement reference
@@ -323,8 +361,16 @@ export class ContentViewerContainerComponent implements OnInit, AfterViewInit, O
 
 	customTabContent: TemplateRef<any> | null;
 
+	customMatchTobeAddedData = null;
+
 	ONLY_TEXT_VIEW_IS_AVAILABLE = $localize`Only text view is available`;
 	MULTISELECT_IS_ON = $localize`Can't navigate between matches when multiple matches are selected`;
+
+	iconPosition = { top: 0, left: 0 };
+	iconVisible = false;
+
+	customMatchesWithEventListenersIds: string[] = [];
+	customMatchesWithAvatarsIds: string[] = [];
 
 	private _zoomIn: boolean;
 
@@ -332,27 +378,32 @@ export class ContentViewerContainerComponent implements OnInit, AfterViewInit, O
 		private _renderer: Renderer2,
 		private _cdr: ChangeDetectorRef,
 		private _highlightService: ReportMatchHighlightService,
-		private _matchesService: ReportMatchesService,
-		private _viewSvc: ReportViewService
+		private _viewSvc: ReportViewService,
+		private _el: ElementRef
 	) {}
 
 	ngOnInit(): void {
 		if (this.flexGrow !== undefined && this.flexGrow !== null) this.flexGrowProp = this.flexGrow;
-		if (this.currentPage > this.numberOfPages) this.currentPage = 1;
 
-		this._viewSvc.selectedCustomTabContent$.pipe(untilDestroy(this)).subscribe(content => {
-			if (this.viewMode !== 'one-to-one') this.customTabContent = content;
-		});
+		if (!this.isExportedComponent)
+			this._viewSvc.selectedCustomTabContent$.pipe(untilDestroy(this)).subscribe(content => {
+				if (this.viewMode !== 'one-to-one') this.customTabContent = content;
+			});
 
-		this._matchesService.showOmittedWords$.pipe(untilDestroy(this)).subscribe(value => {
-			this.showOmittedWords = value;
-		});
+		this._highlightService.textMatchClick$
+			.pipe(
+				filter(event => event.origin === this.reportOrigin),
+				untilDestroy(this)
+			)
+			.subscribe(event => {
+				this.onTextMatchSelectionEvent.emit(event);
+			});
 	}
 
 	ngAfterViewInit() {
-		if (this.contentHtml) this._renderer.setAttribute(this.contentIFrame.nativeElement, 'srcdoc', this.contentHtml);
+		if (this.contentHtml) this._renderer.setAttribute(this.contentIFrame?.nativeElement, 'srcdoc', this.contentHtml);
 
-		this.contentIFrame.nativeElement.addEventListener(
+		this.contentIFrame?.nativeElement?.addEventListener(
 			'load',
 			() => {
 				if (this.contentHtml) {
@@ -364,49 +415,155 @@ export class ContentViewerContainerComponent implements OnInit, AfterViewInit, O
 			false
 		);
 
-		this.contentText.nativeElement.addEventListener('wheel', this._handleScroll, { passive: false });
+		this.contentText?.nativeElement?.addEventListener('wheel', this._handleScroll, { passive: false });
+		if (this.allowCustomViewAddBtn) {
+			document.addEventListener('selectionchange', () => {
+				const selection = window.getSelection();
+				if (selection && selection.rangeCount > 0) {
+					const range = selection.getRangeAt(0);
+					if (this._el.nativeElement.contains(range.commonAncestorContainer) && !document.getSelection().toString()) {
+						this.hideAddCustomMatchIcon();
+					} else if (
+						this._el.nativeElement.contains(range.commonAncestorContainer) &&
+						this.reportResponsive === EResponsiveLayoutType.Mobile
+					) {
+						this.showAddCustomMatchIcon(null);
+					}
+				} else this.hideAddCustomMatchIcon();
+			});
+
+			// Mutation observer to handle DOM changes
+			this.observer = new MutationObserver(() => {
+				// Temporarily disconnect the observer to prevent infinite loop
+				this.observer.disconnect();
+
+				// Reconnect the observer
+				this.observer.observe(this.contentText?.nativeElement, {
+					childList: true,
+					subtree: true,
+					characterData: true,
+				});
+			});
+
+			this.observer.observe(this.contentText?.nativeElement, {
+				childList: true,
+				subtree: true,
+				characterData: true,
+			});
+
+			// Apply existing customMatches on page load
+			if (this.customViewMatchesData)
+				setTimeout(() => {
+					this.customViewMatchesData[this.currentPage - 1].forEach(customMatch => {
+						this.highlightCustomMatchText(customMatch);
+					});
+				}, 1000);
+		}
 	}
 
 	ngOnChanges(changes: SimpleChanges): void {
-		if (changes['contentHtml'] && changes['contentHtml'].currentValue && this.contentIFrame?.nativeElement) {
-			this._renderer.setAttribute(this.contentIFrame.nativeElement, 'srcdoc', changes['contentHtml'].currentValue);
-			this._cdr.detectChanges();
-			this.showLoadingView = true;
-		}
-
-		if ('currentPage' in changes || ('numberOfPages' in changes && this.currentPage && this.numberOfPages)) {
-			this.currentPage = this.currentPage > this.numberOfPages || this.currentPage <= 0 ? 1 : this.currentPage;
-		}
-
 		if (
 			'contentTextMatches' in changes &&
 			changes['contentTextMatches'].currentValue != undefined &&
 			(!this.isHtmlView || !this.hasHtml)
-		)
+		) {
 			this.showLoadingView = false;
+		}
 
 		if ('isAlertsView' in changes && !changes['isAlertsView'].currentValue && !changes['isAlertsView'].firstChange)
 			this.iframeLoaded = false;
 
-		if ('scanSource' in changes) {
-			if (
-				this.scanSource?.html?.exclude?.reasons?.filter(r => r === EExcludeReason.PartialScan).length > 0 ||
-				this.scanSource?.text?.exclude?.reasons?.filter(r => r === EExcludeReason.PartialScan).length > 0
-			) {
-				this._matchesService.showOmittedWords$.next(true);
-				this.isPartitalScan = true;
+		if (this.allowCustomViewAddBtn && 'customViewMatchesData' in changes) {
+			// Apply existing customMatches on page load
+			if (this.customViewMatchesData)
+				setTimeout(() => {
+					this.customViewMatchesData[this.currentPage - 1].forEach(customMatch => {
+						this.highlightCustomMatchText(customMatch);
+					});
+				}, 1000);
+		}
+		if (
+			'scanSource' in changes ||
+			'reportOrigin' in changes ||
+			'resultData' in changes ||
+			'contentHtmlMatches' in changes ||
+			'isHtmlView' in changes
+		) {
+			this.iframeJsScript = this.reportOrigin === 'original' ? oneToManyIframeJsScript : oneToOneIframeJsScript;
+
+			if ((this.reportOrigin === 'source' || this.reportOrigin === 'original') && !!this.scanSource) {
+				this.numberOfWords = this.scanSource?.metadata?.words ?? 0;
+				this.numberOfPages = this.scanSource?.text?.pages?.startPosition?.length ?? 1;
+				if (
+					this.allowCustomViewAddBtn &&
+					(!this.customViewMatchesData || this.customViewMatchesData.length != this.numberOfPages)
+				)
+					this.customViewMatchesData = Array.from({ length: this.numberOfPages }, () => []);
 			}
+
+			if (this.reportOrigin === 'suspect' && !!this.resultData) {
+				this.numberOfPages = this.resultData.result?.text?.pages?.startPosition?.length ?? 1;
+			}
+
+			if (!!this.contentHtmlMatches && this.isHtmlView) {
+				if (
+					this.contentHtmlMatches &&
+					changes['contentHtmlMatches']?.previousValue != changes['contentHtmlMatches']?.currentValue
+				) {
+					this.showLoadingView = true;
+					this.rerendered = false;
+				}
+
+				if (this.reportOrigin === 'original' || this.reportOrigin === 'source') {
+					const updatedHtml = this._getRenderedMatches(this.contentHtmlMatches, this.scanSource?.html?.value);
+					if (updatedHtml && this.contentHtmlMatches) {
+						this.contentHtml = updatedHtml;
+						this.rerendered = true;
+					}
+				}
+
+				if (this.reportOrigin === 'suspect') {
+					const updatedHtml = this._getRenderedMatches(this.contentHtmlMatches, this.resultData?.result?.html?.value);
+					if (updatedHtml && this.contentHtmlMatches) {
+						this.contentHtml = updatedHtml;
+						this.rerendered = true;
+					}
+				}
+			}
+		}
+
+		if (
+			((changes['contentHtmlMatches'] && changes['contentHtmlMatches'].currentValue) || this.contentHtmlMatches) &&
+			this.contentIFrame?.nativeElement &&
+			this.isHtmlView &&
+			!changes['isMultiSelection']
+		) {
+			this._renderer.setAttribute(this.contentIFrame.nativeElement, 'srcdoc', this.contentHtml);
+			this._cdr.detectChanges();
+			this.showLoadingView = true;
+		}
+
+		if ('submittedDocumentName' in changes && this.submittedDocumentName) {
+			this.submittedDocumentName = decodeURIComponent(this.submittedDocumentName);
 		}
 	}
 
 	onViewChange() {
 		if (!this.iframeLoaded) this.showLoadingView = true;
-		this.viewChangeEvent.emit({
-			...this._viewSvc.reportViewMode,
-			isHtmlView: !this.isHtmlView,
-			viewMode: this.viewMode,
-			sourcePageIndex: this.currentPage,
-		});
+		if (this.reportOrigin === 'original' || this.reportOrigin === 'source')
+			this.viewChangeEvent.emit({
+				...this._viewSvc.reportViewMode,
+				isHtmlView: !this.isHtmlView,
+				viewMode: this.viewMode,
+				sourcePageIndex: this.currentPage,
+			});
+		else
+			this.viewChangeEvent.emit({
+				...this._viewSvc.reportViewMode,
+				isHtmlView: !this.isHtmlView,
+				viewMode: this.viewMode,
+				suspectPageIndex: this.currentPage,
+			});
 		this._highlightService.clear();
 		this._highlightService.clearAllMatchs();
 		this._cdr.detectChanges();
@@ -425,6 +582,12 @@ export class ContentViewerContainerComponent implements OnInit, AfterViewInit, O
 			this._zoomIn = false;
 			this._adjustZoom();
 		} else this.contentZoom = Math.max(this.contentZoom - amount, MIN_TEXT_ZOOM);
+
+		this._cdr.detectChanges();
+
+		setTimeout(() => {
+			this.refreshCustomMatchesAvatars();
+		}, 500);
 	}
 
 	/**
@@ -436,6 +599,29 @@ export class ContentViewerContainerComponent implements OnInit, AfterViewInit, O
 			this._zoomIn = true;
 			this._adjustZoom();
 		} else this.contentZoom = Math.min(this.contentZoom + amount, MAX_TEXT_ZOOM);
+
+		this._cdr.detectChanges();
+
+		setTimeout(() => {
+			this.refreshCustomMatchesAvatars();
+		}, 500);
+	}
+
+	refreshCustomMatchesAvatars() {
+		this.customViewMatchesData.forEach(page => {
+			page.forEach(customMatch => {
+				this.deleteCustomMatchesAvatars(customMatch.id);
+			});
+		});
+		this.customMatchesWithAvatarsIds = [];
+		this.customViewMatchesData[this.currentPage - 1].forEach(customMatch => {
+			this.attachHighlightAvatar(customMatch.id);
+		});
+	}
+
+	deleteCustomMatchesAvatars(customMatchId: string) {
+		const avatar = document.querySelectorAll('.custom-view-avatar-container[data-id="' + customMatchId + '"]');
+		avatar.forEach(element => element.remove());
 	}
 
 	onPaginationEvent(event: PageEvent) {
@@ -453,6 +639,18 @@ export class ContentViewerContainerComponent implements OnInit, AfterViewInit, O
 				...this._viewSvc.reportViewMode,
 				suspectPageIndex: this.currentPage,
 			});
+
+		// Apply existing customMatches on page load
+		if (this.allowCustomViewAddBtn && this.customViewMatchesData)
+			setTimeout(() => {
+				this.customMatchesWithEventListenersIds = [];
+				this.customMatchesWithAvatarsIds = [];
+				this.hideAddCustomMatchIcon();
+				this.refreshCustomMatchesAvatars();
+				this.customViewMatchesData[this.currentPage - 1].forEach(customMatch => {
+					this.highlightCustomMatchText(customMatch);
+				});
+			});
 	}
 
 	/**
@@ -468,7 +666,7 @@ export class ContentViewerContainerComponent implements OnInit, AfterViewInit, O
 	}
 
 	toggleOmittedWordsView() {
-		this._matchesService.showOmittedWords$.next(!this._matchesService.showOmittedWords);
+		this.onShowOmittedWords.emit(!this.showOmittedWords);
 	}
 
 	private _adjustZoom() {
@@ -490,6 +688,332 @@ export class ContentViewerContainerComponent implements OnInit, AfterViewInit, O
 			else if (event.deltaY > 0) this.zoomOut();
 		}
 	};
+
+	/**
+	 * Render list of matches in the iframe's HTML
+	 * @param matches the matches to render
+	 */
+	protected _getRenderedMatches(matches: Match[] | null, originalHtml?: string) {
+		if (this.rerendered == true || !matches || !originalHtml) return null;
+
+		const html = helpers.getRenderedMatches(matches, originalHtml);
+		if (!html) return null;
+
+		const css = this._renderer.createElement('style') as HTMLStyleElement;
+		css.textContent = this.iframeStyle;
+		const iframeStyle = css.outerHTML;
+
+		const js = this._renderer.createElement('script') as HTMLScriptElement;
+		js.textContent = this.iframeJsScript;
+		let iframeJsScript = js.outerHTML;
+
+		if (this.customIframeScript) {
+			const customScript = this._renderer.createElement('script') as HTMLScriptElement;
+			customScript.textContent = this.customIframeScript;
+			iframeJsScript +=
+				customScript.outerHTML +
+				`<script await src="https://cdnjs.cloudflare.com/ajax/libs/rangy/1.3.0/rangy-core.min.js"></script>
+        <script await src="https://cdnjs.cloudflare.com/ajax/libs/rangy/1.3.0/rangy-classapplier.min.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/crypto-js/4.1.1/crypto-js.min.js"></script> `;
+		}
+
+		return html + iframeStyle + iframeJsScript;
+	}
+
+	addCustomMatchBtnClick(event) {
+		if (!this.allowCustomViewAddBtn) return;
+		event.preventDefault();
+		event.stopPropagation();
+
+		// get the current selection top offset
+		const contentContainer = document.querySelector('.content-container')?.querySelector('.content-container');
+		if (!contentContainer) return;
+		const rect = window.getSelection().getRangeAt(0).getBoundingClientRect();
+
+		const scrollY = contentContainer.scrollTop;
+		const top = rect.top + scrollY;
+		const selectTextEvent = {
+			type: 'annotation-select',
+			id: this.customMatchTobeAddedData.id,
+			start: this.customMatchTobeAddedData.start,
+			end: this.customMatchTobeAddedData.end,
+			text: this.customMatchTobeAddedData.selectedText,
+			offsetTop: top + 'px',
+			scrollViewOffsetTop: rect.top + 'px',
+		};
+		this.onTextMatchSelectionEvent.emit(selectTextEvent);
+	}
+
+	getCustomMatchGravatarUrlByEmailAddress(email: string = ''): string {
+		const emailHash = email === '' ? email : MD5(email.trim().toLowerCase()).toString();
+		// TODO add default image
+		return `https://www.gravatar.com/avatar/${emailHash}`;
+	}
+
+	// Generate a unique ID for each customMatch
+	generateCustomMatchId() {
+		return 'annotation-' + Math.random().toString(36).substr(2, 9);
+	}
+
+	// Function to get the text content and compute start and end indices
+	getCustomMatchData(range) {
+		var preSelectionRange = range.cloneRange();
+		preSelectionRange.selectNodeContents(this.contentText?.nativeElement);
+		preSelectionRange.setEnd(range.startContainer, range.startOffset);
+		var start = preSelectionRange.toString().length;
+
+		var selectedText = range.toString();
+		if (!selectedText) return;
+		var end = start + selectedText.length;
+
+		return { id: this.generateCustomMatchId(), start: start, end: end, text: selectedText, pageNumber: 0 };
+	}
+
+	// Function to create and display customMatch
+	createCustomMatch() {
+		if (this.customMatchTobeAddedData) {
+			this.customViewMatchesData[this.currentPage - 1].push(this.customMatchTobeAddedData);
+			// Display customMatch
+
+			// Highlight the selected text
+			this.highlightCustomMatchText(this.customMatchTobeAddedData);
+		}
+	}
+
+	// Function to highlight or remove highlight of the selected text
+	highlightCustomMatchText(customMatch, remove = false) {
+		if (!this.allowCustomViewAddBtn) return;
+		var range = rangy.createRange();
+		var container = this.contentText?.nativeElement;
+		var startContainer, endContainer;
+		var startOffset = customMatch.start;
+		var endOffset = customMatch.end;
+		var offset = 0;
+
+		function findNodeAndOffset(node, targetOffset) {
+			if (node.nodeType === Node.TEXT_NODE) {
+				if (offset + node.length >= targetOffset) {
+					return { node: node, offset: targetOffset - offset };
+				}
+				offset += node.length;
+			} else if (node.nodeType === Node.ELEMENT_NODE) {
+				for (var i = 0; i < node.childNodes.length; i++) {
+					var result = findNodeAndOffset(node.childNodes[i], targetOffset);
+					if (result) {
+						return result;
+					}
+				}
+			}
+			return null;
+		}
+
+		var startNodeInfo = findNodeAndOffset(container, startOffset);
+		startContainer = startNodeInfo.node;
+		startOffset = startNodeInfo.offset;
+
+		offset = 0; // Reset offset for end node search
+		var endNodeInfo = findNodeAndOffset(container, endOffset);
+		endContainer = endNodeInfo.node;
+		endOffset = endNodeInfo.offset;
+
+		// Set the range
+		if (startContainer && endContainer) {
+			range.setStart(startContainer, startOffset);
+			range.setEnd(endContainer, endOffset);
+
+			// Apply or remove highlight
+
+			var highlight = rangyclassapplier.createClassApplier(this.customViewMatcheClassName, {
+				elementTagName: 'span',
+				elementProperties: {
+					className: this.customViewMatcheClassName,
+				},
+				normalize: true, // This ensures that overlapping highlights are merged
+			});
+			if (remove) {
+				highlight.undoToRange(range);
+			} else {
+				highlight.applyToRange(range);
+				setTimeout(() => {
+					this.attachHighlightClickEvent(customMatch.id);
+					this.attachHighlightAvatar(customMatch.id);
+				});
+			}
+
+			// Ensure the data-id attribute is set after applying the highlight
+			document.querySelectorAll('.' + this.customViewMatcheClassName).forEach(element => {
+				if (!element.getAttribute('data-id')) {
+					element.setAttribute('data-id', customMatch.id);
+				}
+			});
+		}
+	}
+
+	// Function to attach click event to highlight
+	attachHighlightClickEvent(customMatchId) {
+		if (this.customMatchesWithEventListenersIds.includes(customMatchId)) return;
+		const elements = document.querySelectorAll(
+			'.' + this.customViewMatcheClassName + '[data-id="' + customMatchId + '"]'
+		);
+		elements.forEach(element => {
+			element.addEventListener('click', event => {
+				event.stopPropagation(); // Prevent event bubbling
+				const flattenedArray = this.customViewMatchesData.reduce((acc, curr) => acc.concat(curr), []);
+				const selectedCustomMatch = flattenedArray.find(customMatch => customMatch.id === customMatchId);
+				if (!selectedCustomMatch) return;
+
+				// check if element has attribute 'on'
+				const isOn = element.classList.contains('selected');
+				if (isOn) {
+					const customMatchEvent = {
+						type: 'annotation-click',
+						id: null,
+						start: null,
+						end: null,
+						text: null,
+						offsetTop: null,
+					};
+					element.classList.remove('selected');
+					this.onTextMatchSelectionEvent.emit(customMatchEvent);
+					return;
+				}
+
+				// add attribute 'on' to the element
+				element.classList.add('selected');
+
+				const contentContainer = document.querySelector('.content-container')?.querySelector('.content-container');
+				if (!contentContainer) return;
+
+				const rect = element.getBoundingClientRect();
+				let scrollY = contentContainer.scrollTop;
+
+				const top = rect.top + scrollY;
+
+				const customMatchEvent = {
+					type: 'annotation-click',
+					id: selectedCustomMatch.id,
+					start: selectedCustomMatch.start,
+					end: selectedCustomMatch.end,
+					text: selectedCustomMatch.text,
+					offsetTop: top + 'px',
+					scrollViewOffsetTop: rect.top + 'px',
+				};
+				this.onTextMatchSelectionEvent.emit(customMatchEvent);
+			});
+			this.customMatchesWithEventListenersIds.push(customMatchId);
+		});
+	}
+
+	attachHighlightAvatar(customMatchId) {
+		if (this.customMatchesWithAvatarsIds.includes(customMatchId)) return;
+		const elements = document.querySelectorAll(
+			'.' + this.customViewMatcheClassName + '[data-id="' + customMatchId + '"]'
+		);
+
+		if (elements.length > 0) {
+			// create a div element and put the avatar inside it
+			const avatarContainer = document.createElement('div');
+			// add data-id attribute to the avatar container
+			avatarContainer.setAttribute('data-id', customMatchId);
+			avatarContainer.className = 'custom-view-avatar-container';
+			const spanRect = elements[elements.length - 1].getBoundingClientRect();
+			const contentTextRect = this.contentText?.nativeElement.getBoundingClientRect();
+
+			let left = spanRect.right - this.contentText.nativeElement.getBoundingClientRect().left;
+			let top = spanRect.top - this.contentText.nativeElement.getBoundingClientRect().top;
+
+			if (left + 40 > contentTextRect.width) {
+				left = contentTextRect.width - 40;
+			}
+			avatarContainer.style.left = `${left}px`;
+			avatarContainer.style.top = `${top}px`;
+
+			avatarContainer.addEventListener('mouseover', () => {
+				const highlightedElements = document.querySelectorAll(
+					'.' + this.customViewMatcheClassName + '[data-id="' + customMatchId + '"]'
+				);
+				highlightedElements.forEach(e => e?.classList?.toggle('hover'));
+			});
+			avatarContainer.addEventListener('mouseout', () => {
+				const highlightedElements = document.querySelectorAll(
+					'.' + this.customViewMatcheClassName + '[data-id="' + customMatchId + '"]'
+				);
+				highlightedElements.forEach(e => e?.classList?.toggle('hover'));
+			});
+			avatarContainer.addEventListener('click', () => {
+				// send click event to document.querySelectorAll('.' + this.customViewMatcheClassName + '[data-id="' + customMatchId + '"]')
+				const highlightedElements = document.querySelectorAll(
+					'.' + this.customViewMatcheClassName + '[data-id="' + customMatchId + '"]'
+				);
+				highlightedElements.forEach(e => (e as HTMLElement)?.click());
+			});
+
+			const img = document.createElement('img');
+			img.src = this.getCustomMatchGravatarUrlByEmailAddress();
+			img.alt = 'User Avatar';
+			img.className = 'custom-view-avatar';
+			avatarContainer.appendChild(img);
+
+			this.contentText.nativeElement.appendChild(avatarContainer);
+
+			this.customMatchesWithAvatarsIds.push(customMatchId);
+		}
+	}
+
+	showAddCustomMatchIcon(_: MouseEvent): void {
+		if (!this.allowCustomViewAddBtn) return;
+		const selection = window.getSelection();
+		if (selection && selection.rangeCount > 0) {
+			const range = selection.getRangeAt(0);
+			if (!range.collapsed) {
+				if (!document.getSelection().toString()) {
+					this.hideAddCustomMatchIcon(false);
+					return;
+				}
+
+				const rect = range.getBoundingClientRect();
+				this.iconPosition.top = rect.bottom - this.contentText.nativeElement.getBoundingClientRect().top;
+				this.iconPosition.left = rect.right - this.contentText.nativeElement.getBoundingClientRect().left;
+				this.iconVisible = true;
+
+				const contentTextRect = this.contentText?.nativeElement.getBoundingClientRect();
+
+				// Adjust left position if overflowing on the right
+				if (this.iconPosition.left + 40 > contentTextRect.width) {
+					this.iconPosition.left = contentTextRect.width - 40;
+				}
+
+				this._saveRangySelectionData();
+			} else {
+				this.hideAddCustomMatchIcon();
+			}
+		} else {
+			this.hideAddCustomMatchIcon();
+		}
+	}
+
+	hideAddCustomMatchIcon(emitEvent = true): void {
+		if (!this.allowCustomViewAddBtn) return;
+		this.iconVisible = false;
+		const selectTextEvent = {
+			type: 'annotation-select',
+			id: null,
+			start: null,
+			end: null,
+			text: null,
+			offsetTop: null,
+			scrollViewOffsetTop: null,
+		};
+		if (emitEvent) this.onTextMatchSelectionEvent.emit(selectTextEvent);
+	}
+
+	private _saveRangySelectionData() {
+		var rangySelection = rangy.getSelection();
+		if (rangySelection.rangeCount > 0) {
+			var range = rangySelection.getRangeAt(0);
+			this.customMatchTobeAddedData = this.getCustomMatchData(range);
+		}
+	}
 
 	ngOnDestroy(): void {}
 }

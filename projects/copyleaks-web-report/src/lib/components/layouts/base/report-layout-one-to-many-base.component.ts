@@ -2,7 +2,7 @@ import { Renderer2, TemplateRef } from '@angular/core';
 import { Subject, combineLatest } from 'rxjs';
 import { distinctUntilChanged, filter, takeUntil } from 'rxjs/operators';
 import { ALERTS } from '../../../constants/report-alerts.constants';
-import { EReportViewType, EResponsiveLayoutType } from '../../../enums/copyleaks-web-report.enums';
+import { EExcludeReason, EReportViewType, EResponsiveLayoutType } from '../../../enums/copyleaks-web-report.enums';
 import {
 	ICompleteResultNotificationAlert,
 	ICompleteResults,
@@ -39,7 +39,6 @@ export abstract class OneToManyReportLayoutBaseComponent extends ReportLayoutBas
 	hideRightSection: boolean = false;
 
 	reportCrawledVersion: IScanSource;
-	iframeHtml: string;
 	reportMatches: Match[];
 
 	contentTextMatches: SlicedMatch[][];
@@ -96,13 +95,13 @@ export abstract class OneToManyReportLayoutBaseComponent extends ReportLayoutBas
 	showReadabilityLoadingView: boolean = true;
 	allWritingFeedbacksStats: IWritingFeedbackTypeStatistics[];
 	allMatchResultsStats: IMatchesTypeStatistics[];
+	customActionsTemplate: TemplateRef<any>;
+	selectedCustomTabResultSectionContentTemplate: TemplateRef<any>;
+	showOmittedWords: boolean;
+	isPartitalScan: boolean;
 
 	// Subject for destroying all the subscriptions in base component
 	private unsubscribe$ = new Subject();
-
-	override get rerendered(): boolean {
-		return this.oneToManyRerendered;
-	}
 
 	get combined() {
 		if (!this.reportStatistics) return 0;
@@ -160,10 +159,11 @@ export abstract class OneToManyReportLayoutBaseComponent extends ReportLayoutBas
 			if (data.viewMode === 'writing-feedback') {
 				this.selectedTap = EReportViewType.WritingFeedbackTabView;
 			} else
-				this.selectedTap =
-					data.alertCode === ALERTS.SUSPECTED_AI_TEXT_DETECTED
-						? EReportViewType.AIView
-						: EReportViewType.PlagiarismView;
+				this.selectedTap = data.selectedCustomTabId
+					? EReportViewType.CustomTabView
+					: data.alertCode === ALERTS.SUSPECTED_AI_TEXT_DETECTED
+					? EReportViewType.AIView
+					: EReportViewType.PlagiarismView;
 
 			this.showDisabledProducts = data.showDisabledProducts ?? false;
 
@@ -237,7 +237,26 @@ export abstract class OneToManyReportLayoutBaseComponent extends ReportLayoutBas
 			if (data) {
 				this.reportCrawledVersion = data;
 				this.numberOfPages = data.text?.pages?.startPosition?.length ?? 1;
+				if (
+					(this.reportCrawledVersion?.html?.exclude?.reasons?.filter(r => r === EExcludeReason.PartialScan).length >
+						0 ||
+						this.reportCrawledVersion?.text?.exclude?.reasons?.filter(r => r === EExcludeReason.PartialScan).length >
+							0) &&
+					(!this.isPartitalScan || !this.showOmittedWords)
+				) {
+					this.matchSvc.showOmittedWords$.next(true);
+					this.isPartitalScan = true;
+					this.showOmittedWords = true;
+				}
 			}
+		});
+
+		this.reportViewSvc.selectedCustomTabResultSectionContent$.pipe(takeUntil(this.unsubscribe$)).subscribe(content => {
+			this.selectedCustomTabResultSectionContentTemplate = content;
+		});
+
+		this.matchSvc.showOmittedWords$.pipe(takeUntil(this.unsubscribe$)).subscribe(data => {
+			this.showOmittedWords = data;
 		});
 
 		combineLatest([
@@ -332,12 +351,6 @@ export abstract class OneToManyReportLayoutBaseComponent extends ReportLayoutBas
 					match.correctionText = correction.correctionText;
 				});
 			this.reportMatches = data ?? [];
-
-			const updatedHtml = this._getRenderedMatches(data, this.reportDataSvc.crawledVersion?.html?.value);
-			if (updatedHtml && data) {
-				this.iframeHtml = updatedHtml;
-				this.oneToManyRerendered = true;
-			}
 		});
 
 		this.matchSvc.originalTextMatches$.pipe(takeUntil(this.unsubscribe$)).subscribe(data => {

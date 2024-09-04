@@ -14,8 +14,100 @@
 	background-color: $color-white;
 	border-radius: 0px 0px 10px 10px;
 
+	user-select: text;
+	-webkit-user-select: text;
+	-moz-user-select: text;
+	-ms-user-select: text;
+
 	cr-author-alert-card {
 		margin-bottom: 8px;
+	}
+
+	::-moz-selection {
+		background: #b4d7fe;
+	}
+
+	::selection {
+		background: #b4d7fe;
+	}
+
+	::ng-deep {
+		.copyleaks-highlight {
+			position: relative;
+			background-color: #ffdf54 !important;
+			cursor: pointer;
+			transition: 0.2s ease-in-out;
+
+			&:hover,
+			&.hover {
+				background-color: $color-match-selected !important;
+				.custom-view-avatar-container {
+					background: $color-primary !important;
+				}
+			}
+
+			&.selected {
+				background-color: $color-match-selected !important;
+				.custom-view-avatar-container {
+					background: $color-primary !important;
+				}
+			}
+		}
+
+		.custom-view-avatar-container {
+			position: absolute;
+			height: fit-content;
+			display: inline-block;
+			top: 50%;
+			transform: translateY(-50%);
+
+			transition: all 0.2s ease-in-out;
+			padding: 2px;
+			border-radius: 32px 32px 32px 0px;
+			background: $color-dark-blue;
+			border: 1px solid $color-white;
+			box-shadow: 0px 4px 4px 0px rgba(0, 0, 0, 0.15);
+			box-sizing: border-box;
+			height: 32px;
+
+			cursor: pointer;
+			.custom-view-avatar {
+				border-radius: 24px;
+				border: 1px solid $color-primary;
+				width: 24px;
+				height: 24px;
+			}
+
+			&:hover,
+			&.hover {
+				background: $color-primary !important;
+			}
+		}
+	}
+
+	.submitted-doc-name-container {
+		display: flex;
+		align-items: center;
+		gap: 4px;
+		mat-icon {
+			width: 18px;
+			height: 18px;
+			font-size: 18px;
+			color: $grayed-out-disabled;
+		}
+		span {
+			color: $color-black;
+			text-align: center;
+			font-size: 14px;
+			font-style: normal;
+			font-weight: 700;
+			line-height: normal;
+			max-width: 200px;
+			width: 100%;
+			text-overflow: ellipsis;
+			white-space: nowrap;
+			overflow: hidden;
+		}
 	}
 
 	.title-and-actions-container {
@@ -84,6 +176,7 @@
 		padding-top: 4px;
 		outline: none !important;
 		border: 0 !important;
+		position: relative;
 
 		iframe {
 			width: 100%;
@@ -126,6 +219,7 @@
 		word-break: break-word;
 		padding: 4px;
 		line-height: normal;
+		position: relative;
 		i {
 			opacity: 0.7;
 		}
@@ -389,5 +483,44 @@
 		font-style: normal;
 		font-weight: 500;
 		line-height: normal;
+	}
+}
+
+#highlight-icon {
+	position: absolute;
+	display: flex;
+	width: 40px;
+	height: 40px;
+	padding: 8px;
+	box-sizing: border-box;
+	justify-content: center;
+	align-items: center;
+	flex-shrink: 0;
+	border-radius: 56px;
+	background: $color-primary;
+	box-shadow: 0px 0px 4px 0px rgba(63, 154, 245, 0.4), 0px 2px 4px 0px rgba(0, 0, 0, 0.25);
+	cursor: pointer;
+	transition: 0.4s ease-in-out;
+	// dont allow selection
+	user-select: none;
+	-webkit-user-select: none;
+	-moz-user-select: none;
+	-ms-user-select: none;
+	-o-user-select: none;
+	-khtml-user-select: none;
+	-webkit-touch-callout: none;
+
+	mat-icon {
+		width: 24px;
+		height: 24px;
+		font-size: 24px;
+		color: $color-white;
+	}
+
+	&:hover {
+		background: $color-white;
+		mat-icon {
+			color: $color-primary;
+		}
 	}
 }

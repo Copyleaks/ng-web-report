@@ -20,15 +20,14 @@
 <copyleaks-content-viewer-container
 	[isHtmlView]="isHtmlView"
 	[isAlertsView]="isAlertsMode"
-	[contentHtml]="iframeHtml"
 	[scanSource]="reportCrawledVersion"
 	[contentTextMatches]="contentTextMatches"
-	[numberOfPages]="numberOfPages"
-	[numberOfWords]="numberOfWords"
 	[currentPage]="currentPageSource"
 	[reportResponsive]="EResponsiveLayoutType.Desktop"
 	[authorAlert]="authorAlert"
 	viewMode="one-to-many"
 	reportOrigin="original"
+	[showOmittedWords]="showOmittedWords"
 	(iFrameMessageEvent)="onIFrameMessage($event)"
-	(viewChangeEvent)="onReportViewChange($event)"></copyleaks-content-viewer-container>
+	(viewChangeEvent)="onReportViewChange($event)"
+	(onShowOmittedWords)="onShowOmittedWords($event)"></copyleaks-content-viewer-container>

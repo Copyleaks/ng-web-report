@@ -183,7 +183,7 @@ export class ReportResultsItemComponent implements OnInit, OnChanges, OnDestroy 
 				this.previewResult.metadata.lastModificationDate ||
 				this.previewResult.metadata.publishDate ||
 				this.previewResult.metadata.submissionDate;
-			this.previewResult.tags.unshift({
+			this.previewResult?.tags?.unshift({
 				title: this._datePipe.transform(date, 'MMM d, y, HH:mm:ss'),
 				description: $localize`Published: ${
 					this._datePipe.transform(this.previewResult.metadata.publishDate, "MMM d, y 'at' h:mm a") || 'not available'
@@ -203,7 +203,7 @@ export class ReportResultsItemComponent implements OnInit, OnChanges, OnDestroy 
 		if (!!this.resultItem?.resultPreview?.metadata?.organization) {
 			if (!this.previewResult.tags) this.previewResult.tags = [];
 			if (this.previewResult.tags.find(tag => tag.code === 'organization') === undefined)
-				this.previewResult.tags.unshift({
+				this.previewResult?.tags?.unshift({
 					title: this.resultItem?.resultPreview?.metadata?.organization,
 					description: $localize`Organization Name`,
 					code: 'organization',
@@ -218,7 +218,7 @@ export class ReportResultsItemComponent implements OnInit, OnChanges, OnDestroy 
 			if (!this.previewResult.tags) this.previewResult.tags = [];
 			// push 'Your File' tag to the start of tags array
 			if (this.previewResult.tags.find(tag => tag.code === 'your-file') === undefined)
-				this.previewResult.tags.unshift({
+				this.previewResult?.tags?.unshift({
 					title:
 						this.reportViewSvc?.reportViewMode?.platformType === EPlatformType.APP
 							? $localize`Your File`

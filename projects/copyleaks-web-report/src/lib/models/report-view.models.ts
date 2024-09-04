@@ -10,6 +10,7 @@ export interface IReportViewEvent {
 	alertCode?: string;
 	showDisabledProducts?: boolean;
 	platformType?: EPlatformType;
+	selectedCustomTabId?: string;
 }
 
 export interface IReportViewQueryParams {
@@ -19,6 +20,7 @@ export interface IReportViewQueryParams {
 	suspectPage?: string;
 	suspectId?: string;
 	alertCode?: string;
+	selectedCustomTabId?: string;
 }
 
 export interface IReportResponsiveMode {

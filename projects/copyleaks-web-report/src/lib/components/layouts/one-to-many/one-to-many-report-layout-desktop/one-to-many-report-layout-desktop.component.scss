@@ -7,7 +7,76 @@
 	gap: 8px;
 }
 
-.left-section {
+.assessment-tool-left-section,
+.assessment-tool-middle-section {
+	display: flex;
+	flex-direction: column;
+}
+
+.assessment-tool-left-section {
+	flex: 65%;
+	width: 65%;
+	display: flex;
+	flex-direction: column;
+	copyleaks-report-tabs-container {
+		flex-grow: 10;
+	}
+
+	copyleaks-content-viewer-container {
+		height: 90%;
+		flex-grow: 90;
+		overflow-y: auto;
+	}
+}
+
+.assessment-tool-middle-section {
+	flex: 25%;
+	width: 25%;
+	display: flex;
+	flex-direction: column;
+	gap: 8px;
+	height: 100%;
+	box-sizing: border-box;
+	@include cls-report-container-close-btn;
+
+	.results-alerts-container {
+		display: flex;
+		flex-direction: column;
+		flex-grow: 100;
+		height: auto;
+		padding: 8px;
+		overflow-y: auto;
+		box-shadow: -2px -2px 8px 0px rgba(255, 255, 255, 0.5), 2px 2px 4px 0px rgba(0, 0, 0, 0.15);
+		border-radius: 10px;
+		gap: 8px;
+		background-color: $color-white;
+		copyleaks-report-results-container {
+			height: 95%;
+			flex-grow: 95;
+			overflow-y: auto;
+			::ng-deep .report-results-item-top-container {
+				height: calc(100% - 48px) !important;
+			}
+		}
+
+		cr-readability-score {
+			flex-grow: 0 !important;
+		}
+
+		copyleaks-report-corrections-container {
+			height: 95%;
+			flex-grow: 95;
+			overflow-y: auto;
+		}
+	}
+}
+
+.web-report-left-section {
+	box-shadow: -2px -2px 8px 0px rgba(255, 255, 255, 0.5), 2px 2px 4px 0px rgba(0, 0, 0, 0.15);
+	border-radius: 10px;
+}
+
+.web-report-left-section {
 	flex: 70%;
 	width: 70%;
 	display: flex;
@@ -24,7 +93,11 @@
 	}
 }
 
-.right-section {
+.assessment-tool-view {
+	border-radius: 10px !important;
+	box-shadow: 2px 2px 4px 0px rgba(0, 0, 0, 0.15), -2px -2px 8px 0px rgba(255, 255, 255, 0.5) !important;
+}
+.web-report-right-section {
 	flex: 30%;
 	width: 30%;
 	display: flex;
@@ -66,7 +139,7 @@
 	}
 }
 
-.left-section {
+.web-report-left-section {
 	box-shadow: -2px -2px 8px 0px rgba(255, 255, 255, 0.5), 2px 2px 4px 0px rgba(0, 0, 0, 0.15);
 	border-radius: 10px;
 }
@@ -108,4 +181,8 @@ copyleaks-report-alerts-container {
 	font-style: normal;
 	font-weight: 500;
 	line-height: normal;
+}
+
+cr-assessment-tool-tab-score-panel {
+	flex-grow: initial !important;
 }

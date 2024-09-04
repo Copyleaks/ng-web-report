@@ -51,6 +51,7 @@
 					[style]="'width:100%'"
 					[reportViewSvc]="reportViewSvc"
 					[reportDataSvc]="reportDataSvc"
+					[highlightService]="highlightService"
 					(hiddenResultEvent)="excludeResultById($event)"
 					(showResultEvent)="includeResultById($event)"></cr-report-results-item>
 			</ng-container>

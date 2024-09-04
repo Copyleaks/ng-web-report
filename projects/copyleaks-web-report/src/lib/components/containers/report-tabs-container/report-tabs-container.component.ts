@@ -8,7 +8,7 @@ import {
 	SimpleChanges,
 	TemplateRef,
 } from '@angular/core';
-import { EReportScoreTooltipPosition, EReportViewType } from '../../../enums/copyleaks-web-report.enums';
+import { EReportMode, EReportScoreTooltipPosition, EReportViewType } from '../../../enums/copyleaks-web-report.enums';
 import { ReportViewService } from '../../../services/report-view.service';
 import { ALERTS } from '../../../constants/report-alerts.constants';
 import { ReportNgTemplatesService } from '../../../services/report-ng-templates.service';
@@ -126,6 +126,9 @@ export class ReportTabsContainerComponent implements OnInit, OnDestroy, OnChange
 	 */
 	@Input() forceWritingFeedbackTapHide = false;
 
+	@Input() reportMode: EReportMode;
+	EReportMode = EReportMode;
+
 	EReportViewType = EReportViewType;
 	EReportScoreTooltipPosition = EReportScoreTooltipPosition;
 	customTabsTemplateRef: TemplateRef<any>[] | undefined = undefined;
@@ -215,6 +218,7 @@ export class ReportTabsContainerComponent implements OnInit, OnDestroy, OnChange
 			if (!this.showLoadingView && this.hidePlagarismTap && this.hideAiTap && !this.hideWritingFeedbackTap) {
 				this.selectedTap = EReportViewType.WritingFeedbackTabView;
 				this.reportViewSvc.selectedAlert$.next(null);
+
 				this.reportViewSvc.reportViewMode$.next({
 					...this.reportViewSvc.reportViewMode,
 					alertCode: undefined,
@@ -232,6 +236,7 @@ export class ReportTabsContainerComponent implements OnInit, OnDestroy, OnChange
 					: !this.hideAiTap
 					? EReportViewType.AIView
 					: null;
+
 				this.reportViewSvc.reportViewMode$.next({
 					...this.reportViewSvc.reportViewMode,
 					viewMode:
@@ -336,9 +341,11 @@ export class ReportTabsContainerComponent implements OnInit, OnDestroy, OnChange
 					alertCode: ALERTS.SUSPECTED_AI_TEXT_DETECTED,
 					sourcePageIndex: 1,
 					suspectPageIndex: 1,
+					selectedCustomTabId: undefined,
 				});
 				this.reportViewSvc.selectedAlert$.next(ALERTS.SUSPECTED_AI_TEXT_DETECTED);
 				this.reportViewSvc.selectedCustomTabContent$.next(null);
+				this.reportViewSvc.selectedCustomTabResultSectionContent$.next(null);
 
 				break;
 			case EReportViewType.PlagiarismView:
@@ -348,10 +355,12 @@ export class ReportTabsContainerComponent implements OnInit, OnDestroy, OnChange
 					alertCode: undefined,
 					sourcePageIndex: 1,
 					suspectPageIndex: 1,
-					isHtmlView: true,
+					selectedCustomTabId: undefined,
+					isHtmlView: !!this.reportDataSvc.crawledVersion?.html?.value,
 				});
 				this.reportViewSvc.selectedAlert$.next(null);
 				this.reportViewSvc.selectedCustomTabContent$.next(null);
+				this.reportViewSvc.selectedCustomTabResultSectionContent$.next(null);
 				break;
 			case EReportViewType.WritingFeedbackTabView:
 				this.reportViewSvc.reportViewMode$.next({
@@ -360,10 +369,12 @@ export class ReportTabsContainerComponent implements OnInit, OnDestroy, OnChange
 					alertCode: undefined,
 					sourcePageIndex: 1,
 					suspectPageIndex: 1,
-					isHtmlView: true,
+					selectedCustomTabId: undefined,
+					isHtmlView: !!this.reportDataSvc.crawledVersion?.html?.value,
 				});
 				this.reportViewSvc.selectedAlert$.next(null);
 				this.reportViewSvc.selectedCustomTabContent$.next(null);
+				this.reportViewSvc.selectedCustomTabResultSectionContent$.next(null);
 				break;
 			default:
 				break;

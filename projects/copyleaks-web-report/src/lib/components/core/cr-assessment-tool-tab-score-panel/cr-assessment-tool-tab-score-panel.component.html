@@ -1,0 +1,110 @@
+<ng-container *ngIf="!showLoadingView">
+	<mat-accordion #expansionPanel [tabIndex]="0" (keydown)="expandAccordion()">
+		<mat-expansion-panel #panel [expanded]="expanded" (expandedChange)="expandedChange($event)">
+			<mat-expansion-panel-header [ngClass]="{ 'mobile-results-panel-header': isMobile }">
+				<mat-panel-title>
+					<div class="upper-title-section-container">
+						<div class="title-container">
+							<mat-icon
+								class="hide-alerts-icon"
+								fontSet="material-icons-round"
+								matTooltipClass="web-report-mat-tooltip"
+								[matTooltip]="panel.expanded ? COLLAPSE_TOOLTIP : EXPAND_TOOLTIP">
+								arrow_drop_down
+							</mat-icon>
+							<span class="title" web-report-title-font i18n>
+								{{ selectedTap === EReportViewType.PlagiarismView ? 'Matched Text' : 'AI Content ' }}
+							</span>
+						</div>
+						<span class="score" web-report-title-font>
+							{{
+								selectedTap === EReportViewType.PlagiarismView
+									? (plagarismScore | percent : '1.0-1')
+									: (aiScore | percent : '1.0-1')
+							}}
+						</span>
+					</div>
+					<div *ngIf="!expanded" class="grade-bar">
+						<ng-container *ngIf="selectedTap === EReportViewType.PlagiarismView">
+							<div class="bar plagiarism" [style.width.%]="100">
+								<div
+									class="identical"
+									[class.first-percentage]="!!identicalTotal"
+									[class.last-percentage]="!minorChangesTotal && !paraphrasedTotal"
+									[style.width.%]="
+										wordsTotal - excludedTotal === 0 ? 0 : (identicalTotal / (wordsTotal - excludedTotal)) * 100
+									"
+									[style.border]="!identicalTotal ? 'none' : ''"></div>
+								<div
+									class="minor-changes"
+									[class.first-percentage]="!identicalTotal"
+									[class.last-percentage]="!paraphrasedTotal"
+									[style.width.%]="
+										wordsTotal - excludedTotal === 0 ? 0 : (minorChangesTotal / (wordsTotal - excludedTotal)) * 100
+									"
+									[style.border]="!minorChangesTotal ? 'none' : ''"></div>
+								<div
+									class="paraphrased last-percentage"
+									[class.first-percentage]="!identicalTotal && !minorChangesTotal"
+									[style.width.%]="
+										wordsTotal - excludedTotal === 0 ? 0 : (paraphrasedTotal / (wordsTotal - excludedTotal)) * 100
+									"
+									[style.border]="!paraphrasedTotal ? 'none' : ''"></div>
+							</div>
+						</ng-container>
+
+						<ng-container *ngIf="selectedTap === EReportViewType.AIView">
+							<div class="bar ai-content" [style.width.%]="aiScore * 100" [style.border]="!aiScore ? 'none' : ''"></div>
+						</ng-container>
+					</div>
+				</mat-panel-title>
+			</mat-expansion-panel-header>
+
+			<ng-container *ngIf="selectedTap === EReportViewType.AIView">
+				<cr-report-score-tooltip-content
+					[scoreStats]="{
+						omittedPct: {
+							percentage: excludedTotal / wordsTotal,
+							disabled: false,
+							totalWords: excludedTotal ?? 0
+						},
+						aiPct: { percentage: aiScore, disabled: false, totalWords: totalAiWords ?? 0 },
+						humanPct: { percentage: 1 - aiScore, disabled: false, totalWords: wordsTotal - totalAiWords ?? 0 },
+						totalWords: wordsTotal
+					}"
+					[viewType]="EReportScoreTooltipView.Inline"></cr-report-score-tooltip-content>
+			</ng-container>
+
+			<ng-container *ngIf="selectedTap === EReportViewType.PlagiarismView">
+				<cr-report-score-tooltip-content
+					[scoreStats]="{
+						identicalPct: {
+							percentage: wordsTotal - excludedTotal === 0 ? 0 : identicalTotal / (wordsTotal - excludedTotal),
+							totalWords: identicalTotal ?? 0,
+							disabled: reportDataSvc.filterOptions?.showIdentical === false
+						},
+						minorChangesPct: {
+							percentage: wordsTotal - excludedTotal === 0 ? 0 : minorChangesTotal / (wordsTotal - excludedTotal),
+							totalWords: minorChangesTotal ?? 0,
+							disabled: reportDataSvc.filterOptions?.showMinorChanges === false
+						},
+						paraphrasedPct: {
+							percentage: wordsTotal - excludedTotal === 0 ? 0 : paraphrasedTotal / (wordsTotal - excludedTotal),
+							totalWords: paraphrasedTotal ?? 0,
+							disabled: reportDataSvc.filterOptions?.showRelated === false
+						},
+						omittedPct: {
+							percentage: excludedTotal / wordsTotal,
+							disabled: false,
+							totalWords: excludedTotal ?? 0
+						},
+
+						aiPct: { percentage: aiScore, disabled: false, totalWords: totalAiWords ?? 0 },
+						humanPct: { percentage: 1 - aiScore, disabled: false, totalWords: wordsTotal - totalAiWords ?? 0 },
+						totalWords: wordsTotal
+					}"
+					[viewType]="EReportScoreTooltipView.Inline"></cr-report-score-tooltip-content>
+			</ng-container>
+		</mat-expansion-panel>
+	</mat-accordion>
+</ng-container>

@@ -7,6 +7,7 @@ import { ReportStatisticsService } from '../../../../services/report-statistics.
 import { OneToManyReportLayoutBaseComponent } from '../../base/report-layout-one-to-many-base.component';
 import { ReportNgTemplatesService } from '../../../../services/report-ng-templates.service';
 import { ReportRealtimeResultsService } from '../../../../services/report-realtime-results.service';
+import { EReportMode } from '../../../../enums/copyleaks-web-report.enums';
 
 @Component({
 	selector: 'copyleaks-one-to-many-report-layout-desktop',
@@ -20,6 +21,9 @@ export class OneToManyReportLayoutDesktopComponent
 	@Input() companyLogo: string = null;
 
 	@Input() hideWritingFeedback: boolean = false;
+
+	@Input() reportMode: EReportMode;
+	EReportMode = EReportMode;
 
 	constructor(
 		reportDataSvc: ReportDataService,

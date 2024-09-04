@@ -9,6 +9,400 @@
 	flex-wrap: wrap;
 	position: relative;
 
+	.assessment-tool-container {
+		display: flex;
+		flex-direction: column;
+		align-items: flex-start;
+		gap: 8px;
+
+		&.mobile {
+			flex-direction: row;
+			width: 100%;
+			box-sizing: border-box;
+			background: $color-white;
+			box-shadow: 0px -4px 4px 0px rgba(0, 0, 0, 0.05);
+			padding: 4px 6px 2px 6px;
+			align-items: flex-end;
+			gap: 2px;
+
+			.matched-text-tab,
+			.ai-tab,
+			.writing-assistant-tab,
+			::ng-deep .custom-tab {
+				flex-grow: 1 !important;
+				box-sizing: border-box !important;
+			}
+		}
+
+		.matched-text-tab,
+		.ai-tab,
+		.writing-assistant-tab {
+			cursor: pointer;
+			box-sizing: border-box;
+			&.at-tab-disabled {
+				cursor: not-allowed !important;
+			}
+		}
+
+		.title,
+		svg {
+			transition: all 0.3s ease-in-out;
+		}
+
+		.matched-text-tab {
+			display: flex;
+			width: 72px;
+			height: 96px;
+			padding: 8px 4px;
+			flex-direction: column;
+			justify-content: center;
+			align-items: center;
+			gap: 2px;
+			border-radius: 10px;
+			border: 1px solid $color-white;
+			background: $color-container-background;
+			box-shadow: 2px 2px 4px 0px rgba(0, 0, 0, 0.15), -2px -2px 8px 0px rgba(255, 255, 255, 0.5);
+			border-top: 1px solid transparent;
+			border-right: 1px solid transparent;
+			border-bottom: 2px solid transparent;
+			border-left: 1px solid transparent;
+			transition: 0.4s ease-in-out;
+			&.at-tab-enabled {
+				&:hover,
+				&.tab-selected {
+					border-radius: 10px;
+					border-top: 1px solid $color-plagiarism-identical;
+					border-right: 1px solid $color-plagiarism-identical;
+					border-bottom: 2px solid $color-plagiarism-identical;
+					border-left: 1px solid $color-plagiarism-identical;
+					background: $color-white;
+					box-shadow: -4px -4px 4px 0px rgba(236, 119, 116, 0.1) inset, 4px 4px 4px 0px rgba(251, 115, 103, 0.1) inset;
+					.title {
+						color: $color-plagiarism-identical;
+						font-weight: 800;
+					}
+
+					.icon-container {
+						svg {
+							width: 22px;
+							height: 23px;
+							flex-shrink: 0;
+						}
+					}
+				}
+			}
+
+			.icon-container {
+				box-sizing: border-box;
+				display: flex;
+				width: 32px;
+				height: 32px;
+				padding: 8px 10px;
+				flex-direction: column;
+				justify-content: center;
+				align-items: center;
+				gap: 8px;
+				border-radius: 14px;
+				border: 1px solid rgba(255, 133, 118, 0.4);
+				background: linear-gradient(139deg, rgba(255, 133, 118, 0.2) 0%, rgba(251, 255, 255, 0) 100.01%);
+				svg {
+					width: 17px;
+					height: 17.773px;
+					flex-shrink: 0;
+				}
+			}
+
+			.score-container {
+				display: flex;
+				align-items: center;
+				gap: 4px;
+				svg {
+					width: 8px;
+					height: 8px;
+					fill: $plag-score-top-level;
+				}
+				.score {
+					color: $color-black;
+					text-align: center;
+					font-family: haboro-soft, sans-serif !important;
+					font-size: 12px;
+					font-style: normal;
+					font-weight: 800;
+					line-height: normal;
+				}
+			}
+		}
+
+		.ai-tab {
+			display: flex;
+			width: 72px;
+			height: 96px;
+			padding: 8px 4px;
+			flex-direction: column;
+			justify-content: center;
+			align-items: center;
+			gap: 2px;
+			border-radius: 10px;
+			border: 1px solid $color-white;
+			background: $color-container-background;
+			box-shadow: 2px 2px 4px 0px rgba(0, 0, 0, 0.15), -2px -2px 8px 0px rgba(255, 255, 255, 0.5);
+			border-top: 1px solid transparent;
+			border-right: 1px solid transparent;
+			border-bottom: 2px solid transparent;
+			border-left: 1px solid transparent;
+			transition: 0.4s ease-in-out;
+
+			&.at-tab-enabled {
+				&:hover,
+				&.tab-selected {
+					border-radius: 10px;
+					border-top: 1px solid $color-ai-tab;
+					border-right: 1px solid $color-ai-tab;
+					border-bottom: 2px solid $color-ai-tab;
+					border-left: 1px solid $color-ai-tab;
+					background: $color-white;
+					box-shadow: -4px -4px 4px 0px rgba(236, 119, 116, 0.1) inset, 4px 4px 4px 0px rgba(251, 115, 103, 0.1) inset;
+					.title {
+						color: $color-ai-tab;
+						font-weight: 800;
+					}
+
+					.icon-container {
+						svg {
+							width: 28px;
+							height: 20px;
+							flex-shrink: 0;
+						}
+					}
+				}
+			}
+
+			.icon-container {
+				box-sizing: border-box;
+				display: flex;
+				width: 32px;
+				height: 32px;
+				padding: 8px 4px;
+				flex-direction: column;
+				justify-content: center;
+				align-items: center;
+				gap: 10px;
+				border-radius: 14px;
+				border: 1px solid rgba(101, 18, 210, 0.4);
+				background: linear-gradient(125deg, rgba(101, 18, 210, 0.2) 0%, rgba(251, 255, 255, 0) 99.92%);
+				svg {
+					width: 21px;
+					height: 14.538px;
+					flex-shrink: 0;
+				}
+			}
+
+			.score-container {
+				display: flex;
+				align-items: center;
+				gap: 4px;
+				svg {
+					width: 8px;
+					height: 8px;
+					fill: $plag-score-mid-level;
+				}
+				.score {
+					color: $color-black;
+					text-align: center;
+					font-family: haboro-soft, sans-serif !important;
+					font-size: 12px;
+					font-style: normal;
+					font-weight: 800;
+					line-height: normal;
+				}
+			}
+		}
+
+		.writing-assistant-tab {
+			display: flex;
+			width: 72px;
+			height: 96px;
+			padding: 8px 4px;
+			flex-direction: column;
+			justify-content: center;
+			align-items: center;
+			gap: 2px;
+			border-radius: 10px;
+			border: 1px solid $color-white;
+			background: $color-container-background;
+			box-shadow: 2px 2px 4px 0px rgba(0, 0, 0, 0.15), -2px -2px 8px 0px rgba(255, 255, 255, 0.5);
+			border-top: 1px solid transparent;
+			border-right: 1px solid transparent;
+			border-bottom: 2px solid transparent;
+			border-left: 1px solid transparent;
+			transition: 0.4s ease-in-out;
+			&.at-tab-enabled {
+				&:hover,
+				&.tab-selected {
+					border-radius: 10px;
+					border-top: 1px solid $color-grammar-dark;
+					border-right: 1px solid $color-grammar-dark;
+					border-bottom: 2px solid $color-grammar-dark;
+					border-left: 1px solid $color-grammar-dark;
+					background: var(--Colors-Main-White, #fbffff);
+					box-shadow: -4px -4px 4px 0px rgba(255, 165, 3, 0.14) inset, 4px 4px 4px 0px rgba(255, 165, 3, 0.14) inset;
+					.title {
+						color: $color-grammar-dark;
+						font-weight: 800;
+					}
+
+					.icon-container {
+						svg {
+							width: 24px;
+							height: 15px;
+							flex-shrink: 0;
+						}
+					}
+				}
+			}
+
+			.icon-container {
+				box-sizing: border-box;
+				display: flex;
+				width: 32px;
+				height: 32px;
+				padding: 8px 4px;
+				flex-direction: column;
+				justify-content: center;
+				align-items: center;
+				gap: 10px;
+				border-radius: 14px;
+				border: 1px solid rgba(255, 165, 3, 0.4);
+				background: linear-gradient(121deg, rgba(255, 165, 3, 0.2) 0%, rgba(251, 255, 255, 0) 100.14%);
+				svg {
+					width: 19px;
+					height: 11.875px;
+					flex-shrink: 0;
+				}
+			}
+
+			.score-container {
+				display: flex;
+				align-items: center;
+				gap: 4px;
+				svg {
+					width: 8px;
+					height: 8px;
+					fill: $plag-score-mid-level;
+				}
+				.score {
+					color: $color-black;
+					text-align: center;
+					font-family: haboro-soft, sans-serif !important;
+					font-size: 12px;
+					font-style: normal;
+					font-weight: 800;
+					line-height: normal;
+				}
+			}
+		}
+
+		.tab-title-container {
+			display: flex;
+			flex-direction: column;
+			justify-content: center;
+			align-items: center;
+			gap: 4px;
+			align-self: stretch;
+			.title {
+				color: $color-black;
+				text-align: center;
+				font-size: 12px;
+				font-style: normal;
+				font-weight: 500;
+				line-height: normal;
+			}
+		}
+
+		::ng-deep {
+			.custom-tab {
+				flex-grow: initial !important;
+				display: flex;
+				width: 72px;
+				height: 96px;
+				padding: 8px 4px;
+				flex-direction: column;
+				justify-content: center;
+				align-items: center;
+				gap: 2px;
+				box-sizing: border-box;
+				border-radius: 10px;
+				border-top: 1px solid transparent;
+				border-right: 1px solid transparent;
+				border-bottom: 2px solid transparent;
+				border-left: 1px solid transparent;
+				background: $color-container-background;
+				box-shadow: 2px 2px 4px 0px rgba(0, 0, 0, 0.15), -2px -2px 8px 0px rgba(255, 255, 255, 0.5);
+				transition: 0.4s ease-in-out;
+
+				svg {
+					width: 19px !important;
+					height: 19px !important;
+					flex-shrink: 0 !important;
+				}
+				.title,
+				svg {
+					transition: all 0.3s ease-in-out;
+				}
+
+				&:hover,
+				&.tab-selected {
+					border-radius: 10px;
+					border-top: 1px solid $color-primary;
+					border-right: 1px solid $color-primary;
+					border-bottom: 2px solid $color-primary;
+					border-left: 1px solid $color-primary;
+					background: $color-white;
+					box-shadow: -4px -4px 4px 0px rgba(63, 154, 245, 0.1) inset, 4px 4px 4px 0px rgba(63, 154, 245, 0.22) inset;
+
+					::ng-deep cr-custom-tab-item-title {
+						color: $color-primary !important;
+					}
+					svg {
+						width: 24.049px !important;
+						height: 24.049px !important;
+						flex-shrink: 0;
+					}
+
+					.title {
+						color: $color-primary !important;
+						text-align: center;
+						font-size: 12px;
+						font-style: normal;
+						font-weight: 800;
+						line-height: 109%;
+					}
+
+					&::after {
+						display: none !important;
+					}
+				}
+			}
+
+			cr-custom-tab-item-title :first-child {
+				width: 32px !important;
+				box-sizing: border-box;
+			}
+
+			cr-custom-tab-item-title {
+				display: flex;
+				width: 72px;
+				height: 96px;
+				padding: 0px !important;
+				flex-direction: column;
+				justify-content: center;
+				align-items: center;
+				gap: 2px;
+				flex-grow: initial !important;
+			}
+		}
+	}
+
 	.tab-ai,
 	.tab-plagiarism,
 	.tab-grammar,
@@ -149,6 +543,20 @@
 		}
 	}
 
+	.assessment-tool-skeleton {
+		width: fit-content;
+		display: flex;
+		height: fit-content !important;
+		width: 40px;
+		::ng-deep .loader {
+			height: 15px !important;
+			margin-bottom: 0px !important;
+			border-radius: 10px !important;
+			opacity: 0.2;
+			background-color: $color-medium-dark;
+		}
+	}
+
 	.skeleton.real-time-view {
 		::ng-deep .loader {
 			height: 14px !important;
@@ -175,6 +583,10 @@
 	.tab-disabled {
 		opacity: 0.5 !important;
 		cursor: not-allowed !important;
+	}
+
+	.tab-loading {
+		pointer-events: none !important;
 	}
 
 	.identical.real-time-view {

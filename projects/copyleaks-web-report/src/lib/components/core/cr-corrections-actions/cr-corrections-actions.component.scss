@@ -13,6 +13,9 @@
 	padding-bottom: 4px;
 	padding-top: 4px;
 	padding-right: 8px;
+	.filter-chip {
+		line-height: normal !important;
+	}
 	.corrections-total {
 		display: flex;
 		flex-direction: column;

@@ -27,18 +27,21 @@
 			<ng-container *ngSwitchCase="ResponsiveLayoutType.Desktop">
 				<copyleaks-one-to-many-report-layout-desktop
 					[companyLogo]="companyLogo"
+					[reportMode]="reportMode"
 					[hideWritingFeedback]="hideWritingFeedback"></copyleaks-one-to-many-report-layout-desktop>
 			</ng-container>
 			<!-- Tablet View -->
 			<ng-container *ngSwitchCase="ResponsiveLayoutType.Tablet">
 				<copyleaks-one-to-many-report-layout-desktop
 					[companyLogo]="companyLogo"
+					[reportMode]="reportMode"
 					[hideWritingFeedback]="hideWritingFeedback"></copyleaks-one-to-many-report-layout-desktop>
 			</ng-container>
 			<!-- Mobile View -->
 			<ng-container *ngSwitchCase="ResponsiveLayoutType.Mobile">
 				<copyleaks-one-to-many-report-layout-mobile
 					[companyLogo]="companyLogo"
+					[reportMode]="reportMode"
 					[hideWritingFeedback]="hideWritingFeedback"></copyleaks-one-to-many-report-layout-mobile>
 			</ng-container>
 			<ng-container *ngSwitchDefault>Unsupported Layout</ng-container>
@@ -51,15 +54,18 @@
 		<ng-container [ngSwitch]="responsiveLayoutType">
 			<!-- Desktop View -->
 			<ng-container *ngSwitchCase="ResponsiveLayoutType.Desktop">
-				<copyleaks-one-to-one-report-layout-desktop></copyleaks-one-to-one-report-layout-desktop>
+				<copyleaks-one-to-one-report-layout-desktop
+					[reportMode]="reportMode"></copyleaks-one-to-one-report-layout-desktop>
 			</ng-container>
 			<!-- Tablet View -->
 			<ng-container *ngSwitchCase="ResponsiveLayoutType.Tablet">
-				<copyleaks-one-to-one-report-layout-desktop></copyleaks-one-to-one-report-layout-desktop>
+				<copyleaks-one-to-one-report-layout-desktop
+					[reportMode]="reportMode"></copyleaks-one-to-one-report-layout-desktop>
 			</ng-container>
 			<!-- Mobile View -->
 			<ng-container *ngSwitchCase="ResponsiveLayoutType.Mobile">
-				<copyleaks-one-to-one-report-layout-mobile></copyleaks-one-to-one-report-layout-mobile>
+				<copyleaks-one-to-one-report-layout-mobile
+					[reportMode]="reportMode"></copyleaks-one-to-one-report-layout-mobile>
 			</ng-container>
 			<ng-container *ngSwitchDefault>Unsupported Layout</ng-container>
 		</ng-container>
@@ -74,18 +80,21 @@
 			<ng-container *ngSwitchCase="ResponsiveLayoutType.Desktop">
 				<copyleaks-one-to-many-report-layout-desktop
 					[companyLogo]="companyLogo"
+					[reportMode]="reportMode"
 					[hideWritingFeedback]="hideWritingFeedback"></copyleaks-one-to-many-report-layout-desktop>
 			</ng-container>
 			<!-- Tablet View -->
 			<ng-container *ngSwitchCase="ResponsiveLayoutType.Tablet">
 				<copyleaks-one-to-many-report-layout-desktop
 					[companyLogo]="companyLogo"
+					[reportMode]="reportMode"
 					[hideWritingFeedback]="hideWritingFeedback"></copyleaks-one-to-many-report-layout-desktop>
 			</ng-container>
 			<!-- Mobile View -->
 			<ng-container *ngSwitchCase="ResponsiveLayoutType.Mobile">
 				<copyleaks-one-to-many-report-layout-mobile
 					[companyLogo]="companyLogo"
+					[reportMode]="reportMode"
 					[hideWritingFeedback]="hideWritingFeedback"></copyleaks-one-to-many-report-layout-mobile>
 			</ng-container>
 			<ng-container *ngSwitchDefault>Unsupported Layout</ng-container>

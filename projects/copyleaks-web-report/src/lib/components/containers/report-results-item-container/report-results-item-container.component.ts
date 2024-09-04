@@ -1,5 +1,5 @@
 import { AfterViewInit, Component, HostBinding, Input, OnChanges, OnInit, SimpleChanges } from '@angular/core';
-import { EResponsiveLayoutType } from '../../../enums/copyleaks-web-report.enums';
+import { EReportMode, EResponsiveLayoutType } from '../../../enums/copyleaks-web-report.enums';
 import { IResultItem } from './components/models/report-result-item.models';
 import { ReportDataService } from '../../../services/report-data.service';
 
@@ -37,6 +37,8 @@ export class ReportResultsItemContainerComponent implements OnInit, AfterViewIni
 	@Input() hideMaskedContentDisclaimer: { flag: boolean } = {
 		flag: false,
 	};
+
+	@Input() reportMode: EReportMode;
 
 	constructor(private _reportDataSvc: ReportDataService) {}
 

@@ -2,18 +2,22 @@
 <div class="left-section">
 	<!--Report scan content viewer -->
 	<copyleaks-content-viewer-container
-		[isHtmlView]="isHtmlView"
-		[contentHtml]="sourceIframeHtml"
+		[isHtmlView]="!!sourceCrawledVersion?.html?.value ? isHtmlView : false"
 		[scanSource]="sourceCrawledVersion"
 		[contentTextMatches]="sourceTextMatches"
-		[numberOfPages]="numberOfPagesSource"
-		[numberOfWords]="numberOfWords"
+		[contentHtmlMatches]="sourceHtmlMatches"
 		[currentPage]="currentPageSource"
 		[reportResponsive]="EResponsiveLayoutType.Desktop"
+		[showOmittedWords]="showOmittedWords"
+		[isPartitalScan]="isPartitalScan"
 		viewMode="one-to-one"
 		reportOrigin="source"
+		[hasHtml]="!!sourceCrawledVersion?.html?.value"
+		[submittedDocumentName]="scanResultsPreviews?.scannedDocument?.metadata?.filename"
+		[hidePoweredBy]="reportMode === EReportMode.AssessmentTool"
 		(iFrameMessageEvent)="onSourceIFrameMessage($event)"
-		(viewChangeEvent)="onReportViewChange($event)"></copyleaks-content-viewer-container>
+		(viewChangeEvent)="onReportViewChange($event)"
+		(onShowOmittedWords)="onShowOmittedWords($event)"></copyleaks-content-viewer-container>
 </div>
 
 <!-- Right side section-->
@@ -34,15 +38,15 @@
 	<copyleaks-content-viewer-container
 		style="display: flex; flex-direction: column; flex-grow: 1; overflow-y: auto; gap: 8px"
 		[flexGrow]="80"
-		[isHtmlView]="isHtmlView"
-		[contentHtml]="suspectIframeHtml"
+		[isHtmlView]="!!suspectHtmlMatches ? isHtmlView : false"
 		[resultData]="resultData"
 		[contentTextMatches]="suspectTextMatches"
-		[numberOfPages]="numberOfPagesSuspect"
+		[contentHtmlMatches]="suspectHtmlMatches"
 		[currentPage]="currentPageSuspect"
 		[reportResponsive]="EResponsiveLayoutType.Desktop"
 		[hidePoweredBy]="true"
 		[hasMaskedContent]="isOthersFile && hasNonIdenticalMatchWords"
+		[hasHtml]="!!suspectHtmlMatches"
 		viewMode="one-to-one"
 		reportOrigin="suspect"
 		(onOpenDisclaimer)="openDisclaimer()"

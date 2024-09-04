@@ -86,6 +86,21 @@ export const COPYLEAKS_REPORT_IFRAME_STYLES: string = `
 	font-family: 'haboro-soft', sans-serif;
 }
 
+::-moz-selection {
+		background: #b4d7fe !important;
+	}
+
+	::selection {
+		background: #b4d7fe !important;
+	}
+
+  body, html {
+    user-select: text;
+    -webkit-user-select: text;
+    -moz-user-select: text;
+    -ms-user-select: text;
+}
+
 html {
 	padding: 4px;
 }
@@ -257,6 +272,16 @@ span[exclude-partial-scan] .excluded-reason-tooltip {
   white-space: normal ;
 }
 
+		span.copyleaks-highlight {
+			background-color: #ffdf54 ;
+			cursor: pointer;
+			transition: 0.2s ease-in-out;
+
+			&:hover, &.hover, &.selected {
+				background-color: #00e2a2 ;
+			}
+		}
+
 span[match] .tooltip-match-content-container::after {
   content: "";
   position: absolute;
@@ -291,5 +316,37 @@ span[match] .tooltip-match-content-container::after {
     border-width: 7px;
     border-style: solid;
     border-color: transparent #112960 transparent transparent;
+  }
+
+  .cls-add-annotation-btn {
+    position: absolute;
+    z-index: 999999999;
+    border-radius: 56px;
+    background: var(--Colors-Main-Blue, #3F9AF5);
+    box-shadow: 0px 0px 4px 0px rgba(63, 154, 245, 0.40), 0px 2px 4px 0px rgba(0, 0, 0, 0.25);
+    padding: 8px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    box-sizing: border-box;
+    cursor: pointer;
+    color: #fbffff;
+    transition: 0.4s ease-in-out;
+
+    svg {
+      width: 24px;
+      height: 24px;
+      flex-shrink: 0;
+    }
+    &:hover {
+      background: #fbffff;
+
+      svg {
+        path {
+          color: #3f9af5 !important;
+          fill: #3f9af5 !important;}
+        }
+    }
+
   }
 `;

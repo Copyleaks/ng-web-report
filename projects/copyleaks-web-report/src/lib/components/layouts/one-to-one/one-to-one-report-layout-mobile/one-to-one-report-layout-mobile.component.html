@@ -7,8 +7,8 @@
 	<!-- Report result item section -->
 	<copyleaks-report-results-item-container
 		style="display: flex; flex-direction: column; flex-shrink: 0; gap: 8px"
-		[isMobile]="false"
 		[resultItem]="resultItem"
+		[reportMode]="reportMode"
 		[reportResponsive]="EResponsiveLayoutType.Mobile"
 		[showLoadingView]="isLoadingResultItem"
 		[flexGrow]="20"
@@ -16,35 +16,68 @@
 		[hasMaskedContent]="isOthersFile && hasNonIdenticalMatchWords"
 		[hideMaskedContentDisclaimer]="hideMaskedContentDisclaimer"></copyleaks-report-results-item-container>
 
-	<div style="display: flex; flex-direction: column; flex-grow: 1; overflow-y: auto; gap: 8px">
+	<div
+		#contentViewersContainer
+		style="display: flex; flex-direction: column; flex-grow: 1; overflow-y: hidden; gap: 8px">
 		<!--Report scan content viewer -->
 		<copyleaks-content-viewer-container
-			[isHtmlView]="isHtmlView"
-			[contentHtml]="sourceIframeHtml"
+			[style.height.%]="topHeightPercent"
+			[style.flex-grow]="topHeightPercent"
+			[isHtmlView]="!!sourceCrawledVersion?.html?.value ? isHtmlView : false"
 			[scanSource]="sourceCrawledVersion"
 			[contentTextMatches]="sourceTextMatches"
-			[numberOfPages]="numberOfPagesSource"
-			[numberOfWords]="numberOfWords"
+			[contentHtmlMatches]="sourceHtmlMatches"
 			[currentPage]="currentPageSource"
 			[reportResponsive]="EResponsiveLayoutType.Mobile"
+			[showOmittedWords]="showOmittedWords"
+			[isPartitalScan]="isPartitalScan"
 			viewMode="one-to-one"
 			reportOrigin="source"
+			[hasHtml]="!!sourceCrawledVersion?.html?.value"
+			[submittedDocumentName]="scanResultsPreviews?.scannedDocument?.metadata?.filename"
 			[hidePoweredBy]="true"
 			(iFrameMessageEvent)="onSourceIFrameMessage($event)"
-			(viewChangeEvent)="onReportViewChange($event)"></copyleaks-content-viewer-container>
+			(viewChangeEvent)="onReportViewChange($event)"
+			(onShowOmittedWords)="onShowOmittedWords($event)"></copyleaks-content-viewer-container>
+
+		<div class="expand-icon-container">
+			<div class="line"></div>
+			<svg
+				(mousedown)="startDragging($event)"
+				(touchstart)="startDragging($event)"
+				xmlns="http://www.w3.org/2000/svg"
+				width="18"
+				height="18"
+				viewBox="0 0 18 18"
+				fill="none">
+				<g clip-path="url(#clip0_4678_10271)">
+					<path
+						d="M14.25 6.75H3.75C3.3375 6.75 3 7.0875 3 7.5C3 7.9125 3.3375 8.25 3.75 8.25H14.25C14.6625 8.25 15 7.9125 15 7.5C15 7.0875 14.6625 6.75 14.25 6.75ZM3.75 11.25H14.25C14.6625 11.25 15 10.9125 15 10.5C15 10.0875 14.6625 9.75 14.25 9.75H3.75C3.3375 9.75 3 10.0875 3 10.5C3 10.9125 3.3375 11.25 3.75 11.25Z"
+						fill="#0B163E" />
+				</g>
+				<defs>
+					<clipPath id="clip0_4678_10271">
+						<rect width="18" height="18" fill="white" />
+					</clipPath>
+				</defs>
+			</svg>
+			<div class="line"></div>
+		</div>
 
 		<!-- Report result content viewer -->
 		<copyleaks-content-viewer-container
+			[style.height.%]="bottomHeightPercent"
+			[style.flex-grow]="bottomHeightPercent"
 			[isHtmlView]="isHtmlView"
-			[contentHtml]="suspectIframeHtml"
-			[resultData]="resultData"
+			[contentHtmlMatches]="suspectHtmlMatches"
 			[contentTextMatches]="suspectTextMatches"
-			[numberOfPages]="numberOfPagesSuspect"
+			[resultData]="resultData"
 			[currentPage]="currentPageSuspect"
 			[reportResponsive]="EResponsiveLayoutType.Mobile"
 			[hidePoweredBy]="true"
 			[hasMaskedContent]="isOthersFile && hasNonIdenticalMatchWords"
 			viewMode="one-to-one"
+			[hasHtml]="!!suspectHtmlMatches"
 			reportOrigin="suspect"
 			(onOpenDisclaimer)="openDisclaimer()"
 			(iFrameMessageEvent)="onSuspectIFrameMessage($event)"
@@ -53,4 +86,6 @@
 </div>
 
 <!-- Powered by Copyleaks image section -->
-<div class="powered-by-copyleaks-container"><cr-powered-by></cr-powered-by></div>
+<div *ngIf="reportMode === EReportMode.WebReport" class="powered-by-copyleaks-container">
+	<cr-powered-by></cr-powered-by>
+</div>

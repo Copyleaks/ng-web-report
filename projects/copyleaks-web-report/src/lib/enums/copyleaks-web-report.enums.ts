@@ -1,4 +1,18 @@
 /**
+ * Enum for all the copyleaks report view types.
+ */
+export enum EReportMode {
+	/**
+	 * The normal web reoprt view.
+	 */
+	WebReport = 'web-report',
+	/**
+	 * The Assessment tool view.
+	 */
+	AssessmentTool = 'assessment-tool',
+}
+
+/**
  * Enum for all the copyleaks report layouts types.
  */
 export enum EReportLayoutType {
@@ -51,6 +65,11 @@ export enum EReportScoreTooltipPosition {
 	LEFT = 'left',
 	RIGHT = 'right',
 	DEFAULT = 'above',
+}
+
+export enum EReportScoreTooltipView {
+	Tooltip = 'tooltip',
+	Inline = 'inline',
 }
 
 /**

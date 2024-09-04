@@ -744,8 +744,8 @@ export class ContentViewerContainerComponent implements OnInit, AfterViewInit, O
 		this.onTextMatchSelectionEvent.emit(selectTextEvent);
 	}
 
-	getCustomMatchGravatarUrlByEmailAddress(email: string = 'safaa@copyleaks.com'): string {
-		const emailHash = MD5(email.trim().toLowerCase()).toString();
+	getCustomMatchGravatarUrlByEmailAddress(email: string = ''): string {
+		const emailHash = email === '' ? email : MD5(email.trim().toLowerCase()).toString();
 		// TODO add default image
 		return `https://www.gravatar.com/avatar/${emailHash}`;
 	}

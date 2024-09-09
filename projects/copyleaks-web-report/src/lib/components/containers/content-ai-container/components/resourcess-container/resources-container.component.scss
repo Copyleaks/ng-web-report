@@ -1,0 +1,51 @@
+@import '../../../../../styles/website-colors.styles.scss';
+.resourcess-container {
+	.expansion-panel {
+		border-radius: 10px;
+		background: $color-white;
+		box-shadow: 0px 0px 2px 0px rgba(11, 22, 62, 0.08), 0px 0px 10px 0px rgba(11, 22, 62, 0.04);
+		::ng-deep .mat-expansion-panel-header {
+			padding: 10px 16px;
+			height: 40px;
+			.mat-expansion-panel-header-title {
+				color: $color-black;
+				font-family: 'Almarai';
+				font-size: 18px;
+				font-weight: 800;
+			}
+			.mat-expansion-indicator:after {
+				color: #2b95ff;
+			}
+		}
+		mat-divider {
+			width: 100%;
+		}
+	}
+}
+.content-conrainer {
+	.header-contaienr {
+		width: 100%;
+		.title {
+			color: $color-black;
+			font-family: 'haboro-soft';
+			font-size: 16px;
+			font-weight: 800;
+			line-height: 120%; /* 19.2px */
+			text-transform: capitalize;
+		}
+		.learn-more {
+			color: $color-primary;
+			font-family: 'haboro-soft';
+			font-size: 14px;
+			font-weight: 500;
+			text-decoration-line: underline;
+			white-space: nowrap;
+		}
+	}
+	.description {
+		color: $color-black;
+		font-family: 'haboro-soft';
+		font-size: 14px;
+		font-weight: 500;
+	}
+}

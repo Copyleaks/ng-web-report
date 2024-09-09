@@ -102,6 +102,10 @@ import { ReportViewService } from './services/report-view.service';
 import { ReportDataService } from './services/report-data.service';
 import { ReportErrorsService } from './services/report-errors.service';
 import { FileNamePipeModule } from './pipes/file-name/file-name.module';
+import { ContentAiContainerComponent } from './components/containers/content-ai-container/content-ai-container.component';
+import { AiPercentageComponent } from './components/containers/content-ai-container/components/ai-percentage/ai-percentage.component';
+import { MoreFrequentlyPhrasesContainerComponent } from './components/containers/content-ai-container/components/more-frequently-phrases-container/more-frequently-phrases-container.component';
+import { ResourcesContainerComponent } from './components/containers/content-ai-container/components/resourcess-container/resources-container.component';
 
 @NgModule({
 	declarations: [
@@ -164,6 +168,10 @@ import { FileNamePipeModule } from './pipes/file-name/file-name.module';
 		CrBannerSectionComponent,
 		CrAiDisclaimerComponent,
 		CrAssessmentToolTabScorePanelComponent,
+		ContentAiContainerComponent,
+		AiPercentageComponent,
+		MoreFrequentlyPhrasesContainerComponent,
+		ResourcesContainerComponent,
 	],
 	imports: [
 		CommonModule,

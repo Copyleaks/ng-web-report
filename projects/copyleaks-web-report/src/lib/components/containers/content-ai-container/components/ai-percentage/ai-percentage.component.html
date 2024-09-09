@@ -1,0 +1,16 @@
+<div class="ai-percentage-container" fxLayout="row" fxLayoutAlign="space-between center">
+	<div class="contet-container" fxLayout="column" fxLayoutAlign="start start" fxLayoutGap="8px">
+		<div class="title">
+			<span *ngIf="aiPercentageResult > 0; else noResult" i18n>AI Content Found</span>
+			<span #noResult i18n>No AI Content Found</span>
+		</div>
+		<span class="description" i18n>Percentage of text that may be AI-generated.</span>
+	</div>
+	<div
+		class="percentage-score-container"
+		[ngClass]="{
+			'zero-result': aiPercentageResult === 0
+		}">
+		<span class="percentage-result">{{ aiPercentageResult }}%</span>
+	</div>
+</div>

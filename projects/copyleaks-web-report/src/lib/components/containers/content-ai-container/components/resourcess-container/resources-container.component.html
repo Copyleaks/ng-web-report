@@ -1,0 +1,31 @@
+<div class="resourcess-container">
+	<mat-accordion>
+		<mat-expansion-panel class="expansion-panel">
+			<mat-expansion-panel-header>
+				<mat-panel-title>Resources</mat-panel-title>
+			</mat-expansion-panel-header>
+			<div fxLayout="column" fxLayoutAlign="start start" fxLayoutGap="24px">
+				<ng-container *ngFor="let res of resourcesList">
+					<mat-divider></mat-divider>
+					<ng-container
+						*ngTemplateOutlet="
+							resourcesTemplate;
+							context: { title: res.title, link: res.link, description: res.description }
+						"></ng-container>
+				</ng-container>
+			</div>
+		</mat-expansion-panel>
+	</mat-accordion>
+</div>
+
+<ng-template #resourcesTemplate let-title="title" let-link="link" let-description="description">
+	<div class="content-conrainer" fxLayout="column" fxLayoutAlign="start start" fxLayoutGap="12px">
+		<div class="header-contaienr" fxLayout="row" fxLayoutAlign="space-between center">
+			<span class="title" i18n>{{ title }}</span>
+			<a class="learn-more" [href]="link">
+				<span i18n>Learn more</span>
+			</a>
+		</div>
+		<span class="description">{{ description }}</span>
+	</div>
+</ng-template>

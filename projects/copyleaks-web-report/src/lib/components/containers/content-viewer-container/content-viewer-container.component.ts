@@ -270,7 +270,16 @@ export class ContentViewerContainerComponent implements OnInit, AfterViewInit, O
 
 	@Input() customIframeScript: string;
 
-	@Input() customViewMatchesData: { id: string; start: number; end: number; text: string; pageNumber: number }[][];
+	@Input() currentUserEmail: string;
+
+	@Input() customViewMatchesData: {
+		id: string;
+		start: number;
+		end: number;
+		text: string;
+		pageNumber: number;
+		submitterEmail: string;
+	}[][];
 
 	@Input() customViewMatcheClassName: string = 'copyleaks-highlight';
 
@@ -744,10 +753,24 @@ export class ContentViewerContainerComponent implements OnInit, AfterViewInit, O
 		this.onTextMatchSelectionEvent.emit(selectTextEvent);
 	}
 
-	getCustomMatchGravatarUrlByEmailAddress(email: string = ''): string {
-		const emailHash = email === '' ? email : MD5(email.trim().toLowerCase()).toString();
-		// TODO add default image
-		return `https://www.gravatar.com/avatar/${emailHash}`;
+	async getCustomMatchGravatarUrlByEmailAddress(email: string): Promise<string> {
+		// check if only spaces string
+		if (!email || email.trim() === '') return 'https://copyleaks.com/wp-content/uploads/2023/01/logom.png';
+		var emailHash = MD5(email.trim().toLowerCase());
+		var gravatarUrl = 'https://www.gravatar.com/avatar/' + emailHash;
+
+		try {
+			const response = await fetch(gravatarUrl);
+			if (response.status === 404) {
+				gravatarUrl = 'https://copyleaks.com/wp-content/uploads/2023/01/logom.png';
+			}
+		} catch (error) {
+			// If fetch fails for any reason, use default URL
+			if (error.status === 200) {
+			} else gravatarUrl = 'https://copyleaks.com/wp-content/uploads/2023/01/logom.png';
+		}
+
+		return gravatarUrl;
 	}
 
 	// Generate a unique ID for each customMatch
@@ -766,7 +789,14 @@ export class ContentViewerContainerComponent implements OnInit, AfterViewInit, O
 		if (!selectedText) return;
 		var end = start + selectedText.length;
 
-		return { id: this.generateCustomMatchId(), start: start, end: end, text: selectedText, pageNumber: 0 };
+		return {
+			id: this.generateCustomMatchId(),
+			start: start,
+			end: end,
+			text: selectedText,
+			pageNumber: this.currentPage,
+			submitterEmail: this.currentUserEmail,
+		};
 	}
 
 	// Function to create and display customMatch
@@ -904,7 +934,7 @@ export class ContentViewerContainerComponent implements OnInit, AfterViewInit, O
 		});
 	}
 
-	attachHighlightAvatar(customMatchId) {
+	async attachHighlightAvatar(customMatchId) {
 		if (this.customMatchesWithAvatarsIds.includes(customMatchId)) return;
 		const elements = document.querySelectorAll(
 			'.' + this.customViewMatcheClassName + '[data-id="' + customMatchId + '"]'
@@ -949,7 +979,11 @@ export class ContentViewerContainerComponent implements OnInit, AfterViewInit, O
 			});
 
 			const img = document.createElement('img');
-			img.src = this.getCustomMatchGravatarUrlByEmailAddress();
+			// get the email address from the selected text
+			const customMatch = this.customViewMatchesData[this.currentPage - 1].find(
+				customMatch => customMatch.id === customMatchId
+			);
+			img.src = await this.getCustomMatchGravatarUrlByEmailAddress(customMatch.submitterEmail);
 			img.alt = 'User Avatar';
 			img.className = 'custom-view-avatar';
 			avatarContainer.appendChild(img);

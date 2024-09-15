@@ -45,7 +45,7 @@ import { filter } from 'rxjs/operators';
 import * as rangy from 'rangy';
 import * as rangyclassapplier from 'rangy/lib/rangy-classapplier';
 
-import { MD5 } from 'crypto-js';
+import { md5 } from 'hash-wasm';
 
 @Component({
 	selector: 'copyleaks-content-viewer-container',
@@ -754,23 +754,30 @@ export class ContentViewerContainerComponent implements OnInit, AfterViewInit, O
 	}
 
 	async getCustomMatchGravatarUrlByEmailAddress(email: string): Promise<string> {
-		// check if only spaces string
-		if (!email || email.trim() === '') return 'https://copyleaks.com/wp-content/uploads/2023/01/logom.png';
-		var emailHash = MD5(email.trim().toLowerCase());
-		var gravatarUrl = 'https://www.gravatar.com/avatar/' + emailHash;
-
-		try {
-			const response = await fetch(gravatarUrl);
-			if (response.status === 404) {
-				gravatarUrl = 'https://copyleaks.com/wp-content/uploads/2023/01/logom.png';
-			}
-		} catch (error) {
-			// If fetch fails for any reason, use default URL
-			if (error.status === 200) {
-			} else gravatarUrl = 'https://copyleaks.com/wp-content/uploads/2023/01/logom.png';
+		// If the email is null, undefined, or only contains spaces, return the default image
+		if (!email || email.trim() === '') {
+			return 'https://copyleaks.com/wp-content/uploads/2023/01/logom.png';
 		}
 
-		return gravatarUrl;
+		// Generate the email hash for Gravatar
+		const emailHash = md5(email.trim().toLowerCase());
+		let gravatarUrl = `https://www.gravatar.com/avatar/${emailHash}?d=404`;
+
+		// Create an Image element to check if the avatar exists
+		return new Promise(resolve => {
+			const img = new Image();
+			img.src = gravatarUrl;
+
+			// If the avatar exists, resolve with the Gravatar URL
+			img.onload = () => {
+				resolve(gravatarUrl);
+			};
+
+			// If the avatar does not exist or cannot be loaded, resolve with the default image URL
+			img.onerror = () => {
+				resolve('https://copyleaks.com/wp-content/uploads/2023/01/logom.png');
+			};
+		});
 	}
 
 	// Generate a unique ID for each customMatch

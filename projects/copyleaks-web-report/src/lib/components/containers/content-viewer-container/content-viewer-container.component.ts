@@ -760,7 +760,7 @@ export class ContentViewerContainerComponent implements OnInit, AfterViewInit, O
 		}
 
 		// Generate the email hash for Gravatar
-		const emailHash = md5(email.trim().toLowerCase());
+		const emailHash = await md5(email.trim().toLowerCase());
 		let gravatarUrl = `https://www.gravatar.com/avatar/${emailHash}?d=404`;
 
 		// Create an Image element to check if the avatar exists
@@ -961,6 +961,11 @@ export class ContentViewerContainerComponent implements OnInit, AfterViewInit, O
 
 			if (left + 40 > contentTextRect.width) {
 				left = contentTextRect.width - 40;
+			}
+			// Adjust top position if overflowing on the bottom
+			if (top + 40 > contentTextRect.height) {
+				top = contentTextRect.height - 40;
+				avatarContainer.style.borderRadius = '0px 32px 32px 32px';
 			}
 			avatarContainer.style.left = `${left}px`;
 			avatarContainer.style.top = `${top}px`;

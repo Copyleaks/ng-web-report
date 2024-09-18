@@ -4,6 +4,7 @@ import { distinctUntilChanged, filter } from 'rxjs/operators';
 import { ALERTS } from '../constants/report-alerts.constants';
 import {
 	ICompleteResults,
+	IExcludedCorrection,
 	IScanSource,
 	IWritingFeedback,
 	IWritingFeedbackCorrectionViewModel,
@@ -260,11 +261,20 @@ export class ReportMatchesService implements OnDestroy {
 			this._reportViewSvc.reportViewMode$.pipe(distinctUntilChanged()),
 			this._reportDataSvc.filterOptions$.pipe(distinctUntilChanged()),
 			this._reportDataSvc.excludedCorrections$.pipe(distinctUntilChanged()),
+			this._reportDataSvc.scanResultsDetails$.pipe(distinctUntilChanged()),
 		])
 			.pipe(
 				untilDestroy(this),
 				filter(
-					([scanSource, selectedAlert, writingFeedback, viewMode]) =>
+					([scanSource, selectedAlert, writingFeedback, viewMode]: [
+						IScanSource,
+						string,
+						IWritingFeedback,
+						IReportViewEvent,
+						ICopyleaksReportOptions,
+						IExcludedCorrection[],
+						ResultDetailItem[]
+					]) =>
 						scanSource != null &&
 						scanSource != undefined &&
 						!selectedAlert &&
@@ -275,7 +285,6 @@ export class ReportMatchesService implements OnDestroy {
 			)
 			.subscribe(([scanSource, , writingFeedback, viewMode, filterOptions, excludedCorrections]) => {
 				if (!scanSource || !writingFeedback || !viewMode) return;
-
 				const hasHtml =
 					!!writingFeedback?.corrections?.html?.chars &&
 					!!writingFeedback?.corrections?.html?.chars.types &&

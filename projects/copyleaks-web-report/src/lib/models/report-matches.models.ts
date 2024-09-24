@@ -51,6 +51,7 @@ export enum MatchType {
 	relatedMeaning = 2,
 	writingFeedback = 3,
 	aiText = 4,
+	aiExplain = 6,
 	none = 5,
 
 	// custom
@@ -98,10 +99,30 @@ export type ContentKey = 'text' | 'html';
 /** possible key options for results ranges */
 export type MatchUnit = 'chars' | 'words';
 
+export interface AIExplainResult {
+	start: number[];
+	end: number[];
+	length: number[];
+}
+
 export interface AIScanResult {
 	results: AIScanResultItem[];
 	summary: AIScanResultSummary;
 	scannedDocument: AIScannedDocument;
+	explain: AIExplainPattern;
+}
+
+export interface AIExplainPattern {
+	patterns: {
+		statistics: AIPatternStatistics;
+		text: AIScanResultMatchChar;
+	};
+}
+
+export interface AIPatternStatistics {
+	aiCount: number[];
+	humanCount: number[];
+	proportion: number[];
 }
 
 export interface AIScannedDocument {

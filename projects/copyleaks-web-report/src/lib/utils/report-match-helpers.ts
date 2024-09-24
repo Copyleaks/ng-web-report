@@ -125,7 +125,7 @@ const mergeMatchesInNest = (matches: Match[]): Match[] => {
 
 	const subMatches: Match[] = [];
 	const idMap: { [key: string]: number } = {};
-	const types: number[] = [0, 0, 0, 0, 0, 0];
+	const types: number[] = [0, 0, 0, 0, 0, 0, 0];
 	let start: number | undefined = undefined;
 	for (const { index, type, ids, kind, gid, reason } of endpoints) {
 		if (kind === EndpointKind.start) {
@@ -465,7 +465,10 @@ export const processAICheatingMatches = (
 	alertToMatch: ICompleteResultNotificationAlert
 ): SlicedMatch[][] => {
 	const matches: Match[] = [];
+	let lastExplainIndex: number = 0;
 	var scanResult = JSON.parse(alertToMatch.additionalData) as AIScanResult;
+	const lengthExplain = scanResult?.explain?.patterns?.text?.starts?.length;
+
 	scanResult?.results?.forEach(result => {
 		result?.matches?.forEach((match: AIScanResultMatch) => {
 			const mappedMatches = match?.text.chars?.starts?.map(
@@ -480,7 +483,61 @@ export const processAICheatingMatches = (
 						totalWords: match.text.words.lengths[idx],
 					} as AIMatch)
 			);
-			if (mappedMatches) matches.push(...mappedMatches);
+			//#region add explain to the matches
+			if (mappedMatches && mappedMatches[0].type == MatchType.aiText && lastExplainIndex < lengthExplain) {
+				let startMappedMatches = mappedMatches[0].start;
+				let endMappedMatches = mappedMatches[0].end;
+				for (let i = lastExplainIndex; i < lengthExplain; i++) {
+					const firstExolain = scanResult?.explain?.patterns?.text?.starts[i];
+					const endExolain = firstExolain + scanResult.explain.patterns.text.lengths[i];
+					if (startMappedMatches <= firstExolain && endMappedMatches >= endExolain) {
+						lastExplainIndex = i + 1;
+
+						if (startMappedMatches < firstExolain) {
+							const matchBefore = {
+								start: startMappedMatches,
+								end: firstExolain - 1,
+								type: mappedMatches[0].type,
+								ids: [],
+								classification: mappedMatches[0].classification,
+								probability: mappedMatches[0].probability,
+								totalWords: mappedMatches[0].totalWords,
+							} as AIMatch;
+							matches.push(matchBefore);
+							startMappedMatches = firstExolain;
+							i = i - 1;
+						} else if (startMappedMatches == firstExolain) {
+							const explainMatch = {
+								start: firstExolain,
+								end: endExolain,
+								type: MatchType.aiExplain,
+								ids: [],
+								classification: mappedMatches[0].classification,
+								probability: mappedMatches[0].probability,
+								totalWords: mappedMatches[0].totalWords,
+							} as AIMatch;
+							matches.push(explainMatch);
+							startMappedMatches = endExolain + 1;
+						}
+					}
+				}
+				if (startMappedMatches < endMappedMatches) {
+					const matchAfter = {
+						start: startMappedMatches,
+						end: endMappedMatches,
+						type: mappedMatches[0].type,
+						ids: [],
+						classification: mappedMatches[0].classification,
+						probability: mappedMatches[0].probability,
+						totalWords: mappedMatches[0].totalWords,
+					} as AIMatch;
+					matches.push(matchAfter);
+				}
+			}
+			//#endregion
+			else if (mappedMatches) {
+				matches.push(...mappedMatches);
+			}
 		});
 	});
 
@@ -488,6 +545,14 @@ export const processAICheatingMatches = (
 	const grouped = mergeMatches([...matches, ...excluded]);
 	const filled = fillMissingGaps(grouped, source.text.value.length);
 	return paginateMatches(source.text.value, source.text.pages.startPosition, filled);
+};
+
+export const getProportionDivider = (proportionArray: number[]) => {
+	const positiveValues = proportionArray.filter(value => value > 0);
+	const min = Math.min(...positiveValues);
+	const max = Math.max(...proportionArray);
+	const divider = (max - min) / 3;
+	return divider;
 };
 
 /**

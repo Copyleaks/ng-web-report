@@ -13,6 +13,16 @@
 							context: { title: res.title, link: res.link, description: res.description }
 						"></ng-container>
 				</ng-container>
+				<mat-divider></mat-divider>
+			</div>
+			<div class="platforms-container">
+				<span>
+					Certain platforms, like Grammarly, use ChatGPT and other genAI models for key functionalities and can be
+					flagged as potential AI content.
+				</span>
+				<a class="learn-more">
+					<span i18n>Learn more</span>
+				</a>
 			</div>
 		</mat-expansion-panel>
 	</mat-accordion>
@@ -20,10 +30,11 @@
 
 <ng-template #resourcesTemplate let-title="title" let-link="link" let-description="description">
 	<div class="content-conrainer" fxLayout="column" fxLayoutAlign="start start" fxLayoutGap="12px">
-		<div class="header-contaienr" fxLayout="row" fxLayoutAlign="space-between center">
+		<div class="header-contaienr" fxLayout="row" fxLayoutAlign="space-between center" fxLayoutGap="4px">
 			<span class="title" i18n>{{ title }}</span>
-			<a class="learn-more" [href]="link">
+			<a fxLayout="row" fxLayoutAlign="start end" class="learn-more" [href]="link">
 				<span i18n>Learn more</span>
+				<mat-icon>chevron_right</mat-icon>
 			</a>
 		</div>
 		<span class="description">{{ description }}</span>

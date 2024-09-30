@@ -42,7 +42,7 @@
 								[writingFeedbackStats]="correctionTypeStats"
 								[selectedView]="EReportViewType.WritingFeedbackTabView"
 								(selectCategory)="onSelectCategory($event)"></cr-categories-analysis-panel>
-							<span class="categorized-summery" i18n>Descending</span>
+							<span class="categorized-summery" i18n>Chronological</span>
 						</div>
 						<cr-correction
 							*cdkVirtualFor="let correction of displayedScanCorrectionsView"
@@ -185,7 +185,7 @@
 		{{ selectedCategroyDescription }}
 	</span>
 
-	<span class="categorized-summery" i18n>Descending</span>
+	<span class="categorized-summery" i18n>Chronological</span>
 
 	<cdk-virtual-scroll-viewport class="all-corrections-info-container" itemSize="40">
 		<cr-correction

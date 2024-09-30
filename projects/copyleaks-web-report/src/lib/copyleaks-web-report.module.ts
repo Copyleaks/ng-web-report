@@ -104,7 +104,7 @@ import { ReportErrorsService } from './services/report-errors.service';
 import { FileNamePipeModule } from './pipes/file-name/file-name.module';
 import { ContentAiContainerComponent } from './components/containers/content-ai-container/content-ai-container.component';
 import { AiPercentageComponent } from './components/containers/content-ai-container/components/ai-percentage/ai-percentage.component';
-import { MoreFrequentlyPhrasesContainerComponent } from './components/containers/content-ai-container/components/more-frequently-phrases-container/more-frequently-phrases-container.component';
+import { ExplainableAIResultContainerComponent } from './components/containers/content-ai-container/components/explainable-ai-result-container/explainable-ai-result-container.component';
 import { ResourcesContainerComponent } from './components/containers/content-ai-container/components/resourcess-container/resources-container.component';
 
 @NgModule({
@@ -170,7 +170,7 @@ import { ResourcesContainerComponent } from './components/containers/content-ai-
 		CrAssessmentToolTabScorePanelComponent,
 		ContentAiContainerComponent,
 		AiPercentageComponent,
-		MoreFrequentlyPhrasesContainerComponent,
+		ExplainableAIResultContainerComponent,
 		ResourcesContainerComponent,
 	],
 	imports: [

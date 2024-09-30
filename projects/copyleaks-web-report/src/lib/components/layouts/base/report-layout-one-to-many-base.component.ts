@@ -13,7 +13,14 @@ import {
 	ResultPreview,
 } from '../../../models/report-data.models';
 import { PostMessageEvent } from '../../../models/report-iframe-events.models';
-import { Match, MatchType, ResultDetailItem, SlicedMatch } from '../../../models/report-matches.models';
+import {
+	AIScanResult,
+	ExplainableAIResults,
+	Match,
+	MatchType,
+	ResultDetailItem,
+	SlicedMatch,
+} from '../../../models/report-matches.models';
 import { ICopyleaksReportOptions } from '../../../models/report-options.models';
 import {
 	IMatchesTypeStatistics,
@@ -99,6 +106,7 @@ export abstract class OneToManyReportLayoutBaseComponent extends ReportLayoutBas
 	selectedCustomTabResultSectionContentTemplate: TemplateRef<any>;
 	showOmittedWords: boolean;
 	isPartitalScan: boolean;
+	explainableAI: ExplainableAIResults = { explain: null, slicedMatch: [] };
 
 	// Subject for destroying all the subscriptions in base component
 	private unsubscribe$ = new Subject();
@@ -220,6 +228,19 @@ export abstract class OneToManyReportLayoutBaseComponent extends ReportLayoutBas
 					}
 				});
 		});
+		combineLatest([
+			this.reportViewSvc.selectedAlert$.pipe(distinctUntilChanged()),
+			this.reportDataSvc.scanResultsPreviews$.pipe(distinctUntilChanged()),
+		])
+			.pipe(takeUntil(this.unsubscribe$))
+			.subscribe(([selectedAlert, scanResults]) => {
+				if (selectedAlert && scanResults) {
+					const validSelectedAlert = scanResults?.notifications?.alerts.find(alert => alert.code === selectedAlert);
+					var scanResult = JSON.parse(validSelectedAlert.additionalData) as AIScanResult;
+					this.explainableAI.explain = scanResult?.explain;
+				}
+			});
+
 		this.reportDataSvc.writingFeedback$.pipe(takeUntil(this.unsubscribe$)).subscribe(data => {
 			if (data) this.writingFeedback = data;
 			this.showReadabilityLoadingView = !data;
@@ -357,6 +378,8 @@ export abstract class OneToManyReportLayoutBaseComponent extends ReportLayoutBas
 			if (data) {
 				this.isLoadingScanContent = false;
 				this.contentTextMatches = data;
+				let explainAiMatches = this.contentTextMatches[0].filter(result => result.match.type === MatchType.aiExplain);
+				this.explainableAI.slicedMatch = explainAiMatches;
 
 				if (this.reportViewSvc.reportViewMode?.viewMode === 'writing-feedback') {
 					if (

@@ -1,4 +1,5 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, Input, OnInit } from '@angular/core';
+import { ExplainableAIResults } from '../../../models/report-matches.models';
 
 @Component({
 	selector: 'copyleaks-content-ai-container',
@@ -6,7 +7,8 @@ import { Component, OnInit } from '@angular/core';
 	styleUrls: ['./content-ai-container.component.scss'],
 })
 export class ContentAiContainerComponent implements OnInit {
-	constructor() {}
+	@Input() explainableAIResults: ExplainableAIResults = { explain: null, slicedMatch: [] };
 
+	constructor() {}
 	ngOnInit(): void {}
 }

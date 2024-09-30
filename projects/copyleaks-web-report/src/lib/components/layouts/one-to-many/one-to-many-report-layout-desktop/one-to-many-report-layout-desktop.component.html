@@ -108,7 +108,9 @@
 
 			<!-- Report results container -->
 
-			<copyleaks-content-ai-container *ngIf="selectedTap === EReportViewType.AIView"></copyleaks-content-ai-container>
+			<copyleaks-content-ai-container
+				*ngIf="selectedTap === EReportViewType.AIView"
+				[explainableAIResults]="explainableAI"></copyleaks-content-ai-container>
 			<!-- <cr-ai-disclaimer *ngIf="selectedTap === EReportViewType.AIView"></cr-ai-disclaimer> -->
 
 			<copyleaks-report-results-container

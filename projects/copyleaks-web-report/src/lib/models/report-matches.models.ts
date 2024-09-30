@@ -39,6 +39,8 @@ export interface Match extends Range {
 	wrongText?: string;
 	/** The corrected text */
 	correctionText?: string;
+	/** The proportion type of explain ai */
+	proportionType?: EProportionType;
 }
 
 /**
@@ -105,6 +107,11 @@ export interface AIExplainResult {
 	length: number[];
 }
 
+export interface ExplainableAIResults {
+	explain?: AIExplainPattern;
+	slicedMatch?: SlicedMatch[];
+}
+
 export interface AIScanResult {
 	results: AIScanResultItem[];
 	summary: AIScanResultSummary;
@@ -123,6 +130,17 @@ export interface AIPatternStatistics {
 	aiCount: number[];
 	humanCount: number[];
 	proportion: number[];
+}
+
+export interface AIExProportionItem {
+	index: number;
+	eProportion: EProportionType;
+}
+
+export enum EProportionType {
+	Low = 'low',
+	Medium = 'medium',
+	High = 'high',
 }
 
 export interface AIScannedDocument {

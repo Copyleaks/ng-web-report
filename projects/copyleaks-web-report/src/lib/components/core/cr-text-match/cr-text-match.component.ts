@@ -45,7 +45,7 @@ export class CrTextMatchComponent implements AfterContentInit {
 	@HostListener('click', ['$event'])
 	public click(event) {
 		if (this.match.type === MatchType.aiText) return;
-		if (this.match.type === MatchType.aiExplain) return;
+
 		// If the match isn't AI, then trigger the match click event
 		// also update the selection type according to the user click (with or without the shift for multi selection)
 		this._highlightService.textMatchClicked({
@@ -61,6 +61,10 @@ export class CrTextMatchComponent implements AfterContentInit {
 	 * Add a class to the native element that represents the match type
 	 */
 	ngAfterContentInit() {
-		this.renderer.addClass(this.element.nativeElement, `cr-m-${this.match.type}`);
+		if (this.match.type === MatchType.aiExplain) {
+			this.renderer.addClass(this.element.nativeElement, `cr-m-${MatchType.aiExplain}-${this.match.proportionType}`);
+		} else {
+			this.renderer.addClass(this.element.nativeElement, `cr-m-${this.match.type}`);
+		}
 	}
 }

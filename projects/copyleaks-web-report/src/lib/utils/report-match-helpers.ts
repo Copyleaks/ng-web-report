@@ -1,10 +1,12 @@
 import {
+	AIExProportionItem,
 	AIMatch,
 	AIScanResult,
 	AIScanResultMatch,
 	ComparisonKey,
 	ContentKey,
 	EndpointKind,
+	EProportionType,
 	Match,
 	MatchEndpoint,
 	MatchType,
@@ -144,6 +146,7 @@ const mergeMatchesInNest = (matches: Match[]): Match[] => {
 						writingFeedbackType:
 							uniqueMatches.find(um => um.start === start && um.type === MatchType.writingFeedback)
 								?.writingFeedbackType ?? undefined,
+						proportionType: matches[0]?.proportionType,
 					});
 				}
 			}
@@ -166,6 +169,7 @@ const mergeMatchesInNest = (matches: Match[]): Match[] => {
 					writingFeedbackType:
 						uniqueMatches.find(um => um.start === start && um.type === MatchType.writingFeedback)
 							?.writingFeedbackType ?? undefined,
+					proportionType: matches[0]?.proportionType,
 				});
 			}
 			ids?.forEach(id => (idMap[id] = (idMap[id] || 0) - 1));
@@ -468,7 +472,7 @@ export const processAICheatingMatches = (
 	let lastExplainIndex: number = 0;
 	var scanResult = JSON.parse(alertToMatch.additionalData) as AIScanResult;
 	const lengthExplain = scanResult?.explain?.patterns?.text?.starts?.length;
-
+	const proportionArray = updateExplainProportionType(scanResult?.explain?.patterns?.statistics?.proportion);
 	scanResult?.results?.forEach(result => {
 		result?.matches?.forEach((match: AIScanResultMatch) => {
 			const mappedMatches = match?.text.chars?.starts?.map(
@@ -515,6 +519,7 @@ export const processAICheatingMatches = (
 								classification: mappedMatches[0].classification,
 								probability: mappedMatches[0].probability,
 								totalWords: mappedMatches[0].totalWords,
+								proportionType: proportionArray[i]?.eProportion,
 							} as AIMatch;
 							matches.push(explainMatch);
 							startMappedMatches = endExolain + 1;
@@ -547,12 +552,28 @@ export const processAICheatingMatches = (
 	return paginateMatches(source.text.value, source.text.pages.startPosition, filled);
 };
 
-export const getProportionDivider = (proportionArray: number[]) => {
+export const updateExplainProportionType = (proportionArray: number[]) => {
+	let proportionArrayType: AIExProportionItem[] = [];
+	if (proportionArray.length == 0) {
+		return proportionArrayType;
+	}
 	const positiveValues = proportionArray.filter(value => value > 0);
 	const min = Math.min(...positiveValues);
 	const max = Math.max(...proportionArray);
 	const divider = (max - min) / 3;
-	return divider;
+	proportionArray.forEach((value, index) => {
+		if (min <= value && value < divider) {
+			proportionArrayType.push({
+				index,
+				eProportion: EProportionType.Low,
+			});
+		} else if (divider <= value && value < divider * 2) {
+			proportionArrayType.push({ index, eProportion: EProportionType.Medium });
+		} else if (divider * 2 <= value && value <= max) {
+			proportionArrayType.push({ index, eProportion: EProportionType.High });
+		}
+	});
+	return proportionArrayType;
 };
 
 /**

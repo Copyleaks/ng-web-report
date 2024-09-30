@@ -264,15 +264,33 @@
 			}
 
 			&.cr-m-4 {
-				background-color: $color-ai-detected-text;
+				background-color: $color-light-ai-detected-text;
 				transition: 0.2s;
 				cursor: auto !important;
 			}
 
-			&.cr-m-6 {
-				background-color: $color-explain-ai-detected-text;
+			&.cr-m-6-low {
+				background-color: $color-explain-ai-low;
 				transition: 0.2s;
-				cursor: auto !important;
+				&:hover {
+					background-color: $color-match-selected;
+				}
+			}
+
+			&.cr-m-6-medium {
+				background-color: $color-explain-ai-medium;
+				transition: 0.2s;
+				&:hover {
+					background-color: $color-match-selected;
+				}
+			}
+
+			&.cr-m-6-high {
+				background-color: $color-explain-ai-high;
+				transition: 0.2s;
+				&:hover {
+					background-color: $color-match-selected;
+				}
 			}
 
 			&.cr-m-100 {

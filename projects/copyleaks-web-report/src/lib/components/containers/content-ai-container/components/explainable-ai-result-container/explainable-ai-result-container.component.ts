@@ -1,5 +1,9 @@
 import { Component, Input, OnInit } from '@angular/core';
-import { ExplainableAIResults } from '../../../../../models/report-matches.models';
+import {
+	AIExplainResultItem,
+	EProportionType,
+	ExplainableAIResults,
+} from '../../../../../models/report-matches.models';
 
 @Component({
 	selector: 'copyleaks-explainable-ai-result-container',
@@ -7,13 +11,61 @@ import { ExplainableAIResults } from '../../../../../models/report-matches.model
 	styleUrls: ['./explainable-ai-result-container.component.scss'],
 })
 export class ExplainableAIResultContainerComponent implements OnInit {
+	@Input() explainableAIResults: ExplainableAIResults;
+	explainResults: AIExplainResultItem[] = [];
+
+	minProportion: number = 0;
+	maxProportion: number = 0;
+	proportions: number[] = [];
+	minGradeBar: number = 0;
+	midGradeBar: number = 0;
+	maxGradeBar: number = 0;
+
 	get headerTooltip(): string {
 		return $localize`Generative AI models often overuse certain phrases, which is one of over three dozen signals used by our algorithms to identify the presence of AI.`;
 	}
 
-	@Input() explainableAIResults: ExplainableAIResults = { explain: null, slicedMatch: [] };
 	constructor() {}
+
 	ngOnInit(): void {
-		console.log(this.explainableAIResults);
+		if (this.explainableAIResults) {
+			this._updateProportionRange();
+			this._mapingtoResultItem();
+		}
+	}
+
+	private _updateProportionRange(): void {
+		this.proportions = this.explainableAIResults.explain?.patterns?.statistics?.proportion ?? [];
+		const proportionsFiltered = this.proportions.filter(p => p > 0);
+		this.minProportion = Math.min(...proportionsFiltered);
+		this.maxProportion = Math.max(...proportionsFiltered);
+
+		this.minGradeBar = this._getGradePercentByPropoType(EProportionType.Low);
+		this.midGradeBar = this._getGradePercentByPropoType(EProportionType.Medium);
+		this.maxGradeBar = this._getGradePercentByPropoType(EProportionType.High);
+	}
+
+	private _getGradePercentByPropoType(type: EProportionType): number {
+		const grade =
+			(this.explainableAIResults.slicedMatch.filter(result => result?.match?.proportionType == type)?.length /
+				this.proportions.length) *
+			100;
+		return Number(grade.toFixed(3));
+	}
+
+	private _mapingtoResultItem() {
+		this.explainableAIResults.explain.patterns.statistics.proportion.forEach((item, index) => {
+			const wordStart = this.explainableAIResults.explain.patterns.text.starts[index];
+			const slicedMatchResult = this.explainableAIResults.slicedMatch.find(result => result.match.start === wordStart);
+			this.explainResults.push({
+				content: slicedMatchResult.content,
+				proportionType: slicedMatchResult.match.proportionType,
+				aiCount: this.explainableAIResults.explain.patterns.statistics.aiCount[index],
+				humanCount: this.explainableAIResults.explain.patterns.statistics.humanCount[index],
+				proportion: item,
+				start: this.explainableAIResults.explain.patterns.text.starts[index],
+				end: this.explainableAIResults.explain.patterns.text.lengths[index] + wordStart,
+			});
+		});
 	}
 }

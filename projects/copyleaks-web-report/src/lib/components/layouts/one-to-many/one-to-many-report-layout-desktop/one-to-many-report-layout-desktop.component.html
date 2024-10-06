@@ -110,6 +110,9 @@
 
 			<copyleaks-content-ai-container
 				*ngIf="selectedTap === EReportViewType.AIView"
+				[aiScore]="reportStatistics?.aiScore ?? 0"
+				[wordsTotal]="reportStatistics?.total ?? 0"
+				[excludedTotal]="reportStatistics?.omittedWords ?? 0"
 				[explainableAIResults]="explainableAI"></copyleaks-content-ai-container>
 			<!-- <cr-ai-disclaimer *ngIf="selectedTap === EReportViewType.AIView"></cr-ai-disclaimer> -->
 

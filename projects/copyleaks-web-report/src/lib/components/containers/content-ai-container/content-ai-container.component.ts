@@ -7,8 +7,14 @@ import { ExplainableAIResults } from '../../../models/report-matches.models';
 	styleUrls: ['./content-ai-container.component.scss'],
 })
 export class ContentAiContainerComponent implements OnInit {
-	@Input() explainableAIResults: ExplainableAIResults = { explain: null, slicedMatch: [] };
+	@Input() wordsTotal: number = 0;
+	@Input() aiScore: number = 0;
+	@Input() excludedTotal: number = 0;
+	@Input() explainableAIResults: ExplainableAIResults;
+	totalAiWords: number = 0;
 
 	constructor() {}
-	ngOnInit(): void {}
+	ngOnInit(): void {
+		this.totalAiWords = Math.ceil(this.aiScore * ((this.wordsTotal ?? 0) - (this.excludedTotal ?? 0)));
+	}
 }

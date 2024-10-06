@@ -107,6 +107,16 @@ export interface AIExplainResult {
 	length: number[];
 }
 
+export interface AIExplainResultItem {
+	content: string;
+	proportionType: EProportionType;
+	aiCount: number;
+	humanCount: number;
+	proportion: number;
+	start: number;
+	end: number;
+}
+
 export interface ExplainableAIResults {
 	explain?: AIExplainPattern;
 	slicedMatch?: SlicedMatch[];

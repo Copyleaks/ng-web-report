@@ -1,8 +1,57 @@
-<div class="top-container" fxLayout="column">
-	<div class="header-container" fxLayout="row" fxLayoutAlign="space-between center">
-		<span class="title" i18n>Phrases More Frequently Used By AI</span>
-		<mat-icon class="info-icon" fontSet="material-icons-outlined" [tabIndex]="0" [matTooltip]="headerTooltip">
-			info
-		</mat-icon>
+<div class="top-container" fxLayout="column" fxLayoutGap="16px">
+	<div class="header-container" fxLayout="column" fxLayoutGap="4px">
+		<div class="header" fxLayout="row" fxLayoutAlign="space-between center">
+			<span class="title" i18n>AI insights</span>
+			<div fxLayout="row" fxLayoutAlign="center center" fxLayoutGap="8px">
+				<div class="beta-container">
+					<span>Beta</span>
+				</div>
+				<mat-icon class="info-icon" fontSet="material-icons-outlined" [tabIndex]="0" [matTooltip]="headerTooltip">
+					info
+				</mat-icon>
+			</div>
+		</div>
+		<div fxLayout="column" fxLayoutGap="16px">
+			<span class="header-description" i18n>The frequency of a phrase in AI vs. human text.</span>
+			<div class="grade-bar-container" fxLayout="row" fxLayoutAlign="start center" fxLayoutGap="16px">
+				<span class="min-proportion">{{ minProportion }}x</span>
+				<div class="grade-bar" fxLayout="row">
+					<div class="min-result" [style.width]="minGradeBar + '%'"></div>
+					<div class="mid-result" [style.width]="midGradeBar + '%'"></div>
+					<div class="max-result" [style.width]="maxGradeBar + '%'"></div>
+				</div>
+				<span class="max-proportion">{{ maxProportion }}x</span>
+			</div>
+		</div>
+	</div>
+	<div class="explain-results" fxLayout="column" *ngFor="let item of explainResults">
+		<mat-accordion>
+			<mat-expansion-panel>
+				<mat-expansion-panel-header>
+					<mat-panel-title>
+						<div fxLayout="row" fxLayoutAlign="start center" fxLayoutGap="4px">
+							<div class="proportion">
+								<span>{{ item.proportion }}</span>
+							</div>
+							<span class="content">{{ item.content }}</span>
+						</div>
+					</mat-panel-title>
+				</mat-expansion-panel-header>
+				<div class="result-container" fxLayout="column" fxLayoutGap="2px">
+					<div class="result-header" fxLayout="row" fxLayoutAlign="space-between center">
+						<span class="title" i18n>How frequently the phrase was found in our dataset :</span>
+						<mat-icon class="info-icon" fontSet="material-icons-outlined">info</mat-icon>
+					</div>
+					<div class="ai-count-container" fxLayout="row" fxLayoutAlign="space-between center">
+						<span class="title" i18n>AI Text</span>
+						<span class="count-result" i18n>{{ item.aiCount }} times in 1,000,000 documents</span>
+					</div>
+					<div class="human-count-container" fxLayout="row" fxLayoutAlign="space-between center">
+						<span class="title" i18n>Human Text</span>
+						<span class="count-result" i18n>{{ item.humanCount }} times in 1,000,000 documents</span>
+					</div>
+				</div>
+			</mat-expansion-panel>
+		</mat-accordion>
 	</div>
 </div>

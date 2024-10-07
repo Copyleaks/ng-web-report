@@ -6,7 +6,12 @@
 				<div class="beta-container">
 					<span>Beta</span>
 				</div>
-				<mat-icon class="info-icon" fontSet="material-icons-outlined" [tabIndex]="0" [matTooltip]="headerTooltip">
+				<mat-icon
+					class="info-icon"
+					fontSet="material-icons-outlined"
+					[tabIndex]="0"
+					[matTooltip]="headerTooltip"
+					matTooltipClass="web-report-mat-tooltip">
 					info
 				</mat-icon>
 			</div>
@@ -24,7 +29,7 @@
 			</div>
 		</div>
 	</div>
-	<div class="explain-results" fxLayout="column" *ngFor="let item of explainResults">
+	<div class="explain-results" fxLayout="column" *ngFor="let item of explainItemResults">
 		<mat-accordion>
 			<mat-expansion-panel>
 				<mat-expansion-panel-header>

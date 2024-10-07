@@ -49,7 +49,7 @@
 		box-shadow: -2px -2px 8px 0px rgba(255, 255, 255, 0.5), 2px 2px 4px 0px rgba(0, 0, 0, 0.15);
 		border-radius: 10px;
 		gap: 8px;
-		background-color: transparent;
+		background-color: $color-white;
 		copyleaks-report-results-container {
 			height: 95%;
 			flex-grow: 95;
@@ -117,7 +117,7 @@
 		box-shadow: -2px -2px 8px 0px rgba(255, 255, 255, 0.5), 2px 2px 4px 0px rgba(0, 0, 0, 0.15);
 		border-radius: 10px;
 		gap: 8px;
-		background-color: transparent;
+		background-color: $color-white;
 		copyleaks-report-results-container {
 			height: 95%;
 			flex-grow: 95;
@@ -136,6 +136,9 @@
 			flex-grow: 95;
 			overflow-y: auto;
 		}
+	}
+	.ai-results-container {
+		background-color: transparent;
 	}
 }
 

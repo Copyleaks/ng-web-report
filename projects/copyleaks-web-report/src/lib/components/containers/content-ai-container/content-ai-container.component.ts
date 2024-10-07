@@ -11,6 +11,7 @@ export class ContentAiContainerComponent implements OnInit {
 	@Input() aiScore: number = 0;
 	@Input() excludedTotal: number = 0;
 	@Input() explainableAIResults: ExplainableAIResults;
+	@Input() selectAIText: number[] = [];
 	totalAiWords: number = 0;
 
 	constructor() {}

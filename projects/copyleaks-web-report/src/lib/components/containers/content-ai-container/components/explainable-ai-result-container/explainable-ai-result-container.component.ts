@@ -12,6 +12,7 @@ import {
 })
 export class ExplainableAIResultContainerComponent implements OnInit {
 	@Input() explainableAIResults: ExplainableAIResults;
+	@Input() selectAIText: number[] = [];
 	explainResults: AIExplainResultItem[] = [];
 
 	minProportion: number = 0;
@@ -26,6 +27,12 @@ export class ExplainableAIResultContainerComponent implements OnInit {
 	}
 
 	constructor() {}
+
+	get explainItemResults(): AIExplainResultItem[] {
+		if (this.selectAIText.length == 0) return this.explainResults;
+		let itemResults = this.explainResults.filter(item => this.selectAIText.includes(item.start));
+		return itemResults;
+	}
 
 	ngOnInit(): void {
 		if (this.explainableAIResults) {
@@ -55,17 +62,21 @@ export class ExplainableAIResultContainerComponent implements OnInit {
 
 	private _mapingtoResultItem() {
 		this.explainableAIResults.explain.patterns.statistics.proportion.forEach((item, index) => {
-			const wordStart = this.explainableAIResults.explain.patterns.text.starts[index];
-			const slicedMatchResult = this.explainableAIResults.slicedMatch.find(result => result.match.start === wordStart);
-			this.explainResults.push({
-				content: slicedMatchResult.content,
-				proportionType: slicedMatchResult.match.proportionType,
-				aiCount: this.explainableAIResults.explain.patterns.statistics.aiCount[index],
-				humanCount: this.explainableAIResults.explain.patterns.statistics.humanCount[index],
-				proportion: item,
-				start: this.explainableAIResults.explain.patterns.text.starts[index],
-				end: this.explainableAIResults.explain.patterns.text.lengths[index] + wordStart,
-			});
+			const wordStart = this.explainableAIResults?.explain?.patterns?.text?.starts[index];
+			if (wordStart) {
+				const slicedMatchResult = this.explainableAIResults.slicedMatch.find(
+					result => result.match.start === wordStart
+				);
+				this.explainResults.push({
+					content: slicedMatchResult.content,
+					proportionType: slicedMatchResult.match.proportionType,
+					aiCount: this.explainableAIResults.explain.patterns.statistics.aiCount[index],
+					humanCount: this.explainableAIResults.explain.patterns.statistics.humanCount[index],
+					proportion: Number(item.toFixed(3)),
+					start: this.explainableAIResults.explain.patterns.text.starts[index],
+					end: this.explainableAIResults.explain.patterns.text.lengths[index] + wordStart,
+				});
+			}
 		});
 	}
 }

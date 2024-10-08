@@ -93,18 +93,14 @@
 						<span class="match-type-numbers" style="width: 35px; text-align: end">
 							{{
 								(1 -
-									((scoreStats?.omittedPct?.totalWords ?? 0) +
-										(scoreStats?.paraphrasedPct?.totalWords ?? 0) +
-										(scoreStats?.minorChangesPct?.totalWords ?? 0) +
-										(scoreStats?.identicalPct?.totalWords ?? 0)) /
-										scoreStats?.totalWords >=
+									scoreStats?.paraphrasedPct?.percentage -
+									scoreStats?.minorChangesPct?.percentage -
+									scoreStats?.identicalPct?.percentage >=
 								0
 									? 1 -
-									  ((scoreStats?.omittedPct?.totalWords ?? 0) +
-											(scoreStats?.paraphrasedPct?.totalWords ?? 0) +
-											(scoreStats?.minorChangesPct?.totalWords ?? 0) +
-											(scoreStats?.identicalPct?.totalWords ?? 0)) /
-											scoreStats?.totalWords
+									  scoreStats?.paraphrasedPct?.percentage -
+									  scoreStats?.minorChangesPct?.percentage -
+									  scoreStats?.identicalPct?.percentage
 									: 0) ?? 0 | similarity : '1.0-1'
 							}}
 						</span>
@@ -130,21 +126,17 @@
 					<span
 						*ngIf="
 							1 -
-								((scoreStats?.omittedPct?.totalWords ?? 0) +
-									(scoreStats?.paraphrasedPct?.totalWords ?? 0) +
-									(scoreStats?.minorChangesPct?.totalWords ?? 0) +
-									(scoreStats?.identicalPct?.totalWords ?? 0)) /
-									scoreStats?.totalWords >
+								scoreStats?.paraphrasedPct?.percentage -
+								scoreStats?.minorChangesPct?.percentage -
+								scoreStats?.identicalPct?.percentage >
 							0
 						"
 						class="match-type-bar-pct"
 						[style.width]="
 							(1 -
-								((scoreStats?.omittedPct?.totalWords ?? 0) +
-									(scoreStats?.paraphrasedPct?.totalWords ?? 0) +
-									(scoreStats?.minorChangesPct?.totalWords ?? 0) +
-									(scoreStats?.identicalPct?.totalWords ?? 0)) /
-									scoreStats?.totalWords ??
+								scoreStats?.paraphrasedPct?.percentage -
+								scoreStats?.minorChangesPct?.percentage -
+								scoreStats?.identicalPct?.percentage ??
 								0) *
 								100 +
 							'%'

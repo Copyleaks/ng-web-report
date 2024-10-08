@@ -62,7 +62,7 @@ export class ExplainableAIResultContainerComponent implements OnInit {
 
 	private _mapingtoResultItem() {
 		this.explainableAIResults.explain.patterns.statistics.proportion.forEach((item, index) => {
-			const wordStart = this.explainableAIResults?.explain?.patterns?.text?.starts[index];
+			const wordStart = this.explainableAIResults?.explain?.patterns?.text?.chars.starts[index];
 			if (wordStart) {
 				const slicedMatchResult = this.explainableAIResults.slicedMatch.find(
 					result => result.match.start === wordStart
@@ -73,8 +73,8 @@ export class ExplainableAIResultContainerComponent implements OnInit {
 					aiCount: this.explainableAIResults.explain.patterns.statistics.aiCount[index],
 					humanCount: this.explainableAIResults.explain.patterns.statistics.humanCount[index],
 					proportion: Number(item.toFixed(3)),
-					start: this.explainableAIResults.explain.patterns.text.starts[index],
-					end: this.explainableAIResults.explain.patterns.text.lengths[index] + wordStart,
+					start: this.explainableAIResults.explain.patterns.text.chars.starts[index],
+					end: this.explainableAIResults.explain.patterns.text.chars.lengths[index] + wordStart,
 				});
 			}
 		});

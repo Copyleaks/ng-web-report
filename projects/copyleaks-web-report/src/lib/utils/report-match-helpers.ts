@@ -471,7 +471,7 @@ export const processAICheatingMatches = (
 	const matches: Match[] = [];
 	let lastExplainIndex: number = 0;
 	var scanResult = JSON.parse(alertToMatch.additionalData) as AIScanResult;
-	const lengthExplain = scanResult?.explain?.patterns?.text?.starts?.length;
+	const lengthExplain = scanResult?.explain?.patterns?.text?.chars?.starts?.length;
 	const proportionArray = updateExplainProportionType(scanResult?.explain?.patterns?.statistics?.proportion);
 	scanResult?.results?.forEach(result => {
 		result?.matches?.forEach((match: AIScanResultMatch) => {
@@ -492,8 +492,8 @@ export const processAICheatingMatches = (
 				let startMappedMatches = mappedMatches[0].start;
 				let endMappedMatches = mappedMatches[0].end;
 				for (let i = lastExplainIndex; i < lengthExplain; i++) {
-					const firstExolain = scanResult?.explain?.patterns?.text?.starts[i];
-					const endExolain = firstExolain + scanResult.explain.patterns.text.lengths[i];
+					const firstExolain = scanResult?.explain?.patterns?.text?.chars?.starts[i];
+					const endExolain = firstExolain + scanResult.explain?.patterns?.text?.chars?.lengths[i];
 					if (startMappedMatches <= firstExolain && endMappedMatches >= endExolain) {
 						lastExplainIndex = i + 1;
 

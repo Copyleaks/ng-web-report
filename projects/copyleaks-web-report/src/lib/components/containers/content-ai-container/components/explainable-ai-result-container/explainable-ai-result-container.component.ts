@@ -44,8 +44,8 @@ export class ExplainableAIResultContainerComponent implements OnInit {
 	private _updateProportionRange(): void {
 		this.proportions = this.explainableAIResults.explain?.patterns?.statistics?.proportion ?? [];
 		const proportionsFiltered = this.proportions.filter(p => p > 0);
-		this.minProportion = Math.min(...proportionsFiltered);
-		this.maxProportion = Math.max(...proportionsFiltered);
+		this.minProportion = Number(Math.min(...proportionsFiltered).toFixed(3));
+		this.maxProportion = Number(Math.max(...proportionsFiltered).toFixed(3));
 
 		this.minGradeBar = this._getGradePercentByPropoType(EProportionType.Low);
 		this.midGradeBar = this._getGradePercentByPropoType(EProportionType.Medium);
@@ -70,8 +70,8 @@ export class ExplainableAIResultContainerComponent implements OnInit {
 				this.explainResults.push({
 					content: slicedMatchResult.content,
 					proportionType: slicedMatchResult.match.proportionType,
-					aiCount: this.explainableAIResults.explain.patterns.statistics.aiCount[index],
-					humanCount: this.explainableAIResults.explain.patterns.statistics.humanCount[index],
+					aiCount: Number(this.explainableAIResults.explain.patterns.statistics.aiCount[index].toFixed(3)),
+					humanCount: Number(this.explainableAIResults.explain.patterns.statistics.humanCount[index].toFixed(3)),
 					proportion: Number(item.toFixed(3)),
 					start: this.explainableAIResults.explain.patterns.text.chars.starts[index],
 					end: this.explainableAIResults.explain.patterns.text.chars.lengths[index] + wordStart,

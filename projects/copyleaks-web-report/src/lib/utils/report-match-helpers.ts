@@ -1,5 +1,4 @@
 import {
-	AIExProportionItem,
 	AIMatch,
 	AIScanResult,
 	AIScanResultMatch,
@@ -519,7 +518,7 @@ export const processAICheatingMatches = (
 								classification: mappedMatches[0].classification,
 								probability: mappedMatches[0].probability,
 								totalWords: mappedMatches[0].totalWords,
-								proportionType: proportionArray[i]?.eProportion,
+								proportionType: proportionArray[i],
 							} as AIMatch;
 							matches.push(explainMatch);
 							startMappedMatches = endExolain + 1;
@@ -553,7 +552,7 @@ export const processAICheatingMatches = (
 };
 
 export const updateExplainProportionType = (proportionArray: number[]) => {
-	let proportionArrayType: AIExProportionItem[] = [];
+	let proportionArrayType: EProportionType[] = [];
 	if (proportionArray.length == 0) {
 		return proportionArrayType;
 	}
@@ -561,16 +560,20 @@ export const updateExplainProportionType = (proportionArray: number[]) => {
 	const min = Math.min(...positiveValues);
 	const max = Math.max(...proportionArray);
 	const divider = (max - min) / 3;
-	proportionArray.forEach((value, index) => {
-		if (min <= value && value < divider) {
-			proportionArrayType.push({
-				index,
-				eProportion: EProportionType.Low,
-			});
+	proportionArray.forEach((value) => {
+		if(value == -1){
+			proportionArrayType.push(
+				EProportionType.High,
+			);
+		}
+		else if (min <= value && value < divider) {
+			proportionArrayType.push(
+				EProportionType.Low,
+			);
 		} else if (divider <= value && value < divider * 2) {
-			proportionArrayType.push({ index, eProportion: EProportionType.Medium });
+			proportionArrayType.push(EProportionType.Medium );
 		} else if (divider * 2 <= value && value <= max) {
-			proportionArrayType.push({ index, eProportion: EProportionType.High });
+			proportionArrayType.push(EProportionType.High );
 		}
 	});
 	return proportionArrayType;

@@ -132,14 +132,14 @@ export interface AIScanResult {
 export interface AIExplainPattern {
 	patterns: {
 		statistics: AIPatternStatistics;
-		text:{
+		text: {
 			chars: AIScanResultMatchChar;
 			words: AIScanResultMatchChar;
 		};
-		html:{
-			chars:AIScanResultMatchHtml;
-			words:AIScanResultMatchHtml;
-		}
+		html: {
+			chars: AIScanResultMatchHtml;
+			words: AIScanResultMatchHtml;
+		};
 	};
 }
 
@@ -198,7 +198,7 @@ export interface AIScanResultMatchChar {
 export interface AIScanResultMatchHtml {
 	starts: number[];
 	lengths: number[];
-	groupIds:number[];
+	groupIds: number[];
 }
 
 export interface AIMatch extends Match {

@@ -560,20 +560,15 @@ export const updateExplainProportionType = (proportionArray: number[]) => {
 	const min = Math.min(...positiveValues);
 	const max = Math.max(...proportionArray);
 	const divider = (max - min) / 3;
-	proportionArray.forEach((value) => {
-		if(value == -1){
-			proportionArrayType.push(
-				EProportionType.High,
-			);
-		}
-		else if (min <= value && value < divider) {
-			proportionArrayType.push(
-				EProportionType.Low,
-			);
+	proportionArray.forEach(value => {
+		if (value == -1) {
+			proportionArrayType.push(EProportionType.High);
+		} else if (min <= value && value < divider) {
+			proportionArrayType.push(EProportionType.Low);
 		} else if (divider <= value && value < divider * 2) {
-			proportionArrayType.push(EProportionType.Medium );
+			proportionArrayType.push(EProportionType.Medium);
 		} else if (divider * 2 <= value && value <= max) {
-			proportionArrayType.push(EProportionType.High );
+			proportionArrayType.push(EProportionType.High);
 		}
 	});
 	return proportionArrayType;

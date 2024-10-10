@@ -274,6 +274,7 @@ export class ContentViewerContainerComponent implements OnInit, AfterViewInit, O
 
 	@Input() customViewMatchesData: {
 		id: string;
+		parentId: string;
 		start: number;
 		end: number;
 		text: string;
@@ -464,6 +465,7 @@ export class ContentViewerContainerComponent implements OnInit, AfterViewInit, O
 			if (this.customViewMatchesData)
 				setTimeout(() => {
 					this.customViewMatchesData[this.currentPage - 1].forEach(customMatch => {
+						if (customMatch.parentId) return;
 						this.highlightCustomMatchText(customMatch);
 					});
 				}, 1000);
@@ -487,6 +489,7 @@ export class ContentViewerContainerComponent implements OnInit, AfterViewInit, O
 			if (this.customViewMatchesData)
 				setTimeout(() => {
 					this.customViewMatchesData[this.currentPage - 1].forEach(customMatch => {
+						if (customMatch.parentId) return;
 						this.highlightCustomMatchText(customMatch);
 					});
 				}, 1000);
@@ -657,6 +660,7 @@ export class ContentViewerContainerComponent implements OnInit, AfterViewInit, O
 				this.hideAddCustomMatchIcon();
 				this.refreshCustomMatchesAvatars();
 				this.customViewMatchesData[this.currentPage - 1].forEach(customMatch => {
+					if (customMatch.parentId) return;
 					this.highlightCustomMatchText(customMatch);
 				});
 			});

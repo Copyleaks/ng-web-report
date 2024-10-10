@@ -1,8 +1,17 @@
-<div class="resourcess-container">
+<div
+	class="resourcess-container"
+	[class.resourcess-container-open]="isOpen"
+	[@slidePanel]="isOpen ? 'expanded' : 'collapsed'">
 	<mat-accordion>
-		<mat-expansion-panel class="expansion-panel">
+		<mat-expansion-panel class="expansion-panel" (opened)="isOpen = true" (closed)="isOpen = false" hideToggle>
 			<mat-expansion-panel-header>
 				<mat-panel-title>Resources</mat-panel-title>
+				<mat-panel-description>
+					<mat-icon>
+						<ng-container *ngIf="isOpen; else closePanel">keyboard_arrow_up</ng-container>
+						<ng-template #closePanel>keyboard_arrow_down</ng-template>
+					</mat-icon>
+				</mat-panel-description>
 			</mat-expansion-panel-header>
 			<div fxLayout="column" fxLayoutAlign="start start" fxLayoutGap="24px">
 				<ng-container *ngFor="let res of resourcesList">

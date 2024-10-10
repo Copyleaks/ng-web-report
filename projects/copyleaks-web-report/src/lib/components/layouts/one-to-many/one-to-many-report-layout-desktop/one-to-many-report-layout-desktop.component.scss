@@ -136,9 +136,14 @@
 			flex-grow: 95;
 			overflow-y: auto;
 		}
+		.ai-results-container {
+			display: flex;
+			height: 100%;
+		}
 	}
 	.ai-results-container {
 		background-color: transparent;
+		overflow: hidden;
 	}
 }
 

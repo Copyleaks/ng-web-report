@@ -1,7 +1,10 @@
-<div fxLayout="column" fxLayoutGap="8px">
-	<copyleaks-ai-percentage [aiPercentageResult]="totalAiWords / wordsTotal"></copyleaks-ai-percentage>
-	<copyleaks-explainable-ai-result-container
-		[explainableAIResults]="explainableAIResults"
-		[selectAIText]="selectAIText"></copyleaks-explainable-ai-result-container>
+<div fxLayout="column" fxLayoutAlign="space-between center" fxLayoutGap="8px">
+	<div class="percentage-result-container" fxLayout="column" fxLayoutGap="8px">
+		<copyleaks-ai-percentage [aiPercentageResult]="totalAiWords / wordsTotal"></copyleaks-ai-percentage>
+		<copyleaks-explainable-ai-result-container
+			class="copyleaks-explainable-ai-result"
+			[explainableAIResults]="explainableAIResults"
+			[selectAIText]="selectAIText"></copyleaks-explainable-ai-result-container>
+	</div>
 	<copyleaks-resources-container></copyleaks-resources-container>
 </div>

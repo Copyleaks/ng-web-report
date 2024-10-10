@@ -16,6 +16,7 @@ export class ExplainableAIResultContainerComponent implements OnInit {
 	explainResults: AIExplainResultItem[] = [];
 
 	minProportion: number = 0;
+	hasInfinityResult: boolean = false;
 	maxProportion: number = 0;
 	proportions: number[] = [];
 	minGradeBar: number = 0;
@@ -44,9 +45,9 @@ export class ExplainableAIResultContainerComponent implements OnInit {
 	private _updateProportionRange(): void {
 		this.proportions = this.explainableAIResults.explain?.patterns?.statistics?.proportion ?? [];
 		const proportionsFiltered = this.proportions.filter(p => p > 0);
-		this.minProportion = Number(Math.min(...proportionsFiltered).toFixed(3));
-		this.maxProportion = Number(Math.max(...proportionsFiltered).toFixed(3));
-
+		this.minProportion = Number(Math.min(...proportionsFiltered).toFixed(0));
+		this.maxProportion = Number(Math.max(...proportionsFiltered).toFixed(0));
+		this.hasInfinityResult = this.proportions.some(p => p == -1);
 		this.minGradeBar = this._getGradePercentByPropoType(EProportionType.Low);
 		this.midGradeBar = this._getGradePercentByPropoType(EProportionType.Medium);
 		this.maxGradeBar = this._getGradePercentByPropoType(EProportionType.High);
@@ -57,7 +58,7 @@ export class ExplainableAIResultContainerComponent implements OnInit {
 			(this.explainableAIResults.slicedMatch.filter(result => result?.match?.proportionType == type)?.length /
 				this.proportions.length) *
 			100;
-		return Number(grade.toFixed(3));
+		return Number(grade.toFixed(0));
 	}
 
 	private _mapingtoResultItem() {
@@ -70,9 +71,10 @@ export class ExplainableAIResultContainerComponent implements OnInit {
 				this.explainResults.push({
 					content: slicedMatchResult.content,
 					proportionType: slicedMatchResult.match.proportionType,
-					aiCount: Number(this.explainableAIResults.explain.patterns.statistics.aiCount[index].toFixed(3)),
-					humanCount: Number(this.explainableAIResults.explain.patterns.statistics.humanCount[index].toFixed(3)),
-					proportion: Number(item.toFixed(3)),
+					aiCount: Number(this.explainableAIResults.explain.patterns.statistics.aiCount[index].toFixed(0)),
+					humanCount: Number(this.explainableAIResults.explain.patterns.statistics.humanCount[index].toFixed(0)),
+					proportion: Number(item.toFixed(0)),
+					isInfinity: item == -1,
 					start: this.explainableAIResults.explain.patterns.text.chars.starts[index],
 					end: this.explainableAIResults.explain.patterns.text.chars.lengths[index] + wordStart,
 				});

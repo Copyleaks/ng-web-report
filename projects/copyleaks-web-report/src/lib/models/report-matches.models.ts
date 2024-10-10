@@ -113,6 +113,7 @@ export interface AIExplainResultItem {
 	aiCount: number;
 	humanCount: number;
 	proportion: number;
+	isInfinity?: boolean;
 	start: number;
 	end: number;
 }

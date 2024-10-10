@@ -113,6 +113,7 @@
 
 			<copyleaks-content-ai-container
 				*ngIf="!loadingExplainableAI && selectedTap === EReportViewType.AIView"
+				class="ai-results-container"
 				[aiScore]="reportStatistics?.aiScore ?? 0"
 				[wordsTotal]="reportStatistics?.total ?? 0"
 				[excludedTotal]="reportStatistics?.omittedWords ?? 0"
@@ -159,7 +160,11 @@
 					"></copyleaks-report-corrections-container>
 			</ng-container>
 
-			<div class="custom-results-container" #customResultView [style.flex-grow]="'1'">
+			<div
+				class="custom-results-container"
+				*ngIf="selectedTap !== EReportViewType.AIView"
+				#customResultView
+				[style.flex-grow]="'1'">
 				<ng-container *ngTemplateOutlet="customResultsTemplate ?? null"></ng-container>
 			</div>
 		</ng-container>

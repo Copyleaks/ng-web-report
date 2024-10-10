@@ -1,13 +1,32 @@
 import { Component, OnInit } from '@angular/core';
 import { IResources } from './models/resources-container.models';
+import { animate, state, style, transition, trigger } from '@angular/animations';
 
 @Component({
 	selector: 'copyleaks-resources-container',
 	templateUrl: './resources-container.component.html',
 	styleUrls: ['./resources-container.component.scss'],
+	animations: [
+		trigger('slidePanel', [
+			state(
+				'collapsed',
+				style({
+					top: '0',
+				})
+			),
+			state(
+				'expanded',
+				style({
+					top: '-90%',
+				})
+			),
+			transition('collapsed => expanded', [animate('0.5s ease-in-out')]),
+		]),
+	],
 })
 export class ResourcesContainerComponent implements OnInit {
 	resources: any;
+	isOpen: boolean = false;
 	constructor() {}
 	resourcesList: IResources[] = [
 		{
@@ -27,4 +46,13 @@ export class ResourcesContainerComponent implements OnInit {
 		},
 	];
 	ngOnInit(): void {}
+
+	open() {
+		setTimeout(() => {
+			this.isOpen = true;
+		}, 300);
+	}
+	closed() {
+		console.log('closed');
+	}
 }

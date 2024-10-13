@@ -268,6 +268,7 @@ export abstract class OneToManyReportLayoutBaseComponent extends ReportLayoutBas
 				filter(([scanSource, writingFeedback]) => !!writingFeedback && !!scanSource)
 			)
 			.subscribe(([scanSource, writingFeedback]) => {
+				if (scanSource) this.reportCrawledVersion = scanSource;
 				const filteredCorrections = this.reportDataSvc.filterCorrections(
 					JSON.parse(JSON.stringify(writingFeedback?.corrections)),
 					{

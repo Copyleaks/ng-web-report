@@ -1,27 +1,37 @@
-<div class="top-container" fxLayout="column" fxLayoutGap="16px">
+<div class="top-container" [class.empty-view]="emptyView" [class.locked-view]="lockedResults" fxLayout="column">
 	<div class="header-container" fxLayout="column" fxLayoutGap="4px">
 		<div class="header" fxLayout="row" fxLayoutAlign="space-between center">
-			<span class="title" i18n>AI insights</span>
+			<span class="title" i18n>
+				<ng-container *ngIf="emptyView; else notEmpty">AI Content has not been detected</ng-container>
+				<ng-template #notEmpty>AI insights</ng-template>
+			</span>
 			<div fxLayout="row" fxLayoutAlign="center center" fxLayoutGap="8px">
-				<div class="beta-container">
+				<div *ngIf="!emptyView && !lockedResults && !this.selectAIText.length" class="beta-container">
 					<span>Beta</span>
 				</div>
-				<mat-icon
-					class="info-icon"
-					fontSet="material-icons-outlined"
-					[tabIndex]="0"
-					[matTooltip]="headerTooltip"
-					matTooltipClass="web-report-mat-tooltip">
-					info
-				</mat-icon>
+				<ng-container *ngIf="!this.selectAIText.length; else clearSelect">
+					<mat-icon
+						class="info-icon"
+						fontSet="material-icons-outlined"
+						[tabIndex]="0"
+						[matTooltip]="headerTooltip"
+						matTooltipClass="web-report-mat-tooltip">
+						info
+					</mat-icon>
+				</ng-container>
+				<ng-template #clearSelect>
+					<button class="clear-select-button" mat-icon-button (click)="clearSelectdResult()">
+						<mat-icon class="clear-icon" fontSet="material-icons-outlined">cancel</mat-icon>
+					</button>
+				</ng-template>
 			</div>
 		</div>
-		<div fxLayout="column" fxLayoutGap="16px">
+		<div *ngIf="!emptyView && !lockedResults && !this.selectAIText.length" fxLayout="column" fxLayoutGap="16px">
 			<span class="header-description" i18n>The frequency of a phrase in AI vs. human text.</span>
 			<div class="grade-bar-top-container" fxLayout="column" fxLayoutGap="8px">
 				<span class="title" i18n>The number of times a phrase was found more frequently in AI vs human text.</span>
 				<div class="grade-bar-container" fxLayout="row" fxLayoutAlign="start center" fxLayoutGap="16px">
-					<span class="min-proportion">{{ minProportion }}x</span>
+					<span class="min-proportion">{{ minProportion.toLocaleString() }}x</span>
 					<div class="grade-bar" fxLayout="row">
 						<div class="min-result" [style.width]="minGradeBar + '%'"></div>
 						<div class="mid-result" [style.width]="midGradeBar + '%'"></div>
@@ -31,47 +41,64 @@
 						<mat-icon class="infinity-icon" fontSet="material-icons-outlined">all_inclusive</mat-icon>
 					</ng-container>
 					<ng-template #maxResult>
-						<span class="max-proportion">{{ maxProportion }}x</span>
+						<span class="max-proportion">{{ maxProportion.toLocaleString() }}x</span>
 					</ng-template>
 				</div>
 			</div>
 		</div>
 	</div>
 	<div class="container-explain-results" fxLayout="column">
-		<div class="explain-results" fxLayout="column" *ngFor="let item of explainItemResults">
-			<mat-accordion>
-				<mat-expansion-panel #panel>
-					<mat-expansion-panel-header>
-						<mat-panel-title>
-							<div fxLayout="row" fxLayoutAlign="start center" fxLayoutGap="4px">
-								<div class="proportion" fxLayout="column" fxLayoutAlign="center center">
-									<ng-container *ngIf="item.isInfinity; else showProportionValue">
-										<mat-icon class="infinity-icon" fontSet="material-icons-outlined">all_inclusive</mat-icon>
-									</ng-container>
-									<ng-template #showProportionValue>
-										<span>{{ item.proportion }}</span>
-									</ng-template>
-								</div>
-								<span class="content">{{ item.content }}</span>
-							</div>
-						</mat-panel-title>
-					</mat-expansion-panel-header>
-					<div class="result-container" fxLayout="column" fxLayoutGap="2px">
-						<div class="result-header" fxLayout="row" fxLayoutAlign="space-between center">
-							<span class="title" i18n>How frequently the phrase was found in our dataset :</span>
-							<mat-icon class="info-icon" fontSet="material-icons-outlined">info</mat-icon>
-						</div>
-						<div class="ai-count-container" fxLayout="row" fxLayoutAlign="space-between center">
-							<span class="title" i18n>AI Text</span>
-							<span class="count-result" i18n>{{ item.aiCount }} times in 1,000,000 documents</span>
-						</div>
-						<div class="human-count-container" fxLayout="row" fxLayoutAlign="space-between center">
-							<span class="title" i18n>Human Text</span>
-							<span class="count-result" i18n>{{ item.humanCount }} times in 1,000,000 documents</span>
-						</div>
+		<ng-container *ngIf="emptyView || lockedResults; else showResults">
+			<div class="empty-contaienr" fxLayout="column" fxLayoutAlign="center center">
+				<ng-container *ngIf="emptyView; else lockedResults">
+					<span i18n>No AI phrases have been found</span>
+				</ng-container>
+				<ng-template #lockedResults>
+					<div fxLayout="row" fxLayoutAlign="start center" fxLayoutGap="8px">
+						<mat-icon class="lock-icon" fontSet="material-icons-outlined">lock</mat-icon>
+						<span i18n>Locked results</span>
 					</div>
-				</mat-expansion-panel>
-			</mat-accordion>
-		</div>
+				</ng-template>
+			</div>
+		</ng-container>
+		<ng-template #showResults>
+			<div class="explain-results" fxLayout="column" *ngFor="let item of explainItemResults">
+				<mat-accordion>
+					<mat-expansion-panel #panel>
+						<mat-expansion-panel-header>
+							<mat-panel-title>
+								<div fxLayout="row" fxLayoutAlign="start center" fxLayoutGap="4px">
+									<div class="proportion" fxLayout="column" fxLayoutAlign="center center">
+										<ng-container *ngIf="item.isInfinity; else showProportionValue">
+											<mat-icon class="infinity-icon" fontSet="material-icons-outlined">all_inclusive</mat-icon>
+										</ng-container>
+										<ng-template #showProportionValue>
+											<span>{{ item.proportion.toLocaleString() }}</span>
+										</ng-template>
+									</div>
+									<span class="content">{{ item.content }}</span>
+								</div>
+							</mat-panel-title>
+						</mat-expansion-panel-header>
+						<div class="result-container" fxLayout="column" fxLayoutGap="2px">
+							<div class="result-header" fxLayout="row" fxLayoutAlign="space-between center">
+								<span class="title" i18n>How frequently the phrase was found in our dataset :</span>
+								<mat-icon class="info-icon" fontSet="material-icons-outlined">info</mat-icon>
+							</div>
+							<div class="ai-count-container" fxLayout="row" fxLayoutAlign="space-between center">
+								<span class="title" i18n>AI Text</span>
+								<span class="count-result" i18n>{{ item.aiCount.toLocaleString() }} times in 1,000,000 documents</span>
+							</div>
+							<div class="human-count-container" fxLayout="row" fxLayoutAlign="space-between center">
+								<span class="title" i18n>Human Text</span>
+								<span class="count-result" i18n>
+									{{ item.humanCount.toLocaleString() }} times in 1,000,000 documents
+								</span>
+							</div>
+						</div>
+					</mat-expansion-panel>
+				</mat-accordion>
+			</div>
+		</ng-template>
 	</div>
 </div>

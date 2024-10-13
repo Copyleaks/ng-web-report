@@ -106,6 +106,11 @@ export class CopyleaksWebReportComponent implements OnInit, OnDestroy {
 	@Input() platformType: EPlatformType = EPlatformType.APP;
 
 	/**
+	 * @Input {boolean} - Flag indicating whether to show the locked result in the AI explain.
+	 */
+	@Input() lockedExplainAIResults: boolean = false;
+
+	/**
 	 * @Output {ReportHttpRequestErrorModel} - Emits HTTP request data, when any request to update & fetch report data fails.
 	 */
 	@Output() onReportRequestError = new EventEmitter<ReportHttpRequestErrorModel>();

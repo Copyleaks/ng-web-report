@@ -3,8 +3,10 @@
 		<copyleaks-ai-percentage [aiPercentageResult]="totalAiWords / wordsTotal"></copyleaks-ai-percentage>
 		<copyleaks-explainable-ai-result-container
 			class="copyleaks-explainable-ai-result"
+			[lockedResults]="lockedResults"
 			[explainableAIResults]="explainableAIResults"
-			[selectAIText]="selectAIText"></copyleaks-explainable-ai-result-container>
+			[selectAIText]="selectAIText"
+			(clearSelectResultEvent)="clearSelectResult()"></copyleaks-explainable-ai-result-container>
 	</div>
 	<copyleaks-resources-container></copyleaks-resources-container>
 </div>

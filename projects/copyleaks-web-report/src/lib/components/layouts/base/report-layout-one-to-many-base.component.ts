@@ -474,8 +474,13 @@ export abstract class OneToManyReportLayoutBaseComponent extends ReportLayoutBas
 					}
 				} else {
 					this.focusedMatch = !content.isHtmlView ? text && text.match : html;
-					if (this.viewMode === 'one-to-many') this._showResultsForSelectedMatch(this.focusedMatch);
-					else if (this.viewMode === 'writing-feedback') {
+					if (this.viewMode === 'one-to-many') {
+						if (this.selectedTap === EReportViewType.AIView) {
+							this.selectAIText = [];
+						} else {
+							this._showResultsForSelectedMatch(this.focusedMatch);
+						}
+					} else if (this.viewMode === 'writing-feedback') {
 						if (this.focusedMatch)
 							this.displayedScanCorrectionsView = this.allScanCorrectionsView.filter(
 								sc => this.focusedMatch.start === sc.start && this.focusedMatch.end === sc.end

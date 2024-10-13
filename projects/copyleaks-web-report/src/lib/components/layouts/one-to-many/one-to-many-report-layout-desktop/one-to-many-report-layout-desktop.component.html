@@ -114,12 +114,12 @@
 			<copyleaks-content-ai-container
 				*ngIf="!loadingExplainableAI && selectedTap === EReportViewType.AIView"
 				class="ai-results-container"
+				[lockedResults]="lockedExplainAIResults"
 				[aiScore]="reportStatistics?.aiScore ?? 0"
 				[wordsTotal]="reportStatistics?.total ?? 0"
 				[excludedTotal]="reportStatistics?.omittedWords ?? 0"
 				[explainableAIResults]="explainableAI"
 				[selectAIText]="selectAIText"></copyleaks-content-ai-container>
-			<!-- <cr-ai-disclaimer *ngIf="selectedTap === EReportViewType.AIView"></cr-ai-disclaimer> -->
 
 			<copyleaks-report-results-container
 				*ngIf="

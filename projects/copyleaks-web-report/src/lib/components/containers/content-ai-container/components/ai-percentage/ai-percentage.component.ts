@@ -6,8 +6,9 @@ import { Component, Input, OnInit } from '@angular/core';
 	styleUrls: ['./ai-percentage.component.scss'],
 })
 export class AiPercentageComponent implements OnInit {
-	constructor() {}
-
+	/**
+	 * @Input {number} The AI percentage result
+	 */
 	@Input() aiPercentageResult: number = 0;
 	ngOnInit(): void {}
 }

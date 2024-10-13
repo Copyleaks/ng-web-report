@@ -6,11 +6,7 @@
 		</div>
 		<span class="description" i18n>Percentage of text that may be AI-generated.</span>
 	</div>
-	<div
-		class="percentage-score-container"
-		[ngClass]="{
-			'zero-result': aiPercentageResult === 0
-		}">
+	<div class="percentage-score-container" [class.zero-result]="!aiPercentageResult">
 		<span class="percentage-result">{{ aiPercentageResult | percent : '1.0-1' }}</span>
 	</div>
 </div>

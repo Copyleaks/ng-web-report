@@ -46,13 +46,4 @@ export class ResourcesContainerComponent implements OnInit {
 		},
 	];
 	ngOnInit(): void {}
-
-	open() {
-		setTimeout(() => {
-			this.isOpen = true;
-		}, 300);
-	}
-	closed() {
-		console.log('closed');
-	}
 }

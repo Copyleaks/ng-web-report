@@ -150,11 +150,6 @@ export interface AIPatternStatistics {
 	proportion: number[];
 }
 
-export interface AIExProportionItem {
-	index: number;
-	eProportion: EProportionType;
-}
-
 export enum EProportionType {
 	Low = 'low',
 	Medium = 'medium',

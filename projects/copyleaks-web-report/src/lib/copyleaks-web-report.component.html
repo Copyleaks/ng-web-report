@@ -26,6 +26,7 @@
 			<!-- Desktop View -->
 			<ng-container *ngSwitchCase="ResponsiveLayoutType.Desktop">
 				<copyleaks-one-to-many-report-layout-desktop
+					[lockedExplainAIResults]="lockedExplainAIResults"
 					[companyLogo]="companyLogo"
 					[reportMode]="reportMode"
 					[hideWritingFeedback]="hideWritingFeedback"></copyleaks-one-to-many-report-layout-desktop>

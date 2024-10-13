@@ -1,4 +1,4 @@
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, EventEmitter, Input, OnChanges, OnInit, Output, SimpleChanges } from '@angular/core';
 import {
 	AIExplainResultItem,
 	EProportionType,
@@ -10,15 +10,34 @@ import {
 	templateUrl: './explainable-ai-result-container.component.html',
 	styleUrls: ['./explainable-ai-result-container.component.scss'],
 })
-export class ExplainableAIResultContainerComponent implements OnInit {
+export class ExplainableAIResultContainerComponent implements OnInit, OnChanges {
+	/**
+	 * @Input {ExplainableAIResults} The explainable AI results
+	 */
 	@Input() explainableAIResults: ExplainableAIResults;
-	@Input() selectAIText: number[] = [];
-	explainResults: AIExplainResultItem[] = [];
 
-	minProportion: number = 0;
-	hasInfinityResult: boolean = false;
-	maxProportion: number = 0;
+	/**
+	 * @Input {number[]} The start character of the selected text
+	 */
+	@Input() selectAIText: number[] = [];
+
+	/**
+	 * @Input {boolean} A flag indicating if the results are locked
+	 */
+	@Input() lockedResults: boolean = false;
+
+	/**
+	 * @Output {boolean} Event emitted when the user clears the selected result
+	 */
+	@Output() clearSelectResultEvent = new EventEmitter<boolean>();
+
+	explainResults: AIExplainResultItem[] = [];
+	explainItemResults: AIExplainResultItem[] = [];
 	proportions: number[] = [];
+	emptyView: boolean = false;
+	hasInfinityResult: boolean = false;
+	minProportion: number = 0;
+	maxProportion: number = 0;
 	minGradeBar: number = 0;
 	midGradeBar: number = 0;
 	maxGradeBar: number = 0;
@@ -29,16 +48,23 @@ export class ExplainableAIResultContainerComponent implements OnInit {
 
 	constructor() {}
 
-	get explainItemResults(): AIExplainResultItem[] {
-		if (this.selectAIText.length == 0) return this.explainResults;
-		let itemResults = this.explainResults.filter(item => this.selectAIText.includes(item.start));
-		return itemResults;
+	ngOnChanges(changes: SimpleChanges): void {
+		if (changes.selectAIText) {
+			if (!!this.selectAIText.length) {
+				const selectResult = this.explainResults.filter(item => this.selectAIText.includes(item.start));
+				this.explainItemResults = [...selectResult];
+			} else {
+				this.explainItemResults = [...this.explainResults];
+			}
+		}
 	}
 
 	ngOnInit(): void {
-		if (this.explainableAIResults) {
+		if (this.explainableAIResults?.explain && this.explainableAIResults?.slicedMatch.length > 0) {
 			this._updateProportionRange();
 			this._mapingtoResultItem();
+		} else if (!this.lockedResults) {
+			this.emptyView = true;
 		}
 	}
 
@@ -80,5 +106,15 @@ export class ExplainableAIResultContainerComponent implements OnInit {
 				});
 			}
 		});
+		this.explainItemResults = this.explainResults.sort((a, b) => {
+			if (a.proportion === -1) return -1;
+			if (b.proportion === -1) return 1;
+			return b.proportion - a.proportion;
+		});
+		this.explainItemResults = [...this.explainResults];
+	}
+
+	clearSelectdResult() {
+		this.clearSelectResultEvent.emit(true);
 	}
 }

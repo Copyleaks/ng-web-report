@@ -10,7 +10,7 @@
 			height: auto;
 			.mat-content {
 				display: flex;
-				align-items: end;
+				align-items: flex-end;
 			}
 			.mat-expansion-panel-header-title {
 				color: $color-black;
@@ -20,7 +20,7 @@
 			}
 			.mat-expansion-panel-header-description {
 				display: flex;
-				justify-content: end;
+				justify-content: flex-end;
 				margin: 0;
 				mat-icon {
 					font-size: 18px;

@@ -111,6 +111,17 @@
 <div style="display: flex; flex-direction: column; flex-shrink: 0; gap: 8px">
 	<ng-container *ngIf="!selectedCustomTabResultSectionContentTemplate; else customResultSectionRef">
 		<!-- Report results -->
+		<copyleaks-content-ai-container
+			*ngIf="!loadingExplainableAI && selectedTap === EReportViewType.AIView"
+			class="ai-results-container"
+			[isMobile]="true"
+			[lockedResults]="lockedExplainAIResults"
+			[aiScore]="reportStatistics?.aiScore ?? 0"
+			[wordsTotal]="reportStatistics?.total ?? 0"
+			[excludedTotal]="reportStatistics?.omittedWords ?? 0"
+			[explainableAIResults]="explainableAI"
+			[selectAIText]="selectAIText"></copyleaks-content-ai-container>
+
 		<copyleaks-report-results-container
 			*ngIf="
 				((selectedTap !== EReportViewType.AIView && selectedTap !== EReportViewType.WritingFeedbackTabView) ||

@@ -1,9 +1,23 @@
-import { Component, EventEmitter, Input, OnChanges, OnInit, Output, SimpleChanges } from '@angular/core';
+import {
+	Component,
+	EventEmitter,
+	Input,
+	OnChanges,
+	OnInit,
+	Output,
+	QueryList,
+	SimpleChanges,
+	ViewChild,
+	ViewChildren,
+} from '@angular/core';
 import {
 	AIExplainResultItem,
 	EProportionType,
 	ExplainableAIResults,
 } from '../../../../../models/report-matches.models';
+import { CdkVirtualScrollViewport } from '@angular/cdk/scrolling';
+import { EnumNavigateMobileButton } from '../../../report-results-item-container/components/models/report-result-item.enum';
+import { MatExpansionPanel } from '@angular/material/expansion';
 
 @Component({
 	selector: 'copyleaks-explainable-ai-result-container',
@@ -27,20 +41,34 @@ export class ExplainableAIResultContainerComponent implements OnInit, OnChanges 
 	@Input() lockedResults: boolean = false;
 
 	/**
+	 * @Input {boolean} A flag indicating if the component is in mobile view
+	 */
+	@Input() isMobile: boolean = false;
+
+	/**
 	 * @Output {boolean} Event emitted when the user clears the selected result
 	 */
 	@Output() clearSelectResultEvent = new EventEmitter<boolean>();
 
+	@ViewChild(CdkVirtualScrollViewport) viewport: CdkVirtualScrollViewport;
+
+	@ViewChildren(MatExpansionPanel) panels!: QueryList<MatExpansionPanel>;
+
 	explainResults: AIExplainResultItem[] = [];
 	explainItemResults: AIExplainResultItem[] = [];
+	navigateMobileButton: EnumNavigateMobileButton;
+	enumNavigateMobileButton = EnumNavigateMobileButton;
+
 	proportions: number[] = [];
 	emptyView: boolean = false;
 	hasInfinityResult: boolean = false;
+	openedPanel: boolean = false;
 	minProportion: number = 0;
 	maxProportion: number = 0;
 	minGradeBar: number = 0;
 	midGradeBar: number = 0;
 	maxGradeBar: number = 0;
+	currentViewedIndex: number = 0;
 
 	get headerTooltip(): string {
 		return $localize`Generative AI models often overuse certain phrases, which is one of over three dozen signals used by our algorithms to identify the presence of AI.`;
@@ -116,5 +144,80 @@ export class ExplainableAIResultContainerComponent implements OnInit, OnChanges 
 
 	clearSelectdResult() {
 		this.clearSelectResultEvent.emit(true);
+	}
+
+	onScroll(index: number) {
+		if (this.isMobile && this.openedPanel) {
+			this.closePanel();
+		}
+		this.currentViewedIndex = index;
+		if (index === 0) this.navigateMobileButton = EnumNavigateMobileButton.FirstButton;
+		else if (index === 1) this.navigateMobileButton = EnumNavigateMobileButton.SecondButton;
+		else if (
+			(index >= 2 && index != this.explainItemResults.length - 1 && index != this.explainItemResults.length - 2) ||
+			(index === 2 && this.explainItemResults.length <= 5)
+		)
+			this.navigateMobileButton = EnumNavigateMobileButton.ThirdButton;
+		else if (index === this.explainItemResults.length - 2)
+			this.navigateMobileButton = EnumNavigateMobileButton.FourthButton;
+		else if (index === this.explainItemResults.length - 1)
+			this.navigateMobileButton = EnumNavigateMobileButton.FifthButton;
+	}
+
+	onDotNavigate(dot: EnumNavigateMobileButton) {
+		switch (dot) {
+			case EnumNavigateMobileButton.FirstButton: {
+				if (this.explainItemResults.length > 5 && this.currentViewedIndex >= this.explainItemResults.length - 3)
+					this.scrollToIndex(this.explainItemResults.length - 5);
+				else if (this.explainItemResults.length > 5 && this.currentViewedIndex >= 3)
+					this.scrollToIndex(this.currentViewedIndex - 2);
+				else this.scrollToIndex(0);
+				break;
+			}
+			case EnumNavigateMobileButton.SecondButton: {
+				if (this.explainItemResults.length > 5 && this.currentViewedIndex >= this.explainItemResults.length - 3)
+					this.scrollToIndex(this.explainItemResults.length - 4);
+				else if (this.explainItemResults.length > 5 && this.currentViewedIndex >= 3)
+					this.scrollToIndex(this.currentViewedIndex - 1);
+				else this.scrollToIndex(1);
+				break;
+			}
+			case EnumNavigateMobileButton.ThirdButton: {
+				if (this.explainItemResults.length > 5 && this.currentViewedIndex >= this.explainItemResults.length - 3)
+					this.scrollToIndex(this.explainItemResults.length - 3);
+				else if (this.explainItemResults.length > 5 && this.currentViewedIndex >= 3)
+					this.scrollToIndex(this.currentViewedIndex);
+				else this.scrollToIndex(2);
+				break;
+			}
+			case EnumNavigateMobileButton.FourthButton: {
+				if (this.explainItemResults.length > 5 && this.currentViewedIndex >= this.explainItemResults.length - 3)
+					this.scrollToIndex(this.explainItemResults.length - 2);
+				else if (this.explainItemResults.length > 5 && this.currentViewedIndex >= 3)
+					this.scrollToIndex(this.currentViewedIndex + 1);
+				else this.scrollToIndex(3);
+				break;
+			}
+			case EnumNavigateMobileButton.FifthButton: {
+				if (this.explainItemResults.length > 5 && this.currentViewedIndex >= this.explainItemResults.length - 3)
+					this.scrollToIndex(this.explainItemResults.length - 1);
+				else if (this.explainItemResults.length > 5 && this.currentViewedIndex >= 3)
+					this.scrollToIndex(this.currentViewedIndex + 2);
+				else this.scrollToIndex(4);
+				break;
+			}
+			default:
+				break;
+		}
+	}
+
+	// Function to scroll to the given index
+	scrollToIndex(index?: number): void {
+		if (!this.viewport) return;
+		if (index != undefined) this.viewport.scrollToIndex(index, 'smooth');
+	}
+
+	closePanel() {
+		this.panels.forEach(panel => panel.close()); // Only closes the first expansion panel found
 	}
 }

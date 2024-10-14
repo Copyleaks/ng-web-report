@@ -9,6 +9,11 @@ import { ReportMatchHighlightService } from '../../../services/report-match-high
 })
 export class ContentAiContainerComponent implements OnInit {
 	/**
+	 * @Input {boolean} A flag indicating if the component is in mobile view
+	 */
+	@Input() isMobile: boolean = false;
+
+	/**
 	 * @Input {number} The total number of words in this scan
 	 */
 	@Input() wordsTotal: number = 0;

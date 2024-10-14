@@ -1,12 +1,13 @@
 <div class="top-container" [class.empty-view]="emptyView" [class.locked-view]="lockedResults" fxLayout="column">
-	<div class="header-container" fxLayout="column" fxLayoutGap="4px">
+	<div class="header-container" [class.header-container-mobile]="isMobile" fxLayout="column" fxLayoutGap="4px">
+		<!-- Header -->
 		<div class="header" fxLayout="row" fxLayoutAlign="space-between center">
 			<span class="title" i18n>
 				<ng-container *ngIf="emptyView; else notEmpty">AI Content has not been detected</ng-container>
 				<ng-template #notEmpty>AI insights</ng-template>
 			</span>
 			<div fxLayout="row" fxLayoutAlign="center center" fxLayoutGap="8px">
-				<div *ngIf="!emptyView && !lockedResults && !this.selectAIText.length" class="beta-container">
+				<div *ngIf="!emptyView && !lockedResults && !this.selectAIText.length && !isMobile" class="beta-container">
 					<span>Beta</span>
 				</div>
 				<ng-container *ngIf="!this.selectAIText.length; else clearSelect">
@@ -26,7 +27,11 @@
 				</ng-template>
 			</div>
 		</div>
-		<div *ngIf="!emptyView && !lockedResults && !this.selectAIText.length" fxLayout="column" fxLayoutGap="16px">
+		<!-- Description and Grade-Bar -->
+		<div
+			*ngIf="!emptyView && !lockedResults && !this.selectAIText.length && !isMobile"
+			fxLayout="column"
+			fxLayoutGap="16px">
 			<span class="header-description" i18n>The frequency of a phrase in AI vs. human text.</span>
 			<div class="grade-bar-top-container" fxLayout="column" fxLayoutGap="8px">
 				<span class="title" i18n>The number of times a phrase was found more frequently in AI vs human text.</span>
@@ -47,12 +52,19 @@
 			</div>
 		</div>
 	</div>
-	<div class="container-explain-results" fxLayout="column">
+	<div
+		class="container-explain-results"
+		[class.explain-results-mobile-container]="isMobile"
+		[class.explain-results-mobile-container-height]="isMobile && openedPanel"
+		fxLayout="column">
+		<!-- Empty and Locked view -->
 		<ng-container *ngIf="emptyView || lockedResults; else showResults">
 			<div class="empty-contaienr" fxLayout="column" fxLayoutAlign="center center">
+				<!-- Empty view -->
 				<ng-container *ngIf="emptyView; else lockedResults">
 					<span i18n>No AI phrases have been found</span>
 				</ng-container>
+				<!-- Locked view -->
 				<ng-template #lockedResults>
 					<div fxLayout="row" fxLayoutAlign="start center" fxLayoutGap="8px">
 						<mat-icon class="lock-icon" fontSet="material-icons-outlined">lock</mat-icon>
@@ -61,44 +73,108 @@
 				</ng-template>
 			</div>
 		</ng-container>
+		<!-- Show results -->
 		<ng-template #showResults>
-			<div class="explain-results" fxLayout="column" *ngFor="let item of explainItemResults">
-				<mat-accordion>
-					<mat-expansion-panel #panel>
-						<mat-expansion-panel-header>
-							<mat-panel-title>
-								<div fxLayout="row" fxLayoutAlign="start center" fxLayoutGap="4px">
-									<div class="proportion" fxLayout="column" fxLayoutAlign="center center">
-										<ng-container *ngIf="item.isInfinity; else showProportionValue">
-											<mat-icon class="infinity-icon" fontSet="material-icons-outlined">all_inclusive</mat-icon>
-										</ng-container>
-										<ng-template #showProportionValue>
-											<span>{{ item.proportion.toLocaleString() }}</span>
-										</ng-template>
-									</div>
-									<span class="content">{{ item.content }}</span>
-								</div>
-							</mat-panel-title>
-						</mat-expansion-panel-header>
-						<div class="result-container" fxLayout="column" fxLayoutGap="2px">
-							<div class="result-header" fxLayout="row" fxLayoutAlign="space-between center">
-								<span class="title" i18n>How frequently the phrase was found in our dataset :</span>
-								<mat-icon class="info-icon" fontSet="material-icons-outlined">info</mat-icon>
-							</div>
-							<div class="ai-count-container" fxLayout="row" fxLayoutAlign="space-between center">
-								<span class="title" i18n>AI Text</span>
-								<span class="count-result" i18n>{{ item.aiCount.toLocaleString() }} times in 1,000,000 documents</span>
-							</div>
-							<div class="human-count-container" fxLayout="row" fxLayoutAlign="space-between center">
-								<span class="title" i18n>Human Text</span>
-								<span class="count-result" i18n>
-									{{ item.humanCount.toLocaleString() }} times in 1,000,000 documents
-								</span>
-							</div>
-						</div>
-					</mat-expansion-panel>
-				</mat-accordion>
-			</div>
+			<!-- Desktop view -->
+			<ng-container *ngIf="!isMobile; else mobileView">
+				<div class="explain-results" fxLayout="column" *ngFor="let result of explainItemResults">
+					<ng-container *ngTemplateOutlet="templateResult; context: { item: result }"></ng-container>
+				</div>
+			</ng-container>
+			<!-- Mobile view -->
+			<ng-template #mobileView>
+				<cdk-virtual-scroll-viewport
+					autosize
+					class="mobile-scroll"
+					orientation="horizontal"
+					itemSize="300"
+					(scrolledIndexChange)="onScroll($event)">
+					<div class="explain-results" fxLayout="row" *cdkVirtualFor="let result of explainItemResults">
+						<ng-container *ngTemplateOutlet="templateResult; context: { item: result }"></ng-container>
+					</div>
+				</cdk-virtual-scroll-viewport>
+			</ng-template>
 		</ng-template>
 	</div>
+	<!-- Mobile navigate buttons -->
+	<div
+		*ngIf="isMobile && explainItemResults.length > 1"
+		class="navigate-mobie-button-contaienr"
+		fxLayout="row"
+		fxLayoutAlign="center center"
+		fxLayoutGap="8px">
+		<mat-chip
+			*ngIf="explainItemResults.length > 5 && currentViewedIndex > 2"
+			role="button"
+			(click)="scrollToIndex(0)"
+			class="mat-chip-navigate">
+			{{ currentViewedIndex < explainItemResults.length - 3 ? currentViewedIndex - 2 : explainItemResults.length - 5 }}
+		</mat-chip>
+
+		<button
+			class="navigate-mobie-button"
+			[class.navigate-mobie-button-select]="navigateMobileButton == enumNavigateMobileButton.FirstButton"
+			(click)="onDotNavigate(enumNavigateMobileButton.FirstButton)"></button>
+		<button
+			class="navigate-mobie-button"
+			[class.navigate-mobie-button-select]="navigateMobileButton == enumNavigateMobileButton.SecondButton"
+			(click)="onDotNavigate(enumNavigateMobileButton.SecondButton)"></button>
+		<button
+			class="navigate-mobie-button"
+			[class.navigate-mobie-button-select]="navigateMobileButton == enumNavigateMobileButton.ThirdButton"
+			(click)="onDotNavigate(enumNavigateMobileButton.ThirdButton)"></button>
+		<button
+			class="navigate-mobie-button"
+			[class.navigate-mobie-button-select]="navigateMobileButton == enumNavigateMobileButton.FourthButton"
+			(click)="onDotNavigate(enumNavigateMobileButton.FourthButton)"></button>
+		<button
+			class="navigate-mobie-button"
+			[class.navigate-mobie-button-select]="navigateMobileButton == enumNavigateMobileButton.FifthButton"
+			(click)="onDotNavigate(enumNavigateMobileButton.FifthButton)"></button>
+
+		<mat-chip
+			*ngIf="explainItemResults.length > 5 && currentViewedIndex < explainItemResults.length - 3"
+			role="button"
+			(click)="scrollToIndex(explainItemResults.length - 1)"
+			class="mat-chip-navigate">
+			{{ currentViewedIndex > 2 ? explainItemResults.length - currentViewedIndex - 3 : explainItemResults.length - 5 }}
+		</mat-chip>
+	</div>
 </div>
+
+<!-- AI result template -->
+<ng-template #templateResult let-item="item">
+	<mat-accordion #panels>
+		<mat-expansion-panel (opened)="openedPanel = true" (closed)="openedPanel = false">
+			<mat-expansion-panel-header>
+				<mat-panel-title>
+					<div fxLayout="row" fxLayoutAlign="start center" fxLayoutGap="4px">
+						<div class="proportion" fxLayout="column" fxLayoutAlign="center center">
+							<ng-container *ngIf="item.isInfinity; else showProportionValue">
+								<mat-icon class="infinity-icon" fontSet="material-icons-outlined">all_inclusive</mat-icon>
+							</ng-container>
+							<ng-template #showProportionValue>
+								<span>{{ item.proportion.toLocaleString() }}</span>
+							</ng-template>
+						</div>
+						<span class="content">{{ item.content }}</span>
+					</div>
+				</mat-panel-title>
+			</mat-expansion-panel-header>
+			<div class="result-container" fxLayout="column" fxLayoutGap="2px">
+				<div class="result-header" fxLayout="row" fxLayoutAlign="space-between center">
+					<span class="title" i18n>How frequently the phrase was found in our dataset :</span>
+					<mat-icon class="info-icon" fontSet="material-icons-outlined">info</mat-icon>
+				</div>
+				<div class="ai-count-container" fxLayout="row" fxLayoutAlign="space-between center">
+					<span class="title" i18n>AI Text</span>
+					<span class="count-result" i18n>{{ item.aiCount.toLocaleString() }} times in 1,000,000 documents</span>
+				</div>
+				<div class="human-count-container" fxLayout="row" fxLayoutAlign="space-between center">
+					<span class="title" i18n>Human Text</span>
+					<span class="count-result" i18n>{{ item.humanCount.toLocaleString() }} times in 1,000,000 documents</span>
+				</div>
+			</div>
+		</mat-expansion-panel>
+	</mat-accordion>
+</ng-template>

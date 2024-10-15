@@ -1,7 +1,8 @@
 <div
 	class="resourcess-container"
 	[class.resourcess-container-open]="isOpen"
-	[@slidePanel]="isOpen ? 'expanded' : 'collapsed'">
+	[matTooltip]="resourcessTooltip"
+	matTooltipClass="web-report-mat-tooltip resourcess-mat-tooltip">
 	<mat-accordion>
 		<mat-expansion-panel class="expansion-panel" (opened)="isOpen = true" (closed)="isOpen = false" hideToggle>
 			<mat-expansion-panel-header>

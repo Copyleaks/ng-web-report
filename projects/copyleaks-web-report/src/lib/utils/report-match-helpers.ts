@@ -470,8 +470,12 @@ export const processAICheatingMatches = (
 	const matches: Match[] = [];
 	let lastExplainIndex: number = 0;
 	var scanResult = JSON.parse(alertToMatch.additionalData) as AIScanResult;
-	const lengthExplain = scanResult?.explain?.patterns?.text?.chars?.starts?.length;
-	const proportionArray = updateExplainProportionType(scanResult?.explain?.patterns?.statistics?.proportion);
+	const explainResult = scanResult?.explain ?? false;
+	const lengthExplain = explainResult ? explainResult?.patterns?.text?.chars?.starts?.length : 0;
+	const proportionArray = explainResult
+		? updateExplainProportionType(explainResult?.patterns?.statistics?.proportion)
+		: [];
+
 	scanResult?.results?.forEach(result => {
 		result?.matches?.forEach((match: AIScanResultMatch) => {
 			const mappedMatches = match?.text.chars?.starts?.map(

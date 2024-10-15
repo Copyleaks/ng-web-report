@@ -29,6 +29,9 @@
 					color: $color-primary;
 				}
 			}
+			&:hover {
+				background-color: $color-white;
+			}
 		}
 		::ng-deep .mat-expansion-panel-body {
 			padding: 0 !important;
@@ -99,5 +102,28 @@
 	}
 }
 .resourcess-container-open {
-	position: relative;
+	position: absolute;
+	bottom: 0;
+	left: 0;
+}
+::ng-deep .mat-tooltip.resourcess-mat-tooltip {
+	position: relative !important;
+	font-size: 15px !important;
+	font-weight: 500 !important;
+	color: $color-white !important;
+	background-color: $color-black !important;
+	border-radius: 10px !important;
+	padding: 14px !important;
+	font-family: haboro-soft, sans-serif !important;
+	white-space: pre-line !important;
+	&::after {
+		height: 20px;
+		width: 20px;
+		content: '';
+		position: absolute;
+		border-left: 8px solid transparent;
+		border-right: 8px solid transparent;
+		border-bottom: 8px solid #112960;
+		bottom: -15px;
+	}
 }

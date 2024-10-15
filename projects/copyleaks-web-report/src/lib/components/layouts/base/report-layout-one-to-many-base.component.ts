@@ -13,7 +13,14 @@ import {
 	ResultPreview,
 } from '../../../models/report-data.models';
 import { PostMessageEvent } from '../../../models/report-iframe-events.models';
-import { Match, MatchType, ResultDetailItem, SlicedMatch } from '../../../models/report-matches.models';
+import {
+	AIScanResult,
+	ExplainableAIResults,
+	Match,
+	MatchType,
+	ResultDetailItem,
+	SlicedMatch,
+} from '../../../models/report-matches.models';
 import { ICopyleaksReportOptions } from '../../../models/report-options.models';
 import {
 	IMatchesTypeStatistics,
@@ -99,6 +106,9 @@ export abstract class OneToManyReportLayoutBaseComponent extends ReportLayoutBas
 	selectedCustomTabResultSectionContentTemplate: TemplateRef<any>;
 	showOmittedWords: boolean;
 	isPartitalScan: boolean;
+	explainableAI: ExplainableAIResults = { explain: null, slicedMatch: [] };
+	selectAIText: number[] = [];
+	loadingExplainableAI: boolean = true;
 
 	// Subject for destroying all the subscriptions in base component
 	private unsubscribe$ = new Subject();
@@ -220,6 +230,21 @@ export abstract class OneToManyReportLayoutBaseComponent extends ReportLayoutBas
 					}
 				});
 		});
+		combineLatest([
+			this.reportViewSvc.selectedAlert$.pipe(distinctUntilChanged()),
+			this.reportDataSvc.scanResultsPreviews$.pipe(distinctUntilChanged()),
+		])
+			.pipe(takeUntil(this.unsubscribe$))
+			.subscribe(([selectedAlert, scanResults]) => {
+				if (selectedAlert && scanResults) {
+					const validSelectedAlert = scanResults?.notifications?.alerts.find(alert => alert.code === selectedAlert);
+					var scanResult = JSON.parse(validSelectedAlert.additionalData) as AIScanResult;
+					this.explainableAI.explain = scanResult?.explain;
+					this.selectAIText = [];
+					this.loadingExplainableAI = false;
+				}
+			});
+
 		this.reportDataSvc.writingFeedback$.pipe(takeUntil(this.unsubscribe$)).subscribe(data => {
 			if (data) this.writingFeedback = data;
 			this.showReadabilityLoadingView = !data;
@@ -357,6 +382,8 @@ export abstract class OneToManyReportLayoutBaseComponent extends ReportLayoutBas
 			if (data) {
 				this.isLoadingScanContent = false;
 				this.contentTextMatches = data;
+				let explainAiMatches = this.contentTextMatches[0].filter(result => result.match.type === MatchType.aiExplain);
+				this.explainableAI.slicedMatch = explainAiMatches;
 
 				if (this.reportViewSvc.reportViewMode?.viewMode === 'writing-feedback') {
 					if (
@@ -421,13 +448,23 @@ export abstract class OneToManyReportLayoutBaseComponent extends ReportLayoutBas
 		])
 			.pipe(
 				takeUntil(this.unsubscribe$),
-				filter(([, , , content, crawledVersion]) => !content.alertCode && !!crawledVersion)
+				filter(([, , , , crawledVersion]) => !!crawledVersion)
 			)
 			.subscribe(([text, html, multiText, content]) => {
 				if (multiText && multiText.length > 0) {
 					const selectedMatches = multiText.map(c => c.match);
-					if (this.viewMode === 'one-to-many') this._showResultsForMultiSelection(selectedMatches);
-					else if (this.viewMode === 'writing-feedback') {
+					if (this.viewMode === 'one-to-many') {
+						if (this.selectedTap === EReportViewType.AIView) {
+							this.selectAIText = [];
+							this.loadingExplainableAI = true;
+							selectedMatches.forEach(match => {
+								this.selectAIText.push(match.start);
+							});
+							this.loadingExplainableAI = false;
+						} else {
+							this._showResultsForMultiSelection(selectedMatches);
+						}
+					} else if (this.viewMode === 'writing-feedback') {
 						if (selectedMatches.length === 0) this.displayedScanCorrectionsView = this.filteredCorrections;
 						else
 							this.displayedScanCorrectionsView = this.allScanCorrectionsView.filter(sc =>
@@ -437,8 +474,13 @@ export abstract class OneToManyReportLayoutBaseComponent extends ReportLayoutBas
 					}
 				} else {
 					this.focusedMatch = !content.isHtmlView ? text && text.match : html;
-					if (this.viewMode === 'one-to-many') this._showResultsForSelectedMatch(this.focusedMatch);
-					else if (this.viewMode === 'writing-feedback') {
+					if (this.viewMode === 'one-to-many') {
+						if (this.selectedTap === EReportViewType.AIView) {
+							this.selectAIText = [];
+						} else {
+							this._showResultsForSelectedMatch(this.focusedMatch);
+						}
+					} else if (this.viewMode === 'writing-feedback') {
 						if (this.focusedMatch)
 							this.displayedScanCorrectionsView = this.allScanCorrectionsView.filter(
 								sc => this.focusedMatch.start === sc.start && this.focusedMatch.end === sc.end

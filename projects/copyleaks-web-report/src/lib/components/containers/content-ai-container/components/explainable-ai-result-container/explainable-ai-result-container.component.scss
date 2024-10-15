@@ -1,0 +1,309 @@
+@import '../../../../../styles/website-colors.styles.scss';
+
+.top-container {
+	width: 100%;
+	border-radius: 10px;
+	background: $color-white;
+	box-shadow: 0px 0px 10px 0px rgba(11, 22, 62, 0.04), 0px 0px 2px 0px rgba(11, 22, 62, 0.08);
+	.header-container {
+		padding: 16px;
+		margin-bottom: 4px;
+		box-shadow: 0px 0px 2px 0px rgba(11, 22, 62, 0.12), 0px 0px 20px 0px rgba(11, 22, 62, 0.12);
+		.header {
+			.title {
+				color: $color-black;
+				font-family: 'Almarai';
+				font-size: 18px;
+				font-weight: 800;
+				line-height: 24px; /* 133.333% */
+				text-transform: capitalize;
+			}
+			.beta-container {
+				border-radius: 16px;
+				background: rgba(43, 149, 255, 0.2);
+				height: 22px;
+				padding: 3px 8px;
+				span {
+					color: $color-primary;
+					font-family: 'haboro-soft';
+					font-size: 12px;
+					font-weight: 500;
+				}
+			}
+			.info-icon {
+				width: 24px;
+				height: 24px;
+				font-size: 24px;
+				color: #0517a6;
+			}
+			.clear-select-button {
+				display: flex;
+				align-items: center;
+				width: 24px;
+				height: 24px;
+				mat-icon {
+					color: var(--Black-600, rgba(11, 22, 62, 0.6));
+					font-size: 24px;
+					width: 24px;
+					height: 24px;
+				}
+				::ng-deep .mat-button-focus-overlay {
+					background-color: transparent !important;
+				}
+			}
+		}
+
+		.header-description {
+			color: $color-black;
+			font-family: 'haboro-soft';
+			font-size: 14px;
+			font-weight: 500;
+		}
+
+		.grade-bar-top-container {
+			.title {
+				color: $color-black;
+				font-family: 'haboro-soft';
+				font-size: 12px;
+				font-weight: 800;
+			}
+			.grade-bar-container {
+				.grade-bar {
+					display: flex;
+					flex-direction: column;
+					width: 100%;
+					background-color: $color-white;
+					border: 1px solid $color-effect-dialog-background;
+					border-radius: 10px;
+					box-sizing: border-box;
+					height: 8px;
+					.min-result {
+						height: 100%;
+						background-color: $color-explain-ai-low;
+						border-radius: 10px 0 0 10px;
+					}
+					.mid-result {
+						height: 100%;
+						background-color: $color-explain-ai-medium;
+					}
+					.max-result {
+						height: 100%;
+						background-color: $color-explain-ai-high;
+						border-radius: 0 10px 10px 0;
+					}
+				}
+				.min-proportion,
+				.max-proportion {
+					color: $color-black;
+					font-family: 'haboro-soft';
+					font-size: 12px;
+					font-weight: 700;
+				}
+			}
+		}
+	}
+	.header-container-mobile {
+		box-shadow: none;
+		margin: 0;
+	}
+	.container-explain-results {
+		overflow: auto;
+		.explain-results {
+			::ng-deep .mat-expansion-panel {
+				box-shadow: none;
+				border-bottom: 1px solid $color-container-background;
+				background-color: $color-white;
+				::ng-deep .mat-expansion-panel-header {
+					padding: 0 16px;
+					box-shadow: none;
+					.proportion {
+						padding: 4px 8px;
+						border-radius: 6px;
+						background: #9479ff;
+						span {
+							color: $color-black;
+							text-align: right;
+							font-family: 'haboro-soft';
+							font-size: 14px;
+							font-weight: 800;
+						}
+						mat-icon {
+							width: 18px;
+							height: 18px;
+							font-size: 18px;
+						}
+					}
+					.content {
+						color: $color-black;
+						font-family: 'Open Sans';
+						font-size: 14px;
+						font-weight: 400;
+					}
+					.mat-expansion-indicator:after {
+						color: $color-primary;
+					}
+					&:hover {
+						background-color: $color-white;
+					}
+				}
+				::ng-deep .mat-expansion-panel-body {
+					padding: 0 16px;
+				}
+			}
+			.result-container {
+				.result-header {
+					border-radius: 6px 6px 0px 0px;
+					background-color: $color-container-background;
+					padding: 8px 10px;
+					.title {
+						color: $color-black;
+						font-family: 'haboro-soft';
+						font-size: 12px;
+						font-weight: 800;
+					}
+					.info-icon {
+						width: 18px;
+						height: 18px;
+						font-size: 18px;
+						color: #0517a6;
+					}
+				}
+				.ai-count-container,
+				.human-count-container {
+					background: $color-container-background;
+					padding: 8px 10px;
+					.title {
+						color: $color-black;
+						font-family: 'haboro-soft';
+						font-size: 12px;
+						font-weight: 800;
+					}
+					.count-result {
+						color: $color-black;
+						font-family: 'haboro-soft';
+						font-size: 12px;
+						font-weight: 500;
+					}
+				}
+				.human-count-container {
+					border-radius: 0px 0px 6px 6px;
+				}
+			}
+		}
+	}
+	.navigate-mobie-button-contaienr {
+		padding-bottom: 16px;
+		height: 42px;
+		.navigate-mobie-button {
+			width: 12px !important;
+			height: 12px !important;
+			padding: 0px !important;
+			border-radius: 50%;
+			background-color: $color-dialog-background;
+			border: 0px;
+		}
+		.navigate-mobie-button-select {
+			background-color: $color-primary !important;
+		}
+		.mat-chip-navigate {
+			font-size: 12px;
+			font-weight: 700;
+			color: $color-black;
+			border: 1px solid $grayed-out-disabled;
+			background: rgba(43, 149, 255, 0.2);
+			padding: 2px 8px !important;
+			height: fit-content !important;
+			min-height: auto !important;
+			line-height: normal !important;
+			border-radius: 16px !important;
+		}
+	}
+	.explain-results-mobile-container {
+		padding: 0 16px 16px;
+		min-height: 65px;
+		.mobile-scroll {
+			height: 100%;
+			width: 100%;
+			overflow-x: unset;
+
+			&::-webkit-scrollbar {
+				width: 0px !important;
+				height: 0px !important;
+			}
+
+			::ng-deep .cdk-virtual-scroll-content-wrapper {
+				display: flex;
+				flex-direction: row !important;
+				gap: 16px;
+			}
+			.explain-results {
+				width: 300px;
+				::ng-deep .mat-expansion-panel {
+					border-radius: 10px;
+					background: $color-container-background;
+					box-shadow: 0px 0px 2px 0px rgba(11, 22, 62, 0.08) inset, 0px 0px 10px 0px rgba(11, 22, 62, 0.04) inset;
+					::ng-deep .mat-expansion-panel-header {
+						border-radius: 10px;
+						background: $color-container-background;
+						box-shadow: 0px 0px 2px 0px rgba(11, 22, 62, 0.08) inset, 0px 0px 10px 0px rgba(11, 22, 62, 0.04) inset;
+					}
+					::ng-deep .mat-expansion-panel-body {
+						padding: 0 16px 16px;
+					}
+				}
+				.result-container {
+					.result-header,
+					.ai-count-container,
+					.human-count-container {
+						background: var(--Colors-Main-White, #fbffff);
+					}
+				}
+			}
+		}
+	}
+	.explain-results-mobile-container-height {
+		height: 232px;
+	}
+}
+
+.locked-view,
+.empty-view {
+	.container-explain-results {
+		height: 100%;
+		.empty-contaienr {
+			height: 100%;
+		}
+	}
+}
+
+.locked-view {
+	.empty-contaienr {
+		span {
+			color: $color-black;
+			font-family: 'Almarai' !important;
+			font-size: 20px;
+			font-weight: 800;
+			text-transform: capitalize;
+		}
+		mat-icon {
+			color: $color-primary;
+			font-size: 18px;
+			width: 18px;
+			height: 18px;
+		}
+	}
+}
+
+.empty-view {
+	opacity: 0.2;
+	.empty-contaienr {
+		span {
+			color: var(--Black-600, rgba(11, 22, 62, 0.6));
+			font-family: 'haboro-soft';
+			font-size: 16px;
+			font-weight: 800;
+			line-height: 120%;
+			text-transform: capitalize;
+		}
+	}
+}

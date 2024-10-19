@@ -34,6 +34,7 @@
 			<!-- Tablet View -->
 			<ng-container *ngSwitchCase="ResponsiveLayoutType.Tablet">
 				<copyleaks-one-to-many-report-layout-desktop
+					[lockedExplainAIResults]="lockedExplainAIResults"
 					[companyLogo]="companyLogo"
 					[reportMode]="reportMode"
 					[hideWritingFeedback]="hideWritingFeedback"></copyleaks-one-to-many-report-layout-desktop>
@@ -41,6 +42,7 @@
 			<!-- Mobile View -->
 			<ng-container *ngSwitchCase="ResponsiveLayoutType.Mobile">
 				<copyleaks-one-to-many-report-layout-mobile
+					[lockedExplainAIResults]="lockedExplainAIResults"
 					[companyLogo]="companyLogo"
 					[reportMode]="reportMode"
 					[hideWritingFeedback]="hideWritingFeedback"></copyleaks-one-to-many-report-layout-mobile>
@@ -88,6 +90,7 @@
 			<!-- Tablet View -->
 			<ng-container *ngSwitchCase="ResponsiveLayoutType.Tablet">
 				<copyleaks-one-to-many-report-layout-desktop
+					[lockedExplainAIResults]="lockedExplainAIResults"
 					[companyLogo]="companyLogo"
 					[reportMode]="reportMode"
 					[hideWritingFeedback]="hideWritingFeedback"></copyleaks-one-to-many-report-layout-desktop>

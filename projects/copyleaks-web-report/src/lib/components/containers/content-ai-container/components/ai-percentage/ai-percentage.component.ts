@@ -10,5 +10,8 @@ export class AiPercentageComponent implements OnInit {
 	 * @Input {number} The AI percentage result
 	 */
 	@Input() aiPercentageResult: number = 0;
-	ngOnInit(): void {}
+	tooltipText: string;
+	ngOnInit(): void {
+		this.tooltipText = $localize`This is the overall percentage of content from the submitted text that is likely to contain AI content`;
+	}
 }

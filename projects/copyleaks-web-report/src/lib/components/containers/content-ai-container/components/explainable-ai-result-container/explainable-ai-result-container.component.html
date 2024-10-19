@@ -2,23 +2,15 @@
 	<div class="header-container" [class.header-container-mobile]="isMobile" fxLayout="column" fxLayoutGap="4px">
 		<!-- Header -->
 		<div class="header" fxLayout="row" fxLayoutAlign="space-between center">
-			<span class="title" i18n>
-				<ng-container *ngIf="emptyView; else notEmpty">AI Content has not been detected</ng-container>
-				<ng-template #notEmpty>AI insights</ng-template>
+			<span class="title">
+				{{ title }}
 			</span>
 			<div fxLayout="row" fxLayoutAlign="center center" fxLayoutGap="8px">
-				<div *ngIf="!emptyView && !lockedResults && !this.selectAIText.length && !isMobile" class="beta-container">
+				<div *ngIf="!emptyView && !lockedResults && !selectedMatch && !isMobile" class="beta-container">
 					<span>Beta</span>
 				</div>
-				<ng-container *ngIf="!this.selectAIText.length; else clearSelect">
-					<mat-icon
-						class="info-icon"
-						fontSet="material-icons-outlined"
-						[tabIndex]="0"
-						[matTooltip]="headerTooltip"
-						matTooltipClass="web-report-mat-tooltip">
-						info
-					</mat-icon>
+				<ng-container *ngIf="!selectedMatch; else clearSelect">
+					<mat-icon class="info-icon" fontSet="material-icons-outlined" [tabIndex]="0">info</mat-icon>
 				</ng-container>
 				<ng-template #clearSelect>
 					<button class="clear-select-button" mat-icon-button (click)="clearSelectdResult()">
@@ -28,10 +20,7 @@
 			</div>
 		</div>
 		<!-- Description and Grade-Bar -->
-		<div
-			*ngIf="!emptyView && !lockedResults && !this.selectAIText.length && !isMobile"
-			fxLayout="column"
-			fxLayoutGap="16px">
+		<div *ngIf="!emptyView && !lockedResults && !selectedMatch && !isMobile" fxLayout="column" fxLayoutGap="16px">
 			<span class="header-description" i18n>The frequency of a phrase in AI vs. human text.</span>
 			<div class="grade-bar-top-container" fxLayout="column" fxLayoutGap="8px">
 				<span class="title" i18n>The number of times a phrase was found more frequently in AI vs human text.</span>
@@ -67,7 +56,7 @@
 				<!-- Locked view -->
 				<ng-template #lockedResults>
 					<div fxLayout="row" fxLayoutAlign="start center" fxLayoutGap="8px">
-						<mat-icon class="lock-icon" fontSet="material-icons-outlined">lock</mat-icon>
+						<mat-icon class="lock-icon">lock</mat-icon>
 						<span i18n>Locked results</span>
 					</div>
 				</ng-template>

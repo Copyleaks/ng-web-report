@@ -7,12 +7,21 @@
 	box-shadow: 0px 0px 2px 0px rgba(11, 22, 62, 0.08), 0px 0px 10px 0px rgba(11, 22, 62, 0.04);
 	.contet-container {
 		.title {
-			color: $color-black;
-			font-family: 'Almarai';
-			font-size: 18px;
-			font-weight: 800;
-			line-height: 120%;
-			text-transform: capitalize;
+			width: 100%;
+			span {
+				color: $color-black;
+				font-family: 'Almarai';
+				font-size: 18px;
+				font-weight: 800;
+				line-height: 120%;
+				text-transform: capitalize;
+			}
+			.info-icon {
+				width: 24px;
+				height: 24px;
+				font-size: 24px;
+				color: #0517a6;
+			}
 		}
 		.description {
 			color: $color-black;
@@ -49,4 +58,14 @@
 			text-transform: capitalize;
 		}
 	}
+}
+::ng-deep .mat-tooltip.tooltip-contanier {
+	font-size: 16px !important;
+	font-weight: 500 !important;
+	color: $color-white !important;
+	background-color: $color-black !important;
+	border-radius: 10px !important;
+	padding: 14px !important;
+	font-family: haboro-soft, sans-serif !important;
+	white-space: pre-line !important;
 }

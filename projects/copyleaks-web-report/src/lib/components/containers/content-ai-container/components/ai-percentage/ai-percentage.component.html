@@ -1,8 +1,16 @@
-<div class="ai-percentage-container" fxLayout="row" fxLayoutAlign="space-between center">
+<div class="ai-percentage-container" fxLayout="row" fxLayoutAlign="space-between center" fxLayoutGap="8px">
 	<div class="contet-container" fxLayout="column" fxLayoutAlign="start start" fxLayoutGap="8px">
-		<div class="title">
+		<div class="title" fxLayout="row" fxLayoutAlign="space-between center" fxLayoutGap="4px">
 			<span *ngIf="aiPercentageResult > 0" i18n>AI Content Found</span>
 			<span *ngIf="aiPercentageResult === 0" i18n>No AI Content Found</span>
+			<mat-icon
+				class="info-icon"
+				fontSet="material-icons-outlined"
+				[tabIndex]="0"
+				[matTooltip]="tooltipText"
+				matTooltipClass="web-report-mat-tooltip tooltip-contanier">
+				info
+			</mat-icon>
 		</div>
 		<span class="description" i18n>Percentage of text that may be AI-generated.</span>
 	</div>

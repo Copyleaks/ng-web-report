@@ -240,12 +240,6 @@ export abstract class OneToManyReportLayoutBaseComponent extends ReportLayoutBas
 					const validSelectedAlert = scanResults?.notifications?.alerts.find(alert => alert.code === selectedAlert);
 					var scanResult = JSON.parse(validSelectedAlert.additionalData) as AIScanResult;
 					this.explainableAI.explain = scanResult?.explain;
-					if (this.explainableAI?.explain) {
-						this.explainableAI.explain.patterns.statistics.proportion =
-							scanResult.explain.patterns.statistics.aiCount.map(
-								(value, index) => value / scanResult.explain.patterns.statistics.humanCount[index]
-							);
-					}
 					this.selectAIText = [];
 					this.loadingExplainableAI = false;
 				}

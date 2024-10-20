@@ -471,9 +471,12 @@ export const processAICheatingMatches = (
 	let lastExplainIndex: number = 0;
 	var scanResult = JSON.parse(alertToMatch.additionalData) as AIScanResult;
 	const explainResult = scanResult?.explain ?? false;
-	scanResult.explain.patterns.statistics.proportion = scanResult.explain.patterns.statistics.aiCount.map(
-		(value, index) => value / scanResult.explain.patterns.statistics.humanCount[index]
-	);
+	if (explainResult) {
+		scanResult.explain.patterns.statistics.proportion = explainResult.patterns.statistics.aiCount.map(
+			(value, index) => value / explainResult.patterns.statistics.humanCount[index]
+		);
+	}
+
 	const lengthExplain = explainResult ? explainResult?.patterns?.text?.chars?.starts?.length : 0;
 	const proportionArray = explainResult
 		? updateExplainProportionType(explainResult?.patterns?.statistics?.proportion)

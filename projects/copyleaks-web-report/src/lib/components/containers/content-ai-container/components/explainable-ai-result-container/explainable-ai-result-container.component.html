@@ -1,134 +1,240 @@
 <div class="top-container" [class.empty-view]="emptyView" [class.locked-view]="lockedResults" fxLayout="column">
-	<div class="header-container" [class.header-container-mobile]="isMobile" fxLayout="column" fxLayoutGap="4px">
-		<!-- Header -->
-		<div class="header" fxLayout="row" fxLayoutAlign="space-between center">
-			<span class="title">
-				{{ title }}
-			</span>
-			<div fxLayout="row" fxLayoutAlign="center center" fxLayoutGap="8px">
-				<div *ngIf="!emptyView && !lockedResults && !selectedMatch && !isMobile" class="beta-container">
-					<span>Beta</span>
-				</div>
-				<ng-container *ngIf="!selectedMatch; else clearSelect">
-					<mat-icon class="info-icon" fontSet="material-icons-outlined" [tabIndex]="0">info</mat-icon>
-				</ng-container>
-				<ng-template #clearSelect>
-					<button class="clear-select-button" mat-icon-button (click)="clearSelectdResult()">
-						<mat-icon class="clear-icon" fontSet="material-icons-outlined">cancel</mat-icon>
-					</button>
-				</ng-template>
-			</div>
-		</div>
-		<!-- Description and Grade-Bar -->
-		<div *ngIf="!emptyView && !lockedResults && !selectedMatch && !isMobile" fxLayout="column" fxLayoutGap="16px">
-			<span class="header-description" i18n>The frequency of a phrase in AI vs. human text.</span>
-			<div class="grade-bar-top-container" fxLayout="column" fxLayoutGap="8px">
-				<span class="title" i18n>The number of times a phrase was found more frequently in AI vs human text.</span>
-				<div class="grade-bar-container" fxLayout="row" fxLayoutAlign="start center" fxLayoutGap="16px">
-					<span class="min-proportion">{{ minProportion.toLocaleString() }}x</span>
-					<div class="grade-bar" fxLayout="row">
-						<div class="min-result" [style.width]="minGradeBar + '%'"></div>
-						<div class="mid-result" [style.width]="midGradeBar + '%'"></div>
-						<div class="max-result" [style.width]="maxGradeBar + '%'"></div>
+	<ng-container *ngIf="!isLoading; else loadingState">
+		<div class="header-container" [class.header-container-mobile]="isMobile" fxLayout="column" fxLayoutGap="4px">
+			<!-- Header -->
+			<div class="header" fxLayout="row" fxLayoutAlign="space-between center">
+				<span class="title">
+					{{ title }}
+				</span>
+				<div fxLayout="row" fxLayoutAlign="center center" fxLayoutGap="8px">
+					<div *ngIf="!emptyView && !lockedResults && !selectedMatch && !isMobile" class="beta-container">
+						<span>Beta</span>
 					</div>
-					<ng-container *ngIf="hasInfinityResult; else maxResult">
-						<mat-icon class="infinity-icon" fontSet="material-icons-outlined">all_inclusive</mat-icon>
+					<ng-container *ngIf="!selectedMatch; else clearSelect">
+						<mat-icon class="info-icon" fontSet="material-icons-outlined" [tabIndex]="0">info</mat-icon>
 					</ng-container>
-					<ng-template #maxResult>
-						<span class="max-proportion">{{ maxProportion.toLocaleString() }}x</span>
+					<ng-template #clearSelect>
+						<button class="clear-select-button" mat-icon-button (click)="clearSelectdResult()">
+							<mat-icon class="clear-icon" fontSet="material-icons-outlined">cancel</mat-icon>
+						</button>
 					</ng-template>
 				</div>
 			</div>
-		</div>
-	</div>
-	<div
-		class="container-explain-results"
-		[class.explain-results-mobile-container]="isMobile"
-		[class.explain-results-mobile-container-height]="isMobile && openedPanel"
-		fxLayout="column">
-		<!-- Empty and Locked view -->
-		<ng-container *ngIf="emptyView || lockedResults; else showResults">
-			<div class="empty-contaienr" fxLayout="column" fxLayoutAlign="center center">
-				<!-- Empty view -->
-				<ng-container *ngIf="emptyView; else lockedResults">
-					<span i18n>No AI phrases have been found</span>
-				</ng-container>
-				<!-- Locked view -->
-				<ng-template #lockedResults>
-					<div fxLayout="row" fxLayoutAlign="start center" fxLayoutGap="8px">
-						<mat-icon class="lock-icon">lock</mat-icon>
-						<span i18n>Locked results</span>
+			<!-- Description and Grade-Bar -->
+			<div *ngIf="!emptyView && !lockedResults && !selectedMatch && !isMobile" fxLayout="column" fxLayoutGap="16px">
+				<span class="header-description" i18n>
+					GenAI often overuses certain phrases learned during training, which is one of dozens of signals used to
+					identify AI text.
+				</span>
+				<div class="grade-bar-top-container" fxLayout="column" fxLayoutGap="8px">
+					<span class="title" i18n>The number of times a phrase was found more frequently in AI vs human text.</span>
+					<div class="grade-bar-container" fxLayout="row" fxLayoutAlign="start center" fxLayoutGap="16px">
+						<span class="min-proportion">{{ minProportion.toLocaleString() }}x</span>
+						<div class="grade-bar" fxLayout="row">
+							<div class="min-result" [style.width]="minGradeBar + '%'"></div>
+							<div class="mid-result" [style.width]="midGradeBar + '%'"></div>
+							<div class="max-result" [style.width]="maxGradeBar + '%'"></div>
+						</div>
+						<ng-container *ngIf="hasInfinityResult; else maxResult">
+							<mat-icon class="infinity-icon" fontSet="material-icons-outlined">all_inclusive</mat-icon>
+						</ng-container>
+						<ng-template #maxResult>
+							<span class="max-proportion">{{ maxProportion.toLocaleString() }}x</span>
+						</ng-template>
 					</div>
-				</ng-template>
+				</div>
 			</div>
-		</ng-container>
-		<!-- Show results -->
-		<ng-template #showResults>
-			<!-- Desktop view -->
-			<ng-container *ngIf="!isMobile; else mobileView">
-				<div class="explain-results" fxLayout="column" *ngFor="let result of explainItemResults">
-					<ng-container *ngTemplateOutlet="templateResult; context: { item: result }"></ng-container>
+		</div>
+		<div
+			class="container-explain-results"
+			[class.explain-results-mobile-container]="isMobile"
+			[class.explain-results-mobile-container-height]="isMobile && openedPanel"
+			fxLayout="column">
+			<!-- Empty and Locked view -->
+			<ng-container *ngIf="emptyView || lockedResults; else showResults">
+				<div class="empty-contaienr" fxLayout="column" fxLayoutAlign="center center">
+					<!-- Empty view -->
+					<ng-container *ngIf="emptyView; else lockedResults">
+						<span i18n>No AI phrases have been found</span>
+					</ng-container>
+					<!-- Locked view -->
+					<ng-template #lockedResults>
+						<div fxLayout="row" fxLayoutAlign="start center" fxLayoutGap="8px">
+							<mat-icon class="lock-icon">lock</mat-icon>
+							<span i18n>Locked results</span>
+						</div>
+					</ng-template>
 				</div>
 			</ng-container>
-			<!-- Mobile view -->
-			<ng-template #mobileView>
-				<cdk-virtual-scroll-viewport
-					autosize
-					class="mobile-scroll"
-					orientation="horizontal"
-					itemSize="300"
-					(scrolledIndexChange)="onScroll($event)">
-					<div class="explain-results" fxLayout="row" *cdkVirtualFor="let result of explainItemResults">
+			<!-- Show results -->
+			<ng-template #showResults>
+				<!-- Desktop view -->
+				<ng-container *ngIf="!isMobile; else mobileView">
+					<div class="explain-results" fxLayout="column" *ngFor="let result of explainItemResults">
 						<ng-container *ngTemplateOutlet="templateResult; context: { item: result }"></ng-container>
 					</div>
-				</cdk-virtual-scroll-viewport>
+				</ng-container>
+				<!-- Mobile view -->
+				<ng-template #mobileView>
+					<cdk-virtual-scroll-viewport
+						autosize
+						class="mobile-scroll"
+						orientation="horizontal"
+						itemSize="300"
+						(scrolledIndexChange)="onScroll($event)">
+						<div class="explain-results" fxLayout="row" *cdkVirtualFor="let result of explainItemResults">
+							<ng-container *ngTemplateOutlet="templateResult; context: { item: result }"></ng-container>
+						</div>
+					</cdk-virtual-scroll-viewport>
+				</ng-template>
 			</ng-template>
-		</ng-template>
-	</div>
-	<!-- Mobile navigate buttons -->
-	<div
-		*ngIf="isMobile && explainItemResults.length > 1"
-		class="navigate-mobie-button-contaienr"
-		fxLayout="row"
-		fxLayoutAlign="center center"
-		fxLayoutGap="8px">
-		<mat-chip
-			*ngIf="explainItemResults.length > 5 && currentViewedIndex > 2"
-			role="button"
-			(click)="scrollToIndex(0)"
-			class="mat-chip-navigate">
-			{{ currentViewedIndex < explainItemResults.length - 3 ? currentViewedIndex - 2 : explainItemResults.length - 5 }}
-		</mat-chip>
+		</div>
+		<!-- Mobile navigate buttons -->
+		<div
+			*ngIf="isMobile && explainItemResults.length > 1"
+			class="navigate-mobie-button-contaienr"
+			fxLayout="row"
+			fxLayoutAlign="center center"
+			fxLayoutGap="8px">
+			<mat-chip
+				*ngIf="explainItemResults.length > 5 && currentViewedIndex > 2"
+				role="button"
+				(click)="scrollToIndex(0)"
+				class="mat-chip-navigate">
+				{{
+					currentViewedIndex < explainItemResults.length - 3 ? currentViewedIndex - 2 : explainItemResults.length - 5
+				}}
+			</mat-chip>
 
-		<button
-			class="navigate-mobie-button"
-			[class.navigate-mobie-button-select]="navigateMobileButton == enumNavigateMobileButton.FirstButton"
-			(click)="onDotNavigate(enumNavigateMobileButton.FirstButton)"></button>
-		<button
-			class="navigate-mobie-button"
-			[class.navigate-mobie-button-select]="navigateMobileButton == enumNavigateMobileButton.SecondButton"
-			(click)="onDotNavigate(enumNavigateMobileButton.SecondButton)"></button>
-		<button
-			class="navigate-mobie-button"
-			[class.navigate-mobie-button-select]="navigateMobileButton == enumNavigateMobileButton.ThirdButton"
-			(click)="onDotNavigate(enumNavigateMobileButton.ThirdButton)"></button>
-		<button
-			class="navigate-mobie-button"
-			[class.navigate-mobie-button-select]="navigateMobileButton == enumNavigateMobileButton.FourthButton"
-			(click)="onDotNavigate(enumNavigateMobileButton.FourthButton)"></button>
-		<button
-			class="navigate-mobie-button"
-			[class.navigate-mobie-button-select]="navigateMobileButton == enumNavigateMobileButton.FifthButton"
-			(click)="onDotNavigate(enumNavigateMobileButton.FifthButton)"></button>
+			<button
+				class="navigate-mobie-button"
+				[class.navigate-mobie-button-select]="navigateMobileButton == enumNavigateMobileButton.FirstButton"
+				(click)="onDotNavigate(enumNavigateMobileButton.FirstButton)"></button>
+			<button
+				class="navigate-mobie-button"
+				[class.navigate-mobie-button-select]="navigateMobileButton == enumNavigateMobileButton.SecondButton"
+				(click)="onDotNavigate(enumNavigateMobileButton.SecondButton)"></button>
+			<button
+				class="navigate-mobie-button"
+				[class.navigate-mobie-button-select]="navigateMobileButton == enumNavigateMobileButton.ThirdButton"
+				(click)="onDotNavigate(enumNavigateMobileButton.ThirdButton)"></button>
+			<button
+				class="navigate-mobie-button"
+				[class.navigate-mobie-button-select]="navigateMobileButton == enumNavigateMobileButton.FourthButton"
+				(click)="onDotNavigate(enumNavigateMobileButton.FourthButton)"></button>
+			<button
+				class="navigate-mobie-button"
+				[class.navigate-mobie-button-select]="navigateMobileButton == enumNavigateMobileButton.FifthButton"
+				(click)="onDotNavigate(enumNavigateMobileButton.FifthButton)"></button>
 
-		<mat-chip
-			*ngIf="explainItemResults.length > 5 && currentViewedIndex < explainItemResults.length - 3"
-			role="button"
-			(click)="scrollToIndex(explainItemResults.length - 1)"
-			class="mat-chip-navigate">
-			{{ currentViewedIndex > 2 ? explainItemResults.length - currentViewedIndex - 3 : explainItemResults.length - 5 }}
-		</mat-chip>
-	</div>
+			<mat-chip
+				*ngIf="explainItemResults.length > 5 && currentViewedIndex < explainItemResults.length - 3"
+				role="button"
+				(click)="scrollToIndex(explainItemResults.length - 1)"
+				class="mat-chip-navigate">
+				{{
+					currentViewedIndex > 2 ? explainItemResults.length - currentViewedIndex - 3 : explainItemResults.length - 5
+				}}
+			</mat-chip>
+		</div>
+	</ng-container>
+	<ng-template #loadingState>
+		<div class="loading-container" fxLayout="column">
+			<ng-container *ngIf="!isMobile; else mobileLoading">
+				<div class="loading-header-top-container" fxLayout="column" fxLayoutGap="16px">
+					<div class="loading-header-container" fxLayout="column" fxLayoutGap="4px">
+						<ngx-skeleton-loader
+							class="title-loading skeleton skeleton-small-height"
+							[appearance]="'line'"></ngx-skeleton-loader>
+						<ngx-skeleton-loader
+							class="first-description-loading skeleton skeleton-small-height"
+							[appearance]="'line'"></ngx-skeleton-loader>
+						<ngx-skeleton-loader
+							class="second-description-loading skeleton skeleton-small-height"
+							[appearance]="'line'"></ngx-skeleton-loader>
+					</div>
+					<div class="loading-grade-bar-container" fxLayout="column" fxLayoutGap="8px">
+						<ngx-skeleton-loader
+							class="description-loading skeleton skeleton-small-height"
+							[appearance]="'line'"></ngx-skeleton-loader>
+						<div fxLayout="column" fxLayoutAlign="start center">
+							<ngx-skeleton-loader
+								class="grade-bar-loading skeleton skeleton-small-height"
+								[appearance]="'line'"></ngx-skeleton-loader>
+						</div>
+					</div>
+				</div>
+				<div class="loading-result-top-container" fxLayout="column">
+					<div class="loading-result-container" fxLayout="row" fxLayoutAlign="start center" fxLayoutGap="16px">
+						<ngx-skeleton-loader class="proportion-loading skeleton" [appearance]="'line'"></ngx-skeleton-loader>
+						<ngx-skeleton-loader class="result-loading skeleton" [appearance]="'line'"></ngx-skeleton-loader>
+					</div>
+					<div class="loading-contant-result-container" fxLayout="column" fxLayoutGap="2px">
+						<div class="description-loading" fxLayout="column">
+							<ngx-skeleton-loader
+								class="loading skeleton skeleton-small-height"
+								[appearance]="'line'"></ngx-skeleton-loader>
+						</div>
+						<div
+							class="ai-count-loading-container"
+							fxLayout="row"
+							fxLayoutAlign="space-between center"
+							fxLayoutGap="4px">
+							<ngx-skeleton-loader
+								class="ai-count-loading skeleton skeleton-small-height"
+								[appearance]="'line'"></ngx-skeleton-loader>
+							<ngx-skeleton-loader
+								class="result-loading skeleton skeleton-small-height"
+								[appearance]="'line'"></ngx-skeleton-loader>
+						</div>
+						<div
+							class="human-count-loading-container"
+							fxLayout="row"
+							fxLayoutAlign="space-between center"
+							fxLayoutGap="4px">
+							<ngx-skeleton-loader
+								class="human-count-loading skeleton skeleton-small-height"
+								[appearance]="'line'"></ngx-skeleton-loader>
+							<ngx-skeleton-loader
+								class="result-loading skeleton skeleton-small-height"
+								[appearance]="'line'"></ngx-skeleton-loader>
+						</div>
+					</div>
+					<div class="loading-result-container" fxLayout="row" fxLayoutAlign="start center" fxLayoutGap="16px">
+						<ngx-skeleton-loader class="proportion-loading skeleton" [appearance]="'line'"></ngx-skeleton-loader>
+						<ngx-skeleton-loader class="result-loading skeleton" [appearance]="'line'"></ngx-skeleton-loader>
+					</div>
+					<div class="loading-result-container" fxLayout="row" fxLayoutAlign="start center" fxLayoutGap="16px">
+						<ngx-skeleton-loader class="proportion-loading skeleton" [appearance]="'line'"></ngx-skeleton-loader>
+						<ngx-skeleton-loader class="result-loading skeleton" [appearance]="'line'"></ngx-skeleton-loader>
+					</div>
+					<div class="loading-result-container" fxLayout="row" fxLayoutAlign="start center" fxLayoutGap="16px">
+						<ngx-skeleton-loader class="proportion-loading skeleton" [appearance]="'line'"></ngx-skeleton-loader>
+						<ngx-skeleton-loader class="result-loading skeleton" [appearance]="'line'"></ngx-skeleton-loader>
+					</div>
+					<div class="loading-result-container" fxLayout="row" fxLayoutAlign="start center" fxLayoutGap="16px">
+						<ngx-skeleton-loader class="proportion-loading skeleton" [appearance]="'line'"></ngx-skeleton-loader>
+						<ngx-skeleton-loader class="result-loading skeleton" [appearance]="'line'"></ngx-skeleton-loader>
+					</div>
+					<div class="loading-result-container" fxLayout="row" fxLayoutAlign="start center" fxLayoutGap="16px">
+						<ngx-skeleton-loader class="proportion-loading skeleton" [appearance]="'line'"></ngx-skeleton-loader>
+						<ngx-skeleton-loader class="result-loading skeleton" [appearance]="'line'"></ngx-skeleton-loader>
+					</div>
+				</div>
+			</ng-container>
+			<ng-template #mobileLoading>
+				<div class="mobile-loading-container" fxLayout="column" fxLayoutGap="16px">
+					<div class="mobile-header-loading-container">
+						<ngx-skeleton-loader class="header-loading skeleton" [appearance]="'line'"></ngx-skeleton-loader>
+					</div>
+					<div class="result-loading-container" fxLayout="row" fxLayoutAlign="start center" fxLayoutGap="16px">
+						<ngx-skeleton-loader class="proportion-loading skeleton" [appearance]="'line'"></ngx-skeleton-loader>
+						<ngx-skeleton-loader class="result-loading skeleton" [appearance]="'line'"></ngx-skeleton-loader>
+					</div>
+				</div>
+			</ng-template>
+		</div>
+	</ng-template>
 </div>
 
 <!-- AI result template -->
@@ -137,16 +243,16 @@
 		<mat-expansion-panel (opened)="openedPanel = true" (closed)="openedPanel = false">
 			<mat-expansion-panel-header>
 				<mat-panel-title>
-					<div fxLayout="row" fxLayoutAlign="start center" fxLayoutGap="4px">
+					<div fxLayout="row" fxLayoutAlign="start center" fxLayoutGap="16px">
 						<div class="proportion" fxLayout="column" fxLayoutAlign="center center">
 							<ng-container *ngIf="item.isInfinity; else showProportionValue">
 								<mat-icon class="infinity-icon" fontSet="material-icons-outlined">all_inclusive</mat-icon>
 							</ng-container>
 							<ng-template #showProportionValue>
-								<span>{{ item.proportion.toLocaleString() }}</span>
+								<span>{{ item.proportion.toLocaleString() }}x</span>
 							</ng-template>
 						</div>
-						<span class="content">{{ item.content }}</span>
+						<span class="content">the main encounters of what developed into the French and Indian Conflict</span>
 					</div>
 				</mat-panel-title>
 			</mat-expansion-panel-header>

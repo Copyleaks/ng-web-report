@@ -1,41 +1,49 @@
 <div
 	class="resourcess-container"
 	[class.resourcess-container-open]="isOpen"
-	[matTooltip]="resourcessTooltip"
+	#resourcesTooltipView="matTooltip"
+	[matTooltip]="isLoading || isOpen ? '' : resourcessTooltip"
 	matTooltipClass="web-report-mat-tooltip resourcess-mat-tooltip">
-	<mat-accordion>
-		<mat-expansion-panel class="expansion-panel" (opened)="isOpen = true" (closed)="isOpen = false" hideToggle>
-			<mat-expansion-panel-header>
-				<mat-panel-title>Resources</mat-panel-title>
-				<mat-panel-description>
-					<mat-icon>
-						<ng-container *ngIf="isOpen; else closePanel">keyboard_arrow_up</ng-container>
-						<ng-template #closePanel>keyboard_arrow_down</ng-template>
-					</mat-icon>
-				</mat-panel-description>
-			</mat-expansion-panel-header>
-			<div fxLayout="column" fxLayoutAlign="start start" fxLayoutGap="24px">
-				<ng-container *ngFor="let res of resourcesList">
+	<ng-container *ngIf="!isLoading; else loadingState">
+		<mat-accordion>
+			<mat-expansion-panel class="expansion-panel" (opened)="isOpen = true" (closed)="isOpen = false" hideToggle>
+				<mat-expansion-panel-header (focus)="resourcesTooltipView?.show()" (blur)="resourcesTooltipView?.hide()">
+					<mat-panel-title>Resources</mat-panel-title>
+					<mat-panel-description>
+						<mat-icon>
+							<ng-container *ngIf="isOpen; else closePanel">keyboard_arrow_up</ng-container>
+							<ng-template #closePanel>keyboard_arrow_down</ng-template>
+						</mat-icon>
+					</mat-panel-description>
+				</mat-expansion-panel-header>
+				<div fxLayout="column" fxLayoutAlign="start start" fxLayoutGap="24px">
+					<ng-container *ngFor="let res of resourcesList">
+						<mat-divider></mat-divider>
+						<ng-container
+							*ngTemplateOutlet="
+								resourcesTemplate;
+								context: { title: res.title, link: res.link, description: res.description }
+							"></ng-container>
+					</ng-container>
 					<mat-divider></mat-divider>
-					<ng-container
-						*ngTemplateOutlet="
-							resourcesTemplate;
-							context: { title: res.title, link: res.link, description: res.description }
-						"></ng-container>
-				</ng-container>
-				<mat-divider></mat-divider>
-			</div>
-			<div class="platforms-container">
-				<span>
-					Certain platforms, like Grammarly, use ChatGPT and other genAI models for key functionalities and can be
-					flagged as potential AI content.
-				</span>
-				<a class="learn-more">
-					<span i18n>Learn more</span>
-				</a>
-			</div>
-		</mat-expansion-panel>
-	</mat-accordion>
+				</div>
+				<div class="platforms-container">
+					<span>
+						Certain platforms, like Grammarly, use ChatGPT and other genAI models for key functionalities and can be
+						flagged as potential AI content.
+					</span>
+					<a class="learn-more">
+						<span i18n>Learn more</span>
+					</a>
+				</div>
+			</mat-expansion-panel>
+		</mat-accordion>
+	</ng-container>
+	<ng-template #loadingState>
+		<div class="loader-container" fxLayout="column" fxLayoutAlign="start start">
+			<ngx-skeleton-loader class="title-loader skeleton" [appearance]="'line'"></ngx-skeleton-loader>
+		</div>
+	</ng-template>
 </div>
 
 <ng-template #resourcesTemplate let-title="title" let-link="link" let-description="description">

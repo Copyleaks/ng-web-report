@@ -46,6 +46,11 @@ export class ExplainableAIResultContainerComponent implements OnInit, OnChanges 
 	@Input() isMobile: boolean = false;
 
 	/**
+	 * @Input {boolean} A flag indicating if the component is in loading state
+	 */
+	@Input() isLoading: boolean = false;
+
+	/**
 	 * @Output {boolean} Event emitted when the user clears the selected result
 	 */
 	@Output() clearSelectResultEvent = new EventEmitter<boolean>();

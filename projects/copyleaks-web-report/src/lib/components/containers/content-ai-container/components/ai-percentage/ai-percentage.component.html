@@ -1,20 +1,33 @@
 <div class="ai-percentage-container" fxLayout="row" fxLayoutAlign="space-between center" fxLayoutGap="8px">
-	<div class="contet-container" fxLayout="column" fxLayoutAlign="start start" fxLayoutGap="8px">
-		<div class="title" fxLayout="row" fxLayoutAlign="space-between center" fxLayoutGap="4px">
-			<span *ngIf="aiPercentageResult > 0" i18n>AI Content Found</span>
-			<span *ngIf="aiPercentageResult === 0" i18n>No AI Content Found</span>
-			<mat-icon
-				class="info-icon"
-				fontSet="material-icons-outlined"
-				[tabIndex]="0"
-				[matTooltip]="tooltipText"
-				matTooltipClass="web-report-mat-tooltip tooltip-contanier">
-				info
-			</mat-icon>
+	<ng-container *ngIf="!isLoading; else loadingState">
+		<div class="contet-container" fxLayout="column" fxLayoutAlign="start start" fxLayoutGap="8px">
+			<div class="title" fxLayout="row" fxLayoutAlign="space-between center" fxLayoutGap="4px">
+				<span *ngIf="aiPercentageResult > 0" i18n>AI Content Found</span>
+				<span *ngIf="aiPercentageResult === 0" i18n>No AI Content Found</span>
+				<mat-icon
+					class="info-icon"
+					fontSet="material-icons-outlined"
+					[tabIndex]="0"
+					[matTooltip]="tooltipText"
+					matTooltipClass="web-report-mat-tooltip tooltip-contanier">
+					info
+				</mat-icon>
+			</div>
+			<span class="description" i18n>Percentage of text that may be AI-generated.</span>
 		</div>
-		<span class="description" i18n>Percentage of text that may be AI-generated.</span>
-	</div>
-	<div class="percentage-score-container" [class.zero-result]="!aiPercentageResult">
-		<span class="percentage-result">{{ aiPercentageResult | percent : '1.0-1' }}</span>
-	</div>
+		<div class="percentage-score-container" [class.zero-result]="!aiPercentageResult">
+			<span class="percentage-result">{{ aiPercentageResult | percent : '1.0-1' }}</span>
+		</div>
+	</ng-container>
+	<ng-template #loadingState>
+		<div class="loader-container" fxLayout="row" fxLayoutAlign="space-between center" fxLayoutGap="8px">
+			<div class="loader-header-container" fxLayout="column" fxLayoutGap="8px">
+				<ngx-skeleton-loader class="title-loader skeleton" [appearance]="'line'"></ngx-skeleton-loader>
+				<ngx-skeleton-loader class="description-loader skeleton" [appearance]="'line'"></ngx-skeleton-loader>
+			</div>
+			<div class="loader-percentage-score-container">
+				<ngx-skeleton-loader class="percentage-score-loader skeleton" [appearance]="'line'"></ngx-skeleton-loader>
+			</div>
+		</div>
+	</ng-template>
 </div>

@@ -10,7 +10,7 @@
 			width: 100%;
 			span {
 				color: $color-black;
-				font-family: 'Almarai';
+				font-family: 'Almarai' !important;
 				font-size: 18px;
 				font-weight: 800;
 				line-height: 120%;
@@ -56,6 +56,48 @@
 			font-size: 40px;
 			font-weight: 800;
 			text-transform: capitalize;
+		}
+	}
+
+	.loader-container {
+		width: 100%;
+		.skeleton {
+			width: fit-content;
+			display: flex;
+			height: fit-content !important;
+			::ng-deep .loader {
+				height: 18px !important;
+				margin-bottom: 0px !important;
+				border-radius: 10px !important;
+				opacity: 0.2;
+				background-color: $color-medium-dark;
+			}
+		}
+		.loader-header-container {
+			width: 100%;
+			.title-loader {
+				width: 40%;
+			}
+			.description-loader {
+				width: 60%;
+			}
+		}
+		.loader-percentage-score-container {
+			display: flex;
+			align-items: center;
+			width: 60px;
+			height: 32px;
+			border-radius: 6px;
+			border: 0.5px solid #d7c5ff;
+			background: linear-gradient(140deg, #f8eaff 20.61%, $color-white 104.6%);
+			box-shadow: 0px 0px 2px 0px rgba(11, 22, 62, 0.08) inset, 0px 0px 10px 0px rgba(11, 22, 62, 0.04) inset;
+			padding: 8px 10px 4px 10px;
+			.percentage-score-loader {
+				width: 100%;
+				::ng-deep .loader {
+					height: 20px !important;
+				}
+			}
 		}
 	}
 }

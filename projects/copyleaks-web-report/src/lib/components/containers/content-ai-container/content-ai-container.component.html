@@ -2,14 +2,20 @@
 	<div class="percentage-result-container" fxLayout="column" fxLayoutGap="8px">
 		<copyleaks-ai-percentage
 			*ngIf="!isMobile"
+			[isLoading]="isLoading"
 			[aiPercentageResult]="totalAiWords / wordsTotal"></copyleaks-ai-percentage>
 		<copyleaks-explainable-ai-result-container
 			class="copyleaks-explainable-ai-result"
 			[isMobile]="isMobile"
+			[isLoading]="isLoading"
 			[lockedResults]="lockedResults"
 			[explainableAIResults]="explainableAIResults"
 			[selectAIText]="selectAIText"
 			(clearSelectResultEvent)="clearSelectResult()"></copyleaks-explainable-ai-result-container>
 	</div>
-	<copyleaks-resources-container></copyleaks-resources-container>
+	<ng-container *ngIf="!(isLoading && isMobile)">
+		<copyleaks-resources-container
+			class="copyleaks-resources-container"
+			[isLoading]="isLoading"></copyleaks-resources-container>
+	</ng-container>
 </div>

@@ -43,6 +43,11 @@ export class ContentAiContainerComponent implements OnInit {
 	 */
 	@Input() lockedResults: boolean = false;
 
+	/**
+	 * @Input {boolean} A flag indicating if the component is in loading state
+	 */
+	@Input() isLoading: boolean = false;
+
 	totalAiWords: number = 0;
 	constructor(private _highlightService: ReportMatchHighlightService) {}
 	ngOnInit(): void {

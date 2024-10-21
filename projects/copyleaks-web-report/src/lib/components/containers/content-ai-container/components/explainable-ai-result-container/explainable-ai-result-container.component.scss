@@ -12,7 +12,7 @@
 		.header {
 			.title {
 				color: $color-black;
-				font-family: 'Almarai';
+				font-family: 'Almarai' !important;
 				font-size: 18px;
 				font-weight: 800;
 				line-height: 24px; /* 133.333% */
@@ -263,6 +263,127 @@
 	}
 	.explain-results-mobile-container-height {
 		height: 232px;
+	}
+	.loading-container {
+		width: 100%;
+		.skeleton {
+			width: fit-content;
+			display: flex;
+			height: fit-content !important;
+			::ng-deep .loader {
+				height: 18px !important;
+				margin-bottom: 0px !important;
+				border-radius: 10px !important;
+				opacity: 0.2;
+				background-color: $color-medium-dark;
+			}
+		}
+		.skeleton-small-height {
+			::ng-deep .loader {
+				height: 15px !important;
+			}
+		}
+		.loading-header-top-container {
+			width: 100%;
+			padding: 16px;
+			border-radius: 10px 10px 0px 0px;
+			background: $color-white;
+			box-shadow: 0px 0px 2px 0px rgba(11, 22, 62, 0.12), 0px 0px 20px 0px rgba(11, 22, 62, 0.12);
+
+			.loading-header-container {
+				width: 100%;
+				.title-loading {
+					width: 30%;
+				}
+				.first-description-loading {
+					width: 60%;
+				}
+				.second-description-loading {
+					width: 80%;
+				}
+			}
+			.loading-grade-bar-container {
+				width: 100%;
+				.description-loading {
+					width: 80%;
+				}
+				.grade-bar-loading {
+					width: 80%;
+				}
+			}
+		}
+		.loading-result-top-container {
+			width: 100%;
+			.loading-result-container {
+				width: 100%;
+				padding: 16px;
+				.proportion-loading {
+					width: 15%;
+					::ng-deep .loader {
+						height: 26px !important;
+					}
+				}
+				.result-loading {
+					width: 50%;
+				}
+			}
+			.loading-contant-result-container {
+				width: 100%;
+				padding: 0px 16px 16px 16px;
+				.description-loading {
+					padding: 8px 10px;
+					border-radius: 6px 6px 0px 0px;
+					background: $color-container-background;
+					.loading {
+						width: 40%;
+					}
+				}
+				.ai-count-loading-container {
+					width: 100%;
+					padding: 8px 10px;
+					background: $color-container-background;
+					.ai-count-loading {
+						width: 20%;
+					}
+					.result-loading {
+						width: 50%;
+					}
+				}
+				.human-count-loading-container {
+					width: 100%;
+					padding: 8px 10px;
+					border-radius: 0px 0px 6px 6px;
+					background: $color-container-background;
+					.human-count-loading {
+						width: 30%;
+					}
+					.result-loading {
+						width: 40%;
+					}
+				}
+			}
+		}
+		.mobile-loading-container {
+			width: 100%;
+			padding: 16px 16px 32px;
+			.mobile-header-loading-container {
+				.header-loading {
+					width: 30%;
+				}
+			}
+			.result-loading-container {
+				width: 100%;
+				.proportion-loading {
+					width: 15%;
+					::ng-deep .loader {
+						height: 26px !important;
+					}
+				}
+				.result-loading {
+					width: 50%;
+				}
+			}
+		}
 	}
 }
 

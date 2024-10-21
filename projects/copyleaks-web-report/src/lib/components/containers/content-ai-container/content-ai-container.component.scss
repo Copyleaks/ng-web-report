@@ -1,5 +1,6 @@
 .explain-ai-top-container {
 	position: relative;
+	width: 100%;
 	.percentage-result-container {
 		width: 100%;
 		height: 93%;
@@ -9,5 +10,8 @@
 			height: 100%;
 			overflow: hidden;
 		}
+	}
+	.copyleaks-resources-container {
+		width: 100%;
 	}
 }

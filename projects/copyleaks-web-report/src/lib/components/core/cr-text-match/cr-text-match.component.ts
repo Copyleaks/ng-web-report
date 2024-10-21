@@ -61,6 +61,10 @@ export class CrTextMatchComponent implements AfterContentInit {
 	 * Add a class to the native element that represents the match type
 	 */
 	ngAfterContentInit() {
-		this.renderer.addClass(this.element.nativeElement, `cr-m-${this.match.type}`);
+		if (this.match.type === MatchType.aiExplain) {
+			this.renderer.addClass(this.element.nativeElement, `cr-m-${MatchType.aiExplain}-${this.match.proportionType}`);
+		} else {
+			this.renderer.addClass(this.element.nativeElement, `cr-m-${this.match.type}`);
+		}
 	}
 }

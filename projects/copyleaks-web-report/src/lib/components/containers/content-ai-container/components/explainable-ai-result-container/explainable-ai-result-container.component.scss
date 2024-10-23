@@ -50,6 +50,10 @@
 				::ng-deep .mat-button-focus-overlay {
 					background-color: transparent !important;
 				}
+				&:focus-visible {
+					border-radius: 0;
+					border: 1px solid $color-black !important;
+				}
 			}
 		}
 
@@ -108,6 +112,7 @@
 	}
 	.container-explain-results {
 		overflow: auto;
+		padding-bottom: 16px;
 		.explain-results {
 			::ng-deep .mat-expansion-panel {
 				box-shadow: none;
@@ -116,28 +121,58 @@
 				::ng-deep .mat-expansion-panel-header {
 					padding: 0 16px;
 					box-shadow: none;
-					.proportion {
-						padding: 4px 8px;
-						border-radius: 6px;
-						background: #9479ff;
-						span {
-							color: $color-black;
-							text-align: right;
-							font-family: 'haboro-soft';
-							font-size: 14px;
-							font-weight: 800;
+					.mat-expansion-panel-header-title {
+						width: 100%;
+						margin: 0;
+						.panel-header-container {
+							width: 100%;
 						}
-						mat-icon {
+						.proportion-content-container {
+							max-width: 90%;
+							.proportion {
+								min-width: 60px;
+								padding: 4px 8px;
+								border-radius: 6px;
+								background-color: #9479ff;
+								span {
+									color: $color-black;
+									text-align: right;
+									font-family: 'haboro-soft';
+									font-size: 14px;
+									font-weight: 800;
+								}
+								mat-icon {
+									width: 18px;
+									height: 18px;
+									font-size: 18px;
+								}
+							}
+							.low-proportion {
+								background-color: $color-explain-ai-low;
+							}
+							.medium-proportion {
+								background-color: $color-explain-ai-medium;
+							}
+							.high-proportion {
+								background-color: $color-explain-ai-high;
+							}
+							.content {
+								overflow: hidden;
+								text-overflow: ellipsis;
+								white-space: nowrap;
+								color: $color-black;
+								font-family: 'Open Sans';
+								font-size: 14px;
+								font-weight: 400;
+							}
+						}
+
+						.keyboard-arrow-icon {
+							font-size: 18px;
 							width: 18px;
 							height: 18px;
-							font-size: 18px;
+							color: $color-primary;
 						}
-					}
-					.content {
-						color: $color-black;
-						font-family: 'Open Sans';
-						font-size: 14px;
-						font-weight: 400;
 					}
 					.mat-expansion-indicator:after {
 						color: $color-primary;
@@ -427,4 +462,14 @@
 			text-transform: capitalize;
 		}
 	}
+}
+::ng-deep .mat-tooltip.tooltip-contanier {
+	font-size: 16px !important;
+	font-weight: 500 !important;
+	color: $color-white !important;
+	background-color: $color-black !important;
+	border-radius: 10px !important;
+	padding: 14px !important;
+	font-family: 'haboro-soft', sans-serif !important;
+	white-space: pre-line !important;
 }

@@ -70,19 +70,23 @@ export class ExplainableAIResultContainerComponent implements OnInit, OnChanges 
 	selectedMatch: boolean = false;
 	hasInfinityResult: boolean = false;
 	openedPanel: boolean = false;
+	openedPanelIndex: number = -1;
 	minProportion: number = 0;
 	maxProportion: number = 0;
 	minGradeBar: number = 0;
 	midGradeBar: number = 0;
 	maxGradeBar: number = 0;
 	currentViewedIndex: number = 0;
+	infoTooltipText: string;
+	proportionTooltipText: string;
+	resultTooltipText: string;
 
 	constructor() {}
 
 	ngOnChanges(changes: SimpleChanges): void {
 		if (changes.selectAIText) {
-			if (!!this.selectAIText.length) {
-				const selectResult = this.explainResults.filter(item => this.selectAIText.includes(item.start));
+			const selectResult = this.explainResults?.filter(item => this.selectAIText?.includes(item.start));
+			if (!!this.selectAIText.length && !!selectResult.length) {
 				this.selectedMatch = true;
 				this.title = $localize`${selectResult.length} AI Insights Selected`;
 				this.explainItemResults = [...selectResult];
@@ -95,6 +99,7 @@ export class ExplainableAIResultContainerComponent implements OnInit, OnChanges 
 	}
 
 	ngOnInit(): void {
+		this._updateTooltipText();
 		if (this.explainableAIResults?.explain && this.explainableAIResults?.slicedMatch.length > 0) {
 			this.title = $localize`AI Insights`;
 			this._updateProportionRange();
@@ -103,6 +108,12 @@ export class ExplainableAIResultContainerComponent implements OnInit, OnChanges 
 			this.title = $localize`AI Content Has Not Been Detected`;
 			this.emptyView = true;
 		}
+	}
+
+	private _updateTooltipText() {
+		this.infoTooltipText = $localize`Generative Al models often overuse certain phrases, which is one of over three dozen signals used by our algorithms to identify the presence of AI.`;
+		this.proportionTooltipText = $localize`The ratio represents how many times on average a human would use the phrase compared to how many times on average AI would use this phrase.`;
+		this.resultTooltipText = $localize`Our dataset consists of millions of documents containing both AI and human written text. Here, we are showing the results normalized per 1M texts for an easier interpretation of the data shown.`;
 	}
 
 	private _updateProportionRange(): void {
@@ -134,8 +145,8 @@ export class ExplainableAIResultContainerComponent implements OnInit, OnChanges 
 				this.explainResults.push({
 					content: slicedMatchResult.content,
 					proportionType: slicedMatchResult.match.proportionType,
-					aiCount: Number(this.explainableAIResults.explain.patterns.statistics.aiCount[index].toFixed(0)),
-					humanCount: Number(this.explainableAIResults.explain.patterns.statistics.humanCount[index].toFixed(0)),
+					aiCount: Number(this.explainableAIResults.explain.patterns.statistics.aiCount[index].toFixed(3)),
+					humanCount: Number(this.explainableAIResults.explain.patterns.statistics.humanCount[index].toFixed(3)),
 					proportion: Number(item.toFixed(0)),
 					isInfinity: item == -1,
 					start: this.explainableAIResults.explain.patterns.text.chars.starts[index],
@@ -228,5 +239,16 @@ export class ExplainableAIResultContainerComponent implements OnInit, OnChanges 
 
 	closePanel() {
 		this.panels.forEach(panel => panel.close()); // Only closes the first expansion panel found
+	}
+
+	getProportionClassType(proportionType: EProportionType) {
+		switch (proportionType) {
+			case EProportionType.Low:
+				return 'low-proportion';
+			case EProportionType.Medium:
+				return 'medium-proportion';
+			case EProportionType.High:
+				return 'high-proportion';
+		}
 	}
 }

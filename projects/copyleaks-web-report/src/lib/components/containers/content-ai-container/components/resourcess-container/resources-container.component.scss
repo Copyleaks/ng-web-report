@@ -52,6 +52,7 @@
 				font-weight: 500;
 			}
 			.learn-more {
+				cursor: pointer;
 				span {
 					color: $color-primary;
 					font-family: 'haboro-soft';
@@ -84,6 +85,7 @@
 	}
 }
 .content-conrainer {
+	width: 100%;
 	padding: 0 16px;
 	.header-contaienr {
 		width: 100%;

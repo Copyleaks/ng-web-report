@@ -11,7 +11,15 @@
 						<span>Beta</span>
 					</div>
 					<ng-container *ngIf="!selectedMatch; else clearSelect">
-						<mat-icon class="info-icon" fontSet="material-icons-outlined" [tabIndex]="0">info</mat-icon>
+						<mat-icon
+							class="info-icon"
+							fontSet="material-icons-outlined"
+							[tabIndex]="0"
+							[matTooltip]="infoTooltipText"
+							[matTooltipPosition]="'after'"
+							matTooltipClass="web-report-mat-tooltip tooltip-contanier">
+							info
+						</mat-icon>
 					</ng-container>
 					<ng-template #clearSelect>
 						<button class="clear-select-button" mat-icon-button (click)="clearSelectdResult()">
@@ -70,8 +78,8 @@
 			<ng-template #showResults>
 				<!-- Desktop view -->
 				<ng-container *ngIf="!isMobile; else mobileView">
-					<div class="explain-results" fxLayout="column" *ngFor="let result of explainItemResults">
-						<ng-container *ngTemplateOutlet="templateResult; context: { item: result }"></ng-container>
+					<div class="explain-results" fxLayout="column" *ngFor="let result of explainItemResults; let i = index">
+						<ng-container *ngTemplateOutlet="templateResult; context: { item: result, index: i }"></ng-container>
 					</div>
 				</ng-container>
 				<!-- Mobile view -->
@@ -82,8 +90,11 @@
 						orientation="horizontal"
 						itemSize="300"
 						(scrolledIndexChange)="onScroll($event)">
-						<div class="explain-results" fxLayout="row" *cdkVirtualFor="let result of explainItemResults">
-							<ng-container *ngTemplateOutlet="templateResult; context: { item: result }"></ng-container>
+						<div
+							class="explain-results"
+							fxLayout="row"
+							*cdkVirtualFor="let result of explainItemResults; let i = index">
+							<ng-container *ngTemplateOutlet="templateResult; context: { item: result, index: i }"></ng-container>
 						</div>
 					</cdk-virtual-scroll-viewport>
 				</ng-template>
@@ -238,28 +249,49 @@
 </div>
 
 <!-- AI result template -->
-<ng-template #templateResult let-item="item">
+<ng-template #templateResult let-item="item" let-index="index">
 	<mat-accordion #panels>
-		<mat-expansion-panel (opened)="openedPanel = true" (closed)="openedPanel = false">
+		<mat-expansion-panel (opened)="openedPanelIndex = index" (closed)="openedPanelIndex = -1" hideToggle>
 			<mat-expansion-panel-header>
 				<mat-panel-title>
-					<div fxLayout="row" fxLayoutAlign="start center" fxLayoutGap="16px">
-						<div class="proportion" fxLayout="column" fxLayoutAlign="center center">
-							<ng-container *ngIf="item.isInfinity; else showProportionValue">
-								<mat-icon class="infinity-icon" fontSet="material-icons-outlined">all_inclusive</mat-icon>
-							</ng-container>
-							<ng-template #showProportionValue>
-								<span>{{ item.proportion.toLocaleString() }}x</span>
-							</ng-template>
+					<div class="panel-header-container" fxLayout="row" fxLayoutAlign="space-between center" fxLayoutGap="16px">
+						<div class="proportion-content-container" fxLayout="row" fxLayoutAlign="start center" fxLayoutGap="16px">
+							<div
+								class="proportion {{ getProportionClassType(item.proportionType) }}"
+								[tabIndex]="0"
+								[matTooltip]="proportionTooltipText"
+								[matTooltipPosition]="'after'"
+								matTooltipClass="web-report-mat-tooltip tooltip-contanier"
+								fxLayout="column"
+								fxLayoutAlign="center center">
+								<ng-container *ngIf="item.isInfinity; else showProportionValue">
+									<mat-icon class="infinity-icon" fontSet="material-icons-outlined">all_inclusive</mat-icon>
+								</ng-container>
+								<ng-template #showProportionValue>
+									<span>{{ item.proportion.toLocaleString() }}x</span>
+								</ng-template>
+							</div>
+							<span class="content">{{ item.content }}</span>
 						</div>
-						<span class="content">the main encounters of what developed into the French and Indian Conflict</span>
+						<mat-icon class="keyboard-arrow-icon">
+							<ng-container *ngIf="openedPanelIndex === index; else closePanel">keyboard_arrow_up</ng-container>
+							<ng-template #closePanel>keyboard_arrow_down</ng-template>
+						</mat-icon>
 					</div>
 				</mat-panel-title>
 			</mat-expansion-panel-header>
 			<div class="result-container" fxLayout="column" fxLayoutGap="2px">
 				<div class="result-header" fxLayout="row" fxLayoutAlign="space-between center">
 					<span class="title" i18n>How frequently the phrase was found in our dataset :</span>
-					<mat-icon class="info-icon" fontSet="material-icons-outlined">info</mat-icon>
+					<mat-icon
+						class="info-icon"
+						fontSet="material-icons-outlined"
+						[tabIndex]="0"
+						[matTooltip]="resultTooltipText"
+						[matTooltipPosition]="'before'"
+						matTooltipClass="web-report-mat-tooltip tooltip-contanier">
+						info
+					</mat-icon>
 				</div>
 				<div class="ai-count-container" fxLayout="row" fxLayoutAlign="space-between center">
 					<span class="title" i18n>AI Text</span>

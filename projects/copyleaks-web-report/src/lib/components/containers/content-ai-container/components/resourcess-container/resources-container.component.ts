@@ -24,17 +24,23 @@ export class ResourcesContainerComponent implements OnInit {
 		this.resourcessTooltip = $localize`Learn more about AI content, how to talk about it with students and writers, our testing methodology and more with our resources.`;
 		this.resourcesList = [
 			{
+				title: $localize`Start Here`,
+				description: $localize`Learn the fundamentals of AI insights.`,
+				buttontext: $localize`Watch Video`,
+				link: 'https://vimeo.com/1019805684?share=copy',
+			},
+			{
 				title: $localize`AI Detector FAQs`,
 				description: $localize`Includes commonly asked questions about accuracy, model training, and more.`,
 				link: 'https://copyleaks.com/blog/talking-to-students-about-ai',
 			},
 			{
-				title: $localize`Bringing AI Into the classroom:talking to students about AI`,
+				title: $localize`Bringing AI Into The Classroom : Talking To Students About AI`,
 				description: $localize`Strategies for opening the conversation between educators and students around utilizing AI and AI detectors in the classroom.`,
 				link: 'https://copyleaks.com/blog/talking-to-students-about-ai',
 			},
 			{
-				title: $localize`Check Out our help center`,
+				title: $localize`Check Out Our Help Center`,
 				description: $localize`Find answers to general questions, troubleshooting guides, and video tutorials.`,
 				link: 'https://help.copyleaks.com/hc/en-us',
 			},

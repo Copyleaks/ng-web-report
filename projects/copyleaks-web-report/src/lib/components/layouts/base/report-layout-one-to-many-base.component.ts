@@ -382,8 +382,12 @@ export abstract class OneToManyReportLayoutBaseComponent extends ReportLayoutBas
 			if (data) {
 				this.isLoadingScanContent = false;
 				this.contentTextMatches = data;
-				let explainAiMatches = this.contentTextMatches[0].filter(result => result.match.type === MatchType.aiExplain);
-				this.explainableAI.slicedMatch = explainAiMatches;
+				this.contentTextMatches.forEach(result => {
+					const explainText = result.filter(re => re.match.type === MatchType.aiExplain);
+					if (explainText.length > 0) {
+						this.explainableAI.slicedMatch.push(...explainText);
+					}
+				});
 
 				if (this.reportViewSvc.reportViewMode?.viewMode === 'writing-feedback') {
 					if (

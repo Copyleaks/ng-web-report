@@ -3,5 +3,5 @@ export interface IResources {
 	link: string;
 	buttontext?: string;
 	description: string;
-	isVideo?:boolean;
+	isVideo?: boolean;
 }

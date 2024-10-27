@@ -172,9 +172,10 @@ export class CopyleaksWebReportComponent implements OnInit, OnDestroy {
 			.subscribe(error => this.onReportRequestError.emit(error));
 
 		// Handle start video explination clicked & emit it
-		this._reportAIResultsService.resourcesStartExplainableVideo$
-			.pipe(takeUntil(this.unsubscribe$))
-			.subscribe(data => this.onExplainableAIStartVideoButtonClicked.emit(data));
+		this._reportAIResultsService.resourcesStartExplainableVideo$.pipe(takeUntil(this.unsubscribe$)).subscribe(data => {
+			if (!data.startVideo) return;
+			this.onExplainableAIStartVideoButtonClicked.emit(data);
+		});
 
 		this._reportDataSvc.scanResultsPreviews$
 			.pipe(

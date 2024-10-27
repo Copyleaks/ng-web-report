@@ -28,7 +28,7 @@ export class ResourcesContainerComponent implements OnInit {
 				title: $localize`Start Here`,
 				description: $localize`Learn the fundamentals of AI insights.`,
 				buttontext: $localize`Watch Video`,
-				link: 'https://vimeo.com/1019805684?share=copy',
+				link: 'https://player.vimeo.com/1019805684?share=copy',
 				isVideo: true,
 			},
 			{

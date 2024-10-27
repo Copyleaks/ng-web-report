@@ -7,17 +7,18 @@ import { Component, Input, OnInit } from '@angular/core';
 })
 export class AiPercentageComponent implements OnInit {
 	/**
-	 * @Input {number} The AI percentage result
-	 */
-	@Input() aiPercentageResult: number = 0;
-
-	/**
 	 * @Input {boolean} A flag indicating if the component is in loading state
 	 */
 	@Input() isLoading: boolean = false;
 
-	tooltipText: string;
-	ngOnInit(): void {
-		this.tooltipText = $localize`This is the overall percentage of content from the submitted text that is likely to contain AI content`;
+	/**
+	 * @Input {number} The AI percentage result
+	 */
+	@Input() aiPercentageResult: number = 0;
+
+	get tooltipText() {
+		return $localize`This is the overall percentage of content from the submitted text that is likely to contain AI content`;
 	}
+
+	ngOnInit(): void {}
 }

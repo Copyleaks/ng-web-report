@@ -1,4 +1,4 @@
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, Input, OnChanges, OnInit, SimpleChanges } from '@angular/core';
 import { ExplainableAIResults } from '../../../models/report-matches.models';
 import { ReportMatchHighlightService } from '../../../services/report-match-highlight.service';
 
@@ -7,11 +7,21 @@ import { ReportMatchHighlightService } from '../../../services/report-match-high
 	templateUrl: './content-ai-container.component.html',
 	styleUrls: ['./content-ai-container.component.scss'],
 })
-export class ContentAiContainerComponent implements OnInit {
+export class ContentAiContainerComponent implements OnInit, OnChanges {
 	/**
 	 * @Input {boolean} A flag indicating if the component is in mobile view
 	 */
 	@Input() isMobile: boolean = false;
+
+	/**
+	 * @Input {boolean} A flag indicating if the component is in loading state
+	 */
+	@Input() isLoading: boolean = false;
+
+	/**
+	 * @Input {boolean} A flag indicating if the results are locked
+	 */
+	@Input() lockedResults: boolean = false;
 
 	/**
 	 * @Input {number} The total number of words in this scan
@@ -39,21 +49,33 @@ export class ContentAiContainerComponent implements OnInit {
 	@Input() selectAIText: number[] = [];
 
 	/**
-	 * @Input {boolean} A flag indicating if the results are locked
+	 * {number} The AI percentage result
 	 */
-	@Input() lockedResults: boolean = false;
+	aiPercentageResult: number = 0;
 
-	/**
-	 * @Input {boolean} A flag indicating if the component is in loading state
-	 */
-	@Input() isLoading: boolean = false;
-
-	totalAiWords: number = 0;
 	constructor(private _highlightService: ReportMatchHighlightService) {}
-	ngOnInit(): void {
-		this.totalAiWords = Math.ceil(this.aiScore * ((this.wordsTotal ?? 0) - (this.excludedTotal ?? 0)));
+
+	ngOnChanges(changes: SimpleChanges): void {
+		if (changes['isLoading']?.currentValue == false) {
+			this._updateAiPercentageResult();
+		}
 	}
 
+	ngOnInit(): void {
+		this._updateAiPercentageResult();
+	}
+
+	/**
+	 * Update the AI percentage result
+	 */
+	private _updateAiPercentageResult() {
+		this.aiPercentageResult =
+			Math.ceil(this.aiScore * ((this.wordsTotal ?? 0) - (this.excludedTotal ?? 0))) / this.wordsTotal;
+	}
+
+	/**
+	 * Clear the selected result
+	 */
 	clearSelectResult() {
 		this._highlightService.clearAllMatchs();
 	}

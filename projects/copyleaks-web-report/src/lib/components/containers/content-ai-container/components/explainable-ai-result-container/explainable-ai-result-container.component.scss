@@ -7,7 +7,7 @@
 	box-shadow: 0px 0px 10px 0px rgba(11, 22, 62, 0.04), 0px 0px 2px 0px rgba(11, 22, 62, 0.08);
 	.header-container {
 		padding: 16px;
-		margin-bottom: 4px;
+		margin-bottom: 10px;
 		box-shadow: 0px 0px 2px 0px rgba(11, 22, 62, 0.12), 0px 0px 20px 0px rgba(11, 22, 62, 0.12);
 		.header {
 			.title {
@@ -24,7 +24,7 @@
 				height: 22px;
 				padding: 3px 8px;
 				span {
-					color: $color-primary;
+					color: #2b95ff;
 					font-family: 'haboro-soft';
 					font-size: 12px;
 					font-weight: 500;
@@ -171,7 +171,7 @@
 							font-size: 18px;
 							width: 18px;
 							height: 18px;
-							color: $color-primary;
+							color: #2b95ff;
 						}
 					}
 					.mat-expansion-indicator:after {
@@ -295,9 +295,15 @@
 				}
 			}
 		}
+		.empty-and-locked-contaienr {
+			padding: 0;
+		}
 	}
 	.explain-results-mobile-container-height {
 		height: 232px;
+	}
+	.explain-results-mobile-container-padding {
+		padding-bottom: 0 !important;
 	}
 	.loading-container {
 		width: 100%;
@@ -426,14 +432,14 @@
 .empty-view {
 	.container-explain-results {
 		height: 100%;
-		.empty-contaienr {
+		.empty-and-locked-contaienr {
 			height: 100%;
 		}
 	}
 }
 
 .locked-view {
-	.empty-contaienr {
+	.empty-and-locked-contaienr {
 		span {
 			color: $color-black;
 			font-family: 'Almarai' !important;
@@ -442,7 +448,7 @@
 			text-transform: capitalize;
 		}
 		mat-icon {
-			color: $color-primary;
+			color: #2b95ff;
 			font-size: 18px;
 			width: 18px;
 			height: 18px;
@@ -451,15 +457,31 @@
 }
 
 .empty-view {
-	opacity: 0.2;
-	.empty-contaienr {
-		span {
-			color: var(--Black-600, rgba(11, 22, 62, 0.6));
-			font-family: 'haboro-soft';
-			font-size: 16px;
-			font-weight: 800;
-			line-height: 120%;
-			text-transform: capitalize;
+	.header-container {
+		padding: 16px 0 0;
+		box-shadow: none;
+	}
+	.empty-and-locked-contaienr {
+		padding: 0px 16px;
+		.empty-contaienr {
+			padding: 16px;
+			border-radius: 10px;
+			background: $color-container-background;
+			box-shadow: 0px 0px 2px 0px rgba(11, 22, 62, 0.12);
+			.title {
+				color: $color-black;
+				font-family: 'Almarai' !important;
+				font-size: 18px;
+				font-weight: 800;
+				line-height: 24px; /* 133.333% */
+			}
+			.description {
+				color: $color-black;
+				font-family: 'haboro-soft' !important;
+				font-size: 14px;
+				font-weight: 500;
+				text-align: center;
+			}
 		}
 	}
 }

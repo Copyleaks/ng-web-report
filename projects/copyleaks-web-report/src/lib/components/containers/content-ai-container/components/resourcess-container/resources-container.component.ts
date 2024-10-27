@@ -13,6 +13,11 @@ export class ResourcesContainerComponent implements OnInit {
 	 */
 	@Input() isLoading: boolean = false;
 
+	/**
+	 * @Input {boolean} A flag indicating if the component is in mobile view
+	 */
+	@Input() isMobile: boolean = false;
+
 	@ViewChild('resourcesTooltipView') resourcesTooltipView: MatTooltip;
 
 	isOpen: boolean = false;

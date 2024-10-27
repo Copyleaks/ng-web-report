@@ -444,6 +444,9 @@
 	::ng-deep .tab-selected,
 	.tab-selected {
 		background: $color-white;
+		.grade-bar {
+			background-color: $color-container-background;
+		}
 	}
 	::ng-deep .tab-selected::after,
 	.tab-selected::after {
@@ -455,12 +458,15 @@
 		flex-direction: column;
 		width: 100%;
 		background-color: $color-white;
-		border: 1px solid $color-effect-dialog-background;
 		border-radius: 10px;
 		box-sizing: border-box;
 		height: 8px;
 	}
 
+	.plagiarism-grade-bar,
+	.ai-grade-bar {
+		padding: 0.5px 0;
+	}
 	.bar {
 		height: 100%;
 		display: flex;
@@ -493,10 +499,31 @@
 		background-color: $color-plagiarism-minor-changes;
 		border: 1px solid $color-plagiarism-minor-changes;
 	}
+	.ai-bar {
+		position: relative;
+	}
+	.proportion-bar {
+		padding: 0.5px 0;
+		position: absolute;
+		top: -1px;
+	}
+	.ai-low-proportion {
+		background-color: $color-explain-ai-low;
+		border: 1px solid $color-explain-ai-low;
+	}
+
+	.ai-medium-proportion {
+		background-color: $color-explain-ai-medium;
+		border: 1px solid $color-explain-ai-medium;
+	}
+	.ai-high-proportion {
+		background-color: $color-explain-ai-high;
+		border: 1px solid $color-explain-ai-high;
+	}
 
 	.ai-content {
-		background-color: $color-ai-detected-text;
-		border: 1px solid $color-ai-detected-text;
+		background-color: $color-light-ai-detected-text;
+		border: 0.5px solid $color-explain-ai-low;
 		border-radius: 10px;
 	}
 

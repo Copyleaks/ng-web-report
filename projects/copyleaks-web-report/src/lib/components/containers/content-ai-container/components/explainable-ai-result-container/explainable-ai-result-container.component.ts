@@ -57,7 +57,7 @@ export class ExplainableAIResultContainerComponent implements OnInit, OnChanges 
 
 	@ViewChild(CdkVirtualScrollViewport) viewport: CdkVirtualScrollViewport;
 
-	@ViewChildren(MatExpansionPanel) panels!: QueryList<MatExpansionPanel>;
+	@ViewChildren(MatExpansionPanel) panels: QueryList<MatExpansionPanel>;
 
 	explainResults: AIExplainResultItem[] = [];
 	explainItemResults: AIExplainResultItem[] = [];
@@ -70,7 +70,6 @@ export class ExplainableAIResultContainerComponent implements OnInit, OnChanges 
 	selectedMatch: boolean = false;
 	hasInfinityResult: boolean = false;
 	openedPanel: boolean = false;
-	openedPanelIndex: number = -1;
 	minProportion: number = 0;
 	maxProportion: number = 0;
 	minGradeBar: number = 0;
@@ -80,6 +79,8 @@ export class ExplainableAIResultContainerComponent implements OnInit, OnChanges 
 	infoTooltipText: string;
 	proportionTooltipText: string;
 	resultTooltipText: string;
+	updateResult: boolean = false;
+	panelIndex: number[] = [];
 
 	constructor() {}
 
@@ -96,17 +97,26 @@ export class ExplainableAIResultContainerComponent implements OnInit, OnChanges 
 				this.explainItemResults = [...this.explainResults];
 			}
 		}
+		if (changes['isLoading']?.currentValue == false) {
+			this._initResults();
+		}
 	}
 
 	ngOnInit(): void {
-		this._updateTooltipText();
-		if (this.explainableAIResults?.explain && this.explainableAIResults?.slicedMatch.length > 0) {
-			this.title = $localize`AI Insights`;
-			this._updateProportionRange();
-			this._mapingtoResultItem();
-		} else if (!this.lockedResults) {
-			this.title = $localize`AI Content Has Not Been Detected`;
-			this.emptyView = true;
+		if (!this.isLoading) this._initResults();
+	}
+
+	private _initResults() {
+		if (!this.updateResult) {
+			this._updateTooltipText();
+			if (this.explainableAIResults?.explain && this.explainableAIResults?.slicedMatch.length > 0) {
+				this.title = $localize`AI Insights`;
+				this._updateProportionRange();
+				this._mapingtoResultItem();
+			} else if (!this.lockedResults) {
+				this.emptyView = true;
+			}
+			this.updateResult = true;
 		}
 	}
 
@@ -239,6 +249,18 @@ export class ExplainableAIResultContainerComponent implements OnInit, OnChanges 
 
 	closePanel() {
 		this.panels.forEach(panel => panel.close()); // Only closes the first expansion panel found
+	}
+
+	addToPanelIndex(index: number) {
+		this.panelIndex.push(index);
+	}
+
+	removeFromPanelIndex(index: number) {
+		this.panelIndex = this.panelIndex.filter(i => i !== index);
+	}
+
+	isPanelOpen(index: number) {
+		return this.panelIndex.includes(index);
 	}
 
 	getProportionClassType(proportionType: EProportionType) {

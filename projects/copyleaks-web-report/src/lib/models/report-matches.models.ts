@@ -123,6 +123,13 @@ export interface ExplainableAIResults {
 	slicedMatch?: SlicedMatch[];
 }
 
+export interface ExplainableAIWordTotal {
+	totalExplainableAIWords: number;
+	lowProportionWord: number;
+	midProportionWord: number;
+	highProportionWord: number;
+}
+
 export interface AIScanResult {
 	results: AIScanResultItem[];
 	summary: AIScanResultSummary;

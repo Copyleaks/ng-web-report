@@ -7,7 +7,9 @@
 	<ng-container *ngIf="!isLoading; else loadingState">
 		<mat-accordion>
 			<mat-expansion-panel class="expansion-panel" (opened)="isOpen = true" (closed)="isOpen = false" hideToggle>
-				<mat-expansion-panel-header (focus)="resourcesTooltipView?.show()" (blur)="resourcesTooltipView?.hide()">
+				<mat-expansion-panel-header
+					(focus)="isMobile ? '' : resourcesTooltipView?.show()"
+					(blur)="isMobile ? '' : resourcesTooltipView?.hide()">
 					<mat-panel-title>Resources</mat-panel-title>
 					<mat-panel-description>
 						<mat-icon>

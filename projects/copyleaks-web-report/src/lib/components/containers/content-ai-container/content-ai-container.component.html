@@ -1,10 +1,15 @@
-<div class="explain-ai-top-container" fxLayout="column" fxLayoutAlign="space-between center" fxLayoutGap="8px">
-	<div class="percentage-result-container" fxLayout="column" fxLayoutGap="8px">
+<div class="explain-ai-top-container" fxLayout="column" fxLayoutAlign="start center" fxLayoutGap="8px">
+	<div
+		class="percentage-result-container"
+		[class.percentage-result-container-height]="aiPercentageResult !== 0"
+		fxLayout="column"
+		fxLayoutGap="8px">
 		<copyleaks-ai-percentage
 			*ngIf="!isMobile"
 			[isLoading]="isLoading"
-			[aiPercentageResult]="totalAiWords / wordsTotal"></copyleaks-ai-percentage>
+			[aiPercentageResult]="aiPercentageResult"></copyleaks-ai-percentage>
 		<copyleaks-explainable-ai-result-container
+			*ngIf="aiPercentageResult !== 0"
 			class="copyleaks-explainable-ai-result"
 			[isMobile]="isMobile"
 			[isLoading]="isLoading"
@@ -16,6 +21,7 @@
 	<ng-container *ngIf="!(isLoading && isMobile)">
 		<copyleaks-resources-container
 			class="copyleaks-resources-container"
-			[isLoading]="isLoading"></copyleaks-resources-container>
+			[isLoading]="isLoading"
+			[isMobile]="isMobile"></copyleaks-resources-container>
 	</ng-container>
 </div>

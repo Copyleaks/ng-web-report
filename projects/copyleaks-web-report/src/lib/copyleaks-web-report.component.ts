@@ -34,6 +34,8 @@ import { ReportViewService } from './services/report-view.service';
 import { ReportRealtimeResultsService } from './services/report-realtime-results.service';
 import { ECustomResultsReportView } from './components/core/cr-custom-results/models/cr-custom-results.enums';
 import { Subject } from 'rxjs';
+import { IResourceStartExplainableAIVideo } from './models/report-ai-results.models';
+import { ReportAIResultsService } from './services/report-ai-results.service';
 
 @Component({
 	selector: 'copyleaks-web-report',
@@ -47,6 +49,7 @@ import { Subject } from 'rxjs';
 		ReportMatchesService,
 		ReportMatchHighlightService,
 		ReportStatisticsService,
+		ReportAIResultsService,
 	],
 })
 export class CopyleaksWebReportComponent implements OnInit, OnDestroy {
@@ -111,12 +114,17 @@ export class CopyleaksWebReportComponent implements OnInit, OnDestroy {
 	@Input() lockedExplainAIResults: boolean = false;
 
 	/**
+	 * @Output {IResourceStartExplainableAIVideo} - Emits once AI Insight explination start video button clicked.
+	 */
+	@Output() onExplainableAIStartVideoButtonClicked = new EventEmitter<IResourceStartExplainableAIVideo>();
+
+	/**
 	 * @Output {ReportHttpRequestErrorModel} - Emits HTTP request data, when any request to update & fetch report data fails.
 	 */
 	@Output() onReportRequestError = new EventEmitter<ReportHttpRequestErrorModel>();
 
 	/**
-	 * @Output {ReportHttpRequestErrorModel} - Emits complete request updates.
+	 * @Output {ICompleteResults} - Emits complete request updates.
 	 */
 	@Output() onCompleteResultUpdate = new EventEmitter<ICompleteResults>();
 
@@ -141,7 +149,8 @@ export class CopyleaksWebReportComponent implements OnInit, OnDestroy {
 		private _activatedRoute: ActivatedRoute,
 		private _reportViewSvc: ReportViewService,
 		private _reportErrorsSvc: ReportErrorsService,
-		private _router: Router
+		private _router: Router,
+		private _reportAIResultsService: ReportAIResultsService
 	) {}
 
 	ngOnInit(): void {
@@ -157,10 +166,16 @@ export class CopyleaksWebReportComponent implements OnInit, OnDestroy {
 		// Listen to route params changes
 		this._listenToRouteParamsChange();
 
-		// Handel report requests errors & emit it
+		// Handle report requests errors & emit it
 		this._reportErrorsSvc.reportHttpRequestError$
 			.pipe(takeUntil(this.unsubscribe$))
 			.subscribe(error => this.onReportRequestError.emit(error));
+
+		// Handle start video explination clicked & emit it
+		this._reportAIResultsService.resourcesStartExplainableVideo$.pipe(takeUntil(this.unsubscribe$)).subscribe(data => {
+			if (!data.startVideo) return;
+			this.onExplainableAIStartVideoButtonClicked.emit(data);
+		});
 
 		this._reportDataSvc.scanResultsPreviews$
 			.pipe(

@@ -1,6 +1,7 @@
 import { Component, Input, OnInit, ViewChild } from '@angular/core';
 import { IResources } from './models/resources-container.models';
 import { MatTooltip } from '@angular/material/tooltip';
+import { ReportAIResultsService } from '../../../../../services/report-ai-results.service';
 
 @Component({
 	selector: 'copyleaks-resources-container',
@@ -17,7 +18,7 @@ export class ResourcesContainerComponent implements OnInit {
 
 	isOpen: boolean = false;
 	resourcessTooltip: string;
-	constructor() {}
+	constructor(private _reportAIResultsService: ReportAIResultsService) {}
 	resourcesList: IResources[] = [];
 
 	ngOnInit(): void {
@@ -28,11 +29,12 @@ export class ResourcesContainerComponent implements OnInit {
 				description: $localize`Learn the fundamentals of AI insights.`,
 				buttontext: $localize`Watch Video`,
 				link: 'https://vimeo.com/1019805684?share=copy',
+				isVideo: true,
 			},
 			{
 				title: $localize`AI Detector FAQs`,
 				description: $localize`Includes commonly asked questions about accuracy, model training, and more.`,
-				link: 'https://copyleaks.com/blog/talking-to-students-about-ai',
+				link: 'https://copyleaks.com/wp-content/uploads/2023/05/ai-content-detector-faqs.pdf',
 			},
 			{
 				title: $localize`Bringing AI Into The Classroom : Talking To Students About AI`,
@@ -45,5 +47,13 @@ export class ResourcesContainerComponent implements OnInit {
 				link: 'https://help.copyleaks.com/hc/en-us',
 			},
 		];
+	}
+
+	startVideo(event, link) {
+		event.preventDefault();
+		this._reportAIResultsService.resourcesStartExplainableVideo$.next({
+			startVideo: true,
+			link: link,
+		});
 	}
 }

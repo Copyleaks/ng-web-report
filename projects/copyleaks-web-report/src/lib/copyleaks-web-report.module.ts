@@ -106,6 +106,7 @@ import { ContentAiContainerComponent } from './components/containers/content-ai-
 import { AiPercentageComponent } from './components/containers/content-ai-container/components/ai-percentage/ai-percentage.component';
 import { ExplainableAIResultContainerComponent } from './components/containers/content-ai-container/components/explainable-ai-result-container/explainable-ai-result-container.component';
 import { ResourcesContainerComponent } from './components/containers/content-ai-container/components/resourcess-container/resources-container.component';
+import { ReportAIResultsService } from './services/report-ai-results.service';
 
 @NgModule({
 	declarations: [
@@ -231,6 +232,7 @@ import { ResourcesContainerComponent } from './components/containers/content-ai-
 		ReportMatchesService,
 		ReportDataService,
 		ReportErrorsService,
+		ReportAIResultsService,
 	],
 })
 export class CopyleaksWebReportModule {}

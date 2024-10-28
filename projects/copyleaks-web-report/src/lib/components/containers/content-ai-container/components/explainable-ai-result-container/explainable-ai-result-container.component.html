@@ -48,7 +48,7 @@
 							<div class="max-result" [style.width]="maxGradeBar + '%'"></div>
 						</div>
 						<ng-container *ngIf="hasInfinityResult; else maxResult">
-							<mat-icon class="infinity-icon" fontSet="material-icons-outlined">all_inclusive</mat-icon>
+							<span class="max-proportion">> 10,000</span>
 						</ng-container>
 						<ng-template #maxResult>
 							<span class="max-proportion">{{ maxProportion.toLocaleString() }}x</span>
@@ -276,7 +276,7 @@
 								fxLayout="column"
 								fxLayoutAlign="center center">
 								<ng-container *ngIf="item.isInfinity; else showProportionValue">
-									<mat-icon class="infinity-icon" fontSet="material-icons-outlined">all_inclusive</mat-icon>
+									<span class="content">> 10,000</span>
 								</ng-container>
 								<ng-template #showProportionValue>
 									<span>{{ item.proportion.toLocaleString() }}x</span>

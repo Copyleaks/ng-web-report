@@ -241,18 +241,19 @@ export abstract class OneToManyReportLayoutBaseComponent extends ReportLayoutBas
 
 		this.reportDataSvc.scanResultsPreviews$
 			.pipe(distinctUntilChanged())
-
 			.pipe(takeUntil(this.unsubscribe$))
 			.subscribe(scanResults => {
 				if (scanResults) {
 					const validSelectedAlert = scanResults?.notifications?.alerts?.find(
 						a => a.code === ALERTS.SUSPECTED_AI_TEXT_DETECTED
 					);
-					var scanResult = JSON.parse(validSelectedAlert.additionalData) as AIScanResult;
-					this.explainableAI.explain = scanResult?.explain;
-					if (this.explainableAI?.explain && !this.updateProportionRange) {
-						this._updateProportionRange();
-						this.updateProportionRange = true;
+					if (validSelectedAlert) {
+						var scanResult = JSON.parse(validSelectedAlert.additionalData) as AIScanResult;
+						this.explainableAI.explain = scanResult?.explain;
+						if (this.explainableAI?.explain && !this.updateProportionRange) {
+							this._updateProportionRange();
+							this.updateProportionRange = true;
+						}
 					}
 					this.selectAIText = [];
 					this.loadingExplainableAI = false;

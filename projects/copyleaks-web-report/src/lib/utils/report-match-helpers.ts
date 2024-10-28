@@ -491,61 +491,61 @@ export const processAICheatingMatches = (
 					} as AIMatch)
 			);
 			//#region add explain to the matches
-			if (mappedMatches && mappedMatches[0].type == MatchType.aiText && lastExplainIndex < lengthExplain) {
-				let startMappedMatches = mappedMatches[0].start;
-				let endMappedMatches = mappedMatches[0].end;
-				for (let i = lastExplainIndex; i < lengthExplain; i++) {
-					const firstExolain = scanResult?.explain?.patterns?.text?.chars?.starts[i];
-					const endExolain = firstExolain + scanResult.explain?.patterns?.text?.chars?.lengths[i];
-					if (startMappedMatches <= firstExolain && endMappedMatches >= endExolain) {
-						lastExplainIndex = i + 1;
-
-						if (startMappedMatches < firstExolain) {
-							const matchBefore = {
-								start: startMappedMatches,
-								end: firstExolain - 1,
-								type: mappedMatches[0].type,
-								ids: [],
-								classification: mappedMatches[0].classification,
-								probability: mappedMatches[0].probability,
-								totalWords: mappedMatches[0].totalWords,
-							} as AIMatch;
-							matches.push(matchBefore);
-							startMappedMatches = firstExolain;
-							i = i - 1;
-						} else if (startMappedMatches == firstExolain) {
-							const explainMatch = {
-								start: firstExolain,
-								end: endExolain,
-								type: MatchType.aiExplain,
-								ids: [],
-								classification: mappedMatches[0].classification,
-								probability: mappedMatches[0].probability,
-								totalWords: mappedMatches[0].totalWords,
-								proportionType: proportionArray[i],
-							} as AIMatch;
-							matches.push(explainMatch);
-							startMappedMatches = endExolain + 1;
+			mappedMatches?.forEach(match => {
+				if (match && match.type == MatchType.aiText && lastExplainIndex < lengthExplain) {
+					let startMappedMatches = match.start;
+					let endMappedMatches = match.end;
+					for (let i = lastExplainIndex; i < lengthExplain; i++) {
+						const firstExolain = scanResult?.explain?.patterns?.text?.chars?.starts[i];
+						const endExolain = firstExolain + scanResult.explain?.patterns?.text?.chars?.lengths[i];
+						if (startMappedMatches <= firstExolain && endMappedMatches >= endExolain) {
+							lastExplainIndex = i + 1;
+							if (startMappedMatches < firstExolain) {
+								const matchBefore = {
+									start: startMappedMatches,
+									end: firstExolain - 1,
+									type: match.type,
+									ids: [],
+									classification: match.classification,
+									probability: match.probability,
+									totalWords: match.totalWords,
+								} as AIMatch;
+								matches.push(matchBefore);
+								startMappedMatches = firstExolain;
+								i = i - 1;
+							} else if (startMappedMatches == firstExolain) {
+								const explainMatch = {
+									start: firstExolain,
+									end: endExolain,
+									type: MatchType.aiExplain,
+									ids: [],
+									classification: match.classification,
+									probability: match.probability,
+									totalWords: match.totalWords,
+									proportionType: proportionArray[i],
+								} as AIMatch;
+								matches.push(explainMatch);
+								startMappedMatches = endExolain + 1;
+							}
 						}
 					}
+					if (startMappedMatches < endMappedMatches) {
+						const matchAfter = {
+							start: startMappedMatches,
+							end: endMappedMatches,
+							type: match.type,
+							ids: [],
+							classification: match.classification,
+							probability: match.probability,
+							totalWords: match.totalWords,
+						} as AIMatch;
+						matches.push(matchAfter);
+					}
+				} else if (match) {
+					matches.push(match);
 				}
-				if (startMappedMatches < endMappedMatches) {
-					const matchAfter = {
-						start: startMappedMatches,
-						end: endMappedMatches,
-						type: mappedMatches[0].type,
-						ids: [],
-						classification: mappedMatches[0].classification,
-						probability: mappedMatches[0].probability,
-						totalWords: mappedMatches[0].totalWords,
-					} as AIMatch;
-					matches.push(matchAfter);
-				}
-			}
+			});
 			//#endregion
-			else if (mappedMatches) {
-				matches.push(...mappedMatches);
-			}
 		});
 	});
 

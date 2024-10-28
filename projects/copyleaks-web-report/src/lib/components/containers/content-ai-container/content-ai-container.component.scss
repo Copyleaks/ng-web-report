@@ -3,7 +3,6 @@
 	width: 100%;
 	.percentage-result-container {
 		width: 100%;
-		flex: 2;
 
 		.copyleaks-explainable-ai-result {
 			display: flex;
@@ -13,6 +12,7 @@
 	}
 	.percentage-result-container-height {
 		height: 93%;
+		flex: 2;
 	}
 	.copyleaks-resources-container {
 		width: 100%;

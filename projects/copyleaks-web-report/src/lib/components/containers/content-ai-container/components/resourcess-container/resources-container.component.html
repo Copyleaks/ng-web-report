@@ -1,6 +1,6 @@
 <div
 	class="resourcess-container"
-	[class.resourcess-container-open]="isOpen"
+	[class.resourcess-container-open]="!noResults && isOpen"
 	#resourcesTooltipView="matTooltip"
 	[matTooltip]="isLoading || isOpen ? '' : resourcessTooltip"
 	matTooltipClass="web-report-mat-tooltip resourcess-mat-tooltip">

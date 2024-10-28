@@ -19,12 +19,18 @@ export class ResourcesContainerComponent implements OnInit {
 	 */
 	@Input() isMobile: boolean = false;
 
+	/**
+	 * @Input {boolean} A flag indicating if no results were found
+	 */
+	@Input() noResults: boolean = false;
+
 	@ViewChild('resourcesTooltipView') resourcesTooltipView: MatTooltip;
 
 	isOpen: boolean = false;
 	resourcessTooltip: string;
-	constructor(private _reportAIResultsService: ReportAIResultsService) {}
 	resourcesList: IResources[] = [];
+
+	constructor(private _reportAIResultsService: ReportAIResultsService) {}
 
 	ngOnInit(): void {
 		this.resourcessTooltip = $localize`Learn more about AI content, how to talk about it with students and writers, our testing methodology and more with our resources.`;

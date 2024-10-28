@@ -472,7 +472,7 @@ export abstract class OneToManyReportLayoutBaseComponent extends ReportLayoutBas
 			.subscribe(([text, html, multiText, content]) => {
 				if (multiText && multiText.length > 0) {
 					const selectedMatches = multiText.map(c => c.match);
-					if (this.viewMode === 'one-to-many') {
+					if (this.viewMode === 'one-to-many' || this.viewMode === 'only-ai') {
 						if (this.selectedTap === EReportViewType.AIView) {
 							this.selectAIText = [];
 							this.loadingExplainableAI = true;

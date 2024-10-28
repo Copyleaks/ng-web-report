@@ -148,15 +148,14 @@ export class ExplainableAIResultContainerComponent implements OnInit, OnChanges 
 	private _mapingtoResultItem() {
 		this.explainableAIResults.explain.patterns.statistics.proportion.forEach((item, index) => {
 			const wordStart = this.explainableAIResults?.explain?.patterns?.text?.chars.starts[index];
-			if (wordStart) {
-				const slicedMatchResult = this.explainableAIResults.slicedMatch.find(
-					result => result.match.start === wordStart
-				);
+
+			const slicedMatchResult = this.explainableAIResults.slicedMatch.find(result => result.match.start === wordStart);
+			if (slicedMatchResult.content) {
 				this.explainResults.push({
 					content: slicedMatchResult.content,
 					proportionType: slicedMatchResult.match.proportionType,
-					aiCount: Number(this.explainableAIResults.explain.patterns.statistics.aiCount[index].toFixed(3)),
-					humanCount: Number(this.explainableAIResults.explain.patterns.statistics.humanCount[index].toFixed(3)),
+					aiCount: Number(this.explainableAIResults.explain.patterns.statistics.aiCount[index].toFixed(2)),
+					humanCount: Number(this.explainableAIResults.explain.patterns.statistics.humanCount[index].toFixed(2)),
 					proportion: Number(item.toFixed(0)),
 					isInfinity: item == -1,
 					start: this.explainableAIResults.explain.patterns.text.chars.starts[index],

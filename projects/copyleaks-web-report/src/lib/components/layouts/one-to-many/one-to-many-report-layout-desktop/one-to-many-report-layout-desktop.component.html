@@ -107,6 +107,7 @@
 					viewMode === 'one-to-many'
 				"
 				[class.container-with-custom-results]="reportTemplateMode != undefined"
+				[class.ai-alerts-contanier]="selectedTap === EReportViewType.AIView"
 				[alerts]="alerts"
 				[flexGrow]="25"></copyleaks-report-alerts-container>
 

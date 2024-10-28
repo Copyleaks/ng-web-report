@@ -171,6 +171,11 @@ copyleaks-report-alerts-container {
 	flex-shrink: 0 !important;
 	height: auto !important;
 }
+.ai-alerts-contanier {
+	background-color: $color-white;
+	border-radius: 10px;
+	padding: 16px;
+}
 
 .cr-correction-container {
 	height: 95%;

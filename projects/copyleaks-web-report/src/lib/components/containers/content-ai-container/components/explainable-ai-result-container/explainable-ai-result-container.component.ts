@@ -91,6 +91,7 @@ export class ExplainableAIResultContainerComponent implements OnInit, OnChanges 
 				this.selectedMatch = true;
 				this.title = $localize`${selectResult.length} AI Insights Selected`;
 				this.explainItemResults = [...selectResult];
+				this.closePanel();
 			} else {
 				this.selectedMatch = false;
 				this.title = $localize`AI Insights`;
@@ -173,6 +174,8 @@ export class ExplainableAIResultContainerComponent implements OnInit, OnChanges 
 
 	clearSelectdResult() {
 		this.clearSelectResultEvent.emit(true);
+		this.closePanel();
+		this.panelIndex = [];
 	}
 
 	onScroll(index: number) {

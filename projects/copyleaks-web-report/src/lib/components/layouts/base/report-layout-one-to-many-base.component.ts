@@ -107,7 +107,7 @@ export abstract class OneToManyReportLayoutBaseComponent extends ReportLayoutBas
 	selectedCustomTabResultSectionContentTemplate: TemplateRef<any>;
 	showOmittedWords: boolean;
 	isPartitalScan: boolean;
-	explainableAI: ExplainableAIResults = { explain: null, slicedMatch: [] };
+	explainableAI: ExplainableAIResults = { explain: null, slicedMatch: null };
 	selectAIText: number[] = [];
 	loadingExplainableAI: boolean = true;
 	updateProportionRange: boolean = false;
@@ -249,16 +249,17 @@ export abstract class OneToManyReportLayoutBaseComponent extends ReportLayoutBas
 					);
 					if (validSelectedAlert) {
 						var scanResult = JSON.parse(validSelectedAlert.additionalData) as AIScanResult;
-						this.explainableAI.explain = scanResult?.explain;
+						this.explainableAI = {
+							explain: scanResult?.explain,
+							slicedMatch: this.explainableAI?.slicedMatch,
+						};
 						if (this.explainableAI?.explain && !this.updateProportionRange) {
 							this._updateProportionRange();
 							this.updateProportionRange = true;
 						}
 					}
 					this.selectAIText = [];
-					setTimeout(() => {
-						this.loadingExplainableAI = false;
-					}, 100);
+					this.loadingExplainableAI = false;
 				}
 			});
 
@@ -399,12 +400,17 @@ export abstract class OneToManyReportLayoutBaseComponent extends ReportLayoutBas
 			if (data) {
 				this.isLoadingScanContent = false;
 				this.contentTextMatches = data;
+				let slicedMatch = [];
 				this.contentTextMatches.forEach(result => {
 					const explainText = result.filter(re => re.match.type === MatchType.aiExplain);
 					if (explainText.length > 0) {
-						this.explainableAI.slicedMatch.push(...explainText);
+						slicedMatch.push(...explainText);
 					}
 				});
+				this.explainableAI = {
+					explain: this.explainableAI?.explain,
+					slicedMatch,
+				};
 
 				if (this.reportViewSvc.reportViewMode?.viewMode === 'writing-feedback') {
 					if (

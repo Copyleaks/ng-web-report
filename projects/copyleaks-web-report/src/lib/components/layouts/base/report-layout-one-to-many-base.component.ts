@@ -256,7 +256,9 @@ export abstract class OneToManyReportLayoutBaseComponent extends ReportLayoutBas
 						}
 					}
 					this.selectAIText = [];
-					this.loadingExplainableAI = false;
+					setTimeout(() => {
+						this.loadingExplainableAI = false;
+					}, 100);
 				}
 			});
 

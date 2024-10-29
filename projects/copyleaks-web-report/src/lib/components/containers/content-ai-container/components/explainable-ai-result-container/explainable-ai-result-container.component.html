@@ -99,10 +99,12 @@
 						autosize
 						class="mobile-scroll"
 						orientation="horizontal"
-						itemSize="300"
+						itemSize="330"
 						(scrolledIndexChange)="onScroll($event)">
 						<div
 							class="explain-results"
+							[style.margin-right]="i == explainItemResults.length - 1 ? '0px' : '10px'"
+							[style.margin-left]="i == explainItemResults.length - 1 ? '10px' : '0px'"
 							fxLayout="row"
 							*cdkVirtualFor="let result of explainItemResults; let i = index">
 							<ng-container *ngTemplateOutlet="templateResult; context: { item: result, index: i }"></ng-container>

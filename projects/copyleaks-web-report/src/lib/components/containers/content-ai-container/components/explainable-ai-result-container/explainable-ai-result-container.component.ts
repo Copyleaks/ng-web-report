@@ -69,7 +69,7 @@ export class ExplainableAIResultContainerComponent implements OnInit, OnChanges 
 	title: string;
 	selectedMatch: boolean = false;
 	hasInfinityResult: boolean = false;
-	openedPanel: boolean = false;
+	openedPanel: boolean = false; // its for the ai insight result height, once panel opened we want to add more height
 	minProportion: number = 0;
 	maxProportion: number = 0;
 	minGradeBar: number = 0;
@@ -255,10 +255,12 @@ export class ExplainableAIResultContainerComponent implements OnInit, OnChanges 
 
 	addToPanelIndex(index: number) {
 		this.panelIndex.push(index);
+		this.openedPanel = true; // its for the ai insight result height, once panel opened we want to add more height
 	}
 
 	removeFromPanelIndex(index: number) {
 		this.panelIndex = this.panelIndex.filter(i => i !== index);
+		if (!this.panelIndex.length) this.openedPanel = false; // its for the ai insight result height, once panel opened we want to add more height
 	}
 
 	isPanelOpen(index: number) {

@@ -151,7 +151,7 @@ export class ExplainableAIResultContainerComponent implements OnInit, OnChanges 
 			const wordStart = this.explainableAIResults?.explain?.patterns?.text?.chars.starts[index];
 
 			const slicedMatchResult = this.explainableAIResults.slicedMatch.find(result => result.match.start === wordStart);
-			if (slicedMatchResult.content) {
+			if (slicedMatchResult?.content) {
 				this.explainResults.push({
 					content: slicedMatchResult.content,
 					proportionType: slicedMatchResult.match.proportionType,

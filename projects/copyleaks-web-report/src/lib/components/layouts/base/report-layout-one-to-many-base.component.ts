@@ -493,7 +493,7 @@ export abstract class OneToManyReportLayoutBaseComponent extends ReportLayoutBas
 					}
 				} else {
 					this.focusedMatch = !content.isHtmlView ? text && text.match : html;
-					if (this.viewMode === 'one-to-many') {
+					if (this.viewMode === 'one-to-many' || this.viewMode === 'only-ai') {
 						if (this.selectedTap === EReportViewType.AIView) {
 							this.selectAIText = [];
 						} else {

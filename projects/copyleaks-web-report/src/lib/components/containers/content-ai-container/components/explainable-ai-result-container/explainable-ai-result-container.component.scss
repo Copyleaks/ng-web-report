@@ -274,6 +274,9 @@
 			}
 			.explain-results {
 				width: 330px;
+				mat-accordion {
+					width: 330px;
+				}
 				::ng-deep .mat-expansion-panel {
 					border-radius: 10px;
 					background: $color-container-background;

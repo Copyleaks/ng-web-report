@@ -107,7 +107,7 @@ export abstract class OneToManyReportLayoutBaseComponent extends ReportLayoutBas
 	selectedCustomTabResultSectionContentTemplate: TemplateRef<any>;
 	showOmittedWords: boolean;
 	isPartitalScan: boolean;
-	explainableAI: ExplainableAIResults = { explain: null, slicedMatch: [] };
+	explainableAI: ExplainableAIResults = { explain: null, slicedMatch: [], sourceText: '' };
 	selectAIText: number[] = [];
 	loadingExplainableAI: boolean = true;
 	updateProportionRange: boolean = false;
@@ -278,6 +278,7 @@ export abstract class OneToManyReportLayoutBaseComponent extends ReportLayoutBas
 		this.reportDataSvc.crawledVersion$.pipe(takeUntil(this.unsubscribe$)).subscribe(data => {
 			if (data) {
 				this.reportCrawledVersion = data;
+				this.explainableAI.sourceText = data?.text?.value ?? '';
 				this.numberOfPages = data.text?.pages?.startPosition?.length ?? 1;
 				if (
 					(this.reportCrawledVersion?.html?.exclude?.reasons?.filter(r => r === EExcludeReason.PartialScan).length >
@@ -399,13 +400,16 @@ export abstract class OneToManyReportLayoutBaseComponent extends ReportLayoutBas
 			if (data) {
 				this.isLoadingScanContent = false;
 				this.contentTextMatches = data;
+				let slicedMatch = [];
 				this.contentTextMatches.forEach(result => {
 					const explainText = result.filter(re => re.match.type === MatchType.aiExplain);
 					if (explainText.length > 0) {
-						this.explainableAI.slicedMatch.push(...explainText);
+						slicedMatch.push(...explainText);
 					}
 				});
-
+				if (this.explainableAI.slicedMatch.length === 0) {
+					this.explainableAI.slicedMatch = slicedMatch;
+				}
 				if (this.reportViewSvc.reportViewMode?.viewMode === 'writing-feedback') {
 					if (
 						this.writingFeedback &&

@@ -121,6 +121,7 @@ export interface AIExplainResultItem {
 export interface ExplainableAIResults {
 	explain?: AIExplainPattern;
 	slicedMatch?: SlicedMatch[];
+	sourceText: string;
 }
 
 export interface ExplainableAIWordTotal {

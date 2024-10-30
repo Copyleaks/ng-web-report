@@ -101,13 +101,6 @@ export class ExplainableAIResultContainerComponent implements OnInit, OnChanges 
 		if (changes['isLoading']?.currentValue == false) {
 			this._initResults();
 		}
-		if (changes['explainableAIResults']?.currentValue) {
-			if (this.explainableAIResults?.explain && this.explainableAIResults?.slicedMatch) {
-				this.updateResult = false;
-				this.explainResults = [];
-				this._initResults();
-			}
-		}
 	}
 
 	ngOnInit(): void {
@@ -117,7 +110,7 @@ export class ExplainableAIResultContainerComponent implements OnInit, OnChanges 
 	private _initResults() {
 		if (!this.updateResult) {
 			this._updateTooltipText();
-			if (this.explainableAIResults?.explain && this.explainableAIResults?.slicedMatch) {
+			if (this.explainableAIResults?.explain && this.explainableAIResults?.slicedMatch.length > 0) {
 				this.title = $localize`AI Insights`;
 				this._updateProportionRange();
 				this._mapingtoResultItem();

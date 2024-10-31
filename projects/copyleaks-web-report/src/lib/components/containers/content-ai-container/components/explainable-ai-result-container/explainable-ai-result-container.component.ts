@@ -87,8 +87,7 @@ export class ExplainableAIResultContainerComponent implements OnInit, OnChanges 
 
 	ngOnChanges(changes: SimpleChanges): void {
 		if (changes.selectAIText) {
-			let selectResult: AIExplainResultItem[] = [];
-			selectResult = this.explainResults?.filter(item =>
+			const selectResult = this.explainResults?.filter(item =>
 				this.selectAIText?.find(range => item.start <= range.start && range.end <= item.end)
 			);
 

@@ -966,11 +966,6 @@ export class ContentViewerContainerComponent implements OnInit, AfterViewInit, O
 			if (left + 40 > contentTextRect.width) {
 				left = contentTextRect.width - 40;
 			}
-			// Adjust top position if overflowing on the bottom
-			if (top + 40 > contentTextRect.height) {
-				top = contentTextRect.height - 40;
-				avatarContainer.style.borderRadius = '0px 32px 32px 32px';
-			}
 			avatarContainer.style.left = `${left}px`;
 			avatarContainer.style.top = `${top}px`;
 

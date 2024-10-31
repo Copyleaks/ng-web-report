@@ -1,5 +1,5 @@
 import { Component, Input, OnChanges, OnInit, SimpleChanges } from '@angular/core';
-import { ExplainableAIResults } from '../../../models/report-matches.models';
+import { ExplainableAIResults, Range } from '../../../models/report-matches.models';
 import { ReportMatchHighlightService } from '../../../services/report-match-highlight.service';
 
 @Component({
@@ -46,7 +46,7 @@ export class ContentAiContainerComponent implements OnInit, OnChanges {
 	/**
 	 * @Input {number[]} The start character index of the selected text
 	 */
-	@Input() selectAIText: number[] = [];
+	@Input() selectAIText: Range[] = [];
 
 	/**
 	 * {number} The AI percentage result

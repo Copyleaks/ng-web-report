@@ -21,6 +21,7 @@ import {
 	MatchType,
 	ResultDetailItem,
 	SlicedMatch,
+	Range,
 } from '../../../models/report-matches.models';
 import { ICopyleaksReportOptions } from '../../../models/report-options.models';
 import {
@@ -108,7 +109,7 @@ export abstract class OneToManyReportLayoutBaseComponent extends ReportLayoutBas
 	showOmittedWords: boolean;
 	isPartitalScan: boolean;
 	explainableAI: ExplainableAIResults = { explain: null, slicedMatch: [], sourceText: '' };
-	selectAIText: number[] = [];
+	selectAIText: Range[] = [];
 	loadingExplainableAI: boolean = true;
 	updateProportionRange: boolean = false;
 	aiWordTotal: ExplainableAIWordTotal = {
@@ -400,7 +401,7 @@ export abstract class OneToManyReportLayoutBaseComponent extends ReportLayoutBas
 			if (data) {
 				this.isLoadingScanContent = false;
 				this.contentTextMatches = data;
-				let slicedMatch = [];
+				let slicedMatch: SlicedMatch[] = [];
 				this.contentTextMatches.forEach(result => {
 					const explainText = result.filter(re => re.match.type === MatchType.aiExplain);
 					if (explainText.length > 0) {
@@ -483,7 +484,10 @@ export abstract class OneToManyReportLayoutBaseComponent extends ReportLayoutBas
 							this.selectAIText = [];
 							this.loadingExplainableAI = true;
 							selectedMatches.forEach(match => {
-								this.selectAIText.push(match.start);
+								this.selectAIText.push({
+									start: match.start,
+									end: match.end,
+								});
 							});
 							this.loadingExplainableAI = false;
 						} else {

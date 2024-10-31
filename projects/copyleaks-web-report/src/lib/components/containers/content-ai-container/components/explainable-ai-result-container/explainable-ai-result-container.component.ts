@@ -14,6 +14,7 @@ import {
 	AIExplainResultItem,
 	EProportionType,
 	ExplainableAIResults,
+	Range,
 } from '../../../../../models/report-matches.models';
 import { CdkVirtualScrollViewport } from '@angular/cdk/scrolling';
 import { EnumNavigateMobileButton } from '../../../report-results-item-container/components/models/report-result-item.enum';
@@ -33,7 +34,7 @@ export class ExplainableAIResultContainerComponent implements OnInit, OnChanges 
 	/**
 	 * @Input {number[]} The start character of the selected text
 	 */
-	@Input() selectAIText: number[] = [];
+	@Input() selectAIText: Range[] = [];
 
 	/**
 	 * @Input {boolean} A flag indicating if the results are locked
@@ -86,7 +87,11 @@ export class ExplainableAIResultContainerComponent implements OnInit, OnChanges 
 
 	ngOnChanges(changes: SimpleChanges): void {
 		if (changes.selectAIText) {
-			const selectResult = this.explainResults?.filter(item => this.selectAIText?.includes(item.start));
+			let selectResult: AIExplainResultItem[] = [];
+			selectResult = this.explainResults?.filter(item =>
+				this.selectAIText?.find(range => item.start <= range.start && range.end <= item.end)
+			);
+
 			if (!!this.selectAIText.length && !!selectResult.length) {
 				this.selectedMatch = true;
 				this.title = $localize`${selectResult.length} AI Insights Selected`;

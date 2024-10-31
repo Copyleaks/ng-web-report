@@ -116,8 +116,8 @@ export class ExplainableAIResultContainerComponent implements OnInit, OnChanges 
 			this._updateTooltipText();
 			if (this.explainableAIResults?.explain && this.explainableAIResults?.slicedMatch.length > 0) {
 				this.title = $localize`AI Insights`;
-				this._updateProportionRange();
 				this._mapingtoResultItem();
+				this._updateProportionRange();
 			} else if (!this.lockedResults) {
 				this.emptyView = true;
 			}
@@ -138,7 +138,7 @@ export class ExplainableAIResultContainerComponent implements OnInit, OnChanges 
 	 * Update the bar score
 	 */
 	private _updateProportionRange(): void {
-		this.proportions = this.explainableAIResults.explain?.patterns?.statistics?.proportion ?? [];
+		this.proportions = this.explainResults?.map(result => result.proportion) ?? [];
 		const proportionsFiltered = this.proportions.filter(p => p > 0);
 		this.minProportion = Number(Math.min(...proportionsFiltered).toFixed(0));
 		this.maxProportion = Number(Math.max(...proportionsFiltered).toFixed(0));
@@ -155,9 +155,7 @@ export class ExplainableAIResultContainerComponent implements OnInit, OnChanges 
 	 */
 	private _getGradePercentByPropoType(type: EProportionType): number {
 		const grade =
-			(this.explainableAIResults.slicedMatch.filter(result => result?.match?.proportionType == type)?.length /
-				this.proportions.length) *
-			100;
+			(this.explainResults?.filter(result => result.proportionType == type)?.length / this.proportions.length) * 100;
 		return Number(grade.toFixed(0));
 	}
 

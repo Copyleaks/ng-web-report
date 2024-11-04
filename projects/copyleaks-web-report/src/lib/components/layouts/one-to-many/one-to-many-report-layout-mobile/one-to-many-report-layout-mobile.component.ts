@@ -8,6 +8,7 @@ import { OneToManyReportLayoutBaseComponent } from '../../base/report-layout-one
 import { ReportNgTemplatesService } from '../../../../services/report-ng-templates.service';
 import { ReportRealtimeResultsService } from '../../../../services/report-realtime-results.service';
 import { EReportMode } from '../../../../enums/copyleaks-web-report.enums';
+import { ReportErrorsService } from '../../../../services/report-errors.service';
 
 @Component({
 	selector: 'copyleaks-one-to-many-report-layout-mobile',
@@ -33,7 +34,8 @@ export class OneToManyReportLayoutMobileComponent
 		highlightSvc: ReportMatchHighlightService,
 		statisticsSvc: ReportStatisticsService,
 		templatesSvc: ReportNgTemplatesService,
-		realTimeResultsSvc: ReportRealtimeResultsService
+		realTimeResultsSvc: ReportRealtimeResultsService,
+		reportErrorsSvc: ReportErrorsService
 	) {
 		super(
 			reportDataSvc,
@@ -43,7 +45,8 @@ export class OneToManyReportLayoutMobileComponent
 			highlightSvc,
 			statisticsSvc,
 			templatesSvc,
-			realTimeResultsSvc
+			realTimeResultsSvc,
+			reportErrorsSvc
 		);
 	}
 

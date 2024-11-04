@@ -34,6 +34,7 @@ import { ReportLayoutBaseComponent } from './report-layout-base.component';
 import { ReportRealtimeResultsService } from '../../../services/report-realtime-results.service';
 import { ViewMode } from '../../../models/report-config.models';
 import * as helpers from '../../../utils/report-match-helpers';
+import { ReportErrorsService } from '../../../services/report-errors.service';
 
 export abstract class OneToManyReportLayoutBaseComponent extends ReportLayoutBaseComponent {
 	hideRightSection: boolean = false;
@@ -132,7 +133,8 @@ export abstract class OneToManyReportLayoutBaseComponent extends ReportLayoutBas
 		highlightSvc: ReportMatchHighlightService,
 		statisticsSvc: ReportStatisticsService,
 		templatesSvc: ReportNgTemplatesService,
-		realTimeResultsSvc: ReportRealtimeResultsService
+		realTimeResultsSvc: ReportRealtimeResultsService,
+		reportErrorsSvc: ReportErrorsService
 	) {
 		super(
 			reportDataSvc,
@@ -142,7 +144,8 @@ export abstract class OneToManyReportLayoutBaseComponent extends ReportLayoutBas
 			highlightSvc,
 			statisticsSvc,
 			templatesSvc,
-			realTimeResultsSvc
+			realTimeResultsSvc,
+			reportErrorsSvc
 		);
 	}
 
@@ -257,6 +260,12 @@ export abstract class OneToManyReportLayoutBaseComponent extends ReportLayoutBas
 
 		this.matchSvc.showOmittedWords$.pipe(takeUntil(this.unsubscribe$)).subscribe(data => {
 			this.showOmittedWords = data;
+		});
+
+		this.reportErrorsSvc.reportHttpRequestError$.pipe(takeUntil(this.unsubscribe$)).subscribe(error => {
+			if (!error) return;
+
+			if (error.method === 'initSync - completeResults') this.isLoadingScanContent = false;
 		});
 
 		combineLatest([

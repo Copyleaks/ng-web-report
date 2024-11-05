@@ -21,6 +21,9 @@
 							[tabIndex]="0"
 							[matTooltip]="infoTooltipText"
 							[matTooltipPosition]="'after'"
+							aria-label="ai result info"
+							i18n-aria-label
+							aria-hidden="false"
 							matTooltipClass="web-report-mat-tooltip tooltip-contanier">
 							info
 						</mat-icon>
@@ -48,7 +51,7 @@
 							<div class="max-result" [style.width]="maxGradeBar + '%'"></div>
 						</div>
 						<ng-container *ngIf="hasInfinityResult; else maxResult">
-							<span class="max-proportion">> 10,000</span>
+							<span class="max-proportion">10,000x</span>
 						</ng-container>
 						<ng-template #maxResult>
 							<span class="max-proportion">{{ maxProportion.toLocaleString() }}x</span>
@@ -103,8 +106,7 @@
 						(scrolledIndexChange)="onScroll($event)">
 						<div
 							class="explain-results"
-							[style.margin-right]="i == explainItemResults.length - 1 ? '0px' : '10px'"
-							[style.margin-left]="i == explainItemResults.length - 1 ? '10px' : '0px'"
+							[style.margin-right]="i == explainItemResults.length - 1 ? '0px' : '16px'"
 							fxLayout="row"
 							*cdkVirtualFor="let result of explainItemResults; let i = index">
 							<ng-container *ngTemplateOutlet="templateResult; context: { item: result, index: i }"></ng-container>
@@ -278,13 +280,13 @@
 								fxLayout="column"
 								fxLayoutAlign="center center">
 								<ng-container *ngIf="item.isInfinity; else showProportionValue">
-									<span class="content">> 10,000</span>
+									<span class="content">10,000x</span>
 								</ng-container>
 								<ng-template #showProportionValue>
 									<span>{{ item.proportion.toLocaleString() }}x</span>
 								</ng-template>
 							</div>
-							<span class="content content-overflow">{{ item.content }}</span>
+							<span class="content content-overflow" [class.content-overflow]="!isMobile">{{ item.content }}</span>
 						</div>
 						<mat-icon class="keyboard-arrow-icon">
 							<ng-container *ngIf="isPanelOpen(index); else closePanel">keyboard_arrow_up</ng-container>

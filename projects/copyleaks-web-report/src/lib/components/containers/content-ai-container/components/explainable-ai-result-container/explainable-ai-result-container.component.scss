@@ -5,7 +5,6 @@
 	border-radius: 10px;
 	background: $color-white;
 	box-shadow: 0px 0px 10px 0px rgba(11, 22, 62, 0.04), 0px 0px 2px 0px rgba(11, 22, 62, 0.08);
-	padding-bottom: 16px;
 
 	.header-container {
 		padding: 16px;
@@ -168,8 +167,7 @@
 								font-family: 'Open Sans';
 								font-size: 14px;
 								font-weight: 400;
-							}
-							.content-overflow {
+
 								overflow: hidden;
 								text-overflow: ellipsis;
 								white-space: nowrap;
@@ -274,6 +272,7 @@
 		padding: 0 16px 16px;
 		min-height: 65px;
 		.mobile-scroll {
+			min-height: 58px;
 			height: 100%;
 			width: 100%;
 			overflow-x: unset;
@@ -286,7 +285,6 @@
 			::ng-deep .cdk-virtual-scroll-content-wrapper {
 				display: flex;
 				flex-direction: row !important;
-				gap: 16px;
 			}
 			.explain-results {
 				width: 330px;
@@ -294,11 +292,11 @@
 					width: 330px;
 				}
 				::ng-deep .mat-expansion-panel {
-					border-radius: 10px;
+					border-radius: 10px !important;
 					background: $color-container-background;
 					box-shadow: 0px 0px 2px 0px rgba(11, 22, 62, 0.08) inset, 0px 0px 10px 0px rgba(11, 22, 62, 0.04) inset;
 					::ng-deep .mat-expansion-panel-header {
-						border-radius: 10px;
+						border-radius: 10px !important;
 						background: $color-container-background;
 						box-shadow: 0px 0px 2px 0px rgba(11, 22, 62, 0.08) inset, 0px 0px 10px 0px rgba(11, 22, 62, 0.04) inset;
 					}
@@ -514,4 +512,8 @@
 	padding: 14px !important;
 	font-family: 'haboro-soft', sans-serif !important;
 	white-space: pre-line !important;
+}
+::ng-deep ::-webkit-scrollbar-track {
+	margin-top: 10px;
+	margin-bottom: 10px;
 }

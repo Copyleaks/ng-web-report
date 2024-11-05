@@ -5,12 +5,14 @@
 	[matTooltip]="isLoading || isOpen ? '' : resourcessTooltip"
 	matTooltipClass="web-report-mat-tooltip resourcess-mat-tooltip">
 	<ng-container *ngIf="!isLoading; else loadingState">
-		<mat-accordion>
+		<mat-accordion fxLayout="column">
 			<mat-expansion-panel class="expansion-panel" (opened)="isOpen = true" (closed)="isOpen = false" hideToggle>
 				<mat-expansion-panel-header
 					(focus)="isMobile ? '' : resourcesTooltipView?.show()"
 					(blur)="isMobile ? '' : resourcesTooltipView?.hide()">
-					<mat-panel-title>Resources</mat-panel-title>
+					<mat-panel-title>
+						<span i18n>Resources</span>
+					</mat-panel-title>
 					<mat-panel-description>
 						<mat-icon>
 							<ng-container *ngIf="isOpen; else closePanel">keyboard_arrow_up</ng-container>
@@ -36,7 +38,7 @@
 					<mat-divider></mat-divider>
 				</div>
 				<div class="platforms-container">
-					<span>
+					<span i18n>
 						Certain platforms, like Grammarly, use ChatGPT and other genAI models for key functionalities and can be
 						flagged as potential AI content.
 					</span>

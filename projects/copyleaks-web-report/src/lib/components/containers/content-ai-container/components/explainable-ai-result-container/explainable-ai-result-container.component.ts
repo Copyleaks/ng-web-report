@@ -93,7 +93,9 @@ export class ExplainableAIResultContainerComponent implements OnInit, OnChanges 
 
 			if (!!this.selectAIText.length && !!selectResult.length) {
 				this.selectedMatch = true;
-				this.title = $localize`${selectResult.length} AI Insights Selected`;
+				this.title =
+					`${selectResult.length} ` +
+					(selectResult.length > 1 ? $localize`AI Insights Selected` : $localize`AI Insight Selected`);
 				this.explainItemResults = [...selectResult];
 				this.closePanel();
 			} else {

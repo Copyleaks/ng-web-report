@@ -1,5 +1,6 @@
 import {
 	Component,
+	ElementRef,
 	EventEmitter,
 	Input,
 	OnChanges,
@@ -16,9 +17,9 @@ import {
 	ExplainableAIResults,
 	Range,
 } from '../../../../../models/report-matches.models';
-import { CdkVirtualScrollViewport } from '@angular/cdk/scrolling';
 import { EnumNavigateMobileButton } from '../../../report-results-item-container/components/models/report-result-item.enum';
 import { MatExpansionPanel } from '@angular/material/expansion';
+import { MatTooltip } from '@angular/material/tooltip';
 
 @Component({
 	selector: 'copyleaks-explainable-ai-result-container',
@@ -56,13 +57,13 @@ export class ExplainableAIResultContainerComponent implements OnInit, OnChanges 
 	 */
 	@Output() clearSelectResultEvent = new EventEmitter<boolean>();
 
-	@ViewChild(CdkVirtualScrollViewport) viewport: CdkVirtualScrollViewport;
+	@ViewChild('scrollContainer') scrollContainer!: ElementRef;
 
 	@ViewChildren(MatExpansionPanel) panels: QueryList<MatExpansionPanel>;
 
 	explainResults: AIExplainResultItem[] = [];
 	explainItemResults: AIExplainResultItem[] = [];
-	navigateMobileButton: EnumNavigateMobileButton;
+	navigateMobileButton: EnumNavigateMobileButton = EnumNavigateMobileButton.FirstButton;
 	enumNavigateMobileButton = EnumNavigateMobileButton;
 
 	proportions: number[] = [];
@@ -82,6 +83,7 @@ export class ExplainableAIResultContainerComponent implements OnInit, OnChanges 
 	resultTooltipText: string;
 	updateResult: boolean = false;
 	panelIndex: number[] = [];
+	tooltipVisible: boolean = false;
 
 	constructor() {}
 
@@ -201,10 +203,21 @@ export class ExplainableAIResultContainerComponent implements OnInit, OnChanges 
 		this.panelIndex = [];
 	}
 
-	onScroll(index: number) {
+	toggleTooltip(tooltip: MatTooltip): void {
+		this.tooltipVisible = !this.tooltipVisible;
+		this.tooltipVisible ? tooltip.show() : tooltip.hide();
+	}
+
+	onScrollMobile() {
 		if (this.isMobile && this.openedPanel) {
 			this.closePanel();
 		}
+		const container = this.scrollContainer.nativeElement;
+		const itemWidth = container.clientWidth;
+		const scrollPosition = container.scrollLeft;
+
+		// Calculate the index of the item in the center
+		const index = Math.round(scrollPosition / itemWidth);
 		this.currentViewedIndex = index;
 		if (index === 0) this.navigateMobileButton = EnumNavigateMobileButton.FirstButton;
 		else if (index === 1) this.navigateMobileButton = EnumNavigateMobileButton.SecondButton;
@@ -268,8 +281,10 @@ export class ExplainableAIResultContainerComponent implements OnInit, OnChanges 
 
 	// Function to scroll to the given index
 	scrollToIndex(index?: number): void {
-		if (!this.viewport) return;
-		if (index != undefined) this.viewport.scrollToIndex(index, 'smooth');
+		const itemWidth = this.scrollContainer.nativeElement.clientWidth;
+		const scrollPosition = index * itemWidth;
+
+		this.scrollContainer.nativeElement.scrollTo({ left: scrollPosition, behavior: 'smooth' });
 	}
 
 	/**

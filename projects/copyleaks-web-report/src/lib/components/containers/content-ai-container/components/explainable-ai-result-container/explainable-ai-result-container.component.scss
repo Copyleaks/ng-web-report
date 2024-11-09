@@ -113,8 +113,10 @@
 		margin: 0;
 	}
 	.container-explain-results {
-		overflow: auto;
-
+		overflow: hidden;
+		.desktop-scroll {
+			overflow: auto;
+		}
 		.explain-results {
 			::ng-deep .mat-expansion-panel {
 				box-shadow: none;
@@ -167,18 +169,28 @@
 								font-family: 'Open Sans';
 								font-size: 14px;
 								font-weight: 400;
-
 								overflow: hidden;
 								text-overflow: ellipsis;
 								white-space: nowrap;
-							}
-							.content-overflow:hover {
-								overflow: visible;
-								white-space: wrap;
 								position: relative;
-								background-color: $color-white;
+							}
 
-								border-radius: 1px;
+							.content-overflow:hover {
+								animation: showContent 0.2s ease 0.3s forwards;
+							}
+
+							@keyframes showContent {
+								0% {
+									overflow: hidden;
+									white-space: nowrap;
+									background-color: transparent;
+								}
+								100% {
+									overflow: visible;
+									white-space: normal;
+									background-color: $color-white;
+									border-radius: 1px;
+								}
 							}
 						}
 
@@ -201,6 +213,8 @@
 				}
 			}
 			.result-container {
+				border-radius: 8px;
+				box-shadow: 0px 0px 2px 0px rgba(11, 22, 62, 0.08) inset, 0px 0px 10px 0px rgba(11, 22, 62, 0.04) inset;
 				.result-header {
 					border-radius: 6px 6px 0px 0px;
 					background-color: $color-container-background;
@@ -271,23 +285,17 @@
 	.explain-results-mobile-container {
 		padding: 0 16px 16px;
 		min-height: 65px;
+		align-items: center;
 		.mobile-scroll {
+			overflow-x: auto;
+			scroll-snap-type: x mandatory;
 			min-height: 58px;
 			height: 100%;
-			width: 100%;
-			overflow-x: unset;
-
-			&::-webkit-scrollbar {
-				width: 0px !important;
-				height: 0px !important;
-			}
-
-			::ng-deep .cdk-virtual-scroll-content-wrapper {
-				display: flex;
-				flex-direction: row !important;
-			}
+			scrollbar-width: none;
+			width: 330px;
 			.explain-results {
 				width: 330px;
+				scroll-snap-align: start;
 				mat-accordion {
 					width: 330px;
 				}
@@ -298,7 +306,6 @@
 					::ng-deep .mat-expansion-panel-header {
 						border-radius: 10px !important;
 						background: $color-container-background;
-						box-shadow: 0px 0px 2px 0px rgba(11, 22, 62, 0.08) inset, 0px 0px 10px 0px rgba(11, 22, 62, 0.04) inset;
 					}
 					::ng-deep .mat-expansion-panel-body {
 						padding: 0 16px 16px;
@@ -308,7 +315,7 @@
 					.result-header,
 					.ai-count-container,
 					.human-count-container {
-						background: var(--Colors-Main-White, #fbffff);
+						background: $color-white;
 					}
 				}
 			}
@@ -317,9 +324,7 @@
 			padding: 0;
 		}
 	}
-	.explain-results-mobile-container-height {
-		height: 232px;
-	}
+
 	.explain-results-mobile-container-padding {
 		padding-bottom: 0 !important;
 	}

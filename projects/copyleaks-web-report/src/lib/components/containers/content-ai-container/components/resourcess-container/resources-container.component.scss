@@ -131,12 +131,24 @@
 	bottom: 0;
 	left: 0;
 	@media screen and (max-height: 765px) {
-		overflow: auto;
+		overflow: hidden;
 		height: 550px;
+		.expansion-panel {
+			::ng-deep .mat-expansion-panel-content {
+				overflow: auto;
+				height: 510px;
+			}
+		}
 	}
 	@media screen and (max-height: 700px) {
-		overflow: auto;
+		overflow: hidden;
 		height: 400px;
+		.expansion-panel {
+			::ng-deep .mat-expansion-panel-content {
+				overflow: auto;
+				height: 360px;
+			}
+		}
 	}
 }
 

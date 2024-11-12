@@ -5,7 +5,7 @@
 				class="header-container"
 				[class.header-container-mobile]="isMobile && !lockedResults"
 				fxLayout="column"
-				fxLayoutGap="4px">
+				fxLayoutGap="16px">
 				<!-- Header -->
 				<div *ngIf="!emptyView" class="header" fxLayout="row" fxLayoutAlign="space-between center">
 					<span class="title">
@@ -39,32 +39,30 @@
 					</div>
 				</div>
 				<!-- Description and Grade-Bar -->
-				<div *ngIf="!emptyView && !lockedResults && !selectedMatch && !isMobile" fxLayout="column" fxLayoutGap="16px">
-					<span class="header-description" i18n>
-						GenAI often overuses certain phrases learned during training, which is one of dozens of signals used to
-						identify AI text.
-					</span>
-					<div class="grade-bar-top-container" fxLayout="column" fxLayoutGap="8px">
-						<span class="title" i18n>The number of times a phrase was found more frequently in AI vs human text.</span>
-						<div
-							class="grade-bar-container"
-							crAIScoreTooltipContent
-							fxLayout="row"
-							fxLayoutAlign="start center"
-							fxLayoutGap="16px">
-							<span class="min-proportion">{{ minProportion.toLocaleString() }}x</span>
-							<div class="grade-bar" fxLayout="row">
-								<div class="min-result" [style.width]="minGradeBar + '%'"></div>
-								<div class="mid-result" [style.width]="midGradeBar + '%'"></div>
-								<div class="max-result" [style.width]="maxGradeBar + '%'"></div>
-							</div>
-							<ng-container *ngIf="hasInfinityResult; else maxResult">
-								<span class="max-proportion">10,000x</span>
-							</ng-container>
-							<ng-template #maxResult>
-								<span class="max-proportion">{{ maxProportion.toLocaleString() }}x</span>
-							</ng-template>
+				<div
+					*ngIf="!emptyView && !lockedResults && !selectedMatch && !isMobile"
+					class="grade-bar-top-container"
+					fxLayout="column"
+					fxLayoutGap="8px">
+					<span class="title" i18n>Frequency of phrases in AI vs human text.</span>
+					<div
+						class="grade-bar-container"
+						crAIScoreTooltipContent
+						fxLayout="row"
+						fxLayoutAlign="start center"
+						fxLayoutGap="16px">
+						<span class="min-proportion">{{ minProportion.toLocaleString() }}x</span>
+						<div class="grade-bar" fxLayout="row">
+							<div class="min-result" [style.width]="minGradeBar + '%'"></div>
+							<div class="mid-result" [style.width]="midGradeBar + '%'"></div>
+							<div class="max-result" [style.width]="maxGradeBar + '%'"></div>
 						</div>
+						<ng-container *ngIf="hasInfinityResult; else maxResult">
+							<span class="max-proportion">10,000x</span>
+						</ng-container>
+						<ng-template #maxResult>
+							<span class="max-proportion">{{ maxProportion.toLocaleString() }}x</span>
+						</ng-template>
 					</div>
 				</div>
 			</div>
@@ -79,6 +77,8 @@
 						class="info-icon"
 						fontSet="material-icons-outlined"
 						[tabIndex]="0"
+						[matTooltip]="proportionTooltipText"
+						[matTooltipPosition]="'after'"
 						matTooltipClass="web-report-mat-tooltip tooltip-contanier">
 						info
 					</mat-icon>
@@ -298,10 +298,6 @@
 						<div class="proportion-content-container" fxLayout="row" fxLayoutAlign="start center" fxLayoutGap="16px">
 							<div
 								class="proportion {{ getProportionClassType(item.proportionType) }}"
-								[tabIndex]="0"
-								[matTooltip]="proportionTooltipText"
-								[matTooltipPosition]="'after'"
-								matTooltipClass="web-report-mat-tooltip tooltip-contanier"
 								fxLayout="column"
 								fxLayoutAlign="center center">
 								<ng-container *ngIf="item.isInfinity; else showProportionValue">

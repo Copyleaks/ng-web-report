@@ -7,7 +7,7 @@
 	box-shadow: 0px 0px 10px 0px rgba(11, 22, 62, 0.04), 0px 0px 2px 0px rgba(11, 22, 62, 0.08);
 	.top-header-container {
 		.header-container {
-			padding: 16px;
+			padding: 16px 16px 8px;
 			z-index: 2;
 			.header {
 				.title {
@@ -55,13 +55,6 @@
 						border: 1px solid $color-black !important;
 					}
 				}
-			}
-
-			.header-description {
-				color: $color-black;
-				font-family: 'haboro-soft';
-				font-size: 14px;
-				font-weight: 500;
 			}
 
 			.grade-bar-top-container {

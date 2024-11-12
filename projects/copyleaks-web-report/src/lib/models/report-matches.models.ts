@@ -124,13 +124,6 @@ export interface ExplainableAIResults {
 	sourceText: string;
 }
 
-export interface ExplainableAIWordTotal {
-	totalExplainableAIWords: number;
-	lowProportionWord: number;
-	midProportionWord: number;
-	highProportionWord: number;
-}
-
 export interface AIScanResult {
 	results: AIScanResultItem[];
 	summary: AIScanResultSummary;

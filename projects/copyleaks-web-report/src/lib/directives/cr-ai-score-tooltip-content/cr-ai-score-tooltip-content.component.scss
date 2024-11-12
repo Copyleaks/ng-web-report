@@ -1,0 +1,44 @@
+@import '../../styles/website-colors.styles.scss';
+
+.top-container {
+	padding: 10px;
+	border-radius: 10px;
+	background: $color-black;
+
+	.title {
+		width: 100%;
+		max-width: 392px;
+		color: $color-white;
+		text-align: center;
+		font-family: 'haboro-soft' !important;
+		font-size: 14px;
+		font-weight: 700;
+	}
+	.frequencys-contanier {
+		width: 100%;
+		max-width: 392px;
+		.frequency-frame {
+			padding: 8px;
+			border-radius: 6px;
+			text-align: center;
+			width: 100%;
+			span {
+				color: $color-black;
+				text-align: center;
+				font-family: 'haboro-soft' !important;
+				font-size: 14px;
+				font-weight: 800;
+				line-height: 15px;
+			}
+		}
+		.low-frequency {
+			background: $color-explain-ai-low;
+		}
+		.medium-frequency {
+			background: $color-explain-ai-medium;
+		}
+		.high-frequency {
+			background: $color-explain-ai-high;
+		}
+	}
+}

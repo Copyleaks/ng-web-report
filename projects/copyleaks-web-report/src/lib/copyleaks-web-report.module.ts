@@ -107,6 +107,7 @@ import { AiPercentageComponent } from './components/containers/content-ai-contai
 import { ExplainableAIResultContainerComponent } from './components/containers/content-ai-container/components/explainable-ai-result-container/explainable-ai-result-container.component';
 import { ResourcesContainerComponent } from './components/containers/content-ai-container/components/resourcess-container/resources-container.component';
 import { ReportAIResultsService } from './services/report-ai-results.service';
+import { CrAIScoreTooltipContentModule } from './directives/cr-ai-score-tooltip-content/cr-ai-score-tooltip-content.module';
 
 @NgModule({
 	declarations: [
@@ -199,6 +200,7 @@ import { ReportAIResultsService } from './services/report-ai-results.service';
 		SecondsToTimePipeModule,
 		CrReportScoreTooltipModule,
 		CrReportMatchTooltipModule,
+		CrAIScoreTooltipContentModule,
 		MatSlideToggleModule,
 		MatDividerModule,
 		MatSliderModule,

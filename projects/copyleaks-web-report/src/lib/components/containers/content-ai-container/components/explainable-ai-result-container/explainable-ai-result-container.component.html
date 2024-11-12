@@ -1,65 +1,90 @@
 <div class="top-container" [class.empty-view]="emptyView" [class.locked-view]="lockedResults" fxLayout="column">
 	<ng-container *ngIf="!isLoading; else loadingState">
-		<div
-			class="header-container"
-			[class.header-container-mobile]="isMobile && !lockedResults"
-			fxLayout="column"
-			fxLayoutGap="4px">
-			<!-- Header -->
-			<div *ngIf="!emptyView" class="header" fxLayout="row" fxLayoutAlign="space-between center">
-				<span class="title">
-					{{ title }}
-				</span>
-				<div fxLayout="row" fxLayoutAlign="center center" fxLayoutGap="8px">
-					<div *ngIf="!emptyView && !lockedResults && !selectedMatch && !isMobile" class="beta-container">
-						<span>Beta</span>
-					</div>
-					<ng-container *ngIf="!selectedMatch; else clearSelect">
-						<mat-icon
-							class="info-icon"
-							fontSet="material-icons-outlined"
-							[tabIndex]="0"
-							#tooltipTitle="matTooltip"
-							[matTooltip]="infoTooltipText"
-							[matTooltipPosition]="'after'"
-							(click)="isMobile ? toggleTooltip(tooltipTitle) : ''"
-							aria-label="ai result info"
-							i18n-aria-label
-							aria-hidden="false"
-							matTooltipClass="web-report-mat-tooltip tooltip-contanier">
-							info
-						</mat-icon>
-					</ng-container>
-					<ng-template #clearSelect>
-						<button class="clear-select-button" mat-icon-button (click)="clearSelectdResult()">
-							<mat-icon class="clear-icon" fontSet="material-icons-outlined">cancel</mat-icon>
-						</button>
-					</ng-template>
-				</div>
-			</div>
-			<!-- Description and Grade-Bar -->
-			<div *ngIf="!emptyView && !lockedResults && !selectedMatch && !isMobile" fxLayout="column" fxLayoutGap="16px">
-				<span class="header-description" i18n>
-					GenAI often overuses certain phrases learned during training, which is one of dozens of signals used to
-					identify AI text.
-				</span>
-				<div class="grade-bar-top-container" fxLayout="column" fxLayoutGap="8px">
-					<span class="title" i18n>The number of times a phrase was found more frequently in AI vs human text.</span>
-					<div class="grade-bar-container" fxLayout="row" fxLayoutAlign="start center" fxLayoutGap="16px">
-						<span class="min-proportion">{{ minProportion.toLocaleString() }}x</span>
-						<div class="grade-bar" fxLayout="row">
-							<div class="min-result" [style.width]="minGradeBar + '%'"></div>
-							<div class="mid-result" [style.width]="midGradeBar + '%'"></div>
-							<div class="max-result" [style.width]="maxGradeBar + '%'"></div>
+		<div class="top-header-container">
+			<div
+				class="header-container"
+				[class.header-container-mobile]="isMobile && !lockedResults"
+				fxLayout="column"
+				fxLayoutGap="4px">
+				<!-- Header -->
+				<div *ngIf="!emptyView" class="header" fxLayout="row" fxLayoutAlign="space-between center">
+					<span class="title">
+						{{ title }}
+					</span>
+					<div fxLayout="row" fxLayoutAlign="center center" fxLayoutGap="8px">
+						<div *ngIf="!emptyView && !lockedResults && !selectedMatch && !isMobile" class="beta-container">
+							<span>Beta</span>
 						</div>
-						<ng-container *ngIf="hasInfinityResult; else maxResult">
-							<span class="max-proportion">10,000x</span>
+						<ng-container *ngIf="!selectedMatch; else clearSelect">
+							<mat-icon
+								class="info-icon"
+								fontSet="material-icons-outlined"
+								[tabIndex]="0"
+								#tooltipTitle="matTooltip"
+								[matTooltip]="infoTooltipText"
+								[matTooltipPosition]="'after'"
+								(click)="isMobile ? toggleTooltip(tooltipTitle) : ''"
+								aria-label="ai result info"
+								i18n-aria-label
+								aria-hidden="false"
+								matTooltipClass="web-report-mat-tooltip tooltip-contanier">
+								info
+							</mat-icon>
 						</ng-container>
-						<ng-template #maxResult>
-							<span class="max-proportion">{{ maxProportion.toLocaleString() }}x</span>
+						<ng-template #clearSelect>
+							<button class="clear-select-button" mat-icon-button (click)="clearSelectdResult()">
+								<mat-icon class="clear-icon" fontSet="material-icons-outlined">cancel</mat-icon>
+							</button>
 						</ng-template>
 					</div>
 				</div>
+				<!-- Description and Grade-Bar -->
+				<div *ngIf="!emptyView && !lockedResults && !selectedMatch && !isMobile" fxLayout="column" fxLayoutGap="16px">
+					<span class="header-description" i18n>
+						GenAI often overuses certain phrases learned during training, which is one of dozens of signals used to
+						identify AI text.
+					</span>
+					<div class="grade-bar-top-container" fxLayout="column" fxLayoutGap="8px">
+						<span class="title" i18n>The number of times a phrase was found more frequently in AI vs human text.</span>
+						<div
+							class="grade-bar-container"
+							crAIScoreTooltipContent
+							fxLayout="row"
+							fxLayoutAlign="start center"
+							fxLayoutGap="16px">
+							<span class="min-proportion">{{ minProportion.toLocaleString() }}x</span>
+							<div class="grade-bar" fxLayout="row">
+								<div class="min-result" [style.width]="minGradeBar + '%'"></div>
+								<div class="mid-result" [style.width]="midGradeBar + '%'"></div>
+								<div class="max-result" [style.width]="maxGradeBar + '%'"></div>
+							</div>
+							<ng-container *ngIf="hasInfinityResult; else maxResult">
+								<span class="max-proportion">10,000x</span>
+							</ng-container>
+							<ng-template #maxResult>
+								<span class="max-proportion">{{ maxProportion.toLocaleString() }}x</span>
+							</ng-template>
+						</div>
+					</div>
+				</div>
+			</div>
+			<div
+				*ngIf="!emptyView && !lockedResults && !selectedMatch && !isMobile"
+				class="result-header"
+				fxLayout="row"
+				fxLayoutAlign="start center"
+				fxLayoutGap="16px">
+				<div class="ratio-contanier" fxLayout="row" fxLayoutAlign="start center" fxLayoutGap="2px">
+					<mat-icon
+						class="info-icon"
+						fontSet="material-icons-outlined"
+						[tabIndex]="0"
+						matTooltipClass="web-report-mat-tooltip tooltip-contanier">
+						info
+					</mat-icon>
+					<span i18n>Ratio</span>
+				</div>
+				<span class="phrase" i18n>Phrase</span>
 			</div>
 		</div>
 		<div

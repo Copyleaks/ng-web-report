@@ -60,7 +60,7 @@ export const fillMissingGaps = (intervals: Match[], length: number): Match[] => 
 			intervals.splice(i, 0, { start, end: current.start, type: MatchType.none });
 			i++;
 		}
-		start = current.end + 1;
+		start = current.end;
 	}
 	const last = intervals[intervals.length - 1];
 	if (intervals[intervals.length - 1].end < end) {
@@ -200,8 +200,12 @@ const mergeMatchesInNest = (matches: Match[]): Match[] => {
 export const mergeMatches = (matches: Match[]): Match[] => {
 	const nests = findNests(matches);
 	const merged = nests.reduce((prev: Match[], nest: Match[]) => {
-		const joined = mergeMatchesInNest(nest);
-		return prev.concat(joined);
+		if (nest[0].start == nest[0].end) {
+			return prev;
+		} else {
+			const joined = mergeMatchesInNest(nest);
+			return prev.concat(joined);
+		}
 	}, []);
 	return merged;
 };
@@ -232,11 +236,7 @@ export const paginateMatches = (content: string, pages: number[], matches: Match
 				page++;
 				result[page] = [];
 			}
-			if (match?.type == MatchType.aiExplain || match?.type == MatchType.aiText) {
-				result[page].push({ content: content.slice(match.start, match.end + 1), match });
-			} else {
-				result[page].push({ content: content.slice(match.start, match.end), match });
-			}
+			result[page].push({ content: content.slice(match.start, match.end), match });
 		}
 	}
 	return result;
@@ -501,7 +501,7 @@ export const processAICheatingMatches = (
 					let endMappedMatches = match.end;
 					for (let i = lastExplainIndex; i < lengthExplain; i++) {
 						const firstExolain = scanResult?.explain?.patterns?.text?.chars?.starts[i];
-						const endExolain = firstExolain + scanResult.explain?.patterns?.text?.chars?.lengths[i] - 1;
+						const endExolain = firstExolain + scanResult.explain?.patterns?.text?.chars?.lengths[i];
 						if (startMappedMatches <= firstExolain && endMappedMatches >= endExolain) {
 							lastExplainIndex = i + 1;
 							if (startMappedMatches < firstExolain) {

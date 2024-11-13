@@ -60,7 +60,7 @@ export const fillMissingGaps = (intervals: Match[], length: number): Match[] => 
 			intervals.splice(i, 0, { start, end: current.start, type: MatchType.none });
 			i++;
 		}
-		start = current.end;
+		start = current.end + 1;
 	}
 	const last = intervals[intervals.length - 1];
 	if (intervals[intervals.length - 1].end < end) {
@@ -232,7 +232,11 @@ export const paginateMatches = (content: string, pages: number[], matches: Match
 				page++;
 				result[page] = [];
 			}
-			result[page].push({ content: content.slice(match.start, match.end), match });
+			if (match?.type == MatchType.aiExplain || match?.type == MatchType.aiText) {
+				result[page].push({ content: content.slice(match.start, match.end + 1), match });
+			} else {
+				result[page].push({ content: content.slice(match.start, match.end), match });
+			}
 		}
 	}
 	return result;
@@ -497,7 +501,7 @@ export const processAICheatingMatches = (
 					let endMappedMatches = match.end;
 					for (let i = lastExplainIndex; i < lengthExplain; i++) {
 						const firstExolain = scanResult?.explain?.patterns?.text?.chars?.starts[i];
-						const endExolain = firstExolain + scanResult.explain?.patterns?.text?.chars?.lengths[i];
+						const endExolain = firstExolain + scanResult.explain?.patterns?.text?.chars?.lengths[i] - 1;
 						if (startMappedMatches <= firstExolain && endMappedMatches >= endExolain) {
 							lastExplainIndex = i + 1;
 							if (startMappedMatches < firstExolain) {

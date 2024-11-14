@@ -108,6 +108,7 @@ import { ExplainableAIResultContainerComponent } from './components/containers/c
 import { ResourcesContainerComponent } from './components/containers/content-ai-container/components/resourcess-container/resources-container.component';
 import { ReportAIResultsService } from './services/report-ai-results.service';
 import { CrAIScoreTooltipContentModule } from './directives/cr-ai-score-tooltip-content/cr-ai-score-tooltip-content.module';
+import { FormaDecimalPipeModule } from './pipes/forma-decimal-number/forma-decimal-number.module';
 
 @NgModule({
 	declarations: [
@@ -197,6 +198,7 @@ import { CrAIScoreTooltipContentModule } from './directives/cr-ai-score-tooltip-
 		SimilarityPipeModule,
 		DecodeUriPipeModule,
 		FileNamePipeModule,
+		FormaDecimalPipeModule,
 		SecondsToTimePipeModule,
 		CrReportScoreTooltipModule,
 		CrReportMatchTooltipModule,

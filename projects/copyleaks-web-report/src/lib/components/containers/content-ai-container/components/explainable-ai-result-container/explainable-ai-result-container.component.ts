@@ -177,8 +177,8 @@ export class ExplainableAIResultContainerComponent implements OnInit, OnChanges 
 				this.explainResults.push({
 					content: content,
 					proportionType: slicedMatchResult.match.proportionType,
-					aiCount: Number(this.explainableAIResults.explain.patterns.statistics.aiCount[index].toFixed(2)),
-					humanCount: Number(this.explainableAIResults.explain.patterns.statistics.humanCount[index].toFixed(2)),
+					aiCount: Number(this.explainableAIResults.explain.patterns.statistics.aiCount[index]),
+					humanCount: Number(this.explainableAIResults.explain.patterns.statistics.humanCount[index]),
 					proportion: Number(item.toFixed(0)),
 					isInfinity: item == -1,
 					start: this.explainableAIResults.explain.patterns.text.chars.starts[index],

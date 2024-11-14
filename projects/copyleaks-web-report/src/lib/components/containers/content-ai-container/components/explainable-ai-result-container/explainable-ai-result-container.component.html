@@ -307,7 +307,14 @@
 									<span>{{ item.proportion.toLocaleString() }}x</span>
 								</ng-template>
 							</div>
-							<span class="content content-overflow" [class.content-overflow]="!isMobile">{{ item.content }}</span>
+							<span
+								class="content"
+								[tabIndex]="0"
+								[matTooltip]="item.content"
+								[matTooltipPosition]="'above'"
+								matTooltipClass="web-report-mat-tooltip tooltip-contanier">
+								{{ item.content }}
+							</span>
 						</div>
 						<mat-icon class="keyboard-arrow-icon">
 							<ng-container *ngIf="isPanelOpen(index); else closePanel">keyboard_arrow_up</ng-container>
@@ -316,31 +323,36 @@
 					</div>
 				</mat-panel-title>
 			</mat-expansion-panel-header>
-			<div class="result-container" fxLayout="column" fxLayoutGap="2px">
-				<div class="result-header" fxLayout="row" fxLayoutAlign="space-between center">
-					<span class="title" i18n>How frequently the phrase was found in our dataset :</span>
-					<mat-icon
-						class="info-icon"
-						fontSet="material-icons-outlined"
-						#tooltipResult="matTooltip"
-						[tabIndex]="0"
-						[matTooltip]="resultTooltipText"
-						[matTooltipPosition]="'before'"
-						(click)="isMobile ? toggleTooltip(tooltipResult) : ''"
-						matTooltipClass="web-report-mat-tooltip tooltip-contanier">
-						info
-					</mat-icon>
+			<div class="result-top-container" fxLayout="column" fxLayoutGap="8px">
+				<div class="result-container" fxLayout="column" fxLayoutGap="2px">
+					<div class="result-header" fxLayout="row" fxLayoutAlign="space-between center">
+						<span class="title" i18n>How frequently the phrase was found in our dataset :</span>
+						<mat-icon
+							class="info-icon"
+							fontSet="material-icons-outlined"
+							#tooltipResult="matTooltip"
+							[tabIndex]="0"
+							[matTooltip]="resultTooltipText"
+							[matTooltipPosition]="'before'"
+							(click)="isMobile ? toggleTooltip(tooltipResult) : ''"
+							matTooltipClass="web-report-mat-tooltip tooltip-contanier">
+							info
+						</mat-icon>
+					</div>
+					<div class="ai-count-container" fxLayout="row" fxLayoutAlign="space-between center">
+						<span class="title" i18n>AI Text</span>
+						<span class="count-result" i18n>
+							{{ item.aiCount | formaDecimalNumber }} occurrences per 1 million documents
+						</span>
+					</div>
+					<div class="human-count-container" fxLayout="row" fxLayoutAlign="space-between center">
+						<span class="title" i18n>Human Text</span>
+						<span class="count-result" i18n>
+							{{ item.humanCount | formaDecimalNumber }} occurrences per 1 million documents
+						</span>
+					</div>
 				</div>
-				<div class="ai-count-container" fxLayout="row" fxLayoutAlign="space-between center">
-					<span class="title" i18n>AI Text</span>
-					<span class="count-result" i18n>{{ item.aiCount.toLocaleString() }} occurrences per 1 million documents</span>
-				</div>
-				<div class="human-count-container" fxLayout="row" fxLayoutAlign="space-between center">
-					<span class="title" i18n>Human Text</span>
-					<span class="count-result" i18n>
-						{{ item.humanCount.toLocaleString() }} occurrences per 1 million documents
-					</span>
-				</div>
+				<span class="result-number-explain" i18n>*Decimals are hidden for numbers greater than 1.</span>
 			</div>
 		</mat-expansion-panel>
 	</mat-accordion>

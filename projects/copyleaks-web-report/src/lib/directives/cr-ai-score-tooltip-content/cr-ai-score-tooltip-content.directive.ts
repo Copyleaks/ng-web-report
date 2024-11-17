@@ -1,5 +1,5 @@
 import { Overlay, OverlayPositionBuilder, OverlayRef } from '@angular/cdk/overlay';
-import { Directive, ElementRef, HostListener } from '@angular/core';
+import { ComponentRef, Directive, ElementRef, HostListener, Input } from '@angular/core';
 import { CrAIScoreTooltipContentComponent } from './cr-ai-score-tooltip-content.component';
 import { ComponentPortal } from '@angular/cdk/portal';
 
@@ -8,6 +8,10 @@ import { ComponentPortal } from '@angular/cdk/portal';
 })
 export class CrAIScoreTooltipContentDirective {
 	private _overlayRef: OverlayRef;
+	@Input() isResultTitle: boolean = false;
+	@Input() tooltipText: string = '';
+	@Input() tooltipPosition: string = 'top';
+	@Input() isTooltipBar: boolean = false;
 
 	constructor(
 		private _overlay: Overlay,
@@ -34,10 +38,19 @@ export class CrAIScoreTooltipContentDirective {
 	 * Shows the tooltip when the mouse enters the element.
 	 */
 	@HostListener('mouseenter')
+	@HostListener('focus')
 	show() {
+		let isOverflowing = false;
+		if (this.isResultTitle && this.tooltipText) {
+			isOverflowing = this._elementRef.nativeElement.scrollWidth > this._elementRef.nativeElement.clientWidth;
+		}
 		// Attach the component if it has not already attached to the overlay
 		if (this._overlayRef && !this._overlayRef.hasAttached()) {
-			this._overlayRef.attach(new ComponentPortal(CrAIScoreTooltipContentComponent));
+			const tooltipRef: ComponentRef<CrAIScoreTooltipContentComponent> = this._overlayRef.attach(
+				new ComponentPortal(CrAIScoreTooltipContentComponent)
+			);
+			tooltipRef.instance.tooltipText = this.isResultTitle ? (isOverflowing ? this.tooltipText : '') : this.tooltipText;
+			tooltipRef.instance.isTooltipBar = this.isTooltipBar;
 		}
 	}
 
@@ -46,6 +59,7 @@ export class CrAIScoreTooltipContentDirective {
 	 * Hides the tooltip when the mouse leaves the element.
 	 */
 	@HostListener('mouseleave')
+	@HostListener('blur')
 	hide() {
 		this.closeToolTip();
 	}

@@ -1,31 +1,33 @@
-<div @fade fxLayout="column" fxLayoutAlign="center center">
+<div @fade *ngIf="tooltipText" fxLayout="column" fxLayoutAlign="center center">
 	<div class="top-container" fxLayout="column" fxLayoutAlign="center center" fxLayoutGap="6px">
-		<span class="title" i18n>
-			A phrase's ratio is shown by numbers, and colors indicate severity in AI versus human text.
+		<span class="title" [class.center-text]="isTooltipBar">
+			{{ tooltipText }}
 		</span>
-		<div class="frequencys-contanier" fxLayout="row" fxLayoutAlign="start center" fxLayoutGap="4px">
-			<div class="frequency-frame low-frequency">
-				<span i18n>
-					Low
-					<br />
-					Frequency
-				</span>
+		<ng-container *ngIf="isTooltipBar">
+			<div class="frequencys-contanier" fxLayout="row" fxLayoutAlign="start center" fxLayoutGap="4px">
+				<div class="frequency-frame low-frequency">
+					<span i18n>
+						Low
+						<br />
+						Frequency
+					</span>
+				</div>
+				<div class="frequency-frame medium-frequency">
+					<span i18n>
+						Medium
+						<br />
+						Frequency
+					</span>
+				</div>
+				<div class="frequency-frame high-frequency">
+					<span i18n>
+						High
+						<br />
+						Frequency
+					</span>
+				</div>
 			</div>
-			<div class="frequency-frame medium-frequency">
-				<span i18n>
-					Medium
-					<br />
-					Frequency
-				</span>
-			</div>
-			<div class="frequency-frame high-frequency">
-				<span i18n>
-					High
-					<br />
-					Frequency
-				</span>
-			</div>
-		</div>
+		</ng-container>
 	</div>
 	<svg xmlns="http://www.w3.org/2000/svg" width="14" height="7" viewBox="0 0 14 7" fill="none">
 		<path d="M6.8639 0H13.4953L6.8639 7L0.504883 0H6.8639Z" fill="#0B163E" />

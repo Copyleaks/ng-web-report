@@ -47,7 +47,10 @@
 					<span class="title" i18n>Frequency of phrases in AI vs human text.</span>
 					<div
 						class="grade-bar-container"
+						tabindex="0"
 						crAIScoreTooltipContent
+						[isTooltipBar]="true"
+						[tooltipText]="barTooltipText"
 						fxLayout="row"
 						fxLayoutAlign="start center"
 						fxLayoutGap="16px">
@@ -295,7 +298,7 @@
 			<mat-expansion-panel-header>
 				<mat-panel-title>
 					<div class="panel-header-container" fxLayout="row" fxLayoutAlign="space-between center" fxLayoutGap="16px">
-						<div class="proportion-content-container" fxLayout="row" fxLayoutAlign="start center" fxLayoutGap="16px">
+						<div class="proportion-content-container" fxLayout="row" fxLayoutAlign="start start" fxLayoutGap="16px">
 							<div
 								class="proportion {{ getProportionClassType(item.proportionType) }}"
 								fxLayout="column"
@@ -309,10 +312,10 @@
 							</div>
 							<span
 								class="content"
-								[tabIndex]="0"
-								[matTooltip]="item.content"
-								[matTooltipPosition]="'above'"
-								matTooltipClass="web-report-mat-tooltip tooltip-contanier">
+								[class.show-all-text]="isPanelOpen(index)"
+								crAIScoreTooltipContent
+								[tooltipText]="item.content"
+								[isResultTitle]="true">
 								{{ item.content }}
 							</span>
 						</div>

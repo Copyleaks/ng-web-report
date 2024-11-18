@@ -265,7 +265,13 @@ export abstract class OneToManyReportLayoutBaseComponent extends ReportLayoutBas
 		this.reportErrorsSvc.reportHttpRequestError$.pipe(takeUntil(this.unsubscribe$)).subscribe(error => {
 			if (!error) return;
 
-			if (error.method === 'initSync - completeResults') this.isLoadingScanContent = false;
+			if (error.method === 'initSync - crawledVersion') {
+				this.isLoadingScanContent = false;
+				this.reportMatches = this.contentTextMatches = [];
+
+				this.oneToManyRerendered = true;
+				this.isHtmlView = false;
+			}
 		});
 
 		combineLatest([

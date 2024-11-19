@@ -1,0 +1,23 @@
+.explain-ai-top-container {
+	position: relative;
+	width: 100%;
+	.percentage-result-container {
+		width: 100%;
+
+		.copyleaks-explainable-ai-result {
+			display: flex;
+			height: 100%;
+			border-radius: 10px;
+			overflow: hidden;
+		}
+	}
+	.percentage-result-container-height {
+		overflow: hidden;
+		height: 93%;
+		flex: 2;
+	}
+	.copyleaks-resources-container {
+		z-index: 3;
+		width: 100%;
+	}
+}

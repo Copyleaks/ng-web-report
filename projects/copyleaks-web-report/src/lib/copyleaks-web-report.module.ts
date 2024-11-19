@@ -102,6 +102,11 @@ import { ReportViewService } from './services/report-view.service';
 import { ReportDataService } from './services/report-data.service';
 import { ReportErrorsService } from './services/report-errors.service';
 import { FileNamePipeModule } from './pipes/file-name/file-name.module';
+import { ContentAiContainerComponent } from './components/containers/content-ai-container/content-ai-container.component';
+import { AiPercentageComponent } from './components/containers/content-ai-container/components/ai-percentage/ai-percentage.component';
+import { ExplainableAIResultContainerComponent } from './components/containers/content-ai-container/components/explainable-ai-result-container/explainable-ai-result-container.component';
+import { ResourcesContainerComponent } from './components/containers/content-ai-container/components/resourcess-container/resources-container.component';
+import { ReportAIResultsService } from './services/report-ai-results.service';
 
 @NgModule({
 	declarations: [
@@ -164,6 +169,10 @@ import { FileNamePipeModule } from './pipes/file-name/file-name.module';
 		CrBannerSectionComponent,
 		CrAiDisclaimerComponent,
 		CrAssessmentToolTabScorePanelComponent,
+		ContentAiContainerComponent,
+		AiPercentageComponent,
+		ExplainableAIResultContainerComponent,
+		ResourcesContainerComponent,
 	],
 	imports: [
 		CommonModule,
@@ -223,6 +232,7 @@ import { FileNamePipeModule } from './pipes/file-name/file-name.module';
 		ReportMatchesService,
 		ReportDataService,
 		ReportErrorsService,
+		ReportAIResultsService,
 	],
 })
 export class CopyleaksWebReportModule {}

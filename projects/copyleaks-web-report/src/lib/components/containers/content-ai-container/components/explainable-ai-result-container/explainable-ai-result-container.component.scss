@@ -1,0 +1,536 @@
+@import '../../../../../styles/website-colors.styles.scss';
+
+.top-container {
+	width: 100%;
+	border-radius: 10px;
+	background: $color-white;
+	box-shadow: 0px 0px 10px 0px rgba(11, 22, 62, 0.04), 0px 0px 2px 0px rgba(11, 22, 62, 0.08);
+
+	.header-container {
+		padding: 16px;
+		z-index: 2;
+		box-shadow: 0px 0px 2px 0px rgba(11, 22, 62, 0.12), 0px 0px 20px 0px rgba(11, 22, 62, 0.12);
+		.header {
+			.title {
+				color: $color-black;
+				font-family: 'Almarai' !important;
+				font-size: 18px;
+				font-weight: 800;
+				line-height: 24px; /* 133.333% */
+				text-transform: capitalize;
+			}
+			.beta-container {
+				border-radius: 16px;
+				background: rgba(43, 149, 255, 0.2);
+				height: 22px;
+				padding: 3px 8px;
+				span {
+					color: #2b95ff;
+					font-family: 'haboro-soft';
+					font-size: 12px;
+					font-weight: 500;
+				}
+			}
+			.info-icon {
+				width: 24px;
+				height: 24px;
+				font-size: 24px;
+				color: #0517a6;
+			}
+			.clear-select-button {
+				display: flex;
+				align-items: center;
+				width: 24px;
+				height: 24px;
+				mat-icon {
+					color: var(--Black-600, rgba(11, 22, 62, 0.6));
+					font-size: 24px;
+					width: 24px;
+					height: 24px;
+				}
+				::ng-deep .mat-button-focus-overlay {
+					background-color: transparent !important;
+				}
+				&:focus-visible {
+					border-radius: 0;
+					border: 1px solid $color-black !important;
+				}
+			}
+		}
+
+		.header-description {
+			color: $color-black;
+			font-family: 'haboro-soft';
+			font-size: 14px;
+			font-weight: 500;
+		}
+
+		.grade-bar-top-container {
+			.title {
+				color: $color-black;
+				font-family: 'haboro-soft';
+				font-size: 13px;
+				font-weight: 800;
+			}
+			.grade-bar-container {
+				.grade-bar {
+					display: flex;
+					flex-direction: column;
+					width: 100%;
+					background-color: $color-white;
+					border: 1px solid $color-effect-dialog-background;
+					border-radius: 10px;
+					box-sizing: border-box;
+					height: 8px;
+					.min-result {
+						height: 100%;
+						background-color: $color-explain-ai-low;
+						border-radius: 10px 0 0 10px;
+					}
+					.mid-result {
+						height: 100%;
+						background-color: $color-explain-ai-medium;
+					}
+					.max-result {
+						height: 100%;
+						background-color: $color-explain-ai-high;
+						border-radius: 0 10px 10px 0;
+					}
+				}
+				.min-proportion,
+				.max-proportion {
+					white-space: nowrap;
+					color: $color-black;
+					font-family: 'haboro-soft';
+					font-size: 12px;
+					font-weight: 700;
+				}
+			}
+		}
+	}
+	.header-container-mobile {
+		box-shadow: none;
+		margin: 0;
+	}
+	.container-explain-results {
+		overflow: hidden;
+		.desktop-scroll {
+			overflow: auto;
+		}
+		.explain-results {
+			::ng-deep .mat-expansion-panel {
+				box-shadow: none;
+				border-bottom: 1px solid $color-container-background;
+				background-color: $color-white;
+				border-radius: 0 !important;
+				::ng-deep .mat-expansion-panel-header {
+					padding: 16px;
+					height: auto;
+					box-shadow: none;
+					.mat-expansion-panel-header-title {
+						width: 100%;
+						margin: 0;
+						.panel-header-container {
+							width: 100%;
+						}
+						.proportion-content-container {
+							overflow: hidden;
+							max-width: 90%;
+							.proportion {
+								min-width: 70px !important;
+								padding: 4px 8px;
+								border-radius: 6px;
+								background-color: #9479ff;
+								span {
+									color: $color-black;
+									text-align: right;
+									font-family: 'haboro-soft';
+									font-size: 14px;
+									font-weight: 800;
+									white-space: nowrap;
+								}
+								mat-icon {
+									width: 18px;
+									height: 18px;
+									font-size: 18px;
+								}
+							}
+							.low-proportion {
+								background-color: $color-explain-ai-low;
+							}
+							.medium-proportion {
+								background-color: $color-explain-ai-medium;
+							}
+							.high-proportion {
+								background-color: $color-explain-ai-high;
+							}
+							.content {
+								color: $color-black;
+								font-family: 'Open Sans';
+								font-size: 14px;
+								font-weight: 400;
+								overflow: hidden;
+								text-overflow: ellipsis;
+								white-space: nowrap;
+								position: relative;
+							}
+
+							.content-overflow:hover {
+								animation: showContent 0.2s ease 0.3s forwards;
+							}
+
+							@keyframes showContent {
+								0% {
+									overflow: hidden;
+									white-space: nowrap;
+									background-color: transparent;
+								}
+								100% {
+									overflow: visible;
+									white-space: normal;
+									background-color: $color-white;
+									border-radius: 1px;
+								}
+							}
+						}
+
+						.keyboard-arrow-icon {
+							font-size: 18px;
+							width: 18px;
+							height: 18px;
+							color: #2b95ff;
+						}
+					}
+					.mat-expansion-indicator:after {
+						color: $color-primary;
+					}
+					&:hover {
+						background-color: $color-white;
+					}
+				}
+				::ng-deep .mat-expansion-panel-body {
+					padding: 0 16px 16px;
+				}
+			}
+			.result-container {
+				border-radius: 8px;
+				box-shadow: 0px 0px 2px 0px rgba(11, 22, 62, 0.08) inset, 0px 0px 10px 0px rgba(11, 22, 62, 0.04) inset;
+				.result-header {
+					border-radius: 6px 6px 0px 0px;
+					background-color: $color-container-background;
+					padding: 8px 10px;
+					.title {
+						color: $color-black;
+						font-family: 'haboro-soft';
+						font-size: 12px;
+						font-weight: 800;
+					}
+					.info-icon {
+						width: 18px;
+						height: 18px;
+						font-size: 18px;
+						color: #0517a6;
+					}
+				}
+				.ai-count-container,
+				.human-count-container {
+					background: $color-container-background;
+					padding: 8px 10px;
+					.title {
+						white-space: nowrap;
+						color: $color-black;
+						font-family: 'haboro-soft' !important;
+						font-size: 12px;
+						font-weight: 800;
+						line-height: normal;
+					}
+					.count-result {
+						color: $color-black;
+						font-family: 'haboro-soft' !important;
+						font-size: 12px;
+						font-weight: 500;
+						line-height: normal;
+					}
+				}
+				.human-count-container {
+					border-radius: 0px 0px 6px 6px;
+				}
+			}
+		}
+	}
+	.navigate-mobie-button-contaienr {
+		padding-bottom: 16px;
+		height: 42px;
+		.navigate-mobie-button {
+			width: 12px !important;
+			height: 12px !important;
+			padding: 0px !important;
+			border-radius: 50%;
+			background-color: $color-dialog-background;
+			border: 0px;
+		}
+		.navigate-mobie-button-select {
+			background-color: $color-primary !important;
+		}
+		.mat-chip-navigate {
+			font-size: 12px;
+			font-weight: 700;
+			color: $color-black;
+			border: 1px solid $grayed-out-disabled;
+			background: rgba(43, 149, 255, 0.2);
+			padding: 2px 8px !important;
+			height: fit-content !important;
+			min-height: auto !important;
+			line-height: normal !important;
+			border-radius: 16px !important;
+		}
+	}
+	.explain-results-mobile-container {
+		padding: 0 16px 16px;
+		min-height: 65px;
+		align-items: center;
+		.mobile-scroll {
+			overflow-x: auto;
+			scroll-snap-type: x mandatory;
+			min-height: 58px;
+			height: 100%;
+			scrollbar-width: none;
+			width: 330px;
+			.explain-results {
+				width: 330px;
+				scroll-snap-align: start;
+				mat-accordion {
+					width: 330px;
+				}
+				::ng-deep .mat-expansion-panel {
+					border-radius: 10px !important;
+					background: $color-container-background;
+					box-shadow: 0px 0px 2px 0px rgba(11, 22, 62, 0.08) inset, 0px 0px 10px 0px rgba(11, 22, 62, 0.04) inset;
+					::ng-deep .mat-expansion-panel-header {
+						border-radius: 10px !important;
+						background: $color-container-background;
+					}
+					::ng-deep .mat-expansion-panel-body {
+						padding: 0 16px 16px;
+					}
+				}
+				.result-container {
+					.result-header,
+					.ai-count-container,
+					.human-count-container {
+						background: $color-white;
+					}
+				}
+			}
+			@media screen and (max-width: 360px) {
+				width: 300px;
+				.explain-results {
+					width: 300px;
+					mat-accordion {
+						width: 300px;
+					}
+				}
+			}
+		}
+		.empty-and-locked-contaienr {
+			padding: 0;
+		}
+	}
+
+	.explain-results-mobile-container-padding {
+		padding-bottom: 0 !important;
+	}
+	.loading-container {
+		width: 100%;
+		.skeleton {
+			width: fit-content;
+			display: flex;
+			height: fit-content !important;
+			::ng-deep .loader {
+				height: 18px !important;
+				margin-bottom: 0px !important;
+				border-radius: 10px !important;
+				opacity: 0.2;
+				background-color: $color-medium-dark;
+			}
+		}
+		.skeleton-small-height {
+			::ng-deep .loader {
+				height: 15px !important;
+			}
+		}
+		.loading-header-top-container {
+			width: 100%;
+			padding: 16px;
+			border-radius: 10px 10px 0px 0px;
+			background: $color-white;
+			box-shadow: 0px 0px 2px 0px rgba(11, 22, 62, 0.12), 0px 0px 20px 0px rgba(11, 22, 62, 0.12);
+
+			.loading-header-container {
+				width: 100%;
+				.title-loading {
+					width: 30%;
+				}
+				.first-description-loading {
+					width: 60%;
+				}
+				.second-description-loading {
+					width: 80%;
+				}
+			}
+			.loading-grade-bar-container {
+				width: 100%;
+				.description-loading {
+					width: 80%;
+				}
+				.grade-bar-loading {
+					width: 80%;
+				}
+			}
+		}
+		.loading-result-top-container {
+			width: 100%;
+			.loading-result-container {
+				width: 100%;
+				padding: 16px;
+				.proportion-loading {
+					width: 15%;
+					::ng-deep .loader {
+						height: 26px !important;
+					}
+				}
+				.result-loading {
+					width: 50%;
+				}
+			}
+			.loading-contant-result-container {
+				width: 100%;
+				padding: 0px 16px 16px 16px;
+				.description-loading {
+					padding: 8px 10px;
+					border-radius: 6px 6px 0px 0px;
+					background: $color-container-background;
+					.loading {
+						width: 40%;
+					}
+				}
+				.ai-count-loading-container {
+					width: 100%;
+					padding: 8px 10px;
+					background: $color-container-background;
+					.ai-count-loading {
+						width: 20%;
+					}
+					.result-loading {
+						width: 50%;
+					}
+				}
+				.human-count-loading-container {
+					width: 100%;
+					padding: 8px 10px;
+					border-radius: 0px 0px 6px 6px;
+					background: $color-container-background;
+					.human-count-loading {
+						width: 30%;
+					}
+					.result-loading {
+						width: 40%;
+					}
+				}
+			}
+		}
+		.mobile-loading-container {
+			width: 100%;
+			padding: 16px 16px 32px;
+			.mobile-header-loading-container {
+				.header-loading {
+					width: 30%;
+				}
+			}
+			.result-loading-container {
+				width: 100%;
+				.proportion-loading {
+					width: 15%;
+					::ng-deep .loader {
+						height: 26px !important;
+					}
+				}
+				.result-loading {
+					width: 50%;
+				}
+			}
+		}
+	}
+}
+
+.locked-view,
+.empty-view {
+	.container-explain-results {
+		height: 100%;
+		.empty-and-locked-contaienr {
+			height: 100%;
+		}
+	}
+}
+
+.locked-view {
+	.empty-and-locked-contaienr {
+		span {
+			color: $color-black;
+			font-family: 'Almarai' !important;
+			font-size: 20px;
+			font-weight: 800;
+			text-transform: capitalize;
+		}
+		mat-icon {
+			color: #2b95ff;
+			font-size: 18px;
+			width: 18px;
+			height: 18px;
+		}
+	}
+}
+
+.empty-view {
+	.header-container {
+		padding: 16px 0 0;
+		box-shadow: none;
+	}
+	.empty-and-locked-contaienr {
+		padding: 0px 16px;
+		.empty-contaienr {
+			padding: 16px;
+			border-radius: 10px;
+			background: $color-container-background;
+			box-shadow: 0px 0px 2px 0px rgba(11, 22, 62, 0.12);
+			.title {
+				color: $color-black;
+				font-family: 'Almarai' !important;
+				font-size: 18px;
+				font-weight: 800;
+				line-height: 24px; /* 133.333% */
+			}
+			.description {
+				color: $color-black;
+				font-family: 'haboro-soft' !important;
+				font-size: 14px;
+				font-weight: 500;
+				text-align: center;
+			}
+		}
+	}
+}
+::ng-deep .mat-tooltip.tooltip-contanier {
+	font-size: 16px !important;
+	font-weight: 500 !important;
+	color: $color-white !important;
+	background-color: $color-black !important;
+	border-radius: 10px !important;
+	padding: 14px !important;
+	font-family: 'haboro-soft', sans-serif !important;
+	white-space: pre-line !important;
+}
+::ng-deep ::-webkit-scrollbar-track {
+	margin-top: 10px;
+	margin-bottom: 10px;
+}

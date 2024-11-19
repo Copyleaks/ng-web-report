@@ -19,8 +19,13 @@
 							class="info-icon"
 							fontSet="material-icons-outlined"
 							[tabIndex]="0"
+							#tooltipTitle="matTooltip"
 							[matTooltip]="infoTooltipText"
 							[matTooltipPosition]="'after'"
+							(click)="isMobile ? toggleTooltip(tooltipTitle) : ''"
+							aria-label="ai result info"
+							i18n-aria-label
+							aria-hidden="false"
 							matTooltipClass="web-report-mat-tooltip tooltip-contanier">
 							info
 						</mat-icon>
@@ -48,7 +53,7 @@
 							<div class="max-result" [style.width]="maxGradeBar + '%'"></div>
 						</div>
 						<ng-container *ngIf="hasInfinityResult; else maxResult">
-							<span class="max-proportion">> 10,000</span>
+							<span class="max-proportion">10,000x</span>
 						</ng-container>
 						<ng-template #maxResult>
 							<span class="max-proportion">{{ maxProportion.toLocaleString() }}x</span>
@@ -89,27 +94,24 @@
 			<ng-template #showResults>
 				<!-- Desktop view -->
 				<ng-container *ngIf="!isMobile; else mobileView">
-					<div class="explain-results" fxLayout="column" *ngFor="let result of explainItemResults; let i = index">
-						<ng-container *ngTemplateOutlet="templateResult; context: { item: result, index: i }"></ng-container>
+					<div class="desktop-scroll" fxLayout="column">
+						<div class="explain-results" fxLayout="column" *ngFor="let result of explainItemResults; let i = index">
+							<ng-container *ngTemplateOutlet="templateResult; context: { item: result, index: i }"></ng-container>
+						</div>
 					</div>
 				</ng-container>
 				<!-- Mobile view -->
 				<ng-template #mobileView>
-					<cdk-virtual-scroll-viewport
-						autosize
-						class="mobile-scroll"
-						orientation="horizontal"
-						itemSize="330"
-						(scrolledIndexChange)="onScroll($event)">
+					<div #scrollContainer class="mobile-scroll" fxLayout="row" (scroll)="onScrollMobile()">
 						<div
 							class="explain-results"
-							[style.margin-right]="i == explainItemResults.length - 1 ? '0px' : '10px'"
-							[style.margin-left]="i == explainItemResults.length - 1 ? '10px' : '0px'"
+							[style.margin-right]="i == explainItemResults.length - 1 ? '0px' : '16px'"
 							fxLayout="row"
-							*cdkVirtualFor="let result of explainItemResults; let i = index">
+							*ngFor="let result of explainItemResults; let i = index"
+							[attr.data-index]="i">
 							<ng-container *ngTemplateOutlet="templateResult; context: { item: result, index: i }"></ng-container>
 						</div>
-					</cdk-virtual-scroll-viewport>
+					</div>
 				</ng-template>
 			</ng-template>
 		</div>
@@ -278,13 +280,13 @@
 								fxLayout="column"
 								fxLayoutAlign="center center">
 								<ng-container *ngIf="item.isInfinity; else showProportionValue">
-									<span class="content">> 10,000</span>
+									<span class="content">10,000x</span>
 								</ng-container>
 								<ng-template #showProportionValue>
 									<span>{{ item.proportion.toLocaleString() }}x</span>
 								</ng-template>
 							</div>
-							<span class="content">{{ item.content }}</span>
+							<span class="content content-overflow" [class.content-overflow]="!isMobile">{{ item.content }}</span>
 						</div>
 						<mat-icon class="keyboard-arrow-icon">
 							<ng-container *ngIf="isPanelOpen(index); else closePanel">keyboard_arrow_up</ng-container>
@@ -299,20 +301,24 @@
 					<mat-icon
 						class="info-icon"
 						fontSet="material-icons-outlined"
+						#tooltipResult="matTooltip"
 						[tabIndex]="0"
 						[matTooltip]="resultTooltipText"
 						[matTooltipPosition]="'before'"
+						(click)="isMobile ? toggleTooltip(tooltipResult) : ''"
 						matTooltipClass="web-report-mat-tooltip tooltip-contanier">
 						info
 					</mat-icon>
 				</div>
-				<div class="ai-count-container" fxLayout="row" fxLayoutAlign="space-between center">
+				<div class="ai-count-container" fxLayout="row" fxLayoutAlign="space-between center" fxLayoutGap="4px">
 					<span class="title" i18n>AI Text</span>
-					<span class="count-result" i18n>{{ item.aiCount.toLocaleString() }} times in 1,000,000 documents</span>
+					<span class="count-result" i18n>{{ item.aiCount.toLocaleString() }} occurrences per 1 million documents</span>
 				</div>
-				<div class="human-count-container" fxLayout="row" fxLayoutAlign="space-between center">
+				<div class="human-count-container" fxLayout="row" fxLayoutAlign="space-between center" fxLayoutGap="4px">
 					<span class="title" i18n>Human Text</span>
-					<span class="count-result" i18n>{{ item.humanCount.toLocaleString() }} times in 1,000,000 documents</span>
+					<span class="count-result" i18n>
+						{{ item.humanCount.toLocaleString() }} occurrences per 1 million documents
+					</span>
 				</div>
 			</div>
 		</mat-expansion-panel>

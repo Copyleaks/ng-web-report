@@ -13,10 +13,12 @@
 				align-items: flex-end;
 			}
 			.mat-expansion-panel-header-title {
-				color: $color-black;
-				font-family: 'Almarai' !important;
-				font-size: 18px;
-				font-weight: 800;
+				span {
+					color: $color-black;
+					font-family: 'Almarai' !important;
+					font-size: 18px;
+					font-weight: 800;
+				}
 			}
 			.mat-expansion-panel-header-description {
 				display: flex;
@@ -129,12 +131,24 @@
 	bottom: 0;
 	left: 0;
 	@media screen and (max-height: 765px) {
-		overflow: auto;
+		overflow: hidden;
 		height: 550px;
+		.expansion-panel {
+			::ng-deep .mat-expansion-panel-content {
+				overflow: auto;
+				height: 510px;
+			}
+		}
 	}
 	@media screen and (max-height: 700px) {
-		overflow: auto;
+		overflow: hidden;
 		height: 400px;
+		.expansion-panel {
+			::ng-deep .mat-expansion-panel-content {
+				overflow: auto;
+				height: 360px;
+			}
+		}
 	}
 }
 

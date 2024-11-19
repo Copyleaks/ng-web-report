@@ -21,6 +21,7 @@ import {
 	MatchType,
 	ResultDetailItem,
 	SlicedMatch,
+	Range,
 } from '../../../models/report-matches.models';
 import { ICopyleaksReportOptions } from '../../../models/report-options.models';
 import {
@@ -107,8 +108,8 @@ export abstract class OneToManyReportLayoutBaseComponent extends ReportLayoutBas
 	selectedCustomTabResultSectionContentTemplate: TemplateRef<any>;
 	showOmittedWords: boolean;
 	isPartitalScan: boolean;
-	explainableAI: ExplainableAIResults = { explain: null, slicedMatch: [] };
-	selectAIText: number[] = [];
+	explainableAI: ExplainableAIResults = { explain: null, slicedMatch: [], sourceText: '' };
+	selectAIText: Range[] = [];
 	loadingExplainableAI: boolean = true;
 	updateProportionRange: boolean = false;
 	aiWordTotal: ExplainableAIWordTotal = {
@@ -278,6 +279,7 @@ export abstract class OneToManyReportLayoutBaseComponent extends ReportLayoutBas
 		this.reportDataSvc.crawledVersion$.pipe(takeUntil(this.unsubscribe$)).subscribe(data => {
 			if (data) {
 				this.reportCrawledVersion = data;
+				this.explainableAI.sourceText = data?.text?.value ?? '';
 				this.numberOfPages = data.text?.pages?.startPosition?.length ?? 1;
 				if (
 					(this.reportCrawledVersion?.html?.exclude?.reasons?.filter(r => r === EExcludeReason.PartialScan).length >
@@ -399,13 +401,16 @@ export abstract class OneToManyReportLayoutBaseComponent extends ReportLayoutBas
 			if (data) {
 				this.isLoadingScanContent = false;
 				this.contentTextMatches = data;
+				let slicedMatch: SlicedMatch[] = [];
 				this.contentTextMatches.forEach(result => {
 					const explainText = result.filter(re => re.match.type === MatchType.aiExplain);
 					if (explainText.length > 0) {
-						this.explainableAI.slicedMatch.push(...explainText);
+						slicedMatch.push(...explainText);
 					}
 				});
-
+				if (this.explainableAI.slicedMatch.length === 0) {
+					this.explainableAI.slicedMatch = slicedMatch;
+				}
 				if (this.reportViewSvc.reportViewMode?.viewMode === 'writing-feedback') {
 					if (
 						this.writingFeedback &&
@@ -479,7 +484,10 @@ export abstract class OneToManyReportLayoutBaseComponent extends ReportLayoutBas
 							this.selectAIText = [];
 							this.loadingExplainableAI = true;
 							selectedMatches.forEach(match => {
-								this.selectAIText.push(match.start);
+								this.selectAIText.push({
+									start: match.start,
+									end: match.end,
+								});
 							});
 							this.loadingExplainableAI = false;
 						} else {

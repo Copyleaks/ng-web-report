@@ -2,7 +2,7 @@ import { AfterContentInit, ContentChildren, Directive, EventEmitter, Input, OnDe
 import { Subject } from 'rxjs';
 import { distinctUntilChanged, filter, take, takeUntil, withLatestFrom } from 'rxjs/operators';
 import { CrTextMatchComponent } from '../components/core/cr-text-match/cr-text-match.component';
-import { SlicedMatch, TextMatchHighlightEvent } from '../models/report-matches.models';
+import { Range, SlicedMatch, TextMatchHighlightEvent } from '../models/report-matches.models';
 import { ReportMatchHighlightService } from '../services/report-match-highlight.service';
 import { ReportViewService } from '../services/report-view.service';
 import * as helpers from '../utils/highlight-helpers';
@@ -192,6 +192,64 @@ export class OriginalTextHelperDirective implements AfterContentInit, OnDestroy 
 	}
 
 	/**
+	 *
+	 *
+	 */
+	selectAIInsights(match: Range) {
+		const foundCorrectionInfo = this.findMatchWithStartAndEnd(
+			this.host.contentTextMatches as SlicedMatch[][],
+			match.start,
+			match.end
+		);
+		if (foundCorrectionInfo.page === -1) return;
+		setTimeout(() => {
+			if (this.host.currentPage === foundCorrectionInfo.page + 1) {
+				const components = this.children.toArray();
+				const comp = components.find(comp => comp?.match?.start === match.start && comp?.match?.end === match.end);
+				this.highlightService.textMatchClicked({
+					elem: comp,
+					broadcast: false,
+					origin: 'original',
+					showResults: false,
+					multiSelect: false,
+				});
+			} else {
+				this.host.currentPage = foundCorrectionInfo.page + 1;
+				this.children.changes.pipe(take(1)).subscribe(() => {
+					const components = this.children.toArray();
+					const comp = components.find(comp => comp?.match?.start === match.start && comp?.match?.end === match.end);
+					this.highlightService.textMatchClicked({
+						elem: comp,
+						broadcast: false,
+						origin: 'original',
+						showResults: false,
+						multiSelect: false,
+					});
+				});
+			}
+		});
+	}
+
+	removeSelectAIInsights(match: Range) {
+		const foundCorrectionInfo = this.findMatchWithStartAndEnd(
+			this.host.contentTextMatches as SlicedMatch[][],
+			match.start,
+			match.end
+		);
+		if (foundCorrectionInfo.page === -1) return;
+		setTimeout(() => {
+			if (this.host.currentPage === foundCorrectionInfo.page + 1) {
+				const components = this.children.toArray();
+				components.find(comp => comp?.match?.start === match.start && comp?.match?.end === match.end).focused = false;
+			} else {
+				this.children.changes.pipe(take(1)).subscribe(() => {
+					const components = this.children.toArray();
+					components.find(comp => comp?.match?.start === match.start && comp?.match?.end === match.end).focused = false;
+				});
+			}
+		});
+	}
+	/**
 	 * Checks whether it is possible to jump forward/backward in the current page
 	 * @param forward the direction of the jump
 	 */
@@ -320,6 +378,24 @@ export class OriginalTextHelperDirective implements AfterContentInit, OnDestroy 
 			)
 			.subscribe(([correctionSelect, _]) => {
 				this.handleCorrectionSelect(correctionSelect);
+			});
+
+		this._reportMatchesSvc.aiInsightsSelect$
+			.pipe(
+				untilDestroy(this),
+				withLatestFrom(reportViewMode$),
+				filter(
+					([correctionSelect, viewModeData]) =>
+						correctionSelect && viewModeData.viewMode === 'one-to-many' && !viewModeData.isHtmlView
+				)
+			)
+			.subscribe(([aiInsightsSelect, _]) => {
+				if (!aiInsightsSelect) return;
+				if (aiInsightsSelect.isSelected) {
+					this.selectAIInsights(aiInsightsSelect.resultRange);
+				} else {
+					this.removeSelectAIInsights(aiInsightsSelect.resultRange);
+				}
 			});
 
 		this.host.onTextMatchSelectionEvent.subscribe((event: any) => {

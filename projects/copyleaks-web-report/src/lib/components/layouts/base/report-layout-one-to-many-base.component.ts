@@ -20,7 +20,6 @@ import {
 	MatchType,
 	ResultDetailItem,
 	SlicedMatch,
-	Range,
 } from '../../../models/report-matches.models';
 import { ICopyleaksReportOptions } from '../../../models/report-options.models';
 import {
@@ -108,7 +107,6 @@ export abstract class OneToManyReportLayoutBaseComponent extends ReportLayoutBas
 	showOmittedWords: boolean;
 	isPartitalScan: boolean;
 	explainableAI: ExplainableAIResults = { explain: null, slicedMatch: [], sourceText: '' };
-	selectAIText: Range[] = [];
 	loadingExplainableAI: boolean = true;
 
 	// Subject for destroying all the subscriptions in base component
@@ -244,7 +242,6 @@ export abstract class OneToManyReportLayoutBaseComponent extends ReportLayoutBas
 						var scanResult = JSON.parse(validSelectedAlert.additionalData) as AIScanResult;
 						this.explainableAI.explain = scanResult?.explain;
 					}
-					this.selectAIText = [];
 					setTimeout(() => {
 						this.loadingExplainableAI = false;
 					}, 100);
@@ -468,19 +465,7 @@ export abstract class OneToManyReportLayoutBaseComponent extends ReportLayoutBas
 				if (multiText && multiText.length > 0) {
 					const selectedMatches = multiText.map(c => c.match);
 					if (this.viewMode === 'one-to-many' || this.viewMode === 'only-ai') {
-						if (this.selectedTap === EReportViewType.AIView) {
-							this.selectAIText = [];
-							this.loadingExplainableAI = true;
-							selectedMatches.forEach(match => {
-								this.selectAIText.push({
-									start: match.start,
-									end: match.end,
-								});
-							});
-							this.loadingExplainableAI = false;
-						} else {
-							this._showResultsForMultiSelection(selectedMatches);
-						}
+						this._showResultsForMultiSelection(selectedMatches);
 					} else if (this.viewMode === 'writing-feedback') {
 						if (selectedMatches.length === 0) this.displayedScanCorrectionsView = this.filteredCorrections;
 						else
@@ -492,11 +477,7 @@ export abstract class OneToManyReportLayoutBaseComponent extends ReportLayoutBas
 				} else {
 					this.focusedMatch = !content.isHtmlView ? text && text.match : html;
 					if (this.viewMode === 'one-to-many' || this.viewMode === 'only-ai') {
-						if (this.selectedTap === EReportViewType.AIView) {
-							this.selectAIText = [];
-						} else {
-							this._showResultsForSelectedMatch(this.focusedMatch);
-						}
+						this._showResultsForSelectedMatch(this.focusedMatch);
 					} else if (this.viewMode === 'writing-feedback') {
 						if (this.focusedMatch)
 							this.displayedScanCorrectionsView = this.allScanCorrectionsView.filter(

@@ -13,9 +13,9 @@
 			class="copyleaks-explainable-ai-result"
 			[isMobile]="isMobile"
 			[isLoading]="isLoading"
+			[reportMatchesSvc]="reportMatchesSvc"
 			[lockedResults]="lockedResults"
 			[explainableAIResults]="explainableAIResults"
-			[selectAIText]="selectAIText"
 			(clearSelectResultEvent)="clearSelectResult()"></copyleaks-explainable-ai-result-container>
 	</div>
 	<ng-container *ngIf="!(isLoading && isMobile)">

@@ -62,7 +62,11 @@
 			(click)="toggleOmittedWordsView()"
 			[attr.aria-label]="showOmittedWords ? HIDE_OMITTED_WORDS_TOOLTIP_MESSAGE : VIEW_OMITTED_WORDS_TOOLTIP_MESSAGE">
 			<mat-icon fontSet="material-icons-outlined">fact_check</mat-icon>
-			<span>({{ scanSource?.metadata?.excluded ?? 0 }} Omitted)</span>
+			<span>
+				({{ scanSource?.metadata?.excluded ?? 0 }}
+				<ng-container i18n>Omitted</ng-container>
+				)
+			</span>
 		</button>
 	</div>
 	<div class="actions-container">

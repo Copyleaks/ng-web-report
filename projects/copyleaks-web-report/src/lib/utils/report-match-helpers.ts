@@ -200,8 +200,12 @@ const mergeMatchesInNest = (matches: Match[]): Match[] => {
 export const mergeMatches = (matches: Match[]): Match[] => {
 	const nests = findNests(matches);
 	const merged = nests.reduce((prev: Match[], nest: Match[]) => {
-		const joined = mergeMatchesInNest(nest);
-		return prev.concat(joined);
+		if (nest[0].start == nest[0].end) {
+			return prev;
+		} else {
+			const joined = mergeMatchesInNest(nest);
+			return prev.concat(joined);
+		}
 	}, []);
 	return merged;
 };

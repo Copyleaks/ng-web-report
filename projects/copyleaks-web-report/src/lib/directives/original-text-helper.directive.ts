@@ -192,8 +192,8 @@ export class OriginalTextHelperDirective implements AfterContentInit, OnDestroy 
 	}
 
 	/**
-	 *
-	 *
+	 * select ai match resuli
+	 * @param match
 	 */
 	selectAIInsights(match: Range) {
 		const foundCorrectionInfo = this.findMatchWithStartAndEnd(
@@ -230,6 +230,10 @@ export class OriginalTextHelperDirective implements AfterContentInit, OnDestroy 
 		});
 	}
 
+	/**
+	 * remove select ai match result
+	 * @param match
+	 */
 	removeSelectAIInsights(match: Range) {
 		const foundCorrectionInfo = this.findMatchWithStartAndEnd(
 			this.host.contentTextMatches as SlicedMatch[][],

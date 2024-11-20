@@ -63,6 +63,8 @@ export class ExplainableAIResultContainerComponent implements OnInit, OnChanges 
 
 	@ViewChildren(MatExpansionPanel) panels: QueryList<MatExpansionPanel>;
 
+	@ViewChild('desktopScroll') desktopScroll!: ElementRef;
+
 	explainResults: AIExplainResultItem[] = [];
 	explainItemResults: AIExplainResultItem[] = [];
 	navigateMobileButton: EnumNavigateMobileButton = EnumNavigateMobileButton.FirstButton;
@@ -71,7 +73,6 @@ export class ExplainableAIResultContainerComponent implements OnInit, OnChanges 
 	proportions: number[] = [];
 	emptyView: boolean = false;
 	title: string;
-	selectedMatch: boolean = false;
 	hasInfinityResult: boolean = false;
 	openedPanel: boolean = false; // its for the ai insight result height, once panel opened we want to add more height
 	minProportion: number = 0;
@@ -104,11 +105,25 @@ export class ExplainableAIResultContainerComponent implements OnInit, OnChanges 
 					const selectIndex = this.explainItemResults.findIndex(
 						result => result.start <= selectResult.resultRange.start && selectResult.resultRange.end <= result.end
 					);
-					this.panels.toArray()[selectIndex].open();
+					if (this.isMobile) {
+						this.scrollToIndex(selectIndex);
+						setTimeout(() => {
+							this.panels.toArray()[selectIndex].open();
+						}, 500);
+					} else {
+						this.panels.toArray()[selectIndex].open();
+						setTimeout(() => {
+							this.desktopScroll.nativeElement.children[selectIndex].scrollIntoView({
+								behavior: 'smooth',
+								block: 'center',
+							});
+						}, 350);
+					}
 				} else {
 					const selectIndex = this.explainItemResults.findIndex(
 						result => result.start <= selectResult.resultRange.start && selectResult.resultRange.end <= result.end
 					);
+
 					this.panels.toArray()[selectIndex].close();
 				}
 			}
@@ -195,22 +210,13 @@ export class ExplainableAIResultContainerComponent implements OnInit, OnChanges 
 		this.explainItemResults = [...this.explainResults];
 	}
 
-	/**
-	 * Clear the selected result
-	 */
-	clearSelectdResult() {
-		//this.clearSelectResultEvent.emit(true);
-		this.closePanel();
-		this.panelIndex = [];
-	}
-
 	toggleTooltip(tooltip: MatTooltip): void {
 		this.tooltipVisible = !this.tooltipVisible;
 		this.tooltipVisible ? tooltip.show() : tooltip.hide();
 	}
 
 	onScrollMobile() {
-		if (this.isMobile && this.openedPanel) {
+		if (this.isMobile && this.openedPanel && this.panelIndex.length) {
 			this.closePanel();
 		}
 		const container = this.scrollContainer.nativeElement;
@@ -302,6 +308,7 @@ export class ExplainableAIResultContainerComponent implements OnInit, OnChanges 
 	addToPanelIndex(index: number) {
 		this.panelIndex.push(index);
 		this.openedPanel = true; // its for the ai insight result height, once panel opened we want to add more height
+
 		this.reportMatchesSvc.aiInsightsSelect$.next({
 			resultRange: {
 				start: this.explainItemResults[index].start,
@@ -319,6 +326,7 @@ export class ExplainableAIResultContainerComponent implements OnInit, OnChanges 
 	removeFromPanelIndex(index: number) {
 		this.panelIndex = this.panelIndex.filter(i => i !== index);
 		if (!this.panelIndex.length) this.openedPanel = false;
+
 		this.reportMatchesSvc.aiInsightsSelect$.next({
 			resultRange: {
 				start: this.explainItemResults[index].start,

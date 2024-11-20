@@ -36,25 +36,6 @@
 					font-size: 24px;
 					color: #0517a6;
 				}
-				.clear-select-button {
-					display: flex;
-					align-items: center;
-					width: 24px;
-					height: 24px;
-					mat-icon {
-						color: var(--Black-600, rgba(11, 22, 62, 0.6));
-						font-size: 24px;
-						width: 24px;
-						height: 24px;
-					}
-					::ng-deep .mat-button-focus-overlay {
-						background-color: transparent !important;
-					}
-					&:focus-visible {
-						border-radius: 0;
-						border: 1px solid $color-black !important;
-					}
-				}
 			}
 
 			.grade-bar-top-container {

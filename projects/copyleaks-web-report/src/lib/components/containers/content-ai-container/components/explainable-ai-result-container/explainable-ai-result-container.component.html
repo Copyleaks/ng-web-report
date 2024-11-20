@@ -12,35 +12,28 @@
 						{{ title }}
 					</span>
 					<div fxLayout="row" fxLayoutAlign="center center" fxLayoutGap="8px">
-						<div *ngIf="!emptyView && !lockedResults && !selectedMatch && !isMobile" class="beta-container">
+						<div *ngIf="!emptyView && !lockedResults && !isMobile" class="beta-container">
 							<span>Beta</span>
 						</div>
-						<ng-container *ngIf="!selectedMatch; else clearSelect">
-							<mat-icon
-								class="info-icon"
-								fontSet="material-icons-outlined"
-								[tabIndex]="0"
-								#tooltipTitle="matTooltip"
-								[matTooltip]="infoTooltipText"
-								[matTooltipPosition]="'after'"
-								(click)="isMobile ? toggleTooltip(tooltipTitle) : ''"
-								aria-label="ai result info"
-								i18n-aria-label
-								aria-hidden="false"
-								matTooltipClass="web-report-mat-tooltip tooltip-contanier">
-								info
-							</mat-icon>
-						</ng-container>
-						<ng-template #clearSelect>
-							<button class="clear-select-button" mat-icon-button (click)="clearSelectdResult()">
-								<mat-icon class="clear-icon" fontSet="material-icons-outlined">cancel</mat-icon>
-							</button>
-						</ng-template>
+						<mat-icon
+							class="info-icon"
+							fontSet="material-icons-outlined"
+							[tabIndex]="0"
+							#tooltipTitle="matTooltip"
+							[matTooltip]="infoTooltipText"
+							[matTooltipPosition]="'after'"
+							(click)="isMobile ? toggleTooltip(tooltipTitle) : ''"
+							aria-label="ai result info"
+							i18n-aria-label
+							aria-hidden="false"
+							matTooltipClass="web-report-mat-tooltip tooltip-contanier">
+							info
+						</mat-icon>
 					</div>
 				</div>
 				<!-- Description and Grade-Bar -->
 				<div
-					*ngIf="!emptyView && !lockedResults && !selectedMatch && !isMobile"
+					*ngIf="!emptyView && !lockedResults && !isMobile"
 					class="grade-bar-top-container"
 					fxLayout="column"
 					fxLayoutGap="8px">
@@ -70,7 +63,7 @@
 				</div>
 			</div>
 			<div
-				*ngIf="!emptyView && !lockedResults && !selectedMatch && !isMobile"
+				*ngIf="!emptyView && !lockedResults && !isMobile"
 				class="result-header"
 				fxLayout="row"
 				fxLayoutAlign="start center"
@@ -122,8 +115,12 @@
 			<ng-template #showResults>
 				<!-- Desktop view -->
 				<ng-container *ngIf="!isMobile; else mobileView">
-					<div class="desktop-scroll" fxLayout="column">
-						<div class="explain-results" fxLayout="column" *ngFor="let result of explainItemResults; let i = index">
+					<div #desktopScroll class="desktop-scroll" fxLayout="column">
+						<div
+							class="explain-results"
+							[id]="'result-' + i"
+							fxLayout="column"
+							*ngFor="let result of explainItemResults; let i = index">
 							<ng-container *ngTemplateOutlet="templateResult; context: { item: result, index: i }"></ng-container>
 						</div>
 					</div>

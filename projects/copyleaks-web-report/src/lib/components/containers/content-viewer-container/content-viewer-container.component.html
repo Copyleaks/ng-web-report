@@ -1,8 +1,8 @@
 <div @fadeIn *ngIf="!hideTitleContainer && !customTabContent && !showLoadingView" class="title-and-actions-container">
 	<div class="title-container">
 		<span class="title" web-report-title-font>
-			<ng-container *ngIf="reportOrigin != 'suspect'" i18n>
-				<ng-container *ngIf="!submittedDocumentName; else submittedDocumentNameRef">Submitted text</ng-container>
+			<ng-container *ngIf="reportOrigin != 'suspect'">
+				<ng-container *ngIf="!submittedDocumentName; else submittedDocumentNameRef" i18n>Submitted text</ng-container>
 				<ng-template #submittedDocumentNameRef>
 					<div
 						class="submitted-doc-name-container"
@@ -13,7 +13,7 @@
 					</div>
 				</ng-template>
 			</ng-container>
-			<ng-container *ngIf="reportOrigin === 'suspect'" i18n>
+			<ng-container *ngIf="reportOrigin === 'suspect'">
 				<div class="has-masked-content-title">
 					<button
 						mat-icon-button
@@ -27,7 +27,7 @@
 						i18n-aria-label>
 						<mat-icon>info_outline</mat-icon>
 					</button>
-					<span web-report-title-font>Found text</span>
+					<span web-report-title-font i18n>Found text</span>
 				</div>
 			</ng-container>
 		</span>

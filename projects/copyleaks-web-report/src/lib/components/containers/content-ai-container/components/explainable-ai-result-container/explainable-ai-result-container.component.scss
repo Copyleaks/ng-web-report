@@ -261,6 +261,29 @@
 					font-weight: 400;
 					line-height: normal;
 				}
+				.ai-count-container,
+				.human-count-container {
+					background: $color-container-background;
+					padding: 8px 10px;
+					.title {
+						white-space: nowrap;
+						color: $color-black;
+						font-family: 'haboro-soft' !important;
+						font-size: 12px;
+						font-weight: 800;
+						line-height: normal;
+					}
+					.count-result {
+						color: $color-black;
+						font-family: 'haboro-soft' !important;
+						font-size: 12px;
+						font-weight: 500;
+						line-height: normal;
+					}
+				}
+				.human-count-container {
+					border-radius: 0px 0px 6px 6px;
+				}
 			}
 		}
 	}
@@ -325,6 +348,15 @@
 					.ai-count-container,
 					.human-count-container {
 						background: $color-white;
+					}
+				}
+			}
+			@media screen and (max-width: 360px) {
+				width: 300px;
+				.explain-results {
+					width: 300px;
+					mat-accordion {
+						width: 300px;
 					}
 				}
 			}

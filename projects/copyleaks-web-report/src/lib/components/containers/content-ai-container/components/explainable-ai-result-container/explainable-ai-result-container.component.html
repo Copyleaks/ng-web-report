@@ -72,6 +72,7 @@
 					<mat-icon
 						class="info-icon"
 						fontSet="material-icons-outlined"
+						aria-hidden="false"
 						[tabIndex]="0"
 						[matTooltip]="proportionTooltipText"
 						[matTooltipPosition]="'after'"
@@ -309,9 +310,9 @@
 							</div>
 							<span
 								class="content"
-								[class.show-all-text]="isPanelOpen(index)"
+								[class.show-all-text]="isMobile && isPanelOpen(index)"
 								crAIScoreTooltipContent
-								[tooltipText]="item.content"
+								[tooltipText]="isMobile ? '' : item.content"
 								[isResultTitle]="true">
 								{{ item.content }}
 							</span>

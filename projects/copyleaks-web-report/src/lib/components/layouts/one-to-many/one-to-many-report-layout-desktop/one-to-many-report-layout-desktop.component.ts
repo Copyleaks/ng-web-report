@@ -24,6 +24,9 @@ export class OneToManyReportLayoutDesktopComponent
 	@Input() hideWritingFeedback: boolean = false;
 
 	@Input() reportMode: EReportMode;
+
+	@Input() lockedExplainAIResults: boolean = false;
+
 	EReportMode = EReportMode;
 
 	constructor(

@@ -13,7 +13,16 @@ import {
 	ResultPreview,
 } from '../../../models/report-data.models';
 import { PostMessageEvent } from '../../../models/report-iframe-events.models';
-import { Match, MatchType, ResultDetailItem, SlicedMatch } from '../../../models/report-matches.models';
+import {
+	AIScanResult,
+	ExplainableAIResults,
+	ExplainableAIWordTotal,
+	Match,
+	MatchType,
+	ResultDetailItem,
+	SlicedMatch,
+	Range,
+} from '../../../models/report-matches.models';
 import { ICopyleaksReportOptions } from '../../../models/report-options.models';
 import {
 	IMatchesTypeStatistics,
@@ -100,6 +109,16 @@ export abstract class OneToManyReportLayoutBaseComponent extends ReportLayoutBas
 	selectedCustomTabResultSectionContentTemplate: TemplateRef<any>;
 	showOmittedWords: boolean;
 	isPartitalScan: boolean;
+	explainableAI: ExplainableAIResults = { explain: null, slicedMatch: [], sourceText: '' };
+	selectAIText: Range[] = [];
+	loadingExplainableAI: boolean = true;
+	updateProportionRange: boolean = false;
+	aiWordTotal: ExplainableAIWordTotal = {
+		totalExplainableAIWords: 0,
+		lowProportionWord: 0,
+		midProportionWord: 0,
+		highProportionWord: 0,
+	};
 
 	// Subject for destroying all the subscriptions in base component
 	private unsubscribe$ = new Subject();
@@ -223,6 +242,30 @@ export abstract class OneToManyReportLayoutBaseComponent extends ReportLayoutBas
 					}
 				});
 		});
+
+		this.reportDataSvc.scanResultsPreviews$
+			.pipe(distinctUntilChanged())
+			.pipe(takeUntil(this.unsubscribe$))
+			.subscribe(scanResults => {
+				if (scanResults) {
+					const validSelectedAlert = scanResults?.notifications?.alerts?.find(
+						a => a.code === ALERTS.SUSPECTED_AI_TEXT_DETECTED
+					);
+					if (validSelectedAlert) {
+						var scanResult = JSON.parse(validSelectedAlert.additionalData) as AIScanResult;
+						this.explainableAI.explain = scanResult?.explain;
+						if (this.explainableAI?.explain && !this.updateProportionRange) {
+							this._updateProportionRange();
+							this.updateProportionRange = true;
+						}
+					}
+					this.selectAIText = [];
+					setTimeout(() => {
+						this.loadingExplainableAI = false;
+					}, 100);
+				}
+			});
+
 		this.reportDataSvc.writingFeedback$.pipe(takeUntil(this.unsubscribe$)).subscribe(data => {
 			if (data) this.writingFeedback = data;
 			this.showReadabilityLoadingView = !data;
@@ -239,6 +282,7 @@ export abstract class OneToManyReportLayoutBaseComponent extends ReportLayoutBas
 		this.reportDataSvc.crawledVersion$.pipe(takeUntil(this.unsubscribe$)).subscribe(data => {
 			if (data) {
 				this.reportCrawledVersion = data;
+				this.explainableAI.sourceText = data?.text?.value ?? '';
 				this.numberOfPages = data.text?.pages?.startPosition?.length ?? 1;
 				if (
 					(this.reportCrawledVersion?.html?.exclude?.reasons?.filter(r => r === EExcludeReason.PartialScan).length >
@@ -372,7 +416,16 @@ export abstract class OneToManyReportLayoutBaseComponent extends ReportLayoutBas
 			if (data) {
 				this.isLoadingScanContent = false;
 				this.contentTextMatches = data;
-
+				let slicedMatch: SlicedMatch[] = [];
+				this.contentTextMatches.forEach(result => {
+					const explainText = result.filter(re => re.match.type === MatchType.aiExplain);
+					if (explainText.length > 0) {
+						slicedMatch.push(...explainText);
+					}
+				});
+				if (this.explainableAI.slicedMatch.length === 0) {
+					this.explainableAI.slicedMatch = slicedMatch;
+				}
 				if (this.reportViewSvc.reportViewMode?.viewMode === 'writing-feedback') {
 					if (
 						this.writingFeedback &&
@@ -436,13 +489,26 @@ export abstract class OneToManyReportLayoutBaseComponent extends ReportLayoutBas
 		])
 			.pipe(
 				takeUntil(this.unsubscribe$),
-				filter(([, , , content, crawledVersion]) => !content.alertCode && !!crawledVersion)
+				filter(([, , , , crawledVersion]) => !!crawledVersion)
 			)
 			.subscribe(([text, html, multiText, content]) => {
 				if (multiText && multiText.length > 0) {
 					const selectedMatches = multiText.map(c => c.match);
-					if (this.viewMode === 'one-to-many') this._showResultsForMultiSelection(selectedMatches);
-					else if (this.viewMode === 'writing-feedback') {
+					if (this.viewMode === 'one-to-many' || this.viewMode === 'only-ai') {
+						if (this.selectedTap === EReportViewType.AIView) {
+							this.selectAIText = [];
+							this.loadingExplainableAI = true;
+							selectedMatches.forEach(match => {
+								this.selectAIText.push({
+									start: match.start,
+									end: match.end,
+								});
+							});
+							this.loadingExplainableAI = false;
+						} else {
+							this._showResultsForMultiSelection(selectedMatches);
+						}
+					} else if (this.viewMode === 'writing-feedback') {
 						if (selectedMatches.length === 0) this.displayedScanCorrectionsView = this.filteredCorrections;
 						else
 							this.displayedScanCorrectionsView = this.allScanCorrectionsView.filter(sc =>
@@ -452,8 +518,13 @@ export abstract class OneToManyReportLayoutBaseComponent extends ReportLayoutBas
 					}
 				} else {
 					this.focusedMatch = !content.isHtmlView ? text && text.match : html;
-					if (this.viewMode === 'one-to-many') this._showResultsForSelectedMatch(this.focusedMatch);
-					else if (this.viewMode === 'writing-feedback') {
+					if (this.viewMode === 'one-to-many' || this.viewMode === 'only-ai') {
+						if (this.selectedTap === EReportViewType.AIView) {
+							this.selectAIText = [];
+						} else {
+							this._showResultsForSelectedMatch(this.focusedMatch);
+						}
+					} else if (this.viewMode === 'writing-feedback') {
 						if (this.focusedMatch)
 							this.displayedScanCorrectionsView = this.allScanCorrectionsView.filter(
 								sc => this.focusedMatch.start === sc.start && this.focusedMatch.end === sc.end
@@ -526,6 +597,37 @@ export abstract class OneToManyReportLayoutBaseComponent extends ReportLayoutBas
 			default:
 				console.error('unknown event', message);
 		}
+	}
+
+	private _updateProportionRange(): void {
+		let wordsLengths = this.explainableAI?.explain?.patterns?.text?.words?.lengths ?? [];
+		let totalExplainableAIWords = wordsLengths.reduce((accumulator, currentValue) => accumulator + currentValue, 0);
+		let proportions =
+			this.explainableAI.explain?.patterns?.statistics?.proportion.map(num => parseFloat(num.toFixed(0))) ?? [];
+		const proportionsFiltered = proportions.filter(p => p > 0);
+		const min = Number(Math.min(...proportionsFiltered).toFixed(0));
+		const max = Number(Math.max(...proportionsFiltered).toFixed(0));
+		const divider = Number(((max - min) / 3).toFixed(0));
+		let lowProportionWord = 0;
+		let midProportionWord = 0;
+		let highProportionWord = 0;
+		proportions.forEach((value, index) => {
+			if (value == -1) {
+				highProportionWord += wordsLengths[index];
+			} else if (min <= value && value < divider) {
+				lowProportionWord += wordsLengths[index];
+			} else if (divider <= value && value < divider * 2) {
+				midProportionWord += wordsLengths[index];
+			} else if (divider * 2 <= value && value <= max) {
+				highProportionWord += wordsLengths[index];
+			}
+		});
+		this.aiWordTotal = {
+			totalExplainableAIWords,
+			lowProportionWord,
+			midProportionWord,
+			highProportionWord,
+		};
 	}
 
 	private _showResultsForSelectedMatch(selectedMatch: Match | null) {

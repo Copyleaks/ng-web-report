@@ -19,6 +19,7 @@
 		[wordsTotal]="reportStatistics?.total ?? 0"
 		[identicalTotal]="reportStatistics?.identical ?? 0"
 		[minorChangesTotal]="reportStatistics?.minorChanges ?? 0"
+		[aiWordTotal]="aiWordTotal"
 		[paraphrasedTotal]="reportStatistics?.relatedMeaning ?? 0"
 		[excludedTotal]="reportStatistics?.omittedWords ?? 0"
 		[showLoadingView]="
@@ -77,7 +78,10 @@
 	<copyleaks-report-actions-container [showLoadingView]="isLoadingScanContent"></copyleaks-report-actions-container>
 
 	<!-- Report results & alerts container -->
-	<div class="results-alerts-container" [style.overflow]="isLoadingScanResults ? 'hidden' : ''">
+	<div
+		class="results-alerts-container"
+		[class.ai-results-container]="selectedTap === EReportViewType.AIView"
+		[style.overflow]="isLoadingScanResults ? 'hidden' : ''">
 		<ng-container *ngIf="!selectedCustomTabResultSectionContentTemplate; else customResultSectionRef">
 			<cr-assessment-tool-tab-score-panel
 				*ngIf="reportMode === EReportMode.AssessmentTool && selectedTap !== EReportViewType.WritingFeedbackTabView"
@@ -103,12 +107,22 @@
 					viewMode === 'one-to-many'
 				"
 				[class.container-with-custom-results]="reportTemplateMode != undefined"
+				[class.ai-alerts-contanier]="selectedTap === EReportViewType.AIView"
 				[alerts]="alerts"
 				[flexGrow]="25"></copyleaks-report-alerts-container>
 
 			<!-- Report results container -->
 
-			<cr-ai-disclaimer *ngIf="selectedTap === EReportViewType.AIView"></cr-ai-disclaimer>
+			<copyleaks-content-ai-container
+				*ngIf="selectedTap === EReportViewType.AIView"
+				class="ai-results-container"
+				[isLoading]="loadingExplainableAI"
+				[lockedResults]="lockedExplainAIResults"
+				[aiScore]="reportStatistics?.aiScore ?? 0"
+				[wordsTotal]="reportStatistics?.total ?? 0"
+				[excludedTotal]="reportStatistics?.omittedWords ?? 0"
+				[explainableAIResults]="explainableAI"
+				[selectAIText]="selectAIText"></copyleaks-content-ai-container>
 
 			<copyleaks-report-results-container
 				*ngIf="
@@ -149,7 +163,11 @@
 					"></copyleaks-report-corrections-container>
 			</ng-container>
 
-			<div class="custom-results-container" #customResultView [style.flex-grow]="'1'">
+			<div
+				class="custom-results-container"
+				*ngIf="selectedTap !== EReportViewType.AIView"
+				#customResultView
+				[style.flex-grow]="'1'">
 				<ng-container *ngTemplateOutlet="customResultsTemplate ?? null"></ng-container>
 			</div>
 		</ng-container>

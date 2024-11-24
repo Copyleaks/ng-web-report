@@ -61,7 +61,7 @@
 								{{ hidePlagarismTap && showDisabledProducts ? 'N/A' : (plagarismScore | percent : '1.0-1') }}
 							</span>
 						</div>
-						<div class="grade-bar">
+						<div class="grade-bar plagiarism-grade-bar">
 							<div class="bar plagiarism" [style.width.%]="100">
 								<div
 									class="identical"
@@ -175,11 +175,36 @@
 								{{ hideAiTap && showDisabledProducts ? 'N/A' : (totalAiWords / wordsTotal | percent : '1.0-1') }}
 							</span>
 						</div>
-						<div *ngIf="!isMobile" class="grade-bar">
-							<div
-								class="bar ai-content"
-								[style.width.%]="(totalAiWords / wordsTotal) * 100"
-								[style.border]="!(totalAiWords / wordsTotal) ? 'none' : ''"></div>
+						<div *ngIf="!isMobile" class="grade-bar ai-grade-bar">
+							<div class="bar ai-bar" [style.width.%]="100">
+								<div
+									fxLayout="row"
+									class="proportion-bar"
+									[style.width.%]="(aiWordTotal.totalExplainableAIWords / totalAiWords) * 100">
+									<div
+										class="ai-low-proportion"
+										[style.width.%]="(aiWordTotal.lowProportionWord / aiWordTotal.totalExplainableAIWords) * 100"
+										[style.border]="!aiWordTotal.lowProportionWord ? 'none' : ''"
+										[class.first-percentage]="!!aiWordTotal.lowProportionWord"
+										[class.last-percentage]="!aiWordTotal.midProportionWord && !aiWordTotal.highProportionWord"></div>
+									<div
+										class="ai-medium-proportion"
+										[style.width.%]="(aiWordTotal.midProportionWord / aiWordTotal.totalExplainableAIWords) * 100"
+										[style.border]="!aiWordTotal.midProportionWord ? 'none' : ''"
+										[class.first-percentage]="!aiWordTotal.lowProportionWord"
+										[class.last-percentage]="!aiWordTotal.highProportionWord"></div>
+									<div
+										class="ai-high-proportion"
+										[style.width.%]="(aiWordTotal.highProportionWord / aiWordTotal.totalExplainableAIWords) * 100"
+										[style.border]="!aiWordTotal.highProportionWord ? 'none' : ''"
+										[class.first-percentage]="!aiWordTotal.lowProportionWord && !aiWordTotal.midProportionWord"
+										[class.last-percentage]="!!aiWordTotal.highProportionWord"></div>
+								</div>
+								<div
+									class="bar ai-content"
+									[style.width.%]="(totalAiWords / wordsTotal) * 100"
+									[style.border]="!(totalAiWords / wordsTotal) ? 'none' : ''"></div>
+							</div>
 						</div>
 					</ng-container>
 					<ng-template #mobileViewRef>

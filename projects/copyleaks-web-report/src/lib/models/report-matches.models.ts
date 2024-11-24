@@ -39,6 +39,8 @@ export interface Match extends Range {
 	wrongText?: string;
 	/** The corrected text */
 	correctionText?: string;
+	/** The proportion type of explain ai */
+	proportionType?: EProportionType;
 }
 
 /**
@@ -51,6 +53,7 @@ export enum MatchType {
 	relatedMeaning = 2,
 	writingFeedback = 3,
 	aiText = 4,
+	aiExplain = 6,
 	none = 5,
 
 	// custom
@@ -98,10 +101,67 @@ export type ContentKey = 'text' | 'html';
 /** possible key options for results ranges */
 export type MatchUnit = 'chars' | 'words';
 
+export interface AIExplainResult {
+	start: number[];
+	end: number[];
+	length: number[];
+}
+
+export interface AIExplainResultItem {
+	content: string;
+	proportionType: EProportionType;
+	aiCount: number;
+	humanCount: number;
+	proportion: number;
+	isInfinity?: boolean;
+	start: number;
+	end: number;
+}
+
+export interface ExplainableAIResults {
+	explain?: AIExplainPattern;
+	slicedMatch?: SlicedMatch[];
+	sourceText: string;
+}
+
+export interface ExplainableAIWordTotal {
+	totalExplainableAIWords: number;
+	lowProportionWord: number;
+	midProportionWord: number;
+	highProportionWord: number;
+}
+
 export interface AIScanResult {
 	results: AIScanResultItem[];
 	summary: AIScanResultSummary;
 	scannedDocument: AIScannedDocument;
+	explain: AIExplainPattern;
+}
+
+export interface AIExplainPattern {
+	patterns: {
+		statistics: AIPatternStatistics;
+		text: {
+			chars: AIScanResultMatchChar;
+			words: AIScanResultMatchChar;
+		};
+		html: {
+			chars: AIScanResultMatchHtml;
+			words: AIScanResultMatchHtml;
+		};
+	};
+}
+
+export interface AIPatternStatistics {
+	aiCount: number[];
+	humanCount: number[];
+	proportion: number[];
+}
+
+export enum EProportionType {
+	Low = 'low',
+	Medium = 'medium',
+	High = 'high',
 }
 
 export interface AIScannedDocument {
@@ -137,6 +197,12 @@ export interface AIScanResultMatch {
 export interface AIScanResultMatchChar {
 	starts: number[];
 	lengths: number[];
+}
+
+export interface AIScanResultMatchHtml {
+	starts: number[];
+	lengths: number[];
+	groupIds: number[];
 }
 
 export interface AIMatch extends Match {

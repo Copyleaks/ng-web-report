@@ -167,7 +167,7 @@
 		}
 
 		&.ai {
-			background-color: $color-ai-detected-text;
+			background-color: $color-light-ai-detected-text;
 		}
 
 		&.human {
@@ -378,10 +378,10 @@
 
 			&.ai {
 				border-radius: 10px;
-				border: 1px solid $color-ai-detected-text;
+				border: 1px solid $color-light-ai-detected-text;
 				.match-type-bar-pct {
 					border-radius: 10px;
-					background: $color-ai-detected-text;
+					background: $color-light-ai-detected-text;
 					box-shadow: 0px -4px 2px 0px rgba(0, 0, 0, 0.04) inset;
 				}
 			}

@@ -45,8 +45,6 @@
 			[readabilityInfo]="writingFeedback?.score?.readability"
 			[isMobile]="true"></cr-readability-score>
 
-		<cr-ai-disclaimer *ngIf="selectedTap === EReportViewType.AIView"></cr-ai-disclaimer>
-
 		<!-- Report scan content section -->
 		<div class="content-section">
 			<!-- Report scan content tabs -->
@@ -61,6 +59,7 @@
 				[totalWritingFeedbackIssues]="reportStatistics?.writingFeedbackOverallIssues"
 				[selectedTap]="selectedTap"
 				[plagarismScore]="plagiarismScore"
+				[aiWordTotal]="aiWordTotal"
 				[aiScore]="reportStatistics?.aiScore ?? 0"
 				[wordsTotal]="reportStatistics?.total ?? 0"
 				[identicalTotal]="reportStatistics?.identical ?? 0"
@@ -113,12 +112,25 @@
 <div style="display: flex; flex-direction: column; flex-shrink: 0; gap: 8px">
 	<ng-container *ngIf="!selectedCustomTabResultSectionContentTemplate; else customResultSectionRef">
 		<!-- Report results -->
+		<copyleaks-content-ai-container
+			*ngIf="selectedTap === EReportViewType.AIView"
+			class="ai-results-container"
+			[isMobile]="true"
+			[isLoading]="loadingExplainableAI"
+			[lockedResults]="lockedExplainAIResults"
+			[aiScore]="reportStatistics?.aiScore ?? 0"
+			[wordsTotal]="reportStatistics?.total ?? 0"
+			[excludedTotal]="reportStatistics?.omittedWords ?? 0"
+			[explainableAIResults]="explainableAI"
+			[selectAIText]="selectAIText"></copyleaks-content-ai-container>
+
 		<copyleaks-report-results-container
 			*ngIf="
 				((selectedTap !== EReportViewType.AIView && selectedTap !== EReportViewType.WritingFeedbackTabView) ||
 					reportTemplateMode === ECustomResultsReportView.Partial ||
 					reportTemplateMode === ECustomResultsReportView.Full) &&
-				viewMode === 'one-to-many'
+				viewMode === 'one-to-many' &&
+				selectedTap === EReportViewType.PlagiarismView
 			"
 			class="results-container"
 			[flexGrow]="15"

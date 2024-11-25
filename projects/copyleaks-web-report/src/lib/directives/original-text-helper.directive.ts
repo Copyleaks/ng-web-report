@@ -390,7 +390,9 @@ export class OriginalTextHelperDirective implements AfterContentInit, OnDestroy 
 				withLatestFrom(reportViewMode$),
 				filter(
 					([correctionSelect, viewModeData]) =>
-						correctionSelect && viewModeData.viewMode === 'one-to-many' && !viewModeData.isHtmlView
+						correctionSelect &&
+						(viewModeData.viewMode === 'one-to-many' || viewModeData.viewMode === 'only-ai') &&
+						!viewModeData.isHtmlView
 				)
 			)
 			.subscribe(([aiInsightsSelect, _]) => {

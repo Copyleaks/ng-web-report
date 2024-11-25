@@ -41,8 +41,8 @@
 			.grade-bar-top-container {
 				.title {
 					color: $color-black;
-					font-family: 'haboro-soft';
-					font-size: 13px;
+					font-family: 'haboro-soft' !important;
+					font-size: 12px;
 					font-weight: 800;
 				}
 				.grade-bar-container {

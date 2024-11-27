@@ -37,7 +37,12 @@
 					color: #0517a6;
 				}
 			}
-
+			.header-description {
+				color: $color-black;
+				font-family: 'haboro-soft' !important;
+				font-size: 14px;
+				font-weight: 500;
+			}
 			.grade-bar-top-container {
 				.title {
 					color: $color-black;

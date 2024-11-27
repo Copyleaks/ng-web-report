@@ -5,7 +5,7 @@
 				class="header-container"
 				[class.header-container-mobile]="isMobile && !lockedResults"
 				fxLayout="column"
-				fxLayoutGap="16px">
+				fxLayoutGap="4px">
 				<!-- Header -->
 				<div *ngIf="!emptyView" class="header" fxLayout="row" fxLayoutAlign="space-between center">
 					<span class="title">
@@ -32,33 +32,35 @@
 					</div>
 				</div>
 				<!-- Description and Grade-Bar -->
-				<div
-					*ngIf="!emptyView && !lockedResults && !isMobile"
-					class="grade-bar-top-container"
-					fxLayout="column"
-					fxLayoutGap="8px">
-					<span class="title" i18n>Frequency of phrases in AI vs human text.</span>
-					<div
-						class="grade-bar-container"
-						tabindex="0"
-						crAIScoreTooltipContent
-						[isTooltipBar]="true"
-						[tooltipText]="barTooltipText"
-						fxLayout="row"
-						fxLayoutAlign="start center"
-						fxLayoutGap="16px">
-						<span class="min-proportion">{{ minProportion.toLocaleString() }}x</span>
-						<div class="grade-bar" fxLayout="row">
-							<div class="min-result" [style.width]="minGradeBar + '%'"></div>
-							<div class="mid-result" [style.width]="midGradeBar + '%'"></div>
-							<div class="max-result" [style.width]="maxGradeBar + '%'"></div>
+				<div *ngIf="!emptyView && !lockedResults && !isMobile" fxLayout="column" fxLayoutGap="16px">
+					<span class="header-description" i18n>
+						GenAI often overuses certain phrases learned during training, which is one of dozens of signals used to
+						identify AI text.
+					</span>
+					<div class="grade-bar-top-container" fxLayout="column" fxLayoutGap="8px">
+						<span class="title" i18n>The number of times a phrase was found more frequently in AI vs human text.</span>
+						<div
+							class="grade-bar-container"
+							tabindex="0"
+							crAIScoreTooltipContent
+							[isTooltipBar]="true"
+							[tooltipText]="barTooltipText"
+							fxLayout="row"
+							fxLayoutAlign="start center"
+							fxLayoutGap="16px">
+							<span class="min-proportion">{{ minProportion.toLocaleString() }}x</span>
+							<div class="grade-bar" fxLayout="row">
+								<div class="min-result" [style.width]="minGradeBar + '%'"></div>
+								<div class="mid-result" [style.width]="midGradeBar + '%'"></div>
+								<div class="max-result" [style.width]="maxGradeBar + '%'"></div>
+							</div>
+							<ng-container *ngIf="hasInfinityResult; else maxResult">
+								<span class="max-proportion">10,000x</span>
+							</ng-container>
+							<ng-template #maxResult>
+								<span class="max-proportion">{{ maxProportion.toLocaleString() }}x</span>
+							</ng-template>
 						</div>
-						<ng-container *ngIf="hasInfinityResult; else maxResult">
-							<span class="max-proportion">10,000x</span>
-						</ng-container>
-						<ng-template #maxResult>
-							<span class="max-proportion">{{ maxProportion.toLocaleString() }}x</span>
-						</ng-template>
 					</div>
 				</div>
 			</div>

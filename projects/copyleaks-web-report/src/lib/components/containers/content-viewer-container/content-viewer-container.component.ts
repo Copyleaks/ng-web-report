@@ -963,6 +963,10 @@ export class ContentViewerContainerComponent implements OnInit, AfterViewInit, O
 			let left = spanRect.right - this.contentText.nativeElement.getBoundingClientRect().left;
 			let top = spanRect.top - this.contentText.nativeElement.getBoundingClientRect().top;
 
+			if (top + spanRect.height / 2 < 40) {
+				avatarContainer.style.borderRadius = '0px 32px 32px 32px';
+				top = top + spanRect.height;
+			}
 			if (left + 40 > contentTextRect.width) {
 				left = contentTextRect.width - 40;
 			}

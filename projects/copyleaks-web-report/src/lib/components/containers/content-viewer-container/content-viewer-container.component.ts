@@ -583,6 +583,12 @@ export class ContentViewerContainerComponent implements OnInit, AfterViewInit, O
 
 	changeContentDirection(direction: ReportContentDirectionMode) {
 		this.contentDirection = direction;
+
+		this._cdr.detectChanges();
+
+		setTimeout(() => {
+			this.refreshCustomMatchesAvatars();
+		}, 500);
 	}
 
 	/**

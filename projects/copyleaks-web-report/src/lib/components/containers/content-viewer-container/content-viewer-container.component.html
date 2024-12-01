@@ -356,7 +356,10 @@
 						'left.px': iconPosition.left,
 						display: iconVisible ? 'flex' : 'none'
 					}"
-					(mouseup)="addCustomMatchBtnClick($event)">
+					(mouseup)="addCustomMatchBtnClick($event)"
+					matTooltip="Add annotation"
+					matTooltipClass="web-report-mat-tooltip"
+					i18n-matTooltip>
 					<mat-icon fontSet="material-icons-round">add</mat-icon>
 				</div>
 			</div>

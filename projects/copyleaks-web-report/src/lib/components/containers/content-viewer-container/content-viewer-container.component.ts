@@ -280,6 +280,7 @@ export class ContentViewerContainerComponent implements OnInit, AfterViewInit, O
 		text: string;
 		pageNumber: number;
 		submitterEmail: string;
+		isRead: boolean;
 	}[][];
 
 	@Input() customViewMatcheClassName: string = 'copyleaks-highlight';
@@ -946,6 +947,12 @@ export class ContentViewerContainerComponent implements OnInit, AfterViewInit, O
 					scrollViewOffsetTop: rect.top + 'px',
 				};
 				this.onTextMatchSelectionEvent.emit(customMatchEvent);
+				selectedCustomMatch.isRead = true;
+
+				// Remove unread dot
+				document
+					.querySelectorAll('.custom-view-avatar-container[data-id="' + customMatchId + '"] .unread-dot')
+					?.forEach(e => e.remove());
 			});
 			this.customMatchesWithEventListenersIds.push(customMatchId);
 		});
@@ -1008,6 +1015,28 @@ export class ContentViewerContainerComponent implements OnInit, AfterViewInit, O
 			img.alt = 'User Avatar';
 			img.className = 'custom-view-avatar';
 			avatarContainer.appendChild(img);
+
+			if (!customMatch.isRead) {
+				const unreadDotElement = document.createElement('div');
+				unreadDotElement.className = 'unread-dot';
+
+				unreadDotElement.style.display = 'flex';
+				unreadDotElement.style.width = '8px';
+				unreadDotElement.style.height = '8px';
+				unreadDotElement.style.padding = '2px';
+				unreadDotElement.style.flexDirection = 'column';
+				unreadDotElement.style.justifyContent = 'center';
+				unreadDotElement.style.alignItems = 'center';
+				unreadDotElement.style.borderRadius = '8px';
+				unreadDotElement.style.background = '#FD7366';
+				unreadDotElement.style.boxShadow = '-1px 1px 2px 0px rgba(0, 0, 0, 0.25)';
+				unreadDotElement.style.position = 'absolute';
+				unreadDotElement.style.right = '-2px';
+				unreadDotElement.style.top = '-2px';
+
+				// Append the dot element to the avatarContainer
+				avatarContainer.appendChild(unreadDotElement);
+			}
 
 			this.contentText.nativeElement.appendChild(avatarContainer);
 

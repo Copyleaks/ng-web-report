@@ -25,6 +25,7 @@ export class OriginalTextHelperDirective implements AfterContentInit, OnDestroy 
 			end: number;
 			pageNumber: number;
 			submitterEmail: string;
+			isRead: boolean;
 		}[][];
 		customViewMatcheClassName;
 		onTextMatchSelectionEvent: EventEmitter<TextMatchHighlightEvent | any>;

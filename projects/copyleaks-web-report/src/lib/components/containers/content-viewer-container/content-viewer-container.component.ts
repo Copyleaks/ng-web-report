@@ -272,6 +272,8 @@ export class ContentViewerContainerComponent implements OnInit, AfterViewInit, O
 
 	@Input() currentUserEmail: string;
 
+	@Input() defaultAvatarUrl: string = 'https://lti.copyleaks.com/assets/images/default-avatar.png';
+
 	@Input() customViewMatchesData: {
 		id: string;
 		parentId: string;
@@ -767,7 +769,7 @@ export class ContentViewerContainerComponent implements OnInit, AfterViewInit, O
 	async getCustomMatchGravatarUrlByEmailAddress(email: string): Promise<string> {
 		// If the email is null, undefined, or only contains spaces, return the default image
 		if (!email || email.trim() === '') {
-			return 'https://copyleaks.com/wp-content/uploads/2023/01/logom.png';
+			return this.defaultAvatarUrl;
 		}
 
 		// Generate the email hash for Gravatar
@@ -786,7 +788,7 @@ export class ContentViewerContainerComponent implements OnInit, AfterViewInit, O
 
 			// If the avatar does not exist or cannot be loaded, resolve with the default image URL
 			img.onerror = () => {
-				resolve('https://copyleaks.com/wp-content/uploads/2023/01/logom.png');
+				resolve(this.defaultAvatarUrl);
 			};
 		});
 	}

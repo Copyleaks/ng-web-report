@@ -1046,7 +1046,7 @@ export class ContentViewerContainerComponent implements OnInit, AfterViewInit, O
 		}
 	}
 
-	showAddCustomMatchIcon(_: MouseEvent): void {
+	showAddCustomMatchIcon(event: MouseEvent): void {
 		if (!this.allowCustomViewAddBtn) return;
 		const selection = window.getSelection();
 		if (selection && selection.rangeCount > 0) {
@@ -1057,9 +1057,9 @@ export class ContentViewerContainerComponent implements OnInit, AfterViewInit, O
 					return;
 				}
 
-				const rect = range.getBoundingClientRect();
-				this.iconPosition.top = rect.bottom - this.contentText.nativeElement.getBoundingClientRect().top;
-				this.iconPosition.left = rect.right - this.contentText.nativeElement.getBoundingClientRect().left;
+				// const rect = range.getBoundingClientRect();
+				this.iconPosition.top = event.y - this.contentText.nativeElement.getBoundingClientRect().top;
+				this.iconPosition.left = event.x - this.contentText.nativeElement.getBoundingClientRect().left;
 				this.iconVisible = true;
 
 				const contentTextRect = this.contentText?.nativeElement.getBoundingClientRect();

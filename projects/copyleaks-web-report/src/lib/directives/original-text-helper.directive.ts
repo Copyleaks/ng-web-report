@@ -206,7 +206,7 @@ export class OriginalTextHelperDirective implements AfterContentInit, OnDestroy 
 			matchPages.forEach(page => {
 				if (this.host.currentPage === page + 1) {
 					const components = this.children.toArray();
-					const comp = components.find(comp => comp?.match?.start <= match.start && comp?.match?.end >= match.end);
+					const comp = components.find(comp => comp?.match?.start >= match.start && comp?.match?.end <= match.end);
 					this.highlightService.textMatchClicked({
 						elem: comp,
 						broadcast: false,
@@ -218,7 +218,7 @@ export class OriginalTextHelperDirective implements AfterContentInit, OnDestroy 
 					this.host.currentPage = page + 1;
 					this.children.changes.pipe(take(1)).subscribe(() => {
 						const components = this.children.toArray();
-						const comp = components.find(comp => comp?.match?.start <= match.start && comp?.match?.end >= match.end);
+						const comp = components.find(comp => comp?.match?.start >= match.start && comp?.match?.end <= match.end);
 						this.highlightService.textMatchClicked({
 							elem: comp,
 							broadcast: false,
@@ -247,11 +247,11 @@ export class OriginalTextHelperDirective implements AfterContentInit, OnDestroy 
 			matchPages.forEach(page => {
 				if (this.host.currentPage === page + 1) {
 					const components = this.children.toArray();
-					components.find(comp => comp?.match?.start <= match.start && comp?.match?.end >= match.end).focused = false;
+					components.find(comp => comp?.match?.start >= match.start && comp?.match?.end <= match.end).focused = false;
 				} else {
 					this.children.changes.pipe(take(1)).subscribe(() => {
 						const components = this.children.toArray();
-						components.find(comp => comp?.match?.start <= match.start && comp?.match?.end >= match.end).focused = false;
+						components.find(comp => comp?.match?.start >= match.start && comp?.match?.end <= match.end).focused = false;
 					});
 				}
 			});
@@ -291,7 +291,7 @@ export class OriginalTextHelperDirective implements AfterContentInit, OnDestroy 
 		for (let page = 0; page < contentTextMatches.length; page++) {
 			for (let index = 0; index < contentTextMatches[page].length; index++) {
 				const slicedMatch = contentTextMatches[page][index];
-				if (slicedMatch.match.start <= start && slicedMatch.match.end >= end) {
+				if (slicedMatch.match.start >= start && slicedMatch.match.end <= end) {
 					matchePages.push(page);
 				}
 				if (slicedMatch.match.start > end) {

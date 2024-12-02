@@ -45,7 +45,7 @@ import { filter } from 'rxjs/operators';
 import * as rangy from 'rangy';
 import * as rangyclassapplier from 'rangy/lib/rangy-classapplier';
 
-import { MD5 } from 'crypto-js';
+import { md5 } from 'hash-wasm';
 
 @Component({
 	selector: 'copyleaks-content-viewer-container',
@@ -270,7 +270,20 @@ export class ContentViewerContainerComponent implements OnInit, AfterViewInit, O
 
 	@Input() customIframeScript: string;
 
-	@Input() customViewMatchesData: { id: string; start: number; end: number; text: string; pageNumber: number }[][];
+	@Input() currentUserEmail: string;
+
+	@Input() defaultAvatarUrl: string = 'https://lti.copyleaks.com/assets/images/default-avatar.png';
+
+	@Input() customViewMatchesData: {
+		id: string;
+		parentId: string;
+		start: number;
+		end: number;
+		text: string;
+		pageNumber: number;
+		submitterEmail: string;
+		isRead: boolean;
+	}[][];
 
 	@Input() customViewMatcheClassName: string = 'copyleaks-highlight';
 
@@ -455,6 +468,7 @@ export class ContentViewerContainerComponent implements OnInit, AfterViewInit, O
 			if (this.customViewMatchesData)
 				setTimeout(() => {
 					this.customViewMatchesData[this.currentPage - 1].forEach(customMatch => {
+						if (customMatch.parentId) return;
 						this.highlightCustomMatchText(customMatch);
 					});
 				}, 1000);
@@ -478,6 +492,7 @@ export class ContentViewerContainerComponent implements OnInit, AfterViewInit, O
 			if (this.customViewMatchesData)
 				setTimeout(() => {
 					this.customViewMatchesData[this.currentPage - 1].forEach(customMatch => {
+						if (customMatch.parentId) return;
 						this.highlightCustomMatchText(customMatch);
 					});
 				}, 1000);
@@ -571,6 +586,12 @@ export class ContentViewerContainerComponent implements OnInit, AfterViewInit, O
 
 	changeContentDirection(direction: ReportContentDirectionMode) {
 		this.contentDirection = direction;
+
+		this._cdr.detectChanges();
+
+		setTimeout(() => {
+			this.refreshCustomMatchesAvatars();
+		}, 500);
 	}
 
 	/**
@@ -648,6 +669,7 @@ export class ContentViewerContainerComponent implements OnInit, AfterViewInit, O
 				this.hideAddCustomMatchIcon();
 				this.refreshCustomMatchesAvatars();
 				this.customViewMatchesData[this.currentPage - 1].forEach(customMatch => {
+					if (customMatch.parentId) return;
 					this.highlightCustomMatchText(customMatch);
 				});
 			});
@@ -744,10 +766,31 @@ export class ContentViewerContainerComponent implements OnInit, AfterViewInit, O
 		this.onTextMatchSelectionEvent.emit(selectTextEvent);
 	}
 
-	getCustomMatchGravatarUrlByEmailAddress(email: string = ''): string {
-		const emailHash = email === '' ? email : MD5(email.trim().toLowerCase()).toString();
-		// TODO add default image
-		return `https://www.gravatar.com/avatar/${emailHash}`;
+	async getCustomMatchGravatarUrlByEmailAddress(email: string): Promise<string> {
+		// If the email is null, undefined, or only contains spaces, return the default image
+		if (!email || email.trim() === '') {
+			return this.defaultAvatarUrl;
+		}
+
+		// Generate the email hash for Gravatar
+		const emailHash = await md5(email.trim().toLowerCase());
+		let gravatarUrl = `https://www.gravatar.com/avatar/${emailHash}?d=404`;
+
+		// Create an Image element to check if the avatar exists
+		return new Promise(resolve => {
+			const img = new Image();
+			img.src = gravatarUrl;
+
+			// If the avatar exists, resolve with the Gravatar URL
+			img.onload = () => {
+				resolve(gravatarUrl);
+			};
+
+			// If the avatar does not exist or cannot be loaded, resolve with the default image URL
+			img.onerror = () => {
+				resolve(this.defaultAvatarUrl);
+			};
+		});
 	}
 
 	// Generate a unique ID for each customMatch
@@ -766,7 +809,14 @@ export class ContentViewerContainerComponent implements OnInit, AfterViewInit, O
 		if (!selectedText) return;
 		var end = start + selectedText.length;
 
-		return { id: this.generateCustomMatchId(), start: start, end: end, text: selectedText, pageNumber: 0 };
+		return {
+			id: this.generateCustomMatchId(),
+			start: start,
+			end: end,
+			text: selectedText,
+			pageNumber: this.currentPage,
+			submitterEmail: this.currentUserEmail,
+		};
 	}
 
 	// Function to create and display customMatch
@@ -899,12 +949,18 @@ export class ContentViewerContainerComponent implements OnInit, AfterViewInit, O
 					scrollViewOffsetTop: rect.top + 'px',
 				};
 				this.onTextMatchSelectionEvent.emit(customMatchEvent);
+				selectedCustomMatch.isRead = true;
+
+				// Remove unread dot
+				document
+					.querySelectorAll('.custom-view-avatar-container[data-id="' + customMatchId + '"] .unread-dot')
+					?.forEach(e => e.remove());
 			});
 			this.customMatchesWithEventListenersIds.push(customMatchId);
 		});
 	}
 
-	attachHighlightAvatar(customMatchId) {
+	async attachHighlightAvatar(customMatchId) {
 		if (this.customMatchesWithAvatarsIds.includes(customMatchId)) return;
 		const elements = document.querySelectorAll(
 			'.' + this.customViewMatcheClassName + '[data-id="' + customMatchId + '"]'
@@ -922,6 +978,10 @@ export class ContentViewerContainerComponent implements OnInit, AfterViewInit, O
 			let left = spanRect.right - this.contentText.nativeElement.getBoundingClientRect().left;
 			let top = spanRect.top - this.contentText.nativeElement.getBoundingClientRect().top;
 
+			if (top + 5 < 40) {
+				avatarContainer.style.borderRadius = '0px 32px 32px 32px';
+				top = top + spanRect.height;
+			}
 			if (left + 40 > contentTextRect.width) {
 				left = contentTextRect.width - 40;
 			}
@@ -949,10 +1009,36 @@ export class ContentViewerContainerComponent implements OnInit, AfterViewInit, O
 			});
 
 			const img = document.createElement('img');
-			img.src = this.getCustomMatchGravatarUrlByEmailAddress();
+			// get the email address from the selected text
+			const customMatch = this.customViewMatchesData[this.currentPage - 1].find(
+				customMatch => customMatch.id === customMatchId
+			);
+			img.src = await this.getCustomMatchGravatarUrlByEmailAddress(customMatch.submitterEmail);
 			img.alt = 'User Avatar';
 			img.className = 'custom-view-avatar';
 			avatarContainer.appendChild(img);
+
+			if (!customMatch.isRead) {
+				const unreadDotElement = document.createElement('div');
+				unreadDotElement.className = 'unread-dot';
+
+				unreadDotElement.style.display = 'flex';
+				unreadDotElement.style.width = '8px';
+				unreadDotElement.style.height = '8px';
+				unreadDotElement.style.padding = '2px';
+				unreadDotElement.style.flexDirection = 'column';
+				unreadDotElement.style.justifyContent = 'center';
+				unreadDotElement.style.alignItems = 'center';
+				unreadDotElement.style.borderRadius = '8px';
+				unreadDotElement.style.background = '#FD7366';
+				unreadDotElement.style.boxShadow = '-1px 1px 2px 0px rgba(0, 0, 0, 0.25)';
+				unreadDotElement.style.position = 'absolute';
+				unreadDotElement.style.right = '-2px';
+				unreadDotElement.style.top = '-2px';
+
+				// Append the dot element to the avatarContainer
+				avatarContainer.appendChild(unreadDotElement);
+			}
 
 			this.contentText.nativeElement.appendChild(avatarContainer);
 
@@ -960,7 +1046,7 @@ export class ContentViewerContainerComponent implements OnInit, AfterViewInit, O
 		}
 	}
 
-	showAddCustomMatchIcon(_: MouseEvent): void {
+	showAddCustomMatchIcon(event: MouseEvent): void {
 		if (!this.allowCustomViewAddBtn) return;
 		const selection = window.getSelection();
 		if (selection && selection.rangeCount > 0) {
@@ -971,9 +1057,9 @@ export class ContentViewerContainerComponent implements OnInit, AfterViewInit, O
 					return;
 				}
 
-				const rect = range.getBoundingClientRect();
-				this.iconPosition.top = rect.bottom - this.contentText.nativeElement.getBoundingClientRect().top;
-				this.iconPosition.left = rect.right - this.contentText.nativeElement.getBoundingClientRect().left;
+				// const rect = range.getBoundingClientRect();
+				this.iconPosition.top = event.y - this.contentText.nativeElement.getBoundingClientRect().top;
+				this.iconPosition.left = event.x - this.contentText.nativeElement.getBoundingClientRect().left;
 				this.iconVisible = true;
 
 				const contentTextRect = this.contentText?.nativeElement.getBoundingClientRect();

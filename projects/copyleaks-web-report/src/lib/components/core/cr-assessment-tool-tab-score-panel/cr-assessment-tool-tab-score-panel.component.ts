@@ -73,6 +73,8 @@ export class CrAssessmentToolTabScorePanelComponent implements OnInit, OnChanges
 
 	EXPAND_TOOLTIP = $localize`Expand`;
 	COLLAPSE_TOOLTIP = $localize`Collapse`;
+	MATCHED_TEXT_TITLE = $localize`Matched Text`;
+	AI_CONTENT_TITLE = $localize`AI Content `;
 
 	EReportScoreTooltipView = EReportScoreTooltipView;
 	EReportViewType = EReportViewType;

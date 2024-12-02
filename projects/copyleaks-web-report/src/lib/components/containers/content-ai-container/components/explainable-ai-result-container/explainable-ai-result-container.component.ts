@@ -101,10 +101,11 @@ export class ExplainableAIResultContainerComponent implements OnInit, OnChanges 
 		if (!this.isLoading) this._initResults();
 		this.reportMatchesSvc.aiInsightsShowResult$.subscribe((selectResult: ISelectExplainableAIResult) => {
 			if (selectResult) {
+				const selectIndex = this.explainItemResults.findIndex(
+					result => result.start <= selectResult.resultRange.start && selectResult.resultRange.end <= result.end
+				);
+				if (selectIndex === -1) return;
 				if (selectResult.isSelected) {
-					const selectIndex = this.explainItemResults.findIndex(
-						result => result.start <= selectResult.resultRange.start && selectResult.resultRange.end <= result.end
-					);
 					if (this.isMobile) {
 						this.scrollToIndex(selectIndex);
 						setTimeout(() => {
@@ -120,10 +121,6 @@ export class ExplainableAIResultContainerComponent implements OnInit, OnChanges 
 						}, 350);
 					}
 				} else {
-					const selectIndex = this.explainItemResults.findIndex(
-						result => result.start <= selectResult.resultRange.start && selectResult.resultRange.end <= result.end
-					);
-
 					this.panels.toArray()[selectIndex].close();
 				}
 			}

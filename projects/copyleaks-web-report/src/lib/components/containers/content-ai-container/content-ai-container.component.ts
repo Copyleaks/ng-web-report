@@ -1,6 +1,7 @@
 import { Component, Input, OnChanges, OnInit, SimpleChanges } from '@angular/core';
-import { ExplainableAIResults, Range } from '../../../models/report-matches.models';
+import { ExplainableAIResults } from '../../../models/report-matches.models';
 import { ReportMatchHighlightService } from '../../../services/report-match-highlight.service';
+import { ReportMatchesService } from '../../../services/report-matches.service';
 
 @Component({
 	selector: 'copyleaks-content-ai-container',
@@ -44,16 +45,11 @@ export class ContentAiContainerComponent implements OnInit, OnChanges {
 	@Input() explainableAIResults: ExplainableAIResults;
 
 	/**
-	 * @Input {number[]} The start character index of the selected text
-	 */
-	@Input() selectAIText: Range[] = [];
-
-	/**
 	 * {number} The AI percentage result
 	 */
 	aiPercentageResult: number = 0;
 
-	constructor(private _highlightService: ReportMatchHighlightService) {}
+	constructor(private _highlightService: ReportMatchHighlightService, public reportMatchesSvc: ReportMatchesService) {}
 
 	ngOnChanges(changes: SimpleChanges): void {
 		if (changes['isLoading']?.currentValue == false) {

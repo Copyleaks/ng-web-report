@@ -59,7 +59,6 @@
 				[totalWritingFeedbackIssues]="reportStatistics?.writingFeedbackOverallIssues"
 				[selectedTap]="selectedTap"
 				[plagarismScore]="plagiarismScore"
-				[aiWordTotal]="aiWordTotal"
 				[aiScore]="reportStatistics?.aiScore ?? 0"
 				[wordsTotal]="reportStatistics?.total ?? 0"
 				[identicalTotal]="reportStatistics?.identical ?? 0"
@@ -121,8 +120,7 @@
 			[aiScore]="reportStatistics?.aiScore ?? 0"
 			[wordsTotal]="reportStatistics?.total ?? 0"
 			[excludedTotal]="reportStatistics?.omittedWords ?? 0"
-			[explainableAIResults]="explainableAI"
-			[selectAIText]="selectAIText"></copyleaks-content-ai-container>
+			[explainableAIResults]="explainableAI"></copyleaks-content-ai-container>
 
 		<copyleaks-report-results-container
 			*ngIf="

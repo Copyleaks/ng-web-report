@@ -480,7 +480,9 @@
 							<circle cx="4.5" cy="4.5" r="4" fill="#6512D2" />
 						</svg>
 						<ng-container *ngIf="!showLoadingView; else loadingViewRef">
-							<span class="score">{{ hideAiTap && showDisabledProducts ? 'N/A' : (aiScore | percent : '1.0-1') }}</span>
+							<span class="score">
+								{{ hideAiTap && showDisabledProducts ? 'N/A' : (totalAiWords / wordsTotal | percent : '1.0-1') }}
+							</span>
 						</ng-container>
 						<ng-template #loadingViewRef>
 							<ngx-skeleton-loader class="assessment-tool-skeleton" [appearance]="'line'"></ngx-skeleton-loader>

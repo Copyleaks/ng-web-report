@@ -69,10 +69,13 @@ export class CrAssessmentToolTabScorePanelComponent implements OnInit, OnChanges
 	@Input() showLoadingView: boolean = false;
 
 	expanded: boolean = false;
-	totalAiWords = 0;
+	totalAiWords: number = 0;
+	totalHumanWords: number = 0;
 
 	EXPAND_TOOLTIP = $localize`Expand`;
 	COLLAPSE_TOOLTIP = $localize`Collapse`;
+	MATCHED_TEXT_TITLE = $localize`Matched Text`;
+	AI_CONTENT_TITLE = $localize`AI Content `;
 
 	EReportScoreTooltipView = EReportScoreTooltipView;
 	EReportViewType = EReportViewType;
@@ -82,7 +85,8 @@ export class CrAssessmentToolTabScorePanelComponent implements OnInit, OnChanges
 	ngOnInit(): void {}
 
 	ngOnChanges(_: SimpleChanges): void {
-		this.totalAiWords = Math.ceil(this.aiScore * this.wordsTotal ?? 0);
+		this.totalAiWords = Math.ceil(this.aiScore * ((this.wordsTotal ?? 0) - (this.excludedTotal ?? 0)));
+		this.totalHumanWords = Math.ceil((this.wordsTotal ?? 0) - (this.excludedTotal ?? 0) - (this.totalAiWords ?? 0));
 	}
 
 	expandedChange(event): void {

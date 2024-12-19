@@ -44,6 +44,8 @@ export class CrCustomTabItemComponent implements OnInit {
 	}
 
 	clickEvent() {
+		if (this._reportViewSvc.reportViewMode.selectedCustomTabId === this.tabId) return;
+
 		this._reportViewSvc.selectedCustomTabContent$.next(this.tabTemplateContent);
 		this.checkIfTabResultSectionContentNotEmpty();
 		if (this.isTabResultSectionContentNotEmpty)

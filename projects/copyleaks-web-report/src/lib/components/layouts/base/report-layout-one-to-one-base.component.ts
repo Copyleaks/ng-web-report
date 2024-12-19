@@ -15,6 +15,7 @@ import { IResultItem } from '../../containers/report-results-item-container/comp
 import { Subject, combineLatest } from 'rxjs';
 import { ReportNgTemplatesService } from '../../../services/report-ng-templates.service';
 import { ReportRealtimeResultsService } from '../../../services/report-realtime-results.service';
+import { ReportErrorsService } from '../../../services/report-errors.service';
 
 export abstract class OneToOneReportLayoutBaseComponent extends ReportLayoutBaseComponent {
 	hideRightSection = false;
@@ -77,7 +78,8 @@ export abstract class OneToOneReportLayoutBaseComponent extends ReportLayoutBase
 		highlightSvc: ReportMatchHighlightService,
 		statisticsSvc: ReportStatisticsService,
 		templatesSvc: ReportNgTemplatesService,
-		realTimeResultsSvc: ReportRealtimeResultsService
+		realTimeResultsSvc: ReportRealtimeResultsService,
+		reportErrorsSvc: ReportErrorsService
 	) {
 		super(
 			reportDataSvc,
@@ -87,7 +89,8 @@ export abstract class OneToOneReportLayoutBaseComponent extends ReportLayoutBase
 			highlightSvc,
 			statisticsSvc,
 			templatesSvc,
-			realTimeResultsSvc
+			realTimeResultsSvc,
+			reportErrorsSvc
 		);
 	}
 

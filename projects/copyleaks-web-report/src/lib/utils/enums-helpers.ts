@@ -111,6 +111,8 @@ export function getCorrectionCategoryTitle(type: EWritingFeedbackCategories): st
 			return $localize`Mood Inconsistency`;
 		case EWritingFeedbackCategories.AccentError:
 			return $localize`Accent Error`;
+		case EWritingFeedbackCategories.HomoglyphError:
+			return $localize`Homoglyph Error`;
 		default:
 			return $localize`Unknown Type`;
 	}
@@ -185,6 +187,8 @@ export function getCorrectionCategoryDescription(type: EWritingFeedbackCategorie
 			return $localize`Detects inconsistencies in the expression of mood within a sentence, ensuring cohesive writing.`;
 		case EWritingFeedbackCategories.AccentError:
 			return $localize`Highlights deviations in accents, promoting uniform language usage.`;
+		case EWritingFeedbackCategories.HomoglyphError:
+			return $localize`Non-standard characters that resemble standard ones have been detected.`;
 		default:
 			return $localize`Unknown feedback type.`;
 	}
@@ -203,6 +207,7 @@ export function getSelectedCategoryType(type: EWritingFeedbackCategories): EWrit
 		case EWritingFeedbackCategories.Pronoun:
 		case EWritingFeedbackCategories.PartOfSpeech:
 		case EWritingFeedbackCategories.Conjunction:
+		case EWritingFeedbackCategories.HomoglyphError:
 			return EWritingFeedbackTypes.Grammar;
 
 		case EWritingFeedbackCategories.MisusedWord:
@@ -311,6 +316,9 @@ export function getSelectedCategoryStats(
 			return writingFeedbackStats[EWritingFeedbackTypes.IncorrectNumberAgreementBetweenNouns].categories[
 				type - EWritingFeedbackCategories.NounGenderAgreement
 			];
+
+		case EWritingFeedbackCategories.HomoglyphError:
+			return writingFeedbackStats[EWritingFeedbackTypes.Grammar].categories[8];
 
 		default:
 			return null;

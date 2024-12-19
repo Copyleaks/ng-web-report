@@ -247,6 +247,10 @@ export class ReportStatisticsService implements OnDestroy {
 						type: EWritingFeedbackCategories.Conjunction,
 						totalIssues: 0,
 					},
+					{
+						type: EWritingFeedbackCategories.HomoglyphError,
+						totalIssues: 0,
+					},
 				],
 			},
 			{
@@ -451,6 +455,10 @@ export class ReportStatisticsService implements OnDestroy {
 				writingFeedbackStats[EWritingFeedbackTypes.IncorrectNumberAgreementBetweenNouns].categories[
 					type - EWritingFeedbackCategories.NounGenderAgreement
 				].totalIssues++;
+				break;
+
+			case EWritingFeedbackCategories.HomoglyphError:
+				writingFeedbackStats[EWritingFeedbackTypes.Grammar].categories[8].totalIssues++;
 				break;
 			default:
 				break;

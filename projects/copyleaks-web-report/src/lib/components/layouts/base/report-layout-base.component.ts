@@ -7,6 +7,7 @@ import { ReportMatchHighlightService } from '../../../services/report-match-high
 import { ReportStatisticsService } from '../../../services/report-statistics.service';
 import { ReportNgTemplatesService } from '../../../services/report-ng-templates.service';
 import { ReportRealtimeResultsService } from '../../../services/report-realtime-results.service';
+import { ReportErrorsService } from '../../../services/report-errors.service';
 
 export abstract class ReportLayoutBaseComponent {
 	isHtmlView: boolean;
@@ -23,7 +24,8 @@ export abstract class ReportLayoutBaseComponent {
 		protected highlightSvc: ReportMatchHighlightService,
 		protected statisticsSvc: ReportStatisticsService,
 		protected templatesSvc: ReportNgTemplatesService,
-		protected realTimeResultsSvc: ReportRealtimeResultsService
+		protected realTimeResultsSvc: ReportRealtimeResultsService,
+		protected reportErrorsSvc: ReportErrorsService
 	) {}
 
 	onReportViewChange(event: IReportViewEvent) {

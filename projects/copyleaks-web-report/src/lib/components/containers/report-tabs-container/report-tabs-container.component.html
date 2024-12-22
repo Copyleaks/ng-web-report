@@ -125,7 +125,7 @@
 									<span class="na-border-text" web-report-title-font i18n>N/A</span>
 								</ng-template>
 							</div>
-							<span class="mobile-tab-title" web-report-title-font>Matched Text</span>
+							<span class="mobile-tab-title" web-report-title-font i18n>Matched Text</span>
 						</div>
 					</ng-template>
 				</a>
@@ -215,7 +215,7 @@
 									<span class="na-border-text" web-report-title-font i18n>N/A</span>
 								</ng-template>
 							</div>
-							<span class="mobile-tab-title" web-report-title-font>AI Content</span>
+							<span class="mobile-tab-title" web-report-title-font i18n>AI Content</span>
 						</div>
 					</ng-template>
 				</a>
@@ -380,7 +380,7 @@
 				</div>
 
 				<div class="tab-title-container">
-					<span class="title">Matching</span>
+					<span class="title" i18n>Matching</span>
 					<div class="score-container">
 						<svg
 							*ngIf="!showLoadingView"
@@ -443,7 +443,7 @@
 					</svg>
 				</div>
 				<div class="tab-title-container">
-					<span class="title">AI Content</span>
+					<span class="title" i18n>AI Content</span>
 					<div class="score-container">
 						<svg
 							*ngIf="!showLoadingView"
@@ -455,7 +455,9 @@
 							<circle cx="4.5" cy="4.5" r="4" fill="#6512D2" />
 						</svg>
 						<ng-container *ngIf="!showLoadingView; else loadingViewRef">
-							<span class="score">{{ hideAiTap && showDisabledProducts ? 'N/A' : (aiScore | percent : '1.0-1') }}</span>
+							<span class="score">
+								{{ hideAiTap && showDisabledProducts ? 'N/A' : (totalAiWords / wordsTotal | percent : '1.0-1') }}
+							</span>
 						</ng-container>
 						<ng-template #loadingViewRef>
 							<ngx-skeleton-loader class="assessment-tool-skeleton" [appearance]="'line'"></ngx-skeleton-loader>
@@ -533,7 +535,7 @@
 					</svg>
 				</div>
 				<div class="tab-title-container">
-					<span class="title">Writing Assist.</span>
+					<span class="title" i18n>Writing Assist.</span>
 					<div class="score-container">
 						<span class="score">
 							<ng-container *ngIf="!showLoadingView; else loadingViewRef">

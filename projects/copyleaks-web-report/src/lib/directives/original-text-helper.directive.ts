@@ -18,7 +18,15 @@ export class OriginalTextHelperDirective implements AfterContentInit, OnDestroy 
 	@Input() public host: {
 		contentTextMatches: any;
 		currentPage: number;
-		customViewMatchesData: { id: string; start: number; end: number; pageNumber: number }[][];
+		customViewMatchesData: {
+			id: string;
+			parentId: string;
+			start: number;
+			end: number;
+			pageNumber: number;
+			submitterEmail: string;
+			isRead: boolean;
+		}[][];
 		customViewMatcheClassName;
 		onTextMatchSelectionEvent: EventEmitter<TextMatchHighlightEvent | any>;
 		onPaginationEvent(event: PageEvent): void;

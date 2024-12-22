@@ -80,6 +80,19 @@
 									({{ writingFeedbackStats[1].categories[i].totalIssues }})
 								</span>
 							</mat-checkbox>
+
+							<mat-checkbox
+								*ngFor="let key of categoriesKeys | slice : 33 : 34; let i = index"
+								class="category-checkbox"
+								[formControlName]="key"
+								i18n-aria-label
+								aria-label="Choose to include or exclude corrections of type grammar"
+								aria-live="assertive">
+								<span class="category-name" i18n>{{ formatCategroyFormControlKey(key) }}</span>
+								<span class="total-stat" web-report-title-font>
+									({{ writingFeedbackStats[1].categories[8].totalIssues }})
+								</span>
+							</mat-checkbox>
 						</div>
 					</div>
 					<div class="correction-type-container">

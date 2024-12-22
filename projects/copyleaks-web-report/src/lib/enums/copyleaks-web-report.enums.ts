@@ -183,6 +183,9 @@ export enum EWritingFeedbackCategories {
 	CompoundWordError,
 	MoodInconsistency,
 	AccentError,
+
+	// Grammar
+	HomoglyphError,
 }
 
 export enum EReadabilityLevel {

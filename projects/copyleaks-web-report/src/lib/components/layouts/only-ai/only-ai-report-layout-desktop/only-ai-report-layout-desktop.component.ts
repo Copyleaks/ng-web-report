@@ -7,6 +7,7 @@ import { ReportViewService } from '../../../../services/report-view.service';
 import { OneToManyReportLayoutBaseComponent } from '../../base/report-layout-one-to-many-base.component';
 import { ReportNgTemplatesService } from '../../../../services/report-ng-templates.service';
 import { ReportRealtimeResultsService } from '../../../../services/report-realtime-results.service';
+import { ReportErrorsService } from '../../../../services/report-errors.service';
 
 @Component({
 	selector: 'copyleaks-only-ai-report-layout-desktop',
@@ -29,7 +30,8 @@ export class OnlyAiReportLayoutDesktopComponent
 		highlightSvc: ReportMatchHighlightService,
 		statisticsSvc: ReportStatisticsService,
 		templatesSvc: ReportNgTemplatesService,
-		realTimeResultsSvc: ReportRealtimeResultsService
+		realTimeResultsSvc: ReportRealtimeResultsService,
+		reportErrorsSvc: ReportErrorsService
 	) {
 		super(
 			reportDataSvc,
@@ -39,7 +41,8 @@ export class OnlyAiReportLayoutDesktopComponent
 			highlightSvc,
 			statisticsSvc,
 			templatesSvc,
-			realTimeResultsSvc
+			realTimeResultsSvc,
+			reportErrorsSvc
 		);
 	}
 

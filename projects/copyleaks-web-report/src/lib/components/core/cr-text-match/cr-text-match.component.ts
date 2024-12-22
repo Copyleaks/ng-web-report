@@ -2,6 +2,9 @@ import { AfterContentInit, Component, ElementRef, HostBinding, HostListener, Inp
 import { Match, MatchType, ReportOrigin } from '../../../models/report-matches.models';
 import scrollIntoView from 'scroll-into-view-if-needed';
 import { ReportMatchHighlightService } from '../../../services/report-match-highlight.service';
+import { ReportMatchesService } from '../../../services/report-matches.service';
+import { ISelectExplainableAIResult } from '../../../models/report-ai-results.models';
+//import { ISelectExplainableAIResult } from '../../../models/report-ai-results.models';
 
 @Component({
 	selector: 'span[cr-match]',
@@ -12,7 +15,8 @@ export class CrTextMatchComponent implements AfterContentInit {
 	constructor(
 		public element: ElementRef<HTMLElement>,
 		private renderer: Renderer2,
-		private _highlightService: ReportMatchHighlightService
+		private _highlightService: ReportMatchHighlightService,
+		private _reportMatchesSvc: ReportMatchesService
 	) {}
 
 	// tslint:disable-next-line:no-input-rename
@@ -46,14 +50,25 @@ export class CrTextMatchComponent implements AfterContentInit {
 	public click(event) {
 		if (this.match.type === MatchType.aiText) return;
 
-		// If the match isn't AI, then trigger the match click event
-		// also update the selection type according to the user click (with or without the shift for multi selection)
-		this._highlightService.textMatchClicked({
-			elem: this,
-			broadcast: true,
-			origin: this.origin,
-			multiSelect: event && event.shiftKey,
-		});
+		if (this.match.type === MatchType.aiExplain) {
+			const selectAIMachText = !this._focused;
+			this._reportMatchesSvc.aiInsightsShowResult$.next({
+				resultRange: {
+					start: this.match.start,
+					end: this.match.end,
+				},
+				isSelected: selectAIMachText,
+			} as ISelectExplainableAIResult);
+		} else {
+			// If the match isn't AI, then trigger the match click event
+			// also update the selection type according to the user click (with or without the shift for multi selection)
+			this._highlightService.textMatchClicked({
+				elem: this,
+				broadcast: true,
+				origin: this.origin,
+				multiSelect: event && event.shiftKey,
+			});
+		}
 	}
 
 	/**

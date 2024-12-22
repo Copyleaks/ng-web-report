@@ -20,6 +20,9 @@ import {
 import { EnumNavigateMobileButton } from '../../../report-results-item-container/components/models/report-result-item.enum';
 import { MatExpansionPanel } from '@angular/material/expansion';
 import { MatTooltip } from '@angular/material/tooltip';
+import { ReportMatchesService } from '../../../../../services/report-matches.service';
+import { ISelectExplainableAIResult } from '../../../../../models/report-ai-results.models';
+import { untilDestroy } from '../../../../../utils/until-destroy';
 
 @Component({
 	selector: 'copyleaks-explainable-ai-result-container',
@@ -31,11 +34,6 @@ export class ExplainableAIResultContainerComponent implements OnInit, OnChanges 
 	 * @Input {ExplainableAIResults} The explainable AI results
 	 */
 	@Input() explainableAIResults: ExplainableAIResults;
-
-	/**
-	 * @Input {number[]} The start character of the selected text
-	 */
-	@Input() selectAIText: Range[] = [];
 
 	/**
 	 * @Input {boolean} A flag indicating if the results are locked
@@ -53,6 +51,11 @@ export class ExplainableAIResultContainerComponent implements OnInit, OnChanges 
 	@Input() isLoading: boolean = false;
 
 	/**
+	 * @Input Service for report matches and corrections.
+	 */
+	@Input() reportMatchesSvc: ReportMatchesService;
+
+	/**
 	 * @Output {boolean} Event emitted when the user clears the selected result
 	 */
 	@Output() clearSelectResultEvent = new EventEmitter<boolean>();
@@ -60,6 +63,8 @@ export class ExplainableAIResultContainerComponent implements OnInit, OnChanges 
 	@ViewChild('scrollContainer') scrollContainer!: ElementRef;
 
 	@ViewChildren(MatExpansionPanel) panels: QueryList<MatExpansionPanel>;
+
+	@ViewChild('desktopScroll') desktopScroll!: ElementRef;
 
 	explainResults: AIExplainResultItem[] = [];
 	explainItemResults: AIExplainResultItem[] = [];
@@ -69,7 +74,6 @@ export class ExplainableAIResultContainerComponent implements OnInit, OnChanges 
 	proportions: number[] = [];
 	emptyView: boolean = false;
 	title: string;
-	selectedMatch: boolean = false;
 	hasInfinityResult: boolean = false;
 	openedPanel: boolean = false; // its for the ai insight result height, once panel opened we want to add more height
 	minProportion: number = 0;
@@ -81,6 +85,7 @@ export class ExplainableAIResultContainerComponent implements OnInit, OnChanges 
 	infoTooltipText: string;
 	proportionTooltipText: string;
 	resultTooltipText: string;
+	barTooltipText: string;
 	updateResult: boolean = false;
 	panelIndex: number[] = [];
 	tooltipVisible: boolean = false;
@@ -88,24 +93,6 @@ export class ExplainableAIResultContainerComponent implements OnInit, OnChanges 
 	constructor() {}
 
 	ngOnChanges(changes: SimpleChanges): void {
-		if (changes.selectAIText) {
-			const selectResult = this.explainResults?.filter(item =>
-				this.selectAIText?.find(range => item.start <= range.start && range.end <= item.end)
-			);
-
-			if (!!this.selectAIText.length && !!selectResult.length) {
-				this.selectedMatch = true;
-				this.title =
-					`${selectResult.length} ` +
-					(selectResult.length > 1 ? $localize`AI Insights Selected` : $localize`AI Insight Selected`);
-				this.explainItemResults = [...selectResult];
-				this.closePanel();
-			} else {
-				this.selectedMatch = false;
-				this.title = $localize`AI Insights`;
-				this.explainItemResults = [...this.explainResults];
-			}
-		}
 		if (changes['isLoading']?.currentValue == false) {
 			this._initResults();
 		}
@@ -113,6 +100,34 @@ export class ExplainableAIResultContainerComponent implements OnInit, OnChanges 
 
 	ngOnInit(): void {
 		if (!this.isLoading) this._initResults();
+		this.reportMatchesSvc.aiInsightsShowResult$
+			.pipe(untilDestroy(this))
+			.subscribe((selectResult: ISelectExplainableAIResult) => {
+				if (selectResult) {
+					const selectIndex = this.explainItemResults.findIndex(
+						result => result.start <= selectResult.resultRange.start && selectResult.resultRange.end <= result.end
+					);
+					if (selectIndex === -1) return;
+					if (selectResult.isSelected) {
+						if (this.isMobile) {
+							this.scrollToIndex(selectIndex);
+							setTimeout(() => {
+								this.panels.toArray()[selectIndex].open();
+							}, 500);
+						} else {
+							this.panels.toArray()[selectIndex].open();
+							setTimeout(() => {
+								this.desktopScroll.nativeElement.children[selectIndex].scrollIntoView({
+									behavior: 'smooth',
+									block: 'center',
+								});
+							}, 350);
+						}
+					} else {
+						this.panels.toArray()[selectIndex].close();
+					}
+				}
+			});
 	}
 
 	private _initResults() {
@@ -136,6 +151,7 @@ export class ExplainableAIResultContainerComponent implements OnInit, OnChanges 
 		this.infoTooltipText = $localize`Generative Al models often overuse certain phrases, which is one of over three dozen signals used by our algorithms to identify the presence of AI.`;
 		this.proportionTooltipText = $localize`The ratio represents how many times on average a human would use the phrase compared to how many times on average AI would use this phrase.`;
 		this.resultTooltipText = $localize`Our dataset consists of millions of documents containing both AI and human written text. Here, we are showing the results normalized per 1M texts for an easier interpretation of the data shown.`;
+		this.barTooltipText = $localize`A phrase's ratio is shown by numbers, and colors indicate severity in AI versus human text.`;
 	}
 
 	/**
@@ -177,8 +193,8 @@ export class ExplainableAIResultContainerComponent implements OnInit, OnChanges 
 				this.explainResults.push({
 					content: content,
 					proportionType: slicedMatchResult.match.proportionType,
-					aiCount: Number(this.explainableAIResults.explain.patterns.statistics.aiCount[index].toFixed(2)),
-					humanCount: Number(this.explainableAIResults.explain.patterns.statistics.humanCount[index].toFixed(2)),
+					aiCount: Number(this.explainableAIResults.explain.patterns.statistics.aiCount[index]),
+					humanCount: Number(this.explainableAIResults.explain.patterns.statistics.humanCount[index]),
 					proportion: Number(item.toFixed(0)),
 					isInfinity: item == -1,
 					start: this.explainableAIResults.explain.patterns.text.chars.starts[index],
@@ -194,22 +210,13 @@ export class ExplainableAIResultContainerComponent implements OnInit, OnChanges 
 		this.explainItemResults = [...this.explainResults];
 	}
 
-	/**
-	 * Clear the selected result
-	 */
-	clearSelectdResult() {
-		this.clearSelectResultEvent.emit(true);
-		this.closePanel();
-		this.panelIndex = [];
-	}
-
 	toggleTooltip(tooltip: MatTooltip): void {
 		this.tooltipVisible = !this.tooltipVisible;
 		this.tooltipVisible ? tooltip.show() : tooltip.hide();
 	}
 
 	onScrollMobile() {
-		if (this.isMobile && this.openedPanel) {
+		if (this.isMobile && this.openedPanel && this.panelIndex.length) {
 			this.closePanel();
 		}
 		const container = this.scrollContainer.nativeElement;
@@ -301,6 +308,14 @@ export class ExplainableAIResultContainerComponent implements OnInit, OnChanges 
 	addToPanelIndex(index: number) {
 		this.panelIndex.push(index);
 		this.openedPanel = true; // its for the ai insight result height, once panel opened we want to add more height
+
+		this.reportMatchesSvc.aiInsightsSelect$.next({
+			resultRange: {
+				start: this.explainItemResults[index].start,
+				end: this.explainItemResults[index].end,
+			} as Range,
+			isSelected: true,
+		} as ISelectExplainableAIResult);
 	}
 
 	/**
@@ -311,6 +326,14 @@ export class ExplainableAIResultContainerComponent implements OnInit, OnChanges 
 	removeFromPanelIndex(index: number) {
 		this.panelIndex = this.panelIndex.filter(i => i !== index);
 		if (!this.panelIndex.length) this.openedPanel = false;
+
+		this.reportMatchesSvc.aiInsightsSelect$.next({
+			resultRange: {
+				start: this.explainItemResults[index].start,
+				end: this.explainItemResults[index].end,
+			} as Range,
+			isSelected: false,
+		} as ISelectExplainableAIResult);
 	}
 
 	/**

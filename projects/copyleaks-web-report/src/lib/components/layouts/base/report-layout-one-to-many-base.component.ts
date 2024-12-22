@@ -16,12 +16,10 @@ import { PostMessageEvent } from '../../../models/report-iframe-events.models';
 import {
 	AIScanResult,
 	ExplainableAIResults,
-	ExplainableAIWordTotal,
 	Match,
 	MatchType,
 	ResultDetailItem,
 	SlicedMatch,
-	Range,
 } from '../../../models/report-matches.models';
 import { ICopyleaksReportOptions } from '../../../models/report-options.models';
 import {
@@ -110,15 +108,7 @@ export abstract class OneToManyReportLayoutBaseComponent extends ReportLayoutBas
 	showOmittedWords: boolean;
 	isPartitalScan: boolean;
 	explainableAI: ExplainableAIResults = { explain: null, slicedMatch: [], sourceText: '' };
-	selectAIText: Range[] = [];
 	loadingExplainableAI: boolean = true;
-	updateProportionRange: boolean = false;
-	aiWordTotal: ExplainableAIWordTotal = {
-		totalExplainableAIWords: 0,
-		lowProportionWord: 0,
-		midProportionWord: 0,
-		highProportionWord: 0,
-	};
 
 	// Subject for destroying all the subscriptions in base component
 	private unsubscribe$ = new Subject();
@@ -254,12 +244,7 @@ export abstract class OneToManyReportLayoutBaseComponent extends ReportLayoutBas
 					if (validSelectedAlert) {
 						var scanResult = JSON.parse(validSelectedAlert.additionalData) as AIScanResult;
 						this.explainableAI.explain = scanResult?.explain;
-						if (this.explainableAI?.explain && !this.updateProportionRange) {
-							this._updateProportionRange();
-							this.updateProportionRange = true;
-						}
 					}
-					this.selectAIText = [];
 					setTimeout(() => {
 						this.loadingExplainableAI = false;
 					}, 100);
@@ -495,19 +480,7 @@ export abstract class OneToManyReportLayoutBaseComponent extends ReportLayoutBas
 				if (multiText && multiText.length > 0) {
 					const selectedMatches = multiText.map(c => c.match);
 					if (this.viewMode === 'one-to-many' || this.viewMode === 'only-ai') {
-						if (this.selectedTap === EReportViewType.AIView) {
-							this.selectAIText = [];
-							this.loadingExplainableAI = true;
-							selectedMatches.forEach(match => {
-								this.selectAIText.push({
-									start: match.start,
-									end: match.end,
-								});
-							});
-							this.loadingExplainableAI = false;
-						} else {
-							this._showResultsForMultiSelection(selectedMatches);
-						}
+						this._showResultsForMultiSelection(selectedMatches);
 					} else if (this.viewMode === 'writing-feedback') {
 						if (selectedMatches.length === 0) this.displayedScanCorrectionsView = this.filteredCorrections;
 						else
@@ -519,11 +492,7 @@ export abstract class OneToManyReportLayoutBaseComponent extends ReportLayoutBas
 				} else {
 					this.focusedMatch = !content.isHtmlView ? text && text.match : html;
 					if (this.viewMode === 'one-to-many' || this.viewMode === 'only-ai') {
-						if (this.selectedTap === EReportViewType.AIView) {
-							this.selectAIText = [];
-						} else {
-							this._showResultsForSelectedMatch(this.focusedMatch);
-						}
+						this._showResultsForSelectedMatch(this.focusedMatch);
 					} else if (this.viewMode === 'writing-feedback') {
 						if (this.focusedMatch)
 							this.displayedScanCorrectionsView = this.allScanCorrectionsView.filter(
@@ -597,37 +566,6 @@ export abstract class OneToManyReportLayoutBaseComponent extends ReportLayoutBas
 			default:
 				console.error('unknown event', message);
 		}
-	}
-
-	private _updateProportionRange(): void {
-		let wordsLengths = this.explainableAI?.explain?.patterns?.text?.words?.lengths ?? [];
-		let totalExplainableAIWords = wordsLengths.reduce((accumulator, currentValue) => accumulator + currentValue, 0);
-		let proportions =
-			this.explainableAI.explain?.patterns?.statistics?.proportion.map(num => parseFloat(num.toFixed(0))) ?? [];
-		const proportionsFiltered = proportions.filter(p => p > 0);
-		const min = Number(Math.min(...proportionsFiltered).toFixed(0));
-		const max = Number(Math.max(...proportionsFiltered).toFixed(0));
-		const divider = Number(((max - min) / 3).toFixed(0));
-		let lowProportionWord = 0;
-		let midProportionWord = 0;
-		let highProportionWord = 0;
-		proportions.forEach((value, index) => {
-			if (value == -1) {
-				highProportionWord += wordsLengths[index];
-			} else if (min <= value && value < divider) {
-				lowProportionWord += wordsLengths[index];
-			} else if (divider <= value && value < divider * 2) {
-				midProportionWord += wordsLengths[index];
-			} else if (divider * 2 <= value && value <= max) {
-				highProportionWord += wordsLengths[index];
-			}
-		});
-		this.aiWordTotal = {
-			totalExplainableAIWords,
-			lowProportionWord,
-			midProportionWord,
-			highProportionWord,
-		};
 	}
 
 	private _showResultsForSelectedMatch(selectedMatch: Match | null) {

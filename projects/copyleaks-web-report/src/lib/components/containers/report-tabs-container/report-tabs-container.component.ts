@@ -17,7 +17,6 @@ import { ReportMatchHighlightService } from '../../../services/report-match-high
 import { ReportDataService } from '../../../services/report-data.service';
 import { trigger, state, transition, animate, style } from '@angular/animations';
 import { ECustomResultsReportView } from '../../core/cr-custom-results/models/cr-custom-results.enums';
-import { ExplainableAIWordTotal } from '../../../models/report-matches.models';
 
 @Component({
 	selector: 'copyleaks-report-tabs-container',
@@ -130,13 +129,6 @@ export class ReportTabsContainerComponent implements OnInit, OnDestroy, OnChange
 
 	@Input() reportMode: EReportMode;
 
-	@Input() aiWordTotal: ExplainableAIWordTotal = {
-		lowProportionWord: 0,
-		midProportionWord: 0,
-		highProportionWord: 0,
-		totalExplainableAIWords: 0,
-	};
-
 	EReportMode = EReportMode;
 
 	EReportViewType = EReportViewType;
@@ -154,7 +146,7 @@ export class ReportTabsContainerComponent implements OnInit, OnDestroy, OnChange
 	};
 
 	aiScoreChartColorScheme = {
-		domain: ['#d7c5ff', '#bca6ff', '#a188ff', '#f8eaff', '#EBF3F5'],
+		domain: ['#c1addc', '#EBF3F5'],
 	};
 
 	plagarismScoreChartData = [];
@@ -279,11 +271,6 @@ export class ReportTabsContainerComponent implements OnInit, OnDestroy, OnChange
 				'minorChangesTotal' in changes ||
 				'identicalTotal' in changes ||
 				'wordsTotal' in changes ||
-				'totalExplainableAIWords' in changes ||
-				'lowProportionWord' in changes ||
-				'midProportionWord' in changes ||
-				'highProportionWord' in changes ||
-				'aiWordTotal' in changes ||
 				('showLoadingView' in changes && changes['showLoadingView'].currentValue === false))
 		) {
 			setTimeout(() => {
@@ -313,25 +300,12 @@ export class ReportTabsContainerComponent implements OnInit, OnDestroy, OnChange
 
 				this.aiScoreChartData = [
 					{
-						name: 'Low Proportion',
-						value: this.aiWordTotal.lowProportionWord,
-					},
-					{
-						name: 'Medium Proportion',
-						value: this.aiWordTotal.midProportionWord,
-					},
-					{
-						name: 'High Proportion',
-						value: this.aiWordTotal.highProportionWord,
-					},
-
-					{
 						name: 'AI',
-						value: this.totalAiWords - this.aiWordTotal.totalExplainableAIWords,
+						value: this.totalAiWords,
 					},
 					{
 						name: 'Human',
-						value: this.wordsTotal - this.totalAiWords - this.aiWordTotal.totalExplainableAIWords,
+						value: this.wordsTotal - this.totalAiWords,
 					},
 				];
 			});
@@ -416,7 +390,7 @@ export class ReportTabsContainerComponent implements OnInit, OnDestroy, OnChange
 					domain: ['#fd7366', '#ffb1b1', '#fed5a9', '#FBFFFF'],
 				};
 				this.aiScoreChartColorScheme = {
-					domain: ['#d7c5ff', '#bca6ff', '#a188ff', '#f8eaff', '#EBF3F5'],
+					domain: ['#c1addc', '#EBF3F5'],
 				};
 				break;
 			case EReportViewType.PlagiarismView:
@@ -424,7 +398,7 @@ export class ReportTabsContainerComponent implements OnInit, OnDestroy, OnChange
 					domain: ['#fd7366', '#ffb1b1', '#fed5a9', '#EBF3F5'],
 				};
 				this.aiScoreChartColorScheme = {
-					domain: ['#d7c5ff', '#bca6ff', '#a188ff', '#f8eaff', '#FBFFFF'],
+					domain: ['#c1addc', '#EBF3F5'],
 				};
 				break;
 			case EReportViewType.WritingFeedbackTabView:
@@ -432,7 +406,7 @@ export class ReportTabsContainerComponent implements OnInit, OnDestroy, OnChange
 					domain: ['#fd7366', '#ffb1b1', '#fed5a9', '#FBFFFF'],
 				};
 				this.aiScoreChartColorScheme = {
-					domain: ['#d7c5ff', '#bca6ff', '#a188ff', '#f8eaff', '#FBFFFF'],
+					domain: ['#c1addc', '#EBF3F5'],
 				};
 				break;
 			default:

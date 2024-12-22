@@ -16,7 +16,7 @@ export class CrTextMatchComponent implements AfterContentInit {
 		public element: ElementRef<HTMLElement>,
 		private renderer: Renderer2,
 		private _highlightService: ReportMatchHighlightService,
-		private reportMatchesSvc: ReportMatchesService
+		private _reportMatchesSvc: ReportMatchesService
 	) {}
 
 	// tslint:disable-next-line:no-input-rename
@@ -52,7 +52,7 @@ export class CrTextMatchComponent implements AfterContentInit {
 
 		if (this.match.type === MatchType.aiExplain) {
 			const selectAIMachText = !this._focused;
-			this.reportMatchesSvc.aiInsightsShowResult$.next({
+			this._reportMatchesSvc.aiInsightsShowResult$.next({
 				resultRange: {
 					start: this.match.start,
 					end: this.match.end,

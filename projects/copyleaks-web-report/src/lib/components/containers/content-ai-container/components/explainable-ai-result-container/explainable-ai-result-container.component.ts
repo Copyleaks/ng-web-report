@@ -22,6 +22,7 @@ import { MatExpansionPanel } from '@angular/material/expansion';
 import { MatTooltip } from '@angular/material/tooltip';
 import { ReportMatchesService } from '../../../../../services/report-matches.service';
 import { ISelectExplainableAIResult } from '../../../../../models/report-ai-results.models';
+import { untilDestroy } from '../../../../../utils/until-destroy';
 
 @Component({
 	selector: 'copyleaks-explainable-ai-result-container',
@@ -99,32 +100,34 @@ export class ExplainableAIResultContainerComponent implements OnInit, OnChanges 
 
 	ngOnInit(): void {
 		if (!this.isLoading) this._initResults();
-		this.reportMatchesSvc.aiInsightsShowResult$.subscribe((selectResult: ISelectExplainableAIResult) => {
-			if (selectResult) {
-				const selectIndex = this.explainItemResults.findIndex(
-					result => result.start <= selectResult.resultRange.start && selectResult.resultRange.end <= result.end
-				);
-				if (selectIndex === -1) return;
-				if (selectResult.isSelected) {
-					if (this.isMobile) {
-						this.scrollToIndex(selectIndex);
-						setTimeout(() => {
+		this.reportMatchesSvc.aiInsightsShowResult$
+			.pipe(untilDestroy(this))
+			.subscribe((selectResult: ISelectExplainableAIResult) => {
+				if (selectResult) {
+					const selectIndex = this.explainItemResults.findIndex(
+						result => result.start <= selectResult.resultRange.start && selectResult.resultRange.end <= result.end
+					);
+					if (selectIndex === -1) return;
+					if (selectResult.isSelected) {
+						if (this.isMobile) {
+							this.scrollToIndex(selectIndex);
+							setTimeout(() => {
+								this.panels.toArray()[selectIndex].open();
+							}, 500);
+						} else {
 							this.panels.toArray()[selectIndex].open();
-						}, 500);
+							setTimeout(() => {
+								this.desktopScroll.nativeElement.children[selectIndex].scrollIntoView({
+									behavior: 'smooth',
+									block: 'center',
+								});
+							}, 350);
+						}
 					} else {
-						this.panels.toArray()[selectIndex].open();
-						setTimeout(() => {
-							this.desktopScroll.nativeElement.children[selectIndex].scrollIntoView({
-								behavior: 'smooth',
-								block: 'center',
-							});
-						}, 350);
+						this.panels.toArray()[selectIndex].close();
 					}
-				} else {
-					this.panels.toArray()[selectIndex].close();
 				}
-			}
-		});
+			});
 	}
 
 	private _initResults() {

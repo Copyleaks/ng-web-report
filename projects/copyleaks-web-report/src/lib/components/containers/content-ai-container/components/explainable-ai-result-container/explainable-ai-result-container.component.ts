@@ -214,8 +214,12 @@ export class ExplainableAIResultContainerComponent implements OnInit, OnChanges 
 		debugger;
 		this.tooltipVisible = !this.tooltipVisible;
 		this.tooltipVisible ? tooltip.show() : tooltip.hide();
+		this.redirectToAIInsightsInfo();
 	}
 
+	redirectToAIInsightsInfo() {
+		window.open('https://help.copyleaks.com/hc/en-us/articles/30744676805901-What-are-AI-Insights', '_blank');
+	}
 	onScrollMobile() {
 		if (this.isMobile && this.openedPanel && this.panelIndex.length) {
 			this.closePanel();

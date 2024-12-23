@@ -211,7 +211,6 @@ export class ExplainableAIResultContainerComponent implements OnInit, OnChanges 
 	}
 
 	toggleTooltip(tooltip: MatTooltip): void {
-		debugger;
 		this.tooltipVisible = !this.tooltipVisible;
 		this.tooltipVisible ? tooltip.show() : tooltip.hide();
 		this.redirectToAIInsightsInfo();

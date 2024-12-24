@@ -15,20 +15,23 @@
 						<div *ngIf="!emptyView && !lockedResults && !isMobile" class="beta-container">
 							<span>Beta</span>
 						</div>
-						<mat-icon
-							class="info-icon"
-							fontSet="material-icons-outlined"
-							[tabIndex]="0"
-							#tooltipTitle="matTooltip"
-							[matTooltip]="infoTooltipText"
-							[matTooltipPosition]="'after'"
-							(click)="isMobile ? toggleTooltip(tooltipTitle) : ''"
-							aria-label="ai result info"
-							i18n-aria-label
-							aria-hidden="false"
-							matTooltipClass="web-report-mat-tooltip tooltip-contanier">
-							info
-						</mat-icon>
+						<a>
+							<mat-icon
+								class="info-icon"
+								fontSet="material-icons-outlined"
+								[tabIndex]="0"
+								#tooltipTitle="matTooltip"
+								[matTooltip]="infoTooltipText"
+								[matTooltipPosition]="'after'"
+								(click)="isMobile ? toggleTooltip(tooltipTitle) : ''"
+								(keyup.enter)="isMobile ? toggleTooltip(tooltipTitle) : ''"
+								aria-label="ai result info"
+								i18n-aria-label
+								aria-hidden="false"
+								matTooltipClass="web-report-mat-tooltip tooltip-contanier">
+								info
+							</mat-icon>
+						</a>
 					</div>
 				</div>
 				<!-- Description and Grade-Bar -->
@@ -330,17 +333,20 @@
 				<div class="result-container" fxLayout="column" fxLayoutGap="2px">
 					<div class="result-header" fxLayout="row" fxLayoutAlign="space-between center">
 						<span class="title" i18n>How frequently the phrase was found in our dataset :</span>
-						<mat-icon
-							class="info-icon"
-							fontSet="material-icons-outlined"
-							#tooltipResult="matTooltip"
-							[tabIndex]="0"
-							[matTooltip]="resultTooltipText"
-							[matTooltipPosition]="'before'"
-							(click)="isMobile ? toggleTooltip(tooltipResult) : redirectToAIInsightsInfo()"
-							matTooltipClass="web-report-mat-tooltip tooltip-contanier">
-							info
-						</mat-icon>
+						<a>
+							<mat-icon
+								class="info-icon"
+								fontSet="material-icons-outlined"
+								#tooltipResult="matTooltip"
+								[tabIndex]="0"
+								[matTooltip]="resultTooltipText"
+								[matTooltipPosition]="'before'"
+								(click)="isMobile ? toggleTooltip(tooltipResult) : redirectToAIInsightsInfo()"
+								(keyup.enter)="isMobile ? toggleTooltip(tooltipResult) : redirectToAIInsightsInfo()"
+								matTooltipClass="web-report-mat-tooltip tooltip-contanier">
+								info
+							</mat-icon>
+						</a>
 					</div>
 					<div class="ai-count-container" fxLayout="row" fxLayoutAlign="space-between center">
 						<span class="title" i18n>AI Text</span>

@@ -30,12 +30,15 @@
 						font-weight: 500;
 					}
 				}
-				.info-icon {
-					width: 24px;
-					height: 24px;
-					font-size: 24px;
-					color: #0517a6;
-					cursor: pointer;
+				a {
+					text-decoration: none;
+					.info-icon {
+						width: 24px;
+						height: 24px;
+						font-size: 24px;
+						color: #0517a6;
+						cursor: pointer;
+					}
 				}
 			}
 			.header-description {
@@ -568,9 +571,4 @@
 ::ng-deep ::-webkit-scrollbar-track {
 	margin-top: 10px;
 	margin-bottom: 10px;
-}
-.item-container {
-	display: flex;
-	align-items: center;
-	justify-content: center;
 }

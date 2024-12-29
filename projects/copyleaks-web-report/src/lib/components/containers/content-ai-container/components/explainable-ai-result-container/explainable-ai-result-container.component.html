@@ -16,7 +16,8 @@
 							<span>Beta</span>
 						</div>
 						<a
-							class="item-container"
+							fxLayout="row"
+							fxLayoutAlign="center center"
 							[tabIndex]="0"
 							#tooltipTitle="matTooltip"
 							[matTooltip]="infoTooltipText"
@@ -335,7 +336,6 @@
 						<mat-icon
 							class="info-icon"
 							fontSet="material-icons-outlined"
-							class="item-container"
 							#tooltipResult="matTooltip"
 							[tabIndex]="0"
 							[matTooltip]="resultTooltipText"

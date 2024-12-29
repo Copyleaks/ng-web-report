@@ -65,6 +65,7 @@ export class ExplainableAIResultContainerComponent implements OnInit, OnChanges 
 	@ViewChildren(MatExpansionPanel) panels: QueryList<MatExpansionPanel>;
 
 	@ViewChild('desktopScroll') desktopScroll!: ElementRef;
+	@ViewChild('tooltipTitle') tooltipTitle!: MatTooltip;
 
 	explainResults: AIExplainResultItem[] = [];
 	explainItemResults: AIExplainResultItem[] = [];
@@ -213,7 +214,9 @@ export class ExplainableAIResultContainerComponent implements OnInit, OnChanges 
 	toggleTooltip(tooltip: MatTooltip): void {
 		this.tooltipVisible = !this.tooltipVisible;
 		this.tooltipVisible ? tooltip.show() : tooltip.hide();
-		this.redirectToAIInsightsInfo();
+		if (tooltip === this.tooltipTitle) {
+			this.redirectToAIInsightsInfo();
+		}
 	}
 
 	redirectToAIInsightsInfo() {

@@ -21,8 +21,8 @@
 							#tooltipTitle="matTooltip"
 							[matTooltip]="infoTooltipText"
 							[matTooltipPosition]="'after'"
-							(click)="isMobile ? toggleTooltip(tooltipTitle) : ''"
-							(keyup.enter)="isMobile ? toggleTooltip(tooltipTitle) : ''"
+							(click)="isMobile ? toggleTooltip(tooltipTitle) : redirectToAIInsightsInfo()"
+							(keyup.enter)="isMobile ? toggleTooltip(tooltipTitle) : redirectToAIInsightsInfo()"
 							aria-label="ai result info"
 							i18n-aria-label
 							aria-hidden="false"
@@ -336,8 +336,8 @@
 							[tabIndex]="0"
 							[matTooltip]="resultTooltipText"
 							[matTooltipPosition]="'before'"
-							(click)="isMobile ? toggleTooltip(tooltipResult) : redirectToAIInsightsInfo()"
-							(keyup.enter)="isMobile ? toggleTooltip(tooltipResult) : redirectToAIInsightsInfo()"
+							(click)="isMobile ? toggleTooltip(tooltipResult) : ''"
+							(keyup.enter)="isMobile ? toggleTooltip(tooltipResult) : ''"
 							matTooltipClass="web-report-mat-tooltip tooltip-contanier">
 							<mat-icon class="info-icon" fontSet="material-icons-outlined">info</mat-icon>
 						</a>

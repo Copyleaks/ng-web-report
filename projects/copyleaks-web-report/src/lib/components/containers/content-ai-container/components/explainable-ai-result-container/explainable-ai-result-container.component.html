@@ -21,8 +21,10 @@
 							#tooltipTitle="matTooltip"
 							[matTooltip]="infoTooltipText"
 							[matTooltipPosition]="'after'"
-							(click)="isMobile ? toggleTooltip(tooltipTitle) : redirectToAIInsightsInfo()"
-							(keyup.enter)="isMobile ? toggleTooltip(tooltipTitle) : redirectToAIInsightsInfo()"
+							[href]="'https://help.copyleaks.com/hc/en-us/articles/30744676805901-What-are-AI-Insights'"
+							target="_blank"
+							(click)="isMobile ? toggleTooltip(tooltipTitle) : ''"
+							(keyup.enter)="isMobile ? toggleTooltip(tooltipTitle) : ''"
 							aria-label="ai result info"
 							i18n-aria-label
 							aria-hidden="false"
@@ -330,7 +332,9 @@
 				<div class="result-container" fxLayout="column" fxLayoutGap="2px">
 					<div class="result-header" fxLayout="row" fxLayoutAlign="space-between center">
 						<span class="title" i18n>How frequently the phrase was found in our dataset :</span>
-						<a
+						<mat-icon
+							class="info-icon"
+							fontSet="material-icons-outlined"
 							class="item-container"
 							#tooltipResult="matTooltip"
 							[tabIndex]="0"
@@ -339,8 +343,8 @@
 							(click)="isMobile ? toggleTooltip(tooltipResult) : ''"
 							(keyup.enter)="isMobile ? toggleTooltip(tooltipResult) : ''"
 							matTooltipClass="web-report-mat-tooltip tooltip-contanier">
-							<mat-icon class="info-icon" fontSet="material-icons-outlined">info</mat-icon>
-						</a>
+							info
+						</mat-icon>
 					</div>
 					<div class="ai-count-container" fxLayout="row" fxLayoutAlign="space-between center">
 						<span class="title" i18n>AI Text</span>

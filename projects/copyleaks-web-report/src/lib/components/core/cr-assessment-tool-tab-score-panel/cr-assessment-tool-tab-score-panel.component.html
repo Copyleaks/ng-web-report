@@ -13,14 +13,14 @@
 								arrow_drop_down
 							</mat-icon>
 							<span class="title" web-report-title-font i18n>
-								{{ selectedTap === EReportViewType.PlagiarismView ? 'Matched Text' : 'AI Content ' }}
+								{{ selectedTap === EReportViewType.PlagiarismView ? MATCHED_TEXT_TITLE : AI_CONTENT_TITLE }}
 							</span>
 						</div>
 						<span class="score" web-report-title-font>
 							{{
 								selectedTap === EReportViewType.PlagiarismView
 									? (plagarismScore | percent : '1.0-1')
-									: (aiScore | percent : '1.0-1')
+									: (totalAiWords / wordsTotal | percent : '1.0-1')
 							}}
 						</span>
 					</div>
@@ -68,8 +68,12 @@
 							disabled: false,
 							totalWords: excludedTotal ?? 0
 						},
-						aiPct: { percentage: aiScore, disabled: false, totalWords: totalAiWords ?? 0 },
-						humanPct: { percentage: 1 - aiScore, disabled: false, totalWords: wordsTotal - totalAiWords ?? 0 },
+						aiPct: { percentage: totalAiWords / wordsTotal, disabled: false, totalWords: totalAiWords ?? 0 },
+						humanPct: {
+							percentage: totalHumanWords / wordsTotal,
+							disabled: false,
+							totalWords: totalHumanWords
+						},
 						totalWords: wordsTotal
 					}"
 					[viewType]="EReportScoreTooltipView.Inline"></cr-report-score-tooltip-content>
@@ -99,8 +103,12 @@
 							totalWords: excludedTotal ?? 0
 						},
 
-						aiPct: { percentage: aiScore, disabled: false, totalWords: totalAiWords ?? 0 },
-						humanPct: { percentage: 1 - aiScore, disabled: false, totalWords: wordsTotal - totalAiWords ?? 0 },
+						aiPct: { percentage: totalAiWords / wordsTotal, disabled: false, totalWords: totalAiWords ?? 0 },
+						humanPct: {
+							percentage: totalHumanWords / wordsTotal,
+							disabled: false,
+							totalWords: totalHumanWords
+						},
 						totalWords: wordsTotal
 					}"
 					[viewType]="EReportScoreTooltipView.Inline"></cr-report-score-tooltip-content>

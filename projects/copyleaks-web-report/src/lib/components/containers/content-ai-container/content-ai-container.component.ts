@@ -66,7 +66,10 @@ export class ContentAiContainerComponent implements OnInit, OnChanges {
 	 */
 	private _updateAiPercentageResult() {
 		this.aiPercentageResult =
-			Math.ceil(this.aiScore * ((this.wordsTotal ?? 0) - (this.excludedTotal ?? 0))) / this.wordsTotal;
+			this.wordsTotal - this.excludedTotal === 0
+				? 0
+				: Math.ceil(this.aiScore * ((this.wordsTotal ?? 0) - (this.excludedTotal ?? 0))) /
+				  (this.wordsTotal - this.excludedTotal);
 	}
 
 	/**

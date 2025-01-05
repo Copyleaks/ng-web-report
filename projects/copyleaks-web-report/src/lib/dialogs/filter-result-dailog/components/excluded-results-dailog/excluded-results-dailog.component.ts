@@ -106,8 +106,10 @@ export class ExcludedResultsDailogComponent implements OnInit, AfterViewInit {
 	}
 
 	private _filterTags(value: string) {
-		return this.allResultsItem.filter(result =>
-			result?.resultPreview.title.toLowerCase().includes(value.toLowerCase())
+		return this.allResultsItem.filter(
+			result =>
+				result?.resultPreview?.title?.toLowerCase().includes(value?.toLowerCase()) ||
+				result?.resultPreview?.metadata?.filename?.toLowerCase()?.includes(value?.toLowerCase())
 		);
 	}
 

@@ -86,6 +86,14 @@
 							text-wrap: nowrap;
 						}
 
+						.author-name-text {
+							flex-wrap: nowrap;
+							overflow: hidden;
+							white-space: nowrap;
+							flex-grow: initial;
+							text-overflow: ellipsis;
+						}
+
 						.chips-container {
 							display: flex;
 							align-items: center;
@@ -96,14 +104,18 @@
 							white-space: nowrap;
 							cursor: pointer;
 							flex-grow: 1;
+
+							&.non-empty-container {
+								min-width: 80px;
+							}
+
 							.first-tag {
 								display: block !important;
 								white-space: nowrap;
 								overflow: hidden;
 								text-overflow: ellipsis;
 								max-width: calc(100% - 30px);
-
-								&.one-tag {
+								min &.one-tag {
 									max-width: 100%;
 								}
 							}
@@ -246,6 +258,8 @@
 			padding: 0px 8px;
 			display: flex;
 			align-items: center;
+			width: 100%;
+			box-sizing: border-box;
 			&:hover,
 			&:focus {
 				background-color: $color-container-background !important;

@@ -15,6 +15,7 @@ import { ICopyleaksReportOptions } from '../../models/report-options.models';
 import { trigger, transition, animate, keyframes, style } from '@angular/animations';
 import { EResponsiveLayoutType } from '../../enums/copyleaks-web-report.enums';
 import { distinctUntilChanged } from 'rxjs/operators';
+import { PercentPipe } from '@angular/common';
 
 @Component({
 	selector: 'cr-filter-result-dailog',
@@ -83,6 +84,7 @@ export class FilterResultDailogComponent implements OnInit {
 
 	constructor(
 		private _filterResultsSvc: FilterResultDailogService,
+		private _percentPipe: PercentPipe,
 		private _dialogRef: MatDialogRef<FilterResultDailogComponent>,
 		@Inject(MAT_DIALOG_DATA) public data: IFilterResultDailogData
 	) {}
@@ -288,11 +290,34 @@ export class FilterResultDailogComponent implements OnInit {
 
 	setTotalMatchTypesStatistics() {
 		this.totalParaphrased = this.totalMinorChanges = this.totalIdentical = 0;
+
+		const totalWords =
+			(this.data?.reportDataSvc?.scanResultsPreviews$?.value?.scannedDocument?.totalWords ?? 0) -
+			(this.data?.reportDataSvc?.scanResultsPreviews$?.value?.scannedDocument?.totalExcluded ?? 0);
+
+		if (totalWords <= 0) {
+			return;
+		}
+
+		const calculatePercentage = value => {
+			const percentage = this._percentPipe.transform(value / totalWords, '1.0-1');
+			return percentage !== '0%';
+		};
+
 		this.allResultsItem.forEach(result => {
-			if (result.iStatisticsResult.identical && result.iStatisticsResult.identical > 0) this.totalIdentical++;
-			if (result.iStatisticsResult.minorChanges && result.iStatisticsResult.minorChanges > 0) this.totalMinorChanges++;
-			if (result.iStatisticsResult.relatedMeaning && result.iStatisticsResult.relatedMeaning > 0)
+			const stats = result.iStatisticsResult;
+
+			if (stats.identical > 0 && calculatePercentage(stats.identical)) {
+				this.totalIdentical++;
+			}
+
+			if (stats.minorChanges > 0 && calculatePercentage(stats.minorChanges)) {
+				this.totalMinorChanges++;
+			}
+
+			if (stats.relatedMeaning > 0 && calculatePercentage(stats.relatedMeaning)) {
 				this.totalParaphrased++;
+			}
 		});
 	}
 

@@ -10,4 +10,5 @@ export interface ITotalSourceType {
 export interface ISourceRepositoryType {
 	id: string;
 	title: string;
+	totalResults?: number;
 }

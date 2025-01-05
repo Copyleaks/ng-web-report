@@ -126,7 +126,11 @@
 				fxLayout="column"
 				fxLayoutAlign="start start"
 				fxLayoutGap="8px">
-				<cr-mat-slide-filter-result [formControlName]="item.id" class="mat-slide-filter-result" [title]="item.title">
+				<cr-mat-slide-filter-result
+					[formControlName]="item.id"
+					class="mat-slide-filter-result"
+					[title]="item.title"
+					[total]="item.totalResults">
 					<mat-slide-logo>
 						<div class="source-type-icon-container" fxLayout="column" fxLayoutAlign="center center">
 							<svg

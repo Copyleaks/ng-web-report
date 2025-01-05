@@ -181,7 +181,11 @@ const mergeMatchesInNest = (matches: Match[]): Match[] => {
 		(prev: Match[], curr: Match) => {
 			const last = prev[prev.length - 1];
 
-			if (last.type === curr.type && curr.ids?.sort().join(',') === last.ids?.sort().join(',')) {
+			if (
+				last.type != MatchType.writingFeedback &&
+				last.type === curr.type &&
+				curr.ids?.sort().join(',') === last.ids?.sort().join(',')
+			) {
 				last.end = curr.end;
 			} else {
 				prev.push(curr);

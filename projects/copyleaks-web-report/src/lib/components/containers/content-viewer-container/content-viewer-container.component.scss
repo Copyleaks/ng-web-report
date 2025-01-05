@@ -57,7 +57,7 @@
 		.custom-view-avatar-container {
 			position: absolute;
 			height: fit-content;
-			display: inline-block;
+			display: flex;
 			top: 50%;
 			transform: translateY(-50%);
 
@@ -76,6 +76,7 @@
 				border: 1px solid $color-primary;
 				width: 24px;
 				height: 24px;
+				background: $color-white;
 			}
 
 			&:hover,

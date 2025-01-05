@@ -360,4 +360,6 @@ export class ExplainableAIResultContainerComponent implements OnInit, OnChanges 
 				return 'high-proportion';
 		}
 	}
+
+	ngOnDestroy(): void {}
 }

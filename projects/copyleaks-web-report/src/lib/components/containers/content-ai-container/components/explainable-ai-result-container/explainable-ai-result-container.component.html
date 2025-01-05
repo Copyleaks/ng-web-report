@@ -15,20 +15,23 @@
 						<div *ngIf="!emptyView && !lockedResults && !isMobile" class="beta-container">
 							<span>Beta</span>
 						</div>
-						<mat-icon
-							class="info-icon"
-							fontSet="material-icons-outlined"
+						<a
+							fxLayout="row"
+							fxLayoutAlign="center center"
 							[tabIndex]="0"
 							#tooltipTitle="matTooltip"
 							[matTooltip]="infoTooltipText"
 							[matTooltipPosition]="'after'"
+							[href]="'https://help.copyleaks.com/hc/en-us/articles/30744676805901-What-are-AI-Insights'"
+							target="_blank"
 							(click)="isMobile ? toggleTooltip(tooltipTitle) : ''"
+							(keyup.enter)="isMobile ? toggleTooltip(tooltipTitle) : ''"
 							aria-label="ai result info"
 							i18n-aria-label
 							aria-hidden="false"
 							matTooltipClass="web-report-mat-tooltip tooltip-contanier">
-							info
-						</mat-icon>
+							<mat-icon class="info-icon" fontSet="material-icons-outlined">info</mat-icon>
+						</a>
 					</div>
 				</div>
 				<!-- Description and Grade-Bar -->
@@ -338,6 +341,7 @@
 							[matTooltip]="resultTooltipText"
 							[matTooltipPosition]="'before'"
 							(click)="isMobile ? toggleTooltip(tooltipResult) : ''"
+							(keyup.enter)="isMobile ? toggleTooltip(tooltipResult) : ''"
 							matTooltipClass="web-report-mat-tooltip tooltip-contanier">
 							info
 						</mat-icon>

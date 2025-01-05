@@ -148,10 +148,10 @@ export class ExplainableAIResultContainerComponent implements OnInit, OnChanges 
 	 * Update the tooltip text
 	 */
 	private _updateTooltipText() {
-		this.infoTooltipText = $localize`Generative Al models often overuse certain phrases, which is one of over three dozen signals used by our algorithms to identify the presence of AI.`;
-		this.proportionTooltipText = $localize`The ratio represents how many times on average a human would use the phrase compared to how many times on average AI would use this phrase.`;
+		this.infoTooltipText = $localize`Learn more about AI Insights`;
+		this.proportionTooltipText = $localize`The ratio represents how many times on average AI would use the phrase compared to how many times on average a human would use this phrase.`;
 		this.resultTooltipText = $localize`Our dataset consists of millions of documents containing both AI and human written text. Here, we are showing the results normalized per 1M texts for an easier interpretation of the data shown.`;
-		this.barTooltipText = $localize`A phrase's ratio is shown by numbers, and colors indicate severity in AI versus human text.`;
+		this.barTooltipText = $localize`The darker the color, the more frequently the phrase is used by AI compared to a human.`;
 	}
 
 	/**

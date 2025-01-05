@@ -50,9 +50,20 @@ export class FilterResultDailogService {
 		const reposMap = new Map<string, ISourceRepositoryType>();
 
 		this._completeResults.results.repositories.forEach(r => {
-			// Only add the repository if it doesn't already exist in the map
+			// Check if the repository already exists in the map
 			if (!reposMap.has(r.repositoryId)) {
-				reposMap.set(r.repositoryId, { id: r.repositoryId, title: r.title });
+				// Add the repository with an initial count of 1
+				reposMap.set(r.repositoryId, {
+					id: r.repositoryId,
+					title: r.title,
+					totalResults: 1,
+				});
+			} else {
+				// Increment the totalResults count for the existing repository
+				const existingRepo = reposMap.get(r.repositoryId);
+				if (existingRepo) {
+					existingRepo.totalResults++;
+				}
 			}
 		});
 

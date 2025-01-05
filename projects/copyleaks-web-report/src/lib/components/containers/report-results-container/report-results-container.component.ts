@@ -230,9 +230,10 @@ export class ReportResultsContainerComponent implements OnInit, OnChanges {
 
 		this.displayedResults = this.displayedResults.filter(
 			r =>
-				r.resultPreview.introduction.toLowerCase().includes(value) ||
-				r.resultPreview.title.toLowerCase().includes(value) ||
-				(r.resultPreview.url && r.resultPreview.url.toLowerCase().includes(value)) ||
+				r.resultPreview.introduction?.toLowerCase()?.includes(value) ||
+				r.resultPreview.title?.toLowerCase()?.includes(value) ||
+				r.resultPreview.metadata?.filename?.toLowerCase()?.includes(value) ||
+				(r.resultPreview.url && r.resultPreview.url?.toLowerCase()?.includes(value)) ||
 				this.isSearchByType(value, r)
 		);
 	}

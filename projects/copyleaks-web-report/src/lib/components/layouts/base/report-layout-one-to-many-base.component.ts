@@ -542,7 +542,7 @@ export abstract class OneToManyReportLayoutBaseComponent extends ReportLayoutBas
 			case 'multi-match-select':
 				let selectedMatches: Match[] = [];
 				message.indexes.forEach(i => {
-					if (!selectedMatches.find(s => s.gid === this.reportMatches[i].gid))
+					if (!selectedMatches.find(s => s && s.gid === this.reportMatches[i]?.gid))
 						selectedMatches.push(this.reportMatches[i]);
 				});
 				if (this.viewMode === 'one-to-many') {
@@ -551,7 +551,7 @@ export abstract class OneToManyReportLayoutBaseComponent extends ReportLayoutBas
 					if (selectedMatches.length === 0) this.displayedScanCorrectionsView = this.filteredCorrections;
 					else this.displayedScanCorrectionsView = [];
 					selectedMatches.forEach(sc => {
-						if (sc.gid >= 0 && sc.gid < this.allScanCorrectionsView.length)
+						if (sc && sc.gid >= 0 && sc.gid < this.allScanCorrectionsView.length)
 							this.displayedScanCorrectionsView.push(this.allScanCorrectionsView[sc.gid]);
 					});
 					this.correctionClicked = selectedMatches?.length > 0;

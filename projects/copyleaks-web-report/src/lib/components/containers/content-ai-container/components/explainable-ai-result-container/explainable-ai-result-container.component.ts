@@ -112,10 +112,10 @@ export class ExplainableAIResultContainerComponent implements OnInit, OnChanges 
 						if (this.isMobile) {
 							this.scrollToIndex(selectIndex);
 							setTimeout(() => {
-								this.panels.toArray()[selectIndex].open();
+								this.panels?.toArray()[selectIndex]?.open();
 							}, 500);
 						} else {
-							this.panels.toArray()[selectIndex].open();
+							this.panels?.toArray()[selectIndex]?.open();
 							setTimeout(() => {
 								this.desktopScroll.nativeElement.children[selectIndex].scrollIntoView({
 									behavior: 'smooth',
@@ -124,7 +124,7 @@ export class ExplainableAIResultContainerComponent implements OnInit, OnChanges 
 							}, 350);
 						}
 					} else {
-						this.panels.toArray()[selectIndex].close();
+						this.panels?.toArray()[selectIndex]?.close();
 					}
 				}
 			});

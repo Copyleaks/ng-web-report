@@ -212,8 +212,15 @@ function ready() {
 	 * @param event the default mouse event object
 	 */
 	function onMatchClick(event: MouseEvent) {
-		const elem = event.target as HTMLSpanElement;
+		let elem = event.target as HTMLSpanElement;
+		if (elem.classList.contains('tooltip-match-content-container')) {
+			if (!elem.parentElement) return;
+			elem = elem.parentElement as HTMLSpanElement;
+		}
 		// check if the shift key is pressed (multi selection)
+		// clear the text selection
+		document.getSelection()?.removeAllRanges();
+
 		if (event.shiftKey) {
 			onMatchMultiSelect(elem);
 		} else {
@@ -264,7 +271,9 @@ function ready() {
 		if (!broadcast && foundSelection) {
 			foundSelection?.toggleAttribute('on', false);
 			currentMulti = currentMulti.filter(e => e != elem);
-			const indexes = currentMulti.map(e => +e?.dataset?.['index']);
+			let indexes = currentMulti.map(e => +e?.dataset?.['index']);
+			indexes = indexes.filter(e => e > -1 && !isNaN(e));
+
 			if (currentMulti.length === 1) current = currentMulti[0];
 			else current = null;
 			messageParent({ type: 'multi-match-select', indexes });
@@ -279,7 +288,8 @@ function ready() {
 
 		if (currentMulti.length === 1) current = currentMulti[0];
 		else current = null;
-		const indexes = currentMulti.map(e => (!!e?.dataset?.['index'] ? +(e?.dataset?.['index'] ?? '') : -1));
+		let indexes = currentMulti.map(e => (!!e?.dataset?.['index'] ? +(e?.dataset?.['index'] ?? '') : -1));
+		indexes = indexes.filter(e => e > -1 && !isNaN(e));
 		messageParent({ type: 'multi-match-select', indexes });
 	}
 

@@ -115,7 +115,7 @@
 			*ngIf="selectedTap === EReportViewType.AIView"
 			class="ai-results-container"
 			[isMobile]="true"
-			[isLoading]="loadingExplainableAI"
+			[isLoading]="loadingExplainableAI || !reportStatistics"
 			[lockedResults]="lockedExplainAIResults"
 			[aiScore]="reportStatistics?.aiScore ?? 0"
 			[wordsTotal]="reportStatistics?.total ?? 0"

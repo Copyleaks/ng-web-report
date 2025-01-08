@@ -321,8 +321,7 @@ export class OriginalTextHelperDirective implements AfterContentInit, OnDestroy 
 				distinctUntilChanged(),
 				withLatestFrom(reportViewMode$),
 				filter(
-					([textMatchClickEvent, viewData]) =>
-						textMatchClickEvent &&
+					([, viewData]) =>
 						(viewData.viewMode === 'one-to-many' ||
 							viewData.viewMode === 'only-ai' ||
 							viewData.viewMode === 'writing-feedback') &&
@@ -332,7 +331,16 @@ export class OriginalTextHelperDirective implements AfterContentInit, OnDestroy 
 				takeUntil(this.unsubscribe$)
 			)
 			.subscribe(([textMatchClickEvent, ,]) => {
+				if (
+					this.lastSelectedOriginalTextMatch === textMatchClickEvent ||
+					(this.lastSelectedOriginalTextMatch &&
+						this.lastSelectedOriginalTextMatch.elem?.match === textMatchClickEvent?.elem?.match)
+				) {
+					this.lastSelectedOriginalTextMatch = null;
+					return;
+				}
 				this.lastSelectedOriginalTextMatch = textMatchClickEvent;
+				if (!textMatchClickEvent) return;
 
 				const currentSelectedCorrection = this._reportMatchesSvc.correctionSelect;
 				if (
@@ -404,10 +412,14 @@ export class OriginalTextHelperDirective implements AfterContentInit, OnDestroy 
 				)
 			)
 			.subscribe(([aiInsightsSelect, _]) => {
-				if (!aiInsightsSelect) return;
+				if (!aiInsightsSelect) {
+					this.lastSelectedOriginalTextMatch = null;
+					return;
+				}
 				if (aiInsightsSelect.isSelected) {
 					this.selectAIInsights(aiInsightsSelect.resultRange);
 				} else {
+					this.lastSelectedOriginalTextMatch = null;
 					this.removeSelectAIInsights(aiInsightsSelect.resultRange);
 				}
 			});

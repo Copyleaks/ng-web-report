@@ -92,6 +92,11 @@ export enum EScanStatus {
 	Error = 1,
 	CreditsChecked = 2,
 	Indexed = 3,
+	Crawling = 4,
+	Paying = 5,
+	Refilling = 6,
+	Scanning = 7,
+	GenerateReport = 8,
 }
 
 export enum ECompleteResultNotificationAlertSeverity {

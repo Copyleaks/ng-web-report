@@ -74,6 +74,8 @@ export interface ITextExclude extends IBaseExclude {
 /** Progress endpoint response from Copyleaks api */
 export interface IAPIProgress {
 	percents: number;
+	errorCode?: number;
+	status?: EScanStatus;
 }
 
 /** A basic response from Copyleaks api */

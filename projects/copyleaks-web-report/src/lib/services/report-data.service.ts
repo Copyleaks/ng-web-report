@@ -33,6 +33,7 @@ import { ReportErrorsService } from './report-errors.service';
 import { ReportViewService } from './report-view.service';
 import { ReportStatistics } from '../models/report-statistics.models';
 import { retryWithDelay } from '../utils/retry-with-delay';
+import { ERROR_MESSAGES } from '../constants/report-scan-errors.constants';
 
 @Injectable()
 export class ReportDataService {
@@ -372,6 +373,11 @@ export class ReportDataService {
 			});
 			progressResult$.pipe(retryWithDelay(), take(1), untilDestroy(this)).subscribe(
 				progress => {
+					if (progress.status === EScanStatus.Error) {
+						this._handleProgressErrorResponse(progress, endpointsConfig);
+						return;
+					}
+
 					if (progress?.percents == 100) this.initSync(endpointsConfig);
 					else {
 						this._viewSvc.progress$.next(progress.percents);
@@ -975,7 +981,25 @@ export class ReportDataService {
 		return corrections;
 	}
 
+	private _handleProgressErrorResponse(progress: IAPIProgress, endpointsConfig: IClsReportEndpointConfigModel) {
+		this._viewSvc.progress$.next(100);
+		const errorMessage = ERROR_MESSAGES[progress.errorCode] || $localize`Scan failed`;
+		throw {
+			status: 500,
+			statusText: errorMessage,
+			url: endpointsConfig.progress.url,
+			headers: new HttpHeaders(),
+			error: new Error(errorMessage),
+			message: errorMessage,
+		} as HttpErrorResponse;
+	}
+
 	private async _checkScanProgress(progress: IAPIProgress) {
+		if (progress.status === EScanStatus.Error) {
+			this._handleProgressErrorResponse(progress, this._reportEndpointConfig$.value);
+			return;
+		}
+
 		if (progress.percents < 100 && progress.percents > 36 && !this._crawledVersion$.value) {
 			const crawledVersion = await this._getReportCrawledVersion();
 			this._crawledVersion$.next(crawledVersion);

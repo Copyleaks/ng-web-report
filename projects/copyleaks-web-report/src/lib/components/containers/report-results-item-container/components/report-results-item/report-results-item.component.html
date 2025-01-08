@@ -115,7 +115,13 @@
 									fill="none">
 									<ellipse cx="2.07075" cy="2.83008" rx="2.07075" ry="2" fill="#9DA9BF" />
 								</svg>
-								<span *ngIf="authorName" class="author-name-text">{{ authorName }}</span>
+								<span
+									*ngIf="authorName"
+									class="author-name-text"
+									matTooltipClass="web-report-mat-tooltip"
+									[matTooltip]="authorName">
+									{{ authorName }}
+								</span>
 
 								<div
 									class="chips-container"

@@ -60,6 +60,7 @@
 			display: flex;
 			top: 50%;
 			transform: translateY(-50%);
+			user-select: none !important;
 
 			transition: all 0.2s ease-in-out;
 			padding: 2px;
@@ -77,6 +78,7 @@
 				width: 24px;
 				height: 24px;
 				background: $color-white;
+				user-select: none !important;
 			}
 
 			&:hover,
@@ -527,7 +529,7 @@
 	cursor: pointer;
 	transition: 0.4s ease-in-out;
 	// dont allow selection
-	user-select: none;
+	user-select: none !important;
 	-webkit-user-select: none;
 	-moz-user-select: none;
 	-ms-user-select: none;
@@ -540,6 +542,7 @@
 		height: 24px;
 		font-size: 24px;
 		color: $color-white;
+		user-select: none !important;
 	}
 
 	&:hover {

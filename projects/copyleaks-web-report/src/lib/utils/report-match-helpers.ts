@@ -104,96 +104,98 @@ export const findNests = (matches: Match[]): Match[][] => {
  * @param matches the matches to merge - should not include distinct ranges (gaps)
  */
 const mergeMatchesInNest = (matches: Match[]): Match[] => {
-	const uniqueMatches = matches.slice(1).reduce(
-		(prev: Match[], curr: Match) => {
-			const last = prev[prev.length - 1];
-			if (last.start === curr.start && last.end === curr.end) {
-				last.type = Math.min(last.type, curr.type);
-				if (curr.ids?.length != undefined && curr.ids?.length != 0 && last.ids?.indexOf(curr.ids[0]) === -1) {
-					last.ids.push(curr.ids[0]);
-				}
-			} else {
-				prev.push(curr);
-			}
-			return prev;
-		},
-		[matches[0]]
-	);
+	if (!matches.length) return [];
 
-	const endpoints = uniqueMatches
+	// Sort matches by start and then by end to ensure they are in the correct order
+	matches.sort((a, b) => a.start - b.start || a.end - b.end);
+
+	// Merge overlapping or adjacent ranges
+	const mergedMatches: Match[] = [];
+	for (const curr of matches) {
+		const last = mergedMatches[mergedMatches.length - 1];
+
+		if (last && curr.start <= last.end) {
+			// Overlapping or adjacent range
+			last.end = Math.max(last.end, curr.end);
+			last.type = Math.min(last.type, curr.type); // Preserve the highest priority type
+			last.ids = Array.from(new Set([...last.ids, ...curr.ids])); // Combine unique IDs
+		} else {
+			// Non-overlapping range
+			mergedMatches.push({ ...curr });
+		}
+	}
+
+	// Extract endpoints for sub-matches
+	const endpoints = mergedMatches
 		.reduce(extractMatchEndpoints, [])
 		.sort((a, b) => a.index - b.index || b.kind - a.kind);
 
 	const subMatches: Match[] = [];
 	const idMap: { [key: string]: number } = {};
-	const types: number[] = [0, 0, 0, 0, 0, 0, 0];
+	const types: number[] = Array(10).fill(0); // Adjust size if needed
 	let start: number | undefined = undefined;
+
 	for (const { index, type, ids, kind, gid, reason } of endpoints) {
 		if (kind === EndpointKind.start) {
-			if (start) {
-				if (index !== start) {
-					const participatingIds = Object.entries(idMap)
-						.filter(([, value]) => value > 0)
-						.map(([key]) => key);
-					subMatches.push({
-						start,
-						end: index,
-						type: types.findIndex(x => x > 0),
-						ids: participatingIds,
-						gid,
-						reason,
-						writingFeedbackType:
-							uniqueMatches.find(um => um.start === start && um.type === MatchType.writingFeedback)
-								?.writingFeedbackType ?? undefined,
-						proportionType: matches[0]?.proportionType,
-					});
-				}
-			}
-			ids?.forEach(id => (idMap[id] = (idMap[id] || 0) + 1));
-			types[type]++;
-			start = index;
-		}
-		if (kind === EndpointKind.end) {
-			if (index !== start) {
-				const participatingIds = Object.entries(idMap)
-					.filter(([, value]) => value > 0)
-					.map(([key]) => key);
+			if (start !== undefined && index !== start) {
+				// Create a sub-match for the active range
+				const participatingIds = Object.keys(idMap).filter(id => idMap[id] > 0);
 				subMatches.push({
-					start: start ?? 0,
+					start,
 					end: index,
 					type: types.findIndex(x => x > 0),
 					ids: participatingIds,
 					gid,
 					reason,
 					writingFeedbackType:
-						uniqueMatches.find(um => um.start === start && um.type === MatchType.writingFeedback)
-							?.writingFeedbackType ?? undefined,
+						mergedMatches.find(m => m.start === start && m.type === MatchType.writingFeedback)?.writingFeedbackType ??
+						undefined,
+					proportionType: matches[0]?.proportionType,
+				});
+			}
+			ids?.forEach(id => (idMap[id] = (idMap[id] || 0) + 1));
+			types[type]++;
+			start = index;
+		}
+		if (kind === EndpointKind.end) {
+			if (start !== undefined && index !== start) {
+				// Create a sub-match for the active range
+				const participatingIds = Object.keys(idMap).filter(id => idMap[id] > 0);
+				subMatches.push({
+					start,
+					end: index,
+					type: types.findIndex(x => x > 0),
+					ids: participatingIds,
+					gid,
+					reason,
+					writingFeedbackType:
+						mergedMatches.find(m => m.start === start && m.type === MatchType.writingFeedback)?.writingFeedbackType ??
+						undefined,
 					proportionType: matches[0]?.proportionType,
 				});
 			}
 			ids?.forEach(id => (idMap[id] = (idMap[id] || 0) - 1));
 			types[type]--;
-			start = Object.entries(idMap).filter(([, value]) => value > 0).length === 0 ? undefined : index;
+			start = Object.keys(idMap).some(id => idMap[id] > 0) ? index : undefined;
 		}
 	}
 
-	const result: Match[] = subMatches.slice(1).reduce(
-		(prev: Match[], curr: Match) => {
-			const last = prev[prev.length - 1];
+	// Final reduction to merge adjacent sub-matches with the same type and IDs
+	const result: Match[] = subMatches.reduce((prev: Match[], curr: Match) => {
+		const last = prev[prev.length - 1];
 
-			if (
-				last.type != MatchType.writingFeedback &&
-				last.type === curr.type &&
-				curr.ids?.sort().join(',') === last.ids?.sort().join(',')
-			) {
-				last.end = curr.end;
-			} else {
-				prev.push(curr);
-			}
-			return prev;
-		},
-		[subMatches[0]]
-	);
+		if (
+			last &&
+			last.type === curr.type &&
+			JSON.stringify([...last.ids].sort()) === JSON.stringify([...curr.ids].sort())
+		) {
+			last.end = curr.end;
+		} else {
+			prev.push(curr);
+		}
+		return prev;
+	}, []);
+
 	return result;
 };
 

@@ -114,13 +114,20 @@ const mergeMatchesInNest = (matches: Match[]): Match[] => {
 	for (const curr of matches) {
 		const last = mergedMatches[mergedMatches.length - 1];
 
-		if (last && curr.start <= last.end) {
-			// Overlapping or adjacent range
+		if (
+			last &&
+			curr.start <= last.end &&
+			last.type !== MatchType.aiText &&
+			last.type !== MatchType.aiExplain &&
+			curr.type !== MatchType.aiText &&
+			curr.type !== MatchType.aiExplain
+		) {
+			// Overlapping or adjacent range that is not AI-related
 			last.end = Math.max(last.end, curr.end);
 			last.type = Math.min(last.type, curr.type); // Preserve the highest priority type
 			last.ids = Array.from(new Set([...last.ids, ...curr.ids])); // Combine unique IDs
 		} else {
-			// Non-overlapping range
+			// Non-overlapping range or AI-related match
 			mergedMatches.push({ ...curr });
 		}
 	}
@@ -186,6 +193,10 @@ const mergeMatchesInNest = (matches: Match[]): Match[] => {
 
 		if (
 			last &&
+			last.type !== MatchType.aiText &&
+			last.type !== MatchType.aiExplain &&
+			curr.type !== MatchType.aiText &&
+			curr.type !== MatchType.aiExplain &&
 			last.type === curr.type &&
 			JSON.stringify([...last.ids].sort()) === JSON.stringify([...curr.ids].sort())
 		) {

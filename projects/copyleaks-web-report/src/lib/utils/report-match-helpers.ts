@@ -114,13 +114,20 @@ const mergeMatchesInNest = (matches: Match[]): Match[] => {
 	for (const curr of matches) {
 		const last = mergedMatches[mergedMatches.length - 1];
 
-		if (last && curr.start <= last.end) {
-			// Overlapping or adjacent range
+		if (
+			last &&
+			curr.start <= last.end &&
+			last.type !== MatchType.aiText &&
+			last.type !== MatchType.aiExplain &&
+			curr.type !== MatchType.aiText &&
+			curr.type !== MatchType.aiExplain
+		) {
+			// Overlapping or adjacent range that is not AI-related
 			last.end = Math.max(last.end, curr.end);
 			last.type = Math.min(last.type, curr.type); // Preserve the highest priority type
 			last.ids = Array.from(new Set([...last.ids, ...curr.ids])); // Combine unique IDs
 		} else {
-			// Non-overlapping range
+			// Non-overlapping range or AI-related match
 			mergedMatches.push({ ...curr });
 		}
 	}
@@ -186,6 +193,10 @@ const mergeMatchesInNest = (matches: Match[]): Match[] => {
 
 		if (
 			last &&
+			last.type !== MatchType.aiText &&
+			last.type !== MatchType.aiExplain &&
+			curr.type !== MatchType.aiText &&
+			curr.type !== MatchType.aiExplain &&
 			last.type === curr.type &&
 			JSON.stringify([...last.ids].sort()) === JSON.stringify([...curr.ids].sort())
 		) {
@@ -473,7 +484,7 @@ export const processSuspectedCharacterMatches = (
  * @param source the scan source
  * @param alertToMatch alert to process
  */
-export const processAICheatingMatches = (
+export const processAIInsightsTextMatches = (
 	source: IScanSource,
 	alertToMatch: ICompleteResultNotificationAlert
 ): SlicedMatch[][] => {
@@ -563,6 +574,108 @@ export const processAICheatingMatches = (
 	const grouped = mergeMatches([...matches, ...excluded]);
 	const filled = fillMissingGaps(grouped, source.text.value.length);
 	return paginateMatches(source.text.value, source.text.pages.startPosition, filled);
+};
+
+/**
+ * This function will process notifications and generate a list of match intervals that will help
+ * highlight the source text.
+ * @param source the scan source
+ * @param alertToMatch alert to process
+ */
+export const processAIInsightsHTMLMatches = (
+	source: IScanSource,
+	alertToMatch: ICompleteResultNotificationAlert
+): Match[] => {
+	const matches: Match[] = [];
+	let lastExplainIndex: number = 0;
+	var scanResult = JSON.parse(alertToMatch.additionalData) as AIScanResult;
+	const explainResult = scanResult?.explain ?? false;
+	const lengthExplain = explainResult ? explainResult?.patterns?.html?.chars?.starts?.length : 0;
+	const proportionArray = explainResult
+		? updateExplainProportionType(explainResult?.patterns?.statistics?.proportion)
+		: [];
+
+	scanResult?.results?.forEach(result => {
+		result?.matches?.forEach((match: AIScanResultMatch) => {
+			const mappedMatches = match?.html?.chars?.starts?.map(
+				(start, idx) =>
+					({
+						start,
+						end: start + match.html.chars.lengths[idx],
+						type: result.classification == EMatchClassification.AI ? MatchType.aiText : MatchType.none,
+						ids: [],
+						classification: result.classification,
+						probability: result.probability,
+						totalWords: match.html.words.lengths[idx],
+						gid: match.html.chars?.groupIds[idx],
+					} as AIMatch)
+			);
+			//#region add explain to the matches
+			mappedMatches?.forEach(match => {
+				if (match && match.type == MatchType.aiText && lastExplainIndex < lengthExplain) {
+					let startMappedMatches = match.start;
+					let endMappedMatches = match.end;
+					for (let i = lastExplainIndex; i < lengthExplain; i++) {
+						const firstExolain = scanResult?.explain?.patterns?.html?.chars?.starts[i];
+						const endExolain = firstExolain + scanResult.explain?.patterns?.html?.chars?.lengths[i];
+						if (startMappedMatches <= firstExolain && endMappedMatches >= endExolain) {
+							lastExplainIndex = i + 1;
+							if (startMappedMatches < firstExolain) {
+								const matchBefore = {
+									start: startMappedMatches,
+									end: firstExolain - 1,
+									type: match.type,
+									ids: [],
+									gid: match.gid,
+									classification: match.classification,
+									probability: match.probability,
+									totalWords: match.totalWords,
+								} as AIMatch;
+								matches.push(matchBefore);
+								startMappedMatches = firstExolain;
+								i = i - 1;
+							} else if (startMappedMatches == firstExolain) {
+								const explainMatch = {
+									start: firstExolain,
+									end: endExolain,
+									type: MatchType.aiExplain,
+									ids: [],
+									gid: scanResult?.explain?.patterns?.html?.chars?.groupIds[i],
+									classification: match.classification,
+									probability: match.probability,
+									totalWords: match.totalWords,
+									proportionType: proportionArray[i],
+								} as AIMatch;
+								matches.push(explainMatch);
+								startMappedMatches = endExolain + 1;
+							}
+						}
+					}
+					if (startMappedMatches < endMappedMatches) {
+						const matchAfter = {
+							start: startMappedMatches,
+							end: endMappedMatches,
+							type: match.type,
+							ids: [],
+							classification: match.classification,
+							probability: match.probability,
+							totalWords: match.totalWords,
+							gid: match.gid,
+						} as AIMatch;
+						matches.push(matchAfter);
+					}
+				} else if (match) {
+					matches.push(match);
+				}
+			});
+			//#endregion
+		});
+	});
+
+	const excluded = sourceTextExcluded(source);
+	const grouped = mergeMatches([...matches, ...excluded]);
+	const final = fillMissingGaps(grouped, source.html?.value?.length);
+	return final;
 };
 
 export const updateExplainProportionType = (proportionArray: number[]) => {
@@ -724,6 +837,10 @@ export const getRenderedMatches = (matches: Match[] | null, originalHtml: string
 				if (curr.type === MatchType.writingFeedback) {
 					stringBuilder.push(
 						`<span match data-type="${curr.type}" data-index="${i}" data-gid="${curr.gid}" data-correction-text="${curr.correctionText}" data-wrong-text="${curr.wrongText}">${slice}</span>`
+					);
+				} else if (curr.type === MatchType.aiExplain) {
+					stringBuilder.push(
+						`<span match data-type="${curr.type}" data-index="${i}" data-gid="${curr.gid}" data-proportion="${curr.proportionType}">${slice}</span>`
 					);
 				} else {
 					stringBuilder.push(

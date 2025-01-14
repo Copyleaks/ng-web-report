@@ -2,6 +2,7 @@
 
 import {
 	CorrectionSelectEvent,
+	MatchGroupSelectEvent,
 	MatchJumpEvent,
 	MatchSelectEvent,
 	PostMessageEvent,
@@ -94,6 +95,9 @@ function ready() {
 			case 'match-select':
 				handleBroadcastMatchSelect(event);
 				break;
+			case 'match-group-select':
+				handleBroadcastGroupMatchesSelect(event);
+				break;
 			case 'match-jump':
 				onMatchJump(event);
 				break;
@@ -143,6 +147,25 @@ function ready() {
 			return;
 		}
 		onMatchSelect(elem, true); // should not rebroadcast
+	}
+
+	/**
+	 * handle a broadcasted `match-select` event
+	 * @param event the match select event
+	 */
+	function handleBroadcastGroupMatchesSelect(event: MatchGroupSelectEvent) {
+		const elems: any = document.querySelectorAll<HTMLSpanElement>(`span[match][data-gid='${event.groupId}']`);
+
+		if (elems.length === 0) {
+			messageParent({ type: 'match-warn' });
+			return;
+		}
+
+		setTimeout(() => {
+			elems.forEach(elem => {
+				onMatchMultiSelect(elem, true); // should not rebroadcast
+			});
+		});
 	}
 
 	/**
@@ -240,7 +263,11 @@ function ready() {
 			current = null;
 			currentMulti.forEach(e => e?.toggleAttribute('on', false));
 			currentMulti = [];
-			messageParent({ type: 'match-select', index: -1 });
+			messageParent({
+				type: 'match-select',
+				index: -1,
+				prevIndex: !!elem?.dataset?.['index'] ? +(elem?.dataset?.['index'] ?? '') : -1,
+			});
 			return;
 		}
 		if (!broadcast && current) {

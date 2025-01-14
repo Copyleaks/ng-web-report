@@ -184,6 +184,36 @@ span[match][data-type='3'] {
 span[match][data-type='3'].hover {
 	background-color: #00E2A2 ;
 }
+span[match][data-type='6'] {
+	background-color: #d7c5ff;
+  transition: 0.2s;
+}
+
+span[match][data-type='4'] {
+	background-color: #f8eaff;
+  transition: 0.2s;
+  pointer-events: none !important;
+}
+
+span[match][data-proportion='low'] {
+	background-color: #d7c5ff !important;
+  transition: 0.2s;
+}
+
+span[match][data-proportion='medium'] {
+	background-color: #bca6ff !important;
+  transition: 0.2s;
+}
+
+span[match][data-proportion='high'] {
+	background-color: #a188ff !important;
+  transition: 0.2s;
+}
+
+span[match][data-type='6'].hover {
+	background-color: #00E2A2 !important;
+}
+
 span[match][on] {
 	background-color: #00E2A2  !important;
 }

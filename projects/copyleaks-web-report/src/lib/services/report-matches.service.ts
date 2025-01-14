@@ -52,11 +52,17 @@ export class ReportMatchesService implements OnDestroy {
 	public get originalTextMatches$() {
 		return this._originalTextMatches.asObservable().pipe();
 	}
+	public get originalTextMatches() {
+		return this._originalTextMatches.value;
+	}
 
 	private _originalHtmlMatches = new BehaviorSubject<Match[] | null>(null);
 	/** Emits matches that are relevant to source html one-to-many mode */
 	public get originalHtmlMatches$() {
 		return this._originalHtmlMatches.asObservable().pipe();
+	}
+	public get originalHtmlMatches() {
+		return this._originalHtmlMatches.value;
 	}
 
 	private _correctionSelect$ = new BehaviorSubject<IWritingFeedbackCorrectionViewModel | null>(null);
@@ -425,13 +431,15 @@ export class ReportMatchesService implements OnDestroy {
 		completeResults?: ICompleteResults
 	) {
 		let text: SlicedMatch[][];
+		let html: Match[];
 
 		// check if the selected alert code is valid
 		const selectedAlert = completeResults?.notifications?.alerts.find(alert => alert.code === selectedAlertCode);
 		if (selectedAlert) {
 			switch (selectedAlertCode) {
 				case ALERTS.SUSPECTED_AI_TEXT_DETECTED:
-					text = helpers.processAICheatingMatches(source, selectedAlert);
+					text = helpers.processAIInsightsTextMatches(source, selectedAlert);
+					html = helpers.processAIInsightsHTMLMatches(source, selectedAlert);
 					break;
 				case ALERTS.SUSPECTED_CHARACTER_REPLACEMENT_CODE:
 					text = helpers.processSuspectedCharacterMatches(source, selectedAlert);
@@ -455,15 +463,17 @@ export class ReportMatchesService implements OnDestroy {
 		if (text) this._originalTextMatches.next(text);
 
 		// update the html view with zero results
-		const html = helpers.processSourceHtml(
-			[],
-			settings ?? {
-				showIdentical: true,
-				showRelated: true,
-				showMinorChanges: true,
-			},
-			source
-		);
+		if (!html)
+			html = helpers.processSourceHtml(
+				[],
+				settings ?? {
+					showIdentical: true,
+					showRelated: true,
+					showMinorChanges: true,
+				},
+				source
+			);
+
 		if (html) this._originalHtmlMatches.next(html);
 	}
 

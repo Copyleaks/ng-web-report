@@ -340,7 +340,7 @@ export class CopyleaksWebReportComponent implements OnInit, OnDestroy {
 
 		this._reportViewSvc.reportViewMode$.next({
 			viewMode: viewMode === 'writing-feedback' ? EReportLayoutType.WritingFeedback : this.reportLayoutType,
-			isHtmlView: (!contentMode || contentMode == 'html') && !alertCode,
+			isHtmlView: !contentMode || contentMode == 'html',
 			sourcePageIndex: sourcePage ? Number(sourcePage) ?? 1 : 1,
 			suspectId: suspectId,
 			suspectPageIndex: suspectPage ? Number(suspectPage) ?? 1 : 1,
@@ -413,7 +413,7 @@ export class CopyleaksWebReportComponent implements OnInit, OnDestroy {
 				!(
 					this._reportViewSvc.reportViewMode?.viewMode ==
 						(viewMode === 'writing-feedback' ? EReportLayoutType.WritingFeedback : this.reportLayoutType) &&
-					this._reportViewSvc.reportViewMode?.isHtmlView == ((!contentMode || contentMode == 'html') && !alertCode) &&
+					this._reportViewSvc.reportViewMode?.isHtmlView == (!contentMode || contentMode == 'html') &&
 					this._reportViewSvc.reportViewMode?.sourcePageIndex == (sourcePage ? Number(sourcePage) ?? 1 : 1) &&
 					this._reportViewSvc.reportViewMode?.suspectId == suspectId &&
 					this._reportViewSvc.reportViewMode?.suspectPageIndex == (suspectPage ? Number(suspectPage) ?? 1 : 1) &&
@@ -424,7 +424,7 @@ export class CopyleaksWebReportComponent implements OnInit, OnDestroy {
 			)
 				this._reportViewSvc.reportViewMode$.next({
 					viewMode: viewMode === 'writing-feedback' ? EReportLayoutType.WritingFeedback : this.reportLayoutType,
-					isHtmlView: (!contentMode || contentMode == 'html') && !alertCode,
+					isHtmlView: !contentMode || contentMode == 'html',
 					sourcePageIndex: sourcePage ? Number(sourcePage) ?? 1 : 1,
 					suspectId: suspectId,
 					suspectPageIndex: suspectPage ? Number(suspectPage) ?? 1 : 1,

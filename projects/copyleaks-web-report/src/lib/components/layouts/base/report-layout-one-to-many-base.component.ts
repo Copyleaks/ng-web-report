@@ -42,6 +42,7 @@ import { ReportRealtimeResultsService } from '../../../services/report-realtime-
 import { ViewMode } from '../../../models/report-config.models';
 import * as helpers from '../../../utils/report-match-helpers';
 import { ReportErrorsService } from '../../../services/report-errors.service';
+import { ISelectExplainableAIResult } from '../../../models/report-ai-results.models';
 
 export abstract class OneToManyReportLayoutBaseComponent extends ReportLayoutBaseComponent {
 	hideRightSection: boolean = false;
@@ -185,9 +186,6 @@ export abstract class OneToManyReportLayoutBaseComponent extends ReportLayoutBas
 			])
 				.pipe(takeUntil(this.unsubscribe$))
 				.subscribe(([previews, details]) => {
-					if (data?.alertCode && this.selectedTap === EReportViewType.AIView) {
-						this.isHtmlView = false;
-					}
 					if (this.reportDataSvc.filterOptions?.showAlerts === false) this.alerts = [];
 					else
 						this.alerts =
@@ -528,7 +526,40 @@ export abstract class OneToManyReportLayoutBaseComponent extends ReportLayoutBas
 		switch (message.type) {
 			case 'match-select':
 				const selectedMatch = message.index !== -1 ? this.reportMatches[message.index] : null;
-				if (this.viewMode === 'one-to-many') this._showResultsForSelectedMatch(selectedMatch);
+				if (
+					(this.viewMode === 'one-to-many' && this.selectedTap === EReportViewType.AIView) ||
+					this.viewMode === 'only-ai'
+				) {
+					if (!selectedMatch) {
+						if (this.matchSvc.aiInsightsShowResult$.value && message.prevIndex >= 0) {
+							const unselectedMatch = this.reportMatches[message.prevIndex];
+							if (!unselectedMatch) return;
+
+							let unselectedAIInsight = this.explainableAI.slicedMatch[unselectedMatch?.gid];
+							if (!unselectedAIInsight) return;
+
+							this.matchSvc.aiInsightsShowResult$.next({
+								resultRange: {
+									start: unselectedAIInsight?.match?.start,
+									end: unselectedAIInsight?.match?.end,
+								},
+								isSelected: false,
+							} as ISelectExplainableAIResult);
+							return;
+						}
+					}
+
+					let selectedAIInsight = this.explainableAI.slicedMatch[selectedMatch?.gid];
+					if (!selectedAIInsight) return;
+
+					this.matchSvc.aiInsightsShowResult$.next({
+						resultRange: {
+							start: selectedAIInsight.match.start,
+							end: selectedAIInsight.match.end,
+						},
+						isSelected: true,
+					} as ISelectExplainableAIResult);
+				} else if (this.viewMode === 'one-to-many') this._showResultsForSelectedMatch(selectedMatch);
 				else if (this.viewMode === 'writing-feedback') {
 					if (selectedMatch) {
 						const textSelectedMatch = this.allScanCorrectionsView[selectedMatch.gid];

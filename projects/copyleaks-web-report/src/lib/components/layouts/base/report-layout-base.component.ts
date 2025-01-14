@@ -8,12 +8,13 @@ import { ReportStatisticsService } from '../../../services/report-statistics.ser
 import { ReportNgTemplatesService } from '../../../services/report-ng-templates.service';
 import { ReportRealtimeResultsService } from '../../../services/report-realtime-results.service';
 import { ReportErrorsService } from '../../../services/report-errors.service';
+import { ALERTS } from '../../../constants/report-alerts.constants';
 
 export abstract class ReportLayoutBaseComponent {
 	isHtmlView: boolean;
 
 	get isAlertsMode(): boolean {
-		return !!this.reportViewSvc.selectedAlert;
+		return !!this.reportViewSvc.selectedAlert && this.reportViewSvc.selectedAlert != ALERTS.SUSPECTED_AI_TEXT_DETECTED;
 	}
 
 	constructor(

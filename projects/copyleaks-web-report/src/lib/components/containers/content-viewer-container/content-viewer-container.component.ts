@@ -445,6 +445,12 @@ export class ContentViewerContainerComponent implements OnInit, AfterViewInit, O
 				} else this.hideAddCustomMatchIcon();
 			});
 
+			window.addEventListener('mouseup', event => {
+				setTimeout(() => {
+					this.showAddCustomMatchIcon(event);
+				}, 100);
+			});
+
 			// Mutation observer to handle DOM changes
 			this.observer = new MutationObserver(() => {
 				// Temporarily disconnect the observer to prevent infinite loop
@@ -827,6 +833,7 @@ export class ContentViewerContainerComponent implements OnInit, AfterViewInit, O
 
 			// Highlight the selected text
 			this.highlightCustomMatchText(this.customMatchTobeAddedData);
+			window.getSelection()?.removeAllRanges();
 		}
 	}
 
@@ -1049,6 +1056,65 @@ export class ContentViewerContainerComponent implements OnInit, AfterViewInit, O
 	showAddCustomMatchIcon(event: MouseEvent): void {
 		if (!this.allowCustomViewAddBtn) return;
 		const selection = window.getSelection();
+
+		const container = this.contentText.nativeElement;
+		const containerRange = container.ownerDocument.createRange();
+		containerRange.selectNodeContents(container);
+
+		if (selection && selection.rangeCount > 0) {
+			const range = selection.getRangeAt(0);
+
+			// Restrict the selection to the container
+			if (
+				range.compareBoundaryPoints(Range.START_TO_START, containerRange) < 0 ||
+				range.compareBoundaryPoints(Range.END_TO_END, containerRange) > 0
+			) {
+				const newRange = container.ownerDocument.createRange();
+
+				// Adjust the start of the range if it is outside the container
+				if (range.compareBoundaryPoints(Range.START_TO_START, containerRange) < 0) {
+					newRange.setStart(containerRange.startContainer, containerRange.startOffset);
+				} else {
+					newRange.setStart(range.startContainer, range.startOffset);
+				}
+
+				// Adjust the end of the range if it is outside the container
+				if (range.compareBoundaryPoints(Range.END_TO_END, containerRange) > 0) {
+					newRange.setEnd(containerRange.endContainer, containerRange.endOffset);
+				} else {
+					newRange.setEnd(range.endContainer, range.endOffset);
+				}
+
+				// check if the new range is empty
+				if (newRange.toString().trim() === '') {
+					this.hideAddCustomMatchIcon(false);
+					return;
+				}
+
+				selection.removeAllRanges();
+				selection.addRange(newRange);
+			}
+
+			// Remove the specified element (e.g., highlight-icon which is the icon that ) from the selection
+			const highlightIcon = document.getElementById('highlight-icon');
+			if (highlightIcon) {
+				const highlightRange = document.createRange();
+				highlightRange.selectNodeContents(highlightIcon);
+
+				if (range.intersectsNode(highlightIcon)) {
+					// If the selection includes the highlight-icon, split the range
+					if (range.compareBoundaryPoints(Range.START_TO_START, highlightRange) < 0) {
+						range.setEndBefore(highlightIcon);
+					} else if (range.compareBoundaryPoints(Range.END_TO_END, highlightRange) > 0) {
+						range.setStartAfter(highlightIcon);
+					}
+
+					// Apply the adjusted range back to the selection
+					selection.removeAllRanges();
+					selection.addRange(range);
+				}
+			}
+		}
 		if (selection && selection.rangeCount > 0) {
 			const range = selection.getRangeAt(0);
 			if (!range.collapsed) {
@@ -1067,6 +1133,14 @@ export class ContentViewerContainerComponent implements OnInit, AfterViewInit, O
 				// Adjust left position if overflowing on the right
 				if (this.iconPosition.left + 40 > contentTextRect.width) {
 					this.iconPosition.left = contentTextRect.width - 40;
+				}
+
+				if (this.iconPosition.left < 0) {
+					this.iconPosition.left = 0;
+				}
+
+				if (this.iconPosition.top < 0) {
+					this.iconPosition.top = 0;
 				}
 
 				this._saveRangySelectionData();

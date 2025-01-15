@@ -50,6 +50,9 @@ export class CrTextMatchComponent implements AfterContentInit {
 	public click(event) {
 		if (this.match.type === MatchType.aiText) return;
 
+		// clear window selection
+		document.getSelection()?.removeAllRanges();
+
 		if (this.match.type === MatchType.aiExplain) {
 			const selectAIMachText = !this._focused;
 			this._reportMatchesSvc.aiInsightsShowResult$.next({

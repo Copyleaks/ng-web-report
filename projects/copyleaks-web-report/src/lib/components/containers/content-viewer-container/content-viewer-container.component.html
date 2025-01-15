@@ -300,8 +300,7 @@
 				[dir]="contentDirection"
 				crOriginalTextHelper
 				[host]="this"
-				text-container
-				(mouseup)="showAddCustomMatchIcon($event)">
+				text-container>
 				<ng-container *ngIf="contentTextMatches; else clean">
 					<ng-container *ngFor="let partial of contentTextMatches[currentPage - 1]">
 						<span *ngIf="partial.match.type === MatchType.none">{{ partial.content }}</span>

@@ -247,11 +247,13 @@ export class OriginalTextHelperDirective implements AfterContentInit, OnDestroy 
 		setTimeout(() => {
 			if (this.host.currentPage === foundCorrectionInfo.page + 1) {
 				const components = this.children.toArray();
-				components.find(comp => comp?.match?.start === match.start && comp?.match?.end === match.end).focused = false;
+				const comp = components.find(comp => comp?.match?.start === match.start && comp?.match?.end === match.end);
+				if (comp) comp.focused = false;
 			} else {
 				this.children.changes.pipe(take(1)).subscribe(() => {
 					const components = this.children.toArray();
-					components.find(comp => comp?.match?.start === match.start && comp?.match?.end === match.end).focused = false;
+					const comp = components.find(comp => comp?.match?.start === match.start && comp?.match?.end === match.end);
+					if (comp) comp.focused = false;
 				});
 			}
 		});
@@ -273,6 +275,7 @@ export class OriginalTextHelperDirective implements AfterContentInit, OnDestroy 
 		start: number,
 		end: number
 	): { match: SlicedMatch | null; page: number; index: number } {
+		if (!contentTextMatches || contentTextMatches.length === 0) return { match: null, page: -1, index: -1 };
 		for (let page = 0; page < contentTextMatches.length; page++) {
 			for (let index = 0; index < contentTextMatches[page].length; index++) {
 				const slicedMatch = contentTextMatches[page][index];
@@ -418,6 +421,14 @@ export class OriginalTextHelperDirective implements AfterContentInit, OnDestroy 
 					this.removeSelectAIInsights(aiInsightsSelect.resultRange);
 				}
 			});
+
+		this._highlightService.clear$.pipe(untilDestroy(this)).subscribe(() => {
+			const components = this.children?.toArray();
+			if (!components) return;
+			components.forEach(component => {
+				if (component) component.focused = false;
+			});
+		});
 
 		this.host.onTextMatchSelectionEvent.subscribe((event: any) => {
 			if (event.type === 'annotation-click') {

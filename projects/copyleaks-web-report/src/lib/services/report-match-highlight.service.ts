@@ -59,7 +59,7 @@ export class ReportMatchHighlightService implements OnDestroy {
 	}
 
 	public get clear$() {
-		return this._clear.asObservable();
+		return this._clear;
 	}
 
 	public get oneToManyTextMatchClick$() {

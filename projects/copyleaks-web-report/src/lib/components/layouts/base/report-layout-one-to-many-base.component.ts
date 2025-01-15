@@ -242,10 +242,11 @@ export abstract class OneToManyReportLayoutBaseComponent extends ReportLayoutBas
 									if (match.html != null && match.html != undefined) this.isAiHtmlViewAvailable = true;
 								});
 							});
-
-							if (!this.isAiHtmlViewAvailable) {
-								this.isHtmlView = false;
-							}
+						} else {
+							this.isAiHtmlViewAvailable = false;
+						}
+						if (!this.isAiHtmlViewAvailable) {
+							this.isHtmlView = false;
 						}
 					}
 				});
@@ -498,7 +499,7 @@ export abstract class OneToManyReportLayoutBaseComponent extends ReportLayoutBas
 				if (multiText && multiText.length > 0) {
 					const selectedMatches = multiText.map(c => c.match);
 					if (this.viewMode === 'one-to-many' || this.viewMode === 'only-ai') {
-						this._showResultsForMultiSelection(selectedMatches);
+						this._showResultsForMatchingMultiSelection(selectedMatches);
 					} else if (this.viewMode === 'writing-feedback') {
 						if (selectedMatches.length === 0) this.displayedScanCorrectionsView = this.filteredCorrections;
 						else
@@ -567,52 +568,9 @@ export abstract class OneToManyReportLayoutBaseComponent extends ReportLayoutBas
 					(this.viewMode === 'one-to-many' && this.selectedTap === EReportViewType.AIView) ||
 					this.viewMode === 'only-ai'
 				) {
-					let selectedAIInsights: SlicedMatch[] = [];
-					selectedMatches.forEach(selectedMatch => {
-						let selectedAIInsight = this.explainableAI.slicedMatch[selectedMatch?.gid];
-						if (!selectedAIInsight) return;
-
-						selectedAIInsights.push(selectedAIInsight);
-
-						let prevSelectedAIInsights = this.highlightSvc.aiInsightsSelectedResults ?? [];
-
-						if (
-							prevSelectedAIInsights.find(
-								ai =>
-									ai.resultRange.start === selectedAIInsight.match.start &&
-									ai.resultRange.end === selectedAIInsight.match.end
-							)
-						)
-							return;
-						else {
-							this.highlightSvc.setOriginalHtmlMatch(selectedMatch);
-						}
-
-						return;
-					});
-
-					// filter the this.matchSvc.aiInsightsSelectedResults and take the results that are not the selected ones selectedAIInsights
-					let unselectedAIInsights = this.highlightSvc.aiInsightsSelectedResults?.filter(
-						ai =>
-							!selectedAIInsights.find(
-								s => s.match.start === ai.resultRange.start && s.match.end === ai.resultRange.end
-							)
-					);
-
-					unselectedAIInsights?.forEach(unselectedMatch => {
-						const validSelectedAlert = this.reportDataSvc.scanResultsPreviews?.notifications?.alerts?.find(
-							a => a.code === ALERTS.SUSPECTED_AI_TEXT_DETECTED
-						);
-						if (validSelectedAlert) {
-							var scanResult = JSON.parse(validSelectedAlert.additionalData) as AIScanResult;
-							const index = scanResult.explain.patterns.text.chars.starts.findIndex(
-								s => s === unselectedMatch.resultRange.start
-							);
-							this.highlightSvc.setOriginalHtmlMatch(this.reportMatches.find(m => m.gid === index));
-						}
-					});
+					this._showResultsForAIInsightsMultiSelection(selectedMatches);
 				} else if (this.viewMode === 'one-to-many') {
-					this._showResultsForMultiSelection(selectedMatches);
+					this._showResultsForMatchingMultiSelection(selectedMatches);
 				} else if (this.viewMode === 'writing-feedback') {
 					if (selectedMatches.length === 0) this.displayedScanCorrectionsView = this.filteredCorrections;
 					else this.displayedScanCorrectionsView = [];
@@ -632,6 +590,57 @@ export abstract class OneToManyReportLayoutBaseComponent extends ReportLayoutBas
 			default:
 				console.error('unknown event', message);
 		}
+	}
+
+	private _showResultsForAIInsightsMultiSelection(selectedMatches: Match[]): void {
+		const selectedAIInsights: SlicedMatch[] = [];
+		const prevSelectedAIInsights = this.highlightSvc.aiInsightsSelectedResults ?? [];
+		const validSelectedAlert = this.reportDataSvc.scanResultsPreviews?.notifications?.alerts?.find(
+			a => a.code === ALERTS.SUSPECTED_AI_TEXT_DETECTED
+		);
+		const scanResult: AIScanResult = validSelectedAlert
+			? (JSON.parse(validSelectedAlert.additionalData) as AIScanResult)
+			: null;
+
+		// Process selected matches
+		selectedMatches.forEach(selectedMatch => {
+			const selectedAIInsight = this.explainableAI.slicedMatch[selectedMatch?.gid];
+			if (!selectedAIInsight) return;
+
+			selectedAIInsights.push(selectedAIInsight);
+
+			const isAlreadySelected = prevSelectedAIInsights.some(
+				ai =>
+					ai.resultRange.start === selectedAIInsight.match.start && ai.resultRange.end === selectedAIInsight.match.end
+			);
+
+			// Add to highlights if not already selected
+			if (!isAlreadySelected) {
+				this.highlightSvc.setOriginalHtmlMatch(selectedMatch);
+			}
+		});
+
+		// Filter out unselected AI insights
+		const unselectedAIInsights = prevSelectedAIInsights.filter(
+			ai =>
+				!selectedAIInsights.some(
+					selected => selected.match.start === ai.resultRange.start && selected.match.end === ai.resultRange.end
+				)
+		);
+
+		// Process unselected matches
+		unselectedAIInsights.forEach(unselectedMatch => {
+			if (!scanResult) return;
+
+			const index = scanResult.explain.patterns.text.chars.starts.findIndex(
+				start => start === unselectedMatch.resultRange.start
+			);
+
+			const matchToUnhighlight = this.reportMatches.find(match => match.gid === index);
+			if (matchToUnhighlight) {
+				this.highlightSvc.setOriginalHtmlMatch(matchToUnhighlight);
+			}
+		});
 	}
 
 	private _showResultsForSelectedMatch(selectedMatch: Match | null) {
@@ -695,7 +704,7 @@ export abstract class OneToManyReportLayoutBaseComponent extends ReportLayoutBas
 			};
 	}
 
-	private _showResultsForMultiSelection(selctions: Match[]) {
+	private _showResultsForMatchingMultiSelection(selctions: Match[]) {
 		if (selctions?.length <= 1) this.isMultiSelection = false;
 		else this.isMultiSelection = true;
 

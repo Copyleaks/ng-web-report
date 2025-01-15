@@ -46,6 +46,7 @@ import * as rangy from 'rangy';
 import * as rangyclassapplier from 'rangy/lib/rangy-classapplier';
 
 import { md5 } from 'hash-wasm';
+import { ALERTS } from '../../../constants/report-alerts.constants';
 
 @Component({
 	selector: 'copyleaks-content-viewer-container',
@@ -364,6 +365,7 @@ export class ContentViewerContainerComponent implements OnInit, AfterViewInit, O
 
 	contentHtml: string;
 
+	ALERTS = ALERTS;
 	EXCLUDE_MESSAGE = EXCLUDE_MESSAGE;
 	VIEW_OMITTED_WORDS_TOOLTIP_MESSAGE = $localize`Show omitted words`;
 	HIDE_OMITTED_WORDS_TOOLTIP_MESSAGE = $localize`Hide omitted words`;
@@ -402,7 +404,7 @@ export class ContentViewerContainerComponent implements OnInit, AfterViewInit, O
 		private _renderer: Renderer2,
 		private _cdr: ChangeDetectorRef,
 		private _highlightService: ReportMatchHighlightService,
-		private _viewSvc: ReportViewService,
+		public viewSvc: ReportViewService,
 		private _el: ElementRef
 	) {}
 
@@ -410,7 +412,7 @@ export class ContentViewerContainerComponent implements OnInit, AfterViewInit, O
 		if (this.flexGrow !== undefined && this.flexGrow !== null) this.flexGrowProp = this.flexGrow;
 
 		if (!this.isExportedComponent)
-			this._viewSvc.selectedCustomTabContent$.pipe(untilDestroy(this)).subscribe(content => {
+			this.viewSvc.selectedCustomTabContent$.pipe(untilDestroy(this)).subscribe(content => {
 				if (this.viewMode !== 'one-to-one') this.customTabContent = content;
 			});
 
@@ -582,16 +584,31 @@ export class ContentViewerContainerComponent implements OnInit, AfterViewInit, O
 
 	onViewChange() {
 		if (!this.iframeLoaded) this.showLoadingView = true;
+		if (this.viewSvc.reportViewMode.alertCode === ALERTS.SUSPECTED_AI_TEXT_DETECTED) {
+			this._highlightService.aiInsightsSelectedResults?.forEach(result => {
+				this._highlightService.aiInsightsShowResult$.next({
+					resultRange: {
+						start: result.resultRange.start,
+						end: result.resultRange.end,
+					},
+					isSelected: false,
+				});
+			});
+			this._highlightService.aiInsightsSelectedResults$.next([]);
+			this._highlightService.aiInsightsShowResult$.next(null);
+			this._highlightService.clear$.next(null);
+		}
+
 		if (this.reportOrigin === 'original' || this.reportOrigin === 'source')
 			this.viewChangeEvent.emit({
-				...this._viewSvc.reportViewMode,
+				...this.viewSvc.reportViewMode,
 				isHtmlView: !this.isHtmlView,
 				viewMode: this.viewMode,
 				sourcePageIndex: this.currentPage,
 			});
 		else
 			this.viewChangeEvent.emit({
-				...this._viewSvc.reportViewMode,
+				...this.viewSvc.reportViewMode,
 				isHtmlView: !this.isHtmlView,
 				viewMode: this.viewMode,
 				suspectPageIndex: this.currentPage,
@@ -672,12 +689,12 @@ export class ContentViewerContainerComponent implements OnInit, AfterViewInit, O
 
 		if (this.reportOrigin === 'original' || this.reportOrigin === 'source')
 			this.viewChangeEvent.emit({
-				...this._viewSvc.reportViewMode,
+				...this.viewSvc.reportViewMode,
 				sourcePageIndex: this.currentPage,
 			});
 		else
 			this.viewChangeEvent.emit({
-				...this._viewSvc.reportViewMode,
+				...this.viewSvc.reportViewMode,
 				suspectPageIndex: this.currentPage,
 			});
 

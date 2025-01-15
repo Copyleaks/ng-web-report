@@ -15,6 +15,7 @@ import {
 	AIExplainResultItem,
 	EProportionType,
 	ExplainableAIResults,
+	Match,
 	Range,
 } from '../../../../../models/report-matches.models';
 import { EnumNavigateMobileButton } from '../../../report-results-item-container/components/models/report-result-item.enum';
@@ -133,83 +134,10 @@ export class ExplainableAIResultContainerComponent implements OnInit, OnChanges 
 				}
 			});
 
+		// Subscription to the originalHtml$ observable to handle the AI insight match click
 		this.highlightService.originalHtml$.pipe(untilDestroy(this)).subscribe(selectedMatch => {
-			let selectedAIInsight = this.explainableAIResults.slicedMatch[selectedMatch?.gid];
-			if (!selectedAIInsight) return;
-
-			let prevSelectedAIInsights = this.highlightService.aiInsightsSelectedResults ?? [];
-			let alreadySelected = prevSelectedAIInsights.find(
-				ai =>
-					ai.resultRange.start === selectedAIInsight.match.start && ai.resultRange.end === selectedAIInsight.match.end
-			);
-
-			const selectIndex = this.explainItemResults.findIndex(
-				result => result.start <= selectedAIInsight.match.start && selectedAIInsight.match.end <= result.end
-			);
-			if (alreadySelected) {
-				if (this.panels?.toArray()[selectIndex]) this.programmaticallyCollapsePanel(selectIndex);
-				this.highlightService.aiInsightsSelectedResults$.next(
-					prevSelectedAIInsights.filter(
-						ai =>
-							ai.resultRange.start !== selectedAIInsight.match.start &&
-							ai.resultRange.end !== selectedAIInsight.match.end
-					)
-				);
-			} else if (this.panels?.toArray()[selectIndex]) {
-				// add the selected AI insight to reportMatchesSvc.aiInsightsSelectedResults if not already selected
-				const selectedResults = this.highlightService.aiInsightsSelectedResults$.value ?? [];
-				const index = selectedResults.findIndex(
-					result =>
-						result.resultRange.start === this.explainItemResults[selectIndex].start &&
-						result.resultRange.end === this.explainItemResults[selectIndex].end
-				);
-				if (index === -1)
-					selectedResults.push({
-						resultRange: {
-							start: this.explainItemResults[selectIndex].start,
-							end: this.explainItemResults[selectIndex].end,
-						},
-					} as ISelectExplainableAIResult);
-				this.highlightService.aiInsightsSelectedResults$.next(selectedResults);
-
-				if (this.isMobile) {
-					this.scrollToIndex(selectIndex);
-					setTimeout(() => {
-						this.programmaticallyExpandPanel(selectIndex);
-					}, 500);
-				} else {
-					this.programmaticallyExpandPanel(selectIndex);
-					setTimeout(() => {
-						this.desktopScroll.nativeElement.children[selectIndex].scrollIntoView({
-							behavior: 'smooth',
-							block: 'center',
-						});
-					}, 350);
-				}
-			}
+			this._handleHtmlAIInsightMatchClick(selectedMatch);
 		});
-	}
-
-	programmaticallyExpandPanel(index: number): void {
-		const panel = this.panels.toArray()[index];
-		if (panel) {
-			this.isProgrammaticChange = true;
-			panel.expanded = true;
-			this.panelIndex.push(index);
-			this.openedPanel = true; // its for the ai insight result height, once panel opened we want to add more height
-			setTimeout(() => (this.isProgrammaticChange = false), 0); // Reset the flag after the change
-		}
-	}
-
-	programmaticallyCollapsePanel(index: number): void {
-		const panel = this.panels.toArray()[index];
-		if (panel) {
-			this.panelIndex = this.panelIndex.filter(i => i !== index);
-			if (!this.panelIndex.length) this.openedPanel = false;
-			this.isProgrammaticChange = true;
-			panel.expanded = false;
-			setTimeout(() => (this.isProgrammaticChange = false), 0); // Reset the flag after the change
-		}
 	}
 
 	private _initResults() {
@@ -444,6 +372,98 @@ export class ExplainableAIResultContainerComponent implements OnInit, OnChanges 
 				return 'medium-proportion';
 			case EProportionType.High:
 				return 'high-proportion';
+		}
+	}
+
+	/**
+	 * Handle the HTML View AI insight match click, and expand the panel if the match is selected and collapse it if it's not
+	 * @param selectedMatch The selected HTML match
+	 */
+	private _handleHtmlAIInsightMatchClick(selectedMatch: Match): void {
+		let selectedAIInsight = this.explainableAIResults.slicedMatch[selectedMatch?.gid];
+		if (!selectedAIInsight) return;
+
+		let prevSelectedAIInsights = this.highlightService.aiInsightsSelectedResults ?? [];
+		let alreadySelected = prevSelectedAIInsights.find(
+			ai => ai.resultRange.start === selectedAIInsight.match.start && ai.resultRange.end === selectedAIInsight.match.end
+		);
+
+		const selectIndex = this.explainItemResults.findIndex(
+			result => result.start <= selectedAIInsight.match.start && selectedAIInsight.match.end <= result.end
+		);
+		if (alreadySelected) {
+			if (this.panels?.toArray()[selectIndex]) this._programmaticallyCollapsePanel(selectIndex);
+			this.highlightService.aiInsightsSelectedResults$.next(
+				prevSelectedAIInsights.filter(
+					ai =>
+						ai.resultRange.start !== selectedAIInsight.match.start && ai.resultRange.end !== selectedAIInsight.match.end
+				)
+			);
+		} else if (this.panels?.toArray()[selectIndex]) {
+			// add the selected AI insight to reportMatchesSvc.aiInsightsSelectedResults if not already selected
+			const selectedResults = this.highlightService.aiInsightsSelectedResults$.value ?? [];
+			const index = selectedResults.findIndex(
+				result =>
+					result.resultRange.start === this.explainItemResults[selectIndex].start &&
+					result.resultRange.end === this.explainItemResults[selectIndex].end
+			);
+			if (index === -1)
+				selectedResults.push({
+					resultRange: {
+						start: this.explainItemResults[selectIndex].start,
+						end: this.explainItemResults[selectIndex].end,
+					},
+				} as ISelectExplainableAIResult);
+			this.highlightService.aiInsightsSelectedResults$.next(selectedResults);
+
+			if (this.isMobile) {
+				this.scrollToIndex(selectIndex);
+				setTimeout(() => {
+					this._programmaticallyExpandPanel(selectIndex);
+				}, 500);
+			} else {
+				this._programmaticallyExpandPanel(selectIndex);
+				setTimeout(() => {
+					this.desktopScroll.nativeElement.children[selectIndex].scrollIntoView({
+						behavior: 'smooth',
+						block: 'center',
+					});
+				}, 350);
+			}
+		}
+	}
+
+	/**
+	 * Programmatically expand the panel at the given index & don't allow the Material Expansion Panel built-in event to trigger (open/close) the panel
+	 * @param index The index of the panel to expand
+	 */
+	private _programmaticallyExpandPanel(index: number): void {
+		if (index <= -1) return;
+		const panel = this.panels.toArray()[index];
+		if (panel) {
+			// Don't allow the Material Expansion Panel built-in event to trigger (open/close) the panel
+			this.isProgrammaticChange = true;
+			panel.expanded = true;
+			this.panelIndex.push(index);
+			this.openedPanel = true;
+			setTimeout(() => (this.isProgrammaticChange = false), 0); // Reset the flag after the change
+		}
+	}
+
+	/**
+	 * Programmatically collapse the panel at the given index & don't allow the Material Expansion Panel built-in event to trigger (open/close) the panel
+	 * @param index The index of the panel to expand
+	 */
+	private _programmaticallyCollapsePanel(index: number): void {
+		if (index <= -1) return;
+		const panel = this.panels.toArray()[index];
+		if (panel) {
+			// Don't allow the Material Expansion Panel built-in event to trigger (open/close) the panel
+			this.isProgrammaticChange = true;
+			panel.expanded = false;
+			this.panelIndex = this.panelIndex.filter(i => i !== index);
+			if (!this.panelIndex.length) this.openedPanel = false;
+			setTimeout(() => (this.isProgrammaticChange = false), 0); // Reset the flag after the change
 		}
 	}
 

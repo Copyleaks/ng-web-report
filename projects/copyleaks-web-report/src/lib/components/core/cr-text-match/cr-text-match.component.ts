@@ -3,6 +3,7 @@ import { Match, MatchType, ReportOrigin } from '../../../models/report-matches.m
 import scrollIntoView from 'scroll-into-view-if-needed';
 import { ReportMatchHighlightService } from '../../../services/report-match-highlight.service';
 import { ISelectExplainableAIResult } from '../../../models/report-ai-results.models';
+import { ReportViewService } from '../../../services/report-view.service';
 //import { ISelectExplainableAIResult } from '../../../models/report-ai-results.models';
 
 @Component({
@@ -14,7 +15,8 @@ export class CrTextMatchComponent implements AfterContentInit {
 	constructor(
 		public element: ElementRef<HTMLElement>,
 		private renderer: Renderer2,
-		private _highlightService: ReportMatchHighlightService
+		private _highlightService: ReportMatchHighlightService,
+		private _reportViewService: ReportViewService
 	) {}
 
 	// tslint:disable-next-line:no-input-rename
@@ -47,6 +49,10 @@ export class CrTextMatchComponent implements AfterContentInit {
 	@HostListener('click', ['$event'])
 	public click(event) {
 		if (this.match.type === MatchType.aiText) return;
+
+		if (this._reportViewService.reportViewMode.isHtmlView) {
+			this._reportViewService.reportViewMode$.next({ ...this._reportViewService.reportViewMode, isHtmlView: false });
+		}
 		// clear window selection
 		document.getSelection()?.removeAllRanges();
 

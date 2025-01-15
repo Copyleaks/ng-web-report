@@ -394,8 +394,6 @@ export abstract class OneToManyReportLayoutBaseComponent extends ReportLayoutBas
 		});
 
 		this.matchSvc.originalHtmlMatches$.pipe(takeUntil(this.unsubscribe$)).subscribe(data => {
-			console.log(data);
-
 			this.isLoadingScanContent = data === null;
 			if (data != this.reportMatches) {
 				this.oneToManyRerendered = false;

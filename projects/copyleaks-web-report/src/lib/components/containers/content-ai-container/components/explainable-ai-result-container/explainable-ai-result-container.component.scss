@@ -64,6 +64,7 @@
 						border-radius: 10px;
 						box-sizing: border-box;
 						height: 8px;
+						cursor: pointer;
 						.min-result {
 							height: 100%;
 							background-color: $color-explain-ai-low;
@@ -239,6 +240,7 @@
 							height: 18px;
 							font-size: 18px;
 							color: #0517a6;
+							cursor: pointer;
 						}
 					}
 					.ai-count-container,

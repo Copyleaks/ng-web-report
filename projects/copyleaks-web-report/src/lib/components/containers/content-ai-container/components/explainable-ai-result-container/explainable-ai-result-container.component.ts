@@ -23,6 +23,7 @@ import { MatTooltip } from '@angular/material/tooltip';
 import { ReportMatchesService } from '../../../../../services/report-matches.service';
 import { ISelectExplainableAIResult } from '../../../../../models/report-ai-results.models';
 import { untilDestroy } from '../../../../../utils/until-destroy';
+import { ReportMatchHighlightService } from '../../../../../services/report-match-highlight.service';
 
 @Component({
 	selector: 'copyleaks-explainable-ai-result-container',
@@ -54,6 +55,8 @@ export class ExplainableAIResultContainerComponent implements OnInit, OnChanges 
 	 * @Input Service for report matches and corrections.
 	 */
 	@Input() reportMatchesSvc: ReportMatchesService;
+
+	@Input() highlightService: ReportMatchHighlightService;
 
 	/**
 	 * @Output {boolean} Event emitted when the user clears the selected result
@@ -89,6 +92,7 @@ export class ExplainableAIResultContainerComponent implements OnInit, OnChanges 
 	updateResult: boolean = false;
 	panelIndex: number[] = [];
 	tooltipVisible: boolean = false;
+	isProgrammaticChange: boolean;
 
 	constructor() {}
 
@@ -100,7 +104,7 @@ export class ExplainableAIResultContainerComponent implements OnInit, OnChanges 
 
 	ngOnInit(): void {
 		if (!this.isLoading) this._initResults();
-		this.reportMatchesSvc.aiInsightsShowResult$
+		this.highlightService.aiInsightsShowResult$
 			.pipe(untilDestroy(this))
 			.subscribe((selectResult: ISelectExplainableAIResult) => {
 				if (selectResult) {
@@ -128,6 +132,84 @@ export class ExplainableAIResultContainerComponent implements OnInit, OnChanges 
 					}
 				}
 			});
+
+		this.highlightService.originalHtml$.pipe(untilDestroy(this)).subscribe(selectedMatch => {
+			let selectedAIInsight = this.explainableAIResults.slicedMatch[selectedMatch?.gid];
+			if (!selectedAIInsight) return;
+
+			let prevSelectedAIInsights = this.highlightService.aiInsightsSelectedResults ?? [];
+			let alreadySelected = prevSelectedAIInsights.find(
+				ai =>
+					ai.resultRange.start === selectedAIInsight.match.start && ai.resultRange.end === selectedAIInsight.match.end
+			);
+
+			const selectIndex = this.explainItemResults.findIndex(
+				result => result.start <= selectedAIInsight.match.start && selectedAIInsight.match.end <= result.end
+			);
+			if (alreadySelected) {
+				if (this.panels?.toArray()[selectIndex]) this.programmaticallyCollapsePanel(selectIndex);
+				this.highlightService.aiInsightsSelectedResults$.next(
+					prevSelectedAIInsights.filter(
+						ai =>
+							ai.resultRange.start !== selectedAIInsight.match.start &&
+							ai.resultRange.end !== selectedAIInsight.match.end
+					)
+				);
+			} else if (this.panels?.toArray()[selectIndex]) {
+				// add the selected AI insight to reportMatchesSvc.aiInsightsSelectedResults if not already selected
+				const selectedResults = this.highlightService.aiInsightsSelectedResults$.value ?? [];
+				const index = selectedResults.findIndex(
+					result =>
+						result.resultRange.start === this.explainItemResults[selectIndex].start &&
+						result.resultRange.end === this.explainItemResults[selectIndex].end
+				);
+				if (index === -1)
+					selectedResults.push({
+						resultRange: {
+							start: this.explainItemResults[selectIndex].start,
+							end: this.explainItemResults[selectIndex].end,
+						},
+					} as ISelectExplainableAIResult);
+				this.highlightService.aiInsightsSelectedResults$.next(selectedResults);
+
+				if (this.isMobile) {
+					this.scrollToIndex(selectIndex);
+					setTimeout(() => {
+						this.programmaticallyExpandPanel(selectIndex);
+					}, 500);
+				} else {
+					this.programmaticallyExpandPanel(selectIndex);
+					setTimeout(() => {
+						this.desktopScroll.nativeElement.children[selectIndex].scrollIntoView({
+							behavior: 'smooth',
+							block: 'center',
+						});
+					}, 350);
+				}
+			}
+		});
+	}
+
+	programmaticallyExpandPanel(index: number): void {
+		const panel = this.panels.toArray()[index];
+		if (panel) {
+			this.isProgrammaticChange = true;
+			panel.expanded = true;
+			this.panelIndex.push(index);
+			this.openedPanel = true; // its for the ai insight result height, once panel opened we want to add more height
+			setTimeout(() => (this.isProgrammaticChange = false), 0); // Reset the flag after the change
+		}
+	}
+
+	programmaticallyCollapsePanel(index: number): void {
+		const panel = this.panels.toArray()[index];
+		if (panel) {
+			this.panelIndex = this.panelIndex.filter(i => i !== index);
+			if (!this.panelIndex.length) this.openedPanel = false;
+			this.isProgrammaticChange = true;
+			panel.expanded = false;
+			setTimeout(() => (this.isProgrammaticChange = false), 0); // Reset the flag after the change
+		}
 	}
 
 	private _initResults() {
@@ -306,10 +388,12 @@ export class ExplainableAIResultContainerComponent implements OnInit, OnChanges 
 	 * @param index
 	 */
 	addToPanelIndex(index: number) {
+		if (this.isProgrammaticChange) return;
+
 		this.panelIndex.push(index);
 		this.openedPanel = true; // its for the ai insight result height, once panel opened we want to add more height
 
-		this.reportMatchesSvc.aiInsightsSelect$.next({
+		this.highlightService.aiInsightsSelect$.next({
 			resultRange: {
 				start: this.explainItemResults[index].start,
 				end: this.explainItemResults[index].end,
@@ -324,10 +408,12 @@ export class ExplainableAIResultContainerComponent implements OnInit, OnChanges 
 	 * @param index
 	 */
 	removeFromPanelIndex(index: number) {
+		if (this.isProgrammaticChange) return;
+
 		this.panelIndex = this.panelIndex.filter(i => i !== index);
 		if (!this.panelIndex.length) this.openedPanel = false;
 
-		this.reportMatchesSvc.aiInsightsSelect$.next({
+		this.highlightService.aiInsightsSelect$.next({
 			resultRange: {
 				start: this.explainItemResults[index].start,
 				end: this.explainItemResults[index].end,

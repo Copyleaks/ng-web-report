@@ -297,7 +297,7 @@
 <!-- AI result template -->
 <ng-template #templateResult let-item="item" let-index="index">
 	<mat-accordion #panels>
-		<mat-expansion-panel (opened)="addToPanelIndex(index)" (closed)="removeFromPanelIndex(index)" hideToggle>
+		<mat-expansion-panel #panel (opened)="addToPanelIndex(index)" (closed)="removeFromPanelIndex(index)" hideToggle>
 			<mat-expansion-panel-header>
 				<mat-panel-title>
 					<div class="panel-header-container" fxLayout="row" fxLayoutAlign="space-between center" fxLayoutGap="16px">

@@ -119,6 +119,17 @@ export class ContentViewerContainerComponent implements OnInit, AfterViewInit, O
 	@Input() isAlertsView: boolean;
 
 	/**
+	 * @Input Determines whether the button to switch between text and html view should be hidden or not.
+	 *
+	 * @description
+	 * When set to `true`, the button to switch between text and html view will be hidden.
+	 * When set to `false`, the button to switch between text and html view will be shown.
+	 *
+	 * @default `false`
+	 */
+	@Input() hideTextModeSwitch: boolean;
+
+	/**
 	 * @Input The scan source (the original scanned document) data
 	 *
 	 * @description
@@ -559,7 +570,7 @@ export class ContentViewerContainerComponent implements OnInit, AfterViewInit, O
 			this.isHtmlView &&
 			!changes['isMultiSelection']
 		) {
-			this._renderer.setAttribute(this.contentIFrame.nativeElement, 'srcdoc', this.contentHtml);
+			this.contentIFrame.nativeElement.srcdoc = this.contentHtml;
 			this._cdr.detectChanges();
 			this.showLoadingView = true;
 		}
@@ -595,9 +606,10 @@ export class ContentViewerContainerComponent implements OnInit, AfterViewInit, O
 
 		this._cdr.detectChanges();
 
-		setTimeout(() => {
-			this.refreshCustomMatchesAvatars();
-		}, 500);
+		if (this.allowCustomViewAddBtn && this.customViewMatchesData)
+			setTimeout(() => {
+				this.refreshCustomMatchesAvatars();
+			}, 500);
 	}
 
 	/**
@@ -612,9 +624,10 @@ export class ContentViewerContainerComponent implements OnInit, AfterViewInit, O
 
 		this._cdr.detectChanges();
 
-		setTimeout(() => {
-			this.refreshCustomMatchesAvatars();
-		}, 500);
+		if (this.allowCustomViewAddBtn && this.customViewMatchesData)
+			setTimeout(() => {
+				this.refreshCustomMatchesAvatars();
+			}, 500);
 	}
 
 	/**
@@ -629,9 +642,10 @@ export class ContentViewerContainerComponent implements OnInit, AfterViewInit, O
 
 		this._cdr.detectChanges();
 
-		setTimeout(() => {
-			this.refreshCustomMatchesAvatars();
-		}, 500);
+		if (this.allowCustomViewAddBtn && this.customViewMatchesData)
+			setTimeout(() => {
+				this.refreshCustomMatchesAvatars();
+			}, 500);
 	}
 
 	refreshCustomMatchesAvatars() {

@@ -607,7 +607,7 @@ export const processAIInsightsHTMLMatches = (
 						classification: result.classification,
 						probability: result.probability,
 						totalWords: match.html.words.lengths[idx],
-						gid: match.html.chars?.groupIds[idx],
+						gid: -1,
 					} as AIMatch)
 			);
 			//#region add explain to the matches
@@ -644,7 +644,7 @@ export const processAIInsightsHTMLMatches = (
 									classification: match.classification,
 									probability: match.probability,
 									totalWords: match.totalWords,
-									proportionType: proportionArray[i],
+									proportionType: proportionArray[scanResult?.explain?.patterns?.html?.chars?.groupIds[i]],
 								} as AIMatch;
 								matches.push(explainMatch);
 								startMappedMatches = endExolain + 1;
@@ -672,7 +672,7 @@ export const processAIInsightsHTMLMatches = (
 		});
 	});
 
-	const excluded = sourceTextExcluded(source);
+	const excluded = sourceHtmlExcluded(source);
 	const grouped = mergeMatches([...matches, ...excluded]);
 	const final = fillMissingGaps(grouped, source.html?.value?.length);
 	return final;

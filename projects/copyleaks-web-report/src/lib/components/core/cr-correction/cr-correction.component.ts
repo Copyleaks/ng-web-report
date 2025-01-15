@@ -26,7 +26,7 @@ export class CrCorrectionComponent implements OnInit, OnDestroy {
 	@HostListener('click', ['$event'])
 	handleClick(_): void {
 		if (this.isExcludeView || this.showLoadingView || !this.reportMatchesSvc) return;
-		this.reportMatchesSvc.correctionSelect$.next(this.correction);
+		this.highlightService.correctionSelect$.next(this.correction);
 	}
 
 	/**

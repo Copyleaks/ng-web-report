@@ -49,7 +49,7 @@ export class ContentAiContainerComponent implements OnInit, OnChanges {
 	 */
 	aiPercentageResult: number = 0;
 
-	constructor(private _highlightService: ReportMatchHighlightService, public reportMatchesSvc: ReportMatchesService) {}
+	constructor(public highlightService: ReportMatchHighlightService, public reportMatchesSvc: ReportMatchesService) {}
 
 	ngOnChanges(changes: SimpleChanges): void {
 		if (changes['isLoading']?.currentValue == false) {
@@ -76,6 +76,6 @@ export class ContentAiContainerComponent implements OnInit, OnChanges {
 	 * Clear the selected result
 	 */
 	clearSelectResult() {
-		this._highlightService.clearAllMatchs();
+		this.highlightService.clearAllMatchs();
 	}
 }

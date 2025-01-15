@@ -42,7 +42,6 @@ import { ReportRealtimeResultsService } from '../../../services/report-realtime-
 import { ViewMode } from '../../../models/report-config.models';
 import * as helpers from '../../../utils/report-match-helpers';
 import { ReportErrorsService } from '../../../services/report-errors.service';
-import { ISelectExplainableAIResult } from '../../../models/report-ai-results.models';
 
 export abstract class OneToManyReportLayoutBaseComponent extends ReportLayoutBaseComponent {
 	hideRightSection: boolean = false;
@@ -110,6 +109,7 @@ export abstract class OneToManyReportLayoutBaseComponent extends ReportLayoutBas
 	isPartitalScan: boolean;
 	explainableAI: ExplainableAIResults = { explain: null, slicedMatch: [], sourceText: '' };
 	loadingExplainableAI: boolean = true;
+	isAiHtmlViewAvailable: boolean = false;
 
 	// Subject for destroying all the subscriptions in base component
 	private unsubscribe$ = new Subject();
@@ -227,6 +227,26 @@ export abstract class OneToManyReportLayoutBaseComponent extends ReportLayoutBas
 									},
 								} as IResultItem;
 							});
+					}
+
+					if (this.scanResultsPreviews && this.selectedTap === EReportViewType.AIView) {
+						const validSelectedAlert = previews?.notifications?.alerts?.find(
+							a => a.code === ALERTS.SUSPECTED_AI_TEXT_DETECTED
+						);
+						if (validSelectedAlert) {
+							var aiScanResult = JSON.parse(validSelectedAlert.additionalData) as AIScanResult;
+
+							this.isAiHtmlViewAvailable = false;
+							aiScanResult.results.forEach(result => {
+								result.matches?.forEach(match => {
+									if (match.html != null && match.html != undefined) this.isAiHtmlViewAvailable = true;
+								});
+							});
+
+							if (!this.isAiHtmlViewAvailable) {
+								this.isHtmlView = false;
+							}
+						}
 					}
 				});
 		});
@@ -374,6 +394,8 @@ export abstract class OneToManyReportLayoutBaseComponent extends ReportLayoutBas
 		});
 
 		this.matchSvc.originalHtmlMatches$.pipe(takeUntil(this.unsubscribe$)).subscribe(data => {
+			console.log(data);
+
 			this.isLoadingScanContent = data === null;
 			if (data != this.reportMatches) {
 				this.oneToManyRerendered = false;
@@ -526,40 +548,7 @@ export abstract class OneToManyReportLayoutBaseComponent extends ReportLayoutBas
 		switch (message.type) {
 			case 'match-select':
 				const selectedMatch = message.index !== -1 ? this.reportMatches[message.index] : null;
-				if (
-					(this.viewMode === 'one-to-many' && this.selectedTap === EReportViewType.AIView) ||
-					this.viewMode === 'only-ai'
-				) {
-					if (!selectedMatch) {
-						if (this.matchSvc.aiInsightsShowResult$.value && message.prevIndex >= 0) {
-							const unselectedMatch = this.reportMatches[message.prevIndex];
-							if (!unselectedMatch) return;
-
-							let unselectedAIInsight = this.explainableAI.slicedMatch[unselectedMatch?.gid];
-							if (!unselectedAIInsight) return;
-
-							this.matchSvc.aiInsightsShowResult$.next({
-								resultRange: {
-									start: unselectedAIInsight?.match?.start,
-									end: unselectedAIInsight?.match?.end,
-								},
-								isSelected: false,
-							} as ISelectExplainableAIResult);
-							return;
-						}
-					}
-
-					let selectedAIInsight = this.explainableAI.slicedMatch[selectedMatch?.gid];
-					if (!selectedAIInsight) return;
-
-					this.matchSvc.aiInsightsShowResult$.next({
-						resultRange: {
-							start: selectedAIInsight.match.start,
-							end: selectedAIInsight.match.end,
-						},
-						isSelected: true,
-					} as ISelectExplainableAIResult);
-				} else if (this.viewMode === 'one-to-many') this._showResultsForSelectedMatch(selectedMatch);
+				if (this.viewMode === 'one-to-many') this._showResultsForSelectedMatch(selectedMatch);
 				else if (this.viewMode === 'writing-feedback') {
 					if (selectedMatch) {
 						const textSelectedMatch = this.allScanCorrectionsView[selectedMatch.gid];
@@ -576,7 +565,55 @@ export abstract class OneToManyReportLayoutBaseComponent extends ReportLayoutBas
 					if (!selectedMatches.find(s => s && s.gid === this.reportMatches[i]?.gid))
 						selectedMatches.push(this.reportMatches[i]);
 				});
-				if (this.viewMode === 'one-to-many') {
+				if (
+					(this.viewMode === 'one-to-many' && this.selectedTap === EReportViewType.AIView) ||
+					this.viewMode === 'only-ai'
+				) {
+					let selectedAIInsights: SlicedMatch[] = [];
+					selectedMatches.forEach(selectedMatch => {
+						let selectedAIInsight = this.explainableAI.slicedMatch[selectedMatch?.gid];
+						if (!selectedAIInsight) return;
+
+						selectedAIInsights.push(selectedAIInsight);
+
+						let prevSelectedAIInsights = this.highlightSvc.aiInsightsSelectedResults ?? [];
+
+						if (
+							prevSelectedAIInsights.find(
+								ai =>
+									ai.resultRange.start === selectedAIInsight.match.start &&
+									ai.resultRange.end === selectedAIInsight.match.end
+							)
+						)
+							return;
+						else {
+							this.highlightSvc.setOriginalHtmlMatch(selectedMatch);
+						}
+
+						return;
+					});
+
+					// filter the this.matchSvc.aiInsightsSelectedResults and take the results that are not the selected ones selectedAIInsights
+					let unselectedAIInsights = this.highlightSvc.aiInsightsSelectedResults?.filter(
+						ai =>
+							!selectedAIInsights.find(
+								s => s.match.start === ai.resultRange.start && s.match.end === ai.resultRange.end
+							)
+					);
+
+					unselectedAIInsights?.forEach(unselectedMatch => {
+						const validSelectedAlert = this.reportDataSvc.scanResultsPreviews?.notifications?.alerts?.find(
+							a => a.code === ALERTS.SUSPECTED_AI_TEXT_DETECTED
+						);
+						if (validSelectedAlert) {
+							var scanResult = JSON.parse(validSelectedAlert.additionalData) as AIScanResult;
+							const index = scanResult.explain.patterns.text.chars.starts.findIndex(
+								s => s === unselectedMatch.resultRange.start
+							);
+							this.highlightSvc.setOriginalHtmlMatch(this.reportMatches.find(m => m.gid === index));
+						}
+					});
+				} else if (this.viewMode === 'one-to-many') {
 					this._showResultsForMultiSelection(selectedMatches);
 				} else if (this.viewMode === 'writing-feedback') {
 					if (selectedMatches.length === 0) this.displayedScanCorrectionsView = this.filteredCorrections;

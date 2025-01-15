@@ -9,7 +9,6 @@ import {
 import { ReportMatchHighlightService } from '../services/report-match-highlight.service';
 import { ReportViewService } from '../services/report-view.service';
 import { untilDestroy } from '../utils/until-destroy';
-import { ReportMatchesService } from '../services/report-matches.service';
 import { ALERTS } from '../constants/report-alerts.constants';
 import { ReportDataService } from '../services/report-data.service';
 import { AIScanResult } from '../models/report-matches.models';
@@ -24,7 +23,6 @@ export class OriginalHtmlHelperComponent implements OnInit, OnDestroy {
 	constructor(
 		private _reportViewSvc: ReportViewService,
 		private _reportDataSvc: ReportDataService,
-		private _reportMatchesSvc: ReportMatchesService,
 		private _highlightSvc: ReportMatchHighlightService,
 		private _element: ElementRef<HTMLIFrameElement>
 	) {}
@@ -39,7 +37,9 @@ export class OriginalHtmlHelperComponent implements OnInit, OnDestroy {
 			filter(
 				([jumpForward, viewModeData]) =>
 					(jumpForward === true || jumpForward === false) &&
-					(viewModeData.viewMode === 'one-to-many' || viewModeData.viewMode === 'writing-feedback') &&
+					(viewModeData.viewMode === 'one-to-many' ||
+						viewModeData.viewMode === 'writing-feedback' ||
+						viewModeData.viewMode === 'only-ai') &&
 					viewModeData.isHtmlView
 			),
 			map(([jumpForward]) => jumpForward),
@@ -59,7 +59,7 @@ export class OriginalHtmlHelperComponent implements OnInit, OnDestroy {
 				this.messageFrame({ type: 'match-select', index: -1 } as MatchSelectEvent);
 			});
 
-		this._reportMatchesSvc.correctionSelect$
+		this._highlightSvc.correctionSelect$
 			.pipe(
 				untilDestroy(this),
 				withLatestFrom(reportViewMode$),
@@ -75,7 +75,7 @@ export class OriginalHtmlHelperComponent implements OnInit, OnDestroy {
 				);
 			});
 
-		this._reportMatchesSvc.aiInsightsSelect$
+		this._highlightSvc.aiInsightsSelect$
 			.pipe(
 				untilDestroy(this),
 				withLatestFrom(reportViewMode$),

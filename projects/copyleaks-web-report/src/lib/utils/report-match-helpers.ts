@@ -489,92 +489,102 @@ export const processAIInsightsTextMatches = (
 	alertToMatch: ICompleteResultNotificationAlert
 ): SlicedMatch[][] => {
 	const matches: Match[] = [];
-	let lastExplainIndex: number = 0;
-	var scanResult = JSON.parse(alertToMatch.additionalData) as AIScanResult;
-	const explainResult = scanResult?.explain ?? false;
-	const lengthExplain = explainResult ? explainResult?.patterns?.text?.chars?.starts?.length : 0;
+	let lastExplainIndex = 0;
+
+	const scanResult = JSON.parse(alertToMatch.additionalData) as AIScanResult;
+	const explainResult = scanResult?.explain;
+	const lengthExplain = explainResult?.patterns?.text?.chars?.starts?.length ?? 0;
 	const proportionArray = explainResult
-		? updateExplainProportionType(explainResult?.patterns?.statistics?.proportion)
+		? updateExplainProportionType(explainResult.patterns.statistics.proportion)
 		: [];
 
+	// Process each result and match
 	scanResult?.results?.forEach(result => {
 		result?.matches?.forEach((match: AIScanResultMatch) => {
-			const mappedMatches = match?.text.chars?.starts?.map(
-				(start, idx) =>
-					({
-						start,
-						end: start + match.text.chars.lengths[idx],
-						type: result.classification == EMatchClassification.AI ? MatchType.aiText : MatchType.none,
-						ids: [],
-						classification: result.classification,
-						probability: result.probability,
-						totalWords: match.text.words.lengths[idx],
-					} as AIMatch)
-			);
-			//#region add explain to the matches
-			mappedMatches?.forEach(match => {
-				if (match && match.type == MatchType.aiText && lastExplainIndex < lengthExplain) {
-					let startMappedMatches = match.start;
-					let endMappedMatches = match.end;
-					for (let i = lastExplainIndex; i < lengthExplain; i++) {
-						const firstExolain = scanResult?.explain?.patterns?.text?.chars?.starts[i];
-						const endExolain = firstExolain + scanResult.explain?.patterns?.text?.chars?.lengths[i];
-						if (startMappedMatches <= firstExolain && endMappedMatches >= endExolain) {
-							lastExplainIndex = i + 1;
-							if (startMappedMatches < firstExolain) {
-								const matchBefore = {
-									start: startMappedMatches,
-									end: firstExolain - 1,
-									type: match.type,
-									ids: [],
-									classification: match.classification,
-									probability: match.probability,
-									totalWords: match.totalWords,
-								} as AIMatch;
-								matches.push(matchBefore);
-								startMappedMatches = firstExolain;
-								i = i - 1;
-							} else if (startMappedMatches == firstExolain) {
-								const explainMatch = {
-									start: firstExolain,
-									end: endExolain,
-									type: MatchType.aiExplain,
-									ids: [],
-									classification: match.classification,
-									probability: match.probability,
-									totalWords: match.totalWords,
-									proportionType: proportionArray[i],
-								} as AIMatch;
-								matches.push(explainMatch);
-								startMappedMatches = endExolain + 1;
-							}
+			// Map raw matches
+			const mappedMatches =
+				match?.text?.chars?.starts?.map((start, idx) => ({
+					start,
+					end: start + match.text.chars.lengths[idx],
+					type: result.classification === EMatchClassification.AI ? MatchType.aiText : MatchType.none,
+					ids: [],
+					classification: result.classification,
+					probability: result.probability,
+					totalWords: match.text.words.lengths[idx],
+				})) ?? [];
+
+			// Process each mapped match
+			mappedMatches.forEach(mappedMatch => {
+				if (mappedMatch.type === MatchType.aiText && lastExplainIndex < lengthExplain) {
+					let startMapped = mappedMatch.start;
+					let endMapped = mappedMatch.end;
+
+					// Handle AI insights within the match
+					while (lastExplainIndex < lengthExplain) {
+						const explainStart = explainResult?.patterns?.text?.chars?.starts[lastExplainIndex];
+						const explainEnd = explainStart + (explainResult?.patterns?.text?.chars?.lengths[lastExplainIndex] ?? 0);
+
+						if (startMapped > explainEnd) {
+							lastExplainIndex++;
+							continue; // Skip irrelevant explanations
 						}
+
+						if (endMapped < explainStart) {
+							break; // No more relevant explanations
+						}
+
+						// Add match before the insight if necessary
+						if (startMapped < explainStart) {
+							matches.push(createMatch(mappedMatch, startMapped, explainStart - 1));
+							startMapped = explainStart;
+						}
+
+						// Add the AI insight
+						matches.push(createExplainMatch(mappedMatch, explainStart, explainEnd, proportionArray[lastExplainIndex]));
+						startMapped = explainEnd + 1;
+
+						lastExplainIndex++;
 					}
-					if (startMappedMatches < endMappedMatches) {
-						const matchAfter = {
-							start: startMappedMatches,
-							end: endMappedMatches,
-							type: match.type,
-							ids: [],
-							classification: match.classification,
-							probability: match.probability,
-							totalWords: match.totalWords,
-						} as AIMatch;
-						matches.push(matchAfter);
+
+					// Add remaining part of the match after all insights
+					if (startMapped < endMapped) {
+						matches.push(createMatch(mappedMatch, startMapped, endMapped));
 					}
-				} else if (match) {
-					matches.push(match);
+				} else {
+					matches.push(mappedMatch); // Add non-AI matches directly
 				}
 			});
-			//#endregion
 		});
 	});
 
+	// Handle excluded regions and gaps
 	const excluded = sourceTextExcluded(source);
 	const grouped = mergeMatches([...matches, ...excluded]);
 	const filled = fillMissingGaps(grouped, source.text.value.length);
+
+	// Paginate the matches
 	return paginateMatches(source.text.value, source.text.pages.startPosition, filled);
 };
+
+/**
+ * Creates a generic match segment.
+ */
+const createMatch = (baseMatch: Match, start: number, end: number): Match => ({
+	...baseMatch,
+	start,
+	end,
+});
+
+/**
+ * Creates an AI explain match segment.
+ */
+const createExplainMatch = (baseMatch: Match, start: number, end: number, proportionType: EProportionType): Match => ({
+	...baseMatch,
+	start,
+	end,
+	type: MatchType.aiExplain,
+	proportionType,
+});
 
 /**
  * This function will process notifications and generate a list of match intervals that will help

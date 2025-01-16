@@ -8,7 +8,8 @@ export type PostMessageEvent =
 	| ZoomEvent
 	| MultiMatchSelectEvent
 	| CorrectionSelectEvent
-	| MatchesRefreshEvent;
+	| MatchesRefreshEvent
+	| MatchGroupSelectEvent;
 
 /** base type of post message event */
 interface BasePostMessageEvent {
@@ -21,6 +22,15 @@ export interface MatchSelectEvent extends BasePostMessageEvent {
 	type: 'match-select';
 	/** the index of the match that was selected */
 	index: number;
+	/** the previous index of the match that was deselected */
+	prevIndex?: number;
+}
+
+/** Event type indicating a group of matches was selected */
+export interface MatchGroupSelectEvent extends BasePostMessageEvent {
+	type: 'match-group-select';
+	/** the id of the group that was selected */
+	groupId: number;
 }
 
 /** Event type indicating a multiple matches were selected */

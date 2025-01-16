@@ -38,6 +38,7 @@
 			'assessment-tool-view': reportMode === EReportMode.AssessmentTool
 		}"
 		[isHtmlView]="isHtmlView"
+		[hideTextModeSwitch]="!isAiHtmlViewAvailable && selectedTap === EReportViewType.AIView"
 		[isAlertsView]="isAlertsMode"
 		[scanSource]="reportCrawledVersion"
 		[contentTextMatches]="contentTextMatches"
@@ -115,6 +116,9 @@
 			<copyleaks-content-ai-container
 				*ngIf="selectedTap === EReportViewType.AIView"
 				class="ai-results-container"
+				[ngClass]="{
+					'assessment-tool-view': reportMode === EReportMode.AssessmentTool
+				}"
 				[isLoading]="loadingExplainableAI || !reportStatistics"
 				[lockedResults]="lockedExplainAIResults"
 				[aiScore]="reportStatistics?.aiScore ?? 0"

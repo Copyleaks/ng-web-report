@@ -22,6 +22,7 @@
 	[isAlertsView]="isAlertsMode"
 	[scanSource]="reportCrawledVersion"
 	[contentTextMatches]="contentTextMatches"
+	[hideTextModeSwitch]="!isAiHtmlViewAvailable && selectedTap === EReportViewType.AIView"
 	[currentPage]="currentPageSource"
 	[reportResponsive]="EResponsiveLayoutType.Desktop"
 	[authorAlert]="authorAlert"

@@ -7,7 +7,6 @@ import { ReportMatchHighlightService } from '../services/report-match-highlight.
 import { ReportViewService } from '../services/report-view.service';
 import * as helpers from '../utils/highlight-helpers';
 import { untilDestroy } from '../utils/until-destroy';
-import { ReportMatchesService } from '../services/report-matches.service';
 import { IWritingFeedbackCorrectionViewModel } from '../models/report-data.models';
 import { PageEvent } from '../components/core/cr-paginator/models/cr-paginator.models';
 
@@ -35,11 +34,7 @@ export class OriginalTextHelperDirective implements AfterContentInit, OnDestroy 
 
 	private lastSelectedOriginalTextMatch: TextMatchHighlightEvent;
 
-	constructor(
-		private highlightService: ReportMatchHighlightService,
-		private _reportMatchesSvc: ReportMatchesService,
-		private _viewService: ReportViewService
-	) {}
+	constructor(private _highlightService: ReportMatchHighlightService, private _viewService: ReportViewService) {}
 
 	@ContentChildren(CrTextMatchComponent)
 	private children: QueryList<CrTextMatchComponent>;
@@ -102,7 +97,7 @@ export class OriginalTextHelperDirective implements AfterContentInit, OnDestroy 
 				const nextIndex = this.current
 					? components.indexOf(this.current as CrTextMatchComponent) + (forward ? 1 : -1)
 					: 0;
-				this.highlightService.textMatchClicked({ elem: components[nextIndex], broadcast: true, origin: 'original' });
+				this._highlightService.textMatchClicked({ elem: components[nextIndex], broadcast: true, origin: 'original' });
 			} else {
 				const page = (forward ? helpers.findNextPageWithMatch : helpers.findPrevPageWithMatch)(
 					this.host.contentTextMatches,
@@ -111,7 +106,7 @@ export class OriginalTextHelperDirective implements AfterContentInit, OnDestroy 
 				if (this.host.currentPage !== page) {
 					this.children.changes.pipe(take(1)).subscribe(() => {
 						const comp = forward ? this.children.first : this.children.last;
-						this.highlightService.textMatchClicked({ elem: comp, broadcast: true, origin: 'original' });
+						this._highlightService.textMatchClicked({ elem: comp, broadcast: true, origin: 'original' });
 					});
 					this.host.currentPage = page;
 				}
@@ -170,7 +165,7 @@ export class OriginalTextHelperDirective implements AfterContentInit, OnDestroy 
 				const comp = components.find(
 					comp => comp?.match?.start === correctionSelect.start && comp?.match?.end === correctionSelect.end
 				);
-				this.highlightService.textMatchClicked({
+				this._highlightService.textMatchClicked({
 					elem: comp,
 					broadcast: false,
 					origin: 'original',
@@ -187,7 +182,7 @@ export class OriginalTextHelperDirective implements AfterContentInit, OnDestroy 
 					const comp = components.find(
 						comp => comp?.match?.start === correctionSelect.start && comp?.match?.end === correctionSelect.end
 					);
-					this.highlightService.textMatchClicked({
+					this._highlightService.textMatchClicked({
 						elem: comp,
 						broadcast: false,
 						origin: 'original',
@@ -214,7 +209,7 @@ export class OriginalTextHelperDirective implements AfterContentInit, OnDestroy 
 			if (this.host.currentPage === foundCorrectionInfo.page + 1) {
 				const components = this.children.toArray();
 				const comp = components.find(comp => comp?.match?.start === match.start && comp?.match?.end === match.end);
-				this.highlightService.textMatchClicked({
+				this._highlightService.textMatchClicked({
 					elem: comp,
 					broadcast: false,
 					origin: 'original',
@@ -226,7 +221,7 @@ export class OriginalTextHelperDirective implements AfterContentInit, OnDestroy 
 				this.children.changes.pipe(take(1)).subscribe(() => {
 					const components = this.children.toArray();
 					const comp = components.find(comp => comp?.match?.start === match.start && comp?.match?.end === match.end);
-					this.highlightService.textMatchClicked({
+					this._highlightService.textMatchClicked({
 						elem: comp,
 						broadcast: false,
 						origin: 'original',
@@ -252,11 +247,13 @@ export class OriginalTextHelperDirective implements AfterContentInit, OnDestroy 
 		setTimeout(() => {
 			if (this.host.currentPage === foundCorrectionInfo.page + 1) {
 				const components = this.children.toArray();
-				components.find(comp => comp?.match?.start === match.start && comp?.match?.end === match.end).focused = false;
+				const comp = components.find(comp => comp?.match?.start === match.start && comp?.match?.end === match.end);
+				if (comp) comp.focused = false;
 			} else {
 				this.children.changes.pipe(take(1)).subscribe(() => {
 					const components = this.children.toArray();
-					components.find(comp => comp?.match?.start === match.start && comp?.match?.end === match.end).focused = false;
+					const comp = components.find(comp => comp?.match?.start === match.start && comp?.match?.end === match.end);
+					if (comp) comp.focused = false;
 				});
 			}
 		});
@@ -278,6 +275,7 @@ export class OriginalTextHelperDirective implements AfterContentInit, OnDestroy 
 		start: number,
 		end: number
 	): { match: SlicedMatch | null; page: number; index: number } {
+		if (!contentTextMatches || contentTextMatches.length === 0) return { match: null, page: -1, index: -1 };
 		for (let page = 0; page < contentTextMatches.length; page++) {
 			for (let index = 0; index < contentTextMatches[page].length; index++) {
 				const slicedMatch = contentTextMatches[page][index];
@@ -296,7 +294,7 @@ export class OriginalTextHelperDirective implements AfterContentInit, OnDestroy 
 	 * - subscribe to original text selected match state
 	 */
 	ngAfterContentInit() {
-		const { jump$, originalText$, textMatchClick$ } = this.highlightService;
+		const { jump$, originalText$, textMatchClick$ } = this._highlightService;
 		originalText$.pipe(untilDestroy(this), takeUntil(this.unsubscribe$)).subscribe(value => (this.current = value));
 
 		const { reportViewMode$ } = this._viewService;
@@ -342,7 +340,7 @@ export class OriginalTextHelperDirective implements AfterContentInit, OnDestroy 
 				this.lastSelectedOriginalTextMatch = textMatchClickEvent;
 				if (!textMatchClickEvent) return;
 
-				const currentSelectedCorrection = this._reportMatchesSvc.correctionSelect;
+				const currentSelectedCorrection = this._highlightService.correctionSelect;
 				if (
 					!!currentSelectedCorrection &&
 					textMatchClickEvent?.elem?.match?.start != currentSelectedCorrection.start &&
@@ -383,11 +381,11 @@ export class OriginalTextHelperDirective implements AfterContentInit, OnDestroy 
 					if (!comp) {
 						return;
 					}
-					this.highlightService.textMatchClicked({ elem: comp, broadcast: false, origin: 'original' });
+					this._highlightService.textMatchClicked({ elem: comp, broadcast: false, origin: 'original' });
 				}, 100);
 			});
 
-		this._reportMatchesSvc.correctionSelect$
+		this._highlightService.correctionSelect$
 			.pipe(
 				untilDestroy(this),
 				withLatestFrom(reportViewMode$),
@@ -400,7 +398,7 @@ export class OriginalTextHelperDirective implements AfterContentInit, OnDestroy 
 				this.handleCorrectionSelect(correctionSelect);
 			});
 
-		this._reportMatchesSvc.aiInsightsSelect$
+		this._highlightService.aiInsightsSelect$
 			.pipe(
 				untilDestroy(this),
 				withLatestFrom(reportViewMode$),
@@ -423,6 +421,14 @@ export class OriginalTextHelperDirective implements AfterContentInit, OnDestroy 
 					this.removeSelectAIInsights(aiInsightsSelect.resultRange);
 				}
 			});
+
+		this._highlightService.clear$.pipe(untilDestroy(this)).subscribe(() => {
+			const components = this.children?.toArray();
+			if (!components) return;
+			components.forEach(component => {
+				if (component) component.focused = false;
+			});
+		});
 
 		this.host.onTextMatchSelectionEvent.subscribe((event: any) => {
 			if (event.type === 'annotation-click') {

@@ -206,3 +206,10 @@ copyleaks-report-alerts-container {
 cr-assessment-tool-tab-score-panel {
 	flex-grow: initial !important;
 }
+
+.ai-results-container.assessment-tool-view {
+	display: flex;
+	height: 95%;
+	flex-grow: 95;
+	overflow-y: auto;
+}

@@ -1,10 +1,17 @@
 import { Directive, ElementRef, HostBinding, OnDestroy, OnInit } from '@angular/core';
 import { distinctUntilChanged, filter, map, withLatestFrom } from 'rxjs/operators';
-import { CorrectionSelectEvent, MatchJumpEvent, MatchSelectEvent } from '../models/report-iframe-events.models';
+import {
+	CorrectionSelectEvent,
+	MatchGroupSelectEvent,
+	MatchJumpEvent,
+	MatchSelectEvent,
+} from '../models/report-iframe-events.models';
 import { ReportMatchHighlightService } from '../services/report-match-highlight.service';
 import { ReportViewService } from '../services/report-view.service';
 import { untilDestroy } from '../utils/until-destroy';
-import { ReportMatchesService } from '../services/report-matches.service';
+import { ALERTS } from '../constants/report-alerts.constants';
+import { ReportDataService } from '../services/report-data.service';
+import { AIScanResult } from '../models/report-matches.models';
 
 @Directive({
 	selector: '[crOriginalHtmlHelper]',
@@ -15,7 +22,7 @@ export class OriginalHtmlHelperComponent implements OnInit, OnDestroy {
 
 	constructor(
 		private _reportViewSvc: ReportViewService,
-		private _reportMatchesSvc: ReportMatchesService,
+		private _reportDataSvc: ReportDataService,
 		private _highlightSvc: ReportMatchHighlightService,
 		private _element: ElementRef<HTMLIFrameElement>
 	) {}
@@ -30,7 +37,9 @@ export class OriginalHtmlHelperComponent implements OnInit, OnDestroy {
 			filter(
 				([jumpForward, viewModeData]) =>
 					(jumpForward === true || jumpForward === false) &&
-					(viewModeData.viewMode === 'one-to-many' || viewModeData.viewMode === 'writing-feedback') &&
+					(viewModeData.viewMode === 'one-to-many' ||
+						viewModeData.viewMode === 'writing-feedback' ||
+						viewModeData.viewMode === 'only-ai') &&
 					viewModeData.isHtmlView
 			),
 			map(([jumpForward]) => jumpForward),
@@ -50,7 +59,7 @@ export class OriginalHtmlHelperComponent implements OnInit, OnDestroy {
 				this.messageFrame({ type: 'match-select', index: -1 } as MatchSelectEvent);
 			});
 
-		this._reportMatchesSvc.correctionSelect$
+		this._highlightSvc.correctionSelect$
 			.pipe(
 				untilDestroy(this),
 				withLatestFrom(reportViewMode$),
@@ -64,6 +73,29 @@ export class OriginalHtmlHelperComponent implements OnInit, OnDestroy {
 					{ type: 'correction-select', gid: correctionSelect.index } as CorrectionSelectEvent,
 					'*'
 				);
+			});
+
+		this._highlightSvc.aiInsightsSelect$
+			.pipe(
+				untilDestroy(this),
+				withLatestFrom(reportViewMode$),
+				filter(([selectResult, viewModeData]) => {
+					return (
+						selectResult && viewModeData.alertCode === ALERTS.SUSPECTED_AI_TEXT_DETECTED && viewModeData.isHtmlView
+					);
+				})
+			)
+			.subscribe(([selectResult, _]) => {
+				const validSelectedAlert = this._reportDataSvc.scanResultsPreviews?.notifications?.alerts?.find(
+					a => a.code === ALERTS.SUSPECTED_AI_TEXT_DETECTED
+				);
+				if (validSelectedAlert) {
+					var scanResult = JSON.parse(validSelectedAlert.additionalData) as AIScanResult;
+					const index = scanResult.explain.patterns.text.chars.starts.findIndex(
+						s => s === selectResult.resultRange.start
+					);
+					this.messageFrame({ type: 'match-group-select', groupId: index } as MatchGroupSelectEvent);
+				}
 			});
 	}
 

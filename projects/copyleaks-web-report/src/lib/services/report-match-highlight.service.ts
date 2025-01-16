@@ -7,6 +7,8 @@ import { HtmlMatchClickEvent, Match, TextMatchHighlightEvent } from '../models/r
 import * as helpers from '../utils/highlight-helpers';
 import { untilDestroy } from '../utils/until-destroy';
 import { ReportViewService } from './report-view.service';
+import { IWritingFeedbackCorrectionViewModel } from '../models/report-data.models';
+import { ISelectExplainableAIResult } from '../models/report-ai-results.models';
 
 @Injectable()
 export class ReportMatchHighlightService implements OnDestroy {
@@ -36,6 +38,20 @@ export class ReportMatchHighlightService implements OnDestroy {
 					break;
 			}
 		});
+
+		this._aiInsightsSelect$.pipe(untilDestroy(this)).subscribe(selectedResult => {
+			if (selectedResult) {
+				// add it to _aiInsightsSelectedResults if not already there
+				const selectedResults = this._aiInsightsSelectedResults$.value ?? [];
+				const index = selectedResults.findIndex(
+					result =>
+						result.resultRange.start === selectedResult.resultRange.start &&
+						result.resultRange.end === selectedResult.resultRange.end
+				);
+				if (index === -1) selectedResults.push(selectedResult);
+				this._aiInsightsSelectedResults$.next(selectedResults);
+			}
+		});
 	}
 
 	public get jump$() {
@@ -43,7 +59,7 @@ export class ReportMatchHighlightService implements OnDestroy {
 	}
 
 	public get clear$() {
-		return this._clear.asObservable();
+		return this._clear;
 	}
 
 	public get oneToManyTextMatchClick$() {
@@ -94,6 +110,34 @@ export class ReportMatchHighlightService implements OnDestroy {
 	}
 	public get textMatchClick$() {
 		return this._textMatchClick.asObservable();
+	}
+
+	private _correctionSelect$ = new BehaviorSubject<IWritingFeedbackCorrectionViewModel | null>(null);
+	/** Emits matches that are relevant to source html one-to-many mode */
+	public get correctionSelect$() {
+		return this._correctionSelect$;
+	}
+	public get correctionSelect() {
+		return this._correctionSelect$.value;
+	}
+
+	private _aiInsightsSelect$ = new BehaviorSubject<ISelectExplainableAIResult | null>(null);
+	/** Emits matches that are relevant to source html one-to-many mode */
+	public get aiInsightsSelect$() {
+		return this._aiInsightsSelect$;
+	}
+
+	private _aiInsightsShowResult$ = new BehaviorSubject<ISelectExplainableAIResult | null>(null);
+	public get aiInsightsShowResult$() {
+		return this._aiInsightsShowResult$;
+	}
+
+	private _aiInsightsSelectedResults$ = new BehaviorSubject<ISelectExplainableAIResult[] | null>(null);
+	public get aiInsightsSelectedResults$() {
+		return this._aiInsightsSelectedResults$;
+	}
+	public get aiInsightsSelectedResults() {
+		return this._aiInsightsSelectedResults$.value;
 	}
 
 	/**

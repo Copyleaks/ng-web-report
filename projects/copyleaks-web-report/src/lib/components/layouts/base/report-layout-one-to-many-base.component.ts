@@ -178,6 +178,12 @@ export abstract class OneToManyReportLayoutBaseComponent extends ReportLayoutBas
 					? EReportViewType.AIView
 					: EReportViewType.PlagiarismView;
 
+			if (this.selectedTap != EReportViewType.AIView) {
+				this.highlightSvc.aiInsightsSelectedResults$.next([]);
+				this.highlightSvc.aiInsightsSelect$.next(null);
+				this.highlightSvc.aiInsightsShowResult$.next(null);
+			}
+
 			this.showDisabledProducts = data.showDisabledProducts ?? false;
 
 			combineLatest([

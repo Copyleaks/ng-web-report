@@ -4,6 +4,7 @@ import {
 	EventEmitter,
 	Input,
 	OnChanges,
+	OnDestroy,
 	OnInit,
 	Output,
 	QueryList,
@@ -23,15 +24,16 @@ import { MatExpansionPanel } from '@angular/material/expansion';
 import { MatTooltip } from '@angular/material/tooltip';
 import { ReportMatchesService } from '../../../../../services/report-matches.service';
 import { ISelectExplainableAIResult } from '../../../../../models/report-ai-results.models';
-import { untilDestroy } from '../../../../../utils/until-destroy';
 import { ReportMatchHighlightService } from '../../../../../services/report-match-highlight.service';
+import { Subject } from 'rxjs';
+import { takeUntil } from 'rxjs/operators';
 
 @Component({
 	selector: 'copyleaks-explainable-ai-result-container',
 	templateUrl: './explainable-ai-result-container.component.html',
 	styleUrls: ['./explainable-ai-result-container.component.scss'],
 })
-export class ExplainableAIResultContainerComponent implements OnInit, OnChanges {
+export class ExplainableAIResultContainerComponent implements OnInit, OnChanges, OnDestroy {
 	/**
 	 * @Input {ExplainableAIResults} The explainable AI results
 	 */
@@ -95,6 +97,9 @@ export class ExplainableAIResultContainerComponent implements OnInit, OnChanges 
 	tooltipVisible: boolean = false;
 	isProgrammaticChange: boolean;
 
+	// Subject for destroying all the subscriptions in the main library component
+	private unsubscribe$ = new Subject();
+
 	constructor() {}
 
 	ngOnChanges(changes: SimpleChanges): void {
@@ -106,7 +111,7 @@ export class ExplainableAIResultContainerComponent implements OnInit, OnChanges 
 	ngOnInit(): void {
 		if (!this.isLoading) this._initResults();
 		this.highlightService.aiInsightsShowResult$
-			.pipe(untilDestroy(this))
+			.pipe(takeUntil(this.unsubscribe$))
 			.subscribe((selectResult: ISelectExplainableAIResult) => {
 				if (selectResult) {
 					const selectIndex = this.explainItemResults.findIndex(
@@ -135,7 +140,7 @@ export class ExplainableAIResultContainerComponent implements OnInit, OnChanges 
 			});
 
 		// Subscription to the originalHtml$ observable to handle the AI insight match click
-		this.highlightService.originalHtml$.pipe(untilDestroy(this)).subscribe(selectedMatch => {
+		this.highlightService.originalHtml$.pipe(takeUntil(this.unsubscribe$)).subscribe(selectedMatch => {
 			this._handleHtmlAIInsightMatchClick(selectedMatch);
 		});
 	}
@@ -467,5 +472,8 @@ export class ExplainableAIResultContainerComponent implements OnInit, OnChanges 
 		}
 	}
 
-	ngOnDestroy(): void {}
+	ngOnDestroy(): void {
+		this.unsubscribe$.next();
+		this.unsubscribe$.complete();
+	}
 }

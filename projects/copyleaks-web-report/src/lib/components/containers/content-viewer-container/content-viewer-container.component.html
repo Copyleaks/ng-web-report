@@ -52,8 +52,7 @@
 				reportOrigin != 'suspect' &&
 				scanSource?.metadata?.excluded > 0 &&
 				!isPartitalScan &&
-				viewMode != 'writing-feedback' &&
-				viewSvc.reportViewMode.alertCode !== ALERTS.SUSPECTED_AI_TEXT_DETECTED
+				viewMode != 'writing-feedback'
 			"
 			class="omitted-text-btn"
 			[class.isOn]="showOmittedWords"

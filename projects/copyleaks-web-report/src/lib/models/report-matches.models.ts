@@ -185,6 +185,10 @@ export interface AIScanResultMatch {
 		chars: AIScanResultMatchChar;
 		words: AIScanResultMatchChar;
 	};
+	html: {
+		chars: AIScanResultMatchHtml;
+		words: AIScanResultMatchHtml;
+	};
 }
 
 export interface AIScanResultMatchChar {

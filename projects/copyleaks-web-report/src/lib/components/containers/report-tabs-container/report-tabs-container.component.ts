@@ -339,7 +339,7 @@ export class ReportTabsContainerComponent implements OnInit, OnDestroy, OnChange
 						this._reportNgTemplatesSvc.reportTemplatesMode$.value != ECustomResultsReportView.Partial
 							? 'only-ai'
 							: 'one-to-many',
-					isHtmlView: false,
+					isHtmlView: !!this.reportDataSvc.crawledVersion?.html?.value,
 					alertCode: ALERTS.SUSPECTED_AI_TEXT_DETECTED,
 					sourcePageIndex: 1,
 					suspectPageIndex: 1,

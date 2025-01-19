@@ -109,6 +109,7 @@ export abstract class OneToManyReportLayoutBaseComponent extends ReportLayoutBas
 	isPartitalScan: boolean;
 	explainableAI: ExplainableAIResults = { explain: null, slicedMatch: [], sourceText: '' };
 	loadingExplainableAI: boolean = true;
+	isAiHtmlViewAvailable: boolean = false;
 
 	// Subject for destroying all the subscriptions in base component
 	private unsubscribe$ = new Subject();
@@ -177,6 +178,12 @@ export abstract class OneToManyReportLayoutBaseComponent extends ReportLayoutBas
 					? EReportViewType.AIView
 					: EReportViewType.PlagiarismView;
 
+			if (this.selectedTap != EReportViewType.AIView) {
+				this.highlightSvc.aiInsightsSelectedResults$.next([]);
+				this.highlightSvc.aiInsightsSelect$.next(null);
+				this.highlightSvc.aiInsightsShowResult$.next(null);
+			}
+
 			this.showDisabledProducts = data.showDisabledProducts ?? false;
 
 			combineLatest([
@@ -185,9 +192,6 @@ export abstract class OneToManyReportLayoutBaseComponent extends ReportLayoutBas
 			])
 				.pipe(takeUntil(this.unsubscribe$))
 				.subscribe(([previews, details]) => {
-					if (data?.alertCode && this.selectedTap === EReportViewType.AIView) {
-						this.isHtmlView = false;
-					}
 					if (this.reportDataSvc.filterOptions?.showAlerts === false) this.alerts = [];
 					else
 						this.alerts =
@@ -229,6 +233,27 @@ export abstract class OneToManyReportLayoutBaseComponent extends ReportLayoutBas
 									},
 								} as IResultItem;
 							});
+					}
+
+					if (this.scanResultsPreviews && this.selectedTap === EReportViewType.AIView) {
+						const validSelectedAlert = previews?.notifications?.alerts?.find(
+							a => a.code === ALERTS.SUSPECTED_AI_TEXT_DETECTED
+						);
+						if (validSelectedAlert) {
+							var aiScanResult = JSON.parse(validSelectedAlert.additionalData) as AIScanResult;
+
+							this.isAiHtmlViewAvailable = false;
+							aiScanResult.results.forEach(result => {
+								result.matches?.forEach(match => {
+									if (match.html != null && match.html != undefined) this.isAiHtmlViewAvailable = true;
+								});
+							});
+						} else {
+							this.isAiHtmlViewAvailable = false;
+						}
+						if (!this.isAiHtmlViewAvailable) {
+							this.isHtmlView = false;
+						}
 					}
 				});
 		});
@@ -480,7 +505,7 @@ export abstract class OneToManyReportLayoutBaseComponent extends ReportLayoutBas
 				if (multiText && multiText.length > 0) {
 					const selectedMatches = multiText.map(c => c.match);
 					if (this.viewMode === 'one-to-many' || this.viewMode === 'only-ai') {
-						this._showResultsForMultiSelection(selectedMatches);
+						this._showResultsForMatchingMultiSelection(selectedMatches);
 					} else if (this.viewMode === 'writing-feedback') {
 						if (selectedMatches.length === 0) this.displayedScanCorrectionsView = this.filteredCorrections;
 						else
@@ -545,8 +570,13 @@ export abstract class OneToManyReportLayoutBaseComponent extends ReportLayoutBas
 					if (!selectedMatches.find(s => s && s.gid === this.reportMatches[i]?.gid))
 						selectedMatches.push(this.reportMatches[i]);
 				});
-				if (this.viewMode === 'one-to-many') {
-					this._showResultsForMultiSelection(selectedMatches);
+				if (
+					(this.viewMode === 'one-to-many' && this.selectedTap === EReportViewType.AIView) ||
+					this.viewMode === 'only-ai'
+				) {
+					this._showResultsForAIInsightsMultiSelection(selectedMatches);
+				} else if (this.viewMode === 'one-to-many') {
+					this._showResultsForMatchingMultiSelection(selectedMatches);
 				} else if (this.viewMode === 'writing-feedback') {
 					if (selectedMatches.length === 0) this.displayedScanCorrectionsView = this.filteredCorrections;
 					else this.displayedScanCorrectionsView = [];
@@ -566,6 +596,57 @@ export abstract class OneToManyReportLayoutBaseComponent extends ReportLayoutBas
 			default:
 				console.error('unknown event', message);
 		}
+	}
+
+	private _showResultsForAIInsightsMultiSelection(selectedMatches: Match[]): void {
+		const selectedAIInsights: SlicedMatch[] = [];
+		const prevSelectedAIInsights = this.highlightSvc.aiInsightsSelectedResults ?? [];
+		const validSelectedAlert = this.reportDataSvc.scanResultsPreviews?.notifications?.alerts?.find(
+			a => a.code === ALERTS.SUSPECTED_AI_TEXT_DETECTED
+		);
+		const scanResult: AIScanResult = validSelectedAlert
+			? (JSON.parse(validSelectedAlert.additionalData) as AIScanResult)
+			: null;
+
+		// Process selected matches
+		selectedMatches.forEach(selectedMatch => {
+			const selectedAIInsight = this.explainableAI.slicedMatch[selectedMatch?.gid];
+			if (!selectedAIInsight) return;
+
+			selectedAIInsights.push(selectedAIInsight);
+
+			const isAlreadySelected = prevSelectedAIInsights.some(
+				ai =>
+					ai.resultRange.start === selectedAIInsight.match.start && ai.resultRange.end === selectedAIInsight.match.end
+			);
+
+			// Add to highlights if not already selected
+			if (!isAlreadySelected) {
+				this.highlightSvc.setOriginalHtmlMatch(selectedMatch);
+			}
+		});
+
+		// Filter out unselected AI insights
+		const unselectedAIInsights = prevSelectedAIInsights.filter(
+			ai =>
+				!selectedAIInsights.some(
+					selected => selected.match.start === ai.resultRange.start && selected.match.end === ai.resultRange.end
+				)
+		);
+
+		// Process unselected matches
+		unselectedAIInsights.forEach(unselectedMatch => {
+			if (!scanResult) return;
+
+			const index = scanResult.explain.patterns.text.chars.starts.findIndex(
+				start => start === unselectedMatch.resultRange.start
+			);
+
+			const matchToUnhighlight = this.reportMatches.find(match => match.gid === index);
+			if (matchToUnhighlight) {
+				this.highlightSvc.setOriginalHtmlMatch(matchToUnhighlight);
+			}
+		});
 	}
 
 	private _showResultsForSelectedMatch(selectedMatch: Match | null) {
@@ -629,7 +710,7 @@ export abstract class OneToManyReportLayoutBaseComponent extends ReportLayoutBas
 			};
 	}
 
-	private _showResultsForMultiSelection(selctions: Match[]) {
+	private _showResultsForMatchingMultiSelection(selctions: Match[]) {
 		if (selctions?.length <= 1) this.isMultiSelection = false;
 		else this.isMultiSelection = true;
 

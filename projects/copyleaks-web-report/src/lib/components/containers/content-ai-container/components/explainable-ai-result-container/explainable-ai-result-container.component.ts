@@ -4,6 +4,7 @@ import {
 	EventEmitter,
 	Input,
 	OnChanges,
+	OnDestroy,
 	OnInit,
 	Output,
 	QueryList,
@@ -15,6 +16,7 @@ import {
 	AIExplainResultItem,
 	EProportionType,
 	ExplainableAIResults,
+	Match,
 	Range,
 } from '../../../../../models/report-matches.models';
 import { EnumNavigateMobileButton } from '../../../report-results-item-container/components/models/report-result-item.enum';
@@ -22,14 +24,16 @@ import { MatExpansionPanel } from '@angular/material/expansion';
 import { MatTooltip } from '@angular/material/tooltip';
 import { ReportMatchesService } from '../../../../../services/report-matches.service';
 import { ISelectExplainableAIResult } from '../../../../../models/report-ai-results.models';
-import { untilDestroy } from '../../../../../utils/until-destroy';
+import { ReportMatchHighlightService } from '../../../../../services/report-match-highlight.service';
+import { Subject } from 'rxjs';
+import { takeUntil } from 'rxjs/operators';
 
 @Component({
 	selector: 'copyleaks-explainable-ai-result-container',
 	templateUrl: './explainable-ai-result-container.component.html',
 	styleUrls: ['./explainable-ai-result-container.component.scss'],
 })
-export class ExplainableAIResultContainerComponent implements OnInit, OnChanges {
+export class ExplainableAIResultContainerComponent implements OnInit, OnChanges, OnDestroy {
 	/**
 	 * @Input {ExplainableAIResults} The explainable AI results
 	 */
@@ -54,6 +58,8 @@ export class ExplainableAIResultContainerComponent implements OnInit, OnChanges 
 	 * @Input Service for report matches and corrections.
 	 */
 	@Input() reportMatchesSvc: ReportMatchesService;
+
+	@Input() highlightService: ReportMatchHighlightService;
 
 	/**
 	 * @Output {boolean} Event emitted when the user clears the selected result
@@ -89,6 +95,10 @@ export class ExplainableAIResultContainerComponent implements OnInit, OnChanges 
 	updateResult: boolean = false;
 	panelIndex: number[] = [];
 	tooltipVisible: boolean = false;
+	isProgrammaticChange: boolean;
+
+	// Subject for destroying all the subscriptions in the main library component
+	private unsubscribe$ = new Subject();
 
 	constructor() {}
 
@@ -100,8 +110,8 @@ export class ExplainableAIResultContainerComponent implements OnInit, OnChanges 
 
 	ngOnInit(): void {
 		if (!this.isLoading) this._initResults();
-		this.reportMatchesSvc.aiInsightsShowResult$
-			.pipe(untilDestroy(this))
+		this.highlightService.aiInsightsShowResult$
+			.pipe(takeUntil(this.unsubscribe$))
 			.subscribe((selectResult: ISelectExplainableAIResult) => {
 				if (selectResult) {
 					const selectIndex = this.explainItemResults.findIndex(
@@ -128,6 +138,11 @@ export class ExplainableAIResultContainerComponent implements OnInit, OnChanges 
 					}
 				}
 			});
+
+		// Subscription to the originalHtml$ observable to handle the AI insight match click
+		this.highlightService.originalHtml$.pipe(takeUntil(this.unsubscribe$)).subscribe(selectedMatch => {
+			this._handleHtmlAIInsightMatchClick(selectedMatch);
+		});
 	}
 
 	private _initResults() {
@@ -306,10 +321,12 @@ export class ExplainableAIResultContainerComponent implements OnInit, OnChanges 
 	 * @param index
 	 */
 	addToPanelIndex(index: number) {
+		if (this.isProgrammaticChange) return;
+
 		this.panelIndex.push(index);
 		this.openedPanel = true; // its for the ai insight result height, once panel opened we want to add more height
 
-		this.reportMatchesSvc.aiInsightsSelect$.next({
+		this.highlightService.aiInsightsSelect$.next({
 			resultRange: {
 				start: this.explainItemResults[index].start,
 				end: this.explainItemResults[index].end,
@@ -324,10 +341,12 @@ export class ExplainableAIResultContainerComponent implements OnInit, OnChanges 
 	 * @param index
 	 */
 	removeFromPanelIndex(index: number) {
+		if (this.isProgrammaticChange) return;
+
 		this.panelIndex = this.panelIndex.filter(i => i !== index);
 		if (!this.panelIndex.length) this.openedPanel = false;
 
-		this.reportMatchesSvc.aiInsightsSelect$.next({
+		this.highlightService.aiInsightsSelect$.next({
 			resultRange: {
 				start: this.explainItemResults[index].start,
 				end: this.explainItemResults[index].end,
@@ -361,5 +380,100 @@ export class ExplainableAIResultContainerComponent implements OnInit, OnChanges 
 		}
 	}
 
-	ngOnDestroy(): void {}
+	/**
+	 * Handle the HTML View AI insight match click, and expand the panel if the match is selected and collapse it if it's not
+	 * @param selectedMatch The selected HTML match
+	 */
+	private _handleHtmlAIInsightMatchClick(selectedMatch: Match): void {
+		let selectedAIInsight = this.explainableAIResults.slicedMatch[selectedMatch?.gid];
+		if (!selectedAIInsight) return;
+
+		let prevSelectedAIInsights = this.highlightService.aiInsightsSelectedResults ?? [];
+		let alreadySelected = prevSelectedAIInsights.find(
+			ai => ai.resultRange.start === selectedAIInsight.match.start && ai.resultRange.end === selectedAIInsight.match.end
+		);
+
+		const selectIndex = this.explainItemResults.findIndex(
+			result => result.start <= selectedAIInsight.match.start && selectedAIInsight.match.end <= result.end
+		);
+		if (alreadySelected) {
+			if (this.panels?.toArray()[selectIndex]) this._programmaticallyCollapsePanel(selectIndex);
+			this.highlightService.aiInsightsSelectedResults$.next(
+				prevSelectedAIInsights.filter(
+					ai =>
+						ai.resultRange.start !== selectedAIInsight.match.start && ai.resultRange.end !== selectedAIInsight.match.end
+				)
+			);
+		} else if (this.panels?.toArray()[selectIndex]) {
+			// add the selected AI insight to reportMatchesSvc.aiInsightsSelectedResults if not already selected
+			const selectedResults = this.highlightService.aiInsightsSelectedResults$.value ?? [];
+			const index = selectedResults.findIndex(
+				result =>
+					result.resultRange.start === this.explainItemResults[selectIndex].start &&
+					result.resultRange.end === this.explainItemResults[selectIndex].end
+			);
+			if (index === -1)
+				selectedResults.push({
+					resultRange: {
+						start: this.explainItemResults[selectIndex].start,
+						end: this.explainItemResults[selectIndex].end,
+					},
+				} as ISelectExplainableAIResult);
+			this.highlightService.aiInsightsSelectedResults$.next(selectedResults);
+
+			if (this.isMobile) {
+				this.scrollToIndex(selectIndex);
+				setTimeout(() => {
+					this._programmaticallyExpandPanel(selectIndex);
+				}, 500);
+			} else {
+				this._programmaticallyExpandPanel(selectIndex);
+				setTimeout(() => {
+					this.desktopScroll.nativeElement.children[selectIndex].scrollIntoView({
+						behavior: 'smooth',
+						block: 'center',
+					});
+				}, 350);
+			}
+		}
+	}
+
+	/**
+	 * Programmatically expand the panel at the given index & don't allow the Material Expansion Panel built-in event to trigger (open/close) the panel
+	 * @param index The index of the panel to expand
+	 */
+	private _programmaticallyExpandPanel(index: number): void {
+		if (index <= -1) return;
+		const panel = this.panels.toArray()[index];
+		if (panel) {
+			// Don't allow the Material Expansion Panel built-in event to trigger (open/close) the panel
+			this.isProgrammaticChange = true;
+			panel.expanded = true;
+			this.panelIndex.push(index);
+			this.openedPanel = true;
+			setTimeout(() => (this.isProgrammaticChange = false), 0); // Reset the flag after the change
+		}
+	}
+
+	/**
+	 * Programmatically collapse the panel at the given index & don't allow the Material Expansion Panel built-in event to trigger (open/close) the panel
+	 * @param index The index of the panel to expand
+	 */
+	private _programmaticallyCollapsePanel(index: number): void {
+		if (index <= -1) return;
+		const panel = this.panels.toArray()[index];
+		if (panel) {
+			// Don't allow the Material Expansion Panel built-in event to trigger (open/close) the panel
+			this.isProgrammaticChange = true;
+			panel.expanded = false;
+			this.panelIndex = this.panelIndex.filter(i => i !== index);
+			if (!this.panelIndex.length) this.openedPanel = false;
+			setTimeout(() => (this.isProgrammaticChange = false), 0); // Reset the flag after the change
+		}
+	}
+
+	ngOnDestroy(): void {
+		this.unsubscribe$.next();
+		this.unsubscribe$.complete();
+	}
 }

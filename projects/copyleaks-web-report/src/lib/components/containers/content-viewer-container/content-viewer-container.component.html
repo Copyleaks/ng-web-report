@@ -216,7 +216,7 @@
 			</svg>
 
 			<span
-				*ngIf="hasHtml && !isAlertsView"
+				*ngIf="hasHtml && !isAlertsView && !hideTextModeSwitch"
 				class="icon-tooltip-wrapper"
 				[matTooltip]="!hasHtml ? ONLY_TEXT_VIEW_IS_AVAILABLE : ''"
 				matTooltipClass="web-report-mat-tooltip"
@@ -224,7 +224,7 @@
 				<button
 					class="actions-container-icon-button"
 					mat-icon-button
-					*ngIf="isHtmlView && hasHtml"
+					*ngIf="isHtmlView && hasHtml && !hideTextModeSwitch"
 					(click)="onViewChange()"
 					matTooltip="Switch to textual mode"
 					matTooltipClass="web-report-mat-tooltip"
@@ -300,8 +300,7 @@
 				[dir]="contentDirection"
 				crOriginalTextHelper
 				[host]="this"
-				text-container
-				(mouseup)="showAddCustomMatchIcon($event)">
+				text-container>
 				<ng-container *ngIf="contentTextMatches; else clean">
 					<ng-container *ngFor="let partial of contentTextMatches[currentPage - 1]">
 						<span *ngIf="partial.match.type === MatchType.none">{{ partial.content }}</span>

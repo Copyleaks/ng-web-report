@@ -2,6 +2,7 @@
 
 import {
 	CorrectionSelectEvent,
+	MatchGroupSelectEvent,
 	MatchJumpEvent,
 	MatchSelectEvent,
 	PostMessageEvent,
@@ -94,6 +95,9 @@ function ready() {
 			case 'match-select':
 				handleBroadcastMatchSelect(event);
 				break;
+			case 'match-group-select':
+				handleBroadcastGroupMatchesSelect(event);
+				break;
 			case 'match-jump':
 				onMatchJump(event);
 				break;
@@ -143,6 +147,21 @@ function ready() {
 			return;
 		}
 		onMatchSelect(elem, true); // should not rebroadcast
+	}
+
+	/**
+	 * handle a broadcasted `match-select` event
+	 * @param event the match select event
+	 */
+	function handleBroadcastGroupMatchesSelect(event: MatchGroupSelectEvent) {
+		const elems: any = document.querySelectorAll<HTMLSpanElement>(`span[match][data-gid='${event.groupId}']`);
+
+		if (elems.length === 0) {
+			messageParent({ type: 'match-warn' });
+			return;
+		}
+
+		onMatchMultiSelect(elems[0], false, false);
 	}
 
 	/**
@@ -221,7 +240,7 @@ function ready() {
 		// clear the text selection
 		document.getSelection()?.removeAllRanges();
 
-		if (event.shiftKey) {
+		if (event.shiftKey || isGroupedMatch(elem)) {
 			onMatchMultiSelect(elem);
 		} else {
 			onMatchSelect(elem);
@@ -240,7 +259,11 @@ function ready() {
 			current = null;
 			currentMulti.forEach(e => e?.toggleAttribute('on', false));
 			currentMulti = [];
-			messageParent({ type: 'match-select', index: -1 });
+			messageParent({
+				type: 'match-select',
+				index: -1,
+				prevIndex: !!elem?.dataset?.['index'] ? +(elem?.dataset?.['index'] ?? '') : -1,
+			});
 			return;
 		}
 		if (!broadcast && current) {
@@ -266,17 +289,43 @@ function ready() {
 	 * - highlight and add the `elem` to the highlighted matches
 	 * @param elem the selected element
 	 */
-	function onMatchMultiSelect(elem: HTMLSpanElement, broadcast: boolean = false): void {
-		const foundSelection = currentMulti.find(e => elem === e);
+	function onMatchMultiSelect(
+		elem: HTMLSpanElement,
+		broadcast: boolean = false,
+		sendOutsideEvent: boolean = true
+	): void {
+		let foundSelection = currentMulti.find(e => elem === e);
+
+		if (isGroupedMatch(elem) && !foundSelection && currentMulti?.length > 0) {
+			const groupId = elem.dataset['gid'];
+			const elems = document.querySelectorAll<HTMLSpanElement>(`span[match][data-gid='${groupId}']`);
+
+			if (elems.length > 0) {
+				const elemsArray = Array.from(elems);
+				foundSelection = currentMulti.find(e => elemsArray.includes(e));
+			}
+		}
+
 		if (!broadcast && foundSelection) {
-			foundSelection?.toggleAttribute('on', false);
 			currentMulti = currentMulti.filter(e => e != elem);
+
+			if (isGroupedMatch(elem)) {
+				const groupId = elem.dataset['gid'];
+				const elems = document.querySelectorAll<HTMLSpanElement>(`span[match][data-gid='${groupId}']`);
+				elems.forEach(e => e?.toggleAttribute('on', false));
+
+				const elemsArray = Array.from(elems);
+				// remove the elements from the currentMulti array
+				currentMulti = currentMulti.filter(e => !elemsArray.includes(e));
+			} else foundSelection?.toggleAttribute('on', false);
+
 			let indexes = currentMulti.map(e => +e?.dataset?.['index']);
 			indexes = indexes.filter(e => e > -1 && !isNaN(e));
 
 			if (currentMulti.length === 1) current = currentMulti[0];
 			else current = null;
-			messageParent({ type: 'multi-match-select', indexes });
+
+			if (sendOutsideEvent) messageParent({ type: 'multi-match-select', indexes });
 			return;
 		}
 		currentMulti.push(elem);
@@ -286,11 +335,20 @@ function ready() {
 		}
 		elem?.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
 
+		if (isGroupedMatch(elem)) {
+			const groupId = elem.dataset['gid'];
+			const elems: any = document.querySelectorAll<HTMLSpanElement>(`span[match][data-gid='${groupId}']`);
+			elems.forEach(e => {
+				e?.toggleAttribute('on', true);
+				if (!currentMulti.includes(e)) currentMulti.push(e);
+			});
+		}
+
 		if (currentMulti.length === 1) current = currentMulti[0];
 		else current = null;
 		let indexes = currentMulti.map(e => (!!e?.dataset?.['index'] ? +(e?.dataset?.['index'] ?? '') : -1));
 		indexes = indexes.filter(e => e > -1 && !isNaN(e));
-		messageParent({ type: 'multi-match-select', indexes });
+		if (sendOutsideEvent) messageParent({ type: 'multi-match-select', indexes });
 	}
 
 	/**
@@ -299,7 +357,14 @@ function ready() {
 	 */
 	function onMatchHover(event: MouseEvent): void {
 		const elem = event?.target as HTMLSpanElement;
-		elem?.classList?.toggle('hover');
+
+		if (isGroupedMatch(elem)) {
+			const groupId = elem.dataset['gid'];
+			const elems: any = document.querySelectorAll<HTMLSpanElement>(`span[match][data-gid='${groupId}']`);
+			elems.forEach(e => e?.classList?.toggle('hover'));
+		} else {
+			elem?.classList?.toggle('hover');
+		}
 	}
 
 	function zoomIn() {
@@ -426,6 +491,13 @@ function ready() {
 			// 	tooltip.style.transformOrigin = `0 -${2 * matchRect.height}px`;
 			// }
 		}
+	}
+
+	function isGroupedMatch(elem: HTMLSpanElement): boolean {
+		const matchProportion = elem?.dataset?.['proportion'];
+		if (matchProportion === 'low' || matchProportion === 'medium' || matchProportion === 'high') return true;
+
+		return false;
 	}
 }
 

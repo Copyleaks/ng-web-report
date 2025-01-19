@@ -15,7 +15,6 @@ import * as helpers from '../utils/report-match-helpers';
 import { untilDestroy } from '../utils/until-destroy';
 import { ReportDataService } from './report-data.service';
 import { ReportViewService } from './report-view.service';
-import { ISelectExplainableAIResult } from '../models/report-ai-results.models';
 
 /**
  * Service that calculates the matches highlight positions with respect to the view and content mode.
@@ -52,32 +51,17 @@ export class ReportMatchesService implements OnDestroy {
 	public get originalTextMatches$() {
 		return this._originalTextMatches.asObservable().pipe();
 	}
+	public get originalTextMatches() {
+		return this._originalTextMatches.value;
+	}
 
 	private _originalHtmlMatches = new BehaviorSubject<Match[] | null>(null);
 	/** Emits matches that are relevant to source html one-to-many mode */
 	public get originalHtmlMatches$() {
 		return this._originalHtmlMatches.asObservable().pipe();
 	}
-
-	private _correctionSelect$ = new BehaviorSubject<IWritingFeedbackCorrectionViewModel | null>(null);
-	/** Emits matches that are relevant to source html one-to-many mode */
-	public get correctionSelect$() {
-		return this._correctionSelect$;
-	}
-	public get correctionSelect() {
-		return this._correctionSelect$.value;
-	}
-
-	private _aiInsightsSelect$ = new BehaviorSubject<ISelectExplainableAIResult | null>(null);
-	/** Emits matches that are relevant to source html one-to-many mode */
-	public get aiInsightsSelect$() {
-		return this._aiInsightsSelect$;
-	}
-
-	private _aiInsightsShowResult$ = new BehaviorSubject<ISelectExplainableAIResult | null>(null);
-
-	public get aiInsightsShowResult$() {
-		return this._aiInsightsShowResult$;
+	public get originalHtmlMatches() {
+		return this._originalHtmlMatches.value;
 	}
 
 	private _showOmittedWords$ = new BehaviorSubject<boolean>(false);
@@ -425,13 +409,15 @@ export class ReportMatchesService implements OnDestroy {
 		completeResults?: ICompleteResults
 	) {
 		let text: SlicedMatch[][];
+		let html: Match[];
 
 		// check if the selected alert code is valid
 		const selectedAlert = completeResults?.notifications?.alerts.find(alert => alert.code === selectedAlertCode);
 		if (selectedAlert) {
 			switch (selectedAlertCode) {
 				case ALERTS.SUSPECTED_AI_TEXT_DETECTED:
-					text = helpers.processAICheatingMatches(source, selectedAlert);
+					text = helpers.processAIInsightsTextMatches(source, selectedAlert);
+					html = helpers.processAIInsightsHTMLMatches(source, selectedAlert);
 					break;
 				case ALERTS.SUSPECTED_CHARACTER_REPLACEMENT_CODE:
 					text = helpers.processSuspectedCharacterMatches(source, selectedAlert);
@@ -455,15 +441,17 @@ export class ReportMatchesService implements OnDestroy {
 		if (text) this._originalTextMatches.next(text);
 
 		// update the html view with zero results
-		const html = helpers.processSourceHtml(
-			[],
-			settings ?? {
-				showIdentical: true,
-				showRelated: true,
-				showMinorChanges: true,
-			},
-			source
-		);
+		if (!html)
+			html = helpers.processSourceHtml(
+				[],
+				settings ?? {
+					showIdentical: true,
+					showRelated: true,
+					showMinorChanges: true,
+				},
+				source
+			);
+
 		if (html) this._originalHtmlMatches.next(html);
 	}
 

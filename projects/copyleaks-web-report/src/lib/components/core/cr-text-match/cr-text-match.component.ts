@@ -2,8 +2,8 @@ import { AfterContentInit, Component, ElementRef, HostBinding, HostListener, Inp
 import { Match, MatchType, ReportOrigin } from '../../../models/report-matches.models';
 import scrollIntoView from 'scroll-into-view-if-needed';
 import { ReportMatchHighlightService } from '../../../services/report-match-highlight.service';
-import { ReportMatchesService } from '../../../services/report-matches.service';
 import { ISelectExplainableAIResult } from '../../../models/report-ai-results.models';
+import { ReportViewService } from '../../../services/report-view.service';
 //import { ISelectExplainableAIResult } from '../../../models/report-ai-results.models';
 
 @Component({
@@ -16,7 +16,7 @@ export class CrTextMatchComponent implements AfterContentInit {
 		public element: ElementRef<HTMLElement>,
 		private renderer: Renderer2,
 		private _highlightService: ReportMatchHighlightService,
-		private _reportMatchesSvc: ReportMatchesService
+		private _reportViewService: ReportViewService
 	) {}
 
 	// tslint:disable-next-line:no-input-rename
@@ -50,9 +50,15 @@ export class CrTextMatchComponent implements AfterContentInit {
 	public click(event) {
 		if (this.match.type === MatchType.aiText) return;
 
+		if (this._reportViewService.reportViewMode.isHtmlView) {
+			this._reportViewService.reportViewMode$.next({ ...this._reportViewService.reportViewMode, isHtmlView: false });
+		}
+		// clear window selection
+		document.getSelection()?.removeAllRanges();
+
 		if (this.match.type === MatchType.aiExplain) {
 			const selectAIMachText = !this._focused;
-			this._reportMatchesSvc.aiInsightsShowResult$.next({
+			this._highlightService.aiInsightsShowResult$.next({
 				resultRange: {
 					start: this.match.start,
 					end: this.match.end,

@@ -79,6 +79,7 @@
 				[isHtmlView]="isHtmlView"
 				[isAlertsView]="isAlertsMode"
 				[scanSource]="reportCrawledVersion"
+				[hideTextModeSwitch]="!isAiHtmlViewAvailable && selectedTap === EReportViewType.AIView"
 				[hasHtml]="
 					viewMode === 'writing-feedback'
 						? !!writingFeedback?.corrections?.html &&

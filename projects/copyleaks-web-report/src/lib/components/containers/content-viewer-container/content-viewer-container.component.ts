@@ -46,6 +46,7 @@ import * as rangy from 'rangy';
 import * as rangyclassapplier from 'rangy/lib/rangy-classapplier';
 
 import { md5 } from 'hash-wasm';
+import { ALERTS } from '../../../constants/report-alerts.constants';
 
 @Component({
 	selector: 'copyleaks-content-viewer-container',
@@ -117,6 +118,17 @@ export class ContentViewerContainerComponent implements OnInit, AfterViewInit, O
 	 * @default `false`
 	 */
 	@Input() isAlertsView: boolean;
+
+	/**
+	 * @Input Determines whether the button to switch between text and html view should be hidden or not.
+	 *
+	 * @description
+	 * When set to `true`, the button to switch between text and html view will be hidden.
+	 * When set to `false`, the button to switch between text and html view will be shown.
+	 *
+	 * @default `false`
+	 */
+	@Input() hideTextModeSwitch: boolean;
 
 	/**
 	 * @Input The scan source (the original scanned document) data
@@ -353,6 +365,7 @@ export class ContentViewerContainerComponent implements OnInit, AfterViewInit, O
 
 	contentHtml: string;
 
+	ALERTS = ALERTS;
 	EXCLUDE_MESSAGE = EXCLUDE_MESSAGE;
 	VIEW_OMITTED_WORDS_TOOLTIP_MESSAGE = $localize`Show omitted words`;
 	HIDE_OMITTED_WORDS_TOOLTIP_MESSAGE = $localize`Hide omitted words`;
@@ -391,7 +404,7 @@ export class ContentViewerContainerComponent implements OnInit, AfterViewInit, O
 		private _renderer: Renderer2,
 		private _cdr: ChangeDetectorRef,
 		private _highlightService: ReportMatchHighlightService,
-		private _viewSvc: ReportViewService,
+		public viewSvc: ReportViewService,
 		private _el: ElementRef
 	) {}
 
@@ -399,7 +412,7 @@ export class ContentViewerContainerComponent implements OnInit, AfterViewInit, O
 		if (this.flexGrow !== undefined && this.flexGrow !== null) this.flexGrowProp = this.flexGrow;
 
 		if (!this.isExportedComponent)
-			this._viewSvc.selectedCustomTabContent$.pipe(untilDestroy(this)).subscribe(content => {
+			this.viewSvc.selectedCustomTabContent$.pipe(untilDestroy(this)).subscribe(content => {
 				if (this.viewMode !== 'one-to-one') this.customTabContent = content;
 			});
 
@@ -443,6 +456,12 @@ export class ContentViewerContainerComponent implements OnInit, AfterViewInit, O
 						this.showAddCustomMatchIcon(null);
 					}
 				} else this.hideAddCustomMatchIcon();
+			});
+
+			window.addEventListener('mouseup', event => {
+				setTimeout(() => {
+					this.showAddCustomMatchIcon(event);
+				}, 100);
 			});
 
 			// Mutation observer to handle DOM changes
@@ -553,7 +572,7 @@ export class ContentViewerContainerComponent implements OnInit, AfterViewInit, O
 			this.isHtmlView &&
 			!changes['isMultiSelection']
 		) {
-			this._renderer.setAttribute(this.contentIFrame.nativeElement, 'srcdoc', this.contentHtml);
+			this.contentIFrame.nativeElement.srcdoc = this.contentHtml;
 			this._cdr.detectChanges();
 			this.showLoadingView = true;
 		}
@@ -565,16 +584,31 @@ export class ContentViewerContainerComponent implements OnInit, AfterViewInit, O
 
 	onViewChange() {
 		if (!this.iframeLoaded) this.showLoadingView = true;
+		if (this.viewSvc.reportViewMode.alertCode === ALERTS.SUSPECTED_AI_TEXT_DETECTED) {
+			this._highlightService.aiInsightsSelectedResults?.forEach(result => {
+				this._highlightService.aiInsightsShowResult$.next({
+					resultRange: {
+						start: result.resultRange.start,
+						end: result.resultRange.end,
+					},
+					isSelected: false,
+				});
+			});
+			this._highlightService.aiInsightsSelectedResults$.next([]);
+			this._highlightService.aiInsightsShowResult$.next(null);
+			this._highlightService.clear$.next(null);
+		}
+
 		if (this.reportOrigin === 'original' || this.reportOrigin === 'source')
 			this.viewChangeEvent.emit({
-				...this._viewSvc.reportViewMode,
+				...this.viewSvc.reportViewMode,
 				isHtmlView: !this.isHtmlView,
 				viewMode: this.viewMode,
 				sourcePageIndex: this.currentPage,
 			});
 		else
 			this.viewChangeEvent.emit({
-				...this._viewSvc.reportViewMode,
+				...this.viewSvc.reportViewMode,
 				isHtmlView: !this.isHtmlView,
 				viewMode: this.viewMode,
 				suspectPageIndex: this.currentPage,
@@ -589,9 +623,10 @@ export class ContentViewerContainerComponent implements OnInit, AfterViewInit, O
 
 		this._cdr.detectChanges();
 
-		setTimeout(() => {
-			this.refreshCustomMatchesAvatars();
-		}, 500);
+		if (this.allowCustomViewAddBtn && this.customViewMatchesData)
+			setTimeout(() => {
+				this.refreshCustomMatchesAvatars();
+			}, 500);
 	}
 
 	/**
@@ -606,9 +641,10 @@ export class ContentViewerContainerComponent implements OnInit, AfterViewInit, O
 
 		this._cdr.detectChanges();
 
-		setTimeout(() => {
-			this.refreshCustomMatchesAvatars();
-		}, 500);
+		if (this.allowCustomViewAddBtn && this.customViewMatchesData)
+			setTimeout(() => {
+				this.refreshCustomMatchesAvatars();
+			}, 500);
 	}
 
 	/**
@@ -623,9 +659,10 @@ export class ContentViewerContainerComponent implements OnInit, AfterViewInit, O
 
 		this._cdr.detectChanges();
 
-		setTimeout(() => {
-			this.refreshCustomMatchesAvatars();
-		}, 500);
+		if (this.allowCustomViewAddBtn && this.customViewMatchesData)
+			setTimeout(() => {
+				this.refreshCustomMatchesAvatars();
+			}, 500);
 	}
 
 	refreshCustomMatchesAvatars() {
@@ -652,12 +689,12 @@ export class ContentViewerContainerComponent implements OnInit, AfterViewInit, O
 
 		if (this.reportOrigin === 'original' || this.reportOrigin === 'source')
 			this.viewChangeEvent.emit({
-				...this._viewSvc.reportViewMode,
+				...this.viewSvc.reportViewMode,
 				sourcePageIndex: this.currentPage,
 			});
 		else
 			this.viewChangeEvent.emit({
-				...this._viewSvc.reportViewMode,
+				...this.viewSvc.reportViewMode,
 				suspectPageIndex: this.currentPage,
 			});
 
@@ -827,6 +864,7 @@ export class ContentViewerContainerComponent implements OnInit, AfterViewInit, O
 
 			// Highlight the selected text
 			this.highlightCustomMatchText(this.customMatchTobeAddedData);
+			window.getSelection()?.removeAllRanges();
 		}
 	}
 
@@ -1049,6 +1087,65 @@ export class ContentViewerContainerComponent implements OnInit, AfterViewInit, O
 	showAddCustomMatchIcon(event: MouseEvent): void {
 		if (!this.allowCustomViewAddBtn) return;
 		const selection = window.getSelection();
+
+		const container = this.contentText.nativeElement;
+		const containerRange = container.ownerDocument.createRange();
+		containerRange.selectNodeContents(container);
+
+		if (selection && selection.rangeCount > 0) {
+			const range = selection.getRangeAt(0);
+
+			// Restrict the selection to the container
+			if (
+				range.compareBoundaryPoints(Range.START_TO_START, containerRange) < 0 ||
+				range.compareBoundaryPoints(Range.END_TO_END, containerRange) > 0
+			) {
+				const newRange = container.ownerDocument.createRange();
+
+				// Adjust the start of the range if it is outside the container
+				if (range.compareBoundaryPoints(Range.START_TO_START, containerRange) < 0) {
+					newRange.setStart(containerRange.startContainer, containerRange.startOffset);
+				} else {
+					newRange.setStart(range.startContainer, range.startOffset);
+				}
+
+				// Adjust the end of the range if it is outside the container
+				if (range.compareBoundaryPoints(Range.END_TO_END, containerRange) > 0) {
+					newRange.setEnd(containerRange.endContainer, containerRange.endOffset);
+				} else {
+					newRange.setEnd(range.endContainer, range.endOffset);
+				}
+
+				// check if the new range is empty
+				if (newRange.toString().trim() === '') {
+					this.hideAddCustomMatchIcon(false);
+					return;
+				}
+
+				selection.removeAllRanges();
+				selection.addRange(newRange);
+			}
+
+			// Remove the specified element (e.g., highlight-icon which is the icon that ) from the selection
+			const highlightIcon = document.getElementById('highlight-icon');
+			if (highlightIcon) {
+				const highlightRange = document.createRange();
+				highlightRange.selectNodeContents(highlightIcon);
+
+				if (range.intersectsNode(highlightIcon)) {
+					// If the selection includes the highlight-icon, split the range
+					if (range.compareBoundaryPoints(Range.START_TO_START, highlightRange) < 0) {
+						range.setEndBefore(highlightIcon);
+					} else if (range.compareBoundaryPoints(Range.END_TO_END, highlightRange) > 0) {
+						range.setStartAfter(highlightIcon);
+					}
+
+					// Apply the adjusted range back to the selection
+					selection.removeAllRanges();
+					selection.addRange(range);
+				}
+			}
+		}
 		if (selection && selection.rangeCount > 0) {
 			const range = selection.getRangeAt(0);
 			if (!range.collapsed) {
@@ -1067,6 +1164,14 @@ export class ContentViewerContainerComponent implements OnInit, AfterViewInit, O
 				// Adjust left position if overflowing on the right
 				if (this.iconPosition.left + 40 > contentTextRect.width) {
 					this.iconPosition.left = contentTextRect.width - 40;
+				}
+
+				if (this.iconPosition.left < 0) {
+					this.iconPosition.left = 0;
+				}
+
+				if (this.iconPosition.top < 0) {
+					this.iconPosition.top = 0;
 				}
 
 				this._saveRangySelectionData();

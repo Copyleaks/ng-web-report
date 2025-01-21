@@ -63,6 +63,7 @@ export class ReportResultsItemComponent implements OnInit, OnChanges, OnDestroy 
 	faviconExists: boolean = true;
 	faviconURL: string;
 	platformType: EPlatformType;
+	copyMessage: string;
 
 	@HostListener('click', ['$event'])
 	handleClick() {
@@ -296,6 +297,24 @@ export class ReportResultsItemComponent implements OnInit, OnChanges, OnDestroy 
 
 	openResultMenu(menuTrigger: MatMenuTrigger): void {
 		menuTrigger?.openMenu();
+	}
+
+	copyResultURL() {
+		if (!this.previewResult.url) return;
+		navigator.clipboard.writeText(this.previewResult?.url).then(
+			() => {
+				this.copyMessage = $localize`URL copied!`;
+				setTimeout(() => (this.copyMessage = ''), 3000); // Clear the message after 3 seconds
+			},
+			err => {
+				console.error('Failed to copy text: ', err);
+				this.copyMessage = $localize`Failed to copy text.`;
+			}
+		);
+	}
+
+	openResultURLInNewTab() {
+		if (this.previewResult?.url) window.open(this.previewResult.url, '_blank');
 	}
 
 	ngOnDestroy(): void {}

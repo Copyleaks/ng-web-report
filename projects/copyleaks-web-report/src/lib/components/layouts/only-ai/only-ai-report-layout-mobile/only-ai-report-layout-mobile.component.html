@@ -33,16 +33,31 @@
 				[isAlertsView]="isAlertsMode"
 				[scanSource]="reportCrawledVersion"
 				[contentTextMatches]="contentTextMatches"
+				[contentHtmlMatches]="reportMatches"
+				[hideTextModeSwitch]="!isAiHtmlViewAvailable && selectedTap === EReportViewType.AIView"
 				[currentPage]="currentPageSource"
 				[reportResponsive]="EResponsiveLayoutType.Mobile"
-				[showOmittedWords]="showOmittedWords"
 				[authorAlert]="authorAlert"
-				[hideTextModeSwitch]="!isAiHtmlViewAvailable && selectedTap === EReportViewType.AIView"
-				[hidePoweredBy]="true"
+				[isPartitalScan]="isPartitalScan"
 				viewMode="one-to-many"
 				reportOrigin="original"
+				[submittedDocumentName]="scanResultsPreviews?.scannedDocument?.metadata?.filename"
+				[hasHtml]="
+					viewMode === 'writing-feedback'
+						? !!writingFeedback?.corrections?.html &&
+						  !!writingFeedback?.corrections.html.chars &&
+						  !!writingFeedback?.corrections.html.chars.groupIds &&
+						  !!writingFeedback?.corrections.html.chars.lengths &&
+						  !!writingFeedback?.corrections.html.chars.starts &&
+						  !!writingFeedback?.corrections.html.chars.operationTexts &&
+						  !!writingFeedback?.corrections.html.chars.types
+						: !!reportCrawledVersion?.html?.value
+				"
+				[isMultiSelection]="isMultiSelection"
+				[showOmittedWords]="showOmittedWords"
 				(iFrameMessageEvent)="onIFrameMessage($event)"
-				(viewChangeEvent)="onReportViewChange($event)"></copyleaks-content-viewer-container>
+				(viewChangeEvent)="onReportViewChange($event)"
+				(onShowOmittedWords)="onShowOmittedWords($event)"></copyleaks-content-viewer-container>
 		</div>
 	</div>
 </div>

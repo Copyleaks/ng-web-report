@@ -166,16 +166,60 @@
 			display: flex;
 			justify-content: flex-start;
 			box-sizing: border-box;
-			// align-items: stretch;
 			gap: 8px;
-			.item-url {
-				font-weight: 400;
-				font-size: 14px;
-				color: $color-primary;
-				overflow: hidden;
-				text-overflow: ellipsis;
-				white-space: nowrap;
-				max-width: 500px;
+			.item-url-container {
+				display: flex;
+				flex-direction: row;
+				align-items: center;
+				gap: 8px;
+				min-height: 25px;
+
+				mat-icon {
+					width: 22px;
+					height: 22px;
+					font-size: 22px;
+					color: $color-primary;
+				}
+
+				.item-url {
+					font-weight: 400;
+					font-size: 14px;
+					color: $color-primary;
+					overflow: hidden;
+					text-overflow: ellipsis;
+					white-space: nowrap;
+				}
+
+				.copied-url-chip {
+					border-radius: 32px !important;
+					background: #00800133 !important;
+					display: inline-flex !important;
+					height: 22px !important;
+					padding: 0px 8px 0px 4px !important;
+					align-items: center !important;
+					gap: 4px !important;
+					flex-shrink: 0 !important;
+					opacity: 0; /* Initially hidden */
+					transform: translateY(-10px); /* Initial position for the animation */
+					animation: fadeInSlideDown 0.3s ease-out forwards; /* Animation */
+					::ng-deep {
+						.copy-message {
+							overflow: hidden !important;
+							color: $color-message-positive !important;
+							font-size: 12px !important;
+							font-style: normal !important;
+							font-weight: 700 !important;
+							line-height: normal !important;
+						}
+
+						mat-icon {
+							width: 18px !important;
+							height: 18px !important;
+							font-size: 18px !important;
+							color: $color-message-positive !important;
+						}
+					}
+				}
 			}
 			.item-introduction {
 				width: 100%;
@@ -302,4 +346,15 @@
 
 .internet-result-favicon {
 	width: 18px;
+}
+
+@keyframes fadeInSlideDown {
+	0% {
+		opacity: 0;
+		transform: translateY(-10px);
+	}
+	100% {
+		opacity: 1;
+		transform: translateY(0);
+	}
 }

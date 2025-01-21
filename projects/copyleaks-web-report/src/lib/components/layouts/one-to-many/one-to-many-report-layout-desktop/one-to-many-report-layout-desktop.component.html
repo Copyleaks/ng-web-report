@@ -45,7 +45,7 @@
 		[contentHtmlMatches]="reportMatches"
 		[currentPage]="currentPageSource"
 		[reportResponsive]="EResponsiveLayoutType.Desktop"
-		[isMultiSelection]="isMultiSelection"
+		[isMultiSelection]="selectedTap !== EReportViewType.AIView && isMultiSelection"
 		[showOmittedWords]="showOmittedWords"
 		[isPartitalScan]="isPartitalScan"
 		[hasHtml]="

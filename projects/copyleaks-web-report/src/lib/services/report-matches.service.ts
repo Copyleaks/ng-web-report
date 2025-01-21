@@ -226,8 +226,13 @@ export class ReportMatchesService implements OnDestroy {
 			.pipe(
 				untilDestroy(this),
 				filter(
-					([scanSource, selectedAlert, ,]) =>
-						scanSource != null && scanSource != undefined && selectedAlert != null && selectedAlert != undefined
+					([scanSource, selectedAlert, scanResultsPreviews, filterOptions]) =>
+						scanSource != null &&
+						scanSource != undefined &&
+						selectedAlert != null &&
+						selectedAlert != undefined &&
+						scanResultsPreviews != null &&
+						filterOptions != null
 				)
 			)
 			.subscribe(([scanSource, selectedAlert, completeResults, filterOptions, showOmittedWords]) => {

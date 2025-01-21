@@ -216,9 +216,36 @@
 			<!--  -->
 			<div class="item-body" *ngIf="showItemBody">
 				<ng-container *ngIf="!showLoader; else showItemBodySkeleton">
-					<a class="item-url" *ngIf="previewResult?.url" [href]="previewResult.url" (click)="$event.preventDefault()">
-						{{ previewResult.url }}
-					</a>
+					<div *ngIf="previewResult?.url" class="item-url-container">
+						<ng-container *ngIf="copyMessage; else showItemURL">
+							<mat-chip class="copied-url-chip">
+								<mat-icon fontSet="material-icons-round">done</mat-icon>
+								<div class="copy-message" i18n>{{ copyMessage }}</div>
+							</mat-chip>
+						</ng-container>
+
+						<ng-template #showItemURL>
+							<mat-icon
+								fontSet="material-icons-round"
+								(click)="$event.preventDefault(); $event.stopPropagation(); copyResultURL()"
+								matTooltip="Copy result URL to clipboard"
+								matTooltipClass="web-report-mat-tooltip"
+								i18n-matTooltip>
+								content_copy
+							</mat-icon>
+							<mat-icon
+								fontSet="material-icons-round"
+								(click)="$event.preventDefault(); $event.stopPropagation(); openResultURLInNewTab()"
+								matTooltip="Open result URL in a new tab"
+								matTooltipClass="web-report-mat-tooltip"
+								i18n-matTooltip>
+								open_in_new
+							</mat-icon>
+							<a class="item-url" [href]="previewResult.url" (click)="$event.preventDefault()">
+								{{ previewResult.url }}
+							</a>
+						</ng-template>
+					</div>
 					<div *ngIf="previewResult.introduction" class="item-introduction" [ngClass]="{ 'mobile-text': isMobile }">
 						{{ previewResult.introduction }}
 					</div>

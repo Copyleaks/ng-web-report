@@ -427,7 +427,12 @@ export class ContentViewerContainerComponent implements OnInit, AfterViewInit, O
 	}
 
 	ngAfterViewInit() {
-		if (this.contentHtml) this._renderer.setAttribute(this.contentIFrame?.nativeElement, 'srcdoc', this.contentHtml);
+		if (this.contentHtml) {
+			this._renderer.setAttribute(this.contentIFrame?.nativeElement, 'srcdoc', this.contentHtml);
+			this._renderer.setAttribute(this.contentIFrame?.nativeElement, 'srcdoc', this.contentHtml);
+			this.contentIFrame.nativeElement.srcdoc = this.contentHtml;
+			this._cdr.detectChanges();
+		}
 
 		this.contentIFrame?.nativeElement?.addEventListener(
 			'load',
@@ -570,11 +575,13 @@ export class ContentViewerContainerComponent implements OnInit, AfterViewInit, O
 			((changes['contentHtmlMatches'] && changes['contentHtmlMatches'].currentValue) || this.contentHtmlMatches) &&
 			this.contentIFrame?.nativeElement &&
 			this.isHtmlView &&
-			!changes['isMultiSelection']
+			(!changes['isMultiSelection'] || changes['isMultiSelection'].currentValue === false)
 		) {
-			this.contentIFrame.nativeElement.srcdoc = this.contentHtml;
-			this._cdr.detectChanges();
-			this.showLoadingView = true;
+			setTimeout(() => {
+				this._renderer.setAttribute(this.contentIFrame?.nativeElement, 'srcdoc', this.contentHtml);
+				this._cdr.detectChanges();
+				this.showLoadingView = true;
+			}, 500);
 		}
 
 		if ('submittedDocumentName' in changes && this.submittedDocumentName) {

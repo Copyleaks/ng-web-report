@@ -96,7 +96,7 @@
 				[currentPage]="currentPageSource"
 				[reportResponsive]="EResponsiveLayoutType.Mobile"
 				[hidePoweredBy]="true"
-				[isMultiSelection]="isMultiSelection"
+				[isMultiSelection]="selectedTap !== EReportViewType.AIView && isMultiSelection"
 				[showOmittedWords]="showOmittedWords"
 				[isPartitalScan]="isPartitalScan"
 				[viewMode]="viewMode"

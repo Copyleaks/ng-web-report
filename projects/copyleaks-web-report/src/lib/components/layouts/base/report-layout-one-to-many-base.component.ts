@@ -182,6 +182,8 @@ export abstract class OneToManyReportLayoutBaseComponent extends ReportLayoutBas
 				this.highlightSvc.aiInsightsSelectedResults$.next([]);
 				this.highlightSvc.aiInsightsSelect$.next(null);
 				this.highlightSvc.aiInsightsShowResult$.next(null);
+				this.highlightSvc.setOriginalHtmlMatch(null);
+				this.highlightSvc.setOriginalTextMatch(null);
 			}
 
 			this.showDisabledProducts = data.showDisabledProducts ?? false;
@@ -499,7 +501,15 @@ export abstract class OneToManyReportLayoutBaseComponent extends ReportLayoutBas
 		])
 			.pipe(
 				takeUntil(this.unsubscribe$),
-				filter(([, , , , crawledVersion]) => !!crawledVersion)
+				filter(
+					([originalText, originalHtml, , reportViewMode, crawledVersion]) =>
+						!!crawledVersion &&
+						reportViewMode?.alertCode !== ALERTS.SUSPECTED_AI_TEXT_DETECTED &&
+						originalHtml?.type != MatchType.aiExplain &&
+						originalHtml?.type != MatchType.aiText &&
+						originalText?.match?.type != MatchType.aiExplain &&
+						originalText?.match?.type != MatchType.aiText
+				)
 			)
 			.subscribe(([text, html, multiText, content]) => {
 				if (multiText && multiText.length > 0) {

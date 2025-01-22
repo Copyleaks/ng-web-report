@@ -241,7 +241,11 @@
 								i18n-matTooltip>
 								open_in_new
 							</mat-icon>
-							<a class="item-url" [href]="previewResult.url" (click)="$event.preventDefault()">
+							<a
+								class="item-url"
+								[href]="previewResult.url"
+								[title]="previewResult.url"
+								(click)="$event.preventDefault()">
 								{{ previewResult.url }}
 							</a>
 						</ng-template>

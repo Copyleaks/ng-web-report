@@ -32,6 +32,7 @@
 				[isHtmlView]="isHtmlView"
 				[isAlertsView]="isAlertsMode"
 				[scanSource]="reportCrawledVersion"
+				[isAIView]="selectedTap === EReportViewType.AIView"
 				[contentTextMatches]="contentTextMatches"
 				[contentHtmlMatches]="reportMatches"
 				[hideTextModeSwitch]="!isAiHtmlViewAvailable && selectedTap === EReportViewType.AIView"
@@ -53,7 +54,7 @@
 						  !!writingFeedback?.corrections.html.chars.types
 						: !!reportCrawledVersion?.html?.value
 				"
-				[isMultiSelection]="isMultiSelection"
+				[isMultiSelection]="selectedTap !== EReportViewType.AIView && isMultiSelection ? true : null"
 				[showOmittedWords]="showOmittedWords"
 				(iFrameMessageEvent)="onIFrameMessage($event)"
 				(viewChangeEvent)="onReportViewChange($event)"

@@ -27,6 +27,7 @@
 	[currentPage]="currentPageSource"
 	[reportResponsive]="EResponsiveLayoutType.Desktop"
 	[authorAlert]="authorAlert"
+	[isAIView]="selectedTap === EReportViewType.AIView"
 	[isPartitalScan]="isPartitalScan"
 	viewMode="one-to-many"
 	reportOrigin="original"
@@ -42,7 +43,7 @@
 			  !!writingFeedback?.corrections.html.chars.types
 			: !!reportCrawledVersion?.html?.value
 	"
-	[isMultiSelection]="isMultiSelection"
+	[isMultiSelection]="selectedTap !== EReportViewType.AIView && isMultiSelection ? true : null"
 	[showOmittedWords]="showOmittedWords"
 	(iFrameMessageEvent)="onIFrameMessage($event)"
 	(viewChangeEvent)="onReportViewChange($event)"

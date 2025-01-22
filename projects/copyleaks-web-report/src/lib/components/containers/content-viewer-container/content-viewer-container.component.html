@@ -75,7 +75,7 @@
 				<span
 					*ngIf="reportOrigin != 'suspect' && !(isHtmlView && !hasHtml)"
 					class="icon-tooltip-wrapper"
-					[matTooltip]="isMultiSelection ? MULTISELECT_IS_ON : ''"
+					[matTooltip]="isMultiSelection ? MULTISELECT_IS_ON : MULTISELECT_IS_OF_PREV"
 					matTooltipClass="web-report-mat-tooltip"
 					i18n-matTooltip>
 					<button
@@ -83,9 +83,6 @@
 						[disabled]="isMultiSelection"
 						mat-icon-button
 						(click)="onJumpToNextMatchClick(false)"
-						matTooltip="Go to previous match"
-						matTooltipClass="web-report-mat-tooltip"
-						i18n-matTooltip
 						aria-label="Go to previous match"
 						i18n-aria-label>
 						<mat-icon
@@ -101,7 +98,7 @@
 				<span
 					*ngIf="reportOrigin != 'suspect' && !(isHtmlView && !hasHtml)"
 					class="icon-tooltip-wrapper"
-					[matTooltip]="isMultiSelection ? MULTISELECT_IS_ON : ''"
+					[matTooltip]="isMultiSelection ? MULTISELECT_IS_ON : MULTISELECT_IS_OF_NEXT"
 					matTooltipClass="web-report-mat-tooltip"
 					i18n-matTooltip>
 					<button
@@ -109,9 +106,6 @@
 						[disabled]="isMultiSelection"
 						mat-icon-button
 						(click)="onJumpToNextMatchClick()"
-						matTooltip="Go to next match"
-						matTooltipClass="web-report-mat-tooltip"
-						i18n-matTooltip
 						aria-label="Go to next match"
 						i18n-aria-label>
 						<mat-icon

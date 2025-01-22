@@ -120,6 +120,13 @@ export class ContentViewerContainerComponent implements OnInit, AfterViewInit, O
 	@Input() isAlertsView: boolean;
 
 	/**
+	 * @Input Determines if the view is for AI view or not.
+	 *
+	 * @default `false`
+	 */
+	@Input() isAIView: boolean;
+
+	/**
 	 * @Input Determines whether the button to switch between text and html view should be hidden or not.
 	 *
 	 * @description
@@ -391,6 +398,8 @@ export class ContentViewerContainerComponent implements OnInit, AfterViewInit, O
 
 	ONLY_TEXT_VIEW_IS_AVAILABLE = $localize`Only text view is available`;
 	MULTISELECT_IS_ON = $localize`Can't navigate between matches when multiple matches are selected`;
+	MULTISELECT_IS_OF_NEXT = $localize`Go to next match`;
+	MULTISELECT_IS_OF_PREV = $localize`Go to previous match`;
 
 	iconPosition = { top: 0, left: 0 };
 	iconVisible = false;
@@ -573,7 +582,19 @@ export class ContentViewerContainerComponent implements OnInit, AfterViewInit, O
 			((changes['contentHtmlMatches'] && changes['contentHtmlMatches'].currentValue) || this.contentHtmlMatches) &&
 			this.contentIFrame?.nativeElement &&
 			this.isHtmlView &&
-			(!changes['isMultiSelection'] || changes['isMultiSelection'].currentValue === false)
+			!changes['isMultiSelection']
+		) {
+			setTimeout(() => {
+				this._renderer.setAttribute(this.contentIFrame?.nativeElement, 'srcdoc', this.contentHtml);
+				this._cdr.detectChanges();
+				this.showLoadingView = true;
+			}, 500);
+		} else if (
+			((changes['contentHtmlMatches'] && changes['contentHtmlMatches'].currentValue) || this.contentHtmlMatches) &&
+			this.contentIFrame?.nativeElement &&
+			this.isHtmlView &&
+			changes['isMultiSelection'] &&
+			this.isAIView
 		) {
 			setTimeout(() => {
 				this._renderer.setAttribute(this.contentIFrame?.nativeElement, 'srcdoc', this.contentHtml);

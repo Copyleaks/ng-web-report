@@ -428,10 +428,8 @@ export class ContentViewerContainerComponent implements OnInit, AfterViewInit, O
 
 	ngAfterViewInit() {
 		if (this.contentHtml) {
+			// This is important in the one-to-one view where the iframe is not rendered right away, so we need to wait for it to be rendered
 			this._renderer.setAttribute(this.contentIFrame?.nativeElement, 'srcdoc', this.contentHtml);
-			this._renderer.setAttribute(this.contentIFrame?.nativeElement, 'srcdoc', this.contentHtml);
-			this.contentIFrame.nativeElement.srcdoc = this.contentHtml;
-			this._cdr.detectChanges();
 		}
 
 		this.contentIFrame?.nativeElement?.addEventListener(

@@ -117,8 +117,8 @@ export class ReportMatchesService implements OnDestroy {
 				]) => {
 					let modifiedScanSource = scanSource ? JSON.parse(JSON.stringify(scanSource)) : null;
 					if (!showOmittedWords && modifiedScanSource) {
-						modifiedScanSource.html.exclude = null;
-						modifiedScanSource.text.exclude = null;
+						if (modifiedScanSource?.html) modifiedScanSource.html.exclude = null;
+						if (modifiedScanSource?.text) modifiedScanSource.text.exclude = null;
 					}
 
 					if (
@@ -190,8 +190,8 @@ export class ReportMatchesService implements OnDestroy {
 			.subscribe(([scanSource, selectedResult, viewMode, , filterOptions, showOmittedWords]) => {
 				let modifiedScanSource = scanSource ? JSON.parse(JSON.stringify(scanSource)) : null;
 				if (!showOmittedWords && modifiedScanSource) {
-					modifiedScanSource.html.exclude = null;
-					modifiedScanSource.text.exclude = null;
+					if (modifiedScanSource?.html) modifiedScanSource.html.exclude = null;
+					if (modifiedScanSource?.text) modifiedScanSource.text.exclude = null;
 				}
 
 				if (modifiedScanSource && selectedResult && this._reportViewSvc.progress$.value != 100) {
@@ -238,8 +238,8 @@ export class ReportMatchesService implements OnDestroy {
 			.subscribe(([scanSource, selectedAlert, completeResults, filterOptions, showOmittedWords]) => {
 				let modifiedScanSource = scanSource ? JSON.parse(JSON.stringify(scanSource)) : null;
 				if (!showOmittedWords && modifiedScanSource) {
-					modifiedScanSource.html.exclude = null;
-					modifiedScanSource.text.exclude = null;
+					if (modifiedScanSource?.html) modifiedScanSource.html.exclude = null;
+					if (modifiedScanSource?.text) modifiedScanSource.text.exclude = null;
 				}
 				if (
 					(modifiedScanSource && this._reportViewSvc.progress$.value != 100) ||

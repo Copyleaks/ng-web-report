@@ -225,28 +225,28 @@
 						</ng-container>
 
 						<ng-template #showItemURL>
-							<mat-icon
-								fontSet="material-icons-round"
+							<button
+								class="copy-url-button"
 								(click)="$event.preventDefault(); $event.stopPropagation(); copyResultURL()"
 								matTooltip="Copy result URL to clipboard"
 								matTooltipClass="web-report-mat-tooltip"
 								i18n-matTooltip>
-								content_copy
-							</mat-icon>
-							<mat-icon
-								fontSet="material-icons-round"
-								(click)="$event.preventDefault(); $event.stopPropagation(); openResultURLInNewTab()"
+								<mat-icon fontSet="material-icons-round">content_copy</mat-icon>
+							</button>
+							<button
+								class="copy-url-button"
 								matTooltip="Open result URL in a new tab"
 								matTooltipClass="web-report-mat-tooltip"
-								i18n-matTooltip>
-								open_in_new
-							</mat-icon>
+								i18n-matTooltip
+								(click)="$event.preventDefault(); $event.stopPropagation(); openResultURLInNewTab()">
+								<mat-icon fontSet="material-icons-round">open_in_new</mat-icon>
+							</button>
 							<a
 								class="item-url"
 								[href]="previewResult.url"
 								[title]="previewResult.url"
 								(click)="$event.preventDefault()">
-								{{ previewResult.url }}
+								{{ !!previewResult.url ? (previewResult.url | removeProtocol) : previewResult.url }}
 							</a>
 						</ng-template>
 					</div>

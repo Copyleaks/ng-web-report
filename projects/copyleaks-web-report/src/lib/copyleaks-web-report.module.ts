@@ -109,6 +109,7 @@ import { ResourcesContainerComponent } from './components/containers/content-ai-
 import { ReportAIResultsService } from './services/report-ai-results.service';
 import { CrAIScoreTooltipContentModule } from './directives/cr-ai-score-tooltip-content/cr-ai-score-tooltip-content.module';
 import { FormaDecimalPipeModule } from './pipes/forma-decimal-number/forma-decimal-number.module';
+import { RemoveProtocolPipeModule } from './pipes/remove-protocol/remove-protocol.module';
 
 @NgModule({
 	declarations: [
@@ -184,6 +185,7 @@ import { FormaDecimalPipeModule } from './pipes/forma-decimal-number/forma-decim
 		MatFormFieldModule,
 		ReactiveFormsModule,
 		FlexLayoutModule,
+		RemoveProtocolPipeModule,
 		MatChipsModule,
 		MatMenuModule,
 		MatInputModule,

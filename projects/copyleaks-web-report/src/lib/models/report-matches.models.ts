@@ -120,6 +120,7 @@ export interface AIExplainResultItem {
 
 export interface ExplainableAIResults {
 	explain?: AIExplainPattern;
+	aiScanAlert?: AIScanAlert;
 	slicedMatch?: SlicedMatch[];
 	sourceText: string;
 }
@@ -129,6 +130,11 @@ export interface AIScanResult {
 	summary: AIScanResultSummary;
 	scannedDocument: AIScannedDocument;
 	explain: AIExplainPattern;
+}
+
+export interface AIScanAlert {
+	title: string;
+	message: string;
 }
 
 export interface AIExplainPattern {

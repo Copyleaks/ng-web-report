@@ -125,6 +125,7 @@ export class FilterResultDailogService {
 		const tagSet = new Set();
 		allResults.forEach(result => {
 			result.tags?.forEach(tag => {
+				if (!tag || !tag.title || tag.title.trim() === '') return;
 				const tagKey = `${tag.code}-${tag.description}-${tag.title}`;
 
 				if (!tagSet.has(tagKey)) {

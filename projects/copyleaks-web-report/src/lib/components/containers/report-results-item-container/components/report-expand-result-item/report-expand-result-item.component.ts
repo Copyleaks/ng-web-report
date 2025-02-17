@@ -5,6 +5,7 @@ import { IResultItem } from '../models/report-result-item.models';
 import { IPercentageResult } from '../percentage-result-item/models/percentage-result-item.models';
 import { ReportMatchHighlightService } from '../../../../../services/report-match-highlight.service';
 import { DatePipe } from '@angular/common';
+import { IResultTag } from '../../../../../models/report-data.models';
 
 @Component({
 	selector: 'cr-report-expand-result-item',
@@ -158,6 +159,12 @@ export class ReportExpandResultItemComponent implements OnInit, OnChanges {
 					tag.description.toLowerCase() !== 'submission date' &&
 					tag.description.toLowerCase() !== 'publish date'
 			);
+
+		// remove empty tags from the tags list
+		if (this.resultItem?.resultPreview?.tags)
+			this.resultItem.resultPreview.tags = this.resultItem.resultPreview.tags.filter(
+				tag => tag.title && tag.title.trim() !== ''
+			);
 	}
 
 	clickBack() {
@@ -186,5 +193,36 @@ export class ReportExpandResultItemComponent implements OnInit, OnChanges {
 
 	onFaviconLoad() {
 		this.faviconExists = true;
+	}
+
+	/**
+	 * Checks if the tag text is with ellipsis or not ('...' at the end of the text)
+	 * @param tagChip The tag chip element
+	 * @returns true if the tag text is overflowing, false otherwise
+	 */
+	isTagChipTextOverflowing(tagChip: HTMLElement): boolean {
+		if (!tagChip) return false;
+		// Check if the tag text is overflowing by comparing the scrollWidth with the clientWidth
+		return tagChip.scrollWidth > tagChip.clientWidth;
+	}
+
+	/**
+	 * Returns the tooltip text for the tag chip, if the text is overflowing it will return the tag title with modification: 'tag title: tag content'
+	 * @param tag The tag object
+	 * @param chipContent The tag chip content element
+	 * @returns The tooltip text for the tag chip
+	 */
+	getTagChipTooltipText(tag: IResultTag, chipContent: HTMLElement): string {
+		const fullText = chipContent.textContent?.trim() || '';
+		// Check if the tag text is overflowing and the tag is not 'summary-date' or 'organization' or 'your-file' tags & not empty
+		if (
+			this.isTagChipTextOverflowing(chipContent) &&
+			tag.code !== 'summary-date' &&
+			tag.code !== 'organization' &&
+			tag.code !== 'your-file'
+		) {
+			return `${tag?.description}: ${fullText}`;
+		}
+		return tag?.description;
 	}
 }

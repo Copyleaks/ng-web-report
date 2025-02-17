@@ -240,6 +240,10 @@ export class ReportResultsItemComponent implements OnInit, OnChanges, OnDestroy 
 					tag.description.toLowerCase() !== 'submission date' &&
 					tag.description.toLowerCase() !== 'publish date'
 			);
+
+		// remove empty tags from the tags list
+		if (this.previewResult?.tags)
+			this.previewResult.tags = this.previewResult.tags.filter(tag => tag.title && tag.title.trim() !== '');
 	}
 
 	onFaviconError() {

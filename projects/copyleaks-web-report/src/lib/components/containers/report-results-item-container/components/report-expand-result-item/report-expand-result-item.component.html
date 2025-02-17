@@ -128,7 +128,8 @@
 					role>
 					<mat-chip
 						*ngFor="let tag of resultItem?.resultPreview?.tags"
-						[matTooltip]="tag?.description ?? ''"
+						#chipContent
+						[matTooltip]="getTagChipTooltipText(tag, chipContent)"
 						[matTooltipClass]="
 							tag?.code === 'summary-date' ? ['web-report-mat-tooltip', 'date-tooltip'] : 'web-report-mat-tooltip'
 						"

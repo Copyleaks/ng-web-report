@@ -215,12 +215,7 @@ export class ReportExpandResultItemComponent implements OnInit, OnChanges {
 	getTagChipTooltipText(tag: IResultTag, chipContent: HTMLElement): string {
 		const fullText = chipContent.textContent?.trim() || '';
 		// Check if the tag text is overflowing and the tag is not 'summary-date' or 'organization' or 'your-file' tags & not empty
-		if (
-			this.isTagChipTextOverflowing(chipContent) &&
-			tag.code !== 'summary-date' &&
-			tag.code !== 'organization' &&
-			tag.code !== 'your-file'
-		) {
+		if (this.isTagChipTextOverflowing(chipContent) && tag.code !== 'summary-date' && tag.code !== 'your-file') {
 			return `${tag?.description}: ${fullText}`;
 		}
 		return tag?.description;

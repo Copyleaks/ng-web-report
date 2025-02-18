@@ -79,6 +79,9 @@ export class ExplainableAIResultContainerComponent implements OnInit, OnChanges,
 
 	proportions: number[] = [];
 	emptyView: boolean = false;
+	aiInsightAlert: boolean = false;
+	alertTitle: string;
+	alertMessage: string;
 	title: string;
 	hasInfinityResult: boolean = false;
 	openedPanel: boolean = false; // its for the ai insight result height, once panel opened we want to add more height
@@ -154,6 +157,12 @@ export class ExplainableAIResultContainerComponent implements OnInit, OnChanges,
 				this._updateProportionRange();
 			} else if (!this.lockedResults) {
 				this.emptyView = true;
+				// If the AI insights are empty, check if there is an AI alert
+				this.aiInsightAlert = !!this.explainableAIResults?.aiScanAlert;
+				if (this.aiInsightAlert) {
+					this.alertTitle = this.explainableAIResults?.aiScanAlert?.title;
+					this.alertMessage = this.explainableAIResults?.aiScanAlert?.message;
+				}
 			}
 			this.updateResult = true;
 		}

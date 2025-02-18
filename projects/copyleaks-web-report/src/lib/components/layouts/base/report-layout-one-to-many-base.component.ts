@@ -197,7 +197,9 @@ export abstract class OneToManyReportLayoutBaseComponent extends ReportLayoutBas
 					if (this.reportDataSvc.filterOptions?.showAlerts === false) this.alerts = [];
 					else
 						this.alerts =
-							previews?.notifications?.alerts?.filter(a => a.code != ALERTS.SUSPECTED_AI_TEXT_DETECTED) ?? [];
+							previews?.notifications?.alerts?.filter(
+								a => a.code != ALERTS.SUSPECTED_AI_TEXT_DETECTED && a.code != ALERTS.AI_INSIGHTS_LANG_UNSUPPORTED
+							) ?? [];
 					this.scanResultsPreviews = previews;
 					this.scanResultsDetails = details;
 
@@ -271,6 +273,17 @@ export abstract class OneToManyReportLayoutBaseComponent extends ReportLayoutBas
 					if (validSelectedAlert) {
 						var scanResult = JSON.parse(validSelectedAlert.additionalData) as AIScanResult;
 						this.explainableAI.explain = scanResult?.explain;
+					}
+					// Check if the AI insights are unsupported
+					const aiInsightsUnsup = scanResults?.notifications?.alerts?.find(
+						a => a.code === ALERTS.AI_INSIGHTS_LANG_UNSUPPORTED
+					);
+					// Set the alert for unsupported AI insights
+					if (aiInsightsUnsup) {
+						this.explainableAI.aiScanAlert = {
+							title: $localize`Language Not Yet Supported for AI Insights`,
+							message: $localize`Unsupported language for AI insights, no specific AI phrase found, but other criteria indicate AI generation.`,
+						};
 					}
 					setTimeout(() => {
 						this.loadingExplainableAI = false;
@@ -399,7 +412,9 @@ export abstract class OneToManyReportLayoutBaseComponent extends ReportLayoutBas
 			}
 			this.filterOptions = data;
 			this.alerts =
-				this.scanResultsPreviews?.notifications?.alerts?.filter(a => a.code != ALERTS.SUSPECTED_AI_TEXT_DETECTED) ?? [];
+				this.scanResultsPreviews?.notifications?.alerts?.filter(
+					a => a.code != ALERTS.SUSPECTED_AI_TEXT_DETECTED && a.code != ALERTS.AI_INSIGHTS_LANG_UNSUPPORTED
+				) ?? [];
 		});
 
 		this.matchSvc.originalHtmlMatches$.pipe(takeUntil(this.unsubscribe$)).subscribe(data => {

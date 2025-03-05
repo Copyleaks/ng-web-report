@@ -25,25 +25,28 @@
 			[paraphrasedTotal]="reportStatistics?.relatedMeaning ?? 0"
 			[excludedTotal]="reportStatistics?.omittedWords ?? 0"
 			[showLoadingView]="isLoadingScanContent || isLoadingScanResults"></cr-assessment-tool-tab-score-panel>
-		<!-- Report alerts -->
-		<copyleaks-report-alerts-container
-			*ngIf="
-				viewMode === 'one-to-many' &&
-				alerts &&
-				alerts.length > 0 &&
-				!isLoadingScanResults &&
-				reportTemplateMode !== ECustomResultsReportView.Full &&
-				reportTemplateMode !== ECustomResultsReportView.Partial
-			"
-			[alerts]="alerts"
-			[isMobile]="true"
-			[flexGrow]="20"></copyleaks-report-alerts-container>
 
-		<cr-readability-score
-			*ngIf="viewMode === 'writing-feedback' && !showReadabilityLoadingView"
-			[statisticsInfo]="writingFeedback?.score?.statistics"
-			[readabilityInfo]="writingFeedback?.score?.readability"
-			[isMobile]="true"></cr-readability-score>
+		<!-- Report alerts -->
+		<ng-container *ngIf="!selectedCustomTabResultSectionContentTemplate">
+			<copyleaks-report-alerts-container
+				*ngIf="
+					viewMode === 'one-to-many' &&
+					alerts &&
+					alerts.length > 0 &&
+					!isLoadingScanResults &&
+					reportTemplateMode !== ECustomResultsReportView.Full &&
+					reportTemplateMode !== ECustomResultsReportView.Partial
+				"
+				[alerts]="alerts"
+				[isMobile]="true"
+				[flexGrow]="20"></copyleaks-report-alerts-container>
+
+			<cr-readability-score
+				*ngIf="viewMode === 'writing-feedback' && !showReadabilityLoadingView"
+				[statisticsInfo]="writingFeedback?.score?.statistics"
+				[readabilityInfo]="writingFeedback?.score?.readability"
+				[isMobile]="true"></cr-readability-score>
+		</ng-container>
 
 		<!-- Report scan content section -->
 		<div class="content-section">

@@ -64,7 +64,7 @@ export class ReportMatchesService implements OnDestroy {
 		return this._originalHtmlMatches.value;
 	}
 
-	private _showOmittedWords$ = new BehaviorSubject<boolean>(false);
+	private _showOmittedWords$ = new BehaviorSubject<boolean>(true);
 	/** Emits a falg that indicates if the omitted words should be shown or not */
 	public get showOmittedWords$() {
 		return this._showOmittedWords$;

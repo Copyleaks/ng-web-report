@@ -490,8 +490,7 @@
 	border: none;
 	padding: 0px;
 	&:hover,
-	&.isOn,
-	&:focus {
+	&.isOn {
 		mat-icon,
 		span {
 			color: $color-primary !important;

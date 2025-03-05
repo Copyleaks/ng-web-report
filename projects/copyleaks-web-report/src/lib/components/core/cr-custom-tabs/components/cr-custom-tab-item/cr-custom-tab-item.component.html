@@ -1,6 +1,7 @@
 <ng-template #tabTemplateTitle>
 	<button
 		class="custom-tab"
+		[id]="tabId ?? ''"
 		(click)="clickEvent()"
 		[tabindex]="0"
 		(keyup.enter)="clickEvent()"

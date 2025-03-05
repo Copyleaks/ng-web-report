@@ -287,12 +287,24 @@ export class ContentViewerContainerComponent implements OnInit, AfterViewInit, O
 	 */
 	@Input() hasHtml: boolean;
 
+	/**
+	 * @Input {string} The custom script to be injected into the iframe.
+	 */
 	@Input() customIframeScript: string;
 
+	/**
+	 * @Input {string} The current user email.
+	 */
 	@Input() currentUserEmail: string;
 
+	/**
+	 * @Input {string} The default avatar URL that will be used if the user email does not have a gravatar.
+	 */
 	@Input() defaultAvatarUrl: string = 'https://lti.copyleaks.com/assets/images/default-avatar.png';
 
+	/**
+	 * @Input The custom view matches data.
+	 */
 	@Input() customViewMatchesData: {
 		id: string;
 		parentId: string;
@@ -304,9 +316,25 @@ export class ContentViewerContainerComponent implements OnInit, AfterViewInit, O
 		isRead: boolean;
 	}[][];
 
+	/**
+	 * @Input {string} The class name to be used for the custom view matches.
+	 */
 	@Input() customViewMatcheClassName: string = 'copyleaks-highlight';
 
+	/**
+	 * @Input {boolean} Flag indicating whether to show the add custom match icon or not.
+	 */
 	@Input() allowCustomViewAddBtn: boolean = false;
+
+	/**
+	 * @Input {boolean} Flag indicating whether to show the match navigation buttons or not.
+	 */
+	@Input() hideMatchNavigationButtons = false;
+
+	/**
+	 * @Input {boolean} Flag indicating whether to show the omitted words button or not.
+	 */
+	@Input() hideOmittedWordsButton = false;
 
 	/**
 	 * Emits iFrame messages to the parent layout component.

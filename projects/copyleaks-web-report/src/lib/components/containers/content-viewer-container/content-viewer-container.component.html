@@ -52,7 +52,8 @@
 				reportOrigin != 'suspect' &&
 				scanSource?.metadata?.excluded > 0 &&
 				!isPartitalScan &&
-				viewMode != 'writing-feedback'
+				viewMode != 'writing-feedback' &&
+				!hideOmittedWordsButton
 			"
 			class="omitted-text-btn"
 			[class.isOn]="showOmittedWords"
@@ -71,7 +72,7 @@
 	</div>
 	<div class="actions-container">
 		<ng-container *ngIf="!customTabContent">
-			<div class="actions-pair-container">
+			<div *ngIf="!hideMatchNavigationButtons" class="actions-pair-container">
 				<span
 					*ngIf="reportOrigin != 'suspect' && !(isHtmlView && !hasHtml)"
 					class="icon-tooltip-wrapper"
@@ -120,7 +121,7 @@
 			</div>
 
 			<svg
-				*ngIf="reportOrigin != 'suspect' && !(isHtmlView && !hasHtml)"
+				*ngIf="reportOrigin != 'suspect' && !(isHtmlView && !hasHtml) && !hideMatchNavigationButtons"
 				xmlns="http://www.w3.org/2000/svg"
 				width="2"
 				height="18"

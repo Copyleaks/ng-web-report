@@ -1,11 +1,11 @@
 <ng-container *ngIf="!showLoadingView; else loadingViewRef">
-	<div class="actions-container">
+	<div class="actions-container" [dir]="docDirection">
 		<ng-container
 			*ngIf="!resultsActions?.selectedResults || resultsActions?.selectedResults === 0; else highlightedResultsView">
 			<div *ngIf="!showSearchFiled" class="tootal-results-container">
-				<h6 class="tootal-results" web-report-title-font i18n>
-					Matching Text Results&nbsp;
-					<span *ngIf="!hideTotal">({{ resultsActions?.totalResults }})</span>
+				<h6 class="tootal-results" web-report-title-font>
+					<span i18n>Matching Text Results</span>
+					<span *ngIf="!hideTotal">&nbsp;({{ resultsActions?.totalResults }})</span>
 				</h6>
 			</div>
 
@@ -100,7 +100,10 @@
 		</ng-template>
 	</div>
 
-	<div *ngIf="resultsActions?.totalExcluded || resultsActions?.totalFiltered" class="chips-container">
+	<div
+		*ngIf="resultsActions?.totalExcluded || resultsActions?.totalFiltered"
+		class="chips-container"
+		[dir]="docDirection">
 		<ng-container *ngIf="resultsActions?.totalExcluded">
 			<mat-chip
 				(click)="showFilterDialog(true)"

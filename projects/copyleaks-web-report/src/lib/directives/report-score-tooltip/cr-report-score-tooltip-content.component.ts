@@ -2,6 +2,7 @@ import { Component, Input, OnInit } from '@angular/core';
 import { EReportScoreTooltipPosition, EReportScoreTooltipView } from '../../enums/copyleaks-web-report.enums';
 import { IReportScoreTooltipModel } from '../../models/report-view.models';
 import { trigger, state, transition, animate, style } from '@angular/animations';
+import { ReportViewService } from '../../services/report-view.service';
 
 @Component({
 	selector: 'cr-report-score-tooltip-content',
@@ -12,6 +13,7 @@ import { trigger, state, transition, animate, style } from '@angular/animations'
 export class CrReportScoreTooltipContentComponent implements OnInit {
 	@Input() scoreStats: IReportScoreTooltipModel | null = null;
 	@Input() viewType: EReportScoreTooltipView = EReportScoreTooltipView.Tooltip;
+	@Input() reportViewService: ReportViewService;
 
 	position: EReportScoreTooltipPosition = EReportScoreTooltipPosition.DEFAULT;
 	left: number = 0;

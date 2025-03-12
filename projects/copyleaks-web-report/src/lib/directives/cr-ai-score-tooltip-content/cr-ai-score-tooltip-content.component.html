@@ -1,6 +1,6 @@
 <div @fade *ngIf="tooltipText" fxLayout="column" fxLayoutAlign="center center">
 	<div class="top-container" fxLayout="column" fxLayoutAlign="center center" fxLayoutGap="6px">
-		<span class="title" [class.center-text]="isTooltipBar">
+		<span class="title" [class.center-text]="isTooltipBar" i18n>
 			{{ tooltipText }}
 		</span>
 		<ng-container *ngIf="isTooltipBar">

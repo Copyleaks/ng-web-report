@@ -26,6 +26,7 @@
 			<!-- Desktop View -->
 			<ng-container *ngSwitchCase="ResponsiveLayoutType.Desktop">
 				<copyleaks-one-to-many-report-layout-desktop
+					[dir]="docDirection"
 					[lockedExplainAIResults]="lockedExplainAIResults"
 					[companyLogo]="companyLogo"
 					[reportMode]="reportMode"
@@ -34,6 +35,7 @@
 			<!-- Tablet View -->
 			<ng-container *ngSwitchCase="ResponsiveLayoutType.Tablet">
 				<copyleaks-one-to-many-report-layout-desktop
+					[dir]="docDirection"
 					[lockedExplainAIResults]="lockedExplainAIResults"
 					[companyLogo]="companyLogo"
 					[reportMode]="reportMode"
@@ -42,6 +44,7 @@
 			<!-- Mobile View -->
 			<ng-container *ngSwitchCase="ResponsiveLayoutType.Mobile">
 				<copyleaks-one-to-many-report-layout-mobile
+					[dir]="docDirection"
 					[lockedExplainAIResults]="lockedExplainAIResults"
 					[companyLogo]="companyLogo"
 					[reportMode]="reportMode"
@@ -58,16 +61,19 @@
 			<!-- Desktop View -->
 			<ng-container *ngSwitchCase="ResponsiveLayoutType.Desktop">
 				<copyleaks-one-to-one-report-layout-desktop
+					[dir]="docDirection"
 					[reportMode]="reportMode"></copyleaks-one-to-one-report-layout-desktop>
 			</ng-container>
 			<!-- Tablet View -->
 			<ng-container *ngSwitchCase="ResponsiveLayoutType.Tablet">
 				<copyleaks-one-to-one-report-layout-desktop
+					[dir]="docDirection"
 					[reportMode]="reportMode"></copyleaks-one-to-one-report-layout-desktop>
 			</ng-container>
 			<!-- Mobile View -->
 			<ng-container *ngSwitchCase="ResponsiveLayoutType.Mobile">
 				<copyleaks-one-to-one-report-layout-mobile
+					[dir]="docDirection"
 					[reportMode]="reportMode"></copyleaks-one-to-one-report-layout-mobile>
 			</ng-container>
 			<ng-container *ngSwitchDefault>Unsupported Layout</ng-container>
@@ -82,6 +88,7 @@
 			<!-- Desktop View -->
 			<ng-container *ngSwitchCase="ResponsiveLayoutType.Desktop">
 				<copyleaks-one-to-many-report-layout-desktop
+					[dir]="docDirection"
 					[lockedExplainAIResults]="lockedExplainAIResults"
 					[companyLogo]="companyLogo"
 					[reportMode]="reportMode"
@@ -90,6 +97,7 @@
 			<!-- Tablet View -->
 			<ng-container *ngSwitchCase="ResponsiveLayoutType.Tablet">
 				<copyleaks-one-to-many-report-layout-desktop
+					[dir]="docDirection"
 					[lockedExplainAIResults]="lockedExplainAIResults"
 					[companyLogo]="companyLogo"
 					[reportMode]="reportMode"
@@ -98,6 +106,7 @@
 			<!-- Mobile View -->
 			<ng-container *ngSwitchCase="ResponsiveLayoutType.Mobile">
 				<copyleaks-one-to-many-report-layout-mobile
+					[dir]="docDirection"
 					[lockedExplainAIResults]="lockedExplainAIResults"
 					[companyLogo]="companyLogo"
 					[reportMode]="reportMode"

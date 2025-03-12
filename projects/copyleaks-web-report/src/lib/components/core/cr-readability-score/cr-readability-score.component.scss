@@ -65,12 +65,12 @@
 		height: $icon-size;
 		color: $color-black;
 		cursor: pointer;
-		margin-left: 12px;
-		margin-right: 8px;
+		margin-inline-start: 12px;
+		margin-inline-end: 8px;
 		transition: transform 0.2s ease-in-out;
 
 		&.mobile {
-			margin-right: 0px !important;
+			margin-inline-end: 0px !important;
 		}
 	}
 
@@ -103,7 +103,7 @@
 		}
 
 		mat-panel-description {
-			margin-right: 0px !important;
+			margin-inline-end: 0px !important;
 			justify-content: end;
 		}
 
@@ -112,7 +112,7 @@
 		}
 
 		.mat-expansion-panel-header {
-			padding-right: 0px !important;
+			padding-inline-end: 0px !important;
 			border-bottom: 1px solid $color-container-background;
 			border-radius: 0px;
 			padding-bottom: 4px;

@@ -7,6 +7,7 @@ import { untilDestroy } from '../../../utils/until-destroy';
 import { trigger, state, transition, animate, style } from '@angular/animations';
 import { ReportMatchesService } from '../../../services/report-matches.service';
 import { ReportMatchHighlightService } from '../../../services/report-match-highlight.service';
+import { ReportViewService } from '../../../services/report-view.service';
 
 @Component({
 	selector: 'cr-correction',
@@ -50,6 +51,11 @@ export class CrCorrectionComponent implements OnInit, OnDestroy {
 	@Input() reportDataSvc: ReportDataService;
 
 	/**
+	 * @Input Service for the report view.
+	 */
+	@Input() reportViewSvc: ReportViewService;
+
+	/**
 	 * @Input Service for report matches and corrections.
 	 */
 	@Input() reportMatchesSvc: ReportMatchesService;
@@ -74,6 +80,7 @@ export class CrCorrectionComponent implements OnInit, OnDestroy {
 	isExcluded: boolean = false;
 	excludedTooltipText: string;
 	isMenuAccessible: boolean = true;
+	docDirection: 'ltr' | 'rtl';
 
 	get getCorrectionType(): string {
 		return getCorrectionCategoryTitle(this.correction?.type);
@@ -99,6 +106,11 @@ export class CrCorrectionComponent implements OnInit, OnDestroy {
 					this.isExcluded = true;
 					this.excludedTooltipText = $localize`Include correction`;
 				}
+			});
+
+		if (this.reportViewSvc)
+			this.reportViewSvc.documentDirection$.pipe(untilDestroy(this)).subscribe(dir => {
+				this.docDirection = dir;
 			});
 	}
 

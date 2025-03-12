@@ -12,7 +12,7 @@
 	border-bottom: 1px solid $color-container-background;
 	padding-bottom: 4px;
 	padding-top: 4px;
-	padding-right: 8px;
+	padding-inline-end: 8px;
 	.filter-chip {
 		line-height: normal !important;
 	}
@@ -94,7 +94,7 @@
 	}
 
 	.expand-icon {
-		margin-right: 0px !important;
+		margin-inline-end: 0px !important;
 	}
 
 	.skeleton {

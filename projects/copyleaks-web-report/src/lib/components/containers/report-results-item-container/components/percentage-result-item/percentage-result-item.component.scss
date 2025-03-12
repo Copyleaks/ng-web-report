@@ -2,6 +2,14 @@
 
 :host {
 	width: 100%;
+
+	[dir='rtl'] {
+		::ng-deep {
+			.stacked-bar {
+				flex-direction: row-reverse !important;
+			}
+		}
+	}
 }
 .plagiarism-detection-percentage-top-container {
 	width: 100%;
@@ -52,7 +60,7 @@
 					position: absolute;
 					border-style: solid;
 					top: 100%;
-					left: 45%;
+					inset-inline-start: 45%;
 					font-size: larger;
 					border-width: 10px;
 					border-color: $color-white transparent transparent transparent;

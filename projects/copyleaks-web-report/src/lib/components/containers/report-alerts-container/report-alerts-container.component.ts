@@ -1,5 +1,7 @@
 import { Component, ElementRef, HostBinding, Input, OnInit, ViewChild } from '@angular/core';
 import { ICompleteResultNotificationAlert } from '../../../models/report-data.models';
+import { ReportViewService } from '../../../services/report-view.service';
+import { untilDestroy } from '../../../utils/until-destroy';
 
 @Component({
 	selector: 'copyleaks-report-alerts-container',
@@ -39,8 +41,16 @@ export class ReportAlertsContainerComponent implements OnInit {
 	EXPEND_TOOLTIP = $localize`Expand`;
 	COLLAPSE_TOOLTIP = $localize`Collapse`;
 
+	docDirection: 'ltr' | 'rtl';
+
+	constructor(private _reportViewSvc: ReportViewService) {}
+
 	ngOnInit(): void {
 		if (this.flexGrow !== undefined && this.flexGrow !== null) this.flexGrowProp = this.flexGrow;
+
+		this._reportViewSvc.documentDirection$.pipe(untilDestroy(this)).subscribe(dir => {
+			this.docDirection = dir;
+		});
 	}
 
 	hideAlertsClick() {
@@ -69,4 +79,6 @@ export class ReportAlertsContainerComponent implements OnInit {
 		});
 		this.stopPaddingCheck = false;
 	}
+
+	ngOnDestroy(): void {}
 }

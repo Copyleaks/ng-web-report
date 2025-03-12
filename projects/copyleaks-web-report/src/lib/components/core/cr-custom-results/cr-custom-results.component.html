@@ -3,7 +3,7 @@
 	[resultsActions]="resultsActionsMock"
 	[hideTotal]="true"></cr-results-actions>
 
-<section class="loading-section">
+<section class="loading-section" [dir]="docDirection">
 	<div
 		class="centered-box-content-container"
 		[style.width]="responsiveMode !== EResponsiveLayoutType.Mobile ? '90%' : '100%'">

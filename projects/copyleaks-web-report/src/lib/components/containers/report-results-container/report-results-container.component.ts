@@ -89,6 +89,7 @@ export class ReportResultsContainerComponent implements OnInit, OnChanges {
 
 	private _resizeObserver: ResizeObserver;
 	hideCategoriesSection: boolean;
+	docDirection: 'ltr' | 'rtl';
 
 	get allResultsItemLength() {
 		return this.allResults?.length;
@@ -171,6 +172,10 @@ export class ReportResultsContainerComponent implements OnInit, OnChanges {
 
 		this._resizeObserver = new ResizeObserver(_ => {
 			this.viewport?.checkViewportSize();
+		});
+
+		this.reportViewSvc.documentDirection$.pipe(untilDestroy(this)).subscribe(dir => {
+			this.docDirection = dir;
 		});
 	}
 

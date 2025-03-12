@@ -404,6 +404,8 @@ export class ContentViewerContainerComponent implements OnInit, AfterViewInit, O
 	EXCLUDE_MESSAGE = EXCLUDE_MESSAGE;
 	VIEW_OMITTED_WORDS_TOOLTIP_MESSAGE = $localize`Show omitted words`;
 	HIDE_OMITTED_WORDS_TOOLTIP_MESSAGE = $localize`Hide omitted words`;
+	ZOOM_IN_TOOLTIP_MESSAGE = $localize`Zoom in`;
+	ZOOM_OUT_TOOLTIP_MESSAGE = $localize`Zoom out`;
 
 	iframeStyle: string = COPYLEAKS_REPORT_IFRAME_STYLES;
 	iframeJsScript: string;
@@ -435,6 +437,8 @@ export class ContentViewerContainerComponent implements OnInit, AfterViewInit, O
 	customMatchesWithEventListenersIds: string[] = [];
 	customMatchesWithAvatarsIds: string[] = [];
 
+	docDirection: 'ltr' | 'rtl';
+
 	private _zoomIn: boolean;
 
 	constructor(
@@ -448,10 +452,16 @@ export class ContentViewerContainerComponent implements OnInit, AfterViewInit, O
 	ngOnInit(): void {
 		if (this.flexGrow !== undefined && this.flexGrow !== null) this.flexGrowProp = this.flexGrow;
 
-		if (!this.isExportedComponent)
+		if (!this.isExportedComponent) {
 			this.viewSvc.selectedCustomTabContent$.pipe(untilDestroy(this)).subscribe(content => {
 				if (this.viewMode !== 'one-to-one') this.customTabContent = content;
 			});
+			this.viewSvc.documentDirection$.pipe(untilDestroy(this)).subscribe(dir => {
+				this.docDirection = dir;
+			});
+		} else {
+			this._observeDocumentDirection();
+		}
 
 		this._highlightService.textMatchClick$
 			.pipe(
@@ -536,8 +546,8 @@ export class ContentViewerContainerComponent implements OnInit, AfterViewInit, O
 
 	ngOnChanges(changes: SimpleChanges): void {
 		if (
-			'contentTextMatches' in changes &&
-			changes['contentTextMatches'].currentValue != undefined &&
+			(('contentTextMatches' in changes && changes['contentTextMatches'].currentValue != undefined) ||
+				('customViewMatchesData' in changes && changes['customViewMatchesData'].currentValue != undefined)) &&
 			(!this.isHtmlView || !this.hasHtml)
 		) {
 			this.showLoadingView = false;
@@ -1258,6 +1268,27 @@ export class ContentViewerContainerComponent implements OnInit, AfterViewInit, O
 			var range = rangySelection.getRangeAt(0);
 			this.customMatchTobeAddedData = this.getCustomMatchData(range);
 		}
+	}
+
+	/**
+	 * Observe the document direction changes.
+	 */
+	private _observeDocumentDirection(): void {
+		this.observer = new MutationObserver(() => {
+			this.docDirection = this._getDocumentDirection();
+		});
+
+		this.observer.observe(document.documentElement, {
+			attributeFilter: ['dir'],
+		});
+	}
+
+	/**
+	 * Get the document direction (ltr/rtl).
+	 * @returns The document direction (ltr/rtl).
+	 */
+	private _getDocumentDirection(): 'ltr' | 'rtl' {
+		return document?.documentElement?.getAttribute('dir') === 'rtl' ? 'rtl' : 'ltr';
 	}
 
 	ngOnDestroy(): void {}

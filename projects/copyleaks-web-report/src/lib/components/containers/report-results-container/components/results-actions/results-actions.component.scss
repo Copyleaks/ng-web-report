@@ -16,6 +16,15 @@
 	border-bottom: 1px solid $color-container-background;
 }
 
+[dir='rtl'] {
+	::ng-deep {
+		.clear-filter-icon {
+			margin-inline-start: 0px !important;
+			margin-inline-end: 4px !important;
+		}
+	}
+}
+
 .actions-container {
 	width: 100%;
 	display: flex;
@@ -182,7 +191,7 @@ mat-icon {
 }
 
 .search-icon {
-	margin-right: 8px !important;
+	margin-inline-end: 8px !important;
 	background-color: $color-white;
 	border-radius: 50%;
 	padding: 4px;
@@ -234,7 +243,7 @@ mat-chip {
 }
 
 cr-spinner {
-	margin-left: 5px;
+	margin-inline-start: 5px;
 }
 
 .filter-chip.disabled {

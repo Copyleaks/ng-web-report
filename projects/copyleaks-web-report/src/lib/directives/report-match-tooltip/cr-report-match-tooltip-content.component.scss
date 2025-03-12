@@ -5,6 +5,14 @@
 	align-items: center;
 	justify-content: center;
 	z-index: 10000000;
+
+	[dir='rtl'] {
+		::ng-deep {
+			.arrow-svg {
+				transform: scaleX(-1) !important;
+			}
+		}
+	}
 	.animation-container {
 		position: relative;
 		display: flex;
@@ -58,8 +66,8 @@
 			height: 0;
 			content: '';
 			position: absolute;
-			border-left: 8px solid transparent;
-			border-right: 8px solid transparent;
+			border-inline-start: 8px solid transparent;
+			border-inline-end: 8px solid transparent;
 			border-bottom: 8px solid $color-medium-dark;
 		}
 
@@ -67,7 +75,7 @@
 		margin-bottom: 1rem;
 		&:after {
 			bottom: -6px;
-			right: calc(50% - 8px);
+			inset-inline-end: calc(50% - 8px);
 			transform: rotate(180deg);
 		}
 	}

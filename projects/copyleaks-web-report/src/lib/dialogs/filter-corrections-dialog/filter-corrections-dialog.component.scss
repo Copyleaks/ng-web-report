@@ -156,7 +156,7 @@
 								color: $color-black;
 							}
 							.mat-checkbox-inner-container {
-								margin-right: 8px !important;
+								margin-inline-end: 8px !important;
 							}
 
 							.mat-checkbox-label {
@@ -270,7 +270,7 @@
 			gap: 8px;
 			display: flex;
 			flex-direction: column;
-			padding-right: 4px !important;
+			padding-inline-end: 4px !important;
 			box-sizing: border-box;
 			> cr-correction {
 				height: 107px;

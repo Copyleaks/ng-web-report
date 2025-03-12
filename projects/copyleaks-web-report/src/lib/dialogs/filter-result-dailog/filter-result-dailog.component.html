@@ -43,7 +43,7 @@
 			</div>
 		</div>
 	</div>
-	<div mat-dialog-content fxLayoutAlign="start start" [class.mobile-body-top-container]="isMobile">
+	<div mat-dialog-content fxLayoutAlign="start start" [class.mobile-body-top-container]="isMobile" [dir]="docDirection">
 		<ng-container *ngIf="!isMobile; else contentMobileViewRef">
 			<div class="body-container" [class.mobile-body-container]="isMobile" fxLayout="row" fxLayoutGap="32px">
 				<div class="left-side-container" [class.mobile]="isMobile" fxLayout="column" fxLayoutGap="16px">

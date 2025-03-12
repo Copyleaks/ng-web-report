@@ -1,5 +1,5 @@
 <ng-container *ngIf="!showLoadingView">
-	<mat-accordion #expansionPanel [tabIndex]="0" (keydown)="expandAccordion()">
+	<mat-accordion #expansionPanel [tabIndex]="0" (keydown)="expandAccordion()" [dir]="docDirection">
 		<mat-expansion-panel #panel [expanded]="expanded" (expandedChange)="expandedChange($event)">
 			<mat-expansion-panel-header [ngClass]="{ 'mobile-results-panel-header': isMobile }">
 				<mat-panel-title>

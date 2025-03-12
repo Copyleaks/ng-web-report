@@ -33,6 +33,8 @@ export class FilterCorrectionsDialogComponent implements OnInit, OnDestroy {
 	totalFilteredCorrections: number = 0;
 	searchControl = new FormControl('');
 
+	docDirection: 'ltr' | 'rtl';
+
 	constructor(
 		private _filterCorrectionsSvc: FilterCorrectionsDialogService,
 		private _dialogRef: MatDialogRef<FilterCorrectionsDialogComponent>,
@@ -40,10 +42,15 @@ export class FilterCorrectionsDialogComponent implements OnInit, OnDestroy {
 	) {}
 
 	ngOnInit(): void {
-		if (this.data?.reportViewSvc)
+		if (this.data?.reportViewSvc) {
 			this.data.reportViewSvc.reportResponsiveMode$.pipe(untilDestroy(this)).subscribe(view => {
 				this.isMobile = view.mode === EResponsiveLayoutType.Mobile;
 			});
+
+			this.data.reportViewSvc.documentDirection$.pipe(untilDestroy(this)).subscribe(dir => {
+				this.docDirection = dir;
+			});
+		}
 
 		this.selectedView = this.data.selectedView ?? EFilterCorrectionsDialogView.Filter;
 		if (this.selectedView === EFilterCorrectionsDialogView.Exclude)

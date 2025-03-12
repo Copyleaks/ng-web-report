@@ -27,6 +27,7 @@ import { ISelectExplainableAIResult } from '../../../../../models/report-ai-resu
 import { ReportMatchHighlightService } from '../../../../../services/report-match-highlight.service';
 import { Subject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
+import { ReportViewService } from '../../../../../services/report-view.service';
 
 @Component({
 	selector: 'copyleaks-explainable-ai-result-container',
@@ -99,11 +100,12 @@ export class ExplainableAIResultContainerComponent implements OnInit, OnChanges,
 	panelIndex: number[] = [];
 	tooltipVisible: boolean = false;
 	isProgrammaticChange: boolean;
+	docDirection: 'ltr' | 'rtl';
 
 	// Subject for destroying all the subscriptions in the main library component
 	private unsubscribe$ = new Subject();
 
-	constructor() {}
+	constructor(private _reportViewSvc: ReportViewService) {}
 
 	ngOnChanges(changes: SimpleChanges): void {
 		if (changes['isLoading']?.currentValue == false) {
@@ -145,6 +147,10 @@ export class ExplainableAIResultContainerComponent implements OnInit, OnChanges,
 		// Subscription to the originalHtml$ observable to handle the AI insight match click
 		this.highlightService.originalHtml$.pipe(takeUntil(this.unsubscribe$)).subscribe(selectedMatch => {
 			this._handleHtmlAIInsightMatchClick(selectedMatch);
+		});
+
+		this._reportViewSvc.documentDirection$.pipe(takeUntil(this.unsubscribe$)).subscribe(dir => {
+			this.docDirection = dir;
 		});
 	}
 

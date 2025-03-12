@@ -45,7 +45,7 @@
 			</button>
 		</div>
 
-		<div mat-dialog-content class="content-container">
+		<div mat-dialog-content class="content-container" [dir]="docDirection">
 			<form [formGroup]="filterCorrectionsForm">
 				<div class="corrections-container">
 					<div class="correction-type-container">
@@ -249,7 +249,7 @@
 				</button>
 			</div>
 			<mat-form-field class="search-input with-label" appearance="fill">
-				<div class="search-input-icon-container" fxLayoutAlign="center center" style="margin-right: 8px" matPrefix>
+				<div class="search-input-icon-container" fxLayoutAlign="center center" style="margin-inline-end: 8px" matPrefix>
 					<mat-icon class="search-input-search-icon" fontSet="material-icons-round">search</mat-icon>
 				</div>
 				<mat-label i18n>Search correction</mat-label>
@@ -262,12 +262,13 @@
 			</mat-form-field>
 		</div>
 
-		<div mat-dialog-content class="excluded-content-container">
+		<div mat-dialog-content class="excluded-content-container" [dir]="docDirection">
 			<cdk-virtual-scroll-viewport class="correction-info-container" itemSize="107">
 				<cr-correction
 					*cdkVirtualFor="let correction of searchedExcludedCorrections"
 					[correction]="correction"
 					[reportDataSvc]="data?.reportDataSvc"
+					[reportViewSvc]="data?.reportViewSvc"
 					[isExcludeView]="true"></cr-correction>
 			</cdk-virtual-scroll-viewport>
 		</div>

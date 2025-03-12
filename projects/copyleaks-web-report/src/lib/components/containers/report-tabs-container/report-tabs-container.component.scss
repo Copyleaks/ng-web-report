@@ -9,6 +9,22 @@
 	flex-wrap: wrap;
 	position: relative;
 
+	[dir='rtl'] {
+		::ng-deep {
+			.bar,
+			.grade-bar,
+			.score-container {
+				flex-direction: row-reverse !important;
+			}
+
+			.mobile-tab-container {
+				.charts-container {
+					direction: ltr;
+				}
+			}
+		}
+	}
+
 	.assessment-tool-container {
 		display: flex;
 		flex-direction: column;
@@ -63,18 +79,18 @@
 			background: $color-container-background;
 			box-shadow: 2px 2px 4px 0px rgba(0, 0, 0, 0.15), -2px -2px 8px 0px rgba(255, 255, 255, 0.5);
 			border-top: 1px solid transparent;
-			border-right: 1px solid transparent;
+			border-inline-end: 1px solid transparent;
 			border-bottom: 2px solid transparent;
-			border-left: 1px solid transparent;
+			border-inline-start: 1px solid transparent;
 			transition: 0.4s ease-in-out;
 			&.at-tab-enabled {
 				&:hover,
 				&.tab-selected {
 					border-radius: 10px;
 					border-top: 1px solid $color-plagiarism-identical;
-					border-right: 1px solid $color-plagiarism-identical;
+					border-inline-end: 1px solid $color-plagiarism-identical;
 					border-bottom: 2px solid $color-plagiarism-identical;
-					border-left: 1px solid $color-plagiarism-identical;
+					border-inline-start: 1px solid $color-plagiarism-identical;
 					background: $color-white;
 					box-shadow: -4px -4px 4px 0px rgba(236, 119, 116, 0.1) inset, 4px 4px 4px 0px rgba(251, 115, 103, 0.1) inset;
 					.title {
@@ -147,9 +163,9 @@
 			background: $color-container-background;
 			box-shadow: 2px 2px 4px 0px rgba(0, 0, 0, 0.15), -2px -2px 8px 0px rgba(255, 255, 255, 0.5);
 			border-top: 1px solid transparent;
-			border-right: 1px solid transparent;
+			border-inline-end: 1px solid transparent;
 			border-bottom: 2px solid transparent;
-			border-left: 1px solid transparent;
+			border-inline-start: 1px solid transparent;
 			transition: 0.4s ease-in-out;
 
 			&.at-tab-enabled {
@@ -157,9 +173,9 @@
 				&.tab-selected {
 					border-radius: 10px;
 					border-top: 1px solid $color-ai-tab;
-					border-right: 1px solid $color-ai-tab;
+					border-inline-end: 1px solid $color-ai-tab;
 					border-bottom: 2px solid $color-ai-tab;
-					border-left: 1px solid $color-ai-tab;
+					border-inline-start: 1px solid $color-ai-tab;
 					background: $color-white;
 					box-shadow: -4px -4px 4px 0px rgba(236, 119, 116, 0.1) inset, 4px 4px 4px 0px rgba(251, 115, 103, 0.1) inset;
 					.title {
@@ -232,19 +248,19 @@
 			background: $color-container-background;
 			box-shadow: 2px 2px 4px 0px rgba(0, 0, 0, 0.15), -2px -2px 8px 0px rgba(255, 255, 255, 0.5);
 			border-top: 1px solid transparent;
-			border-right: 1px solid transparent;
+			border-inline-end: 1px solid transparent;
 			border-bottom: 2px solid transparent;
-			border-left: 1px solid transparent;
+			border-inline-start: 1px solid transparent;
 			transition: 0.4s ease-in-out;
 			&.at-tab-enabled {
 				&:hover,
 				&.tab-selected {
 					border-radius: 10px;
 					border-top: 1px solid $color-grammar-dark;
-					border-right: 1px solid $color-grammar-dark;
+					border-inline-end: 1px solid $color-grammar-dark;
 					border-bottom: 2px solid $color-grammar-dark;
-					border-left: 1px solid $color-grammar-dark;
-					background: var(--Colors-Main-White, #fbffff);
+					border-inline-start: 1px solid $color-grammar-dark;
+					background: $color-white;
 					box-shadow: -4px -4px 4px 0px rgba(255, 165, 3, 0.14) inset, 4px 4px 4px 0px rgba(255, 165, 3, 0.14) inset;
 					.title {
 						color: $color-grammar-dark;
@@ -333,9 +349,9 @@
 				box-sizing: border-box;
 				border-radius: 10px;
 				border-top: 1px solid transparent;
-				border-right: 1px solid transparent;
+				border-inline-end: 1px solid transparent;
 				border-bottom: 2px solid transparent;
-				border-left: 1px solid transparent;
+				border-inline-start: 1px solid transparent;
 				background: $color-container-background;
 				box-shadow: 2px 2px 4px 0px rgba(0, 0, 0, 0.15), -2px -2px 8px 0px rgba(255, 255, 255, 0.5);
 				transition: 0.4s ease-in-out;
@@ -354,9 +370,9 @@
 				&.tab-selected {
 					border-radius: 10px;
 					border-top: 1px solid $color-primary;
-					border-right: 1px solid $color-primary;
+					border-inline-end: 1px solid $color-primary;
 					border-bottom: 2px solid $color-primary;
-					border-left: 1px solid $color-primary;
+					border-inline-start: 1px solid $color-primary;
 					background: $color-white;
 					box-shadow: -4px -4px 4px 0px rgba(63, 154, 245, 0.1) inset, 4px 4px 4px 0px rgba(63, 154, 245, 0.22) inset;
 
@@ -429,7 +445,7 @@
 			content: '';
 			position: absolute;
 			bottom: 0;
-			left: 0;
+			inset-inline-start: 0;
 			width: 0;
 			height: 2px;
 			background-color: $color-primary;
@@ -684,7 +700,7 @@
 	.mobile-tab-score {
 		position: absolute;
 		top: 50%;
-		left: 50%;
+		inset-inline-start: 50%;
 		transform: translate(-50%, -50%);
 	}
 }

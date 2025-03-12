@@ -24,6 +24,14 @@
 		}
 	}
 
+	[dir='rtl'] {
+		::ng-deep {
+			.arrow-icon {
+				transform: scaleX(-1);
+			}
+		}
+	}
+
 	.correction-container {
 		display: flex;
 		flex-direction: row;

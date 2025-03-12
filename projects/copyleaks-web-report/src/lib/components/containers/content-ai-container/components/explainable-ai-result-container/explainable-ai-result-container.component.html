@@ -1,4 +1,9 @@
-<div class="top-container" [class.empty-view]="emptyView" [class.locked-view]="lockedResults" fxLayout="column">
+<div
+	class="top-container"
+	[class.empty-view]="emptyView"
+	[class.locked-view]="lockedResults"
+	fxLayout="column"
+	[dir]="docDirection">
 	<ng-container *ngIf="!isLoading; else loadingState">
 		<div class="top-header-container">
 			<div
@@ -144,7 +149,7 @@
 					<div #scrollContainer class="mobile-scroll" fxLayout="row" (scroll)="onScrollMobile()">
 						<div
 							class="explain-results"
-							[style.margin-right]="i == explainItemResults.length - 1 ? '0px' : '16px'"
+							[style.margin-inline-end]="i == explainItemResults.length - 1 ? '0px' : '16px'"
 							fxLayout="row"
 							*ngFor="let result of explainItemResults; let i = index"
 							[attr.data-index]="i">

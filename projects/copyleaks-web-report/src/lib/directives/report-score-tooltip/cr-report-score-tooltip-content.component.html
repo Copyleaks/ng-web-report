@@ -1,6 +1,7 @@
 <div
 	[@fade]
 	class="tooltip"
+	[dir]="reportViewService?.documentDirection"
 	[class.inline]="viewType === EReportScoreTooltipView.Inline"
 	[ngClass]="['tooltip--' + position]"
 	[style.left]="left + 'px'"
@@ -11,7 +12,7 @@
 			<span class="text-coverage-text" i18n>Text Coverage</span>
 			<div class="column-titles-container">
 				<span class="match-type-text" i18n>Match</span>
-				<span class="match-type-text" style="margin-left: auto" i18n>Words</span>
+				<span class="match-type-text" style="margin-inline-start: auto" i18n>Words</span>
 			</div>
 		</div>
 	</div>
@@ -31,7 +32,7 @@
 						<span class="match-type-numbers" style="width: 35px; text-align: end">
 							{{ scoreStats?.identicalPct?.percentage ?? 0 | similarity : '1.0-1' }}
 						</span>
-						<span class="match-type-numbers" style="margin-left: auto">
+						<span class="match-type-numbers" style="margin-inline-start: auto">
 							{{ scoreStats?.identicalPct?.totalWords ?? 0 | number }}
 						</span>
 					</div>
@@ -52,7 +53,7 @@
 						<span class="match-type-numbers" style="width: 35px; text-align: end">
 							{{ scoreStats?.minorChangesPct?.percentage ?? 0 | similarity : '1.0-1' }}
 						</span>
-						<span class="match-type-numbers" style="margin-left: auto">
+						<span class="match-type-numbers" style="margin-inline-start: auto">
 							{{ scoreStats?.minorChangesPct?.totalWords ?? 0 | number }}
 						</span>
 					</div>
@@ -73,7 +74,7 @@
 						<span class="match-type-numbers" style="width: 35px; text-align: end">
 							{{ scoreStats?.paraphrasedPct?.percentage ?? 0 | similarity : '1.0-1' }}
 						</span>
-						<span class="match-type-numbers" style="margin-left: auto">
+						<span class="match-type-numbers" style="margin-inline-start: auto">
 							{{ scoreStats?.paraphrasedPct?.totalWords ?? 0 | number }}
 						</span>
 					</div>
@@ -101,10 +102,11 @@
 									  scoreStats?.paraphrasedPct?.percentage -
 									  scoreStats?.minorChangesPct?.percentage -
 									  scoreStats?.identicalPct?.percentage
-									: 0) ?? 0 | similarity : '1.0-1'
+									: 0
+								) | similarity : '1.0-1'
 							}}
 						</span>
-						<span class="match-type-numbers" style="margin-left: auto">
+						<span class="match-type-numbers" style="margin-inline-start: auto">
 							{{
 								(scoreStats?.totalWords -
 									(scoreStats?.omittedPct?.totalWords ?? 0) -
@@ -117,7 +119,8 @@
 									  (scoreStats?.paraphrasedPct?.totalWords ?? 0) -
 									  (scoreStats?.minorChangesPct?.totalWords ?? 0) -
 									  (scoreStats?.identicalPct?.totalWords ?? 0)
-									: 0) ?? 0 | number
+									: 0
+								) | number
 							}}
 						</span>
 					</div>
@@ -134,10 +137,9 @@
 						class="match-type-bar-pct"
 						[style.width]="
 							(1 -
-								scoreStats?.paraphrasedPct?.percentage -
-								scoreStats?.minorChangesPct?.percentage -
-								scoreStats?.identicalPct?.percentage ??
-								0) *
+								(scoreStats?.paraphrasedPct?.percentage ?? 0) -
+								(scoreStats?.minorChangesPct?.percentage ?? 0) -
+								(scoreStats?.identicalPct?.percentage ?? 0)) *
 								100 +
 							'%'
 						"></span>
@@ -154,7 +156,7 @@
 						<span class="match-type-numbers" style="width: 35px; text-align: end">
 							{{ scoreStats?.aiPct?.percentage ?? 0 | similarity : '1.0-1' }}
 						</span>
-						<span class="match-type-numbers" style="margin-left: auto">
+						<span class="match-type-numbers" style="margin-inline-start: auto">
 							{{ scoreStats?.aiPct?.totalWords ?? 0 | number }}
 						</span>
 					</div>
@@ -173,7 +175,7 @@
 						<span class="match-type-numbers" style="width: 35px; text-align: end">
 							{{ scoreStats?.humanPct?.percentage ?? 0 | similarity : '1.0-1' }}
 						</span>
-						<span class="match-type-numbers" style="margin-left: auto">
+						<span class="match-type-numbers" style="margin-inline-start: auto">
 							{{ scoreStats?.humanPct?.totalWords ?? 0 | number }}
 						</span>
 					</div>

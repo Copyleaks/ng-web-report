@@ -1,5 +1,5 @@
 <ng-container *ngIf="!showLoadingView; else loadingViewRef">
-	<div class="correction-container" (keyup.enter)="handleClick($event)">
+	<div [dir]="docDirection" class="correction-container" (keyup.enter)="handleClick($event)">
 		<div class="correction-info-container">
 			<div class="correction-description-container">
 				<span

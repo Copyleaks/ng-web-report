@@ -317,7 +317,7 @@ span[match] .tooltip-match-content-container::after {
   position: absolute;
   top: 100%;
   left: 50%;
-  margin-left: -5px;
+  margin-inline-start: -5px;
   border-width: 7px;
   border-style: solid;
   border-color: #112960 transparent transparent transparent;

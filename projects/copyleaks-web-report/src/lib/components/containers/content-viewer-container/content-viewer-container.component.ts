@@ -1291,5 +1291,7 @@ export class ContentViewerContainerComponent implements OnInit, AfterViewInit, O
 		return document?.documentElement?.getAttribute('dir') === 'rtl' ? 'rtl' : 'ltr';
 	}
 
-	ngOnDestroy(): void {}
+	ngOnDestroy(): void {
+		this.observer.disconnect();
+	}
 }

@@ -64,9 +64,10 @@
 		class="include-all-button"
 		(click)="includeAllButtonToggle()"
 		aria-label="Includes or excludes previously excluded results"
-		i18n-aria-label
-		i18n>
-		<ng-container *ngIf="!allResultsIncluded; else ExcludeResultBtnTxtRef">Include all</ng-container>
-		<ng-template #ExcludeResultBtnTxtRef>Exclude all</ng-template>
+		i18n-aria-label>
+		<ng-container *ngIf="!allResultsIncluded; else ExcludeResultBtnTxtRef">
+			<span i18n>Include all</span>
+		</ng-container>
+		<ng-template #ExcludeResultBtnTxtRef><span i18n>Exclude all</span></ng-template>
 	</button>
 </div>

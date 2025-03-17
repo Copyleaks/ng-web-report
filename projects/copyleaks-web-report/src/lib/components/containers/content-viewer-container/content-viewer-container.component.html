@@ -322,22 +322,24 @@
 						<i
 							*ngIf="partial.match.type === MatchType.excluded && partial.match.reason != 8"
 							exclude-match
-							[title]="
+							[matTooltip]="
 								partial.match.reason != undefined && partial.match.reason != null
 									? EXCLUDE_MESSAGE[partial.match.reason]
 									: ''
-							">
+							"
+							matTooltipClass="web-report-mat-tooltip">
 							{{ partial.content }}
 						</i>
 						<!--  -->
 						<span
 							*ngIf="partial.match.type === MatchType.excluded && partial.match.reason == 8"
 							exclude-partial-scan
-							[title]="
+							[matTooltip]="
 								partial.match.reason != undefined && partial.match.reason != null
 									? EXCLUDE_MESSAGE[partial.match.reason]
 									: ''
-							">
+							"
+							matTooltipClass="web-report-mat-tooltip">
 							{{ partial.content }}
 						</span>
 					</ng-container>
@@ -397,18 +399,20 @@
 						<i
 							*ngIf="partial.match.type === MatchType.excluded && partial.match.reason != 8"
 							exclude-match
-							[title]="
+							[matTooltip]="
 								partial.match.reason != undefined && partial.match.reason != null
 									? EXCLUDE_MESSAGE[partial.match.reason]
 									: ''
-							">
+							"
+							matTooltipClass="web-report-mat-tooltip">
 							{{ partial.content }}
 						</i>
 						<!--  -->
 						<span
 							*ngIf="partial.match.type === MatchType.excluded && partial.match.reason == 8"
 							exclude-partial-scan
-							[title]="EXCLUDE_MESSAGE[partial.match.reason]">
+							[matTooltip]="EXCLUDE_MESSAGE[partial.match.reason]"
+							matTooltipClass="web-report-mat-tooltip">
 							{{ partial.content }}
 						</span>
 					</ng-container>

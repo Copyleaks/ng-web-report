@@ -112,6 +112,6 @@ export class ReportViewService {
 	}
 
 	ngOnDestroy(): void {
-		this.observer.disconnect();
+		this.observer?.disconnect();
 	}
 }

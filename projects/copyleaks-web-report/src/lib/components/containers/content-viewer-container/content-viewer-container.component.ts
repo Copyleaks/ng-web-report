@@ -457,7 +457,6 @@ export class ContentViewerContainerComponent implements OnInit, AfterViewInit, O
 		if (!this.isExportedComponent) {
 			this.viewSvc.selectedCustomTabContent$.pipe(untilDestroy(this)).subscribe(content => {
 				if (this.viewMode !== 'one-to-one') this.customTabContent = content;
-				console.log(content);
 			});
 			this.viewSvc.documentDirection$.pipe(untilDestroy(this)).subscribe(dir => {
 				this.docDirection = dir;
@@ -548,8 +547,6 @@ export class ContentViewerContainerComponent implements OnInit, AfterViewInit, O
 	}
 
 	ngOnChanges(changes: SimpleChanges): void {
-		console.log(changes);
-
 		if (
 			(('contentTextMatches' in changes && changes['contentTextMatches'].currentValue != undefined) ||
 				('customViewMatchesData' in changes && changes['customViewMatchesData'].currentValue != undefined)) &&

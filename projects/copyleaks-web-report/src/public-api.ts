@@ -13,6 +13,7 @@ export * from './lib/models/report-errors.models';
 export * from './lib/models/report-matches.models';
 export * from './lib/models/report-iframe-events.models';
 export * from './lib/models/report-view.models';
+export * from './lib/constants/report-scan-errors.constants';
 
 // Exported components
 export * from './lib/components/containers/report-results-container/components/empty-result-state/empty-result-state.component';

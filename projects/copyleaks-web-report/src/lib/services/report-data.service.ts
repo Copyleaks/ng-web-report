@@ -760,8 +760,10 @@ export class ReportDataService {
 		if (!completeResult || !this.reportEndpointConfig?.writingFeedback) return false;
 		if (
 			completeResult?.notifications?.alerts?.length &&
-			completeResult?.notifications?.alerts.filter(alert => alert.code == ALERTS.WRITING_FEEDBACK_LANG_NOT_SUPPORTED)
-				.length == 1
+			completeResult?.notifications?.alerts.filter(
+				alert =>
+					alert.code == ALERTS.WRITING_FEEDBACK_LANG_NOT_SUPPORTED || alert.code == ALERTS.WRITING_FEEDBACK_FAILED
+			).length >= 1
 		)
 			return false;
 		if (completeResult?.scannedDocument?.enabled?.writingFeedback != null)

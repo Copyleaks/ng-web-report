@@ -15,6 +15,7 @@
 
 span[class*='cr-m-'] {
 	cursor: pointer;
+	border-radius: 2px !important;
 
 	&.cr-m-1 {
 		background-color: $color-plagiarism-minor-changes;

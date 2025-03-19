@@ -25,10 +25,12 @@
 
 	::-moz-selection {
 		background: #b4d7fe;
+		border-radius: 2px !important;
 	}
 
 	::selection {
 		background: #b4d7fe;
+		border-radius: 2px !important;
 	}
 
 	::ng-deep {
@@ -37,6 +39,7 @@
 			background-color: #ffdf54 !important;
 			cursor: pointer;
 			transition: 0.2s ease-in-out;
+			border-radius: 2px !important;
 
 			&:hover,
 			&.hover {
@@ -262,6 +265,7 @@
 
 		span[class*='cr-m-'] {
 			cursor: pointer;
+			border-radius: 2px !important;
 
 			&.cr-m-0 {
 				background-color: $color-plagiarism-identical;

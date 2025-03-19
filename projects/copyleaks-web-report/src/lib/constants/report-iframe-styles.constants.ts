@@ -88,10 +88,12 @@ export const COPYLEAKS_REPORT_IFRAME_STYLES: string = `
 
 ::-moz-selection {
 	background: #b4d7fe !important;
+	border-radius: 2px !important;
 }
 
 ::selection {
 	background: #b4d7fe !important;
+	border-radius: 2px !important;
 }
 
 body,
@@ -150,6 +152,7 @@ span[match] {
 	cursor: pointer;
 	color: #000;
 	position: relative;
+	border-radius: 2px !important;
 }
 span[match] a:link {
 	pointer-events: none;
@@ -307,6 +310,7 @@ span.copyleaks-highlight {
 	background-color: #ffdf54;
 	cursor: pointer;
 	transition: 0.2s ease-in-out;
+	border-radius: 2px !important;
 
 	&:hover,
 	&.hover,

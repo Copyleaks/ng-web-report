@@ -33,3 +33,7 @@ $copyleaks-design-v2-theme: mat.define-light-theme(
 );
 
 @include mat.all-component-themes($copyleaks-design-v2-theme);
+
+.mat-icon:not([fontSet]):not(.material-icons-outlined):not(.material-icons-sharp):not(.material-icons-two-tone) {
+	font-family: 'Material Icons Round' !important;
+}

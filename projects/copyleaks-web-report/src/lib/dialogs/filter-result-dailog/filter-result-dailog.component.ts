@@ -73,6 +73,7 @@ export class FilterResultDailogComponent implements OnInit {
 
 	EFilterResultSection = EFilterResultSection;
 	selectedFilter: EFilterResultSection;
+	docDirection: 'ltr' | 'rtl';
 
 	get totalFiltered() {
 		return this.totalSourceType ? this.getTotalFilterdResult() : 0;
@@ -94,6 +95,10 @@ export class FilterResultDailogComponent implements OnInit {
 
 		this.data.reportViewSvc?.reportResponsiveMode$.pipe(untilDestroy(this)).subscribe(view => {
 			this.isMobile = view.mode === EResponsiveLayoutType.Mobile;
+		});
+
+		this.data.reportViewSvc?.documentDirection$.pipe(untilDestroy(this)).subscribe(dir => {
+			this.docDirection = dir;
 		});
 
 		this._filterResultsSvc.filterResultFormGroup.valueChanges.pipe(untilDestroy(this)).subscribe(_ => {

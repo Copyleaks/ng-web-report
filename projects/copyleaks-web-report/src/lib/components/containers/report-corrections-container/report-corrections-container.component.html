@@ -1,6 +1,7 @@
 <ng-container *ngIf="selectedCategroy === undefined; else selectedCategroyRef">
 	<cr-corrections-actions
 		[class.mobile]="isMobile"
+		[dir]="docDirection"
 		[totalWritingFeedbackIssues]="totalWritingFeedbackIssues"
 		[totalFilteredWritingFeedbackIssues]="totalFilteredCorrections"
 		[totalIgnoredWritingFeedbackIssues]="totalIgnoredWritingFeedbackIssues"
@@ -18,7 +19,8 @@
 			class="corrections-container"
 			[class.mobile]="isMobile"
 			[class.less-or-equal-to-one]="(displayedScanCorrectionsView?.length ?? 0) <= 1"
-			[class.empty]="(displayedScanCorrectionsView?.length ?? 0) === 0">
+			[class.empty]="(displayedScanCorrectionsView?.length ?? 0) === 0"
+			[dir]="docDirection">
 			<ng-container
 				*ngIf="
 					!displayedScanCorrectionsView || displayedScanCorrectionsView.length === 0;
@@ -49,6 +51,7 @@
 							[tabIndex]="0"
 							[correction]="correction"
 							[reportDataSvc]="reportDataSvc"
+							[reportViewSvc]="reportViewSvc"
 							[reportMatchesSvc]="reportMatchesSvc"
 							[highlightService]="highlightService"
 							[showLoadingView]="false"
@@ -66,6 +69,7 @@
 							[tabIndex]="0"
 							[correction]="correction"
 							[reportDataSvc]="reportDataSvc"
+							[reportViewSvc]="reportViewSvc"
 							[reportMatchesSvc]="reportMatchesSvc"
 							[highlightService]="highlightService"
 							[showLoadingView]="false"></cr-correction>
@@ -162,16 +166,16 @@
 	</ng-template>
 </ng-container>
 <ng-template #selectedCategroyRef>
-	<div class="selected-category-toolbar">
+	<div class="selected-category-toolbar" [dir]="docDirection">
 		<button
 			mat-icon-button
 			class="total-corrections-container all-correction-title icon-button"
 			(click)="goToAllCorrectionsView()"
-			i18n
 			aria-label="Navigates back to all correction results."
 			i18n-aria-label>
 			<mat-icon class="left-arrow">chevron_left</mat-icon>
-			All Corrections ({{ totalWritingFeedbackIssues }})
+			<span i18n>All Corrections</span>
+			({{ totalWritingFeedbackIssues }})
 		</button>
 		<div class="selected-correction-container">
 			<mat-icon class="right-arrow">chevron_right</mat-icon>
@@ -187,13 +191,14 @@
 
 	<span class="categorized-summery" i18n>Chronological</span>
 
-	<cdk-virtual-scroll-viewport class="all-corrections-info-container" itemSize="40">
+	<cdk-virtual-scroll-viewport class="all-corrections-info-container" itemSize="40" [dir]="docDirection">
 		<cr-correction
 			*cdkVirtualFor="let correction of selectedCategroyCorrections"
 			[tabIndex]="0"
 			[correction]="correction"
 			[hideDescription]="true"
 			[reportDataSvc]="reportDataSvc"
+			[reportViewSvc]="reportViewSvc"
 			[reportMatchesSvc]="reportMatchesSvc"
 			[highlightService]="highlightService"></cr-correction>
 	</cdk-virtual-scroll-viewport>

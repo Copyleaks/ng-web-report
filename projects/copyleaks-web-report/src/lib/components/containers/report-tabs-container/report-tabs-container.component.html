@@ -51,6 +51,7 @@
 					[class.with-company-logo]="selectedTap === EReportViewType.PlagiarismView && !hidePlagarismTap && companyLogo"
 					[class.mobile]="isMobile"
 					[matTooltip]="hidePlagarismTap && showDisabledProducts ? DISABLED : ''"
+					[dir]="docDirection"
 					matTooltipClass="web-report-mat-tooltip"
 					(click)="selectTap(EReportViewType.PlagiarismView)"
 					(keyup.enter)="selectTap(EReportViewType.PlagiarismView)">
@@ -168,6 +169,7 @@
 						selectedTap === EReportViewType.AIView && !hideAiTap && hidePlagarismTap && companyLogo
 					"
 					[class.mobile]="isMobile"
+					[dir]="docDirection"
 					[matTooltip]="hideAiTap && showDisabledProducts ? DISABLED : ''"
 					matTooltipClass="web-report-mat-tooltip"
 					(click)="selectTap(EReportViewType.AIView)"
@@ -256,6 +258,7 @@
 						companyLogo
 					"
 					[class.mobile]="isMobile"
+					[dir]="docDirection"
 					[matTooltip]="hideWritingFeedbackTap && showDisabledProducts ? DISABLED : ''"
 					matTooltipClass="web-report-mat-tooltip"
 					(click)="selectTap(EReportViewType.WritingFeedbackTabView)"
@@ -335,6 +338,7 @@
 				[style.flex-grow]="1"
 				[class.tab-selected]="selectedTap === EReportViewType.PlagiarismView && !hidePlagarismTap"
 				[class.tab-disabled]="hidePlagarismTap && showDisabledProducts"
+				[dir]="docDirection"
 				matTooltipClass="web-report-mat-tooltip">
 				<div class="bar-title-container">
 					<ngx-skeleton-loader
@@ -371,6 +375,7 @@
 				[class.at-tab-disabled]="hidePlagarismTap && showDisabledProducts"
 				[class.at-tab-enabled]="!(hidePlagarismTap && showDisabledProducts)"
 				[class.tab-loading]="showLoadingView"
+				[dir]="docDirection"
 				[class.mobile]="isMobile"
 				[matTooltip]="hidePlagarismTap && showDisabledProducts ? DISABLED : ''"
 				matTooltipClass="web-report-mat-tooltip"
@@ -427,6 +432,7 @@
 				role="button"
 				aria-describedby="AI-view-text"
 				tabindex="0"
+				[dir]="docDirection"
 				[class.tab-selected]="selectedTap === EReportViewType.AIView && !hideAiTap"
 				[class.at-tab-disabled]="hideAiTap && showDisabledProducts"
 				[class.at-tab-enabled]="!(hideAiTap && showDisabledProducts)"
@@ -495,6 +501,7 @@
 				@fadeIn
 				tabindex="0"
 				role="button"
+				[dir]="docDirection"
 				aria-describedby="WritingFeedback-view-text"
 				[class.tab-selected]="selectedTap === EReportViewType.WritingFeedbackTabView && !hideWritingFeedbackTap"
 				[class.at-tab-disabled]="hideWritingFeedbackTap && showDisabledProducts"

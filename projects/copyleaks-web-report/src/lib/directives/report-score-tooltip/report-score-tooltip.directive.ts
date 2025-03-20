@@ -57,6 +57,7 @@ export class ReportScoreTooltipDirective {
 	private _setTooltipComponentProperties() {
 		if (this.componentRef !== null) {
 			this.componentRef.instance.scoreStats = this.crReportScoreTooltip;
+			this.componentRef.instance.reportViewService = this.reportViewService;
 			this.componentRef.instance.position = this.crReportScoreTooltipPosition;
 
 			const { left, right, top, bottom } = this.elementRef.nativeElement.getBoundingClientRect();

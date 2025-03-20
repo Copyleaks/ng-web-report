@@ -137,6 +137,7 @@ export class CopyleaksWebReportComponent implements OnInit, OnDestroy {
 	ReportLayoutType = EReportLayoutType;
 	ResponsiveLayoutType = EResponsiveLayoutType;
 	EReportMode = EReportMode;
+	docDirection: 'ltr' | 'rtl';
 
 	// Subject for destroying all the subscriptions in the main library component
 	private unsubscribe$ = new Subject();
@@ -165,6 +166,9 @@ export class CopyleaksWebReportComponent implements OnInit, OnDestroy {
 
 		// Listen to route params changes
 		this._listenToRouteParamsChange();
+
+		// Listen to document direction changes (RTL/LTR)
+		this._listenToDocumentDirectionChange();
 
 		// Handle report requests errors & emit it
 		this._reportErrorsSvc.reportHttpRequestError$
@@ -422,7 +426,8 @@ export class CopyleaksWebReportComponent implements OnInit, OnDestroy {
 					this._reportViewSvc.reportViewMode?.suspectPageIndex == (suspectPage ? Number(suspectPage) ?? 1 : 1) &&
 					this._reportViewSvc.reportViewMode?.alertCode == alertCode &&
 					this._reportViewSvc.reportViewMode?.showDisabledProducts == this.showDisabledProducts &&
-					this._reportViewSvc.reportViewMode?.platformType == this.platformType
+					this._reportViewSvc.reportViewMode?.platformType == this.platformType &&
+					this._reportViewSvc.reportViewMode?.selectedCustomTabId == selectedCustomTabId
 				)
 			)
 				this._reportViewSvc.reportViewMode$.next({
@@ -441,9 +446,18 @@ export class CopyleaksWebReportComponent implements OnInit, OnDestroy {
 				this._reportViewSvc.selectedAlert$.next(alertCode);
 			else if (alertCode === null && this._reportViewSvc.selectedAlert != null)
 				this._reportViewSvc.selectedAlert$.next(null);
+			if (!selectedCustomTabId || selectedCustomTabId == 'null') {
+				this._reportViewSvc.selectedCustomTabContent$.next(null);
+				this._reportViewSvc.selectedCustomTabResultSectionContent$.next(null);
+			}
 		});
 	}
 
+	private _listenToDocumentDirectionChange() {
+		this._reportViewSvc.documentDirection$.pipe(takeUntil(this.unsubscribe$)).subscribe(dir => {
+			this.docDirection = dir;
+		});
+	}
 	ngOnDestroy() {
 		this.unsubscribe$.next();
 		this.unsubscribe$.complete();

@@ -25,10 +25,12 @@
 
 	::-moz-selection {
 		background: #b4d7fe;
+		border-radius: 2px !important;
 	}
 
 	::selection {
 		background: #b4d7fe;
+		border-radius: 2px !important;
 	}
 
 	::ng-deep {
@@ -37,6 +39,7 @@
 			background-color: #ffdf54 !important;
 			cursor: pointer;
 			transition: 0.2s ease-in-out;
+			border-radius: 2px !important;
 
 			&:hover,
 			&.hover {
@@ -125,6 +128,22 @@
 		padding-bottom: 8px;
 		border-bottom: 1px solid $color-container-background;
 
+		&[dir='rtl'] {
+			flex-direction: row-reverse !important;
+			::ng-deep {
+				.title-container {
+					flex-direction: row-reverse !important;
+				}
+				.submitted-doc-name-container {
+					flex-direction: row-reverse;
+					span {
+						direction: ltr;
+						text-align: left;
+					}
+				}
+			}
+		}
+
 		.title-container {
 			display: flex;
 			flex-direction: row;
@@ -181,6 +200,15 @@
 		border: 0 !important;
 		position: relative;
 
+		&[dir='rtl'] {
+			direction: ltr;
+			::ng-deep {
+				::-webkit-scrollbar {
+					direction: ltr;
+				}
+			}
+		}
+
 		iframe {
 			width: 100%;
 			border: none;
@@ -194,8 +222,16 @@
 		flex-wrap: wrap;
 		padding: 8px 4px;
 		padding-bottom: 0px;
+		&[dir='rtl'] {
+			::ng-deep {
+				.paginator-container,
+				.buttons-container {
+					flex-direction: row-reverse !important;
+				}
+			}
+		}
 		cr-paginator {
-			margin-left: auto;
+			margin-inline-start: auto;
 		}
 	}
 
@@ -229,6 +265,7 @@
 
 		span[class*='cr-m-'] {
 			cursor: pointer;
+			border-radius: 2px !important;
 
 			&.cr-m-0 {
 				background-color: $color-plagiarism-identical;

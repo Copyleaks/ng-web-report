@@ -1,6 +1,8 @@
 import { Component, Input, OnChanges, OnInit, SimpleChanges } from '@angular/core';
 import { EReportScoreTooltipView, EReportViewType } from '../../../enums/copyleaks-web-report.enums';
 import { ReportDataService } from '../../../services/report-data.service';
+import { ReportViewService } from '../../../services/report-view.service';
+import { untilDestroy } from '../../../utils/until-destroy';
 
 @Component({
 	selector: 'cr-assessment-tool-tab-score-panel',
@@ -79,14 +81,19 @@ export class CrAssessmentToolTabScorePanelComponent implements OnInit, OnChanges
 
 	EReportScoreTooltipView = EReportScoreTooltipView;
 	EReportViewType = EReportViewType;
+	docDirection: 'ltr' | 'rtl';
 
-	constructor(public reportDataSvc: ReportDataService) {}
+	constructor(public reportDataSvc: ReportDataService, private _reportViewSvc: ReportViewService) {}
 
 	ngOnInit(): void {}
 
 	ngOnChanges(_: SimpleChanges): void {
 		this.totalAiWords = Math.ceil(this.aiScore * ((this.wordsTotal ?? 0) - (this.excludedTotal ?? 0)));
 		this.totalHumanWords = Math.ceil((this.wordsTotal ?? 0) - (this.excludedTotal ?? 0) - (this.totalAiWords ?? 0));
+
+		this._reportViewSvc.documentDirection$.pipe(untilDestroy(this)).subscribe(dir => {
+			this.docDirection = dir;
+		});
 	}
 
 	expandedChange(event): void {
@@ -97,4 +104,6 @@ export class CrAssessmentToolTabScorePanelComponent implements OnInit, OnChanges
 	expandAccordion() {
 		this.expanded = true;
 	}
+
+	ngOnDestroy(): void {}
 }

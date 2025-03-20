@@ -26,6 +26,7 @@ import { untilDestroy } from '../../../utils/until-destroy';
 import { ReportMatchesService } from '../../../services/report-matches.service';
 import { ReportMatchHighlightService } from '../../../services/report-match-highlight.service';
 import { IWritingFeedbackTypeStatistics } from '../../../models/report-statistics.models';
+import { ReportViewService } from '../../../services/report-view.service';
 
 @Component({
 	selector: 'copyleaks-report-corrections-container',
@@ -107,6 +108,7 @@ export class ReportCorrectionsContainerComponent implements OnInit, OnDestroy, O
 	EReportViewType = EReportViewType;
 	showResultsSection: boolean = true;
 	filterIndicatorOn: boolean;
+	docDirection: 'ltr' | 'rtl';
 
 	get allResultsItemLength() {
 		return this.allScanCorrectionsView?.length;
@@ -118,6 +120,7 @@ export class ReportCorrectionsContainerComponent implements OnInit, OnDestroy, O
 
 	constructor(
 		public reportDataSvc: ReportDataService,
+		public reportViewSvc: ReportViewService,
 		public reportMatchesSvc: ReportMatchesService,
 		public highlightService: ReportMatchHighlightService,
 		private _elementRef: ElementRef
@@ -133,6 +136,10 @@ export class ReportCorrectionsContainerComponent implements OnInit, OnDestroy, O
 			this.filterIndicatorOn =
 				scanResultsPreviews?.filters?.writingFeedback?.hiddenCategories?.length > 0 ||
 				scanResultsPreviews?.filters?.writingFeedback?.excludedCorrections?.length > 0;
+		});
+
+		this.reportViewSvc.documentDirection$.pipe(untilDestroy(this)).subscribe(dir => {
+			this.docDirection = dir;
 		});
 	}
 

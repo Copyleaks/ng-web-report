@@ -1,5 +1,5 @@
 <ng-container *ngIf="!showLoadingView; else loadingViewRef">
-	<div class="expand-result-top-continer" fxLayout="row" fxLayoutAlign="space-between start">
+	<div class="expand-result-top-continer" fxLayout="row" fxLayoutAlign="space-between start" [dir]="docDirection">
 		<div class="expand-result-continer" fxLayout="column" fxLayoutAlign="start start">
 			<diV class="result-header" fxLayout="column" fxLayoutAlign="space-between center">
 				<a

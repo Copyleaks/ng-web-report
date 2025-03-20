@@ -6,6 +6,7 @@ import { IPercentageResult } from '../percentage-result-item/models/percentage-r
 import { ReportMatchHighlightService } from '../../../../../services/report-match-highlight.service';
 import { DatePipe } from '@angular/common';
 import { IResultTag } from '../../../../../models/report-data.models';
+import { untilDestroy } from '../../../../../utils/until-destroy';
 
 @Component({
 	selector: 'cr-report-expand-result-item',
@@ -30,6 +31,7 @@ export class ReportExpandResultItemComponent implements OnInit, OnChanges {
 	faviconURL: string;
 
 	EReportViewType = EReportViewType;
+	docDirection: 'ltr' | 'rtl';
 
 	get authorName() {
 		if (this.resultItem?.resultPreview) {
@@ -60,6 +62,10 @@ export class ReportExpandResultItemComponent implements OnInit, OnChanges {
 
 	ngOnInit(): void {
 		this._updateResultTags();
+
+		this.reportViewSvc.documentDirection$.pipe(untilDestroy(this)).subscribe(dir => {
+			this.docDirection = dir;
+		});
 	}
 
 	ngOnChanges(changes: SimpleChanges): void {
@@ -220,4 +226,6 @@ export class ReportExpandResultItemComponent implements OnInit, OnChanges {
 		}
 		return tag?.description;
 	}
+
+	ngOnDestroy(): void {}
 }

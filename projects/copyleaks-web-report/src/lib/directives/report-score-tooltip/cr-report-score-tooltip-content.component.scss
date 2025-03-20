@@ -3,6 +3,19 @@
 :host {
 	position: relative;
 }
+
+[dir='rtl'] {
+	::ng-deep {
+		.match-type-stats-bar-container {
+			flex-direction: row-reverse !important;
+		}
+		.tooltip-indicator {
+			inset-inline-start: initial !important;
+			inset-inline-end: 50% !important;
+		}
+	}
+}
+
 .tooltip {
 	min-width: 220px;
 	position: fixed;
@@ -34,24 +47,24 @@
 		margin-top: 7px;
 
 		&::before {
-			border-left-color: transparent;
-			border-right-color: transparent;
+			border-inline-start-color: transparent;
+			border-inline-end-color: transparent;
 			border-top: none;
-			left: calc(50% - 5px);
+			inset-inline-start: calc(50% - 5px);
 			top: -5px;
 		}
 
 		&::after {
-			border-left-color: transparent;
-			border-right-color: transparent;
+			border-inline-start-color: transparent;
+			border-inline-end-color: transparent;
 			border-top-color: rgba(0, 0, 0, 0.25);
-			left: calc(50% - 6px);
+			inset-inline-start: calc(50% - 6px);
 			top: -7px;
 		}
 
 		.tooltip-indicator {
 			position: absolute;
-			left: 50%;
+			inset-inline-start: 50%;
 			top: -9px;
 			transform: rotateX(180deg);
 			z-index: 100000000;
@@ -63,24 +76,24 @@
 		margin-bottom: 7px;
 
 		&::before {
-			border-left-color: transparent;
-			border-right-color: transparent;
+			border-inline-start-color: transparent;
+			border-inline-end-color: transparent;
 			border-bottom: none;
-			left: calc(50% - 5px);
+			inset-inline-start: calc(50% - 5px);
 			bottom: -5px;
 		}
 
 		&::after {
-			border-left-color: transparent;
-			border-right-color: transparent;
+			border-inline-start-color: transparent;
+			border-inline-end-color: transparent;
 			border-bottom-color: rgba(0, 0, 0, 0.25);
-			left: calc(50% - 6px);
+			inset-inline-start: calc(50% - 6px);
 			bottom: -7px;
 		}
 
 		.tooltip-indicator {
 			position: absolute;
-			left: 50%;
+			inset-inline-start: 50%;
 			bottom: -19px;
 			transform: translate(-50%, -50%);
 			z-index: 100000000;
@@ -93,37 +106,37 @@
 		&::before {
 			border-top-color: transparent;
 			border-bottom-color: transparent;
-			border-right: none;
-			right: -5px;
+			border-inline-end: none;
+			inset-inline-end: -5px;
 			top: calc(50% - 5px);
 		}
 
 		&::after {
 			border-top-color: transparent;
 			border-bottom-color: transparent;
-			border-right-color: rgba(0, 0, 0, 0.25);
-			right: -6px;
+			border-inline-end-color: rgba(0, 0, 0, 0.25);
+			inset-inline-end: -6px;
 			top: calc(50% - 6px);
 		}
 	}
 
 	&--right {
 		transform: translateY(-50%);
-		margin-left: 7px;
+		margin-inline-start: 7px;
 
 		&::before {
 			border-top-color: transparent;
 			border-bottom-color: transparent;
-			border-left: none;
-			left: -5px;
+			border-inline-start: none;
+			inset-inline-start: -5px;
 			top: calc(50% - 5px);
 		}
 
 		&::after {
 			border-top-color: transparent;
 			border-bottom-color: transparent;
-			border-left-color: rgba(0, 0, 0, 0.25);
-			left: -6px;
+			border-inline-start-color: rgba(0, 0, 0, 0.25);
+			inset-inline-start: -6px;
 			top: calc(50% - 6px);
 		}
 	}
@@ -203,7 +216,7 @@
 
 .percentage {
 	color: $color-black;
-	text-align: right;
+	text-align: end;
 	font-size: 12px;
 	font-weight: 700;
 	line-height: normal;
@@ -318,7 +331,7 @@
 				width: 83px;
 				.match-type-numbers {
 					color: $color-black;
-					text-align: right;
+					text-align: end;
 					font-family: Almarai, haboro-soft, sans-serif !important;
 					font-size: 12px;
 					font-style: normal;

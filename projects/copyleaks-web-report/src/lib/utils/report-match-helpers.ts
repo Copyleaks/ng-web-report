@@ -823,8 +823,15 @@ export const getRenderedMatches = (matches: Match[] | null, originalHtml: string
 						`<span exclude-partial-scan data-type="${curr.type}" data-index="${i}" title="${reason}">${slice}</span>`
 					);
 				} else {
-					if (reason) stringBuilder.push(`<span exclude title="${reason}">${slice}</span>`);
-					else stringBuilder.push(`<span exclude title="UnKnown">${slice}</span>`);
+					if (reason) {
+						stringBuilder.push(
+							`<span exclude class="copyleaks-custom-tooltip-trigger" data-tooltip="${reason}">${slice}<div class="copyleaks-custom-tooltip">${reason}</div></span>`
+						);
+					} else {
+						stringBuilder.push(
+							`<span exclude class="copyleaks-custom-tooltip-trigger" data-tooltip="UnKnown">${slice}<div class="copyleaks-custom-tooltip">UnKnown</div></span>`
+						);
+					}
 				}
 				break;
 			case MatchType.none:

@@ -52,7 +52,7 @@
 
 		.add-domain-btn {
 			mat-icon {
-				margin-left: auto;
+				margin-inline-start: auto;
 				width: 18px;
 				height: 18px;
 				font-size: 18px;
@@ -104,7 +104,7 @@
 		}
 
 		mat-panel-description {
-			margin-right: 0px !important;
+			margin-inline-end: 0px !important;
 			justify-content: end;
 		}
 
@@ -113,7 +113,7 @@
 		}
 
 		.mat-expansion-panel-header {
-			padding-right: 0px !important;
+			padding-inline-end: 0px !important;
 		}
 
 		.mat-expansion-panel-body {

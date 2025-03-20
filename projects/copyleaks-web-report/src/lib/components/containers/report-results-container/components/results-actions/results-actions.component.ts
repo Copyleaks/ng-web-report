@@ -56,6 +56,7 @@ export class ResultsActionsComponent implements OnInit, OnChanges, OnDestroy {
 	searchFc = new FormControl('');
 	showSearchFiled: boolean = false;
 	loadingResults: boolean;
+	docDirection: 'ltr' | 'rtl';
 
 	constructor(
 		private _matDialog: MatDialog,
@@ -71,6 +72,10 @@ export class ResultsActionsComponent implements OnInit, OnChanges, OnDestroy {
 
 		this._reportDataSvc.loadingMoreResults$.pipe(untilDestroy(this)).subscribe(value => {
 			this.loadingResults = value;
+		});
+
+		this._reportViewSvc.documentDirection$.pipe(untilDestroy(this)).subscribe(dir => {
+			this.docDirection = dir;
 		});
 	}
 

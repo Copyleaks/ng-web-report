@@ -2,8 +2,7 @@
 	<ng-container *ngIf="!isLoading; else loadingState">
 		<div class="contet-container" fxLayout="column" fxLayoutAlign="start start" fxLayoutGap="8px">
 			<div class="title" fxLayout="row" fxLayoutAlign="space-between center" fxLayoutGap="4px">
-				<span *ngIf="aiPercentageResult > 0" i18n>AI Content Found</span>
-				<span *ngIf="aiPercentageResult === 0" i18n>No AI Content Found</span>
+				<span i18n>{aiPercentageResult, select, 0 {No AI Content Found} other {AI Content Found} }</span>
 				<mat-icon
 					class="info-icon"
 					fontSet="material-icons-outlined"
@@ -11,6 +10,7 @@
 					aria-label="percentage of ai content"
 					i18n-aria-label
 					[matTooltip]="tooltipText"
+					i18n-matTooltip
 					matTooltipClass="web-report-mat-tooltip tooltip-contanier"
 					aria-hidden="false">
 					info
@@ -22,6 +22,7 @@
 			<span class="percentage-result">{{ aiPercentageResult | percent : '1.0-1' }}</span>
 		</div>
 	</ng-container>
+
 	<ng-template #loadingState>
 		<div class="loader-container" fxLayout="row" fxLayoutAlign="space-between center" fxLayoutGap="8px">
 			<div class="loader-header-container" fxLayout="column" fxLayoutGap="8px">

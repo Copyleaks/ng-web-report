@@ -34,6 +34,7 @@ export class CrCustomResultsComponent implements OnInit, OnChanges, AfterViewIni
 
 	ECustomResultsReportView = ECustomResultsReportView;
 	EResponsiveLayoutType = EResponsiveLayoutType;
+	docDirection: 'ltr' | 'rtl';
 
 	@HostListener('window:resize', ['$event'])
 	onResize() {}
@@ -51,6 +52,9 @@ export class CrCustomResultsComponent implements OnInit, OnChanges, AfterViewIni
 			this.reportViewSvc.reportResponsiveMode$.pipe(untilDestroy(this)).subscribe(data => {
 				if (!data) return;
 				this.responsiveMode = data.mode;
+			});
+			this.reportViewSvc.documentDirection$.pipe(untilDestroy(this)).subscribe(dir => {
+				this.docDirection = dir;
 			});
 		});
 	}

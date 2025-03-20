@@ -10,6 +10,33 @@
 	display: flex;
 	flex-direction: column;
 	font-family: haboro-soft, sans-serif !important;
+
+	[dir='rtl'] {
+		::ng-deep {
+			.include-results-checkbox {
+				::ng-deep {
+					.mat-checkbox-label {
+						display: flex;
+						align-items: center;
+					}
+				}
+			}
+
+			.tag-list {
+				direction: rtl;
+				::ng-deep {
+					.mat-checkbox-inner-container {
+						margin: 0 0 0 4px !important;
+					}
+				}
+			}
+
+			.tag-list-container {
+				direction: ltr;
+			}
+		}
+	}
+
 	::ng-deep {
 		input,
 		button,
@@ -37,7 +64,7 @@
 		}
 
 		mat-panel-description {
-			margin-right: 0px !important;
+			margin-inline-end: 0px !important;
 			justify-content: end;
 		}
 
@@ -46,7 +73,7 @@
 		}
 
 		.mat-expansion-panel-header {
-			padding-right: 0px !important;
+			padding-inline-end: 0px !important;
 		}
 	}
 
@@ -153,7 +180,7 @@
 	.mobile-body-container {
 		overflow-y: auto;
 		overflow-x: hidden;
-		padding-right: 16px;
+		padding-inline-end: 16px;
 	}
 }
 
@@ -229,7 +256,7 @@
 	justify-content: flex-end;
 	gap: 16px;
 	padding: 0px !important;
-	padding-right: 10px !important;
+	padding-inline-end: 10px !important;
 	margin: 0px !important;
 	min-height: auto !important;
 	button {
@@ -265,13 +292,13 @@
 .mat-dialog-content {
 	margin: 0px !important;
 	padding: 32px 0px !important;
-	padding-right: 10px !important;
+	padding-inline-end: 10px !important;
 }
 
 .mat-dialog-title {
 	margin: 0px !important;
 	padding: 0px !important;
-	padding-right: 10px !important;
+	padding-inline-end: 10px !important;
 }
 
 .mat-dialog-content.mobile-body-top-container {
@@ -294,7 +321,7 @@
 }
 
 cr-excluded-results-dailog {
-	padding-right: 10px !important;
+	padding-inline-end: 10px !important;
 }
 .left-side-container {
 	width: 33%;

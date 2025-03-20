@@ -297,6 +297,16 @@
 			font-weight: 600;
 		}
 	}
+
+	&[dir='rtl'] {
+		::ng-deep {
+			.item-url,
+			.item-introduction {
+				direction: ltr;
+				text-align: left;
+			}
+		}
+	}
 }
 
 ::ng-deep .result-item-menu-list {

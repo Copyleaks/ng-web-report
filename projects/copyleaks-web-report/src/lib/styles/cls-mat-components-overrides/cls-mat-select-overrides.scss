@@ -9,8 +9,8 @@
 			font-size: 16px !important;
 			.mat-select-arrow {
 				border-radius: 10px;
-				border-left: 4px solid transparent;
-				border-right: 4px solid transparent;
+				border-inline-start: 4px solid transparent;
+				border-inline-end: 4px solid transparent;
 				border-top: 4px solid $color-dark-blue;
 			}
 		}
@@ -83,7 +83,7 @@
 	}
 
 	.mat-checkbox-inner-container {
-		margin-right: 10px;
+		margin-inline-end: 10px;
 	}
 
 	.mat-checkbox-label {

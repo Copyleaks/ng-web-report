@@ -9,6 +9,34 @@
 	flex-grow: 65;
 	gap: 10px;
 
+	cr-results-actions[dir='rtl'].is-desktop {
+		padding: 0px 0px 6px 6px;
+	}
+
+	[dir='rtl'] {
+		::ng-deep {
+			.total-corrections-container {
+				::ng-deep {
+					mat-icon {
+						transform: scaleX(-1);
+					}
+				}
+			}
+
+			.all-corrections-info-container.desktop-scroll {
+				direction: ltr;
+				::ng-deep {
+					.cdk-virtual-scroll-content-wrapper {
+						direction: rtl;
+						box-sizing: border-box;
+						padding-inline-end: 0px !important;
+						padding-inline-start: 5px !important;
+					}
+				}
+			}
+		}
+	}
+
 	.custom-empty-results-container {
 		height: 100%;
 		display: flex;
@@ -61,7 +89,7 @@
 				height: $icon-size;
 				font-size: $icon-size;
 				position: relative;
-				left: -3px;
+				inset-inline-start: -3px;
 			}
 			.all-correction-title {
 				font-size: 14px;
@@ -153,6 +181,20 @@
 		align-items: center;
 		justify-content: flex-start;
 
+		&[dir='rtl'] {
+			::ng-deep {
+				.desktop-scroll {
+					direction: ltr;
+					::ng-deep .cdk-virtual-scroll-content-wrapper {
+						direction: rtl;
+						box-sizing: border-box;
+						padding-inline-end: 0px !important;
+						padding-inline-start: 5px !important;
+					}
+				}
+			}
+		}
+
 		.navigate-mobie-button-contaienr {
 			.navigate-mobie-button-select {
 				background-color: $color-primary !important;
@@ -231,7 +273,7 @@
 	.desktop-scroll {
 		width: 100%;
 		height: 100%;
-		padding-right: var(--scrollbar-offset, 0px);
+		padding-inline-end: var(--scrollbar-offset, 0px);
 		overflow-y: auto;
 		::ng-deep .cdk-virtual-scroll-content-wrapper {
 			width: 100%;
@@ -280,7 +322,7 @@
 
 	.scroll-with-padding {
 		::ng-deep .cdk-virtual-scroll-content-wrapper {
-			padding-right: 5px !important;
+			padding-inline-end: 5px !important;
 			box-sizing: border-box;
 		}
 	}

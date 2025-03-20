@@ -10,8 +10,8 @@
 				<mat-expansion-panel-header
 					(focus)="isMobile ? '' : resourcesTooltipView?.show()"
 					(blur)="isMobile ? '' : resourcesTooltipView?.hide()">
-					<mat-panel-title>
-						<span i18n>Resources</span>
+					<mat-panel-title i18n>
+						<span>Resources</span>
 					</mat-panel-title>
 					<mat-panel-description>
 						<mat-icon>
@@ -78,11 +78,13 @@
 				class="learn-more"
 				[href]="!isVideo ? link : null"
 				target="_blank">
-				<span i18n>
+				<span>
 					<ng-container *ngIf="buttontext; else learnMore">
-						{{ buttontext }}
+						<ng-container i18n>{{ buttontext }}</ng-container>
 					</ng-container>
-					<ng-template #learnMore>Learn more</ng-template>
+					<ng-template #learnMore>
+						<ng-container i18n>Learn more</ng-container>
+					</ng-template>
 				</span>
 				<mat-icon>chevron_right</mat-icon>
 			</a>

@@ -10,6 +10,25 @@
 	gap: 8px;
 	flex-grow: 25;
 
+	[dir='rtl'] {
+		::ng-deep {
+			::-webkit-scrollbar {
+				direction: ltr;
+			}
+			.mat-expansion-panel-content {
+				direction: ltr;
+			}
+
+			.container-alerts {
+				direction: rtl;
+			}
+			.item-with-padding {
+				padding-inline-end: 0px !important;
+				padding-inline-start: 5px !important;
+			}
+		}
+	}
+
 	.container-title {
 		display: flex;
 		flex-direction: row;
@@ -56,7 +75,7 @@
 		height: $icon-size;
 		color: $color-black;
 		cursor: pointer;
-		margin-left: 12px;
+		margin-inline-start: 12px;
 		transition: transform 0.2s ease-in-out;
 	}
 
@@ -93,7 +112,7 @@
 		}
 
 		mat-panel-description {
-			margin-right: 0px !important;
+			margin-inline-end: 0px !important;
 			justify-content: end;
 		}
 
@@ -102,7 +121,7 @@
 		}
 
 		.mat-expansion-panel-header {
-			padding-right: 0px !important;
+			padding-inline-end: 0px !important;
 		}
 	}
 
@@ -117,7 +136,7 @@
 	}
 
 	.item-with-padding {
-		padding-right: 5px !important;
+		padding-inline-end: 5px !important;
 		box-sizing: border-box !important;
 	}
 }

@@ -53,7 +53,9 @@ function ready() {
 
 	(window as any).addEventListener('message', onMessageFromParent);
 
-	addMatchTooltipEventListeners();
+	initMatchTooltipEventListeners();
+
+	initExcludedTextTooltipEventListeners();
 
 	init();
 
@@ -399,7 +401,7 @@ function ready() {
 		}
 	}
 
-	function addMatchTooltipEventListeners() {
+	function initMatchTooltipEventListeners() {
 		document.querySelectorAll('span[match][data-type="3"]').forEach(match => {
 			match.addEventListener('mouseenter', (_: MouseEvent) => {
 				const tooltipSpanContent = generateWritingFeedbackMatchTooltip(
@@ -440,6 +442,44 @@ function ready() {
 		// 		document.querySelectorAll('.excluded-reason-tooltip').forEach(e => e.remove());
 		// 	});
 		// });
+	}
+
+	function initExcludedTextTooltipEventListeners() {
+		const detectScale = () => {
+			const currentScale = currentZoom * pdfZoom;
+			document.body.style.setProperty('--iframe-scale', currentScale.toString());
+		};
+
+		// Initial detection
+		detectScale();
+
+		// Event listeners
+		(window as any).addEventListener('load', detectScale);
+		(window as any).addEventListener('resize', detectScale);
+
+		document.addEventListener('mouseover', e => {
+			const trigger = (e.target as Element).closest('.copyleaks-custom-tooltip-trigger');
+			if (trigger) {
+				const tooltip = trigger.querySelector('.copyleaks-custom-tooltip');
+				updateTooltipPosition(tooltip);
+			}
+		});
+
+		// Optional: MutationObserver for dynamic content changes
+		const observer = new MutationObserver(detectScale);
+		observer.observe(document.body, {
+			attributes: true,
+			childList: true,
+			subtree: true,
+		});
+
+		const updateTooltipPosition = tooltip => {
+			let rect = tooltip.getBoundingClientRect();
+			if (rect.left < 0) {
+				tooltip.style.left = '0';
+				tooltip.style.transform = `translateX(0) scale(calc(1 / var(--iframe-scale, ${currentZoom * pdfZoom})))`;
+			}
+		};
 	}
 
 	function generateWritingFeedbackMatchTooltip(wrongText: string, correctionText: string): string {

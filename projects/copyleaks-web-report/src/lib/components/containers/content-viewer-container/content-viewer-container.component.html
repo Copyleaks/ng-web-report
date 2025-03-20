@@ -1,4 +1,8 @@
-<div @fadeIn *ngIf="!hideTitleContainer && !customTabContent && !showLoadingView" class="title-and-actions-container">
+<div
+	@fadeIn
+	*ngIf="!hideTitleContainer && !customTabContent && !showLoadingView"
+	class="title-and-actions-container"
+	[dir]="docDirection">
 	<div class="title-container">
 		<span class="title" web-report-title-font>
 			<ng-container *ngIf="reportOrigin != 'suspect'">
@@ -66,7 +70,7 @@
 			<span>
 				({{ scanSource?.metadata?.excluded ?? 0 }}
 				<ng-container i18n>Omitted</ng-container>
-				)
+				<ng-container>)</ng-container>
 			</span>
 		</button>
 	</div>
@@ -77,8 +81,7 @@
 					*ngIf="reportOrigin != 'suspect' && !(isHtmlView && !hasHtml)"
 					class="icon-tooltip-wrapper"
 					[matTooltip]="isMultiSelection ? MULTISELECT_IS_ON : MULTISELECT_IS_OF_PREV"
-					matTooltipClass="web-report-mat-tooltip"
-					i18n-matTooltip>
+					matTooltipClass="web-report-mat-tooltip">
 					<button
 						class="actions-container-icon-button"
 						[disabled]="isMultiSelection"
@@ -100,8 +103,7 @@
 					*ngIf="reportOrigin != 'suspect' && !(isHtmlView && !hasHtml)"
 					class="icon-tooltip-wrapper"
 					[matTooltip]="isMultiSelection ? MULTISELECT_IS_ON : MULTISELECT_IS_OF_NEXT"
-					matTooltipClass="web-report-mat-tooltip"
-					i18n-matTooltip>
+					matTooltipClass="web-report-mat-tooltip">
 					<button
 						class="actions-container-icon-button"
 						[disabled]="isMultiSelection"
@@ -176,7 +178,7 @@
 						class="actions-container-icon-button"
 						mat-icon-button
 						(click)="zoomIn()"
-						matTooltip="Zoom in"
+						[matTooltip]="ZOOM_IN_TOOLTIP_MESSAGE"
 						matTooltipClass="web-report-mat-tooltip"
 						i18n-matTooltip
 						aria-label="Zoom in"
@@ -190,7 +192,7 @@
 						class="actions-container-icon-button"
 						mat-icon-button
 						(click)="zoomOut()"
-						matTooltip="Zoom out"
+						[matTooltip]="ZOOM_OUT_TOOLTIP_MESSAGE"
 						matTooltipClass="web-report-mat-tooltip"
 						i18n-matTooltip
 						aria-label="Zoom out"
@@ -266,6 +268,7 @@
 <div
 	@fadeIn
 	class="content-container"
+	[dir]="docDirection"
 	tabindex="0"
 	[ngStyle]="{
 		visibility: showLoadingView ? 'hidden' : '',
@@ -319,22 +322,24 @@
 						<i
 							*ngIf="partial.match.type === MatchType.excluded && partial.match.reason != 8"
 							exclude-match
-							[title]="
+							[matTooltip]="
 								partial.match.reason != undefined && partial.match.reason != null
 									? EXCLUDE_MESSAGE[partial.match.reason]
 									: ''
-							">
+							"
+							matTooltipClass="web-report-mat-tooltip">
 							{{ partial.content }}
 						</i>
 						<!--  -->
 						<span
 							*ngIf="partial.match.type === MatchType.excluded && partial.match.reason == 8"
 							exclude-partial-scan
-							[title]="
+							[matTooltip]="
 								partial.match.reason != undefined && partial.match.reason != null
 									? EXCLUDE_MESSAGE[partial.match.reason]
 									: ''
-							">
+							"
+							matTooltipClass="web-report-mat-tooltip">
 							{{ partial.content }}
 						</span>
 					</ng-container>
@@ -394,18 +399,20 @@
 						<i
 							*ngIf="partial.match.type === MatchType.excluded && partial.match.reason != 8"
 							exclude-match
-							[title]="
+							[matTooltip]="
 								partial.match.reason != undefined && partial.match.reason != null
 									? EXCLUDE_MESSAGE[partial.match.reason]
 									: ''
-							">
+							"
+							matTooltipClass="web-report-mat-tooltip">
 							{{ partial.content }}
 						</i>
 						<!--  -->
 						<span
 							*ngIf="partial.match.type === MatchType.excluded && partial.match.reason == 8"
 							exclude-partial-scan
-							[title]="EXCLUDE_MESSAGE[partial.match.reason]">
+							[matTooltip]="EXCLUDE_MESSAGE[partial.match.reason]"
+							matTooltipClass="web-report-mat-tooltip">
 							{{ partial.content }}
 						</span>
 					</ng-container>
@@ -461,6 +468,7 @@
 	@fadeIn
 	*ngIf="!showLoadingView"
 	class="paginator-container"
+	[dir]="docDirection"
 	[ngStyle]="{ 'justify-content': customTabContent ? 'center' : '' }">
 	<ng-container *ngIf="!hidePoweredBy">
 		<cr-powered-by></cr-powered-by>

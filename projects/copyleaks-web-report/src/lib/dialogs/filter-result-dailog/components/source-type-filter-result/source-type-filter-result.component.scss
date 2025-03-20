@@ -48,7 +48,7 @@
 .internal-database-checkboxes-container {
 	display: flex;
 	flex-direction: column;
-	padding-left: 32px;
+	padding-inline-start: 32px;
 	gap: 4px;
 
 	::ng-deep {

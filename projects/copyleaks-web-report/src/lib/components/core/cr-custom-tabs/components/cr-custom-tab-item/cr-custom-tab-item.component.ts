@@ -58,7 +58,7 @@ export class CrCustomTabItemComponent implements OnInit {
 		else this._reportViewSvc.selectedCustomTabResultSectionContent$.next(null);
 		this._reportViewSvc.reportViewMode$.next({
 			...this._reportViewSvc.reportViewMode,
-			selectedCustomTabId: this.tabId,
+			selectedCustomTabId: this.tabId ?? 'tab-id',
 			suspectId: null,
 			alertCode: null,
 		});

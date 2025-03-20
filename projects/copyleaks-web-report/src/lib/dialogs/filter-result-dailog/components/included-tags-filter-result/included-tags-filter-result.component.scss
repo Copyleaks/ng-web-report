@@ -23,7 +23,7 @@
 		.search-icon {
 			border-radius: 50%;
 			background-color: $color-white;
-			margin-right: 8px;
+			margin-inline-end: 8px;
 			cursor: pointer;
 			&:hover {
 				background-color: $color-primary;
@@ -105,7 +105,7 @@
 			display: flex;
 			align-items: center;
 			justify-content: center;
-			margin-left: 4px;
+			margin-inline-start: 4px;
 			box-sizing: border-box;
 			span {
 				display: flex;

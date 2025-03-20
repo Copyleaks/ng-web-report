@@ -64,6 +64,7 @@ export class ReportResultsItemComponent implements OnInit, OnChanges, OnDestroy 
 	faviconURL: string;
 	platformType: EPlatformType;
 	copyMessage: string;
+	docDirection: 'ltr' | 'rtl';
 
 	@HostListener('click', ['$event'])
 	handleClick() {
@@ -149,6 +150,11 @@ export class ReportResultsItemComponent implements OnInit, OnChanges, OnDestroy 
 					this.lockedResultItemTemplateRef = refs?.lockedResultItemTemplateRef;
 				});
 		});
+
+		if (this.reportViewSvc)
+			this.reportViewSvc.documentDirection$.pipe(untilDestroy(this)).subscribe(dir => {
+				this.docDirection = dir;
+			});
 	}
 
 	ngOnChanges(changes: SimpleChanges): void {

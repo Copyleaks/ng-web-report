@@ -42,4 +42,9 @@
 	copyleaks-one-to-one-report-layout-desktop {
 		width: 100%;
 	}
+
+	copyleaks-one-to-many-report-layout-desktop[dir='rtl'],
+	copyleaks-one-to-one-report-layout-desktop[dir='rtl'] {
+		flex-direction: row-reverse !important;
+	}
 }

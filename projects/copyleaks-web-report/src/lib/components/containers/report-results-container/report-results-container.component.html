@@ -1,6 +1,9 @@
 <ng-container *ngIf="!selectedCategory; else selectedCategroyRef">
 	<cr-results-actions
 		*ngIf="!showLoadingView"
+		[class.is-mobile]="isMobile"
+		[class.is-desktop]="!isMobile"
+		[dir]="docDirection"
 		[resultsActions]="resultsActions"
 		[searchedValue]="searchedValue"
 		[showLoadingView]="false"
@@ -12,6 +15,7 @@
 
 	<div
 		class="report-results-item-top-container"
+		[dir]="docDirection"
 		[style]="'width:100%'"
 		[style.display]="
 			showLoadingView || !showResultsSection || !displayedResults || showCustomResults || displayedResults.length === 0
@@ -290,7 +294,7 @@
 </ng-container>
 
 <ng-template #selectedCategroyRef>
-	<div class="selected-category-container">
+	<div class="selected-category-container" [dir]="docDirection">
 		<div class="selected-category-toolbar">
 			<button class="total-corrections-container" (click)="goToAllResultsView()" [tabIndex]="0">
 				<mat-icon class="left-arrow">chevron_left</mat-icon>

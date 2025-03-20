@@ -4,6 +4,7 @@ import { EMatchType } from './models/percentage-result-item.enum';
 import { IPercentageResult } from './models/percentage-result-item.models';
 import { ReportDataService } from '../../../../../services/report-data.service';
 import { ReportViewService } from '../../../../../services/report-view.service';
+import { untilDestroy } from '../../../../../utils/until-destroy';
 
 @Component({
 	selector: 'cr-percentage-result-item',
@@ -24,6 +25,7 @@ export class PercentageResultItemComponent implements OnInit, OnChanges {
 
 	PERCENTAGE_BTN_EXPEND_TOOLTIP = $localize`Expand`;
 	PERCENTAGE_BTN_COLLAPSE_TOOLTIP = $localize`Collapse`;
+	docDirection: 'ltr' | 'rtl';
 
 	constructor() {}
 
@@ -34,7 +36,12 @@ export class PercentageResultItemComponent implements OnInit, OnChanges {
 	get stackedBarBackgroundColor() {
 		return this.percentageResult?.stackedBarBackgroundColor || '#fbffff';
 	}
-	ngOnInit(): void {}
+	ngOnInit(): void {
+		if (this.reportViewService)
+			this.reportViewService.documentDirection$.pipe(untilDestroy(this)).subscribe(dir => {
+				this.docDirection = dir;
+			});
+	}
 
 	ngOnChanges(changes: SimpleChanges): void {
 		if ('percentageResult' in changes) {
@@ -76,4 +83,6 @@ export class PercentageResultItemComponent implements OnInit, OnChanges {
 
 		return 0;
 	}
+
+	ngOnDestroy(): void {}
 }

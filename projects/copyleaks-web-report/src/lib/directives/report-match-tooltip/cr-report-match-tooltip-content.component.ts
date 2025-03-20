@@ -1,6 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { trigger, state, transition, animate, style } from '@angular/animations';
 import { IWritingFeedbackCorrectionViewModel } from '../../models/report-data.models';
+import { ReportViewService } from '../../services/report-view.service';
+import { untilDestroy } from '../../utils/until-destroy';
 
 @Component({
 	selector: 'cr-report-match-tooltip-content',
@@ -10,8 +12,16 @@ import { IWritingFeedbackCorrectionViewModel } from '../../models/report-data.mo
 })
 export class CrReportMatchTooltipContentComponent implements OnInit {
 	correctionData: IWritingFeedbackCorrectionViewModel;
+	docDirection: 'ltr' | 'rtl';
 
-	constructor() {}
+	constructor(private _reportViewSvc: ReportViewService) {}
 
-	ngOnInit(): void {}
+	ngOnInit(): void {
+		if (this._reportViewSvc)
+			this._reportViewSvc.documentDirection$.pipe(untilDestroy(this)).subscribe(dir => {
+				this.docDirection = dir;
+			});
+	}
+
+	ngOnDestroy(): void {}
 }

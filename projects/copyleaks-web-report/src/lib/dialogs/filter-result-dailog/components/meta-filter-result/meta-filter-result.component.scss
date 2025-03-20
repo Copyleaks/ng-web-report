@@ -49,13 +49,13 @@
 	.mat-slider-container {
 		width: 95%;
 		height: 24px;
-		left: 10px;
+		inset-inline-start: 10px;
 		padding: 0px;
 	}
 	::ng-deep .mat-slider.mat-slider-horizontal {
 		.mat-slider-wrapper {
-			left: 0px;
-			right: 0px;
+			inset-inline-start: 0px;
+			inset-inline-end: 0px;
 			top: 12px;
 			.mat-slider-thumb-container .mat-slider-thumb {
 				background-color: $color-primary;
@@ -81,5 +81,5 @@
 	color: $color-black;
 	font-size: 12px;
 	font-weight: 700;
-	margin-left: 8px;
+	margin-inline-start: 8px;
 }

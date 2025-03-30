@@ -26,6 +26,7 @@ import { IRemoveResultConfirmationDialogData } from '../../../../../dialogs/remo
 import { ReportMatchHighlightService } from '../../../../../services/report-match-highlight.service';
 import { MatMenuTrigger } from '@angular/material/menu';
 import { DatePipe } from '@angular/common';
+import { RESULT_TAGS_CODES } from '../../../../../constants/report-result-tags.constants';
 
 @Component({
 	selector: 'cr-report-results-item',
@@ -65,6 +66,8 @@ export class ReportResultsItemComponent implements OnInit, OnChanges, OnDestroy 
 	platformType: EPlatformType;
 	copyMessage: string;
 	docDirection: 'ltr' | 'rtl';
+
+	RESULT_TAGS_CODES = RESULT_TAGS_CODES;
 
 	@HostListener('click', ['$event'])
 	handleClick() {
@@ -120,9 +123,15 @@ export class ReportResultsItemComponent implements OnInit, OnChanges, OnDestroy 
 	}
 
 	get firstTag() {
-		if (this.resultItem?.resultPreview?.tags && this.resultItem?.resultPreview?.tags.length > 0)
-			return this.resultItem.resultPreview.tags[0];
-		return null;
+		if (!this.resultItem?.resultPreview?.tags || this.resultItem?.resultPreview?.tags.length === 0) return null;
+
+		// Check if there is a tag in the tags list with the code 'suspected-ai-generated' and return the first tag that is not the 'suspected-ai-generated' tag
+		const aiSourceMatchTag = this.resultItem?.resultPreview?.tags.find(
+			tag => tag.code === RESULT_TAGS_CODES.SUSPECTED_AI_GENERATED
+		);
+		if (aiSourceMatchTag) return aiSourceMatchTag;
+
+		return this.resultItem.resultPreview.tags[0];
 	}
 
 	get numberOfTags() {
@@ -183,7 +192,7 @@ export class ReportResultsItemComponent implements OnInit, OnChanges, OnDestroy 
 				this.previewResult?.metadata?.lastModificationDate ||
 				this.previewResult?.metadata?.publishDate ||
 				this.previewResult?.metadata?.submissionDate) &&
-			!this.previewResult?.tags?.find(tag => tag.code === 'summary-date')
+			!this.previewResult?.tags?.find(tag => tag.code === RESULT_TAGS_CODES.SUMMARY_DATE)
 		) {
 			const date =
 				this.previewResult.metadata.creationDate ||
@@ -203,17 +212,17 @@ export class ReportResultsItemComponent implements OnInit, OnChanges, OnDestroy 
 					this._datePipe.transform(this.previewResult.metadata.submissionDate, "MMM d, y 'at' h:mm a") ||
 					'not available'
 				}.`,
-				code: 'summary-date',
+				code: RESULT_TAGS_CODES.SUMMARY_DATE,
 			});
 		}
 
 		if (!!this.resultItem?.resultPreview?.metadata?.organization) {
 			if (!this.previewResult.tags) this.previewResult.tags = [];
-			if (this.previewResult.tags.find(tag => tag.code === 'organization') === undefined)
+			if (this.previewResult.tags.find(tag => tag.code === RESULT_TAGS_CODES.ORGANIZATION) === undefined)
 				this.previewResult?.tags?.unshift({
 					title: this.resultItem?.resultPreview?.metadata?.organization,
 					description: $localize`Organization Name`,
-					code: 'organization',
+					code: RESULT_TAGS_CODES.ORGANIZATION,
 				});
 		}
 
@@ -224,7 +233,7 @@ export class ReportResultsItemComponent implements OnInit, OnChanges, OnDestroy 
 		) {
 			if (!this.previewResult.tags) this.previewResult.tags = [];
 			// push 'Your File' tag to the start of tags array
-			if (this.previewResult.tags.find(tag => tag.code === 'your-file') === undefined)
+			if (this.previewResult.tags.find(tag => tag.code === RESULT_TAGS_CODES.YOUR_FILE) === undefined)
 				this.previewResult?.tags?.unshift({
 					title:
 						this.reportViewSvc?.reportViewMode?.platformType === EPlatformType.APP
@@ -234,7 +243,7 @@ export class ReportResultsItemComponent implements OnInit, OnChanges, OnDestroy 
 						this.reportViewSvc?.reportViewMode?.platformType === EPlatformType.APP
 							? $localize`This is your file`
 							: $localize`This is uploaded by your organization`,
-					code: 'your-file',
+					code: RESULT_TAGS_CODES.YOUR_FILE,
 				});
 		}
 
@@ -250,6 +259,18 @@ export class ReportResultsItemComponent implements OnInit, OnChanges, OnDestroy 
 		// remove empty tags from the tags list
 		if (this.previewResult?.tags)
 			this.previewResult.tags = this.previewResult.tags.filter(tag => tag.title && tag.title.trim() !== '');
+
+		// Check if there is a tag in the tags list with the code 'suspected-ai-generated' and put it in the first place
+		const aiSourceMatchTag = this.previewResult?.tags?.find(
+			tag => tag.code === RESULT_TAGS_CODES.SUSPECTED_AI_GENERATED
+		);
+		if (aiSourceMatchTag) {
+			if (aiSourceMatchTag.title != 'AI Source Match') aiSourceMatchTag.title = 'AI Source Match';
+			this.previewResult.tags = [
+				aiSourceMatchTag,
+				...this.previewResult.tags.filter(tag => tag.code !== RESULT_TAGS_CODES.SUSPECTED_AI_GENERATED),
+			];
+		}
 	}
 
 	onFaviconError() {

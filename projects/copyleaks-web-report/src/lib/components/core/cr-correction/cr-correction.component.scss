@@ -29,10 +29,6 @@
 			.arrow-icon {
 				transform: scaleX(-1);
 			}
-
-			.correction-type-description {
-				direction: rtl;
-			}
 		}
 	}
 
@@ -140,6 +136,10 @@
 		-webkit-line-clamp: 2;
 		-webkit-box-orient: vertical;
 		overflow: hidden;
+
+		&[dir='rtl'] {
+			direction: rtl;
+		}
 	}
 
 	.loader-container {

@@ -62,6 +62,7 @@ export class CrCustomTabItemComponent implements OnInit {
 			suspectId: null,
 			alertCode: null,
 		});
+		this._reportViewSvc.selectedAlert$.next(null);
 	}
 
 	checkIfTabResultSectionContentNotEmpty() {

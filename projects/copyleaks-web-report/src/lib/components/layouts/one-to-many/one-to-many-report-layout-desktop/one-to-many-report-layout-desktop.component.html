@@ -109,6 +109,7 @@
 				"
 				[class.container-with-custom-results]="reportTemplateMode != undefined"
 				[class.ai-alerts-contanier]="selectedTap === EReportViewType.AIView"
+				[class.assessment-tool-alerts-contanier]="reportMode === EReportMode.AssessmentTool"
 				[alerts]="alerts"
 				[flexGrow]="25"></copyleaks-report-alerts-container>
 
@@ -125,7 +126,9 @@
 				[aiScore]="reportStatistics?.aiScore ?? 0"
 				[wordsTotal]="reportStatistics?.total ?? 0"
 				[excludedTotal]="reportStatistics?.omittedWords ?? 0"
-				[explainableAIResults]="explainableAI"></copyleaks-content-ai-container>
+				[explainableAIResults]="explainableAI"
+				[hidePlagarismTap]="hidePlagarismTap"
+				[aiSourceMatchResults]="aiSourceMatchResults"></copyleaks-content-ai-container>
 
 			<copyleaks-report-results-container
 				*ngIf="
@@ -141,6 +144,7 @@
 				[class.container-with-custom-results]="reportTemplateMode != undefined"
 				[flexGrow]="65"
 				[allResults]="scanResultsView"
+				[hideAiTap]="hideAiTap"
 				[resultsActions]="scanResultsActions"
 				[showLoadingView]="isLoadingScanResults || isLoadingScanCorrections"
 				[filterOptions]="filterOptions"

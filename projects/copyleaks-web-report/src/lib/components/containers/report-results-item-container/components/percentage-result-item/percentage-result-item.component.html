@@ -5,6 +5,7 @@
 	fxLayoutGap="4px"
 	[reportViewService]="reportViewService"
 	[dir]="docDirection"
+	[crReportScoreTooltipPosition]="crReportScoreTooltipPosition"
 	[crReportScoreTooltip]="
 		percentageResult && percentageResult.showTooltip
 			? {
@@ -35,14 +36,6 @@
 		fxLayoutAlign="start start"
 		fxLayoutGap="4px">
 		<div
-			*ngIf="percentageResult?.title"
-			class="plagiarism-detection-title"
-			fxLayout="row"
-			fxLayoutAlign="space-between start">
-			<span>{{ percentageResult.title }}</span>
-			<span>{{ getMatchTypePercentage(eMatchType.SimilarWords) | similarity : '1.0-1' }}</span>
-		</div>
-		<div
 			class="plagiarism-detection-percentage-result"
 			fxLayout="column"
 			fxLayoutAlign="start start"
@@ -52,8 +45,19 @@
 
 		<ng-template #showStackedBar>
 			<div class="stacked-bar-top-container" fxLayout="row" fxLayoutGap="8px" fxLayoutAlign="center center">
+				<div *ngIf="percentageResult?.title" class="title">
+					<span>{{ percentageResult.title }}</span>
+				</div>
 				<div class="stacked-bar-container">
 					<ng-container *ngTemplateOutlet="stackedBar"></ng-container>
+				</div>
+
+				<div
+					*ngIf="percentageResult?.title"
+					class="title-percentage"
+					fxLayout="row"
+					fxLayoutAlign="space-between start">
+					<span>{{ getMatchTypePercentage(eMatchType.SimilarWords) | similarity : '1.0-1' }}</span>
 				</div>
 				<span *ngIf="!percentageResult?.title" class="similar-words-percentage">
 					{{ getMatchTypePercentage(eMatchType.SimilarWords) | similarity : '1.0-1' }}

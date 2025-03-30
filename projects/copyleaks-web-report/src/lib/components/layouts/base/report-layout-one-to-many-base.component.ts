@@ -42,6 +42,7 @@ import { ReportRealtimeResultsService } from '../../../services/report-realtime-
 import { ViewMode } from '../../../models/report-config.models';
 import * as helpers from '../../../utils/report-match-helpers';
 import { ReportErrorsService } from '../../../services/report-errors.service';
+import { RESULT_TAGS_CODES } from '../../../constants/report-result-tags.constants';
 
 export abstract class OneToManyReportLayoutBaseComponent extends ReportLayoutBaseComponent {
 	hideRightSection: boolean = false;
@@ -62,6 +63,7 @@ export abstract class OneToManyReportLayoutBaseComponent extends ReportLayoutBas
 
 	scanResultsPreviews: ICompleteResults | undefined;
 	scanResultsDetails: ResultDetailItem[] | undefined;
+	aiSourceMatchResults: IResultItem[];
 	scanResultsView: IResultItem[];
 	scanResultsActions: IResultsActions = {
 		totalResults: 0,
@@ -104,12 +106,14 @@ export abstract class OneToManyReportLayoutBaseComponent extends ReportLayoutBas
 	allWritingFeedbacksStats: IWritingFeedbackTypeStatistics[];
 	allMatchResultsStats: IMatchesTypeStatistics[];
 	customActionsTemplate: TemplateRef<any>;
+	customAISourceMatchUpgradeTemplate: TemplateRef<any>;
 	selectedCustomTabResultSectionContentTemplate: TemplateRef<any>;
 	showOmittedWords: boolean;
 	isPartitalScan: boolean;
 	explainableAI: ExplainableAIResults = { explain: null, slicedMatch: [], sourceText: '' };
 	loadingExplainableAI: boolean = true;
 	isAiHtmlViewAvailable: boolean = false;
+	showAIPhrases: boolean = false;
 
 	// Subject for destroying all the subscriptions in base component
 	private unsubscribe$ = new Subject();
@@ -237,6 +241,12 @@ export abstract class OneToManyReportLayoutBaseComponent extends ReportLayoutBas
 									},
 								} as IResultItem;
 							});
+
+						// Filter "AI Source Match" results by checking their alert code
+
+						this.aiSourceMatchResults = this.scanResultsView?.filter(
+							result => !!result?.resultPreview?.tags?.find(t => t.code === RESULT_TAGS_CODES.SUSPECTED_AI_GENERATED)
+						);
 					}
 
 					if (this.scanResultsPreviews && this.selectedTap === EReportViewType.AIView) {
@@ -272,6 +282,7 @@ export abstract class OneToManyReportLayoutBaseComponent extends ReportLayoutBas
 					);
 					if (validSelectedAlert) {
 						var scanResult = JSON.parse(validSelectedAlert.additionalData) as AIScanResult;
+
 						this.explainableAI.explain = scanResult?.explain;
 					}
 					// Check if the AI insights are unsupported
@@ -450,9 +461,7 @@ export abstract class OneToManyReportLayoutBaseComponent extends ReportLayoutBas
 						slicedMatch.push(...explainText);
 					}
 				});
-				if (this.explainableAI.slicedMatch.length === 0) {
-					this.explainableAI.slicedMatch = slicedMatch;
-				}
+
 				if (this.reportViewSvc.reportViewMode?.viewMode === 'writing-feedback') {
 					if (
 						this.writingFeedback &&
@@ -495,6 +504,10 @@ export abstract class OneToManyReportLayoutBaseComponent extends ReportLayoutBas
 					});
 				}
 			}
+		});
+
+		this.matchSvc.showAIPhrases$.pipe(takeUntil(this.unsubscribe$)).subscribe(data => {
+			this.showAIPhrases = data;
 		});
 
 		this.statisticsSvc.statistics$.pipe(takeUntil(this.unsubscribe$)).subscribe(data => {
@@ -566,11 +579,34 @@ export abstract class OneToManyReportLayoutBaseComponent extends ReportLayoutBas
 					this.customBannerSectionTemplate = refs?.customBannerSectionTemplate;
 				});
 			}
+
+			if (
+				refs?.customAISourceMatchUpgradeTemplate !== undefined &&
+				this.customAISourceMatchUpgradeTemplate === undefined
+			) {
+				setTimeout(() => {
+					this.customAISourceMatchUpgradeTemplate = refs?.customAISourceMatchUpgradeTemplate;
+				});
+			}
 		});
 
 		this.templatesSvc.reportTemplatesMode$.pipe(takeUntil(this.unsubscribe$)).subscribe(mode => {
 			if (mode === undefined) return;
 			this.reportTemplateMode = mode;
+		});
+
+		this.matchSvc.aiPhrases$.pipe(takeUntil(this.unsubscribe$)).subscribe(phrases => {
+			if (!phrases) return;
+			let slicedMatch: SlicedMatch[] = [];
+			phrases?.forEach(result => {
+				const explainText = result.filter(re => re.match.type === MatchType.aiExplain);
+				if (explainText.length > 0) {
+					slicedMatch.push(...explainText);
+				}
+			});
+			if (this.explainableAI.slicedMatch.length === 0) {
+				this.explainableAI.slicedMatch = slicedMatch;
+			}
 		});
 	}
 

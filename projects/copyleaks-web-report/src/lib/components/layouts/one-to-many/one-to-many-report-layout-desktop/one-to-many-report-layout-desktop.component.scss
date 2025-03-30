@@ -180,6 +180,11 @@ copyleaks-report-alerts-container {
 .ai-alerts-contanier {
 	background-color: $color-white;
 	border-radius: 10px;
+	padding: 8px;
+}
+
+.assessment-tool-alerts-contanier {
+	padding: 0px !important;
 }
 
 .cr-correction-container {
@@ -211,4 +216,5 @@ cr-assessment-tool-tab-score-panel {
 	height: 95%;
 	flex-grow: 95;
 	overflow-y: auto;
+	box-shadow: none !important;
 }

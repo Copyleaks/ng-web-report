@@ -29,6 +29,7 @@ export class SourceTypeFilterResultComponent implements OnInit, OnDestroy {
 	INTERNET_SOURCE = $localize`Internet Source`;
 	IINTERNAL_DATABASE = $localize`Internal Database`;
 	THIS_BACTCH = $localize`This batch`;
+	AI_SOURCE_MATCH = $localize`AI Source Match`;
 
 	platformType: EPlatformType;
 

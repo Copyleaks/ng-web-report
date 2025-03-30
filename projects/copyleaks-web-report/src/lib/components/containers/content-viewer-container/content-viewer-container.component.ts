@@ -553,6 +553,8 @@ export class ContentViewerContainerComponent implements OnInit, AfterViewInit, O
 			(!this.isHtmlView || !this.hasHtml)
 		) {
 			this.showLoadingView = false;
+			if (!this.isHtmlView && this.viewSvc.reportViewMode.isHtmlView)
+				this.viewSvc.reportViewMode$.next({ ...this.viewSvc.reportViewMode, isHtmlView: false });
 		}
 
 		if ('isAlertsView' in changes && !changes['isAlertsView'].currentValue && !changes['isAlertsView'].firstChange)

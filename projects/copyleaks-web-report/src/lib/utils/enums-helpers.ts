@@ -15,6 +15,9 @@ export function getResultsTypeTitle(type: EResultPreviewType): string {
 			return $localize`Repository`;
 		case EResultPreviewType.Database:
 			return $localize`Copyleaks internal database`;
+		case EResultPreviewType.AISourceMatch:
+		case EResultPreviewType.AISourceMatchUpgrade:
+			return $localize`AI Source Match`;
 		default:
 			return $localize`Unknown Type`;
 	}

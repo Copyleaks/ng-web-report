@@ -6,6 +6,12 @@
 	background: $color-white;
 	box-shadow: 0px 0px 10px 0px rgba(11, 22, 62, 0.04), 0px 0px 2px 0px rgba(11, 22, 62, 0.08);
 
+	&.default-view {
+		background: none !important;
+		box-shadow: none !important;
+		gap: 8px !important;
+	}
+
 	&[dir='rtl'] {
 		::ng-deep {
 			.desktop-scroll::-webkit-scrollbar,
@@ -18,16 +24,25 @@
 			}
 
 			.result-header {
-				padding: 4px 16px 4px 0px !important;
+				padding: 8px 16px 8px 16px;
+			}
+
+			.proportion-content-container {
+				.content {
+					direction: ltr;
+				}
 			}
 		}
 	}
 
 	.top-header-container {
 		.header-container {
-			padding: 16px 16px 8px;
+			padding: 16px;
 			z-index: 2;
 			.header {
+				display: flex;
+				flex-direction: row;
+				gap: 8px;
 				.title {
 					color: $color-black;
 					font-family: 'Almarai' !important;
@@ -58,6 +73,12 @@
 						cursor: pointer;
 					}
 				}
+
+				::ng-deep {
+					.mat-button-wrapper {
+						line-height: normal !important;
+					}
+				}
 			}
 			.header-description {
 				color: $color-black;
@@ -77,10 +98,10 @@
 						display: flex;
 						flex-direction: column;
 						width: 100%;
-						background-color: $color-white;
-						border: 1px solid $color-effect-dialog-background;
+						background: #dde6e9;
 						border-radius: 10px;
 						box-sizing: border-box;
+						border: none !important;
 						height: 8px;
 						cursor: pointer;
 						.min-result {
@@ -113,10 +134,20 @@
 			box-shadow: none;
 			margin: 0;
 		}
+
+		.total-phrases {
+			color: $color-black;
+			font-family: Almarai !important;
+			font-size: 14px;
+			font-style: normal;
+			font-weight: 700;
+			line-height: normal;
+			margin-inline-start: auto;
+		}
 		.result-header {
 			border-radius: 10px 10px 0px 0px;
 			background: $color-container-background;
-			padding: 4px 0px 4px 16px;
+			padding: 8px 16px 8px 16px;
 			.ratio-contanier {
 				width: 70px;
 				mat-icon {
@@ -320,17 +351,7 @@
 	.navigate-mobie-button-contaienr {
 		padding-bottom: 16px;
 		height: 42px;
-		.navigate-mobie-button {
-			width: 12px !important;
-			height: 12px !important;
-			padding: 0px !important;
-			border-radius: 50%;
-			background-color: $color-dialog-background;
-			border: 0px;
-		}
-		.navigate-mobie-button-select {
-			background-color: $color-primary !important;
-		}
+
 		.mat-chip-navigate {
 			font-size: 12px;
 			font-weight: 700;
@@ -576,6 +597,86 @@
 				font-size: 14px;
 				font-weight: 500;
 				text-align: center;
+			}
+		}
+	}
+}
+
+.navigate-mobie-button {
+	width: 12px !important;
+	height: 12px !important;
+	padding: 0px !important;
+	border-radius: 50%;
+	background-color: $color-dialog-background;
+	border: 0px;
+}
+.navigate-mobie-button-select {
+	background-color: $color-primary !important;
+}
+
+.dots-container {
+	display: flex;
+	flex-direction: row;
+	gap: 8px;
+	justify-content: center;
+	align-items: center;
+	width: 100%;
+}
+
+.mobile-view-ai-logics-container {
+	display: flex;
+	padding-right: 14px;
+	justify-content: space-between;
+	align-items: center;
+	align-self: stretch;
+	overflow-x: auto;
+	scroll-snap-type: x mandatory;
+	scrollbar-width: none;
+	.title-container {
+		display: flex;
+		align-items: center;
+		gap: 8px;
+
+		span {
+			color: $color-black;
+			font-size: 18px;
+			font-style: normal;
+			font-weight: 800;
+			line-height: normal;
+		}
+	}
+
+	mat-icon {
+		color: var(--Black-600, rgba(11, 22, 62, 0.6));
+		text-align: center;
+		text-shadow: 0px 0px 4px rgba(161, 136, 255, 0.2);
+		font-size: 16px;
+		width: 16px;
+		height: 16px;
+		font-style: normal;
+		font-weight: 400;
+		line-height: normal;
+	}
+}
+
+.mobile-view-scroll-container {
+	overflow-x: auto;
+	scroll-snap-type: x mandatory;
+	scrollbar-width: none;
+	.mobile-view-default-entries-container {
+		display: flex;
+		align-items: flex-start;
+		gap: 8px;
+		align-self: stretch;
+		overflow-x: auto;
+		width: fit-content;
+		::ng-deep {
+			cr-ai-phrases-entry,
+			cr-ai-source-match-entry,
+			cr-ai-source-match-upgrade {
+				width: 320px;
+				align-self: center !important;
+				box-sizing: border-box;
 			}
 		}
 	}

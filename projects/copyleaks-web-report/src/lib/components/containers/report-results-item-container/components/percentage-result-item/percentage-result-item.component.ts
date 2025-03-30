@@ -5,6 +5,7 @@ import { IPercentageResult } from './models/percentage-result-item.models';
 import { ReportDataService } from '../../../../../services/report-data.service';
 import { ReportViewService } from '../../../../../services/report-view.service';
 import { untilDestroy } from '../../../../../utils/until-destroy';
+import { EReportScoreTooltipPosition } from '../../../../../enums/copyleaks-web-report.enums';
 
 @Component({
 	selector: 'cr-percentage-result-item',
@@ -16,6 +17,7 @@ export class PercentageResultItemComponent implements OnInit, OnChanges {
 	@Input() reportDataSvc: ReportDataService;
 	@Input() reportViewService: ReportViewService;
 	@Input() excludeResult: boolean = false;
+	@Input() crReportScoreTooltipPosition: EReportScoreTooltipPosition = EReportScoreTooltipPosition.ABOVE;
 
 	showPlagiarismPercentages: boolean = false;
 	metadataSource: ISourceMetadataSection;

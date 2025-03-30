@@ -58,6 +58,14 @@
 					mat-icon {
 						color: $color-primary;
 					}
+
+					&.ai-source-match-icon {
+						border: none !important;
+						svg {
+							height: 34px;
+							width: 34px;
+						}
+					}
 				}
 				.logo-skeleton {
 					::ng-deep .loader {
@@ -114,6 +122,15 @@
 							white-space: nowrap;
 							cursor: pointer;
 							flex-grow: 1;
+
+							&.suspected-ai-generated-container {
+								min-width: auto !important;
+								width: auto !important;
+								overflow: visible !important;
+								.first-tag {
+									max-width: none !important;
+								}
+							}
 
 							&.non-empty-container {
 								min-width: 80px;

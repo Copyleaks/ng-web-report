@@ -35,7 +35,8 @@
 					alerts.length > 0 &&
 					!isLoadingScanResults &&
 					reportTemplateMode !== ECustomResultsReportView.Full &&
-					reportTemplateMode !== ECustomResultsReportView.Partial
+					reportTemplateMode !== ECustomResultsReportView.Partial &&
+					!(selectedTap === EReportViewType.AIView && showAIPhrases)
 				"
 				[alerts]="alerts"
 				[isMobile]="true"
@@ -52,7 +53,7 @@
 		<div class="content-section">
 			<!-- Report scan content tabs -->
 			<copyleaks-report-tabs-container
-				*ngIf="reportMode === EReportMode.WebReport"
+				*ngIf="reportMode === EReportMode.WebReport && !(selectedTap === EReportViewType.AIView && showAIPhrases)"
 				[reportMode]="reportMode"
 				[hideAiTap]="hideAiTap"
 				[hidePlagarismTap]="hidePlagarismTap"
@@ -77,6 +78,14 @@
 				[loadingProgressPct]="loadingProgressPct"
 				[isMobile]="true"></copyleaks-report-tabs-container>
 
+			<cr-ai-phrases-mobile-header
+				*ngIf="selectedTap === EReportViewType.AIView && showAIPhrases"
+				[isLoading]="loadingExplainableAI || !reportStatistics"
+				[lockedResults]="lockedExplainAIResults"
+				[aiScore]="reportStatistics?.aiScore ?? 0"
+				[wordsTotal]="reportStatistics?.total ?? 0"
+				[excludedTotal]="reportStatistics?.omittedWords ?? 0"
+				[explainableAIResults]="explainableAI"></cr-ai-phrases-mobile-header>
 			<!-- Report scan content viewer -->
 			<copyleaks-content-viewer-container
 				[isHtmlView]="isHtmlView"
@@ -125,7 +134,10 @@
 			[aiScore]="reportStatistics?.aiScore ?? 0"
 			[wordsTotal]="reportStatistics?.total ?? 0"
 			[excludedTotal]="reportStatistics?.omittedWords ?? 0"
-			[explainableAIResults]="explainableAI"></copyleaks-content-ai-container>
+			[explainableAIResults]="explainableAI"
+			[showAIPhrases]="showAIPhrases"
+			[hidePlagarismTap]="hidePlagarismTap"
+			[aiSourceMatchResults]="aiSourceMatchResults"></copyleaks-content-ai-container>
 
 		<copyleaks-report-results-container
 			*ngIf="
@@ -139,6 +151,7 @@
 			[flexGrow]="15"
 			[allResults]="scanResultsView"
 			[newResults]="newScanResultsView"
+			[hideAiTap]="hideAiTap"
 			[resultsActions]="scanResultsActions"
 			[isMobile]="true"
 			[showLoadingView]="isLoadingScanResults || isLoadingScanCorrections"

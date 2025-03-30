@@ -39,113 +39,187 @@ import { ERROR_MESSAGES } from '../constants/report-scan-errors.constants';
 export class ReportDataService {
 	public realTimeView: boolean;
 
+	//#region Report Endpoint Configuration
+
 	private _reportEndpointConfig$ = new BehaviorSubject<IClsReportEndpointConfigModel | undefined>(undefined);
 	/**
-	 * Subject for sharing the report data endpoints.
+	 * Observable stream for the report endpoint configuration.
 	 */
 	public get reportEndpointConfig$() {
 		return this._reportEndpointConfig$;
 	}
 	/**
-	 * Getter for the report data endpoints.
+	 * Current value of the report endpoint configuration.
 	 */
 	public get reportEndpointConfig() {
 		return this._reportEndpointConfig$.value;
 	}
 
+	//#endregion
+
+	//#region Scan Results Details
+
 	private _scanResultsDetails$ = new BehaviorSubject<ResultDetailItem[] | undefined>(undefined);
 	private _loadedResultsDetails$: ResultDetailItem[] = [];
 	/**
-	 * Subject for sharing the report complete results.
+	 * Observable stream for the complete scan result details.
 	 */
 	public get scanResultsDetails$() {
 		return this._scanResultsDetails$;
 	}
 	/**
-	 * Getter for the report complete results.
+	 * Current value of the complete scan result details.
 	 */
 	public get scanResultsDetails() {
 		return this._scanResultsDetails$.value;
 	}
 
+	//#endregion
+
+	//#region Scan Results Previews
+
 	public completeResultsSnapshot: ICompleteResults | undefined;
 	private _scanResultsPreviews$ = new BehaviorSubject<ICompleteResults | undefined>(undefined);
 	/**
-	 * Subject for sharing the report complete results.
+	 * Observable stream for scan results preview data.
 	 */
 	public get scanResultsPreviews$() {
 		return this._scanResultsPreviews$;
 	}
 	/**
-	 * Getter for the report complete results.
+	 * Current value of the scan results preview data.
 	 */
 	public get scanResultsPreviews() {
 		return this._scanResultsPreviews$.value;
 	}
 
+	//#endregion
+
+	//#region Crawled Version
+
 	private _crawledVersion$ = new BehaviorSubject<IScanSource | undefined>(undefined);
 	/**
-	 * Subject for sharing the report complete results.
+	 * Observable stream for the crawled source version information.
 	 */
 	public get crawledVersion$() {
 		return this._crawledVersion$;
 	}
 	/**
-	 * Getter for the report complete results.
+	 * Current value of the crawled source version information.
 	 */
 	public get crawledVersion() {
 		return this._crawledVersion$.value;
 	}
 
+	//#endregion
+
+	//#region Writing Feedback
+
 	private _writingFeedback$ = new BehaviorSubject<IWritingFeedback | undefined>(undefined);
 	/**
-	 * Subject for sharing the report writing feedback details.
+	 * Observable stream for writing feedback associated with the report.
 	 */
 	public get writingFeedback$() {
 		return this._writingFeedback$;
 	}
 	/**
-	 * Getter for the report writing feedback details.
+	 * Current value of the writing feedback.
 	 */
 	public get writingFeedback() {
 		return this._writingFeedback$.value;
 	}
 
+	//#endregion
+
+	//#region Excluded Corrections
+
 	private _excludedCorrections$ = new BehaviorSubject<IExcludedCorrection[] | undefined>(undefined);
-	/** Emits matches that are relevant to source html one-to-many mode */
+	/**
+	 * Observable stream for excluded corrections in one-to-many source mode.
+	 */
 	public get excludedCorrections$() {
 		return this._excludedCorrections$;
 	}
+	/**
+	 * Current value of the excluded corrections.
+	 */
 	public get excludedCorrections() {
 		return this._excludedCorrections$.value;
 	}
 
+	//#endregion
+
+	//#region Filter Options
+
 	private _filterOptions$ = new BehaviorSubject<ICopyleaksReportOptions | undefined>(undefined);
-	/** Emits matches that are relevant to source html one-to-many mode */
+	/**
+	 * Observable stream for the report filtering options.
+	 */
 	public get filterOptions$() {
 		return this._filterOptions$;
 	}
+	/**
+	 * Current value of the report filtering options.
+	 */
 	public get filterOptions() {
 		return this._filterOptions$.value;
 	}
 
+	//#endregion
+
+	//#region Excluded Results IDs
+
 	private _excludedResultsIds$ = new BehaviorSubject<string[] | undefined>(undefined);
-	/** Emits matches that are relevant to source html one-to-many mode */
+	/**
+	 * Observable stream for IDs of results excluded from the report.
+	 */
 	public get excludedResultsIds$() {
 		return this._excludedResultsIds$;
 	}
+	/**
+	 * Current value of the excluded result IDs.
+	 */
 	public get excludedResultsIds() {
 		return this._excludedResultsIds$.value;
 	}
 
+	//#endregion
+
+	//#region Selected Category Result IDs
+
+	private _selectedCategoryResultsIds$ = new BehaviorSubject<string[] | undefined>(undefined);
+	/**
+	 * Observable stream for IDs of results selected by category.
+	 */
+	public get selectedCategoryResultsIds$() {
+		return this._selectedCategoryResultsIds$;
+	}
+	/**
+	 * Current value of the selected category result IDs.
+	 */
+	public get selectedCategoryResultsIds() {
+		return this._selectedCategoryResultsIds$.value;
+	}
+
+	//#endregion
+
+	//#region Loading State
+
 	private _loadingMoreResults$ = new BehaviorSubject<boolean>(false);
-	/** Emits matches that are relevant to source html one-to-many mode */
+	/**
+	 * Observable stream indicating whether additional results are currently being loaded.
+	 */
 	public get loadingMoreResults$() {
 		return this._loadingMoreResults$;
 	}
+	/**
+	 * Current loading state for additional results.
+	 */
 	public get loadingMoreResults() {
 		return this._loadingMoreResults$.value;
 	}
+
+	//#endregion
 
 	public get isFilterOn(): boolean {
 		let totalIdentical = 0,

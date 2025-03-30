@@ -14,30 +14,47 @@ export class ReportResultsItemContainerComponent implements OnInit, AfterViewIni
 
 	@HostBinding('style.flex-grow')
 	flexGrowProp: number;
+
 	/**
 	 * @Input {number} Flex grow property - flex-grow
 	 */
 	@Input() flexGrow: number;
+
+	/**
+	 * @Input {EResponsiveLayoutType} The responsive layout type of the report.
+	 */
 	@Input() reportResponsive: EResponsiveLayoutType;
+
+	/**
+	 * @Input {IResultItem} The result item details to display.
+	 */
 	@Input() resultItem: IResultItem | null = null;
+
+	/**
+	 * @Input {boolean} Flag indicating whether to show the excluded results or not.
+	 */
 	@Input() isMobile: boolean;
+
 	/**
 	 * @Input {boolean} Flag indicating whether to show the loading view or not.
 	 */
 	@Input() showLoadingView = false;
 
 	/**
-	 * @Input Flag indicating whether the content has masked text or not.
+	 * @Input {boolean} Flag indicating whether the content has masked text or not.
 	 */
 	@Input() hasMaskedContent: boolean;
 
 	/**
-	 * @Input Flag indicating whether the content has masked text or not.
+	 * @Input {boolean} Flag indicating whether the content has masked text or not.
 	 */
 	@Input() hideMaskedContentDisclaimer: { flag: boolean } = {
 		flag: false,
 	};
 
+	/**
+	 * @Input {EReportMode} The report mode.
+	 */
 	@Input() reportMode: EReportMode;
 
 	constructor(private _reportDataSvc: ReportDataService) {}

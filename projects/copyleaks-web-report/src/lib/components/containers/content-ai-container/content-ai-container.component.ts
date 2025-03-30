@@ -1,7 +1,10 @@
-import { Component, Input, OnChanges, OnInit, SimpleChanges } from '@angular/core';
+import { ChangeDetectorRef, Component, Input, OnChanges, OnInit, SimpleChanges, TemplateRef } from '@angular/core';
 import { ExplainableAIResults } from '../../../models/report-matches.models';
 import { ReportMatchHighlightService } from '../../../services/report-match-highlight.service';
 import { ReportMatchesService } from '../../../services/report-matches.service';
+import { IResultItem } from '../report-results-item-container/components/models/report-result-item.models';
+import { ReportNgTemplatesService } from '../../../services/report-ng-templates.service';
+import { untilDestroy } from '../../../utils/until-destroy';
 
 @Component({
 	selector: 'copyleaks-content-ai-container',
@@ -18,6 +21,11 @@ export class ContentAiContainerComponent implements OnInit, OnChanges {
 	 * @Input {boolean} A flag indicating if the component is in loading state
 	 */
 	@Input() isLoading: boolean = false;
+
+	/**
+	 * @Input {boolean} A flag indicating if the plagiarism tab is hidden or disabled
+	 */
+	@Input() hidePlagarismTap: boolean = false;
 
 	/**
 	 * @Input {boolean} A flag indicating if the results are locked
@@ -45,11 +53,28 @@ export class ContentAiContainerComponent implements OnInit, OnChanges {
 	@Input() explainableAIResults: ExplainableAIResults;
 
 	/**
+	 * @Input {(IInternetResultPreview | IDatabaseResultPreview | IRepositoryResultPreview)[]} The AI source match results
+	 */
+	@Input() aiSourceMatchResults: IResultItem[];
+
+	/**
+	 * @Input {boolean} A flag indicating if the AI phrases are shown
+	 */
+	@Input() showAIPhrases: boolean;
+
+	/**
 	 * {number} The AI percentage result
 	 */
 	aiPercentageResult: number = 0;
 
-	constructor(public highlightService: ReportMatchHighlightService, public reportMatchesSvc: ReportMatchesService) {}
+	customAISourceMatchUpgradeTemplate: TemplateRef<any> | undefined = undefined;
+
+	constructor(
+		private _cdr: ChangeDetectorRef,
+		public highlightService: ReportMatchHighlightService,
+		public reportMatchesSvc: ReportMatchesService,
+		public reportNgTemplatesSvc: ReportNgTemplatesService
+	) {}
 
 	ngOnChanges(changes: SimpleChanges): void {
 		if (changes['isLoading']?.currentValue == false) {
@@ -59,6 +84,16 @@ export class ContentAiContainerComponent implements OnInit, OnChanges {
 
 	ngOnInit(): void {
 		this._updateAiPercentageResult();
+
+		this.reportNgTemplatesSvc.reportTemplatesSubject$.pipe(untilDestroy(this)).subscribe(refs => {
+			if (
+				refs?.customAISourceMatchUpgradeTemplate !== undefined &&
+				this.customAISourceMatchUpgradeTemplate === undefined
+			) {
+				this.customAISourceMatchUpgradeTemplate = refs?.customAISourceMatchUpgradeTemplate;
+				this._cdr.detectChanges();
+			}
+		});
 	}
 
 	/**
@@ -78,4 +113,14 @@ export class ContentAiContainerComponent implements OnInit, OnChanges {
 	clearSelectResult() {
 		this.highlightService.clearAllMatchs();
 	}
+
+	onNavigateToPhrasesClick() {
+		this.showAIPhrases = true;
+	}
+
+	onNavigateToDefaultClick() {
+		this.showAIPhrases = false;
+	}
+
+	ngOnDestroy(): void {}
 }

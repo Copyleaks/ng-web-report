@@ -3,210 +3,361 @@
 	[class.empty-view]="emptyView"
 	[class.locked-view]="lockedResults"
 	fxLayout="column"
+	[class.default-view]="!showAIPhrases"
 	[dir]="docDirection">
 	<ng-container *ngIf="!isLoading; else loadingState">
-		<div class="top-header-container">
-			<div
-				class="header-container"
-				[class.header-container-mobile]="isMobile && !lockedResults"
-				fxLayout="column"
-				fxLayoutGap="4px">
-				<!-- Header -->
-				<div *ngIf="!emptyView" class="header" fxLayout="row" fxLayoutAlign="space-between center">
-					<span class="title">
-						{{ title }}
-					</span>
-					<div fxLayout="row" fxLayoutAlign="center center" fxLayoutGap="8px">
-						<div *ngIf="!emptyView && !lockedResults && !isMobile" class="beta-container">
-							<span>Beta</span>
-						</div>
-						<a
-							fxLayout="row"
-							fxLayoutAlign="center center"
-							[tabIndex]="0"
-							#tooltipTitle="matTooltip"
-							[matTooltip]="infoTooltipText"
-							[matTooltipPosition]="'after'"
-							[href]="'https://help.copyleaks.com/hc/en-us/articles/30744676805901-What-are-AI-Insights'"
-							target="_blank"
-							(click)="isMobile ? toggleTooltip(tooltipTitle) : ''"
-							(keyup.enter)="isMobile ? toggleTooltip(tooltipTitle) : ''"
-							aria-label="ai result info"
-							i18n-aria-label
-							aria-hidden="false"
-							matTooltipClass="web-report-mat-tooltip tooltip-contanier">
-							<mat-icon class="info-icon" fontSet="material-icons-outlined">info</mat-icon>
-						</a>
+		<ng-container *ngIf="showAIPhrases; else defaultView">
+			<div *ngIf="!isMobile" class="top-header-container">
+				<div
+					class="header-container"
+					[class.header-container-mobile]="isMobile && !lockedResults"
+					fxLayout="column"
+					fxLayoutGap="12px">
+					<!-- Header -->
+					<div *ngIf="!emptyView && !isMobile" class="header">
+						<cr-button
+							[isLink]="true"
+							[outlined]="true"
+							padding="4px"
+							icon="arrow_back_ios"
+							fontSize="14px"
+							iconSize="12px"
+							color="#0517A6"
+							(click)="$event.preventDefault(); $event.stopPropagation(); onBackClick()">
+							<ng-container i18n>Back</ng-container>
+						</cr-button>
+						<svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+							<rect x="0.5" y="0.5" width="23" height="23" rx="11.5" fill="#EBF3F5" />
+							<rect x="0.5" y="0.5" width="23" height="23" rx="11.5" stroke="#FBFFFF" />
+							<rect x="0.5" y="0.5" width="23" height="23" rx="11.5" stroke="url(#paint0_linear_7308_1032)" />
+							<rect x="2" y="2" width="20" height="20" rx="10" fill="#FBFFFF" />
+							<rect x="2" y="2" width="20" height="20" rx="10" fill="url(#paint1_linear_7308_1032)" />
+							<path
+								d="M16.4545 10.0909L17.25 8.34091L19 7.54545L17.25 6.75L16.4545 5L15.6591 6.75L13.9091 7.54545L15.6591 8.34091L16.4545 10.0909ZM11.6818 10.4091L10.0909 6.90909L8.5 10.4091L5 12L8.5 13.5909L10.0909 17.0909L11.6818 13.5909L15.1818 12L11.6818 10.4091ZM16.4545 13.9091L15.6591 15.6591L13.9091 16.4545L15.6591 17.25L16.4545 19L17.25 17.25L19 16.4545L17.25 15.6591L16.4545 13.9091Z"
+								fill="white" />
+							<defs>
+								<linearGradient
+									id="paint0_linear_7308_1032"
+									x1="-1.01822e-07"
+									y1="13.811"
+									x2="22.4306"
+									y2="19.7441"
+									gradientUnits="userSpaceOnUse">
+									<stop stop-color="#BCA6FF" />
+									<stop offset="1" stop-color="#9345F9" />
+								</linearGradient>
+								<linearGradient
+									id="paint1_linear_7308_1032"
+									x1="2"
+									y1="13.5092"
+									x2="20.6922"
+									y2="18.4534"
+									gradientUnits="userSpaceOnUse">
+									<stop stop-color="#BCA6FF" />
+									<stop offset="1" stop-color="#9345F9" />
+								</linearGradient>
+							</defs>
+						</svg>
+						<span class="title" i18n>AI Phrases</span>
 					</div>
-				</div>
-				<!-- Description and Grade-Bar -->
-				<div *ngIf="!emptyView && !lockedResults && !isMobile" fxLayout="column" fxLayoutGap="16px">
-					<span class="header-description" i18n>
-						GenAI often overuses certain phrases learned during training, which is one of dozens of signals used to
-						identify AI text.
-					</span>
-					<div class="grade-bar-top-container" fxLayout="column" fxLayoutGap="8px">
-						<span class="title" i18n>The number of times a phrase was found more frequently in AI vs human text.</span>
-						<div
-							class="grade-bar-container"
-							tabindex="0"
-							crAIScoreTooltipContent
-							[isTooltipBar]="true"
-							[tooltipText]="barTooltipText"
-							fxLayout="row"
-							fxLayoutAlign="start center"
-							fxLayoutGap="16px">
-							<span class="min-proportion">{{ minProportion.toLocaleString() }}x</span>
-							<div class="grade-bar" fxLayout="row">
-								<div class="min-result" [style.width]="minGradeBar + '%'"></div>
-								<div class="mid-result" [style.width]="midGradeBar + '%'"></div>
-								<div class="max-result" [style.width]="maxGradeBar + '%'"></div>
+					<!-- Description and Grade-Bar -->
+					<div *ngIf="!emptyView && !lockedResults && !isMobile" fxLayout="column" fxLayoutGap="16px">
+						<div class="grade-bar-top-container" fxLayout="column" fxLayoutGap="8px">
+							<div class="ai-phrases-bar-title-container">
+								<span class="title" i18n>Frequency of phrases in AI vs human text.</span>
 							</div>
-							<ng-container *ngIf="hasInfinityResult; else maxResult">
-								<span class="max-proportion">10,000x</span>
-							</ng-container>
-							<ng-template #maxResult>
-								<span class="max-proportion">{{ maxProportion.toLocaleString() }}x</span>
-							</ng-template>
+							<div
+								class="grade-bar-container"
+								tabindex="0"
+								crAIScoreTooltipContent
+								[isTooltipBar]="true"
+								[tooltipText]="barTooltipText"
+								fxLayout="row"
+								fxLayoutAlign="start center"
+								fxLayoutGap="16px">
+								<span class="min-proportion">{{ minProportion.toLocaleString() }}x</span>
+								<div class="grade-bar" fxLayout="row">
+									<div class="min-result" [style.width]="minGradeBar + '%'"></div>
+									<div class="mid-result" [style.width]="midGradeBar + '%'"></div>
+									<div class="max-result" [style.width]="maxGradeBar + '%'"></div>
+								</div>
+								<ng-container *ngIf="hasInfinityResult; else maxResult">
+									<span class="max-proportion">10,000x</span>
+								</ng-container>
+								<ng-template #maxResult>
+									<span class="max-proportion">{{ maxProportion.toLocaleString() }}x</span>
+								</ng-template>
+							</div>
 						</div>
 					</div>
 				</div>
+				<div
+					*ngIf="!emptyView && !lockedResults && !isMobile"
+					class="result-header"
+					fxLayout="row"
+					fxLayoutAlign="start center"
+					fxLayoutGap="16px">
+					<div class="ratio-contanier" fxLayout="row" fxLayoutAlign="start center" fxLayoutGap="2px">
+						<span i18n>Ratio</span>
+						<mat-icon
+							class="info-icon"
+							fontSet="material-icons-outlined"
+							aria-hidden="false"
+							[tabIndex]="0"
+							[matTooltip]="proportionTooltipText"
+							[matTooltipPosition]="'after'"
+							matTooltipClass="web-report-mat-tooltip tooltip-contanier">
+							info
+						</mat-icon>
+					</div>
+					<span class="phrase" i18n>Phrase</span>
+
+					<span class="total-phrases" i18n>Insights ({{ explainItemResults?.length ?? 0 }})</span>
+				</div>
 			</div>
 			<div
-				*ngIf="!emptyView && !lockedResults && !isMobile"
-				class="result-header"
-				fxLayout="row"
-				fxLayoutAlign="start center"
-				fxLayoutGap="16px">
-				<div class="ratio-contanier" fxLayout="row" fxLayoutAlign="start center" fxLayoutGap="2px">
-					<span i18n>Ratio</span>
-					<mat-icon
-						class="info-icon"
-						fontSet="material-icons-outlined"
-						aria-hidden="false"
-						[tabIndex]="0"
-						[matTooltip]="proportionTooltipText"
-						[matTooltipPosition]="'after'"
-						matTooltipClass="web-report-mat-tooltip tooltip-contanier">
-						info
-					</mat-icon>
-				</div>
-				<span class="phrase" i18n>Phrase</span>
-			</div>
-		</div>
-		<div
-			class="container-explain-results"
-			[class.explain-results-mobile-container]="isMobile"
-			[class.explain-results-mobile-container-height]="isMobile && openedPanel"
-			[class.explain-results-mobile-container-padding]="isMobile && lockedResults"
-			fxLayout="column">
-			<!-- Empty and Locked view -->
-			<ng-container *ngIf="emptyView || lockedResults; else showResults">
-				<div class="empty-and-locked-contaienr" fxLayout="column" fxLayoutAlign="center center">
-					<!-- Empty view -->
-					<ng-container *ngIf="emptyView; else lockedResults">
-						<div class="empty-contaienr" fxLayout="column" fxLayoutAlign="center center" fxLayoutGap="4px">
-							<ng-container *ngIf="aiInsightAlert; else emptyState">
-								<span class="title">{{ alertTitle }}</span>
-								<span class="description" i18n>
-									{{ alertMessage }}
-								</span>
-							</ng-container>
-							<ng-template #emptyState>
-								<span class="title" i18n>No AI Insights Were Found</span>
-								<span class="description" i18n>
-									There is no specific phrase that indicates AI. However, other criteria suggest that this text was
-									generated by AI.
-								</span>
-							</ng-template>
-						</div>
-					</ng-container>
-					<!-- Locked view -->
-					<ng-template #lockedResults>
-						<div fxLayout="row" fxLayoutAlign="start center" fxLayoutGap="8px">
-							<mat-icon class="lock-icon">lock</mat-icon>
-							<span i18n>Locked results</span>
-						</div>
-					</ng-template>
-				</div>
-			</ng-container>
-			<!-- Show results -->
-			<ng-template #showResults>
-				<!-- Desktop view -->
-				<ng-container *ngIf="!isMobile; else mobileView">
-					<div #desktopScroll class="desktop-scroll" fxLayout="column">
-						<div
-							class="explain-results"
-							[id]="'result-' + i"
-							fxLayout="column"
-							*ngFor="let result of explainItemResults; let i = index">
-							<ng-container *ngTemplateOutlet="templateResult; context: { item: result, index: i }"></ng-container>
-						</div>
+				class="container-explain-results"
+				[class.explain-results-mobile-container]="isMobile"
+				[class.explain-results-mobile-container-height]="isMobile && openedPanel"
+				[class.explain-results-mobile-container-padding]="isMobile && lockedResults"
+				fxLayout="column">
+				<!-- Empty and Locked view -->
+				<ng-container *ngIf="emptyView || lockedResults; else showResults">
+					<div class="empty-and-locked-contaienr" fxLayout="column" fxLayoutAlign="center center">
+						<!-- Empty view -->
+						<ng-container *ngIf="emptyView; else lockedResults">
+							<div class="empty-contaienr" fxLayout="column" fxLayoutAlign="center center" fxLayoutGap="4px">
+								<ng-container *ngIf="aiInsightAlert; else emptyState">
+									<span class="title">{{ alertTitle }}</span>
+									<span class="description" i18n>
+										{{ alertMessage }}
+									</span>
+								</ng-container>
+								<ng-template #emptyState>
+									<span class="title" i18n>No AI Insights Were Found</span>
+									<span class="description" i18n>
+										There is no specific phrase that indicates AI. However, other criteria suggest that this text was
+										generated by AI.
+									</span>
+								</ng-template>
+							</div>
+						</ng-container>
+						<!-- Locked view -->
+						<ng-template #lockedResults>
+							<div fxLayout="row" fxLayoutAlign="start center" fxLayoutGap="8px">
+								<mat-icon class="lock-icon">lock</mat-icon>
+								<span i18n>Locked results</span>
+							</div>
+						</ng-template>
 					</div>
 				</ng-container>
-				<!-- Mobile view -->
-				<ng-template #mobileView>
-					<div #scrollContainer class="mobile-scroll" fxLayout="row" (scroll)="onScrollMobile()">
-						<div
-							class="explain-results"
-							[style.margin-inline-end]="i == explainItemResults.length - 1 ? '0px' : '16px'"
-							fxLayout="row"
-							*ngFor="let result of explainItemResults; let i = index"
-							[attr.data-index]="i">
-							<ng-container *ngTemplateOutlet="templateResult; context: { item: result, index: i }"></ng-container>
+				<!-- Show results -->
+				<ng-template #showResults>
+					<!-- Desktop view -->
+					<ng-container *ngIf="!isMobile; else aiPhrasesMobileViewRef">
+						<div #desktopScroll class="desktop-scroll" fxLayout="column">
+							<div
+								class="explain-results"
+								[id]="'result-' + i"
+								fxLayout="column"
+								*ngFor="let result of explainItemResults; let i = index">
+								<ng-container *ngTemplateOutlet="templateResult; context: { item: result, index: i }"></ng-container>
+							</div>
 						</div>
-					</div>
+					</ng-container>
+					<!-- Mobile view -->
+					<ng-template #aiPhrasesMobileViewRef>
+						<div
+							#aiPhrasesMobileViewScrollContainer
+							class="mobile-scroll"
+							fxLayout="row"
+							(scroll)="onAIPhrasesScrollMobile()">
+							<div
+								class="explain-results"
+								[style.margin-inline-end]="i == explainItemResults.length - 1 ? '0px' : '16px'"
+								fxLayout="row"
+								*ngFor="let result of explainItemResults; let i = index"
+								[attr.data-index]="i">
+								<ng-container *ngTemplateOutlet="templateResult; context: { item: result, index: i }"></ng-container>
+							</div>
+						</div>
+					</ng-template>
 				</ng-template>
+			</div>
+			<!-- Mobile navigate buttons -->
+			<div
+				*ngIf="isMobile && explainItemResults.length > 1"
+				class="navigate-mobie-button-contaienr"
+				fxLayout="row"
+				fxLayoutAlign="center center"
+				fxLayoutGap="8px">
+				<mat-chip
+					*ngIf="explainItemResults.length > 5 && currentViewedIndex > 2"
+					role="button"
+					(click)="scrollToIndex(0)"
+					class="mat-chip-navigate">
+					{{
+						currentViewedIndex < explainItemResults.length - 3 ? currentViewedIndex - 2 : explainItemResults.length - 5
+					}}
+				</mat-chip>
+
+				<button
+					class="navigate-mobie-button"
+					[class.navigate-mobie-button-select]="navigateMobileButton == enumNavigateMobileButton.FirstButton"
+					(click)="onAIPhrasesViewDotNavigate(enumNavigateMobileButton.FirstButton)"></button>
+				<button
+					class="navigate-mobie-button"
+					[class.navigate-mobie-button-select]="navigateMobileButton == enumNavigateMobileButton.SecondButton"
+					(click)="onAIPhrasesViewDotNavigate(enumNavigateMobileButton.SecondButton)"></button>
+				<button
+					class="navigate-mobie-button"
+					[class.navigate-mobie-button-select]="navigateMobileButton == enumNavigateMobileButton.ThirdButton"
+					(click)="onAIPhrasesViewDotNavigate(enumNavigateMobileButton.ThirdButton)"></button>
+				<button
+					class="navigate-mobie-button"
+					[class.navigate-mobie-button-select]="navigateMobileButton == enumNavigateMobileButton.FourthButton"
+					(click)="onAIPhrasesViewDotNavigate(enumNavigateMobileButton.FourthButton)"></button>
+				<button
+					class="navigate-mobie-button"
+					[class.navigate-mobie-button-select]="navigateMobileButton == enumNavigateMobileButton.FifthButton"
+					(click)="onAIPhrasesViewDotNavigate(enumNavigateMobileButton.FifthButton)"></button>
+
+				<mat-chip
+					*ngIf="explainItemResults.length > 5 && currentViewedIndex < explainItemResults.length - 3"
+					role="button"
+					(click)="scrollToIndex(explainItemResults.length - 1)"
+					class="mat-chip-navigate">
+					{{
+						currentViewedIndex > 2 ? explainItemResults.length - currentViewedIndex - 3 : explainItemResults.length - 5
+					}}
+				</mat-chip>
+			</div>
+		</ng-container>
+		<ng-template #defaultView>
+			<ng-container *ngIf="!isMobile; else deafultMobileView">
+				<cr-ai-logic-banner></cr-ai-logic-banner>
+
+				<ng-container *ngIf="!hidePlagarismTap">
+					<cr-ai-source-match-entry
+						[aiSourceMatchResultsIndenticalScore]="aiSourceMatchResultsIndenticalScore"
+						[aiSourceMatchResultsMinorChangesScore]="aiSourceMatchResultsMinorChangesScore"
+						[aiSourceMatchResultsParaphrasedScore]="aiSourceMatchResultsParaphrasedScore"
+						[aiSourceMatchResultsScore]="aiSourceMatchResultsScore"
+						[aiSourceMatchResultsTotal]="aiSourceMatchResultsTotal"
+						(onNavigateToResults)="onNavigateToResultsClick()"></cr-ai-source-match-entry>
+				</ng-container>
+
+				<ng-container *ngIf="hidePlagarismTap && reportViewSvc?.reportViewMode?.platformType === EPlatformType.APP">
+					<ng-container *ngTemplateOutlet="customAISourceMatchUpgradeTemplate ?? null"></ng-container>
+				</ng-container>
+
+				<cr-ai-phrases-entry
+					[aiPercentageResult]="aiPercentageResult"
+					[maxProportion]="maxProportion"
+					[minProportion]="minProportion"
+					[barTooltipText]="barTooltipText"
+					[maxGradeBar]="maxGradeBar"
+					[midGradeBar]="midGradeBar"
+					[totalPhrases]="explainItemResults?.length ?? 0"
+					[hasInfinityResult]="hasInfinityResult"
+					[minGradeBar]="minGradeBar"
+					(onNavigateToPhrases)="onNavigateToPhrasesClick()"></cr-ai-phrases-entry>
+			</ng-container>
+
+			<ng-template #deafultMobileView>
+				<div class="mobile-view-ai-logics-container">
+					<div class="title-container">
+						<svg width="26" height="26" viewBox="0 0 26 26" fill="none" xmlns="http://www.w3.org/2000/svg">
+							<g filter="url(#filter0_d_7209_6497)">
+								<path
+									d="M18.2383 10.75L17.3242 8.67578L15.25 7.76172L17.3242 6.8125L18.2383 4.73828L19.1875 6.8125L21.2617 7.76172L19.1875 8.67578L18.2383 10.75ZM12.6133 11.1367L16.7617 13L12.6133 14.8633L10.75 19.0117L8.88672 14.8633L4.73828 13L8.88672 11.1367L10.75 6.98828L12.6133 11.1367ZM18.2383 15.25L19.1875 17.3242L21.2617 18.2383L19.1875 19.1875L18.2383 21.2617L17.3242 19.1875L15.25 18.2383L17.3242 17.3242L18.2383 15.25Z"
+									fill="#0B163E"
+									fill-opacity="0.6"
+									shape-rendering="crispEdges" />
+							</g>
+							<defs>
+								<filter
+									id="filter0_d_7209_6497"
+									x="0.738281"
+									y="0.738281"
+									width="24.5234"
+									height="24.5234"
+									filterUnits="userSpaceOnUse"
+									color-interpolation-filters="sRGB">
+									<feFlood flood-opacity="0" result="BackgroundImageFix" />
+									<feColorMatrix
+										in="SourceAlpha"
+										type="matrix"
+										values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 127 0"
+										result="hardAlpha" />
+									<feOffset />
+									<feGaussianBlur stdDeviation="2" />
+									<feComposite in2="hardAlpha" operator="out" />
+									<feColorMatrix type="matrix" values="0 0 0 0 0.631373 0 0 0 0 0.533333 0 0 0 0 1 0 0 0 0.2 0" />
+									<feBlend mode="normal" in2="BackgroundImageFix" result="effect1_dropShadow_7209_6497" />
+									<feBlend mode="normal" in="SourceGraphic" in2="effect1_dropShadow_7209_6497" result="shape" />
+								</filter>
+							</defs>
+						</svg>
+
+						<span i18n>AI Logic</span>
+					</div>
+
+					<mat-icon
+						fontSet="material-icons-round"
+						matTooltip="Wonder how we spot AI content? Get a glimpse into our validation process."
+						[matTooltipPosition]="'after'"
+						matTooltipClass="web-report-mat-tooltip tooltip-contanier"
+						i18n-matTooltip>
+						info_outline
+					</mat-icon>
+				</div>
+
+				<div
+					class="mobile-view-scroll-container"
+					#aiDefaultMobileViewScrollContainer
+					(scroll)="onAIDefaultViewScrollMobile()">
+					<div class="mobile-view-default-entries-container">
+						<ng-container *ngIf="!hidePlagarismTap">
+							<cr-ai-source-match-entry
+								[aiSourceMatchResultsIndenticalScore]="aiSourceMatchResultsIndenticalScore"
+								[aiSourceMatchResultsMinorChangesScore]="aiSourceMatchResultsMinorChangesScore"
+								[aiSourceMatchResultsParaphrasedScore]="aiSourceMatchResultsParaphrasedScore"
+								[aiSourceMatchResultsScore]="aiSourceMatchResultsScore"
+								[aiSourceMatchResultsTotal]="aiSourceMatchResultsTotal"
+								(onNavigateToResults)="onNavigateToResultsClick()"></cr-ai-source-match-entry>
+						</ng-container>
+
+						<ng-container *ngIf="hidePlagarismTap && reportViewSvc?.reportViewMode?.platformType === EPlatformType.APP">
+							<ng-container *ngTemplateOutlet="customAISourceMatchUpgradeTemplate ?? null"></ng-container>
+						</ng-container>
+
+						<cr-ai-phrases-entry
+							[aiPercentageResult]="aiPercentageResult"
+							[maxProportion]="maxProportion"
+							[minProportion]="minProportion"
+							[barTooltipText]="barTooltipText"
+							[maxGradeBar]="maxGradeBar"
+							[midGradeBar]="midGradeBar"
+							[totalPhrases]="explainItemResults?.length ?? 0"
+							[hasInfinityResult]="hasInfinityResult"
+							[minGradeBar]="minGradeBar"
+							(onNavigateToPhrases)="onNavigateToPhrasesClick()"></cr-ai-phrases-entry>
+					</div>
+				</div>
+				<div class="dots-container">
+					<button
+						class="navigate-mobie-button"
+						[class.navigate-mobie-button-select]="navigateMobileButton === enumNavigateMobileButton.FirstButton"
+						(click)="onAIDefaultViewDotNavigate(enumNavigateMobileButton.FirstButton)"></button>
+
+					<button
+						class="navigate-mobie-button"
+						[class.navigate-mobie-button-select]="navigateMobileButton === enumNavigateMobileButton.SecondButton"
+						(click)="onAIDefaultViewDotNavigate(enumNavigateMobileButton.SecondButton)"></button>
+				</div>
 			</ng-template>
-		</div>
-		<!-- Mobile navigate buttons -->
-		<div
-			*ngIf="isMobile && explainItemResults.length > 1"
-			class="navigate-mobie-button-contaienr"
-			fxLayout="row"
-			fxLayoutAlign="center center"
-			fxLayoutGap="8px">
-			<mat-chip
-				*ngIf="explainItemResults.length > 5 && currentViewedIndex > 2"
-				role="button"
-				(click)="scrollToIndex(0)"
-				class="mat-chip-navigate">
-				{{
-					currentViewedIndex < explainItemResults.length - 3 ? currentViewedIndex - 2 : explainItemResults.length - 5
-				}}
-			</mat-chip>
-
-			<button
-				class="navigate-mobie-button"
-				[class.navigate-mobie-button-select]="navigateMobileButton == enumNavigateMobileButton.FirstButton"
-				(click)="onDotNavigate(enumNavigateMobileButton.FirstButton)"></button>
-			<button
-				class="navigate-mobie-button"
-				[class.navigate-mobie-button-select]="navigateMobileButton == enumNavigateMobileButton.SecondButton"
-				(click)="onDotNavigate(enumNavigateMobileButton.SecondButton)"></button>
-			<button
-				class="navigate-mobie-button"
-				[class.navigate-mobie-button-select]="navigateMobileButton == enumNavigateMobileButton.ThirdButton"
-				(click)="onDotNavigate(enumNavigateMobileButton.ThirdButton)"></button>
-			<button
-				class="navigate-mobie-button"
-				[class.navigate-mobie-button-select]="navigateMobileButton == enumNavigateMobileButton.FourthButton"
-				(click)="onDotNavigate(enumNavigateMobileButton.FourthButton)"></button>
-			<button
-				class="navigate-mobie-button"
-				[class.navigate-mobie-button-select]="navigateMobileButton == enumNavigateMobileButton.FifthButton"
-				(click)="onDotNavigate(enumNavigateMobileButton.FifthButton)"></button>
-
-			<mat-chip
-				*ngIf="explainItemResults.length > 5 && currentViewedIndex < explainItemResults.length - 3"
-				role="button"
-				(click)="scrollToIndex(explainItemResults.length - 1)"
-				class="mat-chip-navigate">
-				{{
-					currentViewedIndex > 2 ? explainItemResults.length - currentViewedIndex - 3 : explainItemResults.length - 5
-				}}
-			</mat-chip>
-		</div>
+		</ng-template>
 	</ng-container>
 	<ng-template #loadingState>
 		<div class="loading-container" fxLayout="column">

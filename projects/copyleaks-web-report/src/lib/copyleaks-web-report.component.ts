@@ -57,6 +57,8 @@ export class CopyleaksWebReportComponent implements OnInit, OnDestroy {
 	@ViewChild('customEmptyResultsTemplate', { static: true }) customEmptyResultsTemplate: TemplateRef<any>;
 	@ViewChild('customResultsTemplate', { static: true }) customResultsTemplate: TemplateRef<any>;
 	@ViewChild('customBannerSectionTemplate', { static: true }) customBannerSectionTemplate: TemplateRef<any>;
+	@ViewChild('customAISourceMatchUpgradeTemplate', { static: true })
+	customAISourceMatchUpgradeTemplate: TemplateRef<any>;
 
 	/**
 	 * @Input {EReportMode} - The copyleaks report view type.
@@ -261,6 +263,13 @@ export class CopyleaksWebReportComponent implements OnInit, OnDestroy {
 		if (this.customBannerSectionTemplate)
 			this._reportNgTemplatesSvc.setReportCustomBannerSectionTemplateRef(this.customBannerSectionTemplate);
 
+		// Read the report custom AI source match upgrade component reference
+		if (this.customAISourceMatchUpgradeTemplate)
+			this._reportNgTemplatesSvc.setReportCustomAISourceMatchUpgradeTemplateRef(
+				this.customAISourceMatchUpgradeTemplate
+			);
+
+		// Read the report results locked result item template reference.
 		if (this.lockedResultTemplateRef)
 			this._reportNgTemplatesSvc.setLockedResultItemTemplateRef(this.lockedResultTemplateRef);
 	}
@@ -335,6 +344,7 @@ export class CopyleaksWebReportComponent implements OnInit, OnDestroy {
 		const suspectId = params['suspectId'];
 		const alertCode = params['alertCode'];
 		const selectedCustomTabId = params['selectedCustomTabId'];
+		const selectedResultsCategory = params['selectedResultsCategory'];
 
 		this.reportLayoutType = viewMode ?? 'one-to-many';
 		if (viewMode === 'writing-feedback') this.reportLayoutType = EReportLayoutType.OneToMany;
@@ -353,12 +363,14 @@ export class CopyleaksWebReportComponent implements OnInit, OnDestroy {
 			showDisabledProducts: this.showDisabledProducts,
 			platformType: this.platformType,
 			selectedCustomTabId: selectedCustomTabId,
+			selectedResultsCategory: selectedResultsCategory,
 		} as IReportViewEvent);
 
 		if (alertCode) this._reportViewSvc.selectedAlert$.next(alertCode);
 
 		this._reportViewSvc.reportViewMode$.pipe(distinctUntilChanged(), takeUntil(this.unsubscribe$)).subscribe(data => {
 			if (!data) return;
+
 			let updatedParams: IReportViewQueryParams = {
 				viewMode: data.viewMode,
 				contentMode: data.isHtmlView ? 'html' : 'text',
@@ -367,6 +379,7 @@ export class CopyleaksWebReportComponent implements OnInit, OnDestroy {
 				suspectId: data.suspectId,
 				alertCode: data.alertCode,
 				selectedCustomTabId: data.selectedCustomTabId,
+				selectedResultsCategory: data.selectedResultsCategory,
 			};
 
 			if (data.viewMode == 'one-to-many' || data.viewMode == 'writing-feedback')

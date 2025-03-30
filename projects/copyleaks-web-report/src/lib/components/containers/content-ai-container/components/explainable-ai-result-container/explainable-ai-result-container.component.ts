@@ -1,4 +1,5 @@
 import {
+	AfterViewInit,
 	Component,
 	ElementRef,
 	EventEmitter,
@@ -9,6 +10,7 @@ import {
 	Output,
 	QueryList,
 	SimpleChanges,
+	TemplateRef,
 	ViewChild,
 	ViewChildren,
 } from '@angular/core';
@@ -28,13 +30,17 @@ import { ReportMatchHighlightService } from '../../../../../services/report-matc
 import { Subject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
 import { ReportViewService } from '../../../../../services/report-view.service';
+import { IResultItem } from '../../../report-results-item-container/components/models/report-result-item.models';
+import * as helpers from '../../../../../utils/report-statistics-helpers';
+import { ReportDataService } from '../../../../../services/report-data.service';
+import { EPlatformType } from '../../../../../enums/copyleaks-web-report.enums';
 
 @Component({
 	selector: 'copyleaks-explainable-ai-result-container',
 	templateUrl: './explainable-ai-result-container.component.html',
 	styleUrls: ['./explainable-ai-result-container.component.scss'],
 })
-export class ExplainableAIResultContainerComponent implements OnInit, OnChanges, OnDestroy {
+export class ExplainableAIResultContainerComponent implements OnInit, OnChanges, AfterViewInit, OnDestroy {
 	/**
 	 * @Input {ExplainableAIResults} The explainable AI results
 	 */
@@ -56,18 +62,57 @@ export class ExplainableAIResultContainerComponent implements OnInit, OnChanges,
 	@Input() isLoading: boolean = false;
 
 	/**
+	 * @Input {boolean} A flag indicating if the plagiarism tab is hidden or disabled
+	 */
+	@Input() hidePlagarismTap: boolean = false;
+
+	/**
 	 * @Input Service for report matches and corrections.
 	 */
 	@Input() reportMatchesSvc: ReportMatchesService;
 
+	/**
+	 * @Input Service for report matches highlights.
+	 */
 	@Input() highlightService: ReportMatchHighlightService;
+
+	/**
+	 * @Input {(IInternetResultPreview | IDatabaseResultPreview | IRepositoryResultPreview)[]} The AI source match results
+	 */
+	@Input() aiSourceMatchResults: IResultItem[];
+
+	/**
+	 * @Input {number} The AI percentage result
+	 */
+	@Input() aiPercentageResult: number = 0;
+
+	/**
+	 * @Input {TemplateRef<any> | undefined} The template for the custom AI source match upgrade.
+	 */
+	@Input() customAISourceMatchUpgradeTemplate: TemplateRef<any> | undefined = undefined;
+
+	/**
+	 * @Input {boolean} A flag indicating if the AI phrases are shown
+	 */
+	@Input() showAIPhrases: boolean;
 
 	/**
 	 * @Output {boolean} Event emitted when the user clears the selected result
 	 */
 	@Output() clearSelectResultEvent = new EventEmitter<boolean>();
 
-	@ViewChild('scrollContainer') scrollContainer!: ElementRef;
+	/**
+	 * @Output {void} Event emitted when the user navigates to the  AI Insights phrases
+	 */
+	@Output() onNavigateToPhrases = new EventEmitter<void>();
+
+	/**
+	 * @Output {void} Event emitted when the user navigates to the  AI Insights phrases
+	 */
+	@Output() onNavigateToDefault = new EventEmitter<void>();
+
+	@ViewChild('aiPhrasesMobileViewScrollContainer') aiPhrasesMobileViewScrollContainer!: ElementRef;
+	@ViewChild('aiDefaultMobileViewScrollContainer') aiDefaultMobileViewScrollContainer!: ElementRef<HTMLDivElement>;
 
 	@ViewChildren(MatExpansionPanel) panels: QueryList<MatExpansionPanel>;
 
@@ -77,6 +122,7 @@ export class ExplainableAIResultContainerComponent implements OnInit, OnChanges,
 	explainItemResults: AIExplainResultItem[] = [];
 	navigateMobileButton: EnumNavigateMobileButton = EnumNavigateMobileButton.FirstButton;
 	enumNavigateMobileButton = EnumNavigateMobileButton;
+	EPlatformType = EPlatformType;
 
 	proportions: number[] = [];
 	emptyView: boolean = false;
@@ -102,14 +148,24 @@ export class ExplainableAIResultContainerComponent implements OnInit, OnChanges,
 	isProgrammaticChange: boolean;
 	docDirection: 'ltr' | 'rtl';
 
+	aiSourceMatchResultsScore: number = 0;
+	aiSourceMatchResultsIndenticalScore: number = 0;
+	aiSourceMatchResultsMinorChangesScore: number = 0;
+	aiSourceMatchResultsParaphrasedScore: number = 0;
+	aiSourceMatchResultsTotal: number = 0;
+
 	// Subject for destroying all the subscriptions in the main library component
 	private unsubscribe$ = new Subject();
 
-	constructor(private _reportViewSvc: ReportViewService) {}
+	constructor(public reportViewSvc: ReportViewService, private _reportDataSvc: ReportDataService) {}
 
 	ngOnChanges(changes: SimpleChanges): void {
 		if (changes['isLoading']?.currentValue == false) {
 			this._initResults();
+		}
+
+		if (changes['aiSourceMatchResults']?.currentValue && changes['aiSourceMatchResults']?.currentValue.length > 0) {
+			this._calculateAiSourceMatchResultsStats();
 		}
 	}
 
@@ -149,9 +205,237 @@ export class ExplainableAIResultContainerComponent implements OnInit, OnChanges,
 			this._handleHtmlAIInsightMatchClick(selectedMatch);
 		});
 
-		this._reportViewSvc.documentDirection$.pipe(takeUntil(this.unsubscribe$)).subscribe(dir => {
+		this.reportViewSvc.documentDirection$.pipe(takeUntil(this.unsubscribe$)).subscribe(dir => {
 			this.docDirection = dir;
 		});
+	}
+
+	ngAfterViewInit() {
+		this.aiDefaultMobileViewScrollContainer?.nativeElement?.addEventListener(
+			'scroll',
+			this.onAIDefaultViewScrollMobile.bind(this)
+		);
+	}
+
+	onAIDefaultViewScrollMobile() {
+		const container = this.aiDefaultMobileViewScrollContainer?.nativeElement;
+		const scrollLeft = container.scrollLeft;
+		const maxScrollLeft = container.scrollWidth - container.clientWidth;
+
+		if (scrollLeft >= maxScrollLeft - 5) {
+			this.navigateMobileButton = EnumNavigateMobileButton.SecondButton;
+		} else {
+			this.navigateMobileButton = EnumNavigateMobileButton.FirstButton;
+		}
+	}
+
+	onAIDefaultViewDotNavigate(button: EnumNavigateMobileButton) {
+		const container = this.aiDefaultMobileViewScrollContainer?.nativeElement;
+		const scrollTo = button === EnumNavigateMobileButton.FirstButton ? 0 : container.scrollWidth / 2;
+
+		container.scrollTo({
+			left: scrollTo,
+			behavior: 'smooth',
+		});
+
+		this.navigateMobileButton = button;
+	}
+
+	toggleTooltip(tooltip: MatTooltip): void {
+		this.tooltipVisible = !this.tooltipVisible;
+		this.tooltipVisible ? tooltip.show() : tooltip.hide();
+	}
+
+	onAIPhrasesScrollMobile() {
+		if (this.isMobile && this.openedPanel && this.panelIndex.length) {
+			this.closePanel();
+		}
+		const container = this.aiPhrasesMobileViewScrollContainer.nativeElement;
+		const itemWidth = container.clientWidth;
+		const scrollPosition = container.scrollLeft;
+
+		// Calculate the index of the item in the center
+		const index = Math.round(scrollPosition / itemWidth);
+		this.currentViewedIndex = index;
+		if (index === 0) this.navigateMobileButton = EnumNavigateMobileButton.FirstButton;
+		else if (index === 1) this.navigateMobileButton = EnumNavigateMobileButton.SecondButton;
+		else if (
+			(index >= 2 && index != this.explainItemResults.length - 1 && index != this.explainItemResults.length - 2) ||
+			(index === 2 && this.explainItemResults.length <= 5)
+		)
+			this.navigateMobileButton = EnumNavigateMobileButton.ThirdButton;
+		else if (index === this.explainItemResults.length - 2)
+			this.navigateMobileButton = EnumNavigateMobileButton.FourthButton;
+		else if (index === this.explainItemResults.length - 1)
+			this.navigateMobileButton = EnumNavigateMobileButton.FifthButton;
+	}
+
+	onAIPhrasesViewDotNavigate(dot: EnumNavigateMobileButton) {
+		switch (dot) {
+			case EnumNavigateMobileButton.FirstButton: {
+				if (this.explainItemResults.length > 5 && this.currentViewedIndex >= this.explainItemResults.length - 3)
+					this.scrollToIndex(this.explainItemResults.length - 5);
+				else if (this.explainItemResults.length > 5 && this.currentViewedIndex >= 3)
+					this.scrollToIndex(this.currentViewedIndex - 2);
+				else this.scrollToIndex(0);
+				break;
+			}
+			case EnumNavigateMobileButton.SecondButton: {
+				if (this.explainItemResults.length > 5 && this.currentViewedIndex >= this.explainItemResults.length - 3)
+					this.scrollToIndex(this.explainItemResults.length - 4);
+				else if (this.explainItemResults.length > 5 && this.currentViewedIndex >= 3)
+					this.scrollToIndex(this.currentViewedIndex - 1);
+				else this.scrollToIndex(1);
+				break;
+			}
+			case EnumNavigateMobileButton.ThirdButton: {
+				if (this.explainItemResults.length > 5 && this.currentViewedIndex >= this.explainItemResults.length - 3)
+					this.scrollToIndex(this.explainItemResults.length - 3);
+				else if (this.explainItemResults.length > 5 && this.currentViewedIndex >= 3)
+					this.scrollToIndex(this.currentViewedIndex);
+				else this.scrollToIndex(2);
+				break;
+			}
+			case EnumNavigateMobileButton.FourthButton: {
+				if (this.explainItemResults.length > 5 && this.currentViewedIndex >= this.explainItemResults.length - 3)
+					this.scrollToIndex(this.explainItemResults.length - 2);
+				else if (this.explainItemResults.length > 5 && this.currentViewedIndex >= 3)
+					this.scrollToIndex(this.currentViewedIndex + 1);
+				else this.scrollToIndex(3);
+				break;
+			}
+			case EnumNavigateMobileButton.FifthButton: {
+				if (this.explainItemResults.length > 5 && this.currentViewedIndex >= this.explainItemResults.length - 3)
+					this.scrollToIndex(this.explainItemResults.length - 1);
+				else if (this.explainItemResults.length > 5 && this.currentViewedIndex >= 3)
+					this.scrollToIndex(this.currentViewedIndex + 2);
+				else this.scrollToIndex(4);
+				break;
+			}
+			default:
+				break;
+		}
+	}
+
+	// Function to scroll to the given index
+	scrollToIndex(index?: number): void {
+		const itemWidth = this.aiPhrasesMobileViewScrollContainer.nativeElement.clientWidth;
+		const scrollPosition = index * itemWidth;
+
+		this.aiPhrasesMobileViewScrollContainer.nativeElement.scrollTo({ left: scrollPosition, behavior: 'smooth' });
+	}
+
+	/**
+	 *  close all the panels
+	 */
+	closePanel() {
+		this.panels.forEach(panel => panel.close());
+	}
+
+	/**
+	 * Add the panel index to the list when the panel is opened
+	 * @param index
+	 */
+	addToPanelIndex(index: number) {
+		if (this.isProgrammaticChange) return;
+
+		this.panelIndex.push(index);
+		this.openedPanel = true; // its for the ai insight result height, once panel opened we want to add more height
+
+		this.highlightService.aiInsightsSelect$.next({
+			resultRange: {
+				start: this.explainItemResults[index].start,
+				end: this.explainItemResults[index].end,
+			} as Range,
+			isSelected: true,
+		} as ISelectExplainableAIResult);
+	}
+
+	/**
+	 *
+	 * Remove the panel index from the list when the panel is closed
+	 * @param index
+	 */
+	removeFromPanelIndex(index: number) {
+		if (this.isProgrammaticChange) return;
+
+		this.panelIndex = this.panelIndex.filter(i => i !== index);
+		if (!this.panelIndex.length) this.openedPanel = false;
+
+		this.highlightService.aiInsightsSelect$.next({
+			resultRange: {
+				start: this.explainItemResults[index].start,
+				end: this.explainItemResults[index].end,
+			} as Range,
+			isSelected: false,
+		} as ISelectExplainableAIResult);
+	}
+
+	/**
+	 * Check if the panel is open
+	 * @param index
+	 * @returns boolean
+	 */
+	isPanelOpen(index: number) {
+		return this.panelIndex.includes(index);
+	}
+
+	/**
+	 * Get the proportion class type
+	 * @param proportionType
+	 * @returns string
+	 */
+	getProportionClassType(proportionType: EProportionType) {
+		switch (proportionType) {
+			case EProportionType.Low:
+				return 'low-proportion';
+			case EProportionType.Medium:
+				return 'medium-proportion';
+			case EProportionType.High:
+				return 'high-proportion';
+		}
+	}
+
+	/**
+	 * Handle the click event on the AI phrases entry by navigating to the AI phrases
+	 */
+	onNavigateToPhrasesClick() {
+		this.reportMatchesSvc.showAIPhrases$.next(true);
+		this.showAIPhrases = true;
+		this.navigateMobileButton = EnumNavigateMobileButton.FirstButton;
+
+		this.onNavigateToPhrases.emit();
+	}
+
+	/**
+	 * Habdle the click event on the AI Source Match results by navigating to the AI Source Match results in the Matching tab
+	 */
+	onNavigateToResultsClick() {
+		this.reportMatchesSvc.showAIPhrases$.next(false);
+		this.showAIPhrases = false;
+
+		this.reportViewSvc.reportViewMode$.next({
+			...this.reportViewSvc.reportViewMode,
+			alertCode: null,
+			selectedResultsCategory: this.isMobile ? null : encodeURI($localize`AI Source Match`),
+			navigateBackToAIView: !this.isMobile,
+		});
+		this.reportViewSvc.selectedAlert$.next(null);
+
+		this._reportDataSvc.selectedCategoryResultsIds$.next([
+			...this.aiSourceMatchResults.map(result => result?.resultPreview?.id),
+		]);
+	}
+
+	/**
+	 * Handle the click event on the back button in the AI phrases entry by returning to the default view in the AI tab
+	 */
+	onBackClick() {
+		this.reportMatchesSvc.showAIPhrases$.next(false);
+		this.showAIPhrases = false;
+		this.navigateMobileButton = EnumNavigateMobileButton.FirstButton;
+
+		this.onNavigateToDefault.emit();
 	}
 
 	private _initResults() {
@@ -238,161 +522,6 @@ export class ExplainableAIResultContainerComponent implements OnInit, OnChanges,
 			return b.proportion - a.proportion;
 		});
 		this.explainItemResults = [...this.explainResults];
-	}
-
-	toggleTooltip(tooltip: MatTooltip): void {
-		this.tooltipVisible = !this.tooltipVisible;
-		this.tooltipVisible ? tooltip.show() : tooltip.hide();
-	}
-
-	onScrollMobile() {
-		if (this.isMobile && this.openedPanel && this.panelIndex.length) {
-			this.closePanel();
-		}
-		const container = this.scrollContainer.nativeElement;
-		const itemWidth = container.clientWidth;
-		const scrollPosition = container.scrollLeft;
-
-		// Calculate the index of the item in the center
-		const index = Math.round(scrollPosition / itemWidth);
-		this.currentViewedIndex = index;
-		if (index === 0) this.navigateMobileButton = EnumNavigateMobileButton.FirstButton;
-		else if (index === 1) this.navigateMobileButton = EnumNavigateMobileButton.SecondButton;
-		else if (
-			(index >= 2 && index != this.explainItemResults.length - 1 && index != this.explainItemResults.length - 2) ||
-			(index === 2 && this.explainItemResults.length <= 5)
-		)
-			this.navigateMobileButton = EnumNavigateMobileButton.ThirdButton;
-		else if (index === this.explainItemResults.length - 2)
-			this.navigateMobileButton = EnumNavigateMobileButton.FourthButton;
-		else if (index === this.explainItemResults.length - 1)
-			this.navigateMobileButton = EnumNavigateMobileButton.FifthButton;
-	}
-
-	onDotNavigate(dot: EnumNavigateMobileButton) {
-		switch (dot) {
-			case EnumNavigateMobileButton.FirstButton: {
-				if (this.explainItemResults.length > 5 && this.currentViewedIndex >= this.explainItemResults.length - 3)
-					this.scrollToIndex(this.explainItemResults.length - 5);
-				else if (this.explainItemResults.length > 5 && this.currentViewedIndex >= 3)
-					this.scrollToIndex(this.currentViewedIndex - 2);
-				else this.scrollToIndex(0);
-				break;
-			}
-			case EnumNavigateMobileButton.SecondButton: {
-				if (this.explainItemResults.length > 5 && this.currentViewedIndex >= this.explainItemResults.length - 3)
-					this.scrollToIndex(this.explainItemResults.length - 4);
-				else if (this.explainItemResults.length > 5 && this.currentViewedIndex >= 3)
-					this.scrollToIndex(this.currentViewedIndex - 1);
-				else this.scrollToIndex(1);
-				break;
-			}
-			case EnumNavigateMobileButton.ThirdButton: {
-				if (this.explainItemResults.length > 5 && this.currentViewedIndex >= this.explainItemResults.length - 3)
-					this.scrollToIndex(this.explainItemResults.length - 3);
-				else if (this.explainItemResults.length > 5 && this.currentViewedIndex >= 3)
-					this.scrollToIndex(this.currentViewedIndex);
-				else this.scrollToIndex(2);
-				break;
-			}
-			case EnumNavigateMobileButton.FourthButton: {
-				if (this.explainItemResults.length > 5 && this.currentViewedIndex >= this.explainItemResults.length - 3)
-					this.scrollToIndex(this.explainItemResults.length - 2);
-				else if (this.explainItemResults.length > 5 && this.currentViewedIndex >= 3)
-					this.scrollToIndex(this.currentViewedIndex + 1);
-				else this.scrollToIndex(3);
-				break;
-			}
-			case EnumNavigateMobileButton.FifthButton: {
-				if (this.explainItemResults.length > 5 && this.currentViewedIndex >= this.explainItemResults.length - 3)
-					this.scrollToIndex(this.explainItemResults.length - 1);
-				else if (this.explainItemResults.length > 5 && this.currentViewedIndex >= 3)
-					this.scrollToIndex(this.currentViewedIndex + 2);
-				else this.scrollToIndex(4);
-				break;
-			}
-			default:
-				break;
-		}
-	}
-
-	// Function to scroll to the given index
-	scrollToIndex(index?: number): void {
-		const itemWidth = this.scrollContainer.nativeElement.clientWidth;
-		const scrollPosition = index * itemWidth;
-
-		this.scrollContainer.nativeElement.scrollTo({ left: scrollPosition, behavior: 'smooth' });
-	}
-
-	/**
-	 *  close all the panels
-	 */
-	closePanel() {
-		this.panels.forEach(panel => panel.close());
-	}
-
-	/**
-	 * Add the panel index to the list when the panel is opened
-	 * @param index
-	 */
-	addToPanelIndex(index: number) {
-		if (this.isProgrammaticChange) return;
-
-		this.panelIndex.push(index);
-		this.openedPanel = true; // its for the ai insight result height, once panel opened we want to add more height
-
-		this.highlightService.aiInsightsSelect$.next({
-			resultRange: {
-				start: this.explainItemResults[index].start,
-				end: this.explainItemResults[index].end,
-			} as Range,
-			isSelected: true,
-		} as ISelectExplainableAIResult);
-	}
-
-	/**
-	 *
-	 * Remove the panel index from the list when the panel is closed
-	 * @param index
-	 */
-	removeFromPanelIndex(index: number) {
-		if (this.isProgrammaticChange) return;
-
-		this.panelIndex = this.panelIndex.filter(i => i !== index);
-		if (!this.panelIndex.length) this.openedPanel = false;
-
-		this.highlightService.aiInsightsSelect$.next({
-			resultRange: {
-				start: this.explainItemResults[index].start,
-				end: this.explainItemResults[index].end,
-			} as Range,
-			isSelected: false,
-		} as ISelectExplainableAIResult);
-	}
-
-	/**
-	 * Check if the panel is open
-	 * @param index
-	 * @returns boolean
-	 */
-	isPanelOpen(index: number) {
-		return this.panelIndex.includes(index);
-	}
-
-	/**
-	 * Get the proportion class type
-	 * @param proportionType
-	 * @returns string
-	 */
-	getProportionClassType(proportionType: EProportionType) {
-		switch (proportionType) {
-			case EProportionType.Low:
-				return 'low-proportion';
-			case EProportionType.Medium:
-				return 'medium-proportion';
-			case EProportionType.High:
-				return 'high-proportion';
-		}
 	}
 
 	/**
@@ -487,8 +616,34 @@ export class ExplainableAIResultContainerComponent implements OnInit, OnChanges,
 		}
 	}
 
+	/**
+	 * Calculate the AI source match results statistics
+	 * @returns void
+	 */
+	private _calculateAiSourceMatchResultsStats() {
+		const aiSourceMatchResultsStats = helpers.calculateStatistics(
+			this._reportDataSvc.scanResultsPreviews,
+			this.aiSourceMatchResults?.map(amr => amr.resultDetails),
+			{
+				showIdentical: true,
+				showMinorChanges: true,
+				showRelated: true,
+			}
+		);
+
+		this.aiSourceMatchResultsScore = aiSourceMatchResultsStats.aggregatedScore;
+		this.aiSourceMatchResultsIndenticalScore = aiSourceMatchResultsStats.identical / aiSourceMatchResultsStats.total;
+		this.aiSourceMatchResultsMinorChangesScore =
+			aiSourceMatchResultsStats.minorChanges / aiSourceMatchResultsStats.total;
+		this.aiSourceMatchResultsParaphrasedScore =
+			aiSourceMatchResultsStats.relatedMeaning / aiSourceMatchResultsStats.total;
+		this.aiSourceMatchResultsTotal = this.aiSourceMatchResults?.length ?? 0;
+	}
+
 	ngOnDestroy(): void {
 		this.unsubscribe$.next();
 		this.unsubscribe$.complete();
+
+		this.reportMatchesSvc.showAIPhrases$.next(false);
 	}
 }

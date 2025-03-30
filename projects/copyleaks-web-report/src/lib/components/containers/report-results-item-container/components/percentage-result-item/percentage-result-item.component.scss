@@ -32,6 +32,16 @@
 			width: 100%;
 			position: relative;
 
+			.title,
+			.title-percentage {
+				color: $color-black;
+				font-size: 16px;
+				font-style: normal;
+				font-weight: 600;
+				line-height: normal;
+				white-space: nowrap;
+			}
+
 			.stacked-bar-container {
 				width: 100%;
 				display: flex;

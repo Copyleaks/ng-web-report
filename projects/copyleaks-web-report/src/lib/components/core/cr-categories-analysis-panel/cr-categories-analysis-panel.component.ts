@@ -1,4 +1,14 @@
-import { Component, EventEmitter, HostBinding, Input, OnChanges, OnInit, Output, SimpleChanges } from '@angular/core';
+import {
+	Component,
+	EventEmitter,
+	HostBinding,
+	Input,
+	OnChanges,
+	OnInit,
+	Output,
+	SimpleChanges,
+	TemplateRef,
+} from '@angular/core';
 import { getCorrectionCategoryTitle, getCorrectionTypeTitle, getResultsTypeTitle } from '../../../utils/enums-helpers';
 import {
 	EReportViewType,
@@ -42,6 +52,11 @@ export class CrCategoriesAnalysisTypePanelComponent implements OnInit, OnChanges
 	@Input() matchesStats: IMatchesTypeStatistics;
 
 	/**
+	 * The template for the custom AI source match upgrade.
+	 */
+	@Input() customAISourceMatchUpgradeTemplate: TemplateRef<any> | undefined = undefined;
+
+	/**
 	 * Event emitted when a category is selected.
 	 */
 	@Output() selectCategory = new EventEmitter<EWritingFeedbackCategories | IMatchesCategoryStatistics>();
@@ -78,7 +93,10 @@ export class CrCategoriesAnalysisTypePanelComponent implements OnInit, OnChanges
 			this.writingFeedbackStats.categories.sort((a, b) => b.totalIssues - a.totalIssues);
 		}
 		if (changes['matchesStats']) {
-			if (this.matchesStats?.totalResults === 0 || this.matchesStats?.categories?.length === 0)
+			if (
+				(this.matchesStats?.totalResults === 0 || this.matchesStats?.categories?.length === 0) &&
+				this.matchesStats.type !== EResultPreviewType.AISourceMatchUpgrade
+			)
 				this.displayProp = 'none';
 			else this.displayProp = 'flex';
 

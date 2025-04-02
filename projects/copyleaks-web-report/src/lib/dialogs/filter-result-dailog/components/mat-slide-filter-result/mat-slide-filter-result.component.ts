@@ -15,8 +15,19 @@ import { MatSlideToggleChange } from '@angular/material/slide-toggle';
 	],
 })
 export class MatSlideFilterResultComponent implements OnInit, ControlValueAccessor {
+	/**
+	 * @Input {string} The title text to display for the section or component
+	 */
 	@Input() title: string;
+
+	/**
+	 * @Input {number} The total number of items or results to display
+	 */
 	@Input() total: number;
+
+	/**
+	 * @Input {boolean} Flag indicating whether the component is disabled
+	 */
 	@Input() disabled: boolean = false;
 
 	value: boolean;

@@ -9,9 +9,24 @@ import { FilterResultDailogService } from '../../services/filter-result-dailog.s
 	styleUrls: ['./meta-filter-result.component.scss'],
 })
 export class MetaFilterResultComponent implements OnInit {
+	/**
+	 * @Input {number} Minimum word limit filter applied to the results
+	 */
 	@Input() minWordLimit: number;
+
+	/**
+	 * @Input {number} Maximum word limit filter applied to the results
+	 */
 	@Input() maxWordLimit: number;
+
+	/**
+	 * @Input {string[]} List of publication dates available for the results
+	 */
 	@Input() publicationDates: string[];
+
+	/**
+	 * @Input {number} Total number of results that do not have a publication date
+	 */
 	@Input() totalResultsWithoutDate: number;
 
 	eFilterResultForm = EFilterResultForm;

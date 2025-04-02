@@ -24,10 +24,29 @@ import { untilDestroy } from '../../../../utils/until-destroy';
 	styleUrls: ['./excluded-results-dailog.component.scss'],
 })
 export class ExcludedResultsDailogComponent implements OnInit, AfterViewInit {
+	/**
+	 * @Input {IResultItem[]} List of all result items to be displayed in the dialog
+	 */
 	@Input() allResultsItem: IResultItem[] = [];
+
+	/**
+	 * @Input {ReportDataService} Service for accessing and managing report data
+	 */
 	@Input() reportDataSvc: ReportDataService;
+
+	/**
+	 * @Input {ReportViewService} Service for controlling report view behavior and state
+	 */
 	@Input() reportViewSvc: ReportViewService;
+
+	/**
+	 * @Input {ReportMatchHighlightService} Service responsible for handling result text highlighting
+	 */
 	@Input() highlightService: ReportMatchHighlightService;
+
+	/**
+	 * @Output {EventEmitter<boolean>} Emits a boolean when the dialog is closed (true if confirmed, false if cancelled)
+	 */
 	@Output() closeDailogEvent = new EventEmitter<boolean>();
 
 	filteredList: IResultItem[];

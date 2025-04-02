@@ -42,18 +42,64 @@ import { RESULT_TAGS_CODES } from '../../../../../constants/report-result-tags.c
 export class ReportResultsItemComponent implements OnInit, OnChanges, OnDestroy {
 	@ViewChild(MatMenuTrigger) public resultItemMenuTrigger: MatMenuTrigger;
 
+	/**
+	 * @Input {IResultItem} The result item to be displayed in the component
+	 */
 	@Input() resultItem: IResultItem;
+
+	/**
+	 * @Input {boolean} Flag indicating whether to show a loading indicator
+	 */
 	@Input() showLoader: boolean = false;
+
+	/**
+	 * @Input {boolean} Flag indicating whether to display the body of the result item
+	 */
 	@Input() showItemBody: boolean = true;
+
+	/**
+	 * @Input {boolean} Flag indicating whether to exclude the result view from rendering
+	 */
 	@Input() excludeView: boolean = false;
+
+	/**
+	 * @Input {boolean} Flag indicating if the result is marked as excluded
+	 */
 	@Input() isResultExcluded: boolean = false;
+
+	/**
+	 * @Input {boolean} Flag indicating if the view is in mobile mode
+	 */
 	@Input() isMobile: boolean = false;
+
+	/**
+	 * @Input {ReportViewService} Service for managing report view state and interactions
+	 */
 	@Input() reportViewSvc: ReportViewService;
+
+	/**
+	 * @Input {ReportDataService} Service for accessing report-related data
+	 */
 	@Input() reportDataSvc: ReportDataService;
+
+	/**
+	 * @Input {ReportMatchHighlightService} Service for managing highlight logic in matched results
+	 */
 	@Input() highlightService: ReportMatchHighlightService;
+
+	/**
+	 * @Input {ReportNgTemplatesService} Service for retrieving custom Angular templates for report rendering
+	 */
 	@Input() reportNgTemplatesSvc: ReportNgTemplatesService;
 
+	/**
+	 * @Output {EventEmitter<string>} Emits when a result is hidden, sending the result ID
+	 */
 	@Output() hiddenResultEvent = new EventEmitter<string>();
+
+	/**
+	 * @Output {EventEmitter<string>} Emits when a hidden result is shown again, sending the result ID
+	 */
 	@Output() showResultEvent = new EventEmitter<string>();
 
 	percentageResult: IPercentageResult;

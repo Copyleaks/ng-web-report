@@ -13,10 +13,29 @@ import { EReportScoreTooltipPosition } from '../../../../../enums/copyleaks-web-
 	styleUrls: ['./percentage-result-item.component.scss'],
 })
 export class PercentageResultItemComponent implements OnInit, OnChanges {
+	/**
+	 * @Input {IPercentageResult} The percentage result data to be displayed
+	 */
 	@Input() percentageResult: IPercentageResult;
+
+	/**
+	 * @Input {ReportDataService} Service for accessing report-related data
+	 */
 	@Input() reportDataSvc: ReportDataService;
+
+	/**
+	 * @Input {ReportViewService} Service for managing report view state and logic
+	 */
 	@Input() reportViewService: ReportViewService;
+
+	/**
+	 * @Input {boolean} Flag indicating whether this result should be excluded
+	 */
 	@Input() excludeResult: boolean = false;
+
+	/**
+	 * @Input {EReportScoreTooltipPosition} Position of the tooltip relative to the report score
+	 */
 	@Input() crReportScoreTooltipPosition: EReportScoreTooltipPosition = EReportScoreTooltipPosition.ABOVE;
 
 	showPlagiarismPercentages: boolean = false;

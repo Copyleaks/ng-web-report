@@ -42,6 +42,11 @@ import { ReportStatistics } from '../../../../../models/report-statistics.models
 	styleUrls: ['./explainable-ai-result-container.component.scss'],
 })
 export class ExplainableAIResultContainerComponent implements OnInit, OnChanges, AfterViewInit, OnDestroy {
+	@ViewChild('aiPhrasesMobileViewScrollContainer') aiPhrasesMobileViewScrollContainer!: ElementRef;
+	@ViewChild('aiDefaultMobileViewScrollContainer') aiDefaultMobileViewScrollContainer!: ElementRef<HTMLDivElement>;
+	@ViewChildren(MatExpansionPanel) panels: QueryList<MatExpansionPanel>;
+	@ViewChild('desktopScroll') desktopScroll!: ElementRef;
+
 	/**
 	 * @Input {ExplainableAIResults} The explainable AI results
 	 */
@@ -111,13 +116,6 @@ export class ExplainableAIResultContainerComponent implements OnInit, OnChanges,
 	 * @Output {void} Event emitted when the user navigates to the  AI Insights phrases
 	 */
 	@Output() onNavigateToDefault = new EventEmitter<void>();
-
-	@ViewChild('aiPhrasesMobileViewScrollContainer') aiPhrasesMobileViewScrollContainer!: ElementRef;
-	@ViewChild('aiDefaultMobileViewScrollContainer') aiDefaultMobileViewScrollContainer!: ElementRef<HTMLDivElement>;
-
-	@ViewChildren(MatExpansionPanel) panels: QueryList<MatExpansionPanel>;
-
-	@ViewChild('desktopScroll') desktopScroll!: ElementRef;
 
 	explainResults: AIExplainResultItem[] = [];
 	explainItemResults: AIExplainResultItem[] = [];

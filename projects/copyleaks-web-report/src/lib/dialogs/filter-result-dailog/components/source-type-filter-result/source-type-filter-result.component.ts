@@ -14,6 +14,9 @@ import { ReportDataService } from '../../../../services/report-data.service';
 	styleUrls: ['./source-type-filter-result.component.scss'],
 })
 export class SourceTypeFilterResultComponent implements OnInit, OnDestroy {
+	/**
+	 * @Input {ITotalSourceType} Total counts of different source types in the report
+	 */
 	@Input() totalSourceType: ITotalSourceType = {
 		totalInternet: 0,
 		totalInternalDatabase: 0,
@@ -23,7 +26,14 @@ export class SourceTypeFilterResultComponent implements OnInit, OnDestroy {
 		totalAISourceMatch: 0,
 	};
 
+	/**
+	 * @Input {ReportViewService} Service for managing the report view state and interactions
+	 */
 	@Input() reportViewSvc: ReportViewService;
+
+	/**
+	 * @Input {ReportDataService} Service for accessing and managing report data
+	 */
 	@Input() reportDataSvc: ReportDataService;
 
 	eFilterResultForm = EFilterResultForm;

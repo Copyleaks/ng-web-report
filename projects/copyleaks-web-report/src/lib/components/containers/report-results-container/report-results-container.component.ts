@@ -45,30 +45,67 @@ export class ReportResultsContainerComponent implements OnInit, OnChanges {
 	@HostBinding('style.flex-grow')
 	flexGrowProp: number;
 
-	/**
-	 * @Input {number} Flex grow property - flex-grow
-	 */
-	@Input() flexGrow: number;
-	@Input() reportResponsive: EResponsiveLayoutType;
-	@Input() allResults: IResultItem[] = [];
-	@Input() newResults: IResultItem[];
-	@Input() resultsActions: IResultsActions;
-	@Input() isMobile: boolean;
-	@Input() hideAiTap: boolean;
-	@Input() filterOptions: ICopyleaksReportOptions;
-	@Input() customResultsTemplate: TemplateRef<any> | undefined = undefined;
-	@Input() reportViewMode: ECustomResultsReportView;
-	/**
-	 * @Input {boolean} Flag indicating whether to show the loading view or not.
-	 */
-	@Input() showLoadingView = false;
-
-	showResultsSection: boolean = true;
-
 	@ViewChild('resultsContainer', { read: ElementRef }) public resultsContainer: ElementRef;
 	@ViewChild('resultitem', { read: ElementRef }) public resultitem: ElementRef;
 	@ViewChild('customEmptyResultView', { read: ElementRef }) public customEmptyResultView: ElementRef;
 	@ViewChild(CdkVirtualScrollViewport, { static: false }) viewport: CdkVirtualScrollViewport;
+
+	/**
+	 * @Input {number} Flex grow property - flex-grow
+	 */
+	@Input() flexGrow: number;
+
+	/**
+	 * @Input {EResponsiveLayoutType} Responsive layout type for the report
+	 */
+	@Input() reportResponsive: EResponsiveLayoutType;
+
+	/**
+	 * @Input {IResultItem[]} All result items to be displayed
+	 */
+	@Input() allResults: IResultItem[] = [];
+
+	/**
+	 * @Input {IResultItem[]} New result items to be displayed
+	 */
+	@Input() newResults: IResultItem[];
+
+	/**
+	 * @Input {IResultsActions} Set of available result actions (e.g., click handlers)
+	 */
+	@Input() resultsActions: IResultsActions;
+
+	/**
+	 * @Input {boolean} Flag indicating whether the view is in mobile mode
+	 */
+	@Input() isMobile: boolean;
+
+	/**
+	 * @Input {boolean} Flag indicating whether to hide the AI tab
+	 */
+	@Input() hideAiTap: boolean;
+
+	/**
+	 * @Input {ICopyleaksReportOptions} Filter options applied to the report
+	 */
+	@Input() filterOptions: ICopyleaksReportOptions;
+
+	/**
+	 * @Input {TemplateRef<any> | undefined} Custom template used for rendering results
+	 */
+	@Input() customResultsTemplate: TemplateRef<any> | undefined = undefined;
+
+	/**
+	 * @Input {ECustomResultsReportView} Current view mode for the report
+	 */
+	@Input() reportViewMode: ECustomResultsReportView;
+
+	/**
+	 * @Input {boolean} Flag indicating whether to show the loading view or not
+	 */
+	@Input() showLoadingView = false;
+
+	showResultsSection: boolean = true;
 
 	displayedResults: IResultItem[];
 	lastItemLoading: boolean = false;

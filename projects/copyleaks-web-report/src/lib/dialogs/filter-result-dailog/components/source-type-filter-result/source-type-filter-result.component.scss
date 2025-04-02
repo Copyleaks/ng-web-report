@@ -26,6 +26,14 @@
 				.internal-database-icon {
 					width: 14px;
 				}
+
+				&.ai-source-match-filter-slide {
+					border: none !important;
+					svg {
+						width: 25px !important;
+						height: 25px !important;
+					}
+				}
 			}
 		}
 		.repository-container {

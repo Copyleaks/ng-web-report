@@ -38,6 +38,23 @@
 		}
 	}
 
+	cr-button {
+		::ng-deep {
+			mat-icon,
+			.cls-button-text {
+				color: $color-dark-blue !important;
+			}
+		}
+
+		&[dir='rtl'] {
+			::ng-deep {
+				mat-icon {
+					transform: scale(-1, -1);
+				}
+			}
+		}
+	}
+
 	.ai-bar-container {
 		display: flex;
 		flex-direction: column;
@@ -58,6 +75,7 @@
 			align-items: center;
 			gap: 8px;
 			align-self: stretch;
+			direction: ltr;
 			.ai-source-match-score {
 				color: $color-black;
 				text-align: center;
@@ -165,6 +183,75 @@
 			.mat-flat-button {
 				line-height: normal !important;
 			}
+		}
+	}
+
+	.title-loading-container {
+		display: flex;
+		align-items: center;
+		gap: 8px;
+		align-self: stretch;
+		.part-1,
+		.part-2,
+		.part-3 {
+			display: flex;
+			padding: 4px 2px;
+			align-items: center;
+			gap: 4px;
+		}
+
+		.part-1 {
+			width: 30%;
+		}
+		.part-2 {
+			width: 30%;
+		}
+		.part-3 {
+			width: 40%;
+		}
+	}
+
+	.bar-loading-container {
+		display: flex;
+		align-items: center;
+		gap: 8px;
+		align-self: stretch;
+	}
+
+	.skeleton {
+		width: fit-content;
+		display: flex;
+		height: fit-content !important;
+		::ng-deep {
+			.loader {
+				height: 18px !important;
+				margin-bottom: 0px !important;
+				border-radius: 10px !important;
+				opacity: 0.2;
+				background-color: $color-medium-dark;
+			}
+		}
+	}
+
+	.skeleton.circle {
+		::ng-deep .loader {
+			width: 24px !important;
+			height: 24px !important;
+			margin: 0px !important;
+			border-radius: 50% !important;
+		}
+	}
+
+	.skeleton.circle.small {
+		::ng-deep .loader {
+			width: 18px !important;
+			height: 18px !important;
+		}
+	}
+
+	.skeleton.bar {
+		::ng-deep .loader {
+			height: 8px !important;
 		}
 	}
 }

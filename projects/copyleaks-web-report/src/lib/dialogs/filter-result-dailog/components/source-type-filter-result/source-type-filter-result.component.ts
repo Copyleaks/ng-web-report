@@ -6,6 +6,7 @@ import { EFilterResultForm } from '../../models/filter-result-dailog.enum';
 import { ReportViewService } from '../../../../services/report-view.service';
 import { EPlatformType } from '../../../../enums/copyleaks-web-report.enums';
 import { untilDestroy } from '../../../../utils/until-destroy';
+import { ReportDataService } from '../../../../services/report-data.service';
 
 @Component({
 	selector: 'cr-source-type-filter-result',
@@ -19,9 +20,11 @@ export class SourceTypeFilterResultComponent implements OnInit, OnDestroy {
 		totalbatch: 0,
 		totalOthersFiles: 0,
 		totalYourFiles: 0,
+		totalAISourceMatch: 0,
 	};
 
 	@Input() reportViewSvc: ReportViewService;
+	@Input() reportDataSvc: ReportDataService;
 
 	eFilterResultForm = EFilterResultForm;
 	ePlatformType = EPlatformType;

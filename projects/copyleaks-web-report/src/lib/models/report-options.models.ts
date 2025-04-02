@@ -22,6 +22,8 @@ export interface ICopyleaksReportOptions {
 	/** */
 	hiddenRepositories?: string[];
 	/** */
+	showAISourceMatch?: boolean;
+	/** */
 	wordLimit?: number;
 	/** */
 	publicationDate?: Date;

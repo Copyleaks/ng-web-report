@@ -193,18 +193,26 @@ export class ReportExpandResultItemComponent implements OnInit, OnChanges {
 				tag => tag.title && tag.title.trim() !== ''
 			);
 
-		// Check if there is a tag in the tags list with the code 'suspected-ai-generated' and put it in the first place
+		// Check if there is a tag in the tags list with the code 'ai-source-match' and put it in the first place
 		const aiSourceMatchTag = this.resultItem?.resultPreview?.tags?.find(
-			tag => tag.code === RESULT_TAGS_CODES.SUSPECTED_AI_GENERATED
+			tag => tag.code === RESULT_TAGS_CODES.AI_SOURCE_MATCH
 		);
-		if (aiSourceMatchTag) {
-			this.isAiSourceResult = true;
-			if (aiSourceMatchTag.title != 'AI Source Match') aiSourceMatchTag.title = 'AI Source Match';
-			this.resultItem.resultPreview.tags = [
-				aiSourceMatchTag,
-				...this.resultItem.resultPreview.tags.filter(tag => tag.code !== RESULT_TAGS_CODES.SUSPECTED_AI_GENERATED),
-			];
-		} else this.isAiSourceResult = false;
+		if (this.reportViewSvc.reportViewMode.platformType === EPlatformType.APP) {
+			if (aiSourceMatchTag) {
+				this.isAiSourceResult = true;
+				if (aiSourceMatchTag.title != 'AI Source Match') aiSourceMatchTag.title = 'AI Source Match';
+				this.resultItem.resultPreview.tags = [
+					aiSourceMatchTag,
+					...this.resultItem.resultPreview.tags.filter(tag => tag.code !== RESULT_TAGS_CODES.AI_SOURCE_MATCH),
+				];
+			} else this.isAiSourceResult = false;
+		} else {
+			// remove the ai-source-match tag from the tags list if the platform is not APP
+			this.resultItem.resultPreview.tags = this.resultItem.resultPreview.tags.filter(
+				tag => tag.code !== RESULT_TAGS_CODES.AI_SOURCE_MATCH
+			);
+			this.isAiSourceResult = false;
+		}
 	}
 
 	clickBack() {

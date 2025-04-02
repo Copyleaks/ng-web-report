@@ -125,9 +125,9 @@ export class ReportResultsItemComponent implements OnInit, OnChanges, OnDestroy 
 	get firstTag() {
 		if (!this.resultItem?.resultPreview?.tags || this.resultItem?.resultPreview?.tags.length === 0) return null;
 
-		// Check if there is a tag in the tags list with the code 'suspected-ai-generated' and return the first tag that is not the 'suspected-ai-generated' tag
+		// Check if there is a tag in the tags list with the code 'ai-source-match' and return the first tag that is not the 'ai-source-match' tag
 		const aiSourceMatchTag = this.resultItem?.resultPreview?.tags.find(
-			tag => tag.code === RESULT_TAGS_CODES.SUSPECTED_AI_GENERATED
+			tag => tag.code === RESULT_TAGS_CODES.AI_SOURCE_MATCH
 		);
 		if (aiSourceMatchTag) return aiSourceMatchTag;
 
@@ -260,16 +260,21 @@ export class ReportResultsItemComponent implements OnInit, OnChanges, OnDestroy 
 		if (this.previewResult?.tags)
 			this.previewResult.tags = this.previewResult.tags.filter(tag => tag.title && tag.title.trim() !== '');
 
-		// Check if there is a tag in the tags list with the code 'suspected-ai-generated' and put it in the first place
-		const aiSourceMatchTag = this.previewResult?.tags?.find(
-			tag => tag.code === RESULT_TAGS_CODES.SUSPECTED_AI_GENERATED
-		);
-		if (aiSourceMatchTag) {
-			if (aiSourceMatchTag.title != 'AI Source Match') aiSourceMatchTag.title = 'AI Source Match';
-			this.previewResult.tags = [
-				aiSourceMatchTag,
-				...this.previewResult.tags.filter(tag => tag.code !== RESULT_TAGS_CODES.SUSPECTED_AI_GENERATED),
-			];
+		// Check if there is a tag in the tags list with the code 'ai-source-match' and put it in the first place
+		const aiSourceMatchTag = this.previewResult?.tags?.find(tag => tag.code === RESULT_TAGS_CODES.AI_SOURCE_MATCH);
+		if (this.reportViewSvc.reportViewMode.platformType === EPlatformType.APP) {
+			if (aiSourceMatchTag) {
+				if (aiSourceMatchTag.title != 'AI Source Match') aiSourceMatchTag.title = 'AI Source Match';
+				this.previewResult.tags = [
+					aiSourceMatchTag,
+					...this.previewResult.tags.filter(tag => tag.code !== RESULT_TAGS_CODES.AI_SOURCE_MATCH),
+				];
+			}
+		} else {
+			// remove the ai-source-match tag from the tags list if the platform is not APP
+			this.previewResult.tags = this.resultItem.resultPreview.tags.filter(
+				tag => tag.code !== RESULT_TAGS_CODES.AI_SOURCE_MATCH
+			);
 		}
 	}
 

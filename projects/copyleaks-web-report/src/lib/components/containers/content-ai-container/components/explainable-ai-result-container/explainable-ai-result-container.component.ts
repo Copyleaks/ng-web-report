@@ -34,6 +34,7 @@ import { IResultItem } from '../../../report-results-item-container/components/m
 import * as helpers from '../../../../../utils/report-statistics-helpers';
 import { ReportDataService } from '../../../../../services/report-data.service';
 import { EPlatformType } from '../../../../../enums/copyleaks-web-report.enums';
+import { ReportStatistics } from '../../../../../models/report-statistics.models';
 
 @Component({
 	selector: 'copyleaks-explainable-ai-result-container',
@@ -148,6 +149,7 @@ export class ExplainableAIResultContainerComponent implements OnInit, OnChanges,
 	isProgrammaticChange: boolean;
 	docDirection: 'ltr' | 'rtl';
 
+	aiSourceMatchResultsStats: ReportStatistics;
 	aiSourceMatchResultsScore: number = 0;
 	aiSourceMatchResultsIndenticalScore: number = 0;
 	aiSourceMatchResultsMinorChangesScore: number = 0;
@@ -403,6 +405,10 @@ export class ExplainableAIResultContainerComponent implements OnInit, OnChanges,
 		this.reportMatchesSvc.showAIPhrases$.next(true);
 		this.showAIPhrases = true;
 		this.navigateMobileButton = EnumNavigateMobileButton.FirstButton;
+		this.reportViewSvc.reportViewMode$.next({
+			...this.reportViewSvc.reportViewMode,
+			showAIPhrases: true,
+		});
 
 		this.onNavigateToPhrases.emit();
 	}
@@ -419,6 +425,7 @@ export class ExplainableAIResultContainerComponent implements OnInit, OnChanges,
 			alertCode: null,
 			selectedResultsCategory: this.isMobile ? null : encodeURI($localize`AI Source Match`),
 			navigateBackToAIView: !this.isMobile,
+			showAIPhrases: false,
 		});
 		this.reportViewSvc.selectedAlert$.next(null);
 
@@ -434,6 +441,10 @@ export class ExplainableAIResultContainerComponent implements OnInit, OnChanges,
 		this.reportMatchesSvc.showAIPhrases$.next(false);
 		this.showAIPhrases = false;
 		this.navigateMobileButton = EnumNavigateMobileButton.FirstButton;
+		this.reportViewSvc.reportViewMode$.next({
+			...this.reportViewSvc.reportViewMode,
+			showAIPhrases: false,
+		});
 
 		this.onNavigateToDefault.emit();
 	}
@@ -621,7 +632,7 @@ export class ExplainableAIResultContainerComponent implements OnInit, OnChanges,
 	 * @returns void
 	 */
 	private _calculateAiSourceMatchResultsStats() {
-		const aiSourceMatchResultsStats = helpers.calculateStatistics(
+		this.aiSourceMatchResultsStats = helpers.calculateStatistics(
 			this._reportDataSvc.scanResultsPreviews,
 			this.aiSourceMatchResults?.map(amr => amr.resultDetails),
 			{
@@ -631,12 +642,13 @@ export class ExplainableAIResultContainerComponent implements OnInit, OnChanges,
 			}
 		);
 
-		this.aiSourceMatchResultsScore = aiSourceMatchResultsStats.aggregatedScore;
-		this.aiSourceMatchResultsIndenticalScore = aiSourceMatchResultsStats.identical / aiSourceMatchResultsStats.total;
+		this.aiSourceMatchResultsScore = this.aiSourceMatchResultsStats.aggregatedScore;
+		this.aiSourceMatchResultsIndenticalScore =
+			this.aiSourceMatchResultsStats.identical / this.aiSourceMatchResultsStats.total;
 		this.aiSourceMatchResultsMinorChangesScore =
-			aiSourceMatchResultsStats.minorChanges / aiSourceMatchResultsStats.total;
+			this.aiSourceMatchResultsStats.minorChanges / this.aiSourceMatchResultsStats.total;
 		this.aiSourceMatchResultsParaphrasedScore =
-			aiSourceMatchResultsStats.relatedMeaning / aiSourceMatchResultsStats.total;
+			this.aiSourceMatchResultsStats.relatedMeaning / this.aiSourceMatchResultsStats.total;
 		this.aiSourceMatchResultsTotal = this.aiSourceMatchResults?.length ?? 0;
 	}
 
@@ -645,5 +657,9 @@ export class ExplainableAIResultContainerComponent implements OnInit, OnChanges,
 		this.unsubscribe$.complete();
 
 		this.reportMatchesSvc.showAIPhrases$.next(false);
+		this.reportViewSvc.reportViewMode$.next({
+			...this.reportViewSvc.reportViewMode,
+			showAIPhrases: false,
+		});
 	}
 }

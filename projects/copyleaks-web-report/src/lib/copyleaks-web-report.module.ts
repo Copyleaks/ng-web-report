@@ -185,7 +185,7 @@ import { CrAiPhrasesMobileHeaderComponent } from './components/core/cr-ai-phrase
 		CrAiSourceMatchEntryComponent,
 		CrAiPhrasesEntryComponent,
 		CrAiSourceMatchUpgradeComponent,
-  CrAiPhrasesMobileHeaderComponent,
+		CrAiPhrasesMobileHeaderComponent,
 	],
 	imports: [
 		CommonModule,

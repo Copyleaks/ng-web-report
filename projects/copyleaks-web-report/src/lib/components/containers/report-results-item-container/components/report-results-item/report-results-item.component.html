@@ -23,9 +23,8 @@
 						fxLayout="column"
 						fxLayoutAlign="center center"
 						class="item-logo"
-						[class.ai-source-match-icon]="firstTag?.code === RESULT_TAGS_CODES.SUSPECTED_AI_GENERATED">
-						<ng-container
-							*ngIf="firstTag?.code !== RESULT_TAGS_CODES.SUSPECTED_AI_GENERATED; else AISourceMatchResultRef">
+						[class.ai-source-match-icon]="firstTag?.code === RESULT_TAGS_CODES.AI_SOURCE_MATCH">
+						<ng-container *ngIf="firstTag?.code !== RESULT_TAGS_CODES.AI_SOURCE_MATCH; else AISourceMatchResultRef">
 							<ng-container [ngSwitch]="previewResult.type">
 								<ng-container *ngSwitchCase="eResultPreviewType.Batch">
 									<mat-icon>compare_arrows</mat-icon>
@@ -166,7 +165,7 @@
 									class="chips-container"
 									[class.non-empty-container]="numberOfTags > 0"
 									aria-label="This is a list of tags the are associated with the given results"
-									[class.suspected-ai-generated-container]="firstTag?.code === RESULT_TAGS_CODES.SUSPECTED_AI_GENERATED"
+									[class.suspected-ai-generated-container]="firstTag?.code === RESULT_TAGS_CODES.AI_SOURCE_MATCH"
 									i18n-aria-label
 									role="list">
 									<mat-chip

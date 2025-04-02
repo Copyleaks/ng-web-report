@@ -161,7 +161,11 @@
 					</ng-container>
 
 					<ng-template #aiSourceMatchUpgradeRef>
-						<ng-container *ngTemplateOutlet="customAISourceMatchUpgradeTemplate ?? null"></ng-container>
+						<ng-container *ngIf="reportViewSvc.reportViewMode.platformType === EPlatformType.APP">
+							<div class="actions-container" #actionsContainer>
+								<ng-container *ngTemplateOutlet="customAISourceMatchUpgradeTemplate ?? null"></ng-container>
+							</div>
+						</ng-container>
 					</ng-template>
 				</ng-container>
 

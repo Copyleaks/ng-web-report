@@ -32,8 +32,8 @@
 				border: 2px solid;
 				border-radius: 50%;
 				border-color: $color-primary;
-				min-width: 34px;
-				min-height: 34px;
+				min-width: 40px;
+				min-height: 40px;
 				line-height: normal !important;
 				mat-icon {
 					color: $color-primary;
@@ -42,14 +42,22 @@
 				&.ai-source-match-icon {
 					border: none !important;
 					svg {
-						height: 34px;
-						width: 34px;
+						height: 40px;
+						width: 40px;
 					}
 				}
 			}
+			.repo-img {
+				width: 16px;
+				height: 25px;
+			}
+			.internal-database-img {
+				width: 20.998px;
+				height: 27px;
+			}
 			.result-title-container {
 				flex-grow: 1;
-				width: calc(100% - 42px);
+				width: calc(100% - 48px);
 				.exclude-button {
 					cursor: pointer;
 					background-color: $color-white;
@@ -70,12 +78,14 @@
 					color: $color-black;
 					display: -webkit-box;
 					-webkit-box-orient: vertical;
-					-webkit-line-clamp: 2; /* Number of lines to show */
+					-webkit-line-clamp: 2;
 					overflow: hidden;
 					text-overflow: ellipsis;
-					line-height: 1.5em; /* Height of one line */
-					max-height: 3em; /* line-height multiplied by number of lines to show */
+					line-height: 1.5em;
+					max-height: 3em;
 					white-space: normal;
+					overflow-wrap: break-word;
+					word-break: break-word;
 				}
 				.result-source {
 					font-size: 14px;
@@ -177,7 +187,7 @@
 					background: rgba(43, 149, 255, 0.2) !important;
 					color: #2b95ff !important;
 
-					&.suspected-ai-generated {
+					&.ai-source-match {
 						background: $color-light-ai-detected-text !important;
 						color: $color-ai-tab !important;
 						font-weight: 800 !important;
@@ -393,7 +403,7 @@
 }
 
 .internet-result-favicon {
-	width: 18px;
+	width: 20px !important;
 }
 
 .cdk-keyboard-focused {

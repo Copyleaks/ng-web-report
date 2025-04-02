@@ -34,6 +34,7 @@ import { ReportViewService } from './report-view.service';
 import { ReportStatistics } from '../models/report-statistics.models';
 import { retryWithDelay } from '../utils/retry-with-delay';
 import { ERROR_MESSAGES } from '../constants/report-scan-errors.constants';
+import { RESULT_TAGS_CODES } from '../constants/report-result-tags.constants';
 
 @Injectable()
 export class ReportDataService {
@@ -411,6 +412,7 @@ export class ReportDataService {
 							othersResults: options?.showOthersResults ?? true,
 							internet: options?.showInternetResults ?? true,
 							repositories: options?.hiddenRepositories ?? [],
+							aiSourceMatch: options?.showAISourceMatch ?? true,
 						},
 						execludedResultIds: excludedResultsIds ?? [],
 						filteredResultIds: filteredOutResultsIds ?? [],
@@ -1266,6 +1268,7 @@ export class ReportDataService {
 					repositories: this.filterOptions?.hiddenRepositories ?? [],
 					yourResults: this.filterOptions?.showYourResults ?? true,
 					othersResults: this.filterOptions?.showOthersResults ?? true,
+					aiSourceMatch: this.filterOptions?.showAISourceMatch ?? false,
 				},
 				execludedResultIds: this.excludedResultsIds ?? [],
 				filteredResultIds: [],
@@ -1441,6 +1444,11 @@ export class ReportDataService {
 				)
 			);
 		}
+
+		if (settings.showAISourceMatch !== undefined && settings.showAISourceMatch === false)
+			filteredResultsIds = filteredResultsIds.filter(id =>
+				completeResults.find(cr => cr.id === id && !cr.tags?.find(t => t.code === RESULT_TAGS_CODES.AI_SOURCE_MATCH))
+			);
 
 		if (!!settings.wordLimit)
 			filteredResultsIds = filteredResultsIds.filter(id =>

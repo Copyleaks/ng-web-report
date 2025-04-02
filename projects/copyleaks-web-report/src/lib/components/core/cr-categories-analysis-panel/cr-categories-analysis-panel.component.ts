@@ -1,5 +1,6 @@
 import {
 	Component,
+	ElementRef,
 	EventEmitter,
 	HostBinding,
 	Input,
@@ -8,9 +9,11 @@ import {
 	Output,
 	SimpleChanges,
 	TemplateRef,
+	ViewChild,
 } from '@angular/core';
 import { getCorrectionCategoryTitle, getCorrectionTypeTitle, getResultsTypeTitle } from '../../../utils/enums-helpers';
 import {
+	EPlatformType,
 	EReportViewType,
 	EResultPreviewType,
 	EWritingFeedbackCategories,
@@ -21,6 +24,7 @@ import {
 	IMatchesTypeStatistics,
 	IWritingFeedbackTypeStatistics,
 } from '../../../models/report-statistics.models';
+import { ReportViewService } from '../../../services/report-view.service';
 
 @Component({
 	selector: 'cr-categories-analysis-panel',
@@ -30,6 +34,8 @@ import {
 export class CrCategoriesAnalysisTypePanelComponent implements OnInit, OnChanges {
 	@HostBinding('style.display')
 	displayProp: string;
+
+	@ViewChild('actionsContainer', { static: false }) actionsContainer: ElementRef;
 
 	/**
 	 * Flag indicating whether the view is a mobile or not.
@@ -70,11 +76,14 @@ export class CrCategoriesAnalysisTypePanelComponent implements OnInit, OnChanges
 
 	EReportViewType = EReportViewType;
 	EResultPreviewType = EResultPreviewType;
+	EPlatformType = EPlatformType;
 
 	EXPAND_TOOLTIP = $localize`Expand`;
 	COLLAPSE_TOOLTIP = $localize`Collapse`;
 
-	constructor() {}
+	private mutationObserver!: MutationObserver;
+
+	constructor(public reportViewSvc: ReportViewService) {}
 
 	/**
 	 * Lifecycle hook that is called when any data-bound property of the component changes.
@@ -103,9 +112,30 @@ export class CrCategoriesAnalysisTypePanelComponent implements OnInit, OnChanges
 			// sort the matchesStats categories by the number of issues
 			this.matchesStats.categories.sort((a, b) => b.totalResults - a.totalResults);
 		}
+
+		if (changes['customAISourceMatchUpgradeTemplate'] && this.customAISourceMatchUpgradeTemplate) {
+			this.refreshDisplayState();
+		}
 	}
 
 	ngOnInit(): void {}
+
+	ngAfterViewInit(): void {
+		if (this.actionsContainer) {
+			this.mutationObserver = new MutationObserver(mutations => {
+				for (const mutation of mutations) {
+					if (mutation.type === 'childList') {
+						if (this.customAISourceMatchUpgradeTemplate) this.refreshDisplayState();
+					}
+				}
+			});
+
+			this.mutationObserver.observe(this.actionsContainer.nativeElement, {
+				childList: true,
+				subtree: true,
+			});
+		}
+	}
 
 	/**
 	 * Gets the title for the correction category.
@@ -149,5 +179,17 @@ export class CrCategoriesAnalysisTypePanelComponent implements OnInit, OnChanges
 	}
 	expandAccordion() {
 		this.expanded = true;
+	}
+
+	get isCustomTemplateNotEmpty() {
+		const containerDiv = this.actionsContainer?.nativeElement;
+		return containerDiv?.children?.length > 0;
+	}
+
+	refreshDisplayState() {
+		setTimeout(() => {
+			if (this.isCustomTemplateNotEmpty) this.displayProp = 'flex';
+			else this.displayProp = 'none';
+		});
 	}
 }

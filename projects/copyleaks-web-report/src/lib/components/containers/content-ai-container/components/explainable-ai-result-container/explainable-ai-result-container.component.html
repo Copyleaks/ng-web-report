@@ -5,8 +5,8 @@
 	fxLayout="column"
 	[class.default-view]="!showAIPhrases"
 	[dir]="docDirection">
-	<ng-container *ngIf="!isLoading; else loadingState">
-		<ng-container *ngIf="showAIPhrases; else defaultView">
+	<ng-container *ngIf="showAIPhrases; else defaultView">
+		<ng-container *ngIf="!isLoading; else loadingState">
 			<div *ngIf="!isMobile" class="top-header-container">
 				<div
 					class="header-container"
@@ -18,6 +18,7 @@
 						<cr-button
 							[isLink]="true"
 							[outlined]="true"
+							[dir]="reportViewSvc.documentDirection"
 							padding="4px"
 							icon="arrow_back_ios"
 							fontSize="14px"
@@ -71,10 +72,7 @@
 								tabindex="0"
 								crAIScoreTooltipContent
 								[isTooltipBar]="true"
-								[tooltipText]="barTooltipText"
-								fxLayout="row"
-								fxLayoutAlign="start center"
-								fxLayoutGap="16px">
+								[tooltipText]="barTooltipText">
 								<span class="min-proportion">{{ minProportion.toLocaleString() }}x</span>
 								<div class="grade-bar" fxLayout="row">
 									<div class="min-result" [style.width]="minGradeBar + '%'"></div>
@@ -98,7 +96,6 @@
 					fxLayoutAlign="start center"
 					fxLayoutGap="16px">
 					<div class="ratio-contanier" fxLayout="row" fxLayoutAlign="start center" fxLayoutGap="2px">
-						<span i18n>Ratio</span>
 						<mat-icon
 							class="info-icon"
 							fontSet="material-icons-outlined"
@@ -109,6 +106,7 @@
 							matTooltipClass="web-report-mat-tooltip tooltip-contanier">
 							info
 						</mat-icon>
+						<span i18n>Ratio</span>
 					</div>
 					<span class="phrase" i18n>Phrase</span>
 
@@ -233,228 +231,386 @@
 				</mat-chip>
 			</div>
 		</ng-container>
-		<ng-template #defaultView>
-			<ng-container *ngIf="!isMobile; else deafultMobileView">
-				<cr-ai-logic-banner></cr-ai-logic-banner>
+		<ng-template #loadingState>
+			<div class="loading-container" fxLayout="column">
+				<ng-container *ngIf="!isMobile; else mobileLoading">
+					<div
+						class="phrases-title-loading-container"
+						style="
+							display: flex;
+							padding: 16px 14px 16px 14px;
+							flex-direction: column;
+							align-items: flex-start;
+							gap: 12px;
+							align-self: stretch;
+						">
+						<div style="display: flex; align-items: center; align-self: stretch; flex-wrap: wrap">
+							<div class="part" style="width: 50px">
+								<ngx-skeleton-loader class="skeleton circle" [appearance]="'line'"></ngx-skeleton-loader>
+								<ngx-skeleton-loader
+									class="skeleton search-input-loader"
+									[appearance]="'line'"
+									style="flex-grow: 1"></ngx-skeleton-loader>
+							</div>
+							<div class="part" style="width: 90px">
+								<ngx-skeleton-loader class="skeleton circle" [appearance]="'line'"></ngx-skeleton-loader>
+								<ngx-skeleton-loader
+									class="skeleton search-input-loader"
+									[appearance]="'line'"
+									style="flex-grow: 1"></ngx-skeleton-loader>
+							</div>
 
-				<ng-container *ngIf="!hidePlagarismTap">
-					<cr-ai-source-match-entry
-						[aiSourceMatchResultsIndenticalScore]="aiSourceMatchResultsIndenticalScore"
-						[aiSourceMatchResultsMinorChangesScore]="aiSourceMatchResultsMinorChangesScore"
-						[aiSourceMatchResultsParaphrasedScore]="aiSourceMatchResultsParaphrasedScore"
-						[aiSourceMatchResultsScore]="aiSourceMatchResultsScore"
-						[aiSourceMatchResultsTotal]="aiSourceMatchResultsTotal"
-						(onNavigateToResults)="onNavigateToResultsClick()"></cr-ai-source-match-entry>
-				</ng-container>
+							<div class="part" style="width: 90px">
+								<ngx-skeleton-loader class="skeleton circle" [appearance]="'line'"></ngx-skeleton-loader>
+								<ngx-skeleton-loader
+									class="skeleton search-input-loader"
+									[appearance]="'line'"
+									style="flex-grow: 1"></ngx-skeleton-loader>
+							</div>
+						</div>
 
-				<ng-container *ngIf="hidePlagarismTap && reportViewSvc?.reportViewMode?.platformType === EPlatformType.APP">
-					<ng-container *ngTemplateOutlet="customAISourceMatchUpgradeTemplate ?? null"></ng-container>
-				</ng-container>
-
-				<cr-ai-phrases-entry
-					[aiPercentageResult]="aiPercentageResult"
-					[maxProportion]="maxProportion"
-					[minProportion]="minProportion"
-					[barTooltipText]="barTooltipText"
-					[maxGradeBar]="maxGradeBar"
-					[midGradeBar]="midGradeBar"
-					[totalPhrases]="explainItemResults?.length ?? 0"
-					[hasInfinityResult]="hasInfinityResult"
-					[minGradeBar]="minGradeBar"
-					(onNavigateToPhrases)="onNavigateToPhrasesClick()"></cr-ai-phrases-entry>
-			</ng-container>
-
-			<ng-template #deafultMobileView>
-				<div class="mobile-view-ai-logics-container">
-					<div class="title-container">
-						<svg width="26" height="26" viewBox="0 0 26 26" fill="none" xmlns="http://www.w3.org/2000/svg">
-							<g filter="url(#filter0_d_7209_6497)">
-								<path
-									d="M18.2383 10.75L17.3242 8.67578L15.25 7.76172L17.3242 6.8125L18.2383 4.73828L19.1875 6.8125L21.2617 7.76172L19.1875 8.67578L18.2383 10.75ZM12.6133 11.1367L16.7617 13L12.6133 14.8633L10.75 19.0117L8.88672 14.8633L4.73828 13L8.88672 11.1367L10.75 6.98828L12.6133 11.1367ZM18.2383 15.25L19.1875 17.3242L21.2617 18.2383L19.1875 19.1875L18.2383 21.2617L17.3242 19.1875L15.25 18.2383L17.3242 17.3242L18.2383 15.25Z"
-									fill="#0B163E"
-									fill-opacity="0.6"
-									shape-rendering="crispEdges" />
-							</g>
-							<defs>
-								<filter
-									id="filter0_d_7209_6497"
-									x="0.738281"
-									y="0.738281"
-									width="24.5234"
-									height="24.5234"
-									filterUnits="userSpaceOnUse"
-									color-interpolation-filters="sRGB">
-									<feFlood flood-opacity="0" result="BackgroundImageFix" />
-									<feColorMatrix
-										in="SourceAlpha"
-										type="matrix"
-										values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 127 0"
-										result="hardAlpha" />
-									<feOffset />
-									<feGaussianBlur stdDeviation="2" />
-									<feComposite in2="hardAlpha" operator="out" />
-									<feColorMatrix type="matrix" values="0 0 0 0 0.631373 0 0 0 0 0.533333 0 0 0 0 1 0 0 0 0.2 0" />
-									<feBlend mode="normal" in2="BackgroundImageFix" result="effect1_dropShadow_7209_6497" />
-									<feBlend mode="normal" in="SourceGraphic" in2="effect1_dropShadow_7209_6497" result="shape" />
-								</filter>
-							</defs>
-						</svg>
-
-						<span i18n>AI Logic</span>
+						<div style="display: flex; flex-direction: column; align-items: flex-start; gap: 8px; align-self: stretch">
+							<div style="display: flex; justify-content: space-between; align-items: flex-end; align-self: stretch">
+								<ngx-skeleton-loader
+									class="skeleton search-input-loader"
+									[appearance]="'line'"
+									style="width: 60%"></ngx-skeleton-loader>
+								<ngx-skeleton-loader
+									class="skeleton search-input-loader"
+									[appearance]="'line'"
+									style="width: 15%"></ngx-skeleton-loader>
+							</div>
+							<div style="display: flex; align-items: center; gap: 8px; align-self: stretch">
+								<ngx-skeleton-loader
+									class="skeleton search-input-loader"
+									[appearance]="'line'"
+									style="width: 10%"></ngx-skeleton-loader>
+								<ngx-skeleton-loader
+									class="search-input-loader bar"
+									[appearance]="'line'"
+									style="width: 80%"></ngx-skeleton-loader>
+								<ngx-skeleton-loader
+									class="skeleton search-input-loader"
+									[appearance]="'line'"
+									style="width: 10%"></ngx-skeleton-loader>
+							</div>
+						</div>
 					</div>
+					<div
+						style="
+							display: flex;
+							justify-content: space-between;
+							align-items: center;
+							width: 100%;
+							border-radius: 10px 10px 0px 0px;
+							background: var(--Colors-Main-Medium-light, #ebf3f5);
+							padding: 8px 16px 8px 16px;
+							box-sizing: border-box;
+						">
+						<div style="display: flex; width: 60px; height: 28px; padding: 4px 2px; align-items: center; gap: 4px">
+							<ngx-skeleton-loader class="skeleton circle" [appearance]="'line'"></ngx-skeleton-loader>
+							<ngx-skeleton-loader
+								class="skeleton search-input-loader"
+								[appearance]="'line'"
+								style="flex-grow: 1"></ngx-skeleton-loader>
+						</div>
 
-					<mat-icon
-						fontSet="material-icons-round"
-						matTooltip="Wonder how we spot AI content? Get a glimpse into our validation process."
-						[matTooltipPosition]="'after'"
-						matTooltipClass="web-report-mat-tooltip tooltip-contanier"
-						i18n-matTooltip>
-						info_outline
-					</mat-icon>
-				</div>
-
-				<div
-					class="mobile-view-scroll-container"
-					#aiDefaultMobileViewScrollContainer
-					(scroll)="onAIDefaultViewScrollMobile()">
-					<div class="mobile-view-default-entries-container">
-						<ng-container *ngIf="!hidePlagarismTap">
-							<cr-ai-source-match-entry
-								[aiSourceMatchResultsIndenticalScore]="aiSourceMatchResultsIndenticalScore"
-								[aiSourceMatchResultsMinorChangesScore]="aiSourceMatchResultsMinorChangesScore"
-								[aiSourceMatchResultsParaphrasedScore]="aiSourceMatchResultsParaphrasedScore"
-								[aiSourceMatchResultsScore]="aiSourceMatchResultsScore"
-								[aiSourceMatchResultsTotal]="aiSourceMatchResultsTotal"
-								(onNavigateToResults)="onNavigateToResultsClick()"></cr-ai-source-match-entry>
-						</ng-container>
-
-						<ng-container *ngIf="hidePlagarismTap && reportViewSvc?.reportViewMode?.platformType === EPlatformType.APP">
-							<ng-container *ngTemplateOutlet="customAISourceMatchUpgradeTemplate ?? null"></ng-container>
-						</ng-container>
-
-						<cr-ai-phrases-entry
-							[aiPercentageResult]="aiPercentageResult"
-							[maxProportion]="maxProportion"
-							[minProportion]="minProportion"
-							[barTooltipText]="barTooltipText"
-							[maxGradeBar]="maxGradeBar"
-							[midGradeBar]="midGradeBar"
-							[totalPhrases]="explainItemResults?.length ?? 0"
-							[hasInfinityResult]="hasInfinityResult"
-							[minGradeBar]="minGradeBar"
-							(onNavigateToPhrases)="onNavigateToPhrasesClick()"></cr-ai-phrases-entry>
+						<ngx-skeleton-loader
+							class="skeleton search-input-loader"
+							[appearance]="'line'"
+							style="width: 20%"></ngx-skeleton-loader>
 					</div>
-				</div>
-				<div class="dots-container">
-					<button
-						class="navigate-mobie-button"
-						[class.navigate-mobie-button-select]="navigateMobileButton === enumNavigateMobileButton.FirstButton"
-						(click)="onAIDefaultViewDotNavigate(enumNavigateMobileButton.FirstButton)"></button>
-
-					<button
-						class="navigate-mobie-button"
-						[class.navigate-mobie-button-select]="navigateMobileButton === enumNavigateMobileButton.SecondButton"
-						(click)="onAIDefaultViewDotNavigate(enumNavigateMobileButton.SecondButton)"></button>
-				</div>
-			</ng-template>
+					<div class="loading-result-top-container" fxLayout="column">
+						<div
+							class="loading-result-container"
+							fxLayout="row"
+							fxLayoutAlign="start center"
+							fxLayoutGap="16px"
+							style="border-radius: 10px 10px 0px 0px">
+							<ngx-skeleton-loader class="proportion-loading skeleton" [appearance]="'line'"></ngx-skeleton-loader>
+							<ngx-skeleton-loader class="result-loading skeleton" [appearance]="'line'"></ngx-skeleton-loader>
+						</div>
+						<div
+							class="loading-contant-result-container"
+							fxLayout="column"
+							fxLayoutGap="2px"
+							style="margin-bottom: 8px">
+							<div class="description-loading" fxLayout="column">
+								<ngx-skeleton-loader
+									class="loading skeleton skeleton-small-height"
+									[appearance]="'line'"></ngx-skeleton-loader>
+							</div>
+							<div
+								class="ai-count-loading-container"
+								fxLayout="row"
+								fxLayoutAlign="space-between center"
+								fxLayoutGap="4px"
+								style="margin-bottom: 8px">
+								<ngx-skeleton-loader
+									class="ai-count-loading skeleton skeleton-small-height"
+									[appearance]="'line'"></ngx-skeleton-loader>
+								<ngx-skeleton-loader
+									class="result-loading skeleton skeleton-small-height"
+									[appearance]="'line'"></ngx-skeleton-loader>
+							</div>
+							<div
+								class="human-count-loading-container"
+								fxLayout="row"
+								fxLayoutAlign="space-between center"
+								fxLayoutGap="4px">
+								<ngx-skeleton-loader
+									class="human-count-loading skeleton skeleton-small-height"
+									[appearance]="'line'"></ngx-skeleton-loader>
+								<ngx-skeleton-loader
+									class="result-loading skeleton skeleton-small-height"
+									[appearance]="'line'"></ngx-skeleton-loader>
+							</div>
+						</div>
+						<div
+							class="loading-result-container"
+							fxLayout="row"
+							fxLayoutAlign="start center"
+							fxLayoutGap="16px"
+							style="margin-bottom: 8px">
+							<ngx-skeleton-loader class="proportion-loading skeleton" [appearance]="'line'"></ngx-skeleton-loader>
+							<ngx-skeleton-loader class="result-loading skeleton" [appearance]="'line'"></ngx-skeleton-loader>
+						</div>
+						<div
+							class="loading-result-container"
+							fxLayout="row"
+							fxLayoutAlign="start center"
+							fxLayoutGap="16px"
+							style="margin-bottom: 8px">
+							<ngx-skeleton-loader class="proportion-loading skeleton" [appearance]="'line'"></ngx-skeleton-loader>
+							<ngx-skeleton-loader class="result-loading skeleton" [appearance]="'line'"></ngx-skeleton-loader>
+						</div>
+						<div
+							class="loading-result-container"
+							fxLayout="row"
+							fxLayoutAlign="start center"
+							fxLayoutGap="16px"
+							style="margin-bottom: 8px">
+							<ngx-skeleton-loader class="proportion-loading skeleton" [appearance]="'line'"></ngx-skeleton-loader>
+							<ngx-skeleton-loader class="result-loading skeleton" [appearance]="'line'"></ngx-skeleton-loader>
+						</div>
+						<div
+							class="loading-result-container"
+							fxLayout="row"
+							fxLayoutAlign="start center"
+							fxLayoutGap="16px"
+							style="margin-bottom: 8px">
+							<ngx-skeleton-loader class="proportion-loading skeleton" [appearance]="'line'"></ngx-skeleton-loader>
+							<ngx-skeleton-loader class="result-loading skeleton" [appearance]="'line'"></ngx-skeleton-loader>
+						</div>
+						<div
+							class="loading-result-container"
+							fxLayout="row"
+							fxLayoutAlign="start center"
+							fxLayoutGap="16px"
+							style="margin-bottom: 8px">
+							<ngx-skeleton-loader class="proportion-loading skeleton" [appearance]="'line'"></ngx-skeleton-loader>
+							<ngx-skeleton-loader class="result-loading skeleton" [appearance]="'line'"></ngx-skeleton-loader>
+						</div>
+						<div
+							class="loading-result-container"
+							fxLayout="row"
+							fxLayoutAlign="start center"
+							fxLayoutGap="16px"
+							style="margin-bottom: 8px">
+							<ngx-skeleton-loader class="proportion-loading skeleton" [appearance]="'line'"></ngx-skeleton-loader>
+							<ngx-skeleton-loader class="result-loading skeleton" [appearance]="'line'"></ngx-skeleton-loader>
+						</div>
+						<div
+							class="loading-result-container"
+							fxLayout="row"
+							fxLayoutAlign="start center"
+							fxLayoutGap="16px"
+							style="margin-bottom: 8px">
+							<ngx-skeleton-loader class="proportion-loading skeleton" [appearance]="'line'"></ngx-skeleton-loader>
+							<ngx-skeleton-loader class="result-loading skeleton" [appearance]="'line'"></ngx-skeleton-loader>
+						</div>
+						<div
+							class="loading-result-container"
+							fxLayout="row"
+							fxLayoutAlign="start center"
+							fxLayoutGap="16px"
+							style="margin-bottom: 8px">
+							<ngx-skeleton-loader class="proportion-loading skeleton" [appearance]="'line'"></ngx-skeleton-loader>
+							<ngx-skeleton-loader class="result-loading skeleton" [appearance]="'line'"></ngx-skeleton-loader>
+						</div>
+					</div>
+				</ng-container>
+				<ng-template #mobileLoading>
+					<div class="mobile-view-scroll-container">
+						<div class="mobile-view-default-entries-container">
+							<div class="mobile-loading-container" fxLayout="column" fxLayoutGap="16px">
+								<div class="result-loading-container" fxLayout="row" fxLayoutAlign="start center" fxLayoutGap="16px">
+									<ngx-skeleton-loader class="proportion-loading skeleton" [appearance]="'line'"></ngx-skeleton-loader>
+									<ngx-skeleton-loader class="result-loading skeleton" [appearance]="'line'"></ngx-skeleton-loader>
+								</div>
+							</div>
+							<div class="mobile-loading-container" fxLayout="column" fxLayoutGap="16px">
+								<div class="result-loading-container" fxLayout="row" fxLayoutAlign="start center" fxLayoutGap="16px">
+									<ngx-skeleton-loader class="proportion-loading skeleton" [appearance]="'line'"></ngx-skeleton-loader>
+									<ngx-skeleton-loader class="result-loading skeleton" [appearance]="'line'"></ngx-skeleton-loader>
+								</div>
+							</div>
+							<div class="mobile-loading-container" fxLayout="column" fxLayoutGap="16px">
+								<div class="result-loading-container" fxLayout="row" fxLayoutAlign="start center" fxLayoutGap="16px">
+									<ngx-skeleton-loader class="proportion-loading skeleton" [appearance]="'line'"></ngx-skeleton-loader>
+									<ngx-skeleton-loader class="result-loading skeleton" [appearance]="'line'"></ngx-skeleton-loader>
+								</div>
+							</div>
+							<div class="mobile-loading-container" fxLayout="column" fxLayoutGap="16px">
+								<div class="result-loading-container" fxLayout="row" fxLayoutAlign="start center" fxLayoutGap="16px">
+									<ngx-skeleton-loader class="proportion-loading skeleton" [appearance]="'line'"></ngx-skeleton-loader>
+									<ngx-skeleton-loader class="result-loading skeleton" [appearance]="'line'"></ngx-skeleton-loader>
+								</div>
+							</div>
+						</div>
+					</div>
+				</ng-template>
+			</div>
 		</ng-template>
 	</ng-container>
-	<ng-template #loadingState>
-		<div class="loading-container" fxLayout="column">
-			<ng-container *ngIf="!isMobile; else mobileLoading">
-				<div class="loading-header-top-container" fxLayout="column" fxLayoutGap="16px">
-					<div class="loading-header-container" fxLayout="column" fxLayoutGap="4px">
-						<ngx-skeleton-loader
-							class="title-loading skeleton skeleton-small-height"
-							[appearance]="'line'"></ngx-skeleton-loader>
-						<ngx-skeleton-loader
-							class="first-description-loading skeleton skeleton-small-height"
-							[appearance]="'line'"></ngx-skeleton-loader>
-						<ngx-skeleton-loader
-							class="second-description-loading skeleton skeleton-small-height"
-							[appearance]="'line'"></ngx-skeleton-loader>
-					</div>
-					<div class="loading-grade-bar-container" fxLayout="column" fxLayoutGap="8px">
-						<ngx-skeleton-loader
-							class="description-loading skeleton skeleton-small-height"
-							[appearance]="'line'"></ngx-skeleton-loader>
-						<div fxLayout="column" fxLayoutAlign="start center">
-							<ngx-skeleton-loader
-								class="grade-bar-loading skeleton skeleton-small-height"
-								[appearance]="'line'"></ngx-skeleton-loader>
-						</div>
-					</div>
-				</div>
-				<div class="loading-result-top-container" fxLayout="column">
-					<div class="loading-result-container" fxLayout="row" fxLayoutAlign="start center" fxLayoutGap="16px">
-						<ngx-skeleton-loader class="proportion-loading skeleton" [appearance]="'line'"></ngx-skeleton-loader>
-						<ngx-skeleton-loader class="result-loading skeleton" [appearance]="'line'"></ngx-skeleton-loader>
-					</div>
-					<div class="loading-contant-result-container" fxLayout="column" fxLayoutGap="2px">
-						<div class="description-loading" fxLayout="column">
-							<ngx-skeleton-loader
-								class="loading skeleton skeleton-small-height"
-								[appearance]="'line'"></ngx-skeleton-loader>
-						</div>
-						<div
-							class="ai-count-loading-container"
-							fxLayout="row"
-							fxLayoutAlign="space-between center"
-							fxLayoutGap="4px">
-							<ngx-skeleton-loader
-								class="ai-count-loading skeleton skeleton-small-height"
-								[appearance]="'line'"></ngx-skeleton-loader>
-							<ngx-skeleton-loader
-								class="result-loading skeleton skeleton-small-height"
-								[appearance]="'line'"></ngx-skeleton-loader>
-						</div>
-						<div
-							class="human-count-loading-container"
-							fxLayout="row"
-							fxLayoutAlign="space-between center"
-							fxLayoutGap="4px">
-							<ngx-skeleton-loader
-								class="human-count-loading skeleton skeleton-small-height"
-								[appearance]="'line'"></ngx-skeleton-loader>
-							<ngx-skeleton-loader
-								class="result-loading skeleton skeleton-small-height"
-								[appearance]="'line'"></ngx-skeleton-loader>
-						</div>
-					</div>
-					<div class="loading-result-container" fxLayout="row" fxLayoutAlign="start center" fxLayoutGap="16px">
-						<ngx-skeleton-loader class="proportion-loading skeleton" [appearance]="'line'"></ngx-skeleton-loader>
-						<ngx-skeleton-loader class="result-loading skeleton" [appearance]="'line'"></ngx-skeleton-loader>
-					</div>
-					<div class="loading-result-container" fxLayout="row" fxLayoutAlign="start center" fxLayoutGap="16px">
-						<ngx-skeleton-loader class="proportion-loading skeleton" [appearance]="'line'"></ngx-skeleton-loader>
-						<ngx-skeleton-loader class="result-loading skeleton" [appearance]="'line'"></ngx-skeleton-loader>
-					</div>
-					<div class="loading-result-container" fxLayout="row" fxLayoutAlign="start center" fxLayoutGap="16px">
-						<ngx-skeleton-loader class="proportion-loading skeleton" [appearance]="'line'"></ngx-skeleton-loader>
-						<ngx-skeleton-loader class="result-loading skeleton" [appearance]="'line'"></ngx-skeleton-loader>
-					</div>
-					<div class="loading-result-container" fxLayout="row" fxLayoutAlign="start center" fxLayoutGap="16px">
-						<ngx-skeleton-loader class="proportion-loading skeleton" [appearance]="'line'"></ngx-skeleton-loader>
-						<ngx-skeleton-loader class="result-loading skeleton" [appearance]="'line'"></ngx-skeleton-loader>
-					</div>
-					<div class="loading-result-container" fxLayout="row" fxLayoutAlign="start center" fxLayoutGap="16px">
-						<ngx-skeleton-loader class="proportion-loading skeleton" [appearance]="'line'"></ngx-skeleton-loader>
-						<ngx-skeleton-loader class="result-loading skeleton" [appearance]="'line'"></ngx-skeleton-loader>
-					</div>
-				</div>
+	<ng-template #defaultView>
+		<ng-container *ngIf="!isMobile; else deafultMobileView">
+			<cr-ai-logic-banner></cr-ai-logic-banner>
+
+			<ng-container
+				*ngIf="(!hidePlagarismTap || isLoading) && reportViewSvc?.reportViewMode?.platformType === EPlatformType.APP">
+				<cr-ai-source-match-entry
+					[isLoading]="isLoading"
+					[aiSourceMatchResultsStats]="aiSourceMatchResultsStats"
+					[aiSourceMatchResultsIndenticalScore]="aiSourceMatchResultsIndenticalScore"
+					[aiSourceMatchResultsMinorChangesScore]="aiSourceMatchResultsMinorChangesScore"
+					[aiSourceMatchResultsParaphrasedScore]="aiSourceMatchResultsParaphrasedScore"
+					[aiSourceMatchResultsScore]="aiSourceMatchResultsScore"
+					[aiSourceMatchResultsTotal]="aiSourceMatchResultsTotal"
+					(onNavigateToResults)="onNavigateToResultsClick()"></cr-ai-source-match-entry>
 			</ng-container>
-			<ng-template #mobileLoading>
-				<div class="mobile-loading-container" fxLayout="column" fxLayoutGap="16px">
-					<div class="mobile-header-loading-container">
-						<ngx-skeleton-loader class="header-loading skeleton" [appearance]="'line'"></ngx-skeleton-loader>
-					</div>
-					<div class="result-loading-container" fxLayout="row" fxLayoutAlign="start center" fxLayoutGap="16px">
-						<ngx-skeleton-loader class="proportion-loading skeleton" [appearance]="'line'"></ngx-skeleton-loader>
-						<ngx-skeleton-loader class="result-loading skeleton" [appearance]="'line'"></ngx-skeleton-loader>
-					</div>
+
+			<ng-container
+				*ngIf="hidePlagarismTap && reportViewSvc?.reportViewMode?.platformType === EPlatformType.APP && !isLoading">
+				<ng-container *ngTemplateOutlet="customAISourceMatchUpgradeTemplate ?? null"></ng-container>
+			</ng-container>
+
+			<cr-ai-phrases-entry
+				[isLoading]="isLoading"
+				[aiPercentageResult]="aiPercentageResult"
+				[maxProportion]="maxProportion"
+				[minProportion]="minProportion"
+				[barTooltipText]="barTooltipText"
+				[maxGradeBar]="maxGradeBar"
+				[midGradeBar]="midGradeBar"
+				[totalPhrases]="explainItemResults?.length ?? 0"
+				[hasInfinityResult]="hasInfinityResult"
+				[minGradeBar]="minGradeBar"
+				(onNavigateToPhrases)="onNavigateToPhrasesClick()"></cr-ai-phrases-entry>
+		</ng-container>
+
+		<ng-template #deafultMobileView>
+			<div class="mobile-view-ai-logics-container">
+				<div class="title-container">
+					<svg width="26" height="26" viewBox="0 0 26 26" fill="none" xmlns="http://www.w3.org/2000/svg">
+						<g filter="url(#filter0_d_7209_6497)">
+							<path
+								d="M18.2383 10.75L17.3242 8.67578L15.25 7.76172L17.3242 6.8125L18.2383 4.73828L19.1875 6.8125L21.2617 7.76172L19.1875 8.67578L18.2383 10.75ZM12.6133 11.1367L16.7617 13L12.6133 14.8633L10.75 19.0117L8.88672 14.8633L4.73828 13L8.88672 11.1367L10.75 6.98828L12.6133 11.1367ZM18.2383 15.25L19.1875 17.3242L21.2617 18.2383L19.1875 19.1875L18.2383 21.2617L17.3242 19.1875L15.25 18.2383L17.3242 17.3242L18.2383 15.25Z"
+								fill="#0B163E"
+								fill-opacity="0.6"
+								shape-rendering="crispEdges" />
+						</g>
+						<defs>
+							<filter
+								id="filter0_d_7209_6497"
+								x="0.738281"
+								y="0.738281"
+								width="24.5234"
+								height="24.5234"
+								filterUnits="userSpaceOnUse"
+								color-interpolation-filters="sRGB">
+								<feFlood flood-opacity="0" result="BackgroundImageFix" />
+								<feColorMatrix
+									in="SourceAlpha"
+									type="matrix"
+									values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 127 0"
+									result="hardAlpha" />
+								<feOffset />
+								<feGaussianBlur stdDeviation="2" />
+								<feComposite in2="hardAlpha" operator="out" />
+								<feColorMatrix type="matrix" values="0 0 0 0 0.631373 0 0 0 0 0.533333 0 0 0 0 1 0 0 0 0.2 0" />
+								<feBlend mode="normal" in2="BackgroundImageFix" result="effect1_dropShadow_7209_6497" />
+								<feBlend mode="normal" in="SourceGraphic" in2="effect1_dropShadow_7209_6497" result="shape" />
+							</filter>
+						</defs>
+					</svg>
+
+					<span i18n>AI Logic</span>
 				</div>
-			</ng-template>
-		</div>
+
+				<mat-icon
+					fontSet="material-icons-round"
+					matTooltip="Wonder how we spot AI content? Get a glimpse into our validation process."
+					[matTooltipPosition]="'after'"
+					matTooltipClass="web-report-mat-tooltip tooltip-contanier"
+					i18n-matTooltip>
+					info_outline
+				</mat-icon>
+			</div>
+
+			<div
+				class="mobile-view-scroll-container"
+				#aiDefaultMobileViewScrollContainer
+				(scroll)="onAIDefaultViewScrollMobile()">
+				<div class="mobile-view-default-entries-container">
+					<ng-container
+						*ngIf="
+							(!hidePlagarismTap || isLoading) && reportViewSvc?.reportViewMode?.platformType === EPlatformType.APP
+						">
+						<cr-ai-source-match-entry
+							[isLoading]="isLoading"
+							[aiSourceMatchResultsStats]="aiSourceMatchResultsStats"
+							[aiSourceMatchResultsIndenticalScore]="aiSourceMatchResultsIndenticalScore"
+							[aiSourceMatchResultsMinorChangesScore]="aiSourceMatchResultsMinorChangesScore"
+							[aiSourceMatchResultsParaphrasedScore]="aiSourceMatchResultsParaphrasedScore"
+							[aiSourceMatchResultsScore]="aiSourceMatchResultsScore"
+							[aiSourceMatchResultsTotal]="aiSourceMatchResultsTotal"
+							(onNavigateToResults)="onNavigateToResultsClick()"></cr-ai-source-match-entry>
+					</ng-container>
+
+					<ng-container
+						*ngIf="hidePlagarismTap && reportViewSvc?.reportViewMode?.platformType === EPlatformType.APP && !isLoading">
+						<ng-container *ngTemplateOutlet="customAISourceMatchUpgradeTemplate ?? null"></ng-container>
+					</ng-container>
+
+					<cr-ai-phrases-entry
+						[isLoading]="isLoading"
+						[aiPercentageResult]="aiPercentageResult"
+						[maxProportion]="maxProportion"
+						[minProportion]="minProportion"
+						[barTooltipText]="barTooltipText"
+						[maxGradeBar]="maxGradeBar"
+						[midGradeBar]="midGradeBar"
+						[totalPhrases]="explainItemResults?.length ?? 0"
+						[hasInfinityResult]="hasInfinityResult"
+						[minGradeBar]="minGradeBar"
+						(onNavigateToPhrases)="onNavigateToPhrasesClick()"></cr-ai-phrases-entry>
+				</div>
+			</div>
+			<div
+				*ngIf="reportViewSvc?.reportViewMode?.platformType === EPlatformType.APP || customAISourceMatchUpgradeTemplate"
+				class="dots-container">
+				<button
+					class="navigate-mobie-button"
+					[class.navigate-mobie-button-select]="navigateMobileButton === enumNavigateMobileButton.FirstButton"
+					(click)="onAIDefaultViewDotNavigate(enumNavigateMobileButton.FirstButton)"></button>
+
+				<button
+					class="navigate-mobie-button"
+					[class.navigate-mobie-button-select]="navigateMobileButton === enumNavigateMobileButton.SecondButton"
+					(click)="onAIDefaultViewDotNavigate(enumNavigateMobileButton.SecondButton)"></button>
+			</div>
+		</ng-template>
 	</ng-template>
 </div>
 

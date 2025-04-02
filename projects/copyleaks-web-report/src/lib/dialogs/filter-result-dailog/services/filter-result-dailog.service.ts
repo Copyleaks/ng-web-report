@@ -84,6 +84,7 @@ export class FilterResultDailogService {
 				yourResults: new FormControl(this.getFormControlValue(EFilterResultForm.fcYourResults)),
 				othersResults: new FormControl(this.getFormControlValue(EFilterResultForm.fcOthersResults)),
 				batch: new FormControl(this.getFormControlValue(EFilterResultForm.fcBatch)),
+				aiSourceMatch: new FormControl(this.getFormControlValue(EFilterResultForm.fgAISourceMatch)),
 				repositories: this._formBuilder.group({}),
 			}),
 			resultsMeta: this._formBuilder.group({
@@ -166,6 +167,7 @@ export class FilterResultDailogService {
 				othersResults: true,
 				batch: true,
 				repositories: {},
+				aiSourceMatch: true,
 			},
 			resultsMeta: {
 				wordLimit: {
@@ -219,6 +221,10 @@ export class FilterResultDailogService {
 			case EFilterResultForm.fcBatch:
 				return this._completeResults.filters?.sourceType?.batch != undefined
 					? this._completeResults.filters?.sourceType?.batch
+					: true;
+			case EFilterResultForm.fgAISourceMatch:
+				return this._completeResults.filters?.sourceType?.aiSourceMatch != undefined
+					? this._completeResults.filters?.sourceType?.aiSourceMatch
 					: true;
 			//Results Meta
 			case EFilterResultForm.fcWordLimitEnabled:

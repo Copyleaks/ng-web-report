@@ -63,6 +63,22 @@
 		}
 	}
 
+	cr-button {
+		&[dir='rtl'] {
+			::ng-deep {
+				mat-icon {
+					transform: scale(-1, 1);
+					margin-inline-end: 10px;
+					margin-inline-start: 0px !important;
+				}
+
+				.mat-button-wrapper {
+					direction: ltr;
+				}
+			}
+		}
+	}
+
 	.bottom-section-container {
 		display: flex;
 		flex-direction: column;
@@ -76,6 +92,7 @@
 			align-items: center;
 			gap: 8px;
 			align-self: stretch;
+			direction: ltr;
 			.ai-source-match-score {
 				color: $color-black;
 				text-align: center;
@@ -168,6 +185,96 @@
 			align-items: center;
 			gap: 10px;
 			color: $color-black-opacity-60;
+		}
+	}
+
+	.title-loading-container {
+		display: flex;
+		flex-direction: column;
+		align-items: flex-start;
+		gap: 2px;
+		align-self: stretch;
+
+		.top-part-loading-container {
+			width: 100%;
+			display: flex;
+			justify-content: space-between;
+			align-items: center;
+			flex: 1 0 0;
+
+			.first-loading {
+				width: 45%;
+				display: flex;
+				align-items: center;
+				gap: 4px;
+			}
+		}
+
+		.bottom-part-loading-container {
+			width: 100%;
+			display: flex;
+		}
+	}
+
+	.content-loading-container {
+		display: flex;
+		flex-direction: column;
+		justify-content: center;
+		align-items: flex-start;
+		gap: 8px;
+		align-self: stretch;
+
+		.top-part-loading-container {
+			width: 100%;
+			display: flex;
+			align-items: center;
+			gap: 8px;
+			align-self: stretch;
+		}
+
+		.bottom-part-loading-container {
+			width: 100%;
+			display: flex;
+			padding: 4px 8px;
+			align-items: center;
+			gap: 4px;
+		}
+	}
+
+	.skeleton {
+		width: fit-content;
+		display: flex;
+		height: fit-content !important;
+		::ng-deep {
+			.loader {
+				height: 18px !important;
+				margin-bottom: 0px !important;
+				border-radius: 10px !important;
+				opacity: 0.2;
+				background-color: $color-medium-dark;
+			}
+		}
+	}
+
+	.skeleton.circle {
+		::ng-deep .loader {
+			width: 24px !important;
+			height: 24px !important;
+			margin: 0px !important;
+			border-radius: 50% !important;
+		}
+	}
+
+	.skeleton.circle.small {
+		::ng-deep .loader {
+			width: 18px !important;
+			height: 18px !important;
+		}
+	}
+
+	.skeleton.bar {
+		::ng-deep .loader {
+			height: 8px !important;
 		}
 	}
 }

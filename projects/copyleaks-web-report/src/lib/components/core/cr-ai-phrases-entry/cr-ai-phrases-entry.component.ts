@@ -1,4 +1,5 @@
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
+import { ReportViewService } from '../../../services/report-view.service';
 
 @Component({
 	selector: 'cr-ai-phrases-entry',
@@ -14,6 +15,8 @@ export class CrAiPhrasesEntryComponent implements OnInit {
 	@Input() midGradeBar: number = 0;
 	@Input() hasInfinityResult: boolean = false;
 	@Input() totalPhrases: number = 0;
+	@Input() isLoading: boolean = true;
+
 	/**
 	 * @Input {number} The AI percentage result
 	 */
@@ -21,7 +24,7 @@ export class CrAiPhrasesEntryComponent implements OnInit {
 
 	@Output() onNavigateToPhrases = new EventEmitter<void>();
 
-	constructor() {}
+	constructor(public reportViewSvc: ReportViewService) {}
 
 	ngOnInit(): void {}
 

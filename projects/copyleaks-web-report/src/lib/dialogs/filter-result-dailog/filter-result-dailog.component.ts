@@ -16,6 +16,7 @@ import { trigger, transition, animate, keyframes, style } from '@angular/animati
 import { EResponsiveLayoutType } from '../../enums/copyleaks-web-report.enums';
 import { distinctUntilChanged } from 'rxjs/operators';
 import { PercentPipe } from '@angular/common';
+import { RESULT_TAGS_CODES } from '../../constants/report-result-tags.constants';
 
 @Component({
 	selector: 'cr-filter-result-dailog',
@@ -402,6 +403,7 @@ export class FilterResultDailogComponent implements OnInit {
 						repository: this._filterResultsSvc.reposIds,
 						totalYourFiles: results.database.filter(r => !!r.scanId).length,
 						totalOthersFiles: results.database.filter(r => !r.scanId).length,
+						totalAISourceMatch: 0,
 					};
 
 					const allResults = [
@@ -412,6 +414,9 @@ export class FilterResultDailogComponent implements OnInit {
 					];
 
 					this.resultsActions.totalResults = allResults.length;
+					this.totalSourceType.totalAISourceMatch =
+						allResults?.filter(i => i.tags?.find(t => t.code === RESULT_TAGS_CODES.AI_SOURCE_MATCH))?.length ?? 0;
+
 					this.allResultsItem = allResults.map(result => {
 						const resultDetail = resultsDetails?.find(r => r.id === result.id);
 						return {
@@ -537,6 +542,10 @@ export class FilterResultDailogComponent implements OnInit {
 			hiddenRepositories: !this.totalSourceType.repository?.length
 				? []
 				: this._filterResultsSvc.getSelectedRepositoryIds(),
+			showAISourceMatch:
+				this.totalSourceType.totalAISourceMatch === 0
+					? false
+					: this._filterResultsSvc.sourceTypeFormGroup.get(EFilterResultForm.fgAISourceMatch)?.value,
 
 			// Metadata
 			wordLimit: this._filterResultsSvc.resultsMetaFormGroup

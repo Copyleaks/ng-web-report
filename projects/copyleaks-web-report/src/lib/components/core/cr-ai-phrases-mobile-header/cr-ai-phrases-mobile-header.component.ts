@@ -1,6 +1,7 @@
 import { Component, Input, OnChanges, OnInit, SimpleChanges } from '@angular/core';
 import { ReportMatchesService } from '../../../services/report-matches.service';
 import { AIExplainResultItem, EProportionType, ExplainableAIResults } from '../../../models/report-matches.models';
+import { ReportViewService } from '../../../services/report-view.service';
 
 @Component({
 	selector: 'cr-ai-phrases-mobile-header',
@@ -64,7 +65,7 @@ export class CrAiPhrasesMobileHeaderComponent implements OnInit, OnChanges {
 	resultTooltipText: string;
 	updateResult: boolean = false;
 
-	constructor(private _reportMatchesSvc: ReportMatchesService) {}
+	constructor(private _reportMatchesSvc: ReportMatchesService, public reportViewSvc: ReportViewService) {}
 
 	ngOnInit(): void {}
 
@@ -76,6 +77,10 @@ export class CrAiPhrasesMobileHeaderComponent implements OnInit, OnChanges {
 
 	onBackClick() {
 		this._reportMatchesSvc.showAIPhrases$.next(false);
+		this.reportViewSvc.reportViewMode$.next({
+			...this.reportViewSvc.reportViewMode,
+			showAIPhrases: false,
+		});
 	}
 
 	private _initResults() {

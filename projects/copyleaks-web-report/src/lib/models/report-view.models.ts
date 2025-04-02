@@ -13,6 +13,7 @@ export interface IReportViewEvent {
 	selectedCustomTabId?: string;
 	selectedResultsCategory?: string;
 	navigateBackToAIView?: boolean;
+	showAIPhrases?: boolean;
 }
 
 export interface IReportViewQueryParams {
@@ -24,6 +25,7 @@ export interface IReportViewQueryParams {
 	alertCode?: string;
 	selectedCustomTabId?: string;
 	selectedResultsCategory?: string;
+	showAIPhrases?: string;
 }
 
 export interface IReportResponsiveMode {

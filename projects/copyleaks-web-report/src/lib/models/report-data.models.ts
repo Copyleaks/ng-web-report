@@ -164,6 +164,7 @@ export interface ISourceTypeFilters {
 	repositories: string[];
 	yourResults?: boolean;
 	othersResults?: boolean;
+	aiSourceMatch?: boolean;
 }
 
 export interface IResultsMetaDataFilters {

@@ -484,6 +484,8 @@ export class ReportResultsContainerComponent implements OnInit, OnChanges {
 	private _setSelectedCategoryRef(selectedCategory: IMatchesCategoryStatistics | null) {
 		this.selectedCategory = selectedCategory;
 
+		if (!selectedCategory) this.reportDataSvc.selectedCategoryResultsIds$.next([]);
+
 		const selectedCategoryTypeQueryParam = this.reportViewSvc.reportViewMode.selectedResultsCategory
 			? decodeURI(this.reportViewSvc.reportViewMode.selectedResultsCategory)
 			: null;
@@ -498,9 +500,7 @@ export class ReportResultsContainerComponent implements OnInit, OnChanges {
 		this.allMatchResultsStats = this._initMatchResultsStatistics();
 		this.displayedResults.forEach(result => {
 			// if the result is an AI source match result add it to the AI source match category
-			const aiSourceMatchTag = result?.resultPreview?.tags?.find(
-				tag => tag.code === RESULT_TAGS_CODES.SUSPECTED_AI_GENERATED
-			);
+			const aiSourceMatchTag = result?.resultPreview?.tags?.find(tag => tag.code === RESULT_TAGS_CODES.AI_SOURCE_MATCH);
 			if (aiSourceMatchTag) {
 				this._increaseMatchResultsCategoryTotal(
 					this.allMatchResultsStats,
@@ -582,7 +582,7 @@ export class ReportResultsContainerComponent implements OnInit, OnChanges {
 			? decodeURI(this.reportViewSvc.reportViewMode.selectedResultsCategory)
 			: null;
 
-		if (selectedCategoryType) {
+		if (selectedCategoryType != this.selectedCategory?.type) {
 			let selectedCategory: IMatchesCategoryStatistics = null;
 			this.allMatchResultsStats.forEach(r => {
 				const category = r?.categories?.find(c => c?.type === selectedCategoryType);

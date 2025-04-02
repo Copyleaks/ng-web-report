@@ -1,103 +1,134 @@
-<div class="top-section-container">
-	<div class="ai-source-match-title-container">
-		<div class="title-container">
-			<svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-				<rect x="0.5" y="0.5" width="23" height="23" rx="11.5" fill="#EBF3F5" />
-				<rect x="0.5" y="0.5" width="23" height="23" rx="11.5" stroke="#FBFFFF" />
-				<rect x="0.5" y="0.5" width="23" height="23" rx="11.5" stroke="url(#paint0_linear_7308_1032)" />
-				<rect x="2" y="2" width="20" height="20" rx="10" fill="#FBFFFF" />
-				<rect x="2" y="2" width="20" height="20" rx="10" fill="url(#paint1_linear_7308_1032)" />
-				<path
-					d="M16.4545 10.0909L17.25 8.34091L19 7.54545L17.25 6.75L16.4545 5L15.6591 6.75L13.9091 7.54545L15.6591 8.34091L16.4545 10.0909ZM11.6818 10.4091L10.0909 6.90909L8.5 10.4091L5 12L8.5 13.5909L10.0909 17.0909L11.6818 13.5909L15.1818 12L11.6818 10.4091ZM16.4545 13.9091L15.6591 15.6591L13.9091 16.4545L15.6591 17.25L16.4545 19L17.25 17.25L19 16.4545L17.25 15.6591L16.4545 13.9091Z"
-					fill="white" />
-				<defs>
-					<linearGradient
-						id="paint0_linear_7308_1032"
-						x1="-1.01822e-07"
-						y1="13.811"
-						x2="22.4306"
-						y2="19.7441"
-						gradientUnits="userSpaceOnUse">
-						<stop stop-color="#BCA6FF" />
-						<stop offset="1" stop-color="#9345F9" />
-					</linearGradient>
-					<linearGradient
-						id="paint1_linear_7308_1032"
-						x1="2"
-						y1="13.5092"
-						x2="20.6922"
-						y2="18.4534"
-						gradientUnits="userSpaceOnUse">
-						<stop stop-color="#BCA6FF" />
-						<stop offset="1" stop-color="#9345F9" />
-					</linearGradient>
-				</defs>
-			</svg>
+<ng-container *ngIf="!isLoading; else loadingViewRef">
+	<div class="top-section-container">
+		<div class="ai-source-match-title-container">
+			<div class="title-container">
+				<svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+					<rect x="0.5" y="0.5" width="23" height="23" rx="11.5" fill="#EBF3F5" />
+					<rect x="0.5" y="0.5" width="23" height="23" rx="11.5" stroke="#FBFFFF" />
+					<rect x="0.5" y="0.5" width="23" height="23" rx="11.5" stroke="url(#paint0_linear_7308_1032)" />
+					<rect x="2" y="2" width="20" height="20" rx="10" fill="#FBFFFF" />
+					<rect x="2" y="2" width="20" height="20" rx="10" fill="url(#paint1_linear_7308_1032)" />
+					<path
+						d="M16.4545 10.0909L17.25 8.34091L19 7.54545L17.25 6.75L16.4545 5L15.6591 6.75L13.9091 7.54545L15.6591 8.34091L16.4545 10.0909ZM11.6818 10.4091L10.0909 6.90909L8.5 10.4091L5 12L8.5 13.5909L10.0909 17.0909L11.6818 13.5909L15.1818 12L11.6818 10.4091ZM16.4545 13.9091L15.6591 15.6591L13.9091 16.4545L15.6591 17.25L16.4545 19L17.25 17.25L19 16.4545L17.25 15.6591L16.4545 13.9091Z"
+						fill="white" />
+					<defs>
+						<linearGradient
+							id="paint0_linear_7308_1032"
+							x1="-1.01822e-07"
+							y1="13.811"
+							x2="22.4306"
+							y2="19.7441"
+							gradientUnits="userSpaceOnUse">
+							<stop stop-color="#BCA6FF" />
+							<stop offset="1" stop-color="#9345F9" />
+						</linearGradient>
+						<linearGradient
+							id="paint1_linear_7308_1032"
+							x1="2"
+							y1="13.5092"
+							x2="20.6922"
+							y2="18.4534"
+							gradientUnits="userSpaceOnUse">
+							<stop stop-color="#BCA6FF" />
+							<stop offset="1" stop-color="#9345F9" />
+						</linearGradient>
+					</defs>
+				</svg>
 
-			<span i18n>AI Phrases</span>
+				<span i18n>AI Phrases</span>
+			</div>
+			<ng-container *ngIf="totalPhrases > 0; else zeroTotalRef">
+				<div class="total-results" i18n>
+					{{ totalPhrases | number }}
+					{totalPhrases, plural, =1 {Phrase} other {Phrases}}
+				</div>
+			</ng-container>
+			<ng-template #zeroTotalRef>
+				<div class="no-results-info-container">
+					<span class="total-results" i18n>No Phrases Were Found</span>
+					<mat-icon
+						fontSet="material-icons-round"
+						matTooltip="GenAI tends to repeat specific phrases it learned during training, which is one of many signals used to detect AI-generated text."
+						[matTooltipPosition]="'after'"
+						matTooltipClass="web-report-mat-tooltip tooltip-contanier"
+						i18n-matTooltip>
+						info_outline
+					</mat-icon>
+				</div>
+			</ng-template>
 		</div>
-		<ng-container *ngIf="totalPhrases > 0; else zeroTotalRef">
-			<div class="total-results" i18n>
-				{{ totalPhrases | number }}
-				{totalPhrases, plural, =1 {Phrase} other {Phrases}}
-			</div>
-		</ng-container>
-		<ng-template #zeroTotalRef>
-			<div class="no-results-info-container">
-				<span class="total-results" i18n>No Phrases Were Found</span>
-				<mat-icon
-					fontSet="material-icons-round"
-					matTooltip="GenAI tends to repeat specific phrases it learned during training, which is one of many signals used to detect AI-generated text."
-					[matTooltipPosition]="'after'"
-					matTooltipClass="web-report-mat-tooltip tooltip-contanier"
-					i18n-matTooltip>
-					info_outline
-				</mat-icon>
-			</div>
-		</ng-template>
+		<div *ngIf="totalPhrases > 0" class="ai-source-match-description" i18n>
+			Frequency of phrases in AI vs human text.
+		</div>
 	</div>
-	<div *ngIf="totalPhrases > 0" class="ai-source-match-description" i18n>Frequency of phrases in AI vs human text.</div>
-</div>
 
-<div *ngIf="totalPhrases > 0" class="bottom-section-container">
-	<div class="match-bar-container">
-		<span class="ai-source-match-score">{{ minProportion?.toLocaleString() }}x</span>
-		<div
-			class="grade-bar-container"
-			tabindex="0"
-			crAIScoreTooltipContent
-			[isTooltipBar]="true"
-			[tooltipText]="barTooltipText"
-			fxLayout="row"
-			fxLayoutAlign="start center"
-			fxLayoutGap="16px">
-			<div class="grade-bar" fxLayout="row">
-				<div class="min-result" [style.width]="minGradeBar + '%'"></div>
-				<div class="mid-result" [style.width]="midGradeBar + '%'"></div>
-				<div class="max-result" [style.width]="maxGradeBar + '%'"></div>
+	<div *ngIf="totalPhrases > 0" class="bottom-section-container">
+		<div class="match-bar-container">
+			<span class="ai-source-match-score">{{ minProportion?.toLocaleString() }}x</span>
+			<div
+				class="grade-bar-container"
+				tabindex="0"
+				crAIScoreTooltipContent
+				[isTooltipBar]="true"
+				[tooltipText]="barTooltipText"
+				fxLayout="row"
+				fxLayoutAlign="start center"
+				fxLayoutGap="16px">
+				<div class="grade-bar" fxLayout="row">
+					<div class="min-result" [style.width]="minGradeBar + '%'"></div>
+					<div class="mid-result" [style.width]="midGradeBar + '%'"></div>
+					<div class="max-result" [style.width]="maxGradeBar + '%'"></div>
+				</div>
 			</div>
+			<span class="ai-source-match-score">
+				<ng-container *ngIf="hasInfinityResult; else maxResult">10,000x</ng-container>
+				<ng-template #maxResult>{{ maxProportion?.toLocaleString() }}x</ng-template>
+			</span>
 		</div>
-		<span class="ai-source-match-score">
-			<ng-container *ngIf="hasInfinityResult; else maxResult">10,000x</ng-container>
-			<ng-template #maxResult>{{ maxProportion?.toLocaleString() }}x</ng-template>
+		<cr-button
+			icon="chevron_right"
+			[outlined]="true"
+			[isLink]="true"
+			[dir]="reportViewSvc.documentDirection"
+			padding="4px 8px"
+			(click)="$event.preventDefault(); $event.stopPropagation(); onNavigateToPhrasesClick()">
+			<ng-container i18n>See phrases</ng-container>
+		</cr-button>
+	</div>
+
+	<div *ngIf="!totalPhrases && aiPercentageResult > 0" class="empty-state-with-ai-score">
+		<div class="info-icon-container">
+			<mat-icon fontSet="material-icons-round">info_outline</mat-icon>
+		</div>
+
+		<span i18n>
+			There is no specific phrase that indicates AI. However, other criteria suggest that this text was generated by AI.
 		</span>
 	</div>
-	<cr-button
-		icon="chevron_right"
-		[outlined]="true"
-		[isLink]="true"
-		padding="4px 8px"
-		(click)="$event.preventDefault(); $event.stopPropagation(); onNavigateToPhrasesClick()">
-		<ng-container i18n>See phrases</ng-container>
-	</cr-button>
-</div>
-
-<div *ngIf="!totalPhrases && aiPercentageResult > 0" class="empty-state-with-ai-score">
-	<div class="info-icon-container">
-		<mat-icon fontSet="material-icons-round">info_outline</mat-icon>
+</ng-container>
+<ng-template #loadingViewRef>
+	<div class="title-loading-container">
+		<div class="top-part-loading-container">
+			<div class="first-loading">
+				<ngx-skeleton-loader class="skeleton circle" [appearance]="'circle'"></ngx-skeleton-loader>
+				<ngx-skeleton-loader class="skeleton" [appearance]="'line'" style="width: 100%"></ngx-skeleton-loader>
+			</div>
+			<ngx-skeleton-loader class="skeleton" [appearance]="'line'" style="width: 15%"></ngx-skeleton-loader>
+		</div>
+		<div class="bottom-part-loading-container">
+			<ngx-skeleton-loader class="skeleton" [appearance]="'line'" style="width: 100%"></ngx-skeleton-loader>
+		</div>
 	</div>
 
-	<span i18n>
-		There is no specific phrase that indicates AI. However, other criteria suggest that this text was generated by AI.
-	</span>
-</div>
+	<div class="content-loading-container">
+		<div class="top-part-loading-container">
+			<ngx-skeleton-loader class="skeleton" [appearance]="'line'" style="width: 15%"></ngx-skeleton-loader>
+			<ngx-skeleton-loader class="skeleton bar" [appearance]="'line'" style="width: 70%"></ngx-skeleton-loader>
+			<ngx-skeleton-loader class="skeleton" [appearance]="'line'" style="width: 15%"></ngx-skeleton-loader>
+		</div>
+		<div class="bottom-part-loading-container">
+			<ngx-skeleton-loader class="skeleton circle small" [appearance]="'circle'"></ngx-skeleton-loader>
+			<ngx-skeleton-loader class="skeleton" [appearance]="'line'" style="width: 30%"></ngx-skeleton-loader>
+		</div>
+	</div>
+</ng-template>

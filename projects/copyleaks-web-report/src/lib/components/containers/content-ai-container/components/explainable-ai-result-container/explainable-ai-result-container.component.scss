@@ -3,8 +3,6 @@
 .top-container {
 	width: 100%;
 	border-radius: 10px;
-	background: $color-white;
-	box-shadow: 0px 0px 10px 0px rgba(11, 22, 62, 0.04), 0px 0px 2px 0px rgba(11, 22, 62, 0.08);
 
 	&.default-view {
 		background: none !important;
@@ -35,7 +33,15 @@
 		}
 	}
 
+	mat-accordion {
+		box-shadow: 0px 0px 2px 0px rgba(11, 22, 62, 0.08), 0px 0px 10px 0px rgba(11, 22, 62, 0.04);
+		border-radius: 10px !important;
+	}
+
 	.top-header-container {
+		background: $color-white;
+		box-shadow: 0px 0px 10px 0px rgba(11, 22, 62, 0.04), 0px 0px 2px 0px rgba(11, 22, 62, 0.08);
+
 		.header-container {
 			padding: 16px;
 			z-index: 2;
@@ -43,11 +49,28 @@
 				display: flex;
 				flex-direction: row;
 				gap: 8px;
+
+				cr-button {
+					::ng-deep {
+						mat-icon,
+						.cls-button-text {
+							color: $color-dark-blue !important;
+						}
+					}
+
+					&[dir='rtl'] {
+						::ng-deep {
+							mat-icon {
+								transform: scale(-1, -1);
+							}
+						}
+					}
+				}
 				.title {
 					color: $color-black;
 					font-family: 'Almarai' !important;
 					font-size: 18px;
-					font-weight: 800;
+					font-weight: 700;
 					line-height: 24px; /* 133.333% */
 					text-transform: capitalize;
 				}
@@ -94,6 +117,11 @@
 					font-weight: 800;
 				}
 				.grade-bar-container {
+					display: flex;
+					flex-direction: row;
+					gap: 16px;
+					align-items: center;
+					direction: ltr;
 					.grade-bar {
 						display: flex;
 						flex-direction: column;
@@ -176,13 +204,14 @@
 		overflow: hidden;
 		.desktop-scroll {
 			overflow: auto;
+			gap: 8px;
 		}
 		.explain-results {
 			::ng-deep .mat-expansion-panel {
 				box-shadow: none;
 				border-bottom: 1px solid $color-container-background;
 				background-color: $color-white;
-				border-radius: 0 !important;
+				border-radius: 10px !important;
 				::ng-deep .mat-expansion-panel-header {
 					padding: 16px;
 					height: auto;
@@ -381,6 +410,7 @@
 				scroll-snap-align: start;
 				mat-accordion {
 					width: 330px;
+					box-shadow: 0px 0px 2px 0px rgba(11, 22, 62, 0.08), 0px 0px 10px 0px rgba(11, 22, 62, 0.04);
 				}
 				::ng-deep .mat-expansion-panel {
 					border-radius: 10px !important;
@@ -473,6 +503,8 @@
 			.loading-result-container {
 				width: 100%;
 				padding: 16px;
+				background: $color-white;
+				border-radius: 10px;
 				.proportion-loading {
 					width: 15%;
 					::ng-deep .loader {
@@ -486,6 +518,9 @@
 			.loading-contant-result-container {
 				width: 100%;
 				padding: 0px 16px 16px 16px;
+				background: $color-white;
+				border-radius: 0px 0px 10px 10px;
+
 				.description-loading {
 					padding: 8px 10px;
 					border-radius: 6px 6px 0px 0px;
@@ -520,8 +555,10 @@
 			}
 		}
 		.mobile-loading-container {
-			width: 100%;
-			padding: 16px 16px 32px;
+			width: 300px;
+			padding: 16px;
+			background: $color-white;
+			border-radius: 10px;
 			.mobile-header-loading-container {
 				.header-loading {
 					width: 30%;
@@ -681,6 +718,39 @@
 		}
 	}
 }
+
+.phrases-title-loading-container {
+	border-radius: 8px 8px 0px 0px;
+	background: linear-gradient(184deg, rgba(248, 234, 255, 0.12) 4.29%, rgba(215, 197, 255, 0.12) 109.21%),
+		var(--Colors-Main-White, #fbffff);
+	.part {
+		display: flex;
+		padding: 4px 8px;
+		align-items: center;
+		gap: 4px;
+	}
+
+	.bar {
+		width: fit-content;
+		display: flex;
+		height: fit-content !important;
+		::ng-deep .loader {
+			height: 8px !important;
+			margin-bottom: 0px !important;
+			border-radius: 10px !important;
+			opacity: 0.2;
+			background-color: $color-medium-dark;
+		}
+	}
+}
+
+.skeleton.circle {
+	::ng-deep .loader {
+		width: 18px !important;
+		height: 18px !important;
+	}
+}
+
 ::ng-deep .mat-tooltip.tooltip-contanier {
 	font-size: 16px !important;
 	font-weight: 500 !important;

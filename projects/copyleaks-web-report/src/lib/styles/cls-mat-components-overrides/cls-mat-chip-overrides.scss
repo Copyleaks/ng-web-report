@@ -46,5 +46,11 @@
 			line-height: normal !important;
 			box-sizing: border-box;
 		}
+
+		.ai-source-match {
+			background: $color-light-ai-detected-text !important;
+			color: $color-ai-tab !important;
+			font-weight: 800 !important;
+		}
 	}
 }

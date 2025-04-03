@@ -1,87 +1,154 @@
 <ng-container *ngIf="!showLoadingView; else loadingViewRef">
-	<div class="expand-result-top-continer" fxLayout="row" fxLayoutAlign="space-between start" [dir]="docDirection">
+	<div class="expand-result-top-continer" fxLayout="column" fxLayoutAlign="space-between start" [dir]="docDirection">
 		<div class="expand-result-continer" fxLayout="column" fxLayoutAlign="start start">
-			<diV class="result-header" fxLayout="column" fxLayoutAlign="space-between center">
-				<a
-					tabIndex="0"
-					class="back-button"
-					fxLayout="row"
-					fxLayoutAlign="center center"
-					fxLayoutGap="4px"
-					mat-button
-					[disableRipple]="true"
-					(click)="clickBack()"
-					(keyup.enter)="clickBack()"
-					role="link"
-					aria-label="Navigates back."
-					i18n-aria-label>
-					<mat-icon fontSet="material-icons-round">chevron_left</mat-icon>
-					<span i18n>Back</span>
-				</a>
+			<div class="result-header" fxLayout="column" fxLayoutAlign="space-between center">
+				<div class="back-and-chips-container">
+					<a
+						tabIndex="0"
+						class="back-button"
+						fxLayout="row"
+						fxLayoutAlign="center center"
+						fxLayoutGap="4px"
+						mat-button
+						[disableRipple]="true"
+						(click)="clickBack()"
+						(keyup.enter)="clickBack()"
+						role="link"
+						aria-label="Navigates back."
+						i18n-aria-label>
+						<mat-icon fontSet="material-icons-round">chevron_left</mat-icon>
+						<span i18n>Back</span>
+					</a>
+					<div
+						*ngIf="resultItem?.resultPreview?.tags?.length"
+						class="mat-chip-list-container"
+						fxLayout="row"
+						fxLayoutAlign="start start">
+						<mat-chip-list
+							aria-label="This is a list of tags the are associated with the given results"
+							i18n-aria-label
+							role>
+							<mat-chip
+								*ngFor="let tag of resultItem?.resultPreview?.tags"
+								#chipContent
+								[class]="tag?.code"
+								[matTooltip]="getTagChipTooltipText(tag, chipContent)"
+								[matTooltipClass]="
+									tag?.code === RESULT_TAGS_CODES.SUMMARY_DATE
+										? ['web-report-mat-tooltip', 'date-tooltip']
+										: 'web-report-mat-tooltip'
+								"
+								i18n-matTooltip>
+								{{ tag?.title ?? '' | decodeUri }}
+							</mat-chip>
+						</mat-chip-list>
+					</div>
+				</div>
+
 				<div fxLayout="row" fxLayoutAlign="start start" fxLayoutGap="8px" style="width: 100%">
-					<div class="result-logo" fxLayout="column" fxLayoutAlign="center center">
-						<ng-container [ngSwitch]="resultItem?.resultPreview?.type">
-							<ng-container *ngSwitchCase="eResultPreviewType.Batch">
-								<mat-icon fontSet="material-icons-round">compare_arrows</mat-icon>
-							</ng-container>
-							<ng-container *ngSwitchCase="eResultPreviewType.Repositroy">
-								<svg
-									class="title-img"
-									xmlns="http://www.w3.org/2000/svg"
-									width="11"
-									height="16"
-									viewBox="0 0 11 16"
-									fill="none">
-									<path
-										d="M10.1426 2.58338C10.1426 3.56798 7.91658 4.36598 5.17158 4.36598C2.42658 4.36598 0.200578 3.56798 0.200578 2.58338C0.200578 1.59878 2.42598 0.80078 5.17158 0.80078C7.91718 0.80078 10.1426 1.59878 10.1426 2.58338ZM10.0694 3.40958C10.1174 3.49885 10.1425 3.59862 10.1426 3.69998V6.61598C10.1426 7.46078 7.91238 8.15078 5.17158 8.15078C2.43078 8.15078 0.200578 7.46198 0.200578 6.61598V3.69998C0.200606 3.59893 0.22598 3.49949 0.274378 3.41078C0.694378 4.26398 2.75238 4.88258 5.17158 4.88258C7.59078 4.88258 9.65118 4.26338 10.0682 3.40958H10.0694ZM1.67838 6.14858C1.67187 6.08352 1.64663 6.02175 1.60571 5.97075C1.56478 5.91976 1.50994 5.88174 1.44783 5.8613C1.38573 5.84087 1.31902 5.8389 1.25582 5.85563C1.19261 5.87236 1.13562 5.90707 1.09175 5.95556C1.04789 6.00404 1.01904 6.06422 1.0087 6.12878C0.998364 6.19334 1.00699 6.25951 1.03352 6.31927C1.06005 6.37903 1.10336 6.4298 1.15819 6.46543C1.21301 6.50105 1.27699 6.52001 1.34238 6.51998C1.43598 6.51486 1.52376 6.47295 1.58659 6.40337C1.64942 6.3338 1.68279 6.24222 1.67838 6.14858ZM10.0694 7.27178C10.1174 7.36105 10.1425 7.46082 10.1426 7.56218L10.1426 10.4782C10.1426 11.3242 7.91238 12.013 5.17158 12.013C2.43078 12.013 0.200578 11.3242 0.200578 10.4782L0.200578 7.56218C0.200606 7.46113 0.22598 7.36169 0.274378 7.27298C0.694378 8.12618 2.75238 8.74478 5.17158 8.74478C7.59078 8.74478 9.65118 8.12498 10.0682 7.27178H10.0694ZM1.67778 10.0102C1.67127 9.94512 1.64603 9.88335 1.60511 9.83236C1.56418 9.78136 1.50934 9.74334 1.44723 9.72291C1.38513 9.70247 1.31842 9.7005 1.25522 9.71723C1.19201 9.73396 1.13502 9.76867 1.09115 9.81716C1.04729 9.86564 1.01844 9.92582 1.0081 9.99038C0.997765 10.0549 1.00639 10.1211 1.03292 10.1809C1.05946 10.2406 1.10276 10.2914 1.15759 10.327C1.21241 10.3627 1.27639 10.3816 1.34178 10.3816C1.43548 10.3766 1.52342 10.3348 1.58637 10.2652C1.64933 10.1956 1.68219 10.1039 1.67778 10.0102ZM10.0694 11.0608C10.1172 11.1497 10.1423 11.249 10.1426 11.35V14.266C10.1426 15.112 7.91238 15.8008 5.17158 15.8008C2.43078 15.8008 0.200578 15.112 0.200578 14.266V11.35C0.200425 11.2489 0.22581 11.1494 0.274378 11.0608C0.694378 11.914 2.75238 12.5326 5.17158 12.5326C7.59078 12.5326 9.65118 11.9134 10.0682 11.0608H10.0694ZM1.67778 13.7986C1.68265 13.7515 1.6776 13.704 1.66293 13.659C1.64827 13.6141 1.62432 13.5727 1.59265 13.5375C1.56098 13.5024 1.52228 13.4743 1.47906 13.4551C1.43585 13.4359 1.38908 13.426 1.34178 13.426C1.29448 13.426 1.24771 13.4359 1.20449 13.4551C1.16128 13.4743 1.12258 13.5024 1.09091 13.5375C1.05923 13.5727 1.03529 13.6141 1.02062 13.659C1.00596 13.704 1.0009 13.7515 1.00578 13.7986C1.0009 13.8456 1.00596 13.8932 1.02062 13.9381C1.03529 13.9831 1.05923 14.0245 1.09091 14.0596C1.12258 14.0947 1.16128 14.1228 1.20449 14.1421C1.24771 14.1613 1.29448 14.1712 1.34178 14.1712C1.38908 14.1712 1.43585 14.1613 1.47906 14.1421C1.52228 14.1228 1.56098 14.0947 1.59265 14.0596C1.62432 14.0245 1.64827 13.9831 1.66293 13.9381C1.6776 13.8932 1.68265 13.8456 1.67778 13.7986Z"
-										fill="#3F9AF5" />
-								</svg>
-							</ng-container>
-							<ng-container *ngSwitchCase="eResultPreviewType.Internet">
-								<ng-container *ngIf="faviconExists; else defaultInternetIcon">
-									<img
-										alt="Source image"
-										role="img"
-										i18n-alt
-										class="internet-result-favicon"
-										[src]="'https://www.google.com/s2/favicons?domain=' + faviconURL"
-										(error)="onFaviconError()"
-										(load)="onFaviconLoad()" />
+					<div
+						class="result-logo"
+						fxLayout="column"
+						fxLayoutAlign="center center"
+						[class.ai-source-match-icon]="isAiSourceResult">
+						<ng-container *ngIf="!isAiSourceResult; else AISourceMatchResultRef">
+							<ng-container [ngSwitch]="resultItem?.resultPreview?.type">
+								<ng-container *ngSwitchCase="eResultPreviewType.Batch">
+									<mat-icon fontSet="material-icons-round">compare_arrows</mat-icon>
 								</ng-container>
-								<ng-template #defaultInternetIcon>
+								<ng-container *ngSwitchCase="eResultPreviewType.Repositroy">
+									<svg
+										class="repo-img"
+										xmlns="http://www.w3.org/2000/svg"
+										width="11"
+										height="16"
+										viewBox="0 0 11 16"
+										fill="none">
+										<path
+											d="M10.1426 2.58338C10.1426 3.56798 7.91658 4.36598 5.17158 4.36598C2.42658 4.36598 0.200578 3.56798 0.200578 2.58338C0.200578 1.59878 2.42598 0.80078 5.17158 0.80078C7.91718 0.80078 10.1426 1.59878 10.1426 2.58338ZM10.0694 3.40958C10.1174 3.49885 10.1425 3.59862 10.1426 3.69998V6.61598C10.1426 7.46078 7.91238 8.15078 5.17158 8.15078C2.43078 8.15078 0.200578 7.46198 0.200578 6.61598V3.69998C0.200606 3.59893 0.22598 3.49949 0.274378 3.41078C0.694378 4.26398 2.75238 4.88258 5.17158 4.88258C7.59078 4.88258 9.65118 4.26338 10.0682 3.40958H10.0694ZM1.67838 6.14858C1.67187 6.08352 1.64663 6.02175 1.60571 5.97075C1.56478 5.91976 1.50994 5.88174 1.44783 5.8613C1.38573 5.84087 1.31902 5.8389 1.25582 5.85563C1.19261 5.87236 1.13562 5.90707 1.09175 5.95556C1.04789 6.00404 1.01904 6.06422 1.0087 6.12878C0.998364 6.19334 1.00699 6.25951 1.03352 6.31927C1.06005 6.37903 1.10336 6.4298 1.15819 6.46543C1.21301 6.50105 1.27699 6.52001 1.34238 6.51998C1.43598 6.51486 1.52376 6.47295 1.58659 6.40337C1.64942 6.3338 1.68279 6.24222 1.67838 6.14858ZM10.0694 7.27178C10.1174 7.36105 10.1425 7.46082 10.1426 7.56218L10.1426 10.4782C10.1426 11.3242 7.91238 12.013 5.17158 12.013C2.43078 12.013 0.200578 11.3242 0.200578 10.4782L0.200578 7.56218C0.200606 7.46113 0.22598 7.36169 0.274378 7.27298C0.694378 8.12618 2.75238 8.74478 5.17158 8.74478C7.59078 8.74478 9.65118 8.12498 10.0682 7.27178H10.0694ZM1.67778 10.0102C1.67127 9.94512 1.64603 9.88335 1.60511 9.83236C1.56418 9.78136 1.50934 9.74334 1.44723 9.72291C1.38513 9.70247 1.31842 9.7005 1.25522 9.71723C1.19201 9.73396 1.13502 9.76867 1.09115 9.81716C1.04729 9.86564 1.01844 9.92582 1.0081 9.99038C0.997765 10.0549 1.00639 10.1211 1.03292 10.1809C1.05946 10.2406 1.10276 10.2914 1.15759 10.327C1.21241 10.3627 1.27639 10.3816 1.34178 10.3816C1.43548 10.3766 1.52342 10.3348 1.58637 10.2652C1.64933 10.1956 1.68219 10.1039 1.67778 10.0102ZM10.0694 11.0608C10.1172 11.1497 10.1423 11.249 10.1426 11.35V14.266C10.1426 15.112 7.91238 15.8008 5.17158 15.8008C2.43078 15.8008 0.200578 15.112 0.200578 14.266V11.35C0.200425 11.2489 0.22581 11.1494 0.274378 11.0608C0.694378 11.914 2.75238 12.5326 5.17158 12.5326C7.59078 12.5326 9.65118 11.9134 10.0682 11.0608H10.0694ZM1.67778 13.7986C1.68265 13.7515 1.6776 13.704 1.66293 13.659C1.64827 13.6141 1.62432 13.5727 1.59265 13.5375C1.56098 13.5024 1.52228 13.4743 1.47906 13.4551C1.43585 13.4359 1.38908 13.426 1.34178 13.426C1.29448 13.426 1.24771 13.4359 1.20449 13.4551C1.16128 13.4743 1.12258 13.5024 1.09091 13.5375C1.05923 13.5727 1.03529 13.6141 1.02062 13.659C1.00596 13.704 1.0009 13.7515 1.00578 13.7986C1.0009 13.8456 1.00596 13.8932 1.02062 13.9381C1.03529 13.9831 1.05923 14.0245 1.09091 14.0596C1.12258 14.0947 1.16128 14.1228 1.20449 14.1421C1.24771 14.1613 1.29448 14.1712 1.34178 14.1712C1.38908 14.1712 1.43585 14.1613 1.47906 14.1421C1.52228 14.1228 1.56098 14.0947 1.59265 14.0596C1.62432 14.0245 1.64827 13.9831 1.66293 13.9381C1.6776 13.8932 1.68265 13.8456 1.67778 13.7986Z"
+											fill="#3F9AF5" />
+									</svg>
+								</ng-container>
+								<ng-container *ngSwitchCase="eResultPreviewType.Internet">
+									<ng-container *ngIf="faviconExists; else defaultInternetIcon">
+										<img
+											alt="Source image"
+											role="img"
+											i18n-alt
+											class="internet-result-favicon"
+											[src]="'https://www.google.com/s2/favicons?domain=' + faviconURL"
+											(error)="onFaviconError()"
+											(load)="onFaviconLoad()" />
+									</ng-container>
+									<ng-template #defaultInternetIcon>
+										<mat-icon fontSet="material-icons-round">language</mat-icon>
+									</ng-template>
+								</ng-container>
+								<ng-container *ngSwitchCase="eResultPreviewType.Database">
+									<svg
+										class="internal-database-img"
+										width="17"
+										height="22"
+										viewBox="0 0 17 22"
+										fill="none"
+										xmlns="http://www.w3.org/2000/svg">
+										<path
+											d="M13.8584 2.77719C13.8584 4.08999 10.8904 5.15399 7.2304 5.15399C3.5704 5.15399 0.602398 4.08999 0.602398 2.77719C0.602398 1.46439 3.5696 0.40039 7.2304 0.40039C10.8912 0.40039 13.8584 1.46439 13.8584 2.77719ZM13.7608 3.87879C13.8248 3.99782 13.8583 4.13085 13.8584 4.26599V8.15399C13.8584 9.28039 10.8848 10.2004 7.2304 10.2004C3.576 10.2004 0.602398 9.28199 0.602398 8.15399V4.26599C0.602436 4.13125 0.636267 3.99867 0.700798 3.88039C1.2608 5.01799 4.0048 5.84279 7.2304 5.84279C10.456 5.84279 13.2032 5.01719 13.7592 3.87879H13.7608ZM2.5728 7.53079C2.56413 7.44405 2.53047 7.36168 2.4759 7.29369C2.42134 7.2257 2.34822 7.175 2.26541 7.14776C2.1826 7.12051 2.09366 7.11788 2.00938 7.14019C1.92511 7.16249 1.84912 7.20878 1.79063 7.27343C1.73215 7.33807 1.69368 7.41831 1.6799 7.50439C1.66611 7.59047 1.67761 7.6787 1.71299 7.75838C1.74837 7.83805 1.80611 7.90575 1.87921 7.95325C1.95231 8.00075 2.03762 8.02602 2.1248 8.02599C2.2496 8.01916 2.36664 7.96328 2.45041 7.87052C2.53418 7.77775 2.57869 7.65564 2.5728 7.53079ZM13.7608 9.02839C13.8248 9.14742 13.8583 9.28045 13.8584 9.41559L13.8584 13.3036C13.8584 14.4316 10.8848 15.35 7.2304 15.35C3.576 15.35 0.602398 14.4316 0.602398 13.3036L0.602398 9.41559C0.602436 9.28085 0.636267 9.14827 0.700798 9.02999C1.2608 10.1676 4.0048 10.9924 7.2304 10.9924C10.456 10.9924 13.2032 10.166 13.7592 9.02839H13.7608ZM2.572 12.6796C2.56333 12.5928 2.52967 12.5105 2.4751 12.4425C2.42054 12.3745 2.34742 12.3238 2.26461 12.2966C2.1818 12.2693 2.09286 12.2667 2.00858 12.289C1.92431 12.3113 1.84832 12.3576 1.78983 12.4222C1.73135 12.4869 1.69288 12.5671 1.6791 12.6532C1.66531 12.7393 1.67681 12.8275 1.71219 12.9072C1.74757 12.9869 1.80531 13.0545 1.87841 13.1021C1.95151 13.1496 2.03682 13.1748 2.124 13.1748C2.24894 13.1682 2.36619 13.1124 2.45013 13.0196C2.53407 12.9268 2.57788 12.8046 2.572 12.6796ZM13.7608 14.0804C13.8245 14.1989 13.8581 14.3314 13.8584 14.466L13.8584 18.354C13.8584 19.482 10.8848 20.4004 7.2304 20.4004C3.576 20.4004 0.602398 19.482 0.602398 18.354V14.466C0.602195 14.3312 0.636042 14.1986 0.700798 14.0804C1.2608 15.218 4.0048 16.0428 7.2304 16.0428C10.456 16.0428 13.2032 15.2172 13.7592 14.0804H13.7608ZM2.572 17.7308C2.5785 17.6681 2.57176 17.6047 2.5522 17.5447C2.53265 17.4848 2.50073 17.4296 2.45849 17.3827C2.41626 17.3359 2.36467 17.2985 2.30704 17.2728C2.24942 17.2472 2.18706 17.234 2.124 17.234C2.06093 17.234 1.99857 17.2472 1.94095 17.2728C1.88333 17.2985 1.83174 17.3359 1.7895 17.3827C1.74727 17.4296 1.71535 17.4848 1.69579 17.5447C1.67624 17.6047 1.6695 17.6681 1.676 17.7308C1.6695 17.7935 1.67624 17.8569 1.69579 17.9169C1.71535 17.9768 1.74727 18.032 1.7895 18.0788C1.83174 18.1257 1.88333 18.1631 1.94095 18.1888C1.99857 18.2144 2.06093 18.2276 2.124 18.2276C2.18706 18.2276 2.24942 18.2144 2.30704 18.1888C2.36467 18.1631 2.41626 18.1257 2.45849 18.0788C2.50073 18.032 2.53265 17.9768 2.5522 17.9169C2.57176 17.8569 2.5785 17.7935 2.572 17.7308Z"
+											fill="#3F9AF5" />
+										<path
+											d="M16.358 20.1885C17.9652 18.1424 17.6915 15.2448 15.6962 13.5372C13.5368 11.6653 10.1284 12.1681 8.58089 14.5827C6.71 17.4553 8.38186 21.2888 11.7057 21.9061C13.4074 22.2696 15.2932 21.5576 16.363 20.1885H16.358Z"
+											fill="#FBFFFF" />
+										<path
+											d="M17.3882 19.6885H17.2787C18.429 17.5257 17.9692 14.8253 16.0225 13.1583C13.631 11.0866 9.87147 11.6443 8.16091 14.3114C6.09755 17.4818 7.9397 21.7106 11.6078 22.3965C13.5002 22.7978 15.5742 22.0102 16.757 20.4964L17.3882 19.6885ZM15.2808 19.0944L15.2808 19.0944L15.2777 19.0988C14.6768 19.9509 13.7076 20.4851 12.6013 20.4851L12.5986 20.4851C10.2392 20.498 8.62123 17.9763 9.60659 15.8388C9.86246 15.2919 10.2521 14.8105 10.7391 14.5024L10.7506 14.4951L10.7617 14.4872C12.0914 13.5405 14.063 13.8547 15.0726 15.0713L15.0726 15.0713L15.0783 15.078C16.0653 16.2258 16.1378 17.9069 15.2808 19.0944Z"
+											fill="#3F9AF5"
+											stroke="#FBFFFF" />
+										<path
+											d="M12.6716 19.8856C11.149 19.9006 9.915 18.6609 9.92992 17.1474C9.91002 15.6389 11.144 14.3993 12.6566 14.4142C13.4577 14.4092 14.0847 14.6631 14.632 15.1809L13.9304 15.8829C13.607 15.5294 13.1642 15.3751 12.6566 15.3751C11.6466 15.3601 10.9699 16.1567 10.9898 17.1524C10.9599 18.1382 11.6515 18.9497 12.6616 18.9297C13.199 18.9347 13.617 18.7655 13.9653 18.407L14.6669 19.109C14.1195 19.6168 13.4528 19.9055 12.6716 19.8956V19.8856Z"
+											fill="#0B163E" />
+									</svg>
+								</ng-container>
+								<ng-container *ngSwitchDefault>
 									<mat-icon fontSet="material-icons-round">language</mat-icon>
-								</ng-template>
-							</ng-container>
-							<ng-container *ngSwitchCase="eResultPreviewType.Database">
-								<svg
-									class="title-img"
-									width="17"
-									height="22"
-									viewBox="0 0 17 22"
-									fill="none"
-									xmlns="http://www.w3.org/2000/svg">
-									<path
-										d="M13.8584 2.77719C13.8584 4.08999 10.8904 5.15399 7.2304 5.15399C3.5704 5.15399 0.602398 4.08999 0.602398 2.77719C0.602398 1.46439 3.5696 0.40039 7.2304 0.40039C10.8912 0.40039 13.8584 1.46439 13.8584 2.77719ZM13.7608 3.87879C13.8248 3.99782 13.8583 4.13085 13.8584 4.26599V8.15399C13.8584 9.28039 10.8848 10.2004 7.2304 10.2004C3.576 10.2004 0.602398 9.28199 0.602398 8.15399V4.26599C0.602436 4.13125 0.636267 3.99867 0.700798 3.88039C1.2608 5.01799 4.0048 5.84279 7.2304 5.84279C10.456 5.84279 13.2032 5.01719 13.7592 3.87879H13.7608ZM2.5728 7.53079C2.56413 7.44405 2.53047 7.36168 2.4759 7.29369C2.42134 7.2257 2.34822 7.175 2.26541 7.14776C2.1826 7.12051 2.09366 7.11788 2.00938 7.14019C1.92511 7.16249 1.84912 7.20878 1.79063 7.27343C1.73215 7.33807 1.69368 7.41831 1.6799 7.50439C1.66611 7.59047 1.67761 7.6787 1.71299 7.75838C1.74837 7.83805 1.80611 7.90575 1.87921 7.95325C1.95231 8.00075 2.03762 8.02602 2.1248 8.02599C2.2496 8.01916 2.36664 7.96328 2.45041 7.87052C2.53418 7.77775 2.57869 7.65564 2.5728 7.53079ZM13.7608 9.02839C13.8248 9.14742 13.8583 9.28045 13.8584 9.41559L13.8584 13.3036C13.8584 14.4316 10.8848 15.35 7.2304 15.35C3.576 15.35 0.602398 14.4316 0.602398 13.3036L0.602398 9.41559C0.602436 9.28085 0.636267 9.14827 0.700798 9.02999C1.2608 10.1676 4.0048 10.9924 7.2304 10.9924C10.456 10.9924 13.2032 10.166 13.7592 9.02839H13.7608ZM2.572 12.6796C2.56333 12.5928 2.52967 12.5105 2.4751 12.4425C2.42054 12.3745 2.34742 12.3238 2.26461 12.2966C2.1818 12.2693 2.09286 12.2667 2.00858 12.289C1.92431 12.3113 1.84832 12.3576 1.78983 12.4222C1.73135 12.4869 1.69288 12.5671 1.6791 12.6532C1.66531 12.7393 1.67681 12.8275 1.71219 12.9072C1.74757 12.9869 1.80531 13.0545 1.87841 13.1021C1.95151 13.1496 2.03682 13.1748 2.124 13.1748C2.24894 13.1682 2.36619 13.1124 2.45013 13.0196C2.53407 12.9268 2.57788 12.8046 2.572 12.6796ZM13.7608 14.0804C13.8245 14.1989 13.8581 14.3314 13.8584 14.466L13.8584 18.354C13.8584 19.482 10.8848 20.4004 7.2304 20.4004C3.576 20.4004 0.602398 19.482 0.602398 18.354V14.466C0.602195 14.3312 0.636042 14.1986 0.700798 14.0804C1.2608 15.218 4.0048 16.0428 7.2304 16.0428C10.456 16.0428 13.2032 15.2172 13.7592 14.0804H13.7608ZM2.572 17.7308C2.5785 17.6681 2.57176 17.6047 2.5522 17.5447C2.53265 17.4848 2.50073 17.4296 2.45849 17.3827C2.41626 17.3359 2.36467 17.2985 2.30704 17.2728C2.24942 17.2472 2.18706 17.234 2.124 17.234C2.06093 17.234 1.99857 17.2472 1.94095 17.2728C1.88333 17.2985 1.83174 17.3359 1.7895 17.3827C1.74727 17.4296 1.71535 17.4848 1.69579 17.5447C1.67624 17.6047 1.6695 17.6681 1.676 17.7308C1.6695 17.7935 1.67624 17.8569 1.69579 17.9169C1.71535 17.9768 1.74727 18.032 1.7895 18.0788C1.83174 18.1257 1.88333 18.1631 1.94095 18.1888C1.99857 18.2144 2.06093 18.2276 2.124 18.2276C2.18706 18.2276 2.24942 18.2144 2.30704 18.1888C2.36467 18.1631 2.41626 18.1257 2.45849 18.0788C2.50073 18.032 2.53265 17.9768 2.5522 17.9169C2.57176 17.8569 2.5785 17.7935 2.572 17.7308Z"
-										fill="#3F9AF5" />
-									<path
-										d="M16.358 20.1885C17.9652 18.1424 17.6915 15.2448 15.6962 13.5372C13.5368 11.6653 10.1284 12.1681 8.58089 14.5827C6.71 17.4553 8.38186 21.2888 11.7057 21.9061C13.4074 22.2696 15.2932 21.5576 16.363 20.1885H16.358Z"
-										fill="#FBFFFF" />
-									<path
-										d="M17.3882 19.6885H17.2787C18.429 17.5257 17.9692 14.8253 16.0225 13.1583C13.631 11.0866 9.87147 11.6443 8.16091 14.3114C6.09755 17.4818 7.9397 21.7106 11.6078 22.3965C13.5002 22.7978 15.5742 22.0102 16.757 20.4964L17.3882 19.6885ZM15.2808 19.0944L15.2808 19.0944L15.2777 19.0988C14.6768 19.9509 13.7076 20.4851 12.6013 20.4851L12.5986 20.4851C10.2392 20.498 8.62123 17.9763 9.60659 15.8388C9.86246 15.2919 10.2521 14.8105 10.7391 14.5024L10.7506 14.4951L10.7617 14.4872C12.0914 13.5405 14.063 13.8547 15.0726 15.0713L15.0726 15.0713L15.0783 15.078C16.0653 16.2258 16.1378 17.9069 15.2808 19.0944Z"
-										fill="#3F9AF5"
-										stroke="#FBFFFF" />
-									<path
-										d="M12.6716 19.8856C11.149 19.9006 9.915 18.6609 9.92992 17.1474C9.91002 15.6389 11.144 14.3993 12.6566 14.4142C13.4577 14.4092 14.0847 14.6631 14.632 15.1809L13.9304 15.8829C13.607 15.5294 13.1642 15.3751 12.6566 15.3751C11.6466 15.3601 10.9699 16.1567 10.9898 17.1524C10.9599 18.1382 11.6515 18.9497 12.6616 18.9297C13.199 18.9347 13.617 18.7655 13.9653 18.407L14.6669 19.109C14.1195 19.6168 13.4528 19.9055 12.6716 19.8956V19.8856Z"
-										fill="#0B163E" />
-								</svg>
-							</ng-container>
-							<ng-container *ngSwitchDefault>
-								<mat-icon fontSet="material-icons-round">language</mat-icon>
+								</ng-container>
 							</ng-container>
 						</ng-container>
+						<ng-template #AISourceMatchResultRef>
+							<svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+								<rect x="0.5" y="0.5" width="23" height="23" rx="11.5" fill="#EBF3F5" />
+								<rect x="0.5" y="0.5" width="23" height="23" rx="11.5" stroke="#FBFFFF" />
+								<rect x="0.5" y="0.5" width="23" height="23" rx="11.5" stroke="url(#paint0_linear_7246_2850)" />
+								<rect x="2" y="2" width="20" height="20" rx="10" fill="#FBFFFF" />
+								<rect x="2" y="2" width="20" height="20" rx="10" fill="url(#paint1_linear_7246_2850)" />
+								<path
+									d="M14.5763 13.5472H14.0343L13.8422 13.3619C14.5146 12.5798 14.9194 11.5643 14.9194 10.4597C14.9194 7.99657 12.9228 6 10.4597 6C7.99657 6 6 7.99657 6 10.4597C6 12.9228 7.99657 14.9194 10.4597 14.9194C11.5643 14.9194 12.5798 14.5146 13.3619 13.8422L13.5472 14.0343V14.5763L16.9777 18L18 16.9777L14.5763 13.5472ZM10.4597 13.5472C8.75129 13.5472 7.37221 12.1681 7.37221 10.4597C7.37221 8.75129 8.75129 7.37221 10.4597 7.37221C12.1681 7.37221 13.5472 8.75129 13.5472 10.4597C13.5472 12.1681 12.1681 13.5472 10.4597 13.5472Z"
+									fill="white" />
+								<defs>
+									<linearGradient
+										id="paint0_linear_7246_2850"
+										x1="-1.01822e-07"
+										y1="13.811"
+										x2="22.4306"
+										y2="19.7441"
+										gradientUnits="userSpaceOnUse">
+										<stop stop-color="#BCA6FF" />
+										<stop offset="1" stop-color="#9345F9" />
+									</linearGradient>
+									<linearGradient
+										id="paint1_linear_7246_2850"
+										x1="2"
+										y1="13.5092"
+										x2="20.6922"
+										y2="18.4534"
+										gradientUnits="userSpaceOnUse">
+										<stop stop-color="#BCA6FF" />
+										<stop offset="1" stop-color="#9345F9" />
+									</linearGradient>
+								</defs>
+							</svg>
+						</ng-template>
 					</div>
 					<div class="result-title-container" fxLayout="column" fxLayoutAlign="start start" fxLayoutGap="4px">
-						<div fxLayout="row" fxLayoutAlign="start center" fxLayoutGap="4px">
+						<div fxLayout="row" fxLayoutAlign="start center" fxLayoutGap="8px">
 							<button
 								class="exclude-button"
 								(click)="excludeResult()"
@@ -90,8 +157,8 @@
 								matTooltipClass="web-report-mat-tooltip"
 								i18n-matTooltip
 								[matTooltip]="exclude ? INCLUDE_RESULT_TOOLTIP : EXCLUDE_RESULT_TOOLTIP">
-								<mat-icon *ngIf="exclude" fontSet="material-icons-outlined">visibility</mat-icon>
-								<mat-icon *ngIf="!exclude" fontSet="material-icons-outlined">visibility_off</mat-icon>
+								<mat-icon *ngIf="exclude" fontSet="material-icons-round">visibility</mat-icon>
+								<mat-icon *ngIf="!exclude" fontSet="material-icons-round">visibility_off</mat-icon>
 							</button>
 							<span class="result-title" [title]="resultItem?.resultPreview?.title">
 								{{ resultItem?.resultPreview?.metadata?.filename ?? resultItem?.resultPreview?.title }}
@@ -104,11 +171,49 @@
 								target="_blank"
 								aria-label="Opens the founded source"
 								i18n-aria-label>
-								<mat-icon fontSet="material-icons-round">open_in_new</mat-icon>
-								<span [title]="resultItem?.resultPreview?.url">
-									<ng-container i18n>Source:</ng-container>
-									{{ resultItem?.resultPreview?.url }}
-								</span>
+								<ng-container *ngIf="copyMessage; else showItemURL">
+									<mat-chip class="copied-url-chip">
+										<mat-icon fontSet="material-icons-round">done</mat-icon>
+										<div class="copy-message" i18n>{{ copyMessage }}</div>
+									</mat-chip>
+								</ng-container>
+								<ng-template #showItemURL>
+									<mat-icon
+										fontSet="material-icons-round"
+										class="copy-url-button"
+										role="button"
+										tabindex="0"
+										aria-label="Copy result URL to clipboard"
+										(click)="$event.preventDefault(); $event.stopPropagation(); copyResultURL()"
+										(keydown.enter)="copyResultURL()"
+										(keydown.space)="copyResultURL(); $event.preventDefault()"
+										matTooltip="Copy result URL to clipboard"
+										matTooltipClass="web-report-mat-tooltip"
+										i18n-matTooltip
+										i18n-aria-label>
+										content_copy
+									</mat-icon>
+
+									<mat-icon
+										fontSet="material-icons-round"
+										class="copy-url-button"
+										role="button"
+										tabindex="0"
+										aria-label="Open result URL in new tab"
+										(click)="$event.preventDefault(); $event.stopPropagation(); openResultURLInNewTab()"
+										(keydown.enter)="openResultURLInNewTab()"
+										(keydown.space)="openResultURLInNewTab(); $event.preventDefault()"
+										matTooltip="Open result URL in a new tab"
+										matTooltipClass="web-report-mat-tooltip"
+										i18n-matTooltip
+										i18n-aria-label>
+										open_in_new
+									</mat-icon>
+									<span [title]="resultItem?.resultPreview?.url">
+										<ng-container i18n>Source:</ng-container>
+										{{ resultItem?.resultPreview?.url }}
+									</span>
+								</ng-template>
 							</a>
 						</ng-container>
 						<ng-template #resultSource>
@@ -116,50 +221,15 @@
 						</ng-template>
 					</div>
 				</div>
-			</diV>
-			<div
-				*ngIf="resultItem?.resultPreview?.tags?.length"
-				class="mat-chip-list-container"
-				fxLayout="row"
-				fxLayoutAlign="start start">
-				<mat-chip-list
-					aria-label="This is a list of tags the are associated with the given results"
-					i18n-aria-label
-					role>
-					<mat-chip
-						*ngFor="let tag of resultItem?.resultPreview?.tags"
-						#chipContent
-						[matTooltip]="getTagChipTooltipText(tag, chipContent)"
-						[matTooltipClass]="
-							tag?.code === 'summary-date' ? ['web-report-mat-tooltip', 'date-tooltip'] : 'web-report-mat-tooltip'
-						"
-						i18n-matTooltip>
-						{{ tag?.title ?? '' | decodeUri }}
-					</mat-chip>
-				</mat-chip-list>
 			</div>
 		</div>
 
 		<div class="plagiarism-detection-container">
-			<!-- <cr-percentage-result-item
+			<cr-percentage-result-item
 				[reportViewService]="reportViewSvc"
-				[percentageResult]="percentageResult"></cr-percentage-result-item> -->
-
-			<cr-assessment-tool-tab-score-panel
-				[selectedTap]="EReportViewType.PlagiarismView"
-				[plagarismScore]="
-					(percentageResult?.resultItem?.iStatisticsResult?.identical +
-						percentageResult?.resultItem?.iStatisticsResult?.minorChanges +
-						percentageResult?.resultItem?.iStatisticsResult?.relatedMeaning) /
-					(percentageResult?.resultItem?.metadataSource?.words - percentageResult?.resultItem?.metadataSource?.excluded)
-				"
-				[wordsTotal]="percentageResult?.resultItem?.metadataSource?.words ?? 0"
-				[identicalTotal]="percentageResult?.resultItem?.iStatisticsResult?.identical ?? 0"
-				[minorChangesTotal]="percentageResult?.resultItem?.iStatisticsResult?.minorChanges ?? 0"
-				[paraphrasedTotal]="percentageResult?.resultItem?.iStatisticsResult?.relatedMeaning ?? 0"
-				[excludedTotal]="
-					percentageResult?.resultItem?.metadataSource?.excluded ?? 0
-				"></cr-assessment-tool-tab-score-panel>
+				[reportDataSvc]="reportDataSvc"
+				[percentageResult]="percentageResult"
+				[crReportScoreTooltipPosition]="EReportScoreTooltipPosition.BELOW"></cr-percentage-result-item>
 		</div>
 	</div>
 </ng-container>

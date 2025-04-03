@@ -75,7 +75,7 @@
 			</mat-icon>
 		</ng-template>
 	</div>
-	<span *ngIf="!hideDescription" class="correction-type-description" i18n>
+	<span *ngIf="!hideDescription" class="correction-type-description" [dir]="docDirection" i18n>
 		{{ correctionDescription }}
 	</span>
 </ng-container>

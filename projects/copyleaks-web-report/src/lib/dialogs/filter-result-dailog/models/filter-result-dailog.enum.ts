@@ -11,6 +11,7 @@ export enum EFilterResultForm {
 	fcOthersResults = 'othersResults',
 	fcBatch = 'batch',
 	fgRepositories = 'repositories',
+	fgAISourceMatch = 'aiSourceMatch',
 
 	//Results Meta
 	fgResultsMeta = 'resultsMeta',

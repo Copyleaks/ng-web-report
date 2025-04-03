@@ -110,6 +110,11 @@ import { ReportAIResultsService } from './services/report-ai-results.service';
 import { CrAIScoreTooltipContentModule } from './directives/cr-ai-score-tooltip-content/cr-ai-score-tooltip-content.module';
 import { FormaDecimalPipeModule } from './pipes/forma-decimal-number/forma-decimal-number.module';
 import { RemoveProtocolPipeModule } from './pipes/remove-protocol/remove-protocol.module';
+import { CrAiLogicBannerComponent } from './components/core/cr-ai-logic-banner/cr-ai-logic-banner.component';
+import { CrAiSourceMatchEntryComponent } from './components/core/cr-ai-source-match-entry/cr-ai-source-match-entry.component';
+import { CrAiPhrasesEntryComponent } from './components/core/cr-ai-phrases-entry/cr-ai-phrases-entry.component';
+import { CrAiSourceMatchUpgradeComponent } from './components/core/cr-ai-source-match-upgrade/cr-ai-source-match-upgrade.component';
+import { CrAiPhrasesMobileHeaderComponent } from './components/core/cr-ai-phrases-mobile-header/cr-ai-phrases-mobile-header.component';
 
 @NgModule({
 	declarations: [
@@ -176,6 +181,11 @@ import { RemoveProtocolPipeModule } from './pipes/remove-protocol/remove-protoco
 		AiPercentageComponent,
 		ExplainableAIResultContainerComponent,
 		ResourcesContainerComponent,
+		CrAiLogicBannerComponent,
+		CrAiSourceMatchEntryComponent,
+		CrAiPhrasesEntryComponent,
+		CrAiSourceMatchUpgradeComponent,
+		CrAiPhrasesMobileHeaderComponent,
 	],
 	imports: [
 		CommonModule,
@@ -227,6 +237,7 @@ import { RemoveProtocolPipeModule } from './pipes/remove-protocol/remove-protoco
 		CrBannerSectionComponent,
 		EmptyResultStateComponent,
 		ContentViewerContainerComponent,
+		CrAiSourceMatchUpgradeComponent,
 	],
 	providers: [
 		ReportRealtimeResultsService,

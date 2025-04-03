@@ -6,6 +6,7 @@ import { EFilterResultForm } from '../../models/filter-result-dailog.enum';
 import { ReportViewService } from '../../../../services/report-view.service';
 import { EPlatformType } from '../../../../enums/copyleaks-web-report.enums';
 import { untilDestroy } from '../../../../utils/until-destroy';
+import { ReportDataService } from '../../../../services/report-data.service';
 
 @Component({
 	selector: 'cr-source-type-filter-result',
@@ -13,15 +14,27 @@ import { untilDestroy } from '../../../../utils/until-destroy';
 	styleUrls: ['./source-type-filter-result.component.scss'],
 })
 export class SourceTypeFilterResultComponent implements OnInit, OnDestroy {
+	/**
+	 * @Input {ITotalSourceType} Total counts of different source types in the report
+	 */
 	@Input() totalSourceType: ITotalSourceType = {
 		totalInternet: 0,
 		totalInternalDatabase: 0,
 		totalbatch: 0,
 		totalOthersFiles: 0,
 		totalYourFiles: 0,
+		totalAISourceMatch: 0,
 	};
 
+	/**
+	 * @Input {ReportViewService} Service for managing the report view state and interactions
+	 */
 	@Input() reportViewSvc: ReportViewService;
+
+	/**
+	 * @Input {ReportDataService} Service for accessing and managing report data
+	 */
+	@Input() reportDataSvc: ReportDataService;
 
 	eFilterResultForm = EFilterResultForm;
 	ePlatformType = EPlatformType;
@@ -29,6 +42,7 @@ export class SourceTypeFilterResultComponent implements OnInit, OnDestroy {
 	INTERNET_SOURCE = $localize`Internet Source`;
 	IINTERNAL_DATABASE = $localize`Internal Database`;
 	THIS_BACTCH = $localize`This batch`;
+	AI_SOURCE_MATCH = $localize`AI Source Match`;
 
 	platformType: EPlatformType;
 

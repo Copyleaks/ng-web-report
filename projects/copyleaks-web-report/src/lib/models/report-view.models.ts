@@ -11,6 +11,9 @@ export interface IReportViewEvent {
 	showDisabledProducts?: boolean;
 	platformType?: EPlatformType;
 	selectedCustomTabId?: string;
+	selectedResultsCategory?: string;
+	navigateBackToAIView?: boolean;
+	showAIPhrases?: boolean;
 }
 
 export interface IReportViewQueryParams {
@@ -21,6 +24,8 @@ export interface IReportViewQueryParams {
 	suspectId?: string;
 	alertCode?: string;
 	selectedCustomTabId?: string;
+	selectedResultsCategory?: string;
+	showAIPhrases?: string;
 }
 
 export interface IReportResponsiveMode {

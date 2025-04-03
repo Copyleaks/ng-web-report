@@ -73,6 +73,25 @@ export class ReportMatchesService implements OnDestroy {
 		return this._showOmittedWords$.value;
 	}
 
+	private _showAIPhrases$ = new BehaviorSubject<boolean>(false);
+	/** Emits a falg that indicates if the AI phrases should be shown or not
+	 */
+	public get showAIPhrases$() {
+		return this._showAIPhrases$;
+	}
+	public get showAIPhrases() {
+		return this._showAIPhrases$.value;
+	}
+
+	private _aiPhrases$ = new BehaviorSubject<SlicedMatch[][] | null>(null);
+	/** Emits matches that are relevant to source html one-to-many mode */
+	public get aiPhrases$() {
+		return this._aiPhrases$.asObservable().pipe();
+	}
+	public get aiPhrases() {
+		return this._aiPhrases$.value;
+	}
+
 	constructor(private _reportDataSvc: ReportDataService, private _reportViewSvc: ReportViewService) {
 		this._initOneToManyMatchesHandler();
 		this._initOneToOneMatchesHandler();
@@ -89,6 +108,7 @@ export class ReportMatchesService implements OnDestroy {
 			this._reportDataSvc.filterOptions$.pipe(distinctUntilChanged()),
 			this._reportDataSvc.excludedResultsIds$.pipe(distinctUntilChanged()),
 			this.showOmittedWords$.pipe(distinctUntilChanged()),
+			this._reportDataSvc.selectedCategoryResultsIds$.pipe(distinctUntilChanged()),
 		])
 			.pipe(
 				untilDestroy(this),
@@ -100,20 +120,31 @@ export class ReportMatchesService implements OnDestroy {
 						string,
 						ICopyleaksReportOptions,
 						string[],
-						boolean
+						boolean,
+						string[]
 					]) =>
 						scanSource != undefined && viewMode != null && viewMode.viewMode === 'one-to-many' && selectedAlert === null
 				)
 			)
 			.subscribe(
-				([scanSource, scanResults, viewMode, , filterOptions, excludedResultsIds, showOmittedWords]: [
+				([
+					scanSource,
+					scanResults,
+					viewMode,
+					,
+					filterOptions,
+					excludedResultsIds,
+					showOmittedWords,
+					selectedCategoryResultsIds,
+				]: [
 					IScanSource,
 					ResultDetailItem[],
 					IReportViewEvent,
 					string,
 					ICopyleaksReportOptions,
 					string[],
-					boolean
+					boolean,
+					string[]
 				]) => {
 					let modifiedScanSource = scanSource ? JSON.parse(JSON.stringify(scanSource)) : null;
 					if (!showOmittedWords && modifiedScanSource) {
@@ -153,14 +184,16 @@ export class ReportMatchesService implements OnDestroy {
 							scanResults,
 							isRealtimeInitView ? undefined : filterOptions,
 							excludedResultsIds,
-							modifiedScanSource
+							modifiedScanSource,
+							selectedCategoryResultsIds
 						);
 					} else {
 						this._processOneToManyMatchesText(
 							scanResults,
 							isRealtimeInitView ? undefined : filterOptions,
 							excludedResultsIds,
-							modifiedScanSource
+							modifiedScanSource,
+							selectedCategoryResultsIds
 						);
 					}
 				}
@@ -222,11 +255,13 @@ export class ReportMatchesService implements OnDestroy {
 			this._reportDataSvc.scanResultsPreviews$.pipe(distinctUntilChanged()),
 			this._reportDataSvc.filterOptions$.pipe(distinctUntilChanged()),
 			this.showOmittedWords$.pipe(distinctUntilChanged()),
+			this.showAIPhrases$.pipe(distinctUntilChanged()),
+			this._reportViewSvc.reportViewMode$.pipe(distinctUntilChanged()),
 		])
 			.pipe(
 				untilDestroy(this),
 				filter(
-					([scanSource, selectedAlert, scanResultsPreviews, filterOptions]) =>
+					([scanSource, selectedAlert, scanResultsPreviews, filterOptions, _, __, ___]) =>
 						scanSource != null &&
 						scanSource != undefined &&
 						selectedAlert != null &&
@@ -235,23 +270,33 @@ export class ReportMatchesService implements OnDestroy {
 						filterOptions != null
 				)
 			)
-			.subscribe(([scanSource, selectedAlert, completeResults, filterOptions, showOmittedWords]) => {
-				let modifiedScanSource = scanSource ? JSON.parse(JSON.stringify(scanSource)) : null;
-				if (!showOmittedWords && modifiedScanSource) {
-					if (modifiedScanSource?.html) modifiedScanSource.html.exclude = null;
-					if (modifiedScanSource?.text) modifiedScanSource.text.exclude = null;
-				}
-				if (
-					(modifiedScanSource && this._reportViewSvc.progress$.value != 100) ||
-					(modifiedScanSource && selectedAlert)
-				) {
-					this._processAlertMatches(modifiedScanSource, selectedAlert, filterOptions, completeResults);
-				}
+			.subscribe(
+				([scanSource, selectedAlert, completeResults, filterOptions, showOmittedWords, showAIPhrases, _]: [
+					IScanSource,
+					string,
+					ICompleteResults,
+					ICopyleaksReportOptions,
+					boolean,
+					boolean,
+					IReportViewEvent
+				]) => {
+					let modifiedScanSource = scanSource ? JSON.parse(JSON.stringify(scanSource)) : null;
+					if (!showOmittedWords && modifiedScanSource) {
+						if (modifiedScanSource?.html) modifiedScanSource.html.exclude = null;
+						if (modifiedScanSource?.text) modifiedScanSource.text.exclude = null;
+					}
+					if (
+						(modifiedScanSource && this._reportViewSvc.progress$.value != 100) ||
+						(modifiedScanSource && selectedAlert)
+					) {
+						this._processAlertMatches(modifiedScanSource, selectedAlert, filterOptions, completeResults, showAIPhrases);
+					}
 
-				if (!modifiedScanSource || !selectedAlert || !completeResults || !filterOptions) return;
+					if (!modifiedScanSource || !selectedAlert || !completeResults || !filterOptions) return;
 
-				this._processAlertMatches(modifiedScanSource, selectedAlert, filterOptions, completeResults);
-			});
+					this._processAlertMatches(modifiedScanSource, selectedAlert, filterOptions, completeResults, showAIPhrases);
+				}
+			);
 	}
 
 	private _initWritingFeedbackCorrectionsHandler() {
@@ -309,9 +354,13 @@ export class ReportMatchesService implements OnDestroy {
 		results: ResultDetailItem[] | undefined,
 		settings: ICopyleaksReportOptions | undefined,
 		excludedResultsIds: string[],
-		source: IScanSource
+		source: IScanSource,
+		selectedCategoryResultsIds: string[] = []
 	) {
 		if (settings) results = this._reportDataSvc.filterResults(settings, excludedResultsIds);
+		if (results && selectedCategoryResultsIds.length > 0)
+			results = results.filter(result => selectedCategoryResultsIds.includes(result.id));
+
 		const html = helpers.processSourceHtml(
 			results ?? [],
 			settings ?? {
@@ -337,9 +386,13 @@ export class ReportMatchesService implements OnDestroy {
 		results: ResultDetailItem[] | undefined,
 		settings: ICopyleaksReportOptions | undefined,
 		excludedResultsIds: string[],
-		source: IScanSource
+		source: IScanSource,
+		selectedCategoryResultsIds: string[] = []
 	) {
 		if (settings) results = this._reportDataSvc.filterResults(settings, excludedResultsIds);
+		if (results && selectedCategoryResultsIds.length > 0)
+			results = results.filter(result => selectedCategoryResultsIds.includes(result.id));
+
 		const text = helpers.processSourceText(
 			results ?? [],
 			settings ?? {
@@ -411,7 +464,8 @@ export class ReportMatchesService implements OnDestroy {
 		source: IScanSource,
 		selectedAlertCode: string | null,
 		settings?: ICopyleaksReportOptions,
-		completeResults?: ICompleteResults
+		completeResults?: ICompleteResults,
+		showAIPhrases: boolean = false
 	) {
 		let text: SlicedMatch[][];
 		let html: Match[];
@@ -421,8 +475,18 @@ export class ReportMatchesService implements OnDestroy {
 		if (selectedAlert) {
 			switch (selectedAlertCode) {
 				case ALERTS.SUSPECTED_AI_TEXT_DETECTED:
-					text = helpers.processAIInsightsTextMatches(source, selectedAlert);
-					html = helpers.processAIInsightsHTMLMatches(source, selectedAlert);
+					text = helpers.processAIInsightsTextMatches(source, selectedAlert, showAIPhrases);
+					html = helpers.processAIInsightsHTMLMatches(source, selectedAlert, showAIPhrases);
+
+					// We need the AI phrases for the AI insights view stats, so we need to store them in a separate variable
+					// Fetch the AI phrases only if they are not already fetched
+					if (!this.aiPhrases || this.aiPhrases.length === 0) {
+						if (showAIPhrases) this._aiPhrases$.next(text);
+						else {
+							const allPhrases = helpers.processAIInsightsTextMatches(source, selectedAlert, true);
+							this._aiPhrases$.next(allPhrases);
+						}
+					}
 					break;
 				case ALERTS.SUSPECTED_CHARACTER_REPLACEMENT_CODE:
 					text = helpers.processSuspectedCharacterMatches(source, selectedAlert);

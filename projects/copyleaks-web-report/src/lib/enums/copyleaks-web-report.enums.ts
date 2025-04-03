@@ -113,6 +113,10 @@ export enum EResultPreviewType {
 	Repositroy,
 	Internet,
 	Database,
+
+	// CUSTOM
+	AISourceMatch,
+	AISourceMatchUpgrade,
 }
 
 /** Enum representing the access of a result */

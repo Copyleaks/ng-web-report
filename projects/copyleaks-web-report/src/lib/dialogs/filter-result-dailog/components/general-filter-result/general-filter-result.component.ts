@@ -8,7 +8,14 @@ import { FilterResultDailogService } from '../../services/filter-result-dailog.s
 	styleUrls: ['./general-filter-result.component.scss'],
 })
 export class GeneralFilterResultComponent implements OnInit {
+	/**
+	 * @Input {number} Total number of alerts related to the report or content
+	 */
 	@Input() totalAlerts: number = 0;
+
+	/**
+	 * @Input {number} Total number of results detected from the same author
+	 */
 	@Input() totalSameAuthor: number = 0;
 
 	eFilterResultForm = EFilterResultForm;

@@ -57,6 +57,8 @@ export class CopyleaksWebReportComponent implements OnInit, OnDestroy {
 	@ViewChild('customEmptyResultsTemplate', { static: true }) customEmptyResultsTemplate: TemplateRef<any>;
 	@ViewChild('customResultsTemplate', { static: true }) customResultsTemplate: TemplateRef<any>;
 	@ViewChild('customBannerSectionTemplate', { static: true }) customBannerSectionTemplate: TemplateRef<any>;
+	@ViewChild('customAISourceMatchUpgradeTemplate', { static: true })
+	customAISourceMatchUpgradeTemplate: TemplateRef<any>;
 
 	/**
 	 * @Input {EReportMode} - The copyleaks report view type.
@@ -151,7 +153,8 @@ export class CopyleaksWebReportComponent implements OnInit, OnDestroy {
 		private _reportViewSvc: ReportViewService,
 		private _reportErrorsSvc: ReportErrorsService,
 		private _router: Router,
-		private _reportAIResultsService: ReportAIResultsService
+		private _reportAIResultsSvc: ReportAIResultsService,
+		private _reportMatchesSvc: ReportMatchesService
 	) {}
 
 	ngOnInit(): void {
@@ -176,7 +179,7 @@ export class CopyleaksWebReportComponent implements OnInit, OnDestroy {
 			.subscribe(error => this.onReportRequestError.emit(error));
 
 		// Handle start video explination clicked & emit it
-		this._reportAIResultsService.resourcesStartExplainableVideo$.pipe(takeUntil(this.unsubscribe$)).subscribe(data => {
+		this._reportAIResultsSvc.resourcesStartExplainableVideo$.pipe(takeUntil(this.unsubscribe$)).subscribe(data => {
 			if (!data?.startVideo) return;
 			this.onExplainableAIStartVideoButtonClicked.emit(data);
 		});
@@ -203,7 +206,7 @@ export class CopyleaksWebReportComponent implements OnInit, OnDestroy {
 				) {
 					this._reportViewSvc.reportViewMode$.next({
 						...this._reportViewSvc.reportViewMode,
-						viewMode: 'only-ai',
+						viewMode: 'one-to-many',
 						alertCode: ALERTS.SUSPECTED_AI_TEXT_DETECTED,
 					});
 					this._reportViewSvc.selectedAlert$.next(ALERTS.SUSPECTED_AI_TEXT_DETECTED);
@@ -261,6 +264,13 @@ export class CopyleaksWebReportComponent implements OnInit, OnDestroy {
 		if (this.customBannerSectionTemplate)
 			this._reportNgTemplatesSvc.setReportCustomBannerSectionTemplateRef(this.customBannerSectionTemplate);
 
+		// Read the report custom AI source match upgrade component reference
+		if (this.customAISourceMatchUpgradeTemplate)
+			this._reportNgTemplatesSvc.setReportCustomAISourceMatchUpgradeTemplateRef(
+				this.customAISourceMatchUpgradeTemplate
+			);
+
+		// Read the report results locked result item template reference.
 		if (this.lockedResultTemplateRef)
 			this._reportNgTemplatesSvc.setLockedResultItemTemplateRef(this.lockedResultTemplateRef);
 	}
@@ -335,6 +345,8 @@ export class CopyleaksWebReportComponent implements OnInit, OnDestroy {
 		const suspectId = params['suspectId'];
 		const alertCode = params['alertCode'];
 		const selectedCustomTabId = params['selectedCustomTabId'];
+		const selectedResultsCategory = params['selectedResultsCategory'];
+		const showAIPhrases = params['showAIPhrases'];
 
 		this.reportLayoutType = viewMode ?? 'one-to-many';
 		if (viewMode === 'writing-feedback') this.reportLayoutType = EReportLayoutType.OneToMany;
@@ -353,12 +365,17 @@ export class CopyleaksWebReportComponent implements OnInit, OnDestroy {
 			showDisabledProducts: this.showDisabledProducts,
 			platformType: this.platformType,
 			selectedCustomTabId: selectedCustomTabId,
+			selectedResultsCategory: selectedResultsCategory,
+			showAIPhrases: showAIPhrases === 'true',
 		} as IReportViewEvent);
 
 		if (alertCode) this._reportViewSvc.selectedAlert$.next(alertCode);
+		if (showAIPhrases === 'true' && !this._reportMatchesSvc.showAIPhrases)
+			this._reportMatchesSvc.showAIPhrases$.next(true);
 
 		this._reportViewSvc.reportViewMode$.pipe(distinctUntilChanged(), takeUntil(this.unsubscribe$)).subscribe(data => {
 			if (!data) return;
+
 			let updatedParams: IReportViewQueryParams = {
 				viewMode: data.viewMode,
 				contentMode: data.isHtmlView ? 'html' : 'text',
@@ -367,6 +384,8 @@ export class CopyleaksWebReportComponent implements OnInit, OnDestroy {
 				suspectId: data.suspectId,
 				alertCode: data.alertCode,
 				selectedCustomTabId: data.selectedCustomTabId,
+				selectedResultsCategory: data.selectedResultsCategory,
+				showAIPhrases: data.showAIPhrases ? 'true' : 'false',
 			};
 
 			if (data.viewMode == 'one-to-many' || data.viewMode == 'writing-feedback')
@@ -390,7 +409,7 @@ export class CopyleaksWebReportComponent implements OnInit, OnDestroy {
 			this._router.navigate([], {
 				relativeTo: this._activatedRoute,
 				queryParams: updatedParams,
-				queryParamsHandling: 'merge', // remove to replace all query params by provided
+				queryParamsHandling: 'merge',
 			});
 		});
 	}
@@ -404,6 +423,8 @@ export class CopyleaksWebReportComponent implements OnInit, OnDestroy {
 			const suspectId = params['suspectId'];
 			const alertCode = params['alertCode'];
 			const selectedCustomTabId = params['selectedCustomTabId'];
+			const selectedResultsCategory = params['selectedResultsCategory'];
+			const showAIPhrases = params['showAIPhrases'];
 
 			this.reportLayoutType = viewMode ?? 'one-to-many';
 			if (viewMode === 'writing-feedback') {
@@ -427,7 +448,9 @@ export class CopyleaksWebReportComponent implements OnInit, OnDestroy {
 					this._reportViewSvc.reportViewMode?.alertCode == alertCode &&
 					this._reportViewSvc.reportViewMode?.showDisabledProducts == this.showDisabledProducts &&
 					this._reportViewSvc.reportViewMode?.platformType == this.platformType &&
-					this._reportViewSvc.reportViewMode?.selectedCustomTabId == selectedCustomTabId
+					this._reportViewSvc.reportViewMode?.selectedCustomTabId == selectedCustomTabId &&
+					this._reportViewSvc.reportViewMode?.selectedResultsCategory == selectedResultsCategory &&
+					this._reportViewSvc.reportViewMode?.showAIPhrases == (showAIPhrases === 'true' ? true : false)
 				)
 			)
 				this._reportViewSvc.reportViewMode$.next({
@@ -441,6 +464,8 @@ export class CopyleaksWebReportComponent implements OnInit, OnDestroy {
 					showDisabledProducts: this.showDisabledProducts,
 					platformType: this.platformType,
 					selectedCustomTabId: selectedCustomTabId,
+					selectedResultsCategory: selectedResultsCategory,
+					showAIPhrases: showAIPhrases === 'true',
 				} as IReportViewEvent);
 			if (alertCode && this._reportViewSvc.selectedAlert != alertCode)
 				this._reportViewSvc.selectedAlert$.next(alertCode);
@@ -450,6 +475,7 @@ export class CopyleaksWebReportComponent implements OnInit, OnDestroy {
 				this._reportViewSvc.selectedCustomTabContent$.next(null);
 				this._reportViewSvc.selectedCustomTabResultSectionContent$.next(null);
 			}
+			if (showAIPhrases === 'true') this._reportMatchesSvc.showAIPhrases$.next(showAIPhrases === 'true');
 		});
 	}
 

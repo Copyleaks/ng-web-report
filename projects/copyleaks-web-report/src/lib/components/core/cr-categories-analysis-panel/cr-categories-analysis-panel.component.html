@@ -12,12 +12,31 @@
 								class="matches-category-title-container"
 								[style.flex-direction]="expanded ? 'column' : 'row'"
 								[style.gap]="expanded ? '2px' : '16px'">
-								<div class="title-percentage-container">
+								<div
+									class="title-percentage-container"
+									[class.is-upgrade-title]="matchesStats?.type === EResultPreviewType.AISourceMatchUpgrade">
+									<svg
+										*ngIf="matchesStats?.type === EResultPreviewType.AISourceMatchUpgrade"
+										width="22"
+										height="16"
+										viewBox="0 0 22 16"
+										fill="none"
+										xmlns="http://www.w3.org/2000/svg">
+										<path
+											id="Union"
+											fill-rule="evenodd"
+											clip-rule="evenodd"
+											d="M12.0085 3.6355C12.5215 3.27341 12.8564 2.67607 12.8564 2.00049C12.8564 0.895919 11.961 0.000488281 10.8564 0.000488281C9.75185 0.000488281 8.85642 0.895919 8.85642 2.00049C8.85642 2.69982 9.21535 3.31531 9.75904 3.67281C8.70013 5.34691 7.25642 7.8147 7.25642 8.8253C6.69325 7.46927 5.13761 6.58355 3.83987 6.05856C4.03171 5.75158 4.14258 5.3888 4.14258 5.00012C4.14258 3.89555 3.24715 3.00012 2.14258 3.00012C1.03801 3.00012 0.142578 3.89555 0.142578 5.00012C0.142578 6.10469 1.03801 7.00012 2.14258 7.00012C2.16908 7.00012 2.19547 6.99961 2.22172 6.99858L3.85643 13.9995H17.8564L19.4983 6.96802C19.6145 6.98903 19.7342 7 19.8564 7C20.961 7 21.8564 6.10457 21.8564 5C21.8564 3.89543 20.961 3 19.8564 3C18.7519 3 17.8564 3.89543 17.8564 5C17.8564 5.35977 17.9514 5.69736 18.1177 5.98904C16.8312 6.50383 15.1931 7.40749 14.5372 8.8253C14.5372 7.62255 13.0883 5.24225 12.0085 3.6355ZM3.92819 15.9995C3.88067 15.6702 3.85643 15.3361 3.85643 14.9995H10.8564H17.8564C17.8564 15.3361 17.8322 15.6702 17.7847 15.9995H3.92819Z"
+											fill="#2B95FF" />
+									</svg>
+
 									<span class="title" i18n>{{ getResultsTypeTitle(matchesStats?.type) }}</span>
-									<span class="percentage" i18n>{{ matchesStats?.totalResultsPct | percent }}</span>
+									<span *ngIf="matchesStats?.type != EResultPreviewType.AISourceMatchUpgrade" class="percentage" i18n>
+										{{ matchesStats?.totalResultsPct | percent }}
+									</span>
 								</div>
 								<div class="stats-container">
-									<ng-container *ngIf="expanded">
+									<ng-container *ngIf="expanded && matchesStats?.type != EResultPreviewType.AISourceMatchUpgrade">
 										<mat-icon>swap_vert</mat-icon>
 										<span i18n>Top results first</span>
 										<svg xmlns="http://www.w3.org/2000/svg" width="5" height="5" viewBox="0 0 5 5" fill="none">
@@ -25,8 +44,13 @@
 										</svg>
 									</ng-container>
 
-									<span style="font-weight: 700" i18n>{{ matchesStats?.totalResults ?? 0 }} Results</span>
-									<ng-container *ngIf="expanded">
+									<span
+										*ngIf="matchesStats?.type != EResultPreviewType.AISourceMatchUpgrade"
+										style="font-weight: 700"
+										i18n>
+										{{ matchesStats?.totalResults ?? 0 }} Results
+									</span>
+									<ng-container *ngIf="expanded && matchesStats?.type != EResultPreviewType.AISourceMatchUpgrade">
 										<ng-container
 											*ngIf="
 												matchesStats?.type === EResultPreviewType.Internet ||
@@ -120,18 +144,29 @@
 		<div class="categories-container" role="listbox" aria-label="List of categories" i18n-aria-label>
 			<ng-container [ngSwitch]="selectedView">
 				<ng-container *ngSwitchCase="EReportViewType.PlagiarismView">
-					<mat-chip
-						*ngFor="let stat of matchesStats?.categories"
-						[style.display]="stat?.totalResults === 0 ? 'none' : 'flex'"
-						[tabIndex]="0"
-						role="option"
-						aria-label="Category item"
-						i18n-aria-label
-						aria-hidden="false"
-						(keyup.enter)="onSelectCategory(stat)"
-						(click)="onSelectCategory(stat)">
-						{{ stat?.type }} ({{ stat?.totalResults }})
-					</mat-chip>
+					<ng-container
+						*ngIf="matchesStats?.type != EResultPreviewType.AISourceMatchUpgrade; else aiSourceMatchUpgradeRef">
+						<mat-chip
+							*ngFor="let stat of matchesStats?.categories"
+							[style.display]="stat?.totalResults === 0 ? 'none' : 'flex'"
+							[tabIndex]="0"
+							role="option"
+							aria-label="Category item"
+							i18n-aria-label
+							aria-hidden="false"
+							(keyup.enter)="onSelectCategory(stat)"
+							(click)="onSelectCategory(stat)">
+							{{ stat?.type }} ({{ stat?.totalResults }})
+						</mat-chip>
+					</ng-container>
+
+					<ng-template #aiSourceMatchUpgradeRef>
+						<ng-container *ngIf="reportViewSvc.reportViewMode.platformType === EPlatformType.APP">
+							<div class="actions-container" #actionsContainer>
+								<ng-container *ngTemplateOutlet="customAISourceMatchUpgradeTemplate ?? null"></ng-container>
+							</div>
+						</ng-container>
+					</ng-template>
 				</ng-container>
 
 				<ng-container *ngSwitchCase="EReportViewType.AIView">

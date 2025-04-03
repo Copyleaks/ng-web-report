@@ -473,13 +473,14 @@ export const processSuspectedCharacterMatches = (
  */
 export const processAIInsightsTextMatches = (
 	source: IScanSource,
-	alertToMatch: ICompleteResultNotificationAlert
+	alertToMatch: ICompleteResultNotificationAlert,
+	showAIPhrases: boolean = false
 ): SlicedMatch[][] => {
 	const matches: Match[] = [];
 	let lastExplainIndex = 0;
 
 	const scanResult = JSON.parse(alertToMatch.additionalData) as AIScanResult;
-	const explainResult = scanResult?.explain;
+	const explainResult = showAIPhrases ? scanResult?.explain : null;
 	const lengthExplain = explainResult?.patterns?.text?.chars?.starts?.length ?? 0;
 	const proportionArray = explainResult
 		? updateExplainProportionType(explainResult.patterns.statistics.proportion)
@@ -581,12 +582,13 @@ const createExplainMatch = (baseMatch: Match, start: number, end: number, propor
  */
 export const processAIInsightsHTMLMatches = (
 	source: IScanSource,
-	alertToMatch: ICompleteResultNotificationAlert
+	alertToMatch: ICompleteResultNotificationAlert,
+	showAIPhrases: boolean = false
 ): Match[] => {
 	const matches: Match[] = [];
 	let lastExplainIndex: number = 0;
 	var scanResult = JSON.parse(alertToMatch.additionalData) as AIScanResult;
-	const explainResult = scanResult?.explain ?? false;
+	const explainResult = showAIPhrases ? scanResult?.explain ?? false : false;
 	const lengthExplain = explainResult ? explainResult?.patterns?.html?.chars?.starts?.length : 0;
 	const proportionArray = explainResult
 		? updateExplainProportionType(explainResult?.patterns?.statistics?.proportion)

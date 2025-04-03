@@ -1,5 +1,10 @@
 import { Component, EventEmitter, Input, OnChanges, OnInit, Output, SimpleChanges } from '@angular/core';
-import { EPlatformType, EReportViewType, EResultPreviewType } from '../../../../../enums/copyleaks-web-report.enums';
+import {
+	EPlatformType,
+	EReportScoreTooltipPosition,
+	EReportViewType,
+	EResultPreviewType,
+} from '../../../../../enums/copyleaks-web-report.enums';
 import { ReportViewService } from '../../../../../services/report-view.service';
 import { IResultItem } from '../models/report-result-item.models';
 import { IPercentageResult } from '../percentage-result-item/models/percentage-result-item.models';
@@ -7,6 +12,8 @@ import { ReportMatchHighlightService } from '../../../../../services/report-matc
 import { DatePipe } from '@angular/common';
 import { IResultTag } from '../../../../../models/report-data.models';
 import { untilDestroy } from '../../../../../utils/until-destroy';
+import { RESULT_TAGS_CODES } from '../../../../../constants/report-result-tags.constants';
+import { ReportDataService } from '../../../../../services/report-data.service';
 
 @Component({
 	selector: 'cr-report-expand-result-item',
@@ -14,12 +21,19 @@ import { untilDestroy } from '../../../../../utils/until-destroy';
 	styleUrls: ['./report-expand-result-item.component.scss'],
 })
 export class ReportExpandResultItemComponent implements OnInit, OnChanges {
+	/**
+	 * @Input {IResultItem} The result item details to display.
+	 */
 	@Input() resultItem: IResultItem | null = null;
+
 	/**
 	 * @Input {boolean} Flag indicating whether to show the loading view or not.
 	 */
 	@Input() showLoadingView = false;
 
+	/**
+	 * @Output {EventEmitter<string>} Emit the result id to exclude the result from the report.
+	 */
 	@Output() excludeResultEvent = new EventEmitter<string>();
 
 	percentageResult: IPercentageResult;
@@ -32,6 +46,11 @@ export class ReportExpandResultItemComponent implements OnInit, OnChanges {
 
 	EReportViewType = EReportViewType;
 	docDirection: 'ltr' | 'rtl';
+
+	RESULT_TAGS_CODES = RESULT_TAGS_CODES;
+	EReportScoreTooltipPosition = EReportScoreTooltipPosition;
+	isAiSourceResult: boolean;
+	copyMessage: string;
 
 	get authorName() {
 		if (this.resultItem?.resultPreview) {
@@ -56,6 +75,7 @@ export class ReportExpandResultItemComponent implements OnInit, OnChanges {
 
 	constructor(
 		public reportViewSvc: ReportViewService,
+		public reportDataSvc: ReportDataService,
 		private _highlightService: ReportMatchHighlightService,
 		private _datePipe: DatePipe
 	) {}
@@ -72,8 +92,9 @@ export class ReportExpandResultItemComponent implements OnInit, OnChanges {
 		if ('resultItem' in changes && changes['resultItem'].currentValue) {
 			this.percentageResult = {
 				resultItem: changes['resultItem'].currentValue,
-				title: $localize`Plagiarism Detection`,
-				showArrowButton: true,
+				title: $localize`Matching Text`,
+				showArrowButton: false,
+				showTooltip: true,
 				stackedBarHeight: '8px',
 				stackedBarBackgroundColor: '#EBF3F5',
 			};
@@ -97,7 +118,7 @@ export class ReportExpandResultItemComponent implements OnInit, OnChanges {
 				this.resultItem?.resultPreview?.metadata?.lastModificationDate ||
 				this.resultItem?.resultPreview?.metadata?.publishDate ||
 				this.resultItem?.resultPreview?.metadata?.submissionDate) &&
-			!this.resultItem.resultPreview.tags.find(tag => tag.code === 'summary-date')
+			!this.resultItem.resultPreview.tags.find(tag => tag.code === RESULT_TAGS_CODES.SUMMARY_DATE)
 		) {
 			const date =
 				this.resultItem.resultPreview.metadata.creationDate ||
@@ -121,18 +142,18 @@ export class ReportExpandResultItemComponent implements OnInit, OnChanges {
 					this._datePipe.transform(this.resultItem.resultPreview.metadata.submissionDate, "MMM d, y 'at' h:mm a") ||
 					'not available'
 				}.`,
-				code: 'summary-date',
+				code: RESULT_TAGS_CODES.SUMMARY_DATE,
 			});
 		}
 
 		// Add the organization name to the tags list if available
 		if (!!this.resultItem?.resultPreview?.metadata?.organization) {
 			if (!this.resultItem.resultPreview.tags) this.resultItem.resultPreview.tags = [];
-			if (this.resultItem.resultPreview.tags.find(tag => tag.code === 'organization') === undefined)
+			if (this.resultItem.resultPreview.tags.find(tag => tag.code === RESULT_TAGS_CODES.ORGANIZATION) === undefined)
 				this.resultItem.resultPreview?.tags?.unshift({
 					title: this.resultItem?.resultPreview?.metadata?.organization,
 					description: $localize`Organization Name`,
-					code: 'organization',
+					code: RESULT_TAGS_CODES.ORGANIZATION,
 				});
 		}
 
@@ -143,7 +164,7 @@ export class ReportExpandResultItemComponent implements OnInit, OnChanges {
 		) {
 			if (!this.resultItem.resultPreview.tags) this.resultItem.resultPreview.tags = [];
 			// push 'Your File' tag to the start of tags array
-			if (this.resultItem.resultPreview.tags.find(tag => tag.code === 'your-file') === undefined)
+			if (this.resultItem.resultPreview.tags.find(tag => tag.code === RESULT_TAGS_CODES.YOUR_FILE) === undefined)
 				this.resultItem?.resultPreview?.tags?.unshift({
 					title:
 						this.reportViewSvc?.reportViewMode?.platformType === EPlatformType.APP
@@ -153,7 +174,7 @@ export class ReportExpandResultItemComponent implements OnInit, OnChanges {
 						this.reportViewSvc?.reportViewMode?.platformType === EPlatformType.APP
 							? $localize`This is your file`
 							: $localize`This is uploaded by your organization`,
-					code: 'your-file',
+					code: RESULT_TAGS_CODES.YOUR_FILE,
 				});
 		}
 
@@ -171,6 +192,27 @@ export class ReportExpandResultItemComponent implements OnInit, OnChanges {
 			this.resultItem.resultPreview.tags = this.resultItem.resultPreview.tags.filter(
 				tag => tag.title && tag.title.trim() !== ''
 			);
+
+		// Check if there is a tag in the tags list with the code 'ai-source-match' and put it in the first place
+		const aiSourceMatchTag = this.resultItem?.resultPreview?.tags?.find(
+			tag => tag.code === RESULT_TAGS_CODES.AI_SOURCE_MATCH
+		);
+		if (this.reportViewSvc.reportViewMode.platformType === EPlatformType.APP) {
+			if (aiSourceMatchTag) {
+				this.isAiSourceResult = true;
+				if (aiSourceMatchTag.title != 'AI Source Match') aiSourceMatchTag.title = 'AI Source Match';
+				this.resultItem.resultPreview.tags = [
+					aiSourceMatchTag,
+					...this.resultItem.resultPreview.tags.filter(tag => tag.code !== RESULT_TAGS_CODES.AI_SOURCE_MATCH),
+				];
+			} else this.isAiSourceResult = false;
+		} else {
+			// remove the ai-source-match tag from the tags list if the platform is not APP
+			this.resultItem.resultPreview.tags = this.resultItem.resultPreview.tags.filter(
+				tag => tag.code !== RESULT_TAGS_CODES.AI_SOURCE_MATCH
+			);
+			this.isAiSourceResult = false;
+		}
 	}
 
 	clickBack() {
@@ -201,6 +243,24 @@ export class ReportExpandResultItemComponent implements OnInit, OnChanges {
 		this.faviconExists = true;
 	}
 
+	copyResultURL() {
+		if (!this.resultItem?.resultPreview.url) return;
+		navigator.clipboard.writeText(this.resultItem?.resultPreview?.url).then(
+			() => {
+				this.copyMessage = $localize`URL copied!`;
+				setTimeout(() => (this.copyMessage = ''), 3000); // Clear the message after 3 seconds
+			},
+			err => {
+				console.error('Failed to copy text: ', err);
+				this.copyMessage = $localize`Failed to copy text.`;
+			}
+		);
+	}
+
+	openResultURLInNewTab() {
+		if (this.resultItem?.resultPreview?.url) window.open(this.resultItem?.resultPreview.url, '_blank');
+	}
+
 	/**
 	 * Checks if the tag text is with ellipsis or not ('...' at the end of the text)
 	 * @param tagChip The tag chip element
@@ -221,7 +281,11 @@ export class ReportExpandResultItemComponent implements OnInit, OnChanges {
 	getTagChipTooltipText(tag: IResultTag, chipContent: HTMLElement): string {
 		const fullText = chipContent.textContent?.trim() || '';
 		// Check if the tag text is overflowing and the tag is not 'summary-date' or 'organization' or 'your-file' tags & not empty
-		if (this.isTagChipTextOverflowing(chipContent) && tag.code !== 'summary-date' && tag.code !== 'your-file') {
+		if (
+			this.isTagChipTextOverflowing(chipContent) &&
+			tag.code !== RESULT_TAGS_CODES.SUMMARY_DATE &&
+			tag.code !== RESULT_TAGS_CODES.YOUR_FILE
+		) {
 			return `${tag?.description}: ${fullText}`;
 		}
 		return tag?.description;

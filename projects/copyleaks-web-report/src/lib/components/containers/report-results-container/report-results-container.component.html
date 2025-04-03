@@ -39,11 +39,20 @@
 							maxBufferPx="100000">
 							<div class="corrections-types-container">
 								<span *ngIf="!hideCategoriesSection" class="categorized-summery" i18n>Categorized Summary</span>
+
 								<cr-categories-analysis-panel
 									*ngFor="let stats of allMatchResultsStats"
 									[matchesStats]="stats"
 									[selectedView]="EReportViewType.PlagiarismView"
 									(selectCategory)="onSelectCategory($event)"></cr-categories-analysis-panel>
+
+								<cr-categories-analysis-panel
+									*ngIf="reportViewSvc?.reportViewMode?.platformType === EPlatformType.APP && hideAiTap"
+									[matchesStats]="aiSourceMatchUpgradeCategory"
+									[selectedView]="EReportViewType.PlagiarismView"
+									[customAISourceMatchUpgradeTemplate]="
+										customAISourceMatchUpgradeTemplate
+									"></cr-categories-analysis-panel>
 								<span class="categorized-summery" i18n>Descending</span>
 							</div>
 							<div
@@ -298,7 +307,12 @@
 		<div class="selected-category-toolbar">
 			<button class="total-corrections-container" (click)="goToAllResultsView()" [tabIndex]="0">
 				<mat-icon class="left-arrow">chevron_left</mat-icon>
-				<span class="all-correction-title" i18n>All Matching Results ({{ resultsActions?.totalResults }})</span>
+				<ng-container *ngIf="reportViewSvc?.reportViewMode?.navigateBackToAIView; else backToResultsRef">
+					<span class="all-correction-title" i18n>Back to AI Detection</span>
+				</ng-container>
+				<ng-template #backToResultsRef>
+					<span class="all-correction-title" i18n>All Matching Results ({{ resultsActions?.totalResults }})</span>
+				</ng-template>
 			</button>
 			<div class="selected-correction-container">
 				<mat-icon class="right-arrow">chevron_right</mat-icon>

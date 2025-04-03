@@ -12,6 +12,9 @@ import { Observable } from 'rxjs';
 	styleUrls: ['./included-tags-filter-result.component.scss'],
 })
 export class IncludedTagsFilterResultComponent implements OnInit, OnChanges {
+	/**
+	 * @Input {ITagItem[]} List of all tag items available for display or selection
+	 */
 	@Input() allTagItem: ITagItem[];
 
 	includedTagsForm: FormControl;

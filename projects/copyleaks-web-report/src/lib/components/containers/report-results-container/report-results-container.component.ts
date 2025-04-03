@@ -13,7 +13,12 @@ import {
 } from '@angular/core';
 import { Observable, combineLatest, fromEvent } from 'rxjs';
 import { distinctUntilChanged, filter, map, pairwise } from 'rxjs/operators';
-import { EReportViewType, EResponsiveLayoutType, EResultPreviewType } from '../../../enums/copyleaks-web-report.enums';
+import {
+	EPlatformType,
+	EReportViewType,
+	EResponsiveLayoutType,
+	EResultPreviewType,
+} from '../../../enums/copyleaks-web-report.enums';
 import { ICopyleaksReportOptions } from '../../../models/report-options.models';
 import { ReportDataService } from '../../../services/report-data.service';
 import { ReportNgTemplatesService } from '../../../services/report-ng-templates.service';
@@ -25,6 +30,8 @@ import { IResultItem } from '../report-results-item-container/components/models/
 import { IResultsActions } from './components/results-actions/models/results-actions.models';
 import { ReportMatchHighlightService } from '../../../services/report-match-highlight.service';
 import { IMatchesCategoryStatistics, IMatchesTypeStatistics } from '../../../models/report-statistics.models';
+import { RESULT_TAGS_CODES } from '../../../constants/report-result-tags.constants';
+import { ALERTS } from '../../../constants/report-alerts.constants';
 
 @Component({
 	selector: 'copyleaks-report-results-container',
@@ -38,29 +45,67 @@ export class ReportResultsContainerComponent implements OnInit, OnChanges {
 	@HostBinding('style.flex-grow')
 	flexGrowProp: number;
 
-	/**
-	 * @Input {number} Flex grow property - flex-grow
-	 */
-	@Input() flexGrow: number;
-	@Input() reportResponsive: EResponsiveLayoutType;
-	@Input() allResults: IResultItem[] = [];
-	@Input() newResults: IResultItem[];
-	@Input() resultsActions: IResultsActions;
-	@Input() isMobile: boolean;
-	@Input() filterOptions: ICopyleaksReportOptions;
-	@Input() customResultsTemplate: TemplateRef<any> | undefined = undefined;
-	@Input() reportViewMode: ECustomResultsReportView;
-	/**
-	 * @Input {boolean} Flag indicating whether to show the loading view or not.
-	 */
-	@Input() showLoadingView = false;
-
-	showResultsSection: boolean = true;
-
 	@ViewChild('resultsContainer', { read: ElementRef }) public resultsContainer: ElementRef;
 	@ViewChild('resultitem', { read: ElementRef }) public resultitem: ElementRef;
 	@ViewChild('customEmptyResultView', { read: ElementRef }) public customEmptyResultView: ElementRef;
 	@ViewChild(CdkVirtualScrollViewport, { static: false }) viewport: CdkVirtualScrollViewport;
+
+	/**
+	 * @Input {number} Flex grow property - flex-grow
+	 */
+	@Input() flexGrow: number;
+
+	/**
+	 * @Input {EResponsiveLayoutType} Responsive layout type for the report
+	 */
+	@Input() reportResponsive: EResponsiveLayoutType;
+
+	/**
+	 * @Input {IResultItem[]} All result items to be displayed
+	 */
+	@Input() allResults: IResultItem[] = [];
+
+	/**
+	 * @Input {IResultItem[]} New result items to be displayed
+	 */
+	@Input() newResults: IResultItem[];
+
+	/**
+	 * @Input {IResultsActions} Set of available result actions (e.g., click handlers)
+	 */
+	@Input() resultsActions: IResultsActions;
+
+	/**
+	 * @Input {boolean} Flag indicating whether the view is in mobile mode
+	 */
+	@Input() isMobile: boolean;
+
+	/**
+	 * @Input {boolean} Flag indicating whether to hide the AI tab
+	 */
+	@Input() hideAiTap: boolean;
+
+	/**
+	 * @Input {ICopyleaksReportOptions} Filter options applied to the report
+	 */
+	@Input() filterOptions: ICopyleaksReportOptions;
+
+	/**
+	 * @Input {TemplateRef<any> | undefined} Custom template used for rendering results
+	 */
+	@Input() customResultsTemplate: TemplateRef<any> | undefined = undefined;
+
+	/**
+	 * @Input {ECustomResultsReportView} Current view mode for the report
+	 */
+	@Input() reportViewMode: ECustomResultsReportView;
+
+	/**
+	 * @Input {boolean} Flag indicating whether to show the loading view or not
+	 */
+	@Input() showLoadingView = false;
+
+	showResultsSection: boolean = true;
 
 	displayedResults: IResultItem[];
 	lastItemLoading: boolean = false;
@@ -68,9 +113,11 @@ export class ReportResultsContainerComponent implements OnInit, OnChanges {
 	navigateMobileButton: EnumNavigateMobileButton;
 	enumNavigateMobileButton = EnumNavigateMobileButton;
 	EReportViewType = EReportViewType;
+	EPlatformType = EPlatformType;
 	searchedValue: string;
 
 	customEmptyResultsTemplate: TemplateRef<any> | undefined = undefined;
+	customAISourceMatchUpgradeTemplate: TemplateRef<any> | undefined = undefined;
 	showCustomView: boolean;
 	currentViewedIndex: number = 0;
 	scrollSub: any;
@@ -86,6 +133,13 @@ export class ReportResultsContainerComponent implements OnInit, OnChanges {
 	allMatchResultsStats: IMatchesTypeStatistics[];
 	selectedCategory: IMatchesCategoryStatistics | null;
 	selectedCategoryResults: IResultItem[];
+
+	aiSourceMatchUpgradeCategory: IMatchesTypeStatistics = {
+		categories: [],
+		totalResults: 0,
+		totalResultsPct: 0,
+		type: EResultPreviewType.AISourceMatchUpgrade,
+	};
 
 	private _resizeObserver: ResizeObserver;
 	hideCategoriesSection: boolean;
@@ -127,7 +181,7 @@ export class ReportResultsContainerComponent implements OnInit, OnChanges {
 					this.displayedResults = this.allResults;
 					this.selectedCategoryResults = this.getSelectedCategoryResults;
 					this._updateMatchesResultsStats();
-					if (this.selectedCategoryResults?.length === 0) this.selectedCategory = null;
+					if (this.selectedCategoryResults?.length === 0) this._setSelectedCategoryRef(null);
 				}
 				if (this.reportDataSvc.filterOptions && this.reportDataSvc.excludedResultsIds)
 					this._filterResults(this.reportDataSvc.filterOptions, this.reportDataSvc.excludedResultsIds);
@@ -166,6 +220,14 @@ export class ReportResultsContainerComponent implements OnInit, OnChanges {
 		this.reportNgTemplatesSvc.reportTemplatesSubject$.pipe(untilDestroy(this)).subscribe(refs => {
 			if (refs?.customEmptyResultsTemplate !== undefined && this.customEmptyResultsTemplate === undefined) {
 				this.customEmptyResultsTemplate = refs?.customEmptyResultsTemplate;
+				this._cdr.detectChanges();
+			}
+
+			if (
+				refs?.customAISourceMatchUpgradeTemplate !== undefined &&
+				this.customAISourceMatchUpgradeTemplate === undefined
+			) {
+				this.customAISourceMatchUpgradeTemplate = refs?.customAISourceMatchUpgradeTemplate;
 				this._cdr.detectChanges();
 			}
 		});
@@ -415,7 +477,7 @@ export class ReportResultsContainerComponent implements OnInit, OnChanges {
 
 		this._updateMatchesResultsStats();
 		this.selectedCategoryResults = this.getSelectedCategoryResults;
-		if (this.selectedCategoryResults?.length === 0) this.selectedCategory = null;
+		if (this.selectedCategoryResults?.length === 0) this._setSelectedCategoryRef(null);
 
 		setTimeout(() => {
 			this.checkAndApplyPadding();
@@ -424,18 +486,70 @@ export class ReportResultsContainerComponent implements OnInit, OnChanges {
 
 	//#endregion
 	goToAllResultsView() {
-		this.selectedCategory = null;
+		this.reportDataSvc.selectedCategoryResultsIds$.next(undefined);
+		this._setSelectedCategoryRef(null);
+
+		if (this.reportViewSvc.reportViewMode?.navigateBackToAIView && this.reportDataSvc.isAiDetectionEnabled()) {
+			this.reportViewSvc.selectedAlert$.next(ALERTS.SUSPECTED_AI_TEXT_DETECTED);
+			this.reportViewSvc.reportViewMode$.next({
+				...this.reportViewSvc.reportViewMode,
+				viewMode: 'one-to-many',
+				alertCode: ALERTS.SUSPECTED_AI_TEXT_DETECTED,
+			});
+		}
 	}
 
 	onSelectCategory(selectedCategory: IMatchesCategoryStatistics) {
-		this.selectedCategory = selectedCategory;
+		this._setSelectedCategoryRef(selectedCategory);
 		this.selectedCategoryResults = this.getSelectedCategoryResults;
-		if (this.selectedCategoryResults?.length === 0) this.selectedCategory = null;
+		if (this.selectedCategoryResults?.length === 0) this._setSelectedCategoryRef(null);
+
+		if (selectedCategory) {
+			const selectedCategoryResultsIds = this.allResults
+				.filter(result => selectedCategory.results.find(r => r.resultPreview?.id === result?.resultPreview?.id))
+				.map(r => r.resultPreview.id);
+			this.reportDataSvc.selectedCategoryResultsIds$.next([...selectedCategoryResultsIds]);
+			this.reportViewSvc.reportViewMode$.next({
+				...this.reportViewSvc.reportViewMode,
+				navigateBackToAIView: false,
+			});
+		} else {
+			this.reportDataSvc.selectedCategoryResultsIds$.next(undefined);
+		}
+	}
+
+	private _setSelectedCategoryRef(selectedCategory: IMatchesCategoryStatistics | null) {
+		this.selectedCategory = selectedCategory;
+
+		if (!selectedCategory) this.reportDataSvc.selectedCategoryResultsIds$.next([]);
+
+		const selectedCategoryTypeQueryParam = this.reportViewSvc.reportViewMode.selectedResultsCategory
+			? decodeURI(this.reportViewSvc.reportViewMode.selectedResultsCategory)
+			: null;
+		if (selectedCategoryTypeQueryParam === selectedCategory?.type) return;
+		this.reportViewSvc.reportViewMode$.next({
+			...this.reportViewSvc.reportViewMode,
+			selectedResultsCategory: selectedCategory?.type ? encodeURI(selectedCategory?.type) : null,
+		});
 	}
 
 	private _updateMatchesResultsStats() {
 		this.allMatchResultsStats = this._initMatchResultsStatistics();
 		this.displayedResults.forEach(result => {
+			// if the result is an AI source match result add it to the AI source match category
+			const aiSourceMatchTag = result?.resultPreview?.tags?.find(tag => tag.code === RESULT_TAGS_CODES.AI_SOURCE_MATCH);
+			if (aiSourceMatchTag) {
+				this._increaseMatchResultsCategoryTotal(
+					this.allMatchResultsStats,
+					EResultPreviewType.AISourceMatch,
+					$localize`AI Source Match`,
+					result
+				);
+				this.allMatchResultsStats[4].totalResults += 1;
+				this.allMatchResultsStats[4].totalResultsPct =
+					this.allMatchResultsStats[4].totalResults / (this.displayedResults?.length ?? 0);
+			}
+
 			switch (result.resultPreview.type) {
 				case EResultPreviewType.Internet:
 					if (result.resultPreview.url)
@@ -500,6 +614,27 @@ export class ReportResultsContainerComponent implements OnInit, OnChanges {
 		// check if all allMatchResultsStats categories are empty
 		if (this.allMatchResultsStats.every(r => r.categories.length === 0)) this.hideCategoriesSection = true;
 		else this.hideCategoriesSection = false;
+
+		const selectedCategoryType = this.reportViewSvc.reportViewMode.selectedResultsCategory
+			? decodeURI(this.reportViewSvc.reportViewMode.selectedResultsCategory)
+			: null;
+
+		if (selectedCategoryType != this.selectedCategory?.type) {
+			let selectedCategory: IMatchesCategoryStatistics = null;
+			this.allMatchResultsStats.forEach(r => {
+				const category = r?.categories?.find(c => c?.type === selectedCategoryType);
+				if (category) selectedCategory = category;
+			});
+			this.selectedCategory = selectedCategory;
+			if (selectedCategory) {
+				const selectedCategoryResultsIds = this.allResults
+					.filter(result => selectedCategory.results.find(r => r.resultPreview?.id === result?.resultPreview?.id))
+					.map(r => r.resultPreview.id);
+				this.reportDataSvc.selectedCategoryResultsIds$.next([...selectedCategoryResultsIds]);
+			} else {
+				this.reportDataSvc.selectedCategoryResultsIds$.next(undefined);
+			}
+		}
 	}
 
 	private _initMatchResultsStatistics(): IMatchesTypeStatistics[] {
@@ -524,6 +659,12 @@ export class ReportResultsContainerComponent implements OnInit, OnChanges {
 			},
 			{
 				type: EResultPreviewType.Repositroy,
+				categories: [],
+				totalResults: 0,
+				totalResultsPct: 0,
+			},
+			{
+				type: EResultPreviewType.AISourceMatch,
 				categories: [],
 				totalResults: 0,
 				totalResultsPct: 0,

@@ -79,6 +79,16 @@ export class ReportNgTemplatesService {
 	}
 
 	/**
+	 * Setter for the custom report custom AI source match upgrade component references
+	 */
+	public setReportCustomAISourceMatchUpgradeTemplateRef(template: TemplateRef<any>) {
+		this._reportTemplatesRefs$.next({
+			...this._reportTemplatesRefs$.value,
+			customAISourceMatchUpgradeTemplate: template,
+		} as ICustomClsReportTemplatesRefs);
+	}
+
+	/**
 	 * Setter for the custom report results section template reference.
 	 */
 	public setLockedResultItemTemplateRef(template: TemplateRef<IResultItem>) {

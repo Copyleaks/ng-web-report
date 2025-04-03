@@ -31,6 +31,11 @@ export interface ICustomClsReportTemplatesRefs {
 	customBannerSectionTemplate: TemplateRef<any> | undefined;
 
 	/**
+	 * @property {ICustomClsReportTabTemplatesRefs[] | undefined} customAISourceMatchUpgradeTemplate - Custom report custom AI source match upgrade component references.
+	 */
+	customAISourceMatchUpgradeTemplate: TemplateRef<any> | undefined;
+
+	/**
 	 * @property {TemplateRef<IResultItem> | undefined} lockedResultItemTemplateRef - Custom locked result item section references.
 	 */
 	lockedResultItemTemplateRef: TemplateRef<IResultItem> | undefined;

@@ -157,6 +157,10 @@
 		gap: 16px;
 		align-items: center;
 
+		&.is-upgrade-title {
+			gap: 8px;
+		}
+
 		.percentage {
 			font-weight: 700;
 		}

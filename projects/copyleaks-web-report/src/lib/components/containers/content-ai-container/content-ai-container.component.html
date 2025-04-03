@@ -5,21 +5,27 @@
 		fxLayout="column"
 		fxLayoutGap="8px">
 		<copyleaks-ai-percentage
-			*ngIf="!isMobile"
+			*ngIf="!isMobile && !showAIPhrases"
 			[isLoading]="isLoading"
 			[aiPercentageResult]="aiPercentageResult"></copyleaks-ai-percentage>
 		<copyleaks-explainable-ai-result-container
-			*ngIf="aiPercentageResult !== 0"
 			class="copyleaks-explainable-ai-result"
 			[isMobile]="isMobile"
 			[isLoading]="isLoading"
+			[hidePlagarismTap]="hidePlagarismTap"
 			[reportMatchesSvc]="reportMatchesSvc"
 			[highlightService]="highlightService"
+			[customAISourceMatchUpgradeTemplate]="customAISourceMatchUpgradeTemplate"
 			[lockedResults]="lockedResults"
+			[aiPercentageResult]="aiPercentageResult"
 			[explainableAIResults]="explainableAIResults"
-			(clearSelectResultEvent)="clearSelectResult()"></copyleaks-explainable-ai-result-container>
+			[showAIPhrases]="showAIPhrases"
+			[aiSourceMatchResults]="aiSourceMatchResults"
+			(clearSelectResultEvent)="clearSelectResult()"
+			(onNavigateToPhrases)="onNavigateToPhrasesClick()"
+			(onNavigateToDefault)="onNavigateToDefaultClick()"></copyleaks-explainable-ai-result-container>
 	</div>
-	<ng-container *ngIf="!(isLoading && isMobile)">
+	<ng-container *ngIf="!isLoading && !showAIPhrases && !isMobile">
 		<copyleaks-resources-container
 			class="copyleaks-resources-container"
 			[isLoading]="isLoading"

@@ -4,6 +4,7 @@ export interface ITotalSourceType {
 	totalYourFiles: number;
 	totalOthersFiles: number;
 	totalbatch: number;
+	totalAISourceMatch: number;
 	repository?: ISourceRepositoryType[];
 }
 

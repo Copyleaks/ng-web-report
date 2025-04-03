@@ -110,12 +110,14 @@ export class FilterResultDailogComponent implements OnInit {
 				!formData.showYourResults &&
 				!formData.showOthersResults &&
 				!formData.showInternalDatabaseResults &&
+				!formData.showAISourceMatch &&
 				formData.hiddenRepositories &&
 				formData.hiddenRepositories.length === this._filterResultsSvc.reposIds.length &&
 				!(
 					this.totalSourceType.totalInternet === 0 &&
 					this.totalSourceType.totalInternalDatabase === 0 &&
 					this.totalSourceType.totalbatch === 0 &&
+					this.totalSourceType.totalAISourceMatch === 0 &&
 					!(this.totalSourceType.repository && this.totalSourceType.repository?.length > 0)
 				)
 			) {
@@ -149,6 +151,11 @@ export class FilterResultDailogComponent implements OnInit {
 							?.get(EFilterResultForm.fgSourceType)
 							?.get(EFilterResultForm.fgRepositories)
 							?.get(this._filterResultsSvc.reposIds[0].id)
+							?.setValue(true, { emitEvent: false });
+					} else if (this.totalSourceType.totalAISourceMatch > 0) {
+						this._filterResultsSvc.filterResultFormGroup
+							?.get(EFilterResultForm.fgSourceType)
+							?.get(EFilterResultForm.fgAISourceMatch)
 							?.setValue(true, { emitEvent: false });
 					}
 				});

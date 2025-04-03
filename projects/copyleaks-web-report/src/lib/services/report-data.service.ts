@@ -1409,12 +1409,21 @@ export class ReportDataService {
 
 		if (settings.showInternetResults !== undefined && settings.showInternetResults === false)
 			filteredResultsIds = filteredResultsIds.filter(id =>
-				completeResults.find(cr => cr.id === id && cr.type !== EResultPreviewType.Internet)
+				completeResults.find(
+					cr =>
+						cr.id === id &&
+						(cr.type !== EResultPreviewType.Internet ||
+							cr.tags?.find(t => t.code === RESULT_TAGS_CODES.AI_SOURCE_MATCH))
+				)
 			);
 
 		if (settings.showBatchResults !== undefined && settings.showBatchResults === false)
 			filteredResultsIds = filteredResultsIds.filter(id =>
-				completeResults.find(cr => cr.id === id && cr.type !== EResultPreviewType.Batch)
+				completeResults.find(
+					cr =>
+						cr.id === id &&
+						(cr.type !== EResultPreviewType.Batch || cr.tags?.find(t => t.code === RESULT_TAGS_CODES.AI_SOURCE_MATCH))
+				)
 			);
 
 		if (
@@ -1423,15 +1432,32 @@ export class ReportDataService {
 			settings.showOthersResults === false
 		)
 			filteredResultsIds = filteredResultsIds.filter(id =>
-				completeResults.find(cr => cr.id === id && cr.type !== EResultPreviewType.Database)
+				completeResults.find(
+					cr =>
+						cr.id === id &&
+						(cr.type !== EResultPreviewType.Database ||
+							cr.tags?.find(t => t.code === RESULT_TAGS_CODES.AI_SOURCE_MATCH))
+				)
 			);
 		else if (settings.showInternalDatabaseResults !== undefined && settings.showYourResults === false)
 			filteredResultsIds = filteredResultsIds.filter(id =>
-				completeResults.find(cr => cr.id === id && (cr.type !== EResultPreviewType.Database || !cr.scanId))
+				completeResults.find(
+					cr =>
+						cr.id === id &&
+						(cr.type !== EResultPreviewType.Database ||
+							!cr.scanId ||
+							cr.tags?.find(t => t.code === RESULT_TAGS_CODES.AI_SOURCE_MATCH))
+				)
 			);
 		else if (settings.showInternalDatabaseResults !== undefined && settings.showOthersResults === false)
 			filteredResultsIds = filteredResultsIds.filter(id =>
-				completeResults.find(cr => cr.id === id && (cr.type !== EResultPreviewType.Database || !!cr.scanId))
+				completeResults.find(
+					cr =>
+						cr.id === id &&
+						(cr.type !== EResultPreviewType.Database ||
+							!!cr.scanId ||
+							cr.tags?.find(t => t.code === RESULT_TAGS_CODES.AI_SOURCE_MATCH))
+				)
 			);
 
 		if (settings.hiddenRepositories !== undefined && settings.hiddenRepositories.length > 0) {
@@ -1440,7 +1466,8 @@ export class ReportDataService {
 					cr =>
 						cr.id === id &&
 						(cr.type !== EResultPreviewType.Repositroy ||
-							!settings.hiddenRepositories?.find(id => id === (cr as IRepositoryResultPreview)?.repositoryId))
+							!settings.hiddenRepositories?.find(id => id === (cr as IRepositoryResultPreview)?.repositoryId) ||
+							cr.tags?.find(t => t.code === RESULT_TAGS_CODES.AI_SOURCE_MATCH))
 				)
 			);
 		}

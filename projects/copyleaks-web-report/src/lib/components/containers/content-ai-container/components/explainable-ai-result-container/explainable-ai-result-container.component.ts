@@ -642,11 +642,20 @@ export class ExplainableAIResultContainerComponent implements OnInit, OnChanges,
 
 		this.aiSourceMatchResultsScore = this.aiSourceMatchResultsStats.aggregatedScore;
 		this.aiSourceMatchResultsIndenticalScore =
-			this.aiSourceMatchResultsStats.identical / this.aiSourceMatchResultsStats.total;
+			this.aiSourceMatchResultsStats.total - this.aiSourceMatchResultsStats.omittedWords <= 0
+				? 0
+				: this.aiSourceMatchResultsStats.identical /
+				  (this.aiSourceMatchResultsStats.total - this.aiSourceMatchResultsStats.omittedWords);
 		this.aiSourceMatchResultsMinorChangesScore =
-			this.aiSourceMatchResultsStats.minorChanges / this.aiSourceMatchResultsStats.total;
+			this.aiSourceMatchResultsStats.total - this.aiSourceMatchResultsStats.omittedWords <= 0
+				? 0
+				: this.aiSourceMatchResultsStats.minorChanges /
+				  (this.aiSourceMatchResultsStats.total - this.aiSourceMatchResultsStats.omittedWords);
 		this.aiSourceMatchResultsParaphrasedScore =
-			this.aiSourceMatchResultsStats.relatedMeaning / this.aiSourceMatchResultsStats.total;
+			this.aiSourceMatchResultsStats.total - this.aiSourceMatchResultsStats.omittedWords <= 0
+				? 0
+				: this.aiSourceMatchResultsStats.relatedMeaning /
+				  (this.aiSourceMatchResultsStats.total - this.aiSourceMatchResultsStats.omittedWords);
 		this.aiSourceMatchResultsTotal = this.aiSourceMatchResults?.length ?? 0;
 	}
 

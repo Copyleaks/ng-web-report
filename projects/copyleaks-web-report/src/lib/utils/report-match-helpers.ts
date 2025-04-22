@@ -276,10 +276,10 @@ const extractMatches =
  * @param content name of the content to extract from (text | html)
  */
 const extractExcluded = (content: ContentKey) => (source: IScanSource) => {
-	if (!source[content].exclude) {
+	if (!source?.[content]?.exclude) {
 		return [];
 	}
-	const { starts, lengths, groupIds, reasons } = source[content].exclude;
+	const { starts, lengths, groupIds, reasons } = source[content]?.exclude;
 	return starts.map(
 		(start, i): Match => ({
 			start,

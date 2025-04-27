@@ -62,7 +62,7 @@ export class ReportExpandResultItemComponent implements OnInit, OnChanges {
 				case EResultPreviewType.Batch:
 					return 'Batch Result';
 				case EResultPreviewType.Repositroy:
-					return 'Repository Result';
+					return 'Private Cloud Hub Result';
 				default:
 					return '';
 			}

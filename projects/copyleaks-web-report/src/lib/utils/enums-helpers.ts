@@ -12,7 +12,7 @@ export function getResultsTypeTitle(type: EResultPreviewType): string {
 		case EResultPreviewType.Internet:
 			return $localize`Internet`;
 		case EResultPreviewType.Repositroy:
-			return $localize`Repository`;
+			return $localize`Private Cloud Hub`;
 		case EResultPreviewType.Database:
 			return $localize`Copyleaks Shared Data Hub`;
 		case EResultPreviewType.AISourceMatch:

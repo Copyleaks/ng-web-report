@@ -156,7 +156,7 @@ export class ReportResultsItemComponent implements OnInit, OnChanges, OnDestroy 
 				case EResultPreviewType.Batch:
 					return 'Batch Result';
 				case EResultPreviewType.Repositroy:
-					return 'Repository Result';
+					return 'Private Cloud Hub Result';
 				default:
 					return '';
 			}

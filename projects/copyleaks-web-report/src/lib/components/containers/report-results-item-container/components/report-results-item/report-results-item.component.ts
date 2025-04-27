@@ -152,7 +152,7 @@ export class ReportResultsItemComponent implements OnInit, OnChanges, OnDestroy 
 				case EResultPreviewType.Internet:
 					return 'Internet Result';
 				case EResultPreviewType.Database:
-					return 'Internal Database Result';
+					return 'Shared Data Hub Result';
 				case EResultPreviewType.Batch:
 					return 'Batch Result';
 				case EResultPreviewType.Repositroy:

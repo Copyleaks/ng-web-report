@@ -331,6 +331,7 @@ export class ReportTabsContainerComponent implements OnInit, OnDestroy, OnChange
 					sourcePageIndex: 1,
 					suspectPageIndex: 1,
 					selectedCustomTabId: undefined,
+					navigateBackToAIView: false,
 				});
 				this.reportViewSvc.selectedAlert$.next(ALERTS.SUSPECTED_AI_TEXT_DETECTED);
 				this.reportViewSvc.selectedCustomTabContent$.next(null);

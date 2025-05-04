@@ -31,7 +31,6 @@ import { IResultsActions } from './components/results-actions/models/results-act
 import { ReportMatchHighlightService } from '../../../services/report-match-highlight.service';
 import { IMatchesCategoryStatistics, IMatchesTypeStatistics } from '../../../models/report-statistics.models';
 import { RESULT_TAGS_CODES } from '../../../constants/report-result-tags.constants';
-import { ALERTS } from '../../../constants/report-alerts.constants';
 
 @Component({
 	selector: 'copyleaks-report-results-container',
@@ -490,14 +489,14 @@ export class ReportResultsContainerComponent implements OnInit, OnChanges {
 		this.reportDataSvc.selectedCategoryResultsIds$.next(undefined);
 		this._setSelectedCategoryRef(null);
 
-		if (this.reportViewSvc.reportViewMode?.navigateBackToAIView && this.reportDataSvc.isAiDetectionEnabled()) {
-			this.reportViewSvc.selectedAlert$.next(ALERTS.SUSPECTED_AI_TEXT_DETECTED);
-			this.reportViewSvc.reportViewMode$.next({
-				...this.reportViewSvc.reportViewMode,
-				viewMode: 'one-to-many',
-				alertCode: ALERTS.SUSPECTED_AI_TEXT_DETECTED,
-			});
-		}
+		// if (this.reportViewSvc.reportViewMode?.navigateBackToAIView && this.reportDataSvc.isAiDetectionEnabled()) {
+		// 	this.reportViewSvc.selectedAlert$.next(ALERTS.SUSPECTED_AI_TEXT_DETECTED);
+		// 	this.reportViewSvc.reportViewMode$.next({
+		// 		...this.reportViewSvc.reportViewMode,
+		// 		viewMode: 'one-to-many',
+		// 		alertCode: ALERTS.SUSPECTED_AI_TEXT_DETECTED,
+		// 	});
+		// }
 	}
 
 	onSelectCategory(selectedCategory: IMatchesCategoryStatistics) {

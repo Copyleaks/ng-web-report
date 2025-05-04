@@ -36,7 +36,11 @@
 										totalWords: paraphrasedTotal ?? 0,
 										disabled: reportDataSvc.filterOptions?.showRelated === false
 									},
-									omittedPct: null,
+									omittedPct: {
+										percentage: excludedTotal / wordsTotal,
+										disabled: false,
+										totalWords: excludedTotal ?? 0
+									},
 									totalWords: wordsTotal
 							  }
 					"

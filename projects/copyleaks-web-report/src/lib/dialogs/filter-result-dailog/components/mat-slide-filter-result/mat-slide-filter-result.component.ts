@@ -21,6 +21,11 @@ export class MatSlideFilterResultComponent implements OnInit, ControlValueAccess
 	@Input() title: string;
 
 	/**
+	 * @Input {string} The text to display for the tooltip
+	 */
+	@Input() tooltipText: string;
+
+	/**
 	 * @Input {number} The total number of items or results to display
 	 */
 	@Input() total: number;

@@ -43,6 +43,7 @@ export class SourceTypeFilterResultComponent implements OnInit, OnDestroy {
 	IINTERNAL_DATABASE = $localize`Shared Data Hub`;
 	THIS_BACTCH = $localize`This batch`;
 	AI_SOURCE_MATCH = $localize`AI Source Match`;
+	AI_SOURCE_MATCH_TOOLTIP = $localize`AI Source Match blends plagiarism and AI detection to identify reused or repurposed AI-generated content from other sources.`;
 
 	platformType: EPlatformType;
 

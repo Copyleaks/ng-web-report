@@ -1,3 +1,8 @@
+<div
+role="dialog"
+aria-modal="true"
+aria-labelledby="dialog-title"
+aria-describedby="dialog-description">
 <ng-container *ngIf="!data.showExcludedDailog; else excludedDailog">
 	<div mat-dialog-title class="header-container" fxLayout="column" fxLayoutGap="8px">
 		<div class="title-container" fxLayout="row" fxLayoutAlign="space-between center" fxLayoutGap="4px">
@@ -314,3 +319,4 @@
 		[highlightService]="data.highlightService"
 		(closeDailogEvent)="data.showExcludedDailog = !$event"></cr-excluded-results-dailog>
 </ng-template>
+</div>

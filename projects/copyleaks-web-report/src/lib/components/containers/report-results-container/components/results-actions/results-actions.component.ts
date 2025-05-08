@@ -8,6 +8,8 @@ import {
 	OnInit,
 	Output,
 	SimpleChanges,
+	ViewChild,
+	ElementRef,
 } from '@angular/core';
 import { IResultsActions } from './models/results-actions.models';
 import { FormControl } from '@angular/forms';
@@ -25,6 +27,9 @@ import { untilDestroy } from '../../../../../utils/until-destroy';
 	styleUrls: ['./results-actions.component.scss'],
 })
 export class ResultsActionsComponent implements OnInit, OnChanges, OnDestroy {
+
+	@ViewChild('searchInput') searchInput: ElementRef;
+
 	@HostBinding('style.padding')
 	paddingProp: string;
 
@@ -91,6 +96,14 @@ export class ResultsActionsComponent implements OnInit, OnChanges, OnDestroy {
 			this.searchFc.setValue('');
 			this.justifyContent = 'center';
 		} else this.justifyContent = 'start';
+
+			setTimeout(() => {
+				if (this.searchInput) {
+						this.searchInput.nativeElement.setAttribute('aria-live', 'assertive');
+						this.searchInput.nativeElement.focus();
+						this.searchInput.nativeElement.select();
+				}
+		},100);
 	}
 
 	expandResultsSection() {

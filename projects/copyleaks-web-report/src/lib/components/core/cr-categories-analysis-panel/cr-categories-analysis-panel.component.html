@@ -1,4 +1,7 @@
-<mat-accordion #expansionPanel [tabIndex]="-1">
+<mat-accordion
+	#expansionPanel
+	[tabIndex]="-1"
+	[class.is-upgrade-category]="matchesStats?.type === EResultPreviewType.AISourceMatchUpgrade">
 	<mat-expansion-panel #panel [expanded]="expanded" (expandedChange)="expandedChange($event)" [tabIndex]="-1">
 		<mat-expansion-panel-header
 			[ngClass]="{ 'mobile-results-panel-header': isMobile }"
@@ -147,6 +150,7 @@
 					class="info-icon"
 					fontSet="material-icons-round"
 					matTooltipClass="web-report-mat-tooltip"
+					tabindex="0"
 					[attr.aria-label]="AI_SOURCE_MATCH_TOOLTIP"
 					[matTooltip]="AI_SOURCE_MATCH_TOOLTIP">
 					info_outline

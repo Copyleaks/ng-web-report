@@ -27,7 +27,6 @@ import { untilDestroy } from '../../../../../utils/until-destroy';
 	styleUrls: ['./results-actions.component.scss'],
 })
 export class ResultsActionsComponent implements OnInit, OnChanges, OnDestroy {
-
 	@ViewChild('searchInput') searchInput: ElementRef;
 
 	@HostBinding('style.padding')
@@ -97,13 +96,13 @@ export class ResultsActionsComponent implements OnInit, OnChanges, OnDestroy {
 			this.justifyContent = 'center';
 		} else this.justifyContent = 'start';
 
-			setTimeout(() => {
-				if (this.searchInput) {
-						this.searchInput.nativeElement.setAttribute('aria-live', 'assertive');
-						this.searchInput.nativeElement.focus();
-						this.searchInput.nativeElement.select();
-				}
-		},100);
+		setTimeout(() => {
+			if (this.searchInput) {
+				this.searchInput.nativeElement.setAttribute('aria-live', 'assertive');
+				this.searchInput.nativeElement.focus();
+				this.searchInput.nativeElement.select();
+			}
+		}, 100);
 	}
 
 	expandResultsSection() {

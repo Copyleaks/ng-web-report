@@ -50,7 +50,7 @@ export class CrTextMatchComponent implements AfterContentInit {
 	public click(event) {
 		if (this.match.type === MatchType.aiText) return;
 
-		if (this._reportViewService.reportViewMode.isHtmlView) {
+		if (this._reportViewService.reportViewMode.isHtmlView && this.origin === 'original') {
 			this._reportViewService.reportViewMode$.next({ ...this._reportViewService.reportViewMode, isHtmlView: false });
 		}
 		// clear window selection

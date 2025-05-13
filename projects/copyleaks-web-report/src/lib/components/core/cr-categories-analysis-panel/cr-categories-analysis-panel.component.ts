@@ -80,6 +80,7 @@ export class CrCategoriesAnalysisTypePanelComponent implements OnInit, OnChanges
 
 	EXPAND_TOOLTIP = $localize`Expand`;
 	COLLAPSE_TOOLTIP = $localize`Collapse`;
+	AI_SOURCE_MATCH_TOOLTIP = $localize`AI Source Match blends plagiarism and AI detection to identify reused or repurposed AI-generated content from other sources.`;
 
 	private mutationObserver!: MutationObserver;
 

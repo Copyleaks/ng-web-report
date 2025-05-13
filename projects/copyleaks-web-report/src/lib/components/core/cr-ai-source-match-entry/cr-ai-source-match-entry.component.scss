@@ -1,4 +1,5 @@
 @import '../../../styles/website-colors.styles.scss';
+@import '../../../styles/cls-mat-components-overrides/cls-mat-chip-overrides.scss';
 
 :host {
 	display: flex;
@@ -26,6 +27,20 @@
 				}
 			}
 		}
+	}
+
+	.new-chip {
+		border-radius: 16px !important;
+		background: rgba(63, 154, 245, 0.2) !important;
+		display: flex !important;
+		padding: 2px 8px !important;
+		align-items: center !important;
+		gap: 4px !important;
+		color: $color-primary !important;
+		font-size: 12px !important;
+		font-style: normal !important;
+		font-weight: 700 !important;
+		line-height: normal !important;
 	}
 
 	.top-section-container {
@@ -185,6 +200,7 @@
 			align-items: center;
 			gap: 10px;
 			color: $color-black-opacity-60;
+			cursor: pointer;
 		}
 	}
 

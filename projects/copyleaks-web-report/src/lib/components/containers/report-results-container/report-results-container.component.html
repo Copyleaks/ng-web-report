@@ -307,12 +307,13 @@
 		<div class="selected-category-toolbar">
 			<button class="total-corrections-container" (click)="goToAllResultsView()" [tabIndex]="0">
 				<mat-icon class="left-arrow">chevron_left</mat-icon>
-				<ng-container *ngIf="reportViewSvc?.reportViewMode?.navigateBackToAIView; else backToResultsRef">
+				<!-- <ng-container *ngIf="reportViewSvc?.reportViewMode?.navigateBackToAIView; else backToResultsRef">
 					<span class="all-correction-title" i18n>Back to AI Detection</span>
 				</ng-container>
 				<ng-template #backToResultsRef>
 					<span class="all-correction-title" i18n>All Matching Results ({{ resultsActions?.totalResults }})</span>
-				</ng-template>
+				</ng-template> -->
+				<span class="all-correction-title" i18n>All Matching Results ({{ resultsActions?.totalResults }})</span>
 			</button>
 			<div class="selected-correction-container">
 				<mat-icon class="right-arrow">chevron_right</mat-icon>

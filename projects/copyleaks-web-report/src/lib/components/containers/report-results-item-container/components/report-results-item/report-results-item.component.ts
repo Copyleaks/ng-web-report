@@ -152,11 +152,11 @@ export class ReportResultsItemComponent implements OnInit, OnChanges, OnDestroy 
 				case EResultPreviewType.Internet:
 					return 'Internet Result';
 				case EResultPreviewType.Database:
-					return 'Internal Database Result';
+					return 'Shared Data Hub Result';
 				case EResultPreviewType.Batch:
 					return 'Batch Result';
 				case EResultPreviewType.Repositroy:
-					return 'Repository Result';
+					return 'Private Cloud Hub Result';
 				default:
 					return '';
 			}
@@ -175,7 +175,11 @@ export class ReportResultsItemComponent implements OnInit, OnChanges, OnDestroy 
 		const aiSourceMatchTag = this.resultItem?.resultPreview?.tags.find(
 			tag => tag.code === RESULT_TAGS_CODES.AI_SOURCE_MATCH
 		);
-		if (aiSourceMatchTag) return aiSourceMatchTag;
+		if (aiSourceMatchTag) {
+			aiSourceMatchTag.title = $localize`AI Source Match`;
+			aiSourceMatchTag.description = $localize`AI Source Match blends plagiarism and AI detection to identify reused or repurposed AI-generated content from other sources.`;
+			return aiSourceMatchTag;
+		}
 
 		return this.resultItem.resultPreview.tags[0];
 	}
@@ -310,7 +314,10 @@ export class ReportResultsItemComponent implements OnInit, OnChanges, OnDestroy 
 		const aiSourceMatchTag = this.previewResult?.tags?.find(tag => tag.code === RESULT_TAGS_CODES.AI_SOURCE_MATCH);
 		if (this.reportViewSvc.reportViewMode.platformType === EPlatformType.APP) {
 			if (aiSourceMatchTag) {
-				if (aiSourceMatchTag.title != 'AI Source Match') aiSourceMatchTag.title = 'AI Source Match';
+				if (aiSourceMatchTag.title != 'AI Source Match') {
+					aiSourceMatchTag.title = $localize`AI Source Match`;
+					aiSourceMatchTag.description = $localize`AI Source Match blends plagiarism and AI detection to identify reused or repurposed AI-generated content from other sources.`;
+				}
 				this.previewResult.tags = [
 					aiSourceMatchTag,
 					...this.previewResult.tags.filter(tag => tag.code !== RESULT_TAGS_CODES.AI_SOURCE_MATCH),

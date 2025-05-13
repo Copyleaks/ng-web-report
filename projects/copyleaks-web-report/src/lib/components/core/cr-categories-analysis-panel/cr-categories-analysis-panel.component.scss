@@ -85,6 +85,7 @@
 			margin-inline-end: 0px !important;
 			justify-content: end;
 			gap: 16px !important;
+			align-items: center !important;
 		}
 
 		.chip-button {
@@ -92,6 +93,15 @@
 			background: transparent !important;
 			padding: 0px !important;
 			margin: 0px !important;
+		}
+
+		.info-icon {
+			color: rgba(11, 22, 62, 0.6);
+			$icon-size: 14px;
+			font-size: $icon-size;
+			width: $icon-size;
+			height: $icon-size;
+			cursor: pointer;
 		}
 
 		.mat-expansion-panel-header[aria-expanded='true'] .hide-alerts-icon {
@@ -139,15 +149,17 @@
 		mat-chip {
 			width: fit-content !important;
 			border-radius: 16px !important;
-			background: rgba(63, 154, 245, 0.2) !important;
-			color: $color-primary !important;
-			font-size: 12px;
-			font-style: normal;
-			font-weight: 400;
-			line-height: normal;
 			text-transform: capitalize;
 			cursor: pointer;
-			border: none !important;
+			border: 1px solid $grayed-out-disabled !important;
+			background: $color-main-gray !important;
+			box-shadow: 0px 0px 2px 0px rgba(11, 22, 62, 0.08), 0px 0px 10px 0px rgba(11, 22, 62, 0.04) !important;
+			color: $color-dark-blue !important;
+			font-size: 12px !important;
+			font-style: normal !important;
+			font-weight: 500 !important;
+			line-height: normal !important;
+			padding: 3px 8px !important;
 		}
 	}
 
@@ -175,6 +187,7 @@
 			flex-direction: row;
 			gap: 8px;
 			align-items: center;
+			flex-wrap: wrap !important;
 			span {
 				font-size: 14px;
 				font-style: normal;
@@ -189,5 +202,19 @@
 				color: $grayed-out-disabled;
 			}
 		}
+	}
+
+	.new-chip {
+		border-radius: 16px !important;
+		background: rgba(63, 154, 245, 0.2) !important;
+		display: flex !important;
+		padding: 2px 8px !important;
+		align-items: center !important;
+		gap: 10px !important;
+		color: $color-primary !important;
+		font-size: 12px !important;
+		font-style: normal !important;
+		font-weight: 700 !important;
+		line-height: normal !important;
 	}
 }

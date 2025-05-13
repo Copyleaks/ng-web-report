@@ -475,76 +475,62 @@
 	</ng-container>
 	<ng-template #defaultView>
 		<ng-container *ngIf="!isMobile; else deafultMobileView">
-			<cr-ai-logic-banner></cr-ai-logic-banner>
+			<div class="divider"></div>
+			<div class="desktop-view-ai-logics-container">
+				<div class="desktop-view-ai-logics-title-container">
+					<div class="title-text-container">
+						<div class="title-text" i18n>AI Logic</div>
+						<mat-icon
+							*ngIf="!hidePlagarismTap"
+							fontSet="material-icons-round"
+							matTooltip="AI Logic uses a layered detection approach that applies multiple analysis methods in tandem, providing a highly accurate perspective on how AI may have influenced a piece of text."
+							matTooltipClass="web-report-mat-tooltip tooltip-contanier"
+							tabindex="0"
+							i18n-matTooltip>
+							info_outline
+						</mat-icon>
+					</div>
+					<span class="title-text-description" i18n>
+						Shows you the “why” behind AI detection with sources you can see and verify.
+					</span>
+				</div>
 
-			<ng-container
-				*ngIf="(!hidePlagarismTap || isLoading) && reportViewSvc?.reportViewMode?.platformType === EPlatformType.APP">
-				<cr-ai-source-match-entry
+				<ng-container
+					*ngIf="(!hidePlagarismTap || isLoading) && reportViewSvc?.reportViewMode?.platformType === EPlatformType.APP">
+					<cr-ai-source-match-entry
+						[isLoading]="isLoading"
+						[aiSourceMatchResultsStats]="aiSourceMatchResultsStats"
+						[aiSourceMatchResultsIndenticalScore]="aiSourceMatchResultsIndenticalScore"
+						[aiSourceMatchResultsMinorChangesScore]="aiSourceMatchResultsMinorChangesScore"
+						[aiSourceMatchResultsParaphrasedScore]="aiSourceMatchResultsParaphrasedScore"
+						[aiSourceMatchResultsScore]="aiSourceMatchResultsScore"
+						[aiSourceMatchResultsTotal]="aiSourceMatchResultsTotal"
+						(onNavigateToResults)="onNavigateToResultsClick()"></cr-ai-source-match-entry>
+				</ng-container>
+
+				<ng-container
+					*ngIf="hidePlagarismTap && reportViewSvc?.reportViewMode?.platformType === EPlatformType.APP && !isLoading">
+					<ng-container *ngTemplateOutlet="customAISourceMatchUpgradeTemplate ?? null"></ng-container>
+				</ng-container>
+
+				<cr-ai-phrases-entry
 					[isLoading]="isLoading"
-					[aiSourceMatchResultsStats]="aiSourceMatchResultsStats"
-					[aiSourceMatchResultsIndenticalScore]="aiSourceMatchResultsIndenticalScore"
-					[aiSourceMatchResultsMinorChangesScore]="aiSourceMatchResultsMinorChangesScore"
-					[aiSourceMatchResultsParaphrasedScore]="aiSourceMatchResultsParaphrasedScore"
-					[aiSourceMatchResultsScore]="aiSourceMatchResultsScore"
-					[aiSourceMatchResultsTotal]="aiSourceMatchResultsTotal"
-					(onNavigateToResults)="onNavigateToResultsClick()"></cr-ai-source-match-entry>
-			</ng-container>
-
-			<ng-container
-				*ngIf="hidePlagarismTap && reportViewSvc?.reportViewMode?.platformType === EPlatformType.APP && !isLoading">
-				<ng-container *ngTemplateOutlet="customAISourceMatchUpgradeTemplate ?? null"></ng-container>
-			</ng-container>
-
-			<cr-ai-phrases-entry
-				[isLoading]="isLoading"
-				[aiPercentageResult]="aiPercentageResult"
-				[maxProportion]="maxProportion"
-				[minProportion]="minProportion"
-				[barTooltipText]="barTooltipText"
-				[maxGradeBar]="maxGradeBar"
-				[midGradeBar]="midGradeBar"
-				[totalPhrases]="explainItemResults?.length ?? 0"
-				[hasInfinityResult]="hasInfinityResult"
-				[minGradeBar]="minGradeBar"
-				(onNavigateToPhrases)="onNavigateToPhrasesClick()"></cr-ai-phrases-entry>
+					[aiPercentageResult]="aiPercentageResult"
+					[maxProportion]="maxProportion"
+					[minProportion]="minProportion"
+					[barTooltipText]="barTooltipText"
+					[maxGradeBar]="maxGradeBar"
+					[midGradeBar]="midGradeBar"
+					[totalPhrases]="explainItemResults?.length ?? 0"
+					[hasInfinityResult]="hasInfinityResult"
+					[minGradeBar]="minGradeBar"
+					(onNavigateToPhrases)="onNavigateToPhrasesClick()"></cr-ai-phrases-entry>
+			</div>
 		</ng-container>
 
 		<ng-template #deafultMobileView>
 			<div class="mobile-view-ai-logics-container">
 				<div class="title-container">
-					<svg width="26" height="26" viewBox="0 0 26 26" fill="none" xmlns="http://www.w3.org/2000/svg">
-						<g filter="url(#filter0_d_7209_6497)">
-							<path
-								d="M18.2383 10.75L17.3242 8.67578L15.25 7.76172L17.3242 6.8125L18.2383 4.73828L19.1875 6.8125L21.2617 7.76172L19.1875 8.67578L18.2383 10.75ZM12.6133 11.1367L16.7617 13L12.6133 14.8633L10.75 19.0117L8.88672 14.8633L4.73828 13L8.88672 11.1367L10.75 6.98828L12.6133 11.1367ZM18.2383 15.25L19.1875 17.3242L21.2617 18.2383L19.1875 19.1875L18.2383 21.2617L17.3242 19.1875L15.25 18.2383L17.3242 17.3242L18.2383 15.25Z"
-								fill="#0B163E"
-								fill-opacity="0.6"
-								shape-rendering="crispEdges" />
-						</g>
-						<defs>
-							<filter
-								id="filter0_d_7209_6497"
-								x="0.738281"
-								y="0.738281"
-								width="24.5234"
-								height="24.5234"
-								filterUnits="userSpaceOnUse"
-								color-interpolation-filters="sRGB">
-								<feFlood flood-opacity="0" result="BackgroundImageFix" />
-								<feColorMatrix
-									in="SourceAlpha"
-									type="matrix"
-									values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 127 0"
-									result="hardAlpha" />
-								<feOffset />
-								<feGaussianBlur stdDeviation="2" />
-								<feComposite in2="hardAlpha" operator="out" />
-								<feColorMatrix type="matrix" values="0 0 0 0 0.631373 0 0 0 0 0.533333 0 0 0 0 1 0 0 0 0.2 0" />
-								<feBlend mode="normal" in2="BackgroundImageFix" result="effect1_dropShadow_7209_6497" />
-								<feBlend mode="normal" in="SourceGraphic" in2="effect1_dropShadow_7209_6497" result="shape" />
-							</filter>
-						</defs>
-					</svg>
-
 					<span i18n>AI Logic</span>
 				</div>
 

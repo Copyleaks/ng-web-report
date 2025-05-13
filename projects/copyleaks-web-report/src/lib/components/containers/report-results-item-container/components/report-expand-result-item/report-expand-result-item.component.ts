@@ -58,11 +58,11 @@ export class ReportExpandResultItemComponent implements OnInit, OnChanges {
 				case EResultPreviewType.Internet:
 					return 'Internet Result';
 				case EResultPreviewType.Database:
-					return 'Internal Database Result';
+					return 'Shared Data Hub Result';
 				case EResultPreviewType.Batch:
 					return 'Batch Result';
 				case EResultPreviewType.Repositroy:
-					return 'Repository Result';
+					return 'Private Cloud Hub Result';
 				default:
 					return '';
 			}
@@ -200,7 +200,10 @@ export class ReportExpandResultItemComponent implements OnInit, OnChanges {
 		if (this.reportViewSvc.reportViewMode.platformType === EPlatformType.APP) {
 			if (aiSourceMatchTag) {
 				this.isAiSourceResult = true;
-				if (aiSourceMatchTag.title != 'AI Source Match') aiSourceMatchTag.title = 'AI Source Match';
+				if (aiSourceMatchTag.title != 'AI Source Match') {
+					aiSourceMatchTag.title = $localize`AI Source Match`;
+					aiSourceMatchTag.description = $localize`AI Source Match blends plagiarism and AI detection to identify reused or repurposed AI-generated content from other sources.`;
+				}
 				this.resultItem.resultPreview.tags = [
 					aiSourceMatchTag,
 					...this.resultItem.resultPreview.tags.filter(tag => tag.code !== RESULT_TAGS_CODES.AI_SOURCE_MATCH),
@@ -287,6 +290,10 @@ export class ReportExpandResultItemComponent implements OnInit, OnChanges {
 			tag.code !== RESULT_TAGS_CODES.YOUR_FILE
 		) {
 			return `${tag?.description}: ${fullText}`;
+		}
+
+		if (tag.code === RESULT_TAGS_CODES.AI_SOURCE_MATCH) {
+			return $localize`AI Source Match blends plagiarism and AI detection to identify reused or repurposed AI-generated content from other sources.`;
 		}
 		return tag?.description;
 	}

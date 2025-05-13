@@ -1,4 +1,7 @@
-<mat-accordion #expansionPanel [tabIndex]="-1">
+<mat-accordion
+	#expansionPanel
+	[tabIndex]="-1"
+	[class.is-upgrade-category]="matchesStats?.type === EResultPreviewType.AISourceMatchUpgrade">
 	<mat-expansion-panel #panel [expanded]="expanded" (expandedChange)="expandedChange($event)" [tabIndex]="-1">
 		<mat-expansion-panel-header
 			[ngClass]="{ 'mobile-results-panel-header': isMobile }"
@@ -34,6 +37,12 @@
 									<span *ngIf="matchesStats?.type != EResultPreviewType.AISourceMatchUpgrade" class="percentage" i18n>
 										{{ matchesStats?.totalResultsPct | percent }}
 									</span>
+									<mat-chip
+										*ngIf="expanded && matchesStats?.type === EResultPreviewType.AISourceMatch"
+										class="new-chip"
+										i18n>
+										New
+									</mat-chip>
 								</div>
 								<div class="stats-container">
 									<ng-container *ngIf="expanded && matchesStats?.type != EResultPreviewType.AISourceMatchUpgrade">
@@ -50,6 +59,13 @@
 										i18n>
 										{{ matchesStats?.totalResults ?? 0 }} Results
 									</span>
+
+									<mat-chip
+										*ngIf="!expanded && matchesStats?.type === EResultPreviewType.AISourceMatch"
+										class="new-chip"
+										i18n>
+										New
+									</mat-chip>
 									<ng-container *ngIf="expanded && matchesStats?.type != EResultPreviewType.AISourceMatchUpgrade">
 										<ng-container
 											*ngIf="
@@ -129,7 +145,16 @@
 				<span *ngIf="selectedView === EReportViewType.WritingFeedbackTabView" class="description" i18n>
 					{{ totalCorrections }} CORRECTIONS
 				</span>
-
+				<mat-icon
+					*ngIf="matchesStats?.type === EResultPreviewType.AISourceMatch"
+					class="info-icon"
+					fontSet="material-icons-round"
+					matTooltipClass="web-report-mat-tooltip"
+					tabindex="0"
+					[attr.aria-label]="AI_SOURCE_MATCH_TOOLTIP"
+					[matTooltip]="AI_SOURCE_MATCH_TOOLTIP">
+					info_outline
+				</mat-icon>
 				<mat-icon
 					class="hide-alerts-icon"
 					fontSet="material-icons-round"

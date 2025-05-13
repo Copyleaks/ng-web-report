@@ -3,6 +3,16 @@
 		<ng-content select="mat-slide-logo"></ng-content>
 		<span class="mat-slide-title">{{ title }}</span>
 		<span *ngIf="!!total" class="mat-slide-total">({{ total }})</span>
+		<mat-icon
+			*ngIf="tooltipText"
+			class="info-icon"
+			fontSet="material-icons-round"
+			tabindex="0"
+			matTooltipClass="web-report-mat-tooltip"
+			[attr.aria-label]="tooltipText"
+			[matTooltip]="tooltipText">
+			info_outline
+		</mat-icon>
 	</div>
 	<mat-slide-toggle
 		[checked]="value && !disabledSlide"

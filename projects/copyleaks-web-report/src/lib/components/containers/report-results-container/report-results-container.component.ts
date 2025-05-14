@@ -312,10 +312,9 @@ export class ReportResultsContainerComponent implements OnInit, OnChanges {
 		switch (value) {
 			case 'internet':
 				return r.resultPreview.type === EResultPreviewType.Internet;
-			case 'copyleaks shared data hub':
-			case 'shared data hub':
+			case 'internal database':
 				return r.resultPreview.type === EResultPreviewType.Database;
-			case 'private cloud hub':
+			case 'repository':
 				return r.resultPreview.type === EResultPreviewType.Repositroy;
 			case 'batch':
 				return r.resultPreview.type === EResultPreviewType.Batch;

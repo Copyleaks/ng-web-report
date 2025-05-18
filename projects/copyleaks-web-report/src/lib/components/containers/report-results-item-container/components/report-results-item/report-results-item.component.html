@@ -243,22 +243,22 @@
 				</div>
 				<ng-container *ngIf="!showLoader">
 					<ng-container *ngIf="!excludeView; else showExcludeResult">
-						<mat-icon
-							#menuTrigger="matMenuTrigger"
-							class="item-menu"
-							mat-icon
+						<button
+							mat-icon-button
+							class="icon-button"
 							[matMenuTriggerFor]="menu"
 							matTooltip="More Options"
 							i18n-matTooltip
 							matTooltipClass="web-report-mat-tooltip"
 							aria-label="More Options"
 							i18n-aria-label
+							#menuTrigger="matMenuTrigger"
 							[tabIndex]="0"
 							[attr.aria-hidden]="false"
 							(keyup.enter)="$event.stopPropagation(); $event.preventDefault(); openResultMenu(menuTrigger)"
 							(click)="$event.stopPropagation()">
-							more_vert
-						</mat-icon>
+							<mat-icon>more_vert</mat-icon>
+						</button>
 					</ng-container>
 
 					<ng-template #showExcludeResult>

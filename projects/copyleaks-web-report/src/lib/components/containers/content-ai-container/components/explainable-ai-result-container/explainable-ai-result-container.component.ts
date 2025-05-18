@@ -422,7 +422,7 @@ export class ExplainableAIResultContainerComponent implements OnInit, OnChanges,
 			...this.reportViewSvc.reportViewMode,
 			alertCode: null,
 			selectedResultsCategory: this.isMobile ? null : encodeURI($localize`AI Source Match`),
-			navigateBackToAIView: !this.isMobile,
+			// navigateBackToAIView: !this.isMobile,
 			showAIPhrases: false,
 		});
 		this.reportViewSvc.selectedAlert$.next(null);

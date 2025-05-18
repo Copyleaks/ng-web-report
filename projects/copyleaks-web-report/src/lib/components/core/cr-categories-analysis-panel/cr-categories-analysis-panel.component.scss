@@ -85,6 +85,8 @@
 			margin-inline-end: 0px !important;
 			justify-content: end;
 			gap: 16px !important;
+			align-items: center !important;
+			flex-wrap: wrap !important;
 		}
 
 		.chip-button {
@@ -186,12 +188,13 @@
 			flex-direction: row;
 			gap: 8px;
 			align-items: center;
+			flex-wrap: wrap !important;
 			span {
 				font-size: 14px;
 				font-style: normal;
 				font-weight: 500;
 				line-height: normal;
-				color: $grayed-out-disabled;
+				color: $color-black-opacity-60;
 			}
 			mat-icon {
 				width: 16px;

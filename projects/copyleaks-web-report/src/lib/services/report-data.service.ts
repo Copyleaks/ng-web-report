@@ -889,6 +889,7 @@ export class ReportDataService {
 			showInternalDatabaseResults: true,
 			showYourResults: true,
 			showOthersResults: true,
+			showAISourceMatch: true,
 
 			showBatchResults: true,
 			hiddenRepositories: [],
@@ -1193,6 +1194,10 @@ export class ReportDataService {
 					? completeResultsRes.filters?.sourceType?.batch
 					: true,
 			hiddenRepositories: completeResultsRes.filters?.sourceType?.repositories,
+			showAISourceMatch:
+				completeResultsRes.filters?.sourceType?.aiSourceMatch != undefined
+					? completeResultsRes.filters?.sourceType?.aiSourceMatch
+					: true,
 
 			wordLimit: completeResultsRes.filters?.resultsMetaData?.wordLimit?.wordLimitEnabled
 				? completeResultsRes.filters?.resultsMetaData?.wordLimit?.totalWordLimit
@@ -1268,7 +1273,7 @@ export class ReportDataService {
 					repositories: this.filterOptions?.hiddenRepositories ?? [],
 					yourResults: this.filterOptions?.showYourResults ?? true,
 					othersResults: this.filterOptions?.showOthersResults ?? true,
-					aiSourceMatch: this.filterOptions?.showAISourceMatch ?? false,
+					aiSourceMatch: this.filterOptions?.showAISourceMatch ?? true,
 				},
 				execludedResultIds: this.excludedResultsIds ?? [],
 				filteredResultIds: [],

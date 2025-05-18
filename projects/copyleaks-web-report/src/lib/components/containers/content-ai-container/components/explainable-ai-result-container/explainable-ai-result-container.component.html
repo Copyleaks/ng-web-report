@@ -481,9 +481,11 @@
 					<div class="title-text-container">
 						<div class="title-text" i18n>AI Logic</div>
 						<mat-icon
+							*ngIf="!hidePlagarismTap"
 							fontSet="material-icons-round"
 							matTooltip="AI Logic uses a layered detection approach that applies multiple analysis methods in tandem, providing a highly accurate perspective on how AI may have influenced a piece of text."
 							matTooltipClass="web-report-mat-tooltip tooltip-contanier"
+							tabindex="0"
 							i18n-matTooltip>
 							info_outline
 						</mat-icon>

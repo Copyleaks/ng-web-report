@@ -58,11 +58,11 @@ export class ReportExpandResultItemComponent implements OnInit, OnChanges {
 				case EResultPreviewType.Internet:
 					return 'Internet Result';
 				case EResultPreviewType.Database:
-					return 'Shared Data Hub Result';
+					return 'Internal Database Result';
 				case EResultPreviewType.Batch:
 					return 'Batch Result';
 				case EResultPreviewType.Repositroy:
-					return 'Private Cloud Hub Result';
+					return 'Repository Result';
 				default:
 					return '';
 			}

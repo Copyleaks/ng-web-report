@@ -39,7 +39,7 @@ export class ResourcesContainerComponent implements OnInit {
 				title: $localize`Start Here`,
 				description: $localize`Learn the fundamentals of AI Logic.`,
 				buttontext: $localize`Watch video`,
-				link: 'https://player.vimeo.com/video/1019805684?h=bb3cb5d73e',
+				link: 'https://player.vimeo.com/video/1084270773?badge=0&amp',
 				isVideo: true,
 			},
 			{

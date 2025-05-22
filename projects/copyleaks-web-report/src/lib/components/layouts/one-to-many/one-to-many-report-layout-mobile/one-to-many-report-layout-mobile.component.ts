@@ -53,6 +53,10 @@ export class OneToManyReportLayoutMobileComponent
 		);
 	}
 
+public isPlagiarismEnabled(): boolean {
+  return this.reportDataSvc.isPlagiarismEnabled();
+}
+
 	ngOnInit(): void {
 		this.initOneToManyViewData();
 	}

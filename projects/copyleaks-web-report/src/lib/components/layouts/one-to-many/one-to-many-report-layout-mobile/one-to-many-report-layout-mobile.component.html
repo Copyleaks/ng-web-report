@@ -53,7 +53,10 @@
 		<div class="content-section">
 			<!-- Report scan content tabs -->
 			<copyleaks-report-tabs-container
-				*ngIf="reportMode === EReportMode.WebReport && !(selectedTap === EReportViewType.AIView && showAIPhrases)"
+				*ngIf="
+					(reportMode === EReportMode.WebReport && !(selectedTap === EReportViewType.AIView && showAIPhrases)) ||
+					(selectedTap === EReportViewType.AIView && !isPlagiarismEnabled())
+				"
 				[reportMode]="reportMode"
 				[hideAiTap]="hideAiTap"
 				[hidePlagarismTap]="hidePlagarismTap"
@@ -78,6 +81,23 @@
 				[loadingProgressPct]="loadingProgressPct"
 				[isMobile]="true"></copyleaks-report-tabs-container>
 
+			<div
+				class="mobile-view-ai-logics-container"
+				*ngIf="selectedTap === EReportViewType.AIView && !isPlagiarismEnabled()">
+				<div class="title-container">
+					<span i18n>AI Logic</span>
+				</div>
+
+				<mat-icon
+					fontSet="material-icons-round"
+					matTooltip="Wonder how we spot AI content? Get a glimpse into our validation process."
+					[matTooltipPosition]="'after'"
+					matTooltipClass="web-report-mat-tooltip tooltip-contanier"
+					i18n-matTooltip>
+					info_outline
+				</mat-icon>
+			</div>
+
 			<cr-ai-phrases-mobile-header
 				*ngIf="selectedTap === EReportViewType.AIView && showAIPhrases"
 				[isLoading]="loadingExplainableAI || !reportStatistics || !reportCrawledVersion"
@@ -85,6 +105,7 @@
 				[aiScore]="reportStatistics?.aiScore ?? 0"
 				[wordsTotal]="reportStatistics?.total ?? 0"
 				[excludedTotal]="reportStatistics?.omittedWords ?? 0"
+				[ngStyle]="{ 'border-radius': !isPlagiarismEnabled() ? '0px' : null }"
 				[explainableAIResults]="explainableAI"></cr-ai-phrases-mobile-header>
 			<!-- Report scan content viewer -->
 			<copyleaks-content-viewer-container

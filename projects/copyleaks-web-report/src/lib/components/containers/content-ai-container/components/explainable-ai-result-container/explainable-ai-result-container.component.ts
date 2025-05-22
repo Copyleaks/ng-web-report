@@ -158,16 +158,23 @@ export class ExplainableAIResultContainerComponent implements OnInit, OnChanges,
 	private unsubscribe$ = new Subject();
 
 	constructor(public reportViewSvc: ReportViewService, private _reportDataSvc: ReportDataService) {}
-
 	ngOnChanges(changes: SimpleChanges): void {
 		if (changes['isLoading']?.currentValue == false) {
 			this._initResults();
+		if (!this.isPlagiarismEnabled()){
+			this.reportMatchesSvc.showAIPhrases$.next(true);
+			this.showAIPhrases = true;
 		}
+	}
 
 		if (changes['aiSourceMatchResults']?.currentValue && changes['aiSourceMatchResults']?.currentValue.length > 0) {
 			this._calculateAiSourceMatchResultsStats();
 		}
 	}
+
+	public isPlagiarismEnabled(): boolean {
+  return this._reportDataSvc.isPlagiarismEnabled();
+}
 
 	ngOnInit(): void {
 		if (!this.isLoading) this._initResults();

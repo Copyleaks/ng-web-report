@@ -14,8 +14,27 @@
 					fxLayout="column"
 					fxLayoutGap="12px">
 					<!-- Header -->
+					<div *ngIf="!isMobile && !isPlagiarismEnabled()" class="desktop-view-ai-logics-container">
+						<div class="desktop-view-ai-logics-title-container">
+							<div class="title-text-container">
+								<div class="title-text" i18n>AI Logic</div>
+								<mat-icon
+									fontSet="material-icons-round"
+									matTooltip="AI Logic uses a layered detection approach that applies multiple analysis methods in tandem, providing a highly accurate perspective on how AI may have influenced a piece of text."
+									matTooltipClass="web-report-mat-tooltip tooltip-contanier"
+									tabindex="0"
+									i18n-matTooltip>
+									info_outline
+								</mat-icon>
+							</div>
+							<span class="title-text-description" i18n>
+								Shows you the “why” behind AI detection with sources you can see and verify.
+							</span>
+						</div>
+					</div>
 					<div *ngIf="!emptyView && !isMobile" class="header">
 						<cr-button
+							[hidden]="!isPlagiarismEnabled()"
 							[isLink]="true"
 							[outlined]="true"
 							[dir]="reportViewSvc.documentDirection"

@@ -25,7 +25,12 @@
 			(onNavigateToPhrases)="onNavigateToPhrasesClick()"
 			(onNavigateToDefault)="onNavigateToDefaultClick()"></copyleaks-explainable-ai-result-container>
 	</div>
-	<ng-container *ngIf="!isLoading && !showAIPhrases && !isMobile">
+	<ng-container
+		*ngIf="
+			!isLoading &&
+			(!showAIPhrases || (!isAiSourceMatchEnabled() && reportViewSvc?.reportViewMode?.hideAISourceMatchUpgrade)) &&
+			!isMobile
+		">
 		<copyleaks-resources-container
 			class="copyleaks-resources-container"
 			[isLoading]="isLoading"

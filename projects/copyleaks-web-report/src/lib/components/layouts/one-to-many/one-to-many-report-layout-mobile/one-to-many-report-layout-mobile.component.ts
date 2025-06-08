@@ -53,9 +53,13 @@ export class OneToManyReportLayoutMobileComponent
 		);
 	}
 
-public isPlagiarismEnabled(): boolean {
-  return this.reportDataSvc.isPlagiarismEnabled();
-}
+	public isPlagiarismEnabled(): boolean {
+		return this.reportDataSvc.isPlagiarismEnabled();
+	}
+
+	public isAiSourceMatchEnabled(): boolean {
+		return this.reportDataSvc.isAiSourceMatchEnabled();
+	}
 
 	ngOnInit(): void {
 		this.initOneToManyViewData();

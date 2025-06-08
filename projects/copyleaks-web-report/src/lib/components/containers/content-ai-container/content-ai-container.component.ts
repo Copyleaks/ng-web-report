@@ -5,6 +5,8 @@ import { ReportMatchesService } from '../../../services/report-matches.service';
 import { IResultItem } from '../report-results-item-container/components/models/report-result-item.models';
 import { ReportNgTemplatesService } from '../../../services/report-ng-templates.service';
 import { untilDestroy } from '../../../utils/until-destroy';
+import { ReportViewService } from '../../../services/report-view.service';
+import { ReportDataService } from '../../../services/report-data.service';
 
 @Component({
 	selector: 'copyleaks-content-ai-container',
@@ -71,9 +73,11 @@ export class ContentAiContainerComponent implements OnInit, OnChanges {
 
 	constructor(
 		private _cdr: ChangeDetectorRef,
+		private _reportDataSvc: ReportDataService,
 		public highlightService: ReportMatchHighlightService,
 		public reportMatchesSvc: ReportMatchesService,
-		public reportNgTemplatesSvc: ReportNgTemplatesService
+		public reportNgTemplatesSvc: ReportNgTemplatesService,
+		public reportViewSvc: ReportViewService
 	) {}
 
 	ngOnChanges(changes: SimpleChanges): void {
@@ -94,6 +98,10 @@ export class ContentAiContainerComponent implements OnInit, OnChanges {
 				this._cdr.detectChanges();
 			}
 		});
+	}
+
+	public isAiSourceMatchEnabled(): boolean {
+		return this._reportDataSvc.isAiSourceMatchEnabled();
 	}
 
 	/**

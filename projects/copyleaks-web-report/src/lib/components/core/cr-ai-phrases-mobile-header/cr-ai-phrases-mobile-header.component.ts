@@ -66,7 +66,11 @@ export class CrAiPhrasesMobileHeaderComponent implements OnInit, OnChanges {
 	resultTooltipText: string;
 	updateResult: boolean = false;
 
-	constructor(private _reportMatchesSvc: ReportMatchesService, public reportViewSvc: ReportViewService, private _reportDataSvc: ReportDataService) {}
+	constructor(
+		private _reportMatchesSvc: ReportMatchesService,
+		public reportViewSvc: ReportViewService,
+		private _reportDataSvc: ReportDataService
+	) {}
 
 	ngOnInit(): void {}
 
@@ -86,6 +90,10 @@ export class CrAiPhrasesMobileHeaderComponent implements OnInit, OnChanges {
 
 	public isPlagiarismEnabled(): boolean {
 		return this._reportDataSvc.isPlagiarismEnabled();
+	}
+
+	public isAiSourceMatchEnabled(): boolean {
+		return this._reportDataSvc.isAiSourceMatchEnabled();
 	}
 
 	private _initResults() {

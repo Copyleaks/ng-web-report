@@ -55,7 +55,7 @@
 			<copyleaks-report-tabs-container
 				*ngIf="
 					(reportMode === EReportMode.WebReport && !(selectedTap === EReportViewType.AIView && showAIPhrases)) ||
-					(selectedTap === EReportViewType.AIView && !isPlagiarismEnabled())
+					(selectedTap === EReportViewType.AIView && !isAiSourceMatchEnabled() && hideAISourceMatchUpgrade)
 				"
 				[reportMode]="reportMode"
 				[hideAiTap]="hideAiTap"
@@ -82,8 +82,8 @@
 				[isMobile]="true"></copyleaks-report-tabs-container>
 
 			<div
-				class="mobile-view-ai-logics-container"
-				*ngIf="selectedTap === EReportViewType.AIView && !isPlagiarismEnabled()">
+				*ngIf="selectedTap === EReportViewType.AIView && !isAiSourceMatchEnabled() && hideAISourceMatchUpgrade"
+				class="mobile-view-ai-logics-container">
 				<div class="title-container">
 					<span i18n>AI Logic</span>
 				</div>

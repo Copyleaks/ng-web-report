@@ -152,7 +152,7 @@
 		<!-- AI Source Match -->
 		<ng-container>
 			<cr-mat-slide-filter-result
-				*ngIf="platformType === ePlatformType.APP && reportDataSvc.isAiDetectionEnabled()"
+				*ngIf="reportDataSvc.isAiSourceMatchEnabled()"
 				[formControlName]="eFilterResultForm.fgAISourceMatch"
 				class="mat-slide-filter-result"
 				[title]="AI_SOURCE_MATCH"

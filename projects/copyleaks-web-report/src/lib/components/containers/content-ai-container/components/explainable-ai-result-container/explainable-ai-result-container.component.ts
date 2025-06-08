@@ -160,12 +160,14 @@ export class ExplainableAIResultContainerComponent implements OnInit, OnChanges,
 	constructor(public reportViewSvc: ReportViewService, private _reportDataSvc: ReportDataService) {}
 	ngOnChanges(changes: SimpleChanges): void {
 		if (changes['isLoading']?.currentValue == false) {
-			this._initResults();
-		if (!this.isPlagiarismEnabled()){
-			this.reportMatchesSvc.showAIPhrases$.next(true);
-			this.showAIPhrases = true;
+			{
+				this._initResults();
+				if (!this.isAiSourceMatchEnabled() && this.reportViewSvc?.reportViewMode?.hideAISourceMatchUpgrade) {
+					this.reportMatchesSvc.showAIPhrases$.next(true);
+					this.showAIPhrases = true;
+				}
+			}
 		}
-	}
 
 		if (changes['aiSourceMatchResults']?.currentValue && changes['aiSourceMatchResults']?.currentValue.length > 0) {
 			this._calculateAiSourceMatchResultsStats();
@@ -173,8 +175,12 @@ export class ExplainableAIResultContainerComponent implements OnInit, OnChanges,
 	}
 
 	public isPlagiarismEnabled(): boolean {
-  return this._reportDataSvc.isPlagiarismEnabled();
-}
+		return this._reportDataSvc.isPlagiarismEnabled();
+	}
+
+	public isAiSourceMatchEnabled(): boolean {
+		return this._reportDataSvc.isAiSourceMatchEnabled();
+	}
 
 	ngOnInit(): void {
 		if (!this.isLoading) this._initResults();

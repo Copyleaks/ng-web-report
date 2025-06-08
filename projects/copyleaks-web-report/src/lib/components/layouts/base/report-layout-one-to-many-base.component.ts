@@ -114,6 +114,7 @@ export abstract class OneToManyReportLayoutBaseComponent extends ReportLayoutBas
 	loadingExplainableAI: boolean = true;
 	isAiHtmlViewAvailable: boolean = false;
 	showAIPhrases: boolean = false;
+	hideAISourceMatchUpgrade: boolean = false;
 
 	// Subject for destroying all the subscriptions in base component
 	private unsubscribe$ = new Subject();
@@ -172,6 +173,7 @@ export abstract class OneToManyReportLayoutBaseComponent extends ReportLayoutBas
 			this.isHtmlView = data.isHtmlView;
 			this.currentPageSource = data.sourcePageIndex;
 			this.viewMode = data.viewMode;
+			this.hideAISourceMatchUpgrade = data.hideAISourceMatchUpgrade;
 
 			if (data.viewMode === 'writing-feedback') {
 				this.selectedTap = EReportViewType.WritingFeedbackTabView;

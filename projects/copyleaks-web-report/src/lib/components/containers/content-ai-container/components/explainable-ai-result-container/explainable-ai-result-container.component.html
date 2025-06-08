@@ -14,7 +14,9 @@
 					fxLayout="column"
 					fxLayoutGap="12px">
 					<!-- Header -->
-					<div *ngIf="!isMobile && !isPlagiarismEnabled()" class="desktop-view-ai-logics-container">
+					<div
+						*ngIf="!isMobile && !isAiSourceMatchEnabled() && reportViewSvc?.reportViewMode?.hideAISourceMatchUpgrade"
+						class="desktop-view-ai-logics-container">
 						<div class="desktop-view-ai-logics-title-container">
 							<div class="title-text-container">
 								<div class="title-text" i18n>AI Logic</div>
@@ -34,7 +36,7 @@
 					</div>
 					<div *ngIf="!emptyView && !isMobile" class="header">
 						<cr-button
-							[hidden]="!isPlagiarismEnabled()"
+							*ngIf="isAiSourceMatchEnabled()"
 							[isLink]="true"
 							[outlined]="true"
 							[dir]="reportViewSvc.documentDirection"
@@ -528,7 +530,12 @@
 				</ng-container>
 
 				<ng-container
-					*ngIf="hidePlagarismTap && reportViewSvc?.reportViewMode?.platformType === EPlatformType.APP && !isLoading">
+					*ngIf="
+						hidePlagarismTap &&
+						reportViewSvc?.reportViewMode?.platformType === EPlatformType.APP &&
+						!isLoading &&
+						!reportViewSvc?.reportViewMode?.hideAISourceMatchUpgrade
+					">
 					<ng-container *ngTemplateOutlet="customAISourceMatchUpgradeTemplate ?? null"></ng-container>
 				</ng-container>
 
@@ -584,7 +591,12 @@
 					</ng-container>
 
 					<ng-container
-						*ngIf="hidePlagarismTap && reportViewSvc?.reportViewMode?.platformType === EPlatformType.APP && !isLoading">
+						*ngIf="
+							hidePlagarismTap &&
+							reportViewSvc?.reportViewMode?.platformType === EPlatformType.APP &&
+							!isLoading &&
+							!reportViewSvc?.reportViewMode?.hideAISourceMatchUpgrade
+						">
 						<ng-container *ngTemplateOutlet="customAISourceMatchUpgradeTemplate ?? null"></ng-container>
 					</ng-container>
 

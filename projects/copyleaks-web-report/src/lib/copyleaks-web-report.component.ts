@@ -116,6 +116,12 @@ export class CopyleaksWebReportComponent implements OnInit, OnDestroy {
 	@Input() lockedExplainAIResults: boolean = false;
 
 	/**
+	 * @Input {boolean} - Flag indicating whether to show the AI source match upgrade component.
+	 * @Default value: true
+	 */
+	@Input() hideAISourceMatchUpgrade: boolean = true;
+
+	/**
 	 * @Output {IResourceStartExplainableAIVideo} - Emits once AI Insight explination start video button clicked.
 	 */
 	@Output() onExplainableAIStartVideoButtonClicked = new EventEmitter<IResourceStartExplainableAIVideo>();
@@ -242,6 +248,14 @@ export class CopyleaksWebReportComponent implements OnInit, OnDestroy {
 					showDisabledProducts: this.showDisabledProducts,
 				} as IReportViewEvent);
 		}
+
+		if ('hideAISourceMatchUpgrade' in changes) {
+			if (!!this._reportViewSvc.reportViewMode)
+				this._reportViewSvc.reportViewMode$.next({
+					...this._reportViewSvc.reportViewMode,
+					hideAISourceMatchUpgrade: this.hideAISourceMatchUpgrade,
+				} as IReportViewEvent);
+		}
 	}
 
 	/**
@@ -363,6 +377,7 @@ export class CopyleaksWebReportComponent implements OnInit, OnDestroy {
 			suspectPageIndex: suspectPage ? Number(suspectPage) ?? 1 : 1,
 			alertCode: alertCode,
 			showDisabledProducts: this.showDisabledProducts,
+			hideAISourceMatchUpgrade: this.hideAISourceMatchUpgrade,
 			platformType: this.platformType,
 			selectedCustomTabId: selectedCustomTabId,
 			selectedResultsCategory: selectedResultsCategory,
@@ -447,6 +462,7 @@ export class CopyleaksWebReportComponent implements OnInit, OnDestroy {
 					this._reportViewSvc.reportViewMode?.suspectPageIndex == (suspectPage ? Number(suspectPage) ?? 1 : 1) &&
 					this._reportViewSvc.reportViewMode?.alertCode == alertCode &&
 					this._reportViewSvc.reportViewMode?.showDisabledProducts == this.showDisabledProducts &&
+					this._reportViewSvc.reportViewMode?.hideAISourceMatchUpgrade == this.hideAISourceMatchUpgrade &&
 					this._reportViewSvc.reportViewMode?.platformType == this.platformType &&
 					this._reportViewSvc.reportViewMode?.selectedCustomTabId == selectedCustomTabId &&
 					this._reportViewSvc.reportViewMode?.selectedResultsCategory == selectedResultsCategory &&
@@ -462,6 +478,7 @@ export class CopyleaksWebReportComponent implements OnInit, OnDestroy {
 					suspectPageIndex: suspectPage ? Number(suspectPage) ?? 1 : 1,
 					alertCode: alertCode,
 					showDisabledProducts: this.showDisabledProducts,
+					hideAISourceMatchUpgrade: this.hideAISourceMatchUpgrade,
 					platformType: this.platformType,
 					selectedCustomTabId: selectedCustomTabId,
 					selectedResultsCategory: selectedResultsCategory,

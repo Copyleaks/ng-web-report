@@ -668,6 +668,7 @@
 }
 
 .desktop-view-ai-logics-container {
+	overflow-y: auto;
 	display: flex;
 	padding: 8px;
 	flex-direction: column;

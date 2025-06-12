@@ -48,6 +48,7 @@
 	.top-header-container {
 		background: $color-white;
 		box-shadow: 0px 0px 10px 0px rgba(11, 22, 62, 0.04), 0px 0px 2px 0px rgba(11, 22, 62, 0.08);
+		border-radius: 8px;
 
 		.header-container {
 			padding: 16px;
@@ -622,6 +623,8 @@
 	}
 	.empty-and-locked-contaienr {
 		padding: 0px 16px;
+		background-color: $color-white;
+		border-radius: 10px;
 		.empty-contaienr {
 			padding: 16px;
 			border-radius: 10px;
@@ -668,7 +671,6 @@
 }
 
 .desktop-view-ai-logics-container {
-	overflow-y: auto;
 	display: flex;
 	padding: 8px;
 	flex-direction: column;
@@ -676,6 +678,7 @@
 	gap: 12px;
 	align-self: stretch;
 	border-radius: 8px;
+	margin-bottom: 8px;
 	border: 1px solid #bca6ff !important;
 	background: linear-gradient(0deg, rgba(161, 136, 255, 0.2) 0%, rgba(161, 136, 255, 0.2) 100%), $color-white;
 

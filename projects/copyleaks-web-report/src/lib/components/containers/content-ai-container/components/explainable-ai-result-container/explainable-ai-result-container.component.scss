@@ -682,6 +682,10 @@
 	border: 1px solid #bca6ff !important;
 	background: linear-gradient(0deg, rgba(161, 136, 255, 0.2) 0%, rgba(161, 136, 255, 0.2) 100%), $color-white;
 
+	&.with-scroll {
+		overflow-y: auto;
+	}
+
 	.desktop-view-ai-logics-title-container {
 		display: flex;
 		flex-direction: column;

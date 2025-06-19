@@ -12,8 +12,20 @@
 						class="submitted-doc-name-container"
 						[matTooltip]="submittedDocumentName | fileName"
 						matTooltipClass="web-report-mat-tooltip">
-						<mat-icon>description</mat-icon>
-						<span>{{ submittedDocumentName | fileName }}</span>
+						<mat-icon
+							*ngIf="
+								reportResponsive != EResponsiveLayoutType.Mobile ||
+								viewSvc.reportViewMode.platformType != EPlatformType.APP
+							">
+							description
+						</mat-icon>
+						<span
+							*ngIf="
+								reportResponsive != EResponsiveLayoutType.Mobile ||
+								viewSvc.reportViewMode.platformType != EPlatformType.APP
+							">
+							{{ submittedDocumentName | fileName }}
+						</span>
 					</div>
 				</ng-template>
 			</ng-container>

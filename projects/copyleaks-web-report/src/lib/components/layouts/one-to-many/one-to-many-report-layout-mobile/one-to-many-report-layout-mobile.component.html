@@ -55,7 +55,10 @@
 			<copyleaks-report-tabs-container
 				*ngIf="
 					(reportMode === EReportMode.WebReport && !(selectedTap === EReportViewType.AIView && showAIPhrases)) ||
-					(selectedTap === EReportViewType.AIView && !isAiSourceMatchEnabled() && hideAISourceMatchUpgrade)
+					(reportMode === EReportMode.WebReport &&
+						selectedTap === EReportViewType.AIView &&
+						!isAiSourceMatchEnabled() &&
+						hideAISourceMatchUpgrade)
 				"
 				[reportMode]="reportMode"
 				[hideAiTap]="hideAiTap"
@@ -109,7 +112,13 @@
 				[aiScore]="reportStatistics?.aiScore ?? 0"
 				[wordsTotal]="reportStatistics?.total ?? 0"
 				[excludedTotal]="reportStatistics?.omittedWords ?? 0"
-				[ngStyle]="{ 'border-radius': !isPlagiarismEnabled() ? '0px' : null }"
+				[ngStyle]="{
+					'border-radius':
+						!isPlagiarismEnabled() ||
+						(selectedTap === EReportViewType.AIView && !isAiSourceMatchEnabled() && hideAISourceMatchUpgrade)
+							? '0px'
+							: null
+				}"
 				[explainableAIResults]="explainableAI"></cr-ai-phrases-mobile-header>
 			<!-- Report scan content viewer -->
 			<copyleaks-content-viewer-container

@@ -9,6 +9,7 @@ import { ReportNgTemplatesService } from '../../../../services/report-ng-templat
 import { ReportRealtimeResultsService } from '../../../../services/report-realtime-results.service';
 import { EReportMode } from '../../../../enums/copyleaks-web-report.enums';
 import { ReportErrorsService } from '../../../../services/report-errors.service';
+import { MatTooltip } from '@angular/material/tooltip/public-api';
 
 @Component({
 	selector: 'copyleaks-one-to-many-report-layout-mobile',
@@ -28,6 +29,8 @@ export class OneToManyReportLayoutMobileComponent
 	@Input() lockedExplainAIResults: boolean = false;
 
 	EReportMode = EReportMode;
+
+	tooltipVisible: boolean = false;
 
 	constructor(
 		reportDataSvc: ReportDataService,
@@ -53,6 +56,11 @@ export class OneToManyReportLayoutMobileComponent
 		);
 	}
 
+	toggleTooltip(tooltip: MatTooltip): void {
+		this.tooltipVisible = !this.tooltipVisible;
+		this.tooltipVisible ? tooltip.show() : tooltip.hide();
+	}
+	
 	public isPlagiarismEnabled(): boolean {
 		return this.reportDataSvc.isPlagiarismEnabled();
 	}

@@ -75,7 +75,7 @@
 				<span i18n>AI Source Match</span>
 				<mat-chip class="new-chip" i18n>New</mat-chip>
 			</div>
-			<ng-container *ngIf="aiSourceMatchResultsTotal > 0; else zeroTotalRef">
+			<ng-container *ngIf="aiSourceMatchResultsTotal >= 0; else zeroTotalRef">
 				<div class="total-results" i18n>
 					{{ aiSourceMatchResultsTotal | number }}
 					{aiSourceMatchResultsTotal, plural, =1 {Result} other {Results}}
@@ -96,12 +96,12 @@
 				</div>
 			</ng-template>
 		</div>
-		<div *ngIf="aiSourceMatchResultsTotal > 0" class="ai-source-match-description" i18n>
+		<div *ngIf="aiSourceMatchResultsTotal >= 0" class="ai-source-match-description" i18n>
 			Identifies if any part of the text matches AI-generated content already published elsewhere.
 		</div>
 	</div>
 
-	<div *ngIf="aiSourceMatchResultsTotal > 0" class="bottom-section-container">
+	<div *ngIf="aiSourceMatchResultsTotal >= 0" class="bottom-section-container">
 		<div class="match-bar-container">
 			<span class="ai-source-match-score">{{ aiSourceMatchResultsScore | similarity : '1.0-1' }}</span>
 			<div
@@ -152,7 +152,13 @@
 			[isLink]="true"
 			[dir]="reportViewSvc.documentDirection"
 			padding="4px 8px"
-			(click)="$event.preventDefault(); $event.stopPropagation(); onNavigateToResultsClick()">
+			[style.border-color]="aiSourceMatchResultsTotal <= 0 ? '#9DA9BF' : '$color-primary'"
+			[disabled]="aiSourceMatchResultsTotal <= 0"
+			(click)="
+				$event.preventDefault();
+				$event.stopPropagation();
+				aiSourceMatchResultsTotal > 0 ? onNavigateToResultsClick() : null
+			">
 			<ng-container i18n>Matching Results</ng-container>
 		</cr-button>
 	</div>

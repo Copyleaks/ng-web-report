@@ -37,7 +37,7 @@
 
 				<span i18n>AI Phrases</span>
 			</div>
-			<ng-container *ngIf="totalPhrases > 0; else zeroTotalRef">
+			<ng-container *ngIf="totalPhrases >= 0; else zeroTotalRef">
 				<div class="total-results" i18n>
 					{{ totalPhrases | number }}
 					{totalPhrases, plural, =1 {Phrase} other {Phrases}}
@@ -58,14 +58,18 @@
 				</div>
 			</ng-template>
 		</div>
-		<div *ngIf="totalPhrases > 0" class="ai-source-match-description" i18n>
+		<div *ngIf="totalPhrases >= 0" class="ai-source-match-description" i18n>
 			Detects phrases that appear with higher frequency in AI-written text than in human writing.
 		</div>
 	</div>
 
-	<div *ngIf="totalPhrases > 0" class="bottom-section-container">
+	<div
+		*ngIf="
+			((totalPhrases > 0 && aiPercentageResult > 0) || (totalPhrases == 0 && !aiPercentageResult)) && !aiInsightAlert
+		"
+		class="bottom-section-container">
 		<div class="match-bar-container">
-			<span class="ai-source-match-score">{{ minProportion?.toLocaleString() }}x</span>
+			<span *ngIf="totalPhrases > 0" class="ai-source-match-score">{{ minProportion?.toLocaleString() }}x</span>
 			<div
 				class="grade-bar-container"
 				tabindex="0"
@@ -82,8 +86,11 @@
 				</div>
 			</div>
 			<span class="ai-source-match-score">
-				<ng-container *ngIf="hasInfinityResult; else maxResult">10,000x</ng-container>
-				<ng-template #maxResult>{{ maxProportion?.toLocaleString() }}x</ng-template>
+				<ng-container *ngIf="hasInfinityResult; else maxResultCheck">10,000x</ng-container>
+				<ng-template #maxResultCheck>
+					<ng-container *ngIf="totalPhrases > 0; else emptyResult">{{ maxProportion?.toLocaleString() }}x</ng-container>
+					<ng-template #emptyResult></ng-template>
+				</ng-template>
 			</span>
 		</div>
 		<cr-button
@@ -91,8 +98,12 @@
 			[outlined]="true"
 			[isLink]="true"
 			[dir]="reportViewSvc.documentDirection"
+			[disabled]="totalPhrases <= 0"
+			[ngStyle]="{
+				'border-color': totalPhrases <= 0 ? '#9DA9BF' : '$color-primary'
+			}"
 			padding="4px 8px"
-			(click)="$event.preventDefault(); $event.stopPropagation(); onNavigateToPhrasesClick()">
+			(click)="$event.preventDefault(); $event.stopPropagation(); totalPhrases > 0 ? onNavigateToPhrasesClick() : null">
 			<ng-container i18n>See phrases</ng-container>
 		</cr-button>
 	</div>

@@ -7,6 +7,12 @@ import { ReportViewService } from '../../../services/report-view.service';
 	styleUrls: ['./cr-ai-phrases-entry.component.scss'],
 })
 export class CrAiPhrasesEntryComponent implements OnInit {
+	@Input() alertTitle: string = '';
+
+	@Input() alertMessage: string = '';
+
+	@Input() aiInsightAlert: boolean = false;
+
 	/**
 	 * @Input {string} Tooltip text displayed on the bar component
 	 */

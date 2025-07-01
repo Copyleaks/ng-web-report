@@ -44,49 +44,10 @@
 			&:hover,
 			&.hover {
 				background-color: $color-match-selected !important;
-				.custom-view-avatar-container {
-					background: $color-primary !important;
-				}
 			}
 
 			&.selected {
 				background-color: $color-match-selected !important;
-				.custom-view-avatar-container {
-					background: $color-primary !important;
-				}
-			}
-		}
-
-		.custom-view-avatar-container {
-			position: absolute;
-			height: fit-content;
-			display: flex;
-			top: 50%;
-			transform: translateY(-50%);
-			user-select: none !important;
-
-			transition: all 0.2s ease-in-out;
-			padding: 2px;
-			border-radius: 32px 32px 32px 0px;
-			background: $color-dark-blue;
-			border: 1px solid $color-white;
-			box-shadow: 0px 4px 4px 0px rgba(0, 0, 0, 0.15);
-			box-sizing: border-box;
-			height: 32px;
-
-			cursor: pointer;
-			.custom-view-avatar {
-				border-radius: 24px;
-				border: 1px solid $color-primary;
-				width: 24px;
-				height: 24px;
-				background: $color-white;
-				user-select: none !important;
-			}
-
-			&:hover,
-			&.hover {
-				background: $color-primary !important;
 			}
 		}
 	}

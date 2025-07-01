@@ -45,7 +45,6 @@ import { filter } from 'rxjs/operators';
 import * as rangy from 'rangy';
 import * as rangyclassapplier from 'rangy/lib/rangy-classapplier';
 
-import { md5 } from 'hash-wasm';
 import { ALERTS } from '../../../constants/report-alerts.constants';
 
 @Component({

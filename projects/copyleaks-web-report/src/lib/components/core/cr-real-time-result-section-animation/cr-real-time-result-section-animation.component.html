@@ -1,0 +1,234 @@
+<div class="loading-item-container">
+	<ng-container *ngIf="counter % 10 == 1; else defaultLoadingTemplate">
+		<div class="loading-details" @expandContainer>
+			<div class="title-container">
+				<div class="icon-container">
+					<ng-container *ngTemplateOutlet="matchingSvgTemplate"></ng-container>
+
+					<mat-icon fontSet="material-icons-round">language</mat-icon>
+				</div>
+				<span i18n>Analyzing billions of web pages for matching content…</span>
+			</div>
+
+			<ng-container *ngTemplateOutlet="detailsLoadingTableTemplate"></ng-container>
+		</div>
+	</ng-container>
+</div>
+<div class="loading-item-container">
+	<ng-container *ngIf="counter % 10 == 2; else defaultLoadingTemplate">
+		<div class="loading-details" @expandContainer>
+			<div class="title-container">
+				<div class="icon-container">
+					<ng-container *ngTemplateOutlet="matchingSvgTemplate"></ng-container>
+
+					<mat-icon fontSet="material-icons-round">psychology</mat-icon>
+				</div>
+				<span i18n>Breaking down your text for in-depth analysis...</span>
+			</div>
+			<ng-container *ngTemplateOutlet="detailsLoadingTableTemplate"></ng-container>
+		</div>
+	</ng-container>
+</div>
+<div class="loading-item-container">
+	<ng-container *ngIf="counter % 10 == 3; else defaultLoadingTemplate">
+		<div class="loading-details" @expandContainer>
+			<div class="title-container">
+				<div class="icon-container">
+					<ng-container *ngTemplateOutlet="matchingSvgTemplate"></ng-container>
+
+					<mat-icon fontSet="material-icons-round">cloud_circle</mat-icon>
+				</div>
+				<span i18n>Scanning millions of publications for potential matches...</span>
+			</div>
+			<ng-container *ngTemplateOutlet="detailsLoadingTableTemplate"></ng-container>
+		</div>
+	</ng-container>
+</div>
+<div class="loading-item-container">
+	<ng-container *ngIf="counter % 10 == 4; else defaultLoadingTemplate">
+		<div class="loading-details" @expandContainer>
+			<div class="title-container">
+				<div class="icon-container">
+					<ng-container *ngTemplateOutlet="matchingSvgTemplate"></ng-container>
+
+					<mat-icon fontSet="material-icons-round">change_history</mat-icon>
+				</div>
+				<span i18n>Analyzing for advanced rewording and paraphrasing...</span>
+			</div>
+			<ng-container *ngTemplateOutlet="detailsLoadingTableTemplate"></ng-container>
+		</div>
+	</ng-container>
+</div>
+<div class="loading-item-container">
+	<ng-container *ngIf="counter % 10 == 5; else defaultLoadingTemplate">
+		<div class="loading-details" @expandContainer>
+			<div class="title-container">
+				<div class="icon-container">
+					<ng-container *ngTemplateOutlet="matchingSvgTemplate"></ng-container>
+
+					<mat-icon fontSet="material-icons-round">copyright</mat-icon>
+				</div>
+				<span i18n>Ensuring your content is uniquely yours...</span>
+			</div>
+			<ng-container *ngTemplateOutlet="detailsLoadingTableTemplate"></ng-container>
+		</div>
+	</ng-container>
+</div>
+<div class="loading-item-container">
+	<ng-container *ngIf="counter % 10 == 6; else defaultLoadingTemplate">
+		<div class="loading-details" @expandContainer>
+			<div class="title-container">
+				<div class="icon-container">
+					<ng-container *ngTemplateOutlet="aiSvgTemplate"></ng-container>
+
+					<mat-icon class="ai-details-icon" fontSet="material-icons-round">fingerprint</mat-icon>
+				</div>
+				<span i18n>Identifying the subtle patterns left by AI...</span>
+			</div>
+			<ng-container *ngTemplateOutlet="detailsLoadingTableTemplate"></ng-container>
+		</div>
+	</ng-container>
+</div>
+<div class="loading-item-container">
+	<ng-container *ngIf="counter % 10 == 7; else defaultLoadingTemplate">
+		<div class="loading-details" @expandContainer>
+			<div class="title-container">
+				<div class="icon-container">
+					<ng-container *ngTemplateOutlet="aiSvgTemplate"></ng-container>
+
+					<mat-icon class="ai-details-icon" fontSet="material-icons-round">generating_tokens</mat-icon>
+				</div>
+				<span i18n>Reviewing for content from LLMs like ChatGPT, Gemini etc...</span>
+			</div>
+			<ng-container *ngTemplateOutlet="detailsLoadingTableTemplate"></ng-container>
+		</div>
+	</ng-container>
+</div>
+<div class="loading-item-container">
+	<ng-container *ngIf="counter % 10 == 8; else defaultLoadingTemplate">
+		<div class="loading-details" @expandContainer>
+			<div class="title-container">
+				<div class="icon-container">
+					<ng-container *ngTemplateOutlet="aiSvgTemplate"></ng-container>
+
+					<mat-icon class="ai-details-icon" fontSet="material-icons-round">auto_awesome</mat-icon>
+				</div>
+				<span i18n>Analyzing AI Phrases to clarify detection results...</span>
+			</div>
+			<ng-container *ngTemplateOutlet="detailsLoadingTableTemplate"></ng-container>
+		</div>
+	</ng-container>
+</div>
+<div class="loading-item-container">
+	<ng-container *ngIf="counter % 10 == 9; else defaultLoadingTemplate">
+		<div class="loading-details" @expandContainer>
+			<div class="title-container">
+				<div class="icon-container">
+					<ng-container *ngTemplateOutlet="aiSvgTemplate"></ng-container>
+
+					<mat-icon class="ai-details-icon" fontSet="material-icons-round">join_inner</mat-icon>
+				</div>
+				<span i18n>Pinpointing where AI generated content blends with human text...</span>
+			</div>
+			<ng-container *ngTemplateOutlet="detailsLoadingTableTemplate"></ng-container>
+		</div>
+	</ng-container>
+</div>
+<div class="loading-item-container">
+	<ng-container *ngIf="counter % 10 == 0; else defaultLoadingTemplate">
+		<div class="loading-details" @expandContainer>
+			<div class="title-container">
+				<div class="icon-container">
+					<ng-container *ngTemplateOutlet="aiSvgTemplate"></ng-container>
+
+					<mat-icon class="ai-details-icon" fontSet="material-icons-round">bolt</mat-icon>
+				</div>
+				<span i18n>Tracking the latest shifts in AI-generated writing styles...</span>
+			</div>
+			<ng-container *ngTemplateOutlet="detailsLoadingTableTemplate"></ng-container>
+		</div>
+	</ng-container>
+</div>
+
+<ng-template #defaultLoadingTemplate>
+	<div class="loading-item" @expandContainer>
+		<ngx-skeleton-loader class="circle skeleton" [appearance]="'line'"></ngx-skeleton-loader>
+		<ngx-skeleton-loader class="description-loader skeleton" [appearance]="'line'"></ngx-skeleton-loader>
+	</div>
+</ng-template>
+
+<ng-template #detailsLoadingTableTemplate>
+	<div class="table-container">
+		<div class="row-container">
+			<ngx-skeleton-loader class="skeleton" [appearance]="'line'" style="width: 50%"></ngx-skeleton-loader>
+		</div>
+		<div class="row-container">
+			<ngx-skeleton-loader class="skeleton" [appearance]="'line'" style="width: 10%"></ngx-skeleton-loader>
+			<ngx-skeleton-loader class="skeleton" [appearance]="'line'" style="width: 50%"></ngx-skeleton-loader>
+		</div>
+		<div class="row-container">
+			<ngx-skeleton-loader class="skeleton" [appearance]="'line'" style="width: 15%"></ngx-skeleton-loader>
+			<ngx-skeleton-loader class="skeleton" [appearance]="'line'" style="width: 40%"></ngx-skeleton-loader>
+		</div>
+	</div>
+</ng-template>
+
+<ng-template #matchingSvgTemplate>
+	<svg width="32" height="32" viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg">
+		<g opacity="0.4">
+			<mask id="mask0_9030_84" style="mask-type: alpha" maskUnits="userSpaceOnUse" x="0" y="0" width="64" height="32">
+				<path
+					d="M0 16C0 7.16344 7.16344 0 16 0H48C56.8366 0 64 7.16344 64 16C64 24.8366 56.8366 32 48 32H16C7.16344 32 0 24.8366 0 16Z"
+					fill="url(#paint0_linear_9030_84)" />
+			</mask>
+			<g mask="url(#mask0_9030_84)">
+				<path
+					d="M0 16C0 7.16344 7.16344 0 16 0C24.8366 0 32 7.16344 32 16C32 24.8366 24.8366 32 16 32C7.16344 32 0 24.8366 0 16Z"
+					fill="#FFB1B1" />
+			</g>
+		</g>
+		<defs>
+			<linearGradient
+				id="paint0_linear_9030_84"
+				x1="64"
+				y1="32"
+				x2="-1.30775"
+				y2="29.0611"
+				gradientUnits="userSpaceOnUse">
+				<stop offset="0.0154342" stop-color="#7B8499" />
+				<stop offset="0.567708" stop-color="#8E97A9" stop-opacity="0" />
+				<stop offset="1" stop-color="#EBF3F5" />
+			</linearGradient>
+		</defs>
+	</svg>
+</ng-template>
+
+<ng-template #aiSvgTemplate>
+	<svg width="32" height="32" viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg">
+		<g opacity="0.4">
+			<mask id="mask0_9030_1014" style="mask-type: alpha" maskUnits="userSpaceOnUse" x="0" y="0" width="64" height="32">
+				<path
+					d="M0 16C0 7.16344 7.16344 0 16 0H48C56.8366 0 64 7.16344 64 16C64 24.8366 56.8366 32 48 32H16C7.16344 32 0 24.8366 0 16Z"
+					fill="url(#paint0_linear_9030_1014)" />
+			</mask>
+			<g mask="url(#mask0_9030_1014)">
+				<path
+					d="M0 16C0 7.16344 7.16344 0 16 0C24.8366 0 32 7.16344 32 16C32 24.8366 24.8366 32 16 32C7.16344 32 0 24.8366 0 16Z"
+					fill="#A188FF" />
+			</g>
+		</g>
+		<defs>
+			<linearGradient
+				id="paint0_linear_9030_1014"
+				x1="64"
+				y1="32"
+				x2="-1.30775"
+				y2="29.0611"
+				gradientUnits="userSpaceOnUse">
+				<stop offset="0.0154342" stop-color="#7B8499" />
+				<stop offset="0.567708" stop-color="#8E97A9" stop-opacity="0" />
+				<stop offset="1" stop-color="#EBF3F5" />
+			</linearGradient>
+		</defs>
+	</svg>
+</ng-template>

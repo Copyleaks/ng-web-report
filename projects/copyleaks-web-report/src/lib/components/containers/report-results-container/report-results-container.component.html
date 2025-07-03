@@ -194,7 +194,9 @@
 		</div>
 	</div>
 	<ng-container *ngIf="showLoadingView">
-		<cr-results-actions [showLoadingView]="showLoadingView"></cr-results-actions>
+		<cr-results-actions
+			*ngIf="!(reportViewSvc.progress$.value < 100 && (!newResults || newResults.length === 0))"
+			[showLoadingView]="showLoadingView"></cr-results-actions>
 		<div
 			class="report-results-item-top-container"
 			[style]="'width:100%'"
@@ -208,18 +210,24 @@
 						'results-item-container': !isMobile,
 						'results-item-mobile-container': isMobile
 					}">
-					<ng-container *ngIf="!newResults || newResults.length === 0; else realTimeView">
-						<ng-container *ngFor="let _ of [1, 2, 3, 4, 5, 6, 7, 8]">
-							<cr-report-results-item
-								[reportViewSvc]="reportViewSvc"
-								[reportNgTemplatesSvc]="reportNgTemplatesSvc"
-								[reportDataSvc]="reportDataSvc"
-								[highlightService]="highlightService"
-								[showLoader]="true"
-								[style]="'width:100%'"></cr-report-results-item>
+					<ng-container *ngIf="!newResults || newResults.length === 0; else resultsRealTimeView">
+						<ng-container *ngIf="reportViewSvc.progress$.value < 100 && !isMobile; else nonRealTimeView">
+							<cr-real-time-result-section-animation></cr-real-time-result-section-animation>
 						</ng-container>
+
+						<ng-template #nonRealTimeView>
+							<ng-container *ngFor="let _ of [1, 2, 3, 4, 5, 6, 7, 8]">
+								<cr-report-results-item
+									[reportViewSvc]="reportViewSvc"
+									[reportNgTemplatesSvc]="reportNgTemplatesSvc"
+									[reportDataSvc]="reportDataSvc"
+									[highlightService]="highlightService"
+									[showLoader]="true"
+									[style]="'width:100%'"></cr-report-results-item>
+							</ng-container>
+						</ng-template>
 					</ng-container>
-					<ng-template #realTimeView>
+					<ng-template #resultsRealTimeView>
 						<ng-container *ngFor="let item of newResults">
 							<cr-report-results-item
 								class="real-time-result"

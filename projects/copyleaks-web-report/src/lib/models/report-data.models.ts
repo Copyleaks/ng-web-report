@@ -215,6 +215,7 @@ export interface IScanEnabledSettings {
 	writingFeedback: boolean;
 	pdfReport: boolean;
 	cheatDetection: boolean;
+	aiSourceMatch?: boolean;
 }
 
 /** Type representing a summary of the reuslts of a scanned document */

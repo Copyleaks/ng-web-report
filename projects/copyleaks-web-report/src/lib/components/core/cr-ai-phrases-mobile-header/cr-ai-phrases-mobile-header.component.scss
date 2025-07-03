@@ -9,7 +9,7 @@
 	.title-container {
 		display: flex;
 		align-items: center;
-		justify-content: space-between;
+		justify-content: center;
 		align-self: stretch;
 		gap: 8px;
 
@@ -26,6 +26,9 @@
 				font-weight: 700;
 				line-height: normal;
 			}
+		}
+		.justify-left {
+		justify-content: flex-start !important;
 		}
 
 		.total-phrases {
@@ -67,7 +70,6 @@
 			font-style: normal;
 			font-weight: 800;
 			line-height: normal;
-			padding-top: 5px;
 		}
 
 		.match-bar-container {
@@ -253,5 +255,5 @@
 		::ng-deep .loader {
 			height: 8px !important;
 		}
-	}
+	}	
 }

@@ -3,6 +3,9 @@
 	width: 100%;
 	.percentage-result-container {
 		width: 100%;
+		overflow: hidden;
+		height: 93%;
+		flex: 2;
 
 		.copyleaks-explainable-ai-result {
 			display: flex;

@@ -37,25 +37,14 @@
 
 				<span i18n>AI Phrases</span>
 			</div>
-			<ng-container *ngIf="totalPhrases >= 0; else zeroTotalRef">
+			<ng-container *ngIf="!aiInsightAlert; else notApplicableRef">
 				<div class="total-results" i18n>
 					{{ totalPhrases | number }}
 					{totalPhrases, plural, =1 {Phrase} other {Phrases}}
 				</div>
 			</ng-container>
-			<ng-template #zeroTotalRef>
-				<div class="no-results-info-container">
-					<span class="total-results" i18n>No Phrases Were Found</span>
-					<mat-icon
-						fontSet="material-icons-round"
-						tabindex="0"
-						matTooltip="GenAI tends to repeat specific phrases it learned during training, which is one of many signals used to detect AI-generated text."
-						[matTooltipPosition]="'after'"
-						matTooltipClass="web-report-mat-tooltip tooltip-contanier"
-						i18n-matTooltip>
-						info_outline
-					</mat-icon>
-				</div>
+			<ng-template #notApplicableRef>
+				<span class="not-applicable-results" i18n>N/A</span>
 			</ng-template>
 		</div>
 		<div *ngIf="totalPhrases >= 0" class="ai-source-match-description" i18n>
@@ -100,10 +89,11 @@
 			[dir]="reportViewSvc.documentDirection"
 			[disabled]="totalPhrases <= 0"
 			[ngStyle]="{
+				'pointer-events': totalPhrases <= 0 ? 'none' : 'auto',
 				'border-color': totalPhrases <= 0 ? '#9DA9BF' : '$color-primary'
 			}"
 			padding="4px 8px"
-			(click)="$event.preventDefault(); $event.stopPropagation(); totalPhrases > 0 ? onNavigateToPhrasesClick() : null">
+			(click)="$event.preventDefault(); $event.stopPropagation(); onNavigateToPhrasesClick()">
 			<ng-container i18n>See phrases</ng-container>
 		</cr-button>
 	</div>

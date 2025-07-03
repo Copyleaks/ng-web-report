@@ -779,7 +779,7 @@
 			cr-ai-source-match-entry,
 			cr-ai-source-match-upgrade {
 				width: 320px;
-				align-self: center !important;
+				align-self: flex-start !important;
 				box-sizing: border-box;
 			}
 		}
@@ -834,7 +834,7 @@
 }
 
 
-.insight-container{
+.lang-not-supported-container{
 	
 	display: flex;
 	padding: 8px;
@@ -866,10 +866,6 @@
 		line-height: normal;
 	}
 
-
-
-
-
 	.language-icon-container {
 		display: flex;
 		padding: 8px;
@@ -880,12 +876,10 @@
 		background: rgba(208, 67, 64, 0.20);
 		
 		mat-icon {
-			display: flex;
 			color: #D04340;
 			height: 18px;
 			width: 18px;
-			justify-content: center;
-			align-items: center;
+			font-size: 18px;
 			gap: 10px;
 		}
 	}

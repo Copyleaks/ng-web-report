@@ -152,13 +152,12 @@
 			[isLink]="true"
 			[dir]="reportViewSvc.documentDirection"
 			padding="4px 8px"
-			[style.border-color]="aiSourceMatchResultsTotal <= 0 ? '#9DA9BF' : '$color-primary'"
+			[ngStyle]="{
+				'pointer-events': aiSourceMatchResultsTotal <= 0 ? 'none' : 'auto',
+				'border-color': aiSourceMatchResultsTotal <= 0 ? '#9DA9BF' : '$color-primary'
+			}"
 			[disabled]="aiSourceMatchResultsTotal <= 0"
-			(click)="
-				$event.preventDefault();
-				$event.stopPropagation();
-				aiSourceMatchResultsTotal > 0 ? onNavigateToResultsClick() : null
-			">
+			(click)="$event.preventDefault(); $event.stopPropagation(); onNavigateToResultsClick()">
 			<ng-container i18n>Matching Results</ng-container>
 		</cr-button>
 	</div>

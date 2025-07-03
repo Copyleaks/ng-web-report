@@ -145,7 +145,7 @@
 				<!-- Empty and Locked view -->
 				<ng-container *ngIf="emptyView || lockedResults; else showResults">
 					<ng-container *ngIf="aiInsightAlert">
-						<div class="insight-container" fxLayoutAlign="center center">
+						<div class="lang-not-supported-container" fxLayoutAlign="center center">
 							<div class="language-icon-container">
 								<mat-icon fontSet="material-icons-round">language_outline</mat-icon>
 							</div>
@@ -631,6 +631,9 @@
 						[totalPhrases]="explainItemResults?.length ?? 0"
 						[hasInfinityResult]="hasInfinityResult"
 						[minGradeBar]="minGradeBar"
+						[alertTitle]="alertTitle"
+						[alertMessage]="alertMessage"
+						[aiInsightAlert]="aiInsightAlert"
 						(onNavigateToPhrases)="onNavigateToPhrasesClick()"></cr-ai-phrases-entry>
 				</div>
 			</div>

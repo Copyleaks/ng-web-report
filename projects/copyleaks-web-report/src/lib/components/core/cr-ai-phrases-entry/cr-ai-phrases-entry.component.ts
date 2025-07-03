@@ -7,10 +7,19 @@ import { ReportViewService } from '../../../services/report-view.service';
 	styleUrls: ['./cr-ai-phrases-entry.component.scss'],
 })
 export class CrAiPhrasesEntryComponent implements OnInit {
+	/**
+	 * @Input {string} Title of the alert displayed in the component
+	 */
 	@Input() alertTitle: string = '';
 
+	/**
+	 * @Input {string} Message of the alert displayed in the component
+	 */
 	@Input() alertMessage: string = '';
 
+	/**
+	 * @Input {boolean} Flag indicating if the alert is related to AI insights
+	 */
 	@Input() aiInsightAlert: boolean = false;
 
 	/**

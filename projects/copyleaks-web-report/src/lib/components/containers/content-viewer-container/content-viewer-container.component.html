@@ -305,9 +305,10 @@
 				text-container>
 				<ng-container *ngIf="contentTextMatches; else clean">
 					<ng-container *ngFor="let partial of contentTextMatches[currentPage - 1]">
-						<span *ngIf="partial.match.type === MatchType.none">{{ partial.content }}</span>
+						<span tabindex="0" *ngIf="partial.match.type === MatchType.none">{{ partial.content }}</span>
 						<!--  -->
 						<span
+							tabindex="0"
 							*ngIf="partial.match.type !== MatchType.none && partial.match.type !== MatchType.excluded"
 							[cr-match]="partial.match"
 							origin="original"
@@ -324,6 +325,7 @@
 						</span>
 						<!--  -->
 						<i
+							tabindex="0"
 							*ngIf="partial.match.type === MatchType.excluded && partial.match.reason != 8"
 							exclude-match
 							[matTooltip]="
@@ -336,6 +338,7 @@
 						</i>
 						<!--  -->
 						<span
+							tabindex="0"
 							*ngIf="partial.match.type === MatchType.excluded && partial.match.reason == 8"
 							exclude-partial-scan
 							[matTooltip]="
@@ -391,9 +394,10 @@
 				text-container>
 				<ng-container *ngIf="contentTextMatches; else clean">
 					<ng-container *ngFor="let partial of contentTextMatches[currentPage - 1]">
-						<span *ngIf="partial.match.type === MatchType.none">{{ partial.content }}</span>
+						<span tabindex="0" *ngIf="partial.match.type === MatchType.none">{{ partial.content }}</span>
 						<!--  -->
 						<span
+							tabindex="0"
 							*ngIf="partial.match.type !== MatchType.none && partial.match.type !== MatchType.excluded"
 							[cr-match]="partial.match"
 							origin="source">
@@ -401,6 +405,7 @@
 						</span>
 						<!--  -->
 						<i
+							tabindex="0"
 							*ngIf="partial.match.type === MatchType.excluded && partial.match.reason != 8"
 							exclude-match
 							[matTooltip]="
@@ -413,6 +418,7 @@
 						</i>
 						<!--  -->
 						<span
+							tabindex="0"
 							*ngIf="partial.match.type === MatchType.excluded && partial.match.reason == 8"
 							exclude-partial-scan
 							[matTooltip]="EXCLUDE_MESSAGE[partial.match.reason]"
@@ -450,8 +456,12 @@
 				[dir]="contentDirection">
 				<ng-container *ngIf="contentTextMatches; else clean">
 					<ng-container *ngFor="let partial of contentTextMatches[currentPage - 1]">
-						<span *ngIf="partial.match.type === MatchType.none">{{ partial.content }}</span>
-						<span *ngIf="partial.match.type !== MatchType.none" [cr-match]="partial.match" origin="suspect">
+						<span tabindex="0" *ngIf="partial.match.type === MatchType.none">{{ partial.content }}</span>
+						<span
+							tabindex="0"
+							*ngIf="partial.match.type !== MatchType.none"
+							[cr-match]="partial.match"
+							origin="suspect">
 							{{ partial.content }}
 						</span>
 					</ng-container>

@@ -150,7 +150,7 @@
 								<mat-icon fontSet="material-icons-round">language_outline</mat-icon>
 							</div>
 							<div class="insight-text" fxLayout="column">
-								<span class="title">{{ alertTitle }}</span>
+								<span class="title" i18n>{{ alertTitle }}</span>
 								<span class="description" i18n>
 									{{ alertMessage }}
 								</span>
@@ -163,7 +163,7 @@
 							<ng-container *ngIf="emptyView; else lockedResults">
 								<div class="empty-contaienr" fxLayout="column" fxLayoutAlign="center center" fxLayoutGap="4px">
 									<ng-container *ngIf="aiInsightAlert; else emptyState">
-										<span class="title">{{ alertTitle }}</span>
+										<span class="title" i18n>{{ alertTitle }}</span>
 										<span class="description" i18n>
 											{{ alertMessage }}
 										</span>

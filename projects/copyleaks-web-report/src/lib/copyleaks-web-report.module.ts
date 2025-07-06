@@ -115,6 +115,7 @@ import { CrAiSourceMatchEntryComponent } from './components/core/cr-ai-source-ma
 import { CrAiPhrasesEntryComponent } from './components/core/cr-ai-phrases-entry/cr-ai-phrases-entry.component';
 import { CrAiSourceMatchUpgradeComponent } from './components/core/cr-ai-source-match-upgrade/cr-ai-source-match-upgrade.component';
 import { CrAiPhrasesMobileHeaderComponent } from './components/core/cr-ai-phrases-mobile-header/cr-ai-phrases-mobile-header.component';
+import { CrRealTimeResultSectionAnimationComponent } from './components/core/cr-real-time-result-section-animation/cr-real-time-result-section-animation.component';
 
 @NgModule({
 	declarations: [
@@ -186,6 +187,7 @@ import { CrAiPhrasesMobileHeaderComponent } from './components/core/cr-ai-phrase
 		CrAiPhrasesEntryComponent,
 		CrAiSourceMatchUpgradeComponent,
 		CrAiPhrasesMobileHeaderComponent,
+		CrRealTimeResultSectionAnimationComponent,
 	],
 	imports: [
 		CommonModule,

@@ -50,6 +50,10 @@
 		border-radius: 10px;
 		gap: 8px;
 		background-color: $color-white;
+		&.is-real-time {
+			background-color: transparent !important;
+			box-shadow: none !important;
+		}
 		copyleaks-report-results-container {
 			height: 95%;
 			flex-grow: 95;
@@ -124,6 +128,10 @@
 		border-radius: 10px;
 		gap: 8px;
 		background-color: $color-white;
+		&.is-real-time {
+			background-color: transparent !important;
+			box-shadow: none !important;
+		}
 		copyleaks-report-results-container {
 			height: 95%;
 			flex-grow: 95;

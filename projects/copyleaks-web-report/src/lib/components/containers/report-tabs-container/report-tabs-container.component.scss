@@ -25,6 +25,16 @@
 		}
 	}
 
+	.loading-div {
+		display: flex;
+		width: 149px;
+		height: 19px;
+		justify-content: center;
+		align-items: center;
+		background-color: #ccd4df;
+		border-radius: 10px;
+	}
+
 	.assessment-tool-container {
 		display: flex;
 		flex-direction: column;
@@ -628,12 +638,13 @@
 	}
 
 	.bar-score.real-time-view {
-		font-size: 14px !important;
-		font-style: normal !important;
-		font-weight: 500 !important;
-		line-height: normal !important;
 		display: flex;
 		align-items: center;
+		font-size: 12px !important;
+		font-style: normal !important;
+		font-weight: 700 !important;
+		line-height: normal !important;
+		font-family: haboro-soft, sans-serif !important;
 	}
 }
 

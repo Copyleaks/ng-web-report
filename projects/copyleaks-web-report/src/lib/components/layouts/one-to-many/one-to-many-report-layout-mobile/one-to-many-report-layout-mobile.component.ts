@@ -60,7 +60,7 @@ export class OneToManyReportLayoutMobileComponent
 		this.tooltipVisible = !this.tooltipVisible;
 		this.tooltipVisible ? tooltip.show() : tooltip.hide();
 	}
-	
+
 	public isPlagiarismEnabled(): boolean {
 		return this.reportDataSvc.isPlagiarismEnabled();
 	}

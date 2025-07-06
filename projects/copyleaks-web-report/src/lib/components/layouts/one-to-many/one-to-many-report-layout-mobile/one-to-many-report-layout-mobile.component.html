@@ -122,6 +122,10 @@
 				[explainableAIResults]="explainableAI"></cr-ai-phrases-mobile-header>
 			<!-- Report scan content viewer -->
 			<copyleaks-content-viewer-container
+				*ngIf="
+					!(loadingProgressPct < 100 && (!newScanResultsView || newScanResultsView.length === 0));
+					else realTimeResultsLoading
+				"
 				[isHtmlView]="isHtmlView"
 				[isAlertsView]="isAlertsMode"
 				[scanSource]="reportCrawledVersion"
@@ -152,6 +156,10 @@
 				(iFrameMessageEvent)="onIFrameMessage($event)"
 				(viewChangeEvent)="onReportViewChange($event)"
 				(onShowOmittedWords)="onShowOmittedWords($event)"></copyleaks-content-viewer-container>
+
+			<ng-template #realTimeResultsLoading>
+				<cr-real-time-result-section-animation></cr-real-time-result-section-animation>
+			</ng-template>
 		</div>
 	</div>
 </div>

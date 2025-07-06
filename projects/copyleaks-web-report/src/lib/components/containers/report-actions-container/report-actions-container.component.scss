@@ -13,6 +13,7 @@
 	.actions-loader-container {
 		display: flex;
 		flex-direction: row;
+		padding: 4px 0px;
 
 		.icons-loader-container,
 		.buttons-loader-container {
@@ -36,6 +37,15 @@
 			border-radius: 10px !important;
 			opacity: 0.2;
 			background-color: $color-medium-dark;
+		}
+
+		&.first {
+			width: 141px !important;
+			::ng-deep .loader {
+				width: 141px !important;
+				height: 30px !important;
+				border-radius: 30px !important;
+			}
 		}
 	}
 

@@ -20,8 +20,8 @@
 		justify-content: center;
 		align-items: center;
 		border-radius: 10px;
-		background: var(--Colors-Main-black, #0b163e);
-		color: var(--Main-White, var(--Colors-Main-White, #fbffff));
+		background: $color-black;
+		color: $color-white;
 		flex-direction: row;
 		gap: 16px;
 		width: 100%;

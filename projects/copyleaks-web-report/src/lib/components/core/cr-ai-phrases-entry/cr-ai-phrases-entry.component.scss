@@ -366,23 +366,18 @@ cr-button {
 	gap: 16px;
 	align-self: stretch;
 	border-radius: 10px;
-	background: rgba(208, 67, 64, 0.10);
+	background: rgba(208, 67, 64, 0.1);
 	box-shadow: 0px 0px 2px 0px rgba(11, 22, 62, 0.12);
 
-	.title{
-		color: var(--Main-black, var(--Colors-Main-black, #0B163E));
-		/* tiny paragraph */
-		font-family: "Haboro Soft";
+	.title {
+		color: $color-black;
 		font-size: 14px;
 		font-style: normal;
 		font-weight: 700;
 		line-height: normal;
 	}
-	.description{
-		color: var(--Main-black, var(--Colors-Main-black, #0B163E));
-
-		/* tiny paragraph */
-		font-family: "Haboro Soft";
+	.description {
+		color: $color-black;
 		font-size: 14px;
 		font-style: normal;
 		font-weight: 500;
@@ -396,10 +391,10 @@ cr-button {
 		align-items: center;
 		gap: 8px;
 		border-radius: 18px;
-		background: rgba(208, 67, 64, 0.20);
-		
+		background: rgba(208, 67, 64, 0.2);
+
 		mat-icon {
-			color: #D04340;
+			color: $color-error;
 			height: 18px;
 			width: 18px;
 			font-size: 18px;
@@ -408,12 +403,11 @@ cr-button {
 	}
 }
 
-.not-applicable-results{
-color: var(--Black-600, rgba(11, 22, 62, 0.60));
-text-align: center;
-font-family: "Haboro Soft";
-font-size: 16px;
-font-style: normal;
-font-weight: 500;
-line-height: normal;
+.not-applicable-results {
+	color: rgba(11, 22, 62, 0.6);
+	text-align: center;
+	font-size: 16px;
+	font-style: normal;
+	font-weight: 500;
+	line-height: normal;
 }

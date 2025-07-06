@@ -9,23 +9,15 @@
 				<ng-container *ngIf="!submittedDocumentName; else submittedDocumentNameRef" i18n>Submitted text</ng-container>
 				<ng-template #submittedDocumentNameRef>
 					<div
+						*ngIf="
+							reportResponsive != EResponsiveLayoutType.Mobile ||
+							viewSvc.reportViewMode.platformType != EPlatformType.APP
+						"
 						class="submitted-doc-name-container"
 						[matTooltip]="submittedDocumentName | fileName"
 						matTooltipClass="web-report-mat-tooltip">
-						<mat-icon
-							*ngIf="
-								reportResponsive != EResponsiveLayoutType.Mobile ||
-								viewSvc.reportViewMode.platformType != EPlatformType.APP
-							">
-							description
-						</mat-icon>
-						<span
-							*ngIf="
-								reportResponsive != EResponsiveLayoutType.Mobile ||
-								viewSvc.reportViewMode.platformType != EPlatformType.APP
-							">
-							{{ submittedDocumentName | fileName }}
-						</span>
+						<mat-icon>description</mat-icon>
+						<span>{{ submittedDocumentName | fileName }}</span>
 					</div>
 				</ng-template>
 			</ng-container>

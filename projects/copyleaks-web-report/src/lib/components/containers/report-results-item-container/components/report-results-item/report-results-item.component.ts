@@ -312,22 +312,15 @@ export class ReportResultsItemComponent implements OnInit, OnChanges, OnDestroy 
 
 		// Check if there is a tag in the tags list with the code 'ai-source-match' and put it in the first place
 		const aiSourceMatchTag = this.previewResult?.tags?.find(tag => tag.code === RESULT_TAGS_CODES.AI_SOURCE_MATCH);
-		if (this.reportViewSvc.reportViewMode.platformType === EPlatformType.APP) {
-			if (aiSourceMatchTag) {
-				if (aiSourceMatchTag.title != 'AI Source Match') {
-					aiSourceMatchTag.title = $localize`AI Source Match`;
-					aiSourceMatchTag.description = $localize`AI Source Match blends plagiarism and AI detection to identify reused or repurposed AI-generated content from other sources.`;
-				}
-				this.previewResult.tags = [
-					aiSourceMatchTag,
-					...this.previewResult.tags.filter(tag => tag.code !== RESULT_TAGS_CODES.AI_SOURCE_MATCH),
-				];
+		if (aiSourceMatchTag) {
+			if (aiSourceMatchTag.title != 'AI Source Match') {
+				aiSourceMatchTag.title = $localize`AI Source Match`;
+				aiSourceMatchTag.description = $localize`AI Source Match blends plagiarism and AI detection to identify reused or repurposed AI-generated content from other sources.`;
 			}
-		} else {
-			// remove the ai-source-match tag from the tags list if the platform is not APP
-			this.previewResult.tags = this.resultItem.resultPreview.tags.filter(
-				tag => tag.code !== RESULT_TAGS_CODES.AI_SOURCE_MATCH
-			);
+			this.previewResult.tags = [
+				aiSourceMatchTag,
+				...this.previewResult.tags.filter(tag => tag.code !== RESULT_TAGS_CODES.AI_SOURCE_MATCH),
+			];
 		}
 	}
 

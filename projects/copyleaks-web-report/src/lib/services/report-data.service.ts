@@ -830,6 +830,13 @@ export class ReportDataService {
 		return false;
 	}
 
+	public isAiSourceMatchEnabled() {
+		const completeResult = this.scanResultsPreviews;
+		if (this._viewSvc.progress$.value != 100) return true;
+		if (completeResult?.scannedDocument?.enabled?.aiSourceMatch) return true;
+		return false;
+	}
+
 	public isWritingFeedbackEnabled() {
 		const completeResult = this.scanResultsPreviews;
 		if (this._viewSvc.progress$.value != 100) return true;

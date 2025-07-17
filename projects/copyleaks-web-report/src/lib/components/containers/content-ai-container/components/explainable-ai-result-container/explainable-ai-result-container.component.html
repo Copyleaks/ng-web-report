@@ -533,8 +533,7 @@
 					</span>
 				</div>
 
-				<ng-container
-					*ngIf="(!hidePlagarismTap || isLoading) && reportViewSvc?.reportViewMode?.platformType === EPlatformType.APP">
+				<ng-container *ngIf="!hidePlagarismTap || isLoading">
 					<cr-ai-source-match-entry
 						[isLoading]="isLoading"
 						[aiSourceMatchResultsStats]="aiSourceMatchResultsStats"
@@ -547,12 +546,7 @@
 				</ng-container>
 
 				<ng-container
-					*ngIf="
-						hidePlagarismTap &&
-						reportViewSvc?.reportViewMode?.platformType === EPlatformType.APP &&
-						!isLoading &&
-						!reportViewSvc?.reportViewMode?.hideAISourceMatchUpgrade
-					">
+					*ngIf="hidePlagarismTap && !isLoading && !reportViewSvc?.reportViewMode?.hideAISourceMatchUpgrade">
 					<ng-container *ngTemplateOutlet="customAISourceMatchUpgradeTemplate ?? null"></ng-container>
 				</ng-container>
 
@@ -595,10 +589,7 @@
 				#aiDefaultMobileViewScrollContainer
 				(scroll)="onAIDefaultViewScrollMobile()">
 				<div class="mobile-view-default-entries-container">
-					<ng-container
-						*ngIf="
-							(!hidePlagarismTap || isLoading) && reportViewSvc?.reportViewMode?.platformType === EPlatformType.APP
-						">
+					<ng-container *ngIf="!hidePlagarismTap || isLoading">
 						<cr-ai-source-match-entry
 							[isLoading]="isLoading"
 							[aiSourceMatchResultsStats]="aiSourceMatchResultsStats"
@@ -611,12 +602,7 @@
 					</ng-container>
 
 					<ng-container
-						*ngIf="
-							hidePlagarismTap &&
-							reportViewSvc?.reportViewMode?.platformType === EPlatformType.APP &&
-							!isLoading &&
-							!reportViewSvc?.reportViewMode?.hideAISourceMatchUpgrade
-						">
+						*ngIf="hidePlagarismTap && !isLoading && !reportViewSvc?.reportViewMode?.hideAISourceMatchUpgrade">
 						<ng-container *ngTemplateOutlet="customAISourceMatchUpgradeTemplate ?? null"></ng-container>
 					</ng-container>
 
@@ -637,9 +623,7 @@
 						(onNavigateToPhrases)="onNavigateToPhrasesClick()"></cr-ai-phrases-entry>
 				</div>
 			</div>
-			<div
-				*ngIf="reportViewSvc?.reportViewMode?.platformType === EPlatformType.APP || customAISourceMatchUpgradeTemplate"
-				class="dots-container">
+			<div *ngIf="customAISourceMatchUpgradeTemplate" class="dots-container">
 				<button
 					class="navigate-mobie-button"
 					[class.navigate-mobie-button-select]="navigateMobileButton === enumNavigateMobileButton.FirstButton"

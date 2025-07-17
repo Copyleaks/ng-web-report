@@ -47,11 +47,7 @@
 									(selectCategory)="onSelectCategory($event)"></cr-categories-analysis-panel>
 
 								<cr-categories-analysis-panel
-									*ngIf="
-										reportViewSvc?.reportViewMode?.platformType === EPlatformType.APP &&
-										hideAiTap &&
-										!reportViewSvc?.reportViewMode?.hideAISourceMatchUpgrade
-									"
+									*ngIf="hideAiTap && !reportViewSvc?.reportViewMode?.hideAISourceMatchUpgrade"
 									[matchesStats]="aiSourceMatchUpgradeCategory"
 									[selectedView]="EReportViewType.PlagiarismView"
 									[customAISourceMatchUpgradeTemplate]="

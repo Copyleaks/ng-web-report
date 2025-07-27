@@ -85,7 +85,7 @@ export class ReportStatisticsService implements OnDestroy {
 			.subscribe(([completeResult, , , excludedResultsIds, filterOptions, writingFeedback, excludedCorrections]) => {
 				if (completeResult && filterOptions && excludedResultsIds) {
 					const isRealtimeInitView =
-						this._reportDataSvc.realTimeView &&
+						this._reportDataSvc.isRealTimeView &&
 						!this._reportDataSvc.isFilterOn &&
 						(!this._reportDataSvc.excludedResultsIds || this._reportDataSvc.excludedResultsIds.length === 0);
 

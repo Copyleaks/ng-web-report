@@ -38,7 +38,10 @@ import { RESULT_TAGS_CODES } from '../constants/report-result-tags.constants';
 
 @Injectable()
 export class ReportDataService {
-	public realTimeView: boolean;
+	public isRealTimeView$ = new BehaviorSubject<boolean>(false);
+	public get isRealTimeView(): boolean {
+		return this.isRealTimeView$.value;
+	}
 
 	//#region Report Endpoint Configuration
 
@@ -326,7 +329,7 @@ export class ReportDataService {
 					this._viewSvc.progress$.value !== 100 ||
 					(this.totalCompleteResults <= 100 &&
 						this.scanResultsDetails.length != this.totalCompleteResults &&
-						this.realTimeView) ||
+						this.isRealTimeView) ||
 					(this.isWritingFeedbackEnabled() && writingFeedback === undefined)
 				)
 					return;
@@ -360,8 +363,8 @@ export class ReportDataService {
 
 				// Load all the viewed results
 				if (
-					!this.realTimeView ||
-					(this.realTimeView &&
+					!this.isRealTimeView ||
+					(this.isRealTimeView &&
 						this.totalCompleteResults > 100 &&
 						this.scanResultsDetails.length != this.totalCompleteResults &&
 						!options.showTop100Results)
@@ -573,7 +576,7 @@ export class ReportDataService {
 			...this._viewSvc.reportViewMode,
 		});
 
-		this.realTimeView = true;
+		this.isRealTimeView$.next(true);
 
 		// subscribtion to stop the 10 sec inteval when the progress is 100% and the report data is loaded
 		var _realTimeUpdateSub = new Subject();
@@ -1290,7 +1293,7 @@ export class ReportDataService {
 
 		if (this.filterOptions && this.excludedResultsIds) {
 			// Load all the complete scan results
-			this.loadViewedResultsDetails(this.realTimeView ? false : true);
+			this.loadViewedResultsDetails(this.isRealTimeView ? false : true);
 		}
 	}
 

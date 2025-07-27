@@ -213,7 +213,10 @@
 					<ng-container *ngIf="!newResults || newResults.length === 0; else resultsRealTimeView">
 						<ng-container
 							*ngIf="
-								!!reportDataSvc.reportEndpointConfig$.value && reportViewSvc.progress$.value < 100 && !isMobile;
+								!!reportDataSvc.reportEndpointConfig$.value &&
+									reportViewSvc.progress$.value < 100 &&
+									!isMobile &&
+									reportDataSvc.isRealTimeView$.value;
 								else nonRealTimeView
 							">
 							<cr-real-time-result-section-animation></cr-real-time-result-section-animation>

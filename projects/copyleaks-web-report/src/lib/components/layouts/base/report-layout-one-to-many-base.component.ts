@@ -117,6 +117,7 @@ export abstract class OneToManyReportLayoutBaseComponent extends ReportLayoutBas
 	hideAISourceMatchUpgrade: boolean = false;
 
 	reportEndpointConfig: IClsReportEndpointConfigModel;
+	isRealTimeView: boolean;
 
 	// Subject for destroying all the subscriptions in base component
 	private unsubscribe$ = new Subject();
@@ -281,6 +282,13 @@ export abstract class OneToManyReportLayoutBaseComponent extends ReportLayoutBas
 			.pipe(takeUntil(this.unsubscribe$))
 			.subscribe(config => {
 				this.reportEndpointConfig = config;
+			});
+
+		this.reportDataSvc.isRealTimeView$
+			.pipe(distinctUntilChanged())
+			.pipe(takeUntil(this.unsubscribe$))
+			.subscribe(isRealTimeView => {
+				this.isRealTimeView = isRealTimeView;
 			});
 
 		this.reportDataSvc.scanResultsPreviews$

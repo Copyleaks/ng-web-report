@@ -83,7 +83,9 @@
 		class="results-alerts-container"
 		[class.ai-results-container]="selectedTap === EReportViewType.AIView"
 		[style.overflow]="isLoadingScanResults ? 'hidden' : ''"
-		[class.is-real-time]="loadingProgressPct < 100 && (!newScanResultsView || newScanResultsView.length === 0)">
+		[class.is-real-time]="
+			loadingProgressPct < 100 && (!newScanResultsView || newScanResultsView.length === 0) && !!reportEndpointConfig
+		">
 		<ng-container *ngIf="!selectedCustomTabResultSectionContentTemplate; else customResultSectionRef">
 			<cr-assessment-tool-tab-score-panel
 				*ngIf="reportMode === EReportMode.AssessmentTool && selectedTap !== EReportViewType.WritingFeedbackTabView"

@@ -123,7 +123,8 @@
 			<!-- Report scan content viewer -->
 			<copyleaks-content-viewer-container
 				*ngIf="
-					!(loadingProgressPct < 100 && (!newScanResultsView || newScanResultsView.length === 0));
+					!(loadingProgressPct < 100 && (!newScanResultsView || newScanResultsView.length === 0)) ||
+						!reportEndpointConfig;
 					else realTimeResultsLoading
 				"
 				[isHtmlView]="isHtmlView"

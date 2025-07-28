@@ -45,7 +45,6 @@ import { filter } from 'rxjs/operators';
 import * as rangy from 'rangy';
 import * as rangyclassapplier from 'rangy/lib/rangy-classapplier';
 
-import { md5 } from 'hash-wasm';
 import { ALERTS } from '../../../constants/report-alerts.constants';
 
 @Component({
@@ -298,11 +297,6 @@ export class ContentViewerContainerComponent implements OnInit, AfterViewInit, O
 	@Input() currentUserEmail: string;
 
 	/**
-	 * @Input {string} The default avatar URL that will be used if the user email does not have a gravatar.
-	 */
-	@Input() defaultAvatarUrl: string = 'https://lti.copyleaks.com/assets/images/default-avatar.png';
-
-	/**
 	 * @Input The custom view matches data.
 	 */
 	@Input() customViewMatchesData: {
@@ -437,7 +431,6 @@ export class ContentViewerContainerComponent implements OnInit, AfterViewInit, O
 	iconVisible = false;
 
 	customMatchesWithEventListenersIds: string[] = [];
-	customMatchesWithAvatarsIds: string[] = [];
 
 	docDirection: 'ltr' | 'rtl';
 
@@ -690,11 +683,6 @@ export class ContentViewerContainerComponent implements OnInit, AfterViewInit, O
 		this.contentDirection = direction;
 
 		this._cdr.detectChanges();
-
-		if (this.allowCustomViewAddBtn && this.customViewMatchesData)
-			setTimeout(() => {
-				this.refreshCustomMatchesAvatars();
-			}, 500);
 	}
 
 	/**
@@ -708,11 +696,6 @@ export class ContentViewerContainerComponent implements OnInit, AfterViewInit, O
 		} else this.contentZoom = Math.max(this.contentZoom - amount, MIN_TEXT_ZOOM);
 
 		this._cdr.detectChanges();
-
-		if (this.allowCustomViewAddBtn && this.customViewMatchesData)
-			setTimeout(() => {
-				this.refreshCustomMatchesAvatars();
-			}, 500);
 	}
 
 	/**
@@ -726,28 +709,6 @@ export class ContentViewerContainerComponent implements OnInit, AfterViewInit, O
 		} else this.contentZoom = Math.min(this.contentZoom + amount, MAX_TEXT_ZOOM);
 
 		this._cdr.detectChanges();
-
-		if (this.allowCustomViewAddBtn && this.customViewMatchesData)
-			setTimeout(() => {
-				this.refreshCustomMatchesAvatars();
-			}, 500);
-	}
-
-	refreshCustomMatchesAvatars() {
-		this.customViewMatchesData.forEach(page => {
-			page.forEach(customMatch => {
-				this.deleteCustomMatchesAvatars(customMatch.id);
-			});
-		});
-		this.customMatchesWithAvatarsIds = [];
-		this.customViewMatchesData[this.currentPage - 1].forEach(customMatch => {
-			this.attachHighlightAvatar(customMatch.id);
-		});
-	}
-
-	deleteCustomMatchesAvatars(customMatchId: string) {
-		const avatar = document.querySelectorAll('.custom-view-avatar-container[data-id="' + customMatchId + '"]');
-		avatar.forEach(element => element.remove());
 	}
 
 	onPaginationEvent(event: PageEvent) {
@@ -770,9 +731,7 @@ export class ContentViewerContainerComponent implements OnInit, AfterViewInit, O
 		if (this.allowCustomViewAddBtn && this.customViewMatchesData)
 			setTimeout(() => {
 				this.customMatchesWithEventListenersIds = [];
-				this.customMatchesWithAvatarsIds = [];
 				this.hideAddCustomMatchIcon();
-				this.refreshCustomMatchesAvatars();
 				this.customViewMatchesData[this.currentPage - 1].forEach(customMatch => {
 					if (customMatch.parentId) return;
 					this.highlightCustomMatchText(customMatch);
@@ -871,33 +830,6 @@ export class ContentViewerContainerComponent implements OnInit, AfterViewInit, O
 		this.onTextMatchSelectionEvent.emit(selectTextEvent);
 	}
 
-	async getCustomMatchGravatarUrlByEmailAddress(email: string): Promise<string> {
-		// If the email is null, undefined, or only contains spaces, return the default image
-		if (!email || email.trim() === '') {
-			return this.defaultAvatarUrl;
-		}
-
-		// Generate the email hash for Gravatar
-		const emailHash = await md5(email.trim().toLowerCase());
-		let gravatarUrl = `https://www.gravatar.com/avatar/${emailHash}?d=404`;
-
-		// Create an Image element to check if the avatar exists
-		return new Promise(resolve => {
-			const img = new Image();
-			img.src = gravatarUrl;
-
-			// If the avatar exists, resolve with the Gravatar URL
-			img.onload = () => {
-				resolve(gravatarUrl);
-			};
-
-			// If the avatar does not exist or cannot be loaded, resolve with the default image URL
-			img.onerror = () => {
-				resolve(this.defaultAvatarUrl);
-			};
-		});
-	}
-
 	// Generate a unique ID for each customMatch
 	generateCustomMatchId() {
 		return 'annotation-' + Math.random().toString(36).substr(2, 9);
@@ -992,7 +924,6 @@ export class ContentViewerContainerComponent implements OnInit, AfterViewInit, O
 				highlight.applyToRange(range);
 				setTimeout(() => {
 					this.attachHighlightClickEvent(customMatch.id);
-					this.attachHighlightAvatar(customMatch.id);
 				});
 			}
 
@@ -1056,100 +987,9 @@ export class ContentViewerContainerComponent implements OnInit, AfterViewInit, O
 				};
 				this.onTextMatchSelectionEvent.emit(customMatchEvent);
 				selectedCustomMatch.isRead = true;
-
-				// Remove unread dot
-				document
-					.querySelectorAll('.custom-view-avatar-container[data-id="' + customMatchId + '"] .unread-dot')
-					?.forEach(e => e.remove());
 			});
 			this.customMatchesWithEventListenersIds.push(customMatchId);
 		});
-	}
-
-	async attachHighlightAvatar(customMatchId) {
-		if (this.customMatchesWithAvatarsIds.includes(customMatchId)) return;
-		const elements = document.querySelectorAll(
-			'.' + this.customViewMatcheClassName + '[data-id="' + customMatchId + '"]'
-		);
-
-		if (elements.length > 0) {
-			// create a div element and put the avatar inside it
-			const avatarContainer = document.createElement('div');
-			// add data-id attribute to the avatar container
-			avatarContainer.setAttribute('data-id', customMatchId);
-			avatarContainer.className = 'custom-view-avatar-container';
-			const spanRect = elements[elements.length - 1].getBoundingClientRect();
-			const contentTextRect = this.contentText?.nativeElement.getBoundingClientRect();
-
-			let left = spanRect.right - this.contentText.nativeElement.getBoundingClientRect().left;
-			let top = spanRect.top - this.contentText.nativeElement.getBoundingClientRect().top;
-
-			if (top + 5 < 40) {
-				avatarContainer.style.borderRadius = '0px 32px 32px 32px';
-				top = top + spanRect.height;
-			}
-			if (left + 40 > contentTextRect.width) {
-				left = contentTextRect.width - 40;
-			}
-			avatarContainer.style.left = `${left}px`;
-			avatarContainer.style.top = `${top}px`;
-
-			avatarContainer.addEventListener('mouseover', () => {
-				const highlightedElements = document.querySelectorAll(
-					'.' + this.customViewMatcheClassName + '[data-id="' + customMatchId + '"]'
-				);
-				highlightedElements.forEach(e => e?.classList?.toggle('hover'));
-			});
-			avatarContainer.addEventListener('mouseout', () => {
-				const highlightedElements = document.querySelectorAll(
-					'.' + this.customViewMatcheClassName + '[data-id="' + customMatchId + '"]'
-				);
-				highlightedElements.forEach(e => e?.classList?.toggle('hover'));
-			});
-			avatarContainer.addEventListener('click', () => {
-				// send click event to document.querySelectorAll('.' + this.customViewMatcheClassName + '[data-id="' + customMatchId + '"]')
-				const highlightedElements = document.querySelectorAll(
-					'.' + this.customViewMatcheClassName + '[data-id="' + customMatchId + '"]'
-				);
-				highlightedElements.forEach(e => (e as HTMLElement)?.click());
-			});
-
-			const img = document.createElement('img');
-			// get the email address from the selected text
-			const customMatch = this.customViewMatchesData[this.currentPage - 1].find(
-				customMatch => customMatch.id === customMatchId
-			);
-			img.src = await this.getCustomMatchGravatarUrlByEmailAddress(customMatch.submitterEmail);
-			img.alt = 'User Avatar';
-			img.className = 'custom-view-avatar';
-			avatarContainer.appendChild(img);
-
-			if (!customMatch.isRead) {
-				const unreadDotElement = document.createElement('div');
-				unreadDotElement.className = 'unread-dot';
-
-				unreadDotElement.style.display = 'flex';
-				unreadDotElement.style.width = '8px';
-				unreadDotElement.style.height = '8px';
-				unreadDotElement.style.padding = '2px';
-				unreadDotElement.style.flexDirection = 'column';
-				unreadDotElement.style.justifyContent = 'center';
-				unreadDotElement.style.alignItems = 'center';
-				unreadDotElement.style.borderRadius = '8px';
-				unreadDotElement.style.background = '#FD7366';
-				unreadDotElement.style.boxShadow = '-1px 1px 2px 0px rgba(0, 0, 0, 0.25)';
-				unreadDotElement.style.position = 'absolute';
-				unreadDotElement.style.right = '-2px';
-				unreadDotElement.style.top = '-2px';
-
-				// Append the dot element to the avatarContainer
-				avatarContainer.appendChild(unreadDotElement);
-			}
-
-			this.contentText.nativeElement.appendChild(avatarContainer);
-
-			this.customMatchesWithAvatarsIds.push(customMatchId);
-		}
 	}
 
 	showAddCustomMatchIcon(event: MouseEvent): void {

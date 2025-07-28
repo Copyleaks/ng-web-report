@@ -19,14 +19,14 @@
     "script:extract-version": "node scripts/extract-version.js",
     "package": "npm run lib:prettier && npm run lib:version && npm run script:extract-version && npm run lib:build && npm run lib:copy-readme && npm run lib:publish",
     "firebase-deploy": "npm run build && firebase deploy"
-  },  
+  },
   "dependencies": {
     "@angular/animations": "~13.3.0",
     "@angular/cdk": "^13.3.9",
     "@angular/common": "~13.3.0",
     "@angular/compiler": "~13.3.0",
     "@angular/core": "~13.3.0",
-    "@angular/flex-layout": "^13.0.0-beta.36",
+    "@angular/flex-layout": "^14.0.0-beta.41",
     "@angular/forms": "~13.3.0",
     "@angular/localize": "^13.3.12",
     "@angular/material": "^13.3.9",

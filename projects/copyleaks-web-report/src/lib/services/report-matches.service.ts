@@ -175,7 +175,7 @@ export class ReportMatchesService implements OnDestroy {
 					}
 					// process the mathces according to the report view
 					const isRealtimeInitView =
-						this._reportDataSvc.realTimeView &&
+						this._reportDataSvc.isRealTimeView &&
 						!this._reportDataSvc.isFilterOn &&
 						(!this._reportDataSvc.excludedResultsIds || this._reportDataSvc.excludedResultsIds.length === 0);
 

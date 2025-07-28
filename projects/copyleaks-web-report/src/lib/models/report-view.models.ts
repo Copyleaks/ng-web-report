@@ -14,6 +14,7 @@ export interface IReportViewEvent {
 	selectedResultsCategory?: string;
 	navigateBackToAIView?: boolean;
 	showAIPhrases?: boolean;
+	hideAISourceMatchUpgrade?: boolean;
 }
 
 export interface IReportViewQueryParams {

@@ -2,6 +2,7 @@ import { Component, Input, OnChanges, OnInit, SimpleChanges } from '@angular/cor
 import { ReportMatchesService } from '../../../services/report-matches.service';
 import { AIExplainResultItem, EProportionType, ExplainableAIResults } from '../../../models/report-matches.models';
 import { ReportViewService } from '../../../services/report-view.service';
+import { ReportDataService } from '../../../services/report-data.service';
 
 @Component({
 	selector: 'cr-ai-phrases-mobile-header',
@@ -65,7 +66,11 @@ export class CrAiPhrasesMobileHeaderComponent implements OnInit, OnChanges {
 	resultTooltipText: string;
 	updateResult: boolean = false;
 
-	constructor(private _reportMatchesSvc: ReportMatchesService, public reportViewSvc: ReportViewService) {}
+	constructor(
+		private _reportMatchesSvc: ReportMatchesService,
+		public reportViewSvc: ReportViewService,
+		private _reportDataSvc: ReportDataService
+	) {}
 
 	ngOnInit(): void {}
 
@@ -81,6 +86,14 @@ export class CrAiPhrasesMobileHeaderComponent implements OnInit, OnChanges {
 			...this.reportViewSvc.reportViewMode,
 			showAIPhrases: false,
 		});
+	}
+
+	public isPlagiarismEnabled(): boolean {
+		return this._reportDataSvc.isPlagiarismEnabled();
+	}
+
+	public isAiSourceMatchEnabled(): boolean {
+		return this._reportDataSvc.isAiSourceMatchEnabled();
 	}
 
 	private _initResults() {

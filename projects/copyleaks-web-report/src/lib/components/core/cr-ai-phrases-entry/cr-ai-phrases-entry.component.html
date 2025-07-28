@@ -37,35 +37,28 @@
 
 				<span i18n>AI Phrases</span>
 			</div>
-			<ng-container *ngIf="totalPhrases > 0; else zeroTotalRef">
+			<ng-container *ngIf="!aiInsightAlert; else notApplicableRef">
 				<div class="total-results" i18n>
 					{{ totalPhrases | number }}
 					{totalPhrases, plural, =1 {Phrase} other {Phrases}}
 				</div>
 			</ng-container>
-			<ng-template #zeroTotalRef>
-				<div class="no-results-info-container">
-					<span class="total-results" i18n>No Phrases Were Found</span>
-					<mat-icon
-						fontSet="material-icons-round"
-						tabindex="0"
-						matTooltip="GenAI tends to repeat specific phrases it learned during training, which is one of many signals used to detect AI-generated text."
-						[matTooltipPosition]="'after'"
-						matTooltipClass="web-report-mat-tooltip tooltip-contanier"
-						i18n-matTooltip>
-						info_outline
-					</mat-icon>
-				</div>
+			<ng-template #notApplicableRef>
+				<span class="not-applicable-results" i18n>N/A</span>
 			</ng-template>
 		</div>
-		<div *ngIf="totalPhrases > 0" class="ai-source-match-description" i18n>
+		<div *ngIf="totalPhrases >= 0" class="ai-source-match-description" i18n>
 			Detects phrases that appear with higher frequency in AI-written text than in human writing.
 		</div>
 	</div>
 
-	<div *ngIf="totalPhrases > 0" class="bottom-section-container">
+	<div
+		*ngIf="
+			((totalPhrases > 0 && aiPercentageResult > 0) || (totalPhrases == 0 && !aiPercentageResult)) && !aiInsightAlert
+		"
+		class="bottom-section-container">
 		<div class="match-bar-container">
-			<span class="ai-source-match-score">{{ minProportion?.toLocaleString() }}x</span>
+			<span *ngIf="totalPhrases > 0" class="ai-source-match-score">{{ minProportion?.toLocaleString() }}x</span>
 			<div
 				class="grade-bar-container"
 				tabindex="0"
@@ -82,8 +75,11 @@
 				</div>
 			</div>
 			<span class="ai-source-match-score">
-				<ng-container *ngIf="hasInfinityResult; else maxResult">10,000x</ng-container>
-				<ng-template #maxResult>{{ maxProportion?.toLocaleString() }}x</ng-template>
+				<ng-container *ngIf="hasInfinityResult; else maxResultCheck">10,000x</ng-container>
+				<ng-template #maxResultCheck>
+					<ng-container *ngIf="totalPhrases > 0; else emptyResult">{{ maxProportion?.toLocaleString() }}x</ng-container>
+					<ng-template #emptyResult></ng-template>
+				</ng-template>
 			</span>
 		</div>
 		<cr-button
@@ -91,10 +87,29 @@
 			[outlined]="true"
 			[isLink]="true"
 			[dir]="reportViewSvc.documentDirection"
+			[disabled]="totalPhrases <= 0"
+			[ngStyle]="{
+				'pointer-events': totalPhrases <= 0 ? 'none' : 'auto',
+				'border-color': totalPhrases <= 0 ? '#9DA9BF' : '$color-primary'
+			}"
 			padding="4px 8px"
 			(click)="$event.preventDefault(); $event.stopPropagation(); onNavigateToPhrasesClick()">
 			<ng-container i18n>See phrases</ng-container>
 		</cr-button>
+	</div>
+
+	<div *ngIf="aiInsightAlert" class="lang-not-supported-container" fxLayoutAlign="center center">
+		<div class="language-icon-container">
+			<mat-icon fontSet="material-icons-round">language_outline</mat-icon>
+		</div>
+		<div class="insight-text" fxLayout="column">
+			<span class="title" i18n>
+				{{ alertTitle }}
+			</span>
+			<span class="description" i18n>
+				{{ alertMessage }}
+			</span>
+		</div>
 	</div>
 
 	<div *ngIf="!totalPhrases && aiPercentageResult > 0" class="empty-state-with-ai-score">

@@ -39,7 +39,7 @@ import { IResultItem } from '../../containers/report-results-item-container/comp
 import { ECustomResultsReportView } from '../../core/cr-custom-results/models/cr-custom-results.enums';
 import { ReportLayoutBaseComponent } from './report-layout-base.component';
 import { ReportRealtimeResultsService } from '../../../services/report-realtime-results.service';
-import { ViewMode } from '../../../models/report-config.models';
+import { IClsReportEndpointConfigModel, ViewMode } from '../../../models/report-config.models';
 import * as helpers from '../../../utils/report-match-helpers';
 import { ReportErrorsService } from '../../../services/report-errors.service';
 import { RESULT_TAGS_CODES } from '../../../constants/report-result-tags.constants';
@@ -114,6 +114,10 @@ export abstract class OneToManyReportLayoutBaseComponent extends ReportLayoutBas
 	loadingExplainableAI: boolean = true;
 	isAiHtmlViewAvailable: boolean = false;
 	showAIPhrases: boolean = false;
+	hideAISourceMatchUpgrade: boolean = false;
+
+	reportEndpointConfig: IClsReportEndpointConfigModel;
+	isRealTimeView: boolean;
 
 	// Subject for destroying all the subscriptions in base component
 	private unsubscribe$ = new Subject();
@@ -172,6 +176,7 @@ export abstract class OneToManyReportLayoutBaseComponent extends ReportLayoutBas
 			this.isHtmlView = data.isHtmlView;
 			this.currentPageSource = data.sourcePageIndex;
 			this.viewMode = data.viewMode;
+			this.hideAISourceMatchUpgrade = data.hideAISourceMatchUpgrade;
 
 			if (data.viewMode === 'writing-feedback') {
 				this.selectedTap = EReportViewType.WritingFeedbackTabView;
@@ -271,6 +276,20 @@ export abstract class OneToManyReportLayoutBaseComponent extends ReportLayoutBas
 					}
 				});
 		});
+
+		this.reportDataSvc.reportEndpointConfig$
+			.pipe(distinctUntilChanged())
+			.pipe(takeUntil(this.unsubscribe$))
+			.subscribe(config => {
+				this.reportEndpointConfig = config;
+			});
+
+		this.reportDataSvc.isRealTimeView$
+			.pipe(distinctUntilChanged())
+			.pipe(takeUntil(this.unsubscribe$))
+			.subscribe(isRealTimeView => {
+				this.isRealTimeView = isRealTimeView;
+			});
 
 		this.reportDataSvc.scanResultsPreviews$
 			.pipe(distinctUntilChanged())

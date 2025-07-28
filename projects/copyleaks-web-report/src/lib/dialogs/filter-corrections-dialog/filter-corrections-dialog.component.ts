@@ -6,7 +6,7 @@ import { IWritingFeedbackCorrectionViewModel } from '../../models/report-data.mo
 import { untilDestroy } from '../../utils/until-destroy';
 import { EResponsiveLayoutType } from '../../enums/copyleaks-web-report.enums';
 import { FilterCorrectionsDialogService } from './services/filter-corrections-dialog.service';
-import { FormControl, FormGroup } from '@angular/forms';
+import { UntypedFormControl, UntypedFormGroup } from '@angular/forms';
 import { startWith } from 'rxjs/operators';
 import { getCorrectionCategoryDescription, getCorrectionCategoryTitle } from '../../utils/enums-helpers';
 import { IWritingFeedbackTypeStatistics } from '../../models/report-statistics.models';
@@ -25,13 +25,13 @@ export class FilterCorrectionsDialogComponent implements OnInit, OnDestroy {
 	searchedExcludedCorrections: IWritingFeedbackCorrectionViewModel[] = [];
 	writingFeedbackStats: IWritingFeedbackTypeStatistics[];
 
-	filterCorrectionsForm: FormGroup;
+	filterCorrectionsForm: UntypedFormGroup;
 	totalExcludedCorrections: number = 0;
 	categoriesKeys: string[];
 	allIncluded: boolean;
 	totalCorrections: number = 0;
 	totalFilteredCorrections: number = 0;
-	searchControl = new FormControl('');
+	searchControl = new UntypedFormControl('');
 
 	docDirection: 'ltr' | 'rtl';
 

@@ -1,5 +1,5 @@
 import { Component, Input, OnInit } from '@angular/core';
-import { FormControl, FormGroup } from '@angular/forms';
+import { UntypedFormControl, UntypedFormGroup } from '@angular/forms';
 import { EFilterResultForm } from '../../models/filter-result-dailog.enum';
 import { FilterResultDailogService } from '../../services/filter-result-dailog.service';
 
@@ -36,20 +36,20 @@ export class MetaFilterResultComponent implements OnInit {
 
 	constructor(public filterService: FilterResultDailogService) {}
 
-	get form(): FormGroup {
+	get form(): UntypedFormGroup {
 		return this.filterService.resultsMetaFormGroup;
 	}
 
-	get wordLimitform(): FormGroup {
-		return this.filterService.resultsMetaFormGroup.get(EFilterResultForm.fgWordLimit) as FormGroup;
+	get wordLimitform(): UntypedFormGroup {
+		return this.filterService.resultsMetaFormGroup.get(EFilterResultForm.fgWordLimit) as UntypedFormGroup;
 	}
 
-	get publicationDateForm(): FormGroup {
-		return this.filterService.resultsMetaFormGroup.get(EFilterResultForm.fgPublicationDate) as FormGroup;
+	get publicationDateForm(): UntypedFormGroup {
+		return this.filterService.resultsMetaFormGroup.get(EFilterResultForm.fgPublicationDate) as UntypedFormGroup;
 	}
 
-	get publicationDate(): FormControl {
-		return this.publicationDateForm.get(EFilterResultForm.fcPublicationStartDate) as FormControl;
+	get publicationDate(): UntypedFormControl {
+		return this.publicationDateForm.get(EFilterResultForm.fcPublicationStartDate) as UntypedFormControl;
 	}
 
 	get wordLimitTotalWord() {
@@ -57,7 +57,7 @@ export class MetaFilterResultComponent implements OnInit {
 	}
 
 	get wordLimitTotalWordFc() {
-		return this.wordLimitform.get(EFilterResultForm.fcWordLimitTotalWordlimt) as FormControl;
+		return this.wordLimitform.get(EFilterResultForm.fcWordLimitTotalWordlimt) as UntypedFormControl;
 	}
 
 	get maxSliderDates() {
@@ -87,7 +87,7 @@ export class MetaFilterResultComponent implements OnInit {
 	}
 
 	getFormGroup(eFilterResultForm: EFilterResultForm) {
-		return this.filterService.resultsMetaFormGroup.get(eFilterResultForm) as FormGroup;
+		return this.filterService.resultsMetaFormGroup.get(eFilterResultForm) as UntypedFormGroup;
 	}
 
 	getEnabledValue(eFilterResultForm: EFilterResultForm) {

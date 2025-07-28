@@ -1,7 +1,7 @@
 import { Component, Input, OnChanges, OnInit, SimpleChanges } from '@angular/core';
 import { ITagItem } from './models/included-tags-filter-result.models';
 import { FilterResultDailogService } from '../../services/filter-result-dailog.service';
-import { FormControl } from '@angular/forms';
+import { UntypedFormControl } from '@angular/forms';
 import { map, startWith } from 'rxjs/operators';
 import { untilDestroy } from '../../../../utils/until-destroy';
 import { Observable } from 'rxjs';
@@ -17,9 +17,9 @@ export class IncludedTagsFilterResultComponent implements OnInit, OnChanges {
 	 */
 	@Input() allTagItem: ITagItem[];
 
-	includedTagsForm: FormControl;
+	includedTagsForm: UntypedFormControl;
 	filteredTagList: Observable<ITagItem[]>;
-	searchTagControl = new FormControl('');
+	searchTagControl = new UntypedFormControl('');
 	showMoreMenu: boolean = false;
 
 	get includedTagsFormValue() {

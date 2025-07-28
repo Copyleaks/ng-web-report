@@ -1,5 +1,5 @@
 import { Component, Input, OnDestroy, OnInit } from '@angular/core';
-import { FormControl, FormGroup } from '@angular/forms';
+import { UntypedFormControl, UntypedFormGroup } from '@angular/forms';
 import { ITotalSourceType } from './models/source-type-filter-result.models';
 import { FilterResultDailogService } from '../../services/filter-result-dailog.service';
 import { EFilterResultForm } from '../../models/filter-result-dailog.enum';
@@ -48,7 +48,7 @@ export class SourceTypeFilterResultComponent implements OnInit, OnDestroy {
 	platformType: EPlatformType;
 
 	get repositoriesForm() {
-		return this.filterService.sourceTypeFormGroup?.get(EFilterResultForm.fgRepositories) as FormGroup;
+		return this.filterService.sourceTypeFormGroup?.get(EFilterResultForm.fgRepositories) as UntypedFormGroup;
 	}
 
 	get repositoryLength() {
@@ -75,7 +75,7 @@ export class SourceTypeFilterResultComponent implements OnInit, OnDestroy {
 
 	addRepositoryControl(repoId: string) {
 		const repositories = this.repositoriesForm;
-		repositories.addControl(repoId, new FormControl(this.filterService.getRepositoryValueById()));
+		repositories.addControl(repoId, new UntypedFormControl(this.filterService.getRepositoryValueById()));
 	}
 
 	ngOnDestroy(): void {}

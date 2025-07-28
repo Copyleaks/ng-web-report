@@ -9,7 +9,7 @@ import {
 	Renderer2,
 	ViewChild,
 } from '@angular/core';
-import { FormControl } from '@angular/forms';
+import { UntypedFormControl } from '@angular/forms';
 import { fromEvent } from 'rxjs';
 import { debounceTime, startWith } from 'rxjs/operators';
 import { IResultItem } from '../../../../components/containers/report-results-item-container/components/models/report-result-item.models';
@@ -50,7 +50,7 @@ export class ExcludedResultsDailogComponent implements OnInit, AfterViewInit {
 	@Output() closeDailogEvent = new EventEmitter<boolean>();
 
 	filteredList: IResultItem[];
-	searchControl = new FormControl('');
+	searchControl = new UntypedFormControl('');
 
 	private _startingIndex: number = 0;
 	private _pageSize: number = 10;

@@ -12,7 +12,7 @@ import {
 	ElementRef,
 } from '@angular/core';
 import { IResultsActions } from './models/results-actions.models';
-import { FormControl } from '@angular/forms';
+import { UntypedFormControl } from '@angular/forms';
 import { MatDialog } from '@angular/material/dialog';
 import { FilterResultDailogComponent } from '../../../../../dialogs/filter-result-dailog/filter-result-dailog.component';
 import { ReportDataService } from '../../../../../services/report-data.service';
@@ -57,7 +57,7 @@ export class ResultsActionsComponent implements OnInit, OnChanges, OnDestroy {
 	@Output() onSearch = new EventEmitter<string>();
 	@Output() onExpandToggle = new EventEmitter<boolean>();
 
-	searchFc = new FormControl('');
+	searchFc = new UntypedFormControl('');
 	showSearchFiled: boolean = false;
 	loadingResults: boolean;
 	docDirection: 'ltr' | 'rtl';

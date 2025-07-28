@@ -5,7 +5,7 @@ import { ITotalSourceType } from './components/source-type-filter-result/models/
 import { FilterResultDailogService } from './services/filter-result-dailog.service';
 import { ITagItem } from './components/included-tags-filter-result/models/included-tags-filter-result.models';
 import { EFilterResultForm, EFilterResultSection, IFilterResultDailogData } from './models/filter-result-dailog.enum';
-import { FormGroup } from '@angular/forms';
+import { UntypedFormGroup } from '@angular/forms';
 import { untilDestroy } from '../../utils/until-destroy';
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
 import { combineLatest } from 'rxjs';
@@ -292,7 +292,7 @@ export class FilterResultDailogComponent implements OnInit {
 
 	getTotalEnabledRepositories() {
 		let countRepo = 0;
-		var repositories = this.sourceTypeFormGroup.get(EFilterResultForm.fgRepositories) as FormGroup;
+		var repositories = this.sourceTypeFormGroup.get(EFilterResultForm.fgRepositories) as UntypedFormGroup;
 		for (const controlName in repositories.controls) {
 			if (repositories.get(controlName)?.value) {
 				countRepo += 1;

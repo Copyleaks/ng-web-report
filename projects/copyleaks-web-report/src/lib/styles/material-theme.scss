@@ -1,39 +1,37 @@
 @use '@angular/material' as mat;
-@import '~@angular/material/theming';
 @import './website-colors.styles.scss';
 @import './cls-mat-components-overrides/cls-mat-tooltip-overrides.scss';
 
+// 1. Core styles
 @include mat.core();
 
-// Define a custom color configuration
-$copyleaks-design-v2-primary: mat.define-palette($copyleaks-primary-palette);
-$copyleaks-design-v2-accent: mat.define-palette($copyleaks-primary-palette);
-$copyleaks-design-v2-warn: mat.define-palette($copyleaks-warn-palette);
+// 2. Palettes
+$copyleaks-primary: mat.define-palette($copyleaks-primary-palette);
+$copyleaks-accent: mat.define-palette($copyleaks-primary-palette);
+$copyleaks-warn: mat.define-palette($copyleaks-warn-palette);
 
-// Load Fonts
-@import url('https://fonts.googleapis.com/css?family=Material+Icons|Material+Icons+Outlined|Material+Icons+Two+Tone|Material+Icons+Round|Material+Icons+Sharp');
-@import url('https://fonts.googleapis.com/css2?family=Almarai:wght@300;400;700;800&display=swap');
-@import './fonts/haboro-soft-fonts.scss';
-
-$copyleaks-design-v2-typography: mat-typography-config(
-	$font-family: 'haboro-soft, Almarai, sans-serif',
+// 3. Typography (fixed quoting!)
+$copyleaks-typography: mat.define-typography-config(
+	$font-family: '"haboro-soft", "Almarai", sans-serif',
 );
 
-// Copyleaks theme object which consists of configurations for individual
-// theming systems such as "color" or "typography".
-$copyleaks-design-v2-theme: mat.define-light-theme(
+// 4. Theme object
+$copyleaks-theme: mat.define-light-theme(
 	(
 		color: (
-			primary: $copyleaks-design-v2-primary,
-			accent: $copyleaks-design-v2-accent,
-			warn: $copyleaks-design-v2-warn,
+			primary: $copyleaks-primary,
+			accent: $copyleaks-accent,
+			warn: $copyleaks-warn,
 		),
-		typography: $copyleaks-design-v2-typography,
+		typography: $copyleaks-typography,
 	)
 );
 
-@include mat.all-component-themes($copyleaks-design-v2-theme);
+// 5. Include component styles + typography
+@include mat.all-component-themes($copyleaks-theme);
+@include mat.all-component-typographies($copyleaks-typography);
 
-.mat-icon:not([fontSet]):not(.material-icons-outlined):not(.material-icons-sharp):not(.material-icons-two-tone) {
+// 6. Icon override
+.mat-icon:not([fontSet]) :not(.material-icons-outlined) :not(.material-icons-sharp) :not(.material-icons-two-tone) {
 	font-family: 'Material Icons Round' !important;
 }

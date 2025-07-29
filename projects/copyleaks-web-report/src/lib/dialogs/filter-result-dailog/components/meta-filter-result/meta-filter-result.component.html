@@ -50,7 +50,7 @@
 					class="mat-slider-container"
 					aria-label="'This is a slider for the result publication date selection."
 					i18n-aria-label
-					[value]="valueSliderDate"
+					[textContent]="valueSliderDate"
 					[disabled]="publicationDates.length < 2"
 					(change)="changeSliderDate($event)"
 					[min]="0"

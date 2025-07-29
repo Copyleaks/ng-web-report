@@ -17,11 +17,11 @@
 				</ng-container>
 
 				<ng-container *ngIf="showMatChipList && matChipList && matChipList.length > 0">
-					<mat-chip-list class="my-chip-list" role="listbox">
+					<mat-chip-listbox class="my-chip-list" role="listbox">
 						<div fxLayout="row" fxLayoutGap="8px">
 							<mat-chip class="mat-chip-severity" *ngFor="let item of matChipList">{{ item | decodeUri }}</mat-chip>
 						</div>
-					</mat-chip-list>
+					</mat-chip-listbox>
 				</ng-container>
 			</div>
 		</div>

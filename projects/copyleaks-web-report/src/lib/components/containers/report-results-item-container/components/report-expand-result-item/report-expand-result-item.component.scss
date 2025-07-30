@@ -226,7 +226,7 @@
 	width: fit-content;
 	display: flex;
 	height: fit-content !important;
-	::ng-deep .loader {
+	::ng-deep .skeleton-loader {
 		height: 16px !important;
 		margin-bottom: 0px !important;
 		border-radius: 10px !important;
@@ -282,7 +282,7 @@
 		gap: 10px;
 		.back-btn {
 			width: 15%;
-			::ng-deep .loader {
+			::ng-deep .skeleton-loader {
 				height: 22px !important;
 			}
 		}
@@ -294,7 +294,7 @@
 			justify-content: flex-start;
 			gap: 8px;
 			.result-icon-loader {
-				::ng-deep .loader {
+				::ng-deep .skeleton-loader {
 					border-radius: 50% !important;
 					width: 32px !important;
 					height: 32px !important;
@@ -305,7 +305,7 @@
 				flex-direction: column;
 				gap: 4px;
 				.icon-loader {
-					::ng-deep .loader {
+					::ng-deep .skeleton-loader {
 						border-radius: 50% !important;
 						width: 16px !important;
 						height: 16px !important;
@@ -333,7 +333,7 @@
 			gap: 4px;
 			.skeleton {
 				width: 15%;
-				::ng-deep .loader {
+				::ng-deep .skeleton-loader {
 					height: 22px !important;
 				}
 			}
@@ -344,7 +344,7 @@
 		gap: 4px;
 		.title-loader {
 			width: 30%;
-			::ng-deep .loader {
+			::ng-deep .skeleton-loader {
 				height: 16px !important;
 			}
 		}
@@ -358,7 +358,7 @@
 
 			.skeleton:first-child {
 				width: 30%;
-				::ng-deep .loader {
+				::ng-deep .skeleton-loader {
 					height: 16px !important;
 				}
 			}
@@ -370,7 +370,7 @@
 				gap: 16px;
 				.skeleton {
 					width: 32px !important;
-					::ng-deep .loader {
+					::ng-deep .skeleton-loader {
 						height: 16px !important;
 					}
 				}
@@ -384,14 +384,14 @@
 				flex-grow: 1;
 				.skeleton {
 					width: 30%;
-					::ng-deep .loader {
+					::ng-deep .skeleton-loader {
 						height: 16px !important;
 					}
 				}
 
 				.skeleton:first-child {
 					width: 16px !important;
-					::ng-deep .loader {
+					::ng-deep .skeleton-loader {
 						width: 16px !important;
 						height: 16px !important;
 						border-radius: 50% !important;

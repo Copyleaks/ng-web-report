@@ -560,7 +560,7 @@
 		width: fit-content;
 		display: flex;
 		height: fit-content !important;
-		::ng-deep .loader {
+		::ng-deep .skeleton-loader {
 			height: 19px !important;
 			margin-bottom: 0px !important;
 			border-radius: 10px !important;
@@ -574,7 +574,7 @@
 		display: flex;
 		height: fit-content !important;
 		width: 40px;
-		::ng-deep .loader {
+		::ng-deep .skeleton-loader {
 			height: 15px !important;
 			margin-bottom: 0px !important;
 			border-radius: 10px !important;
@@ -584,7 +584,7 @@
 	}
 
 	.skeleton.real-time-view {
-		::ng-deep .loader {
+		::ng-deep .skeleton-loader {
 			height: 14px !important;
 		}
 	}
@@ -600,7 +600,7 @@
 		.bar {
 			height: 10px !important;
 
-			::ng-deep .loader {
+			::ng-deep .skeleton-loader {
 				height: 10px !important;
 			}
 		}

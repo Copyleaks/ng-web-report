@@ -263,7 +263,7 @@
 		display: flex;
 		height: fit-content !important;
 		::ng-deep {
-			.loader {
+			::ng-deep .skeleton-loader {
 				height: 18px !important;
 				margin-bottom: 0px !important;
 				border-radius: 10px !important;
@@ -274,7 +274,7 @@
 	}
 
 	.skeleton.circle {
-		::ng-deep .loader {
+		::ng-deep .skeleton-loader {
 			width: 24px !important;
 			height: 24px !important;
 			margin: 0px !important;
@@ -283,14 +283,14 @@
 	}
 
 	.skeleton.circle.small {
-		::ng-deep .loader {
+		::ng-deep .skeleton-loader {
 			width: 18px !important;
 			height: 18px !important;
 		}
 	}
 
 	.skeleton.bar {
-		::ng-deep .loader {
+		::ng-deep .skeleton-loader {
 			height: 8px !important;
 		}
 	}

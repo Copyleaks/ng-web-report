@@ -159,7 +159,7 @@
 		width: fit-content;
 		display: flex;
 		height: fit-content !important;
-		::ng-deep .loader {
+		::ng-deep .skeleton-loader {
 			height: 19px !important;
 			margin-bottom: 0px !important;
 			border-radius: 10px !important;
@@ -169,13 +169,13 @@
 	}
 
 	.correction-line-loader {
-		::ng-deep .loader {
+		::ng-deep .skeleton-loader {
 			height: 19px !important;
 		}
 	}
 
 	.circle-loader {
-		::ng-deep .loader {
+		::ng-deep .skeleton-loader {
 			width: 19px !important;
 			height: 19px !important;
 			border-radius: 50% !important;

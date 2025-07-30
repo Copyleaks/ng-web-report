@@ -66,7 +66,7 @@
 			width: fit-content;
 			display: flex;
 			height: fit-content !important;
-			::ng-deep .loader {
+			::ng-deep .skeleton-loader {
 				height: 18px !important;
 				margin-bottom: 0px !important;
 				border-radius: 10px !important;
@@ -95,7 +95,7 @@
 			padding: 8px 10px 4px 10px;
 			.percentage-score-loader {
 				width: 100%;
-				::ng-deep .loader {
+				::ng-deep .skeleton-loader {
 					height: 20px !important;
 				}
 			}

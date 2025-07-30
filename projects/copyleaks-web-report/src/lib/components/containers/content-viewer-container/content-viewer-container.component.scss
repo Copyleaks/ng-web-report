@@ -374,7 +374,7 @@
 		width: fit-content;
 		display: flex;
 		height: fit-content !important;
-		::ng-deep .loader {
+		::ng-deep .skeleton-loader {
 			height: 19px !important;
 			margin-bottom: 0px !important;
 			border-radius: 10px !important;
@@ -384,7 +384,7 @@
 	}
 
 	.circle {
-		::ng-deep .loader {
+		::ng-deep .skeleton-loader {
 			border-radius: 50% !important;
 			width: 16px !important;
 			height: 16px !important;

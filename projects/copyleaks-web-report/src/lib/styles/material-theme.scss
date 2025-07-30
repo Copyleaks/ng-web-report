@@ -3,8 +3,12 @@
 @import './cls-mat-components-overrides/cls-mat-tooltip-overrides.scss';
 
 // 1. Core styles (typography + density)
-@include mat.all-legacy-component-typographies();
-@include mat.legacy-core();
+/* TODO(mdc-migration): Remove all-legacy-component-typographies once all legacy components are migrated*/
+@include mat.all-component-typographies();
+@include mat.all-component-typographies();
+/* TODO(mdc-migration): Remove legacy-core once all legacy components are migrated*/
+@include mat.core();
+@include mat.core();
 
 // 2. Palettes
 $copyleaks-primary: mat.define-palette($copyleaks-primary-palette);
@@ -12,7 +16,7 @@ $copyleaks-accent: mat.define-palette($copyleaks-primary-palette);
 $copyleaks-warn: mat.define-palette($copyleaks-warn-palette);
 
 // 3. Typography config
-$copyleaks-typography: mat.define-legacy-typography-config(
+$copyleaks-typography: mat.define-typography-config(
 	$font-family: '"haboro-soft", Almarai, sans-serif',
 );
 
@@ -29,10 +33,12 @@ $copyleaks-theme: mat.define-light-theme(
 );
 
 // 5. **Only** include color styles (no duplicate typography)
-@include mat.all-legacy-component-colors($copyleaks-theme);
+/* TODO(mdc-migration): Remove all-legacy-component-colors once all legacy components are migrated*/
+@include mat.all-component-colors($copyleaks-theme);
+@include mat.all-component-colors($copyleaks-theme);
 
 // 6. Emit your custom typography hierarchy **once**
-@include mat.all-legacy-component-typographies($copyleaks-typography);
+@include mat.all-component-typographies($copyleaks-typography);
 
 // 7. Icon override
 .mat-icon:not([fontSet]) :not(.material-icons-outlined),

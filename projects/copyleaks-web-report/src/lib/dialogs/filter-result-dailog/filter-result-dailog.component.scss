@@ -15,6 +15,7 @@
 		::ng-deep {
 			.include-results-checkbox {
 				::ng-deep {
+					/* TODO(mdc-migration): The following rule targets internal classes of checkbox that may no longer apply for the MDC version. */
 					.mat-checkbox-label {
 						display: flex;
 						align-items: center;
@@ -25,6 +26,7 @@
 			.tag-list {
 				direction: rtl;
 				::ng-deep {
+					/* TODO(mdc-migration): The following rule targets internal classes of checkbox that may no longer apply for the MDC version. */
 					.mat-checkbox-inner-container {
 						margin: 0 0 0 4px !important;
 					}
@@ -289,19 +291,19 @@
 	justify-content: flex-start;
 }
 
-.mat-dialog-content {
+.mat-mdc-dialog-content {
 	margin: 0px !important;
 	padding: 32px 0px !important;
 	padding-inline-end: 10px !important;
 }
 
-.mat-dialog-title {
+.mat-mdc-dialog-title {
 	margin: 0px !important;
 	padding: 0px !important;
 	padding-inline-end: 10px !important;
 }
 
-.mat-dialog-content.mobile-body-top-container {
+.mat-mdc-dialog-content.mobile-body-top-container {
 	padding: 16px 10px 0px 0px !important;
 }
 
@@ -343,6 +345,7 @@ cr-excluded-results-dailog {
 	gap: 4px;
 	align-items: center;
 	justify-content: flex-start;
+	/* TODO(mdc-migration): The following rule targets internal classes of chips that may no longer apply for the MDC version. */
 	mat-chip {
 		font-size: 14px !important;
 		font-style: normal !important;

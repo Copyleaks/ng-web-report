@@ -187,6 +187,7 @@
 	}
 }
 
+/* TODO(mdc-migration): The following rule targets internal classes of menu that may no longer apply for the MDC version. */
 .mat-menu-item-icon {
 	opacity: 0.4;
 	color: $color-medium-dark;

@@ -23,7 +23,7 @@ import {
 } from '../../../../../models/report-matches.models';
 import { EnumNavigateMobileButton } from '../../../report-results-item-container/components/models/report-result-item.enum';
 import { MatExpansionPanel } from '@angular/material/expansion';
-import { MatLegacyTooltip as MatTooltip } from '@angular/material/legacy-tooltip';
+import { MatTooltip } from '@angular/material/tooltip';
 import { ReportMatchesService } from '../../../../../services/report-matches.service';
 import { ISelectExplainableAIResult } from '../../../../../models/report-ai-results.models';
 import { ReportMatchHighlightService } from '../../../../../services/report-match-highlight.service';

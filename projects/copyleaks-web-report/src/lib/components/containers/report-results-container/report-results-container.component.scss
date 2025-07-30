@@ -208,7 +208,7 @@
 				background-color: $color-dialog-background;
 				border: 0px;
 			}
-
+			/* TODO(mdc-migration): The following rule targets internal classes of chips that may no longer apply for the MDC version. */
 			.mat-chip-navigate {
 				font-size: 12px;
 				font-weight: 500;

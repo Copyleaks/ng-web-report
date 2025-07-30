@@ -2,16 +2,17 @@
 
 :host {
 	::ng-deep {
+		/* TODO(mdc-migration): The following rule targets internal classes of checkbox that may no longer apply for the MDC version. */
 		.mat-checkbox-frame,
 		.mat-option-pseudo-checkbox {
 			border-color: $color-medium-dark !important;
 		}
-
+		/* TODO(mdc-migration): The following rule targets internal classes of checkbox that may no longer apply for the MDC version. */
 		.mat-checkbox-frame,
 		.mat-checkbox-background {
 			border-radius: 3px !important;
 		}
-
+		/* TODO(mdc-migration): The following rule targets internal classes of checkbox that may no longer apply for the MDC version. */
 		.mat-checkbox-checked .mat-checkbox-background {
 			background-color: $color-primary !important;
 		}
@@ -19,11 +20,11 @@
 		.mat-pseudo-checkbox-checked {
 			border-color: $color-primary !important;
 		}
-
+		/* TODO(mdc-migration): The following rule targets internal classes of checkbox that may no longer apply for the MDC version. */
 		.mat-checkbox-inner-container {
 			margin-inline-end: 10px;
 		}
-
+		/* TODO(mdc-migration): The following rule targets internal classes of checkbox that may no longer apply for the MDC version. */
 		.mat-checkbox-label {
 			font-size: 14px;
 			color: $color-black;
@@ -31,16 +32,16 @@
 			line-height: normal !important;
 			font-family: haboro-soft, Almarai, sans-serif !important;
 		}
-
+		/* TODO(mdc-migration): The following rule targets internal classes of checkbox that may no longer apply for the MDC version. */
 		.mat-checkbox-layout {
 			white-space: normal !important;
 		}
-
+		/* TODO(mdc-migration): The following rule targets internal classes of checkbox that may no longer apply for the MDC version. */
 		.mat-checkbox-disabled {
 			opacity: 0.5 !important;
 			pointer-events: none !important;
 		}
-
+		/* TODO(mdc-migration): The following rule targets internal classes of checkbox that may no longer apply for the MDC version. */
 		.mat-checkbox-ripple {
 			display: none !important;
 		}

@@ -13,7 +13,7 @@ import {
 } from '@angular/core';
 import { IResultsActions } from './models/results-actions.models';
 import { UntypedFormControl } from '@angular/forms';
-import { MatLegacyDialog as MatDialog } from '@angular/material/legacy-dialog';
+import { MatDialog } from '@angular/material/dialog';
 import { FilterResultDailogComponent } from '../../../../../dialogs/filter-result-dailog/filter-result-dailog.component';
 import { ReportDataService } from '../../../../../services/report-data.service';
 import { IFilterResultDailogData } from '../../../../../dialogs/filter-result-dailog/models/filter-result-dailog.enum';

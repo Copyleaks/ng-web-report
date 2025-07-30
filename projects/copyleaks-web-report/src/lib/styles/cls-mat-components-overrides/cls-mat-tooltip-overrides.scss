@@ -1,7 +1,7 @@
 @import '../website-colors.styles.scss';
 
 ::ng-deep {
-	.mat-tooltip.web-report-mat-tooltip {
+	.mat-mdc-tooltip.web-report-mat-tooltip {
 		font-size: 14px !important;
 		font-weight: 500 !important;
 		color: $color-white !important;
@@ -12,7 +12,7 @@
 		white-space: pre-line !important;
 	}
 
-	.mat-tooltip.web-report-mat-tooltip.date-tooltip {
+	.mat-mdc-tooltip.web-report-mat-tooltip.date-tooltip {
 		white-space: pre-line !important;
 		max-width: 400px !important;
 	}

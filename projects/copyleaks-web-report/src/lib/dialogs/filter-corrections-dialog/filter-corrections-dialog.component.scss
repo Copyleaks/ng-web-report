@@ -22,8 +22,8 @@
 		}
 	}
 
-	.mat-dialog-title,
-	.mat-dialog-content {
+	.mat-mdc-dialog-title,
+	.mat-mdc-dialog-content {
 		margin-bottom: 32px !important;
 	}
 
@@ -155,10 +155,11 @@
 								text-transform: uppercase;
 								color: $color-black;
 							}
+							/* TODO(mdc-migration): The following rule targets internal classes of checkbox that may no longer apply for the MDC version. */
 							.mat-checkbox-inner-container {
 								margin-inline-end: 8px !important;
 							}
-
+							/* TODO(mdc-migration): The following rule targets internal classes of checkbox that may no longer apply for the MDC version. */
 							.mat-checkbox-label {
 								display: flex;
 								flex-direction: row;
@@ -168,6 +169,7 @@
 						}
 						&:focus-within:not(:hover) {
 							::ng-deep {
+								/* TODO(mdc-migration): The following rule targets internal classes of checkbox that may no longer apply for the MDC version. */
 								.mat-checkbox-ripple {
 									display: unset !important;
 								}
@@ -289,6 +291,7 @@
 	}
 
 	::ng-deep {
+		/* TODO(mdc-migration): The following rule targets internal classes of form-field that may no longer apply for the MDC version. */
 		.mat-form-field-wrapper {
 			padding-bottom: 8px !important;
 		}

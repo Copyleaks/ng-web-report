@@ -1,13 +1,13 @@
 @import '../website-colors.styles.scss';
 
-::ng-deep .mat-menu-panel {
+::ng-deep .mat-mdc-menu-panel {
 	box-shadow: 2px 2px 4px rgba(0, 0, 0, 0.25);
 	border-radius: 10px !important;
 	background-color: $color-white;
 	min-height: fit-content !important;
 	min-width: fit-content !important;
 
-	.mat-menu-item {
+	.mat-mdc-menu-item {
 		display: flex;
 		align-items: center;
 		justify-content: flex-start;
@@ -29,15 +29,15 @@
 			margin-inline-end: 8px;
 		}
 	}
-	.mat-menu-content {
+	.mat-mdc-menu-content {
 		padding: 0px !important;
 	}
-
+	/* TODO(mdc-migration): The following rule targets internal classes of checkbox that may no longer apply for the MDC version. */
 	.mat-checkbox-frame,
 	.mat-option-pseudo-checkbox {
 		border-color: $color-medium-dark !important;
 	}
-
+	/* TODO(mdc-migration): The following rule targets internal classes of checkbox that may no longer apply for the MDC version. */
 	.mat-checkbox-frame,
 	.mat-checkbox-background {
 		border-radius: 3px !important;
@@ -46,27 +46,27 @@
 	.mat-pseudo-checkbox-checked {
 		border-color: $color-primary !important;
 	}
-
+	/* TODO(mdc-migration): The following rule targets internal classes of checkbox that may no longer apply for the MDC version. */
 	.mat-checkbox-inner-container {
 		margin-inline-end: 10px;
 	}
-
+	/* TODO(mdc-migration): The following rule targets internal classes of checkbox that may no longer apply for the MDC version. */
 	.mat-checkbox-label {
 		font-size: 14px;
 		color: $color-medium-dark;
 		font-weight: 600;
 		line-height: normal !important;
 	}
-
+	/* TODO(mdc-migration): The following rule targets internal classes of checkbox that may no longer apply for the MDC version. */
 	.mat-checkbox-layout {
 		white-space: normal !important;
 	}
-
+	/* TODO(mdc-migration): The following rule targets internal classes of checkbox that may no longer apply for the MDC version. */
 	.mat-checkbox-disabled {
 		opacity: 0.5 !important;
 		pointer-events: none !important;
 	}
-
+	/* TODO(mdc-migration): The following rule targets internal classes of menu that may no longer apply for the MDC version. */
 	.mat-menu-submenu-icon {
 		fill: #112960 !important;
 		border-radius: 5px;

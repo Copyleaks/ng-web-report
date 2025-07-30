@@ -206,7 +206,7 @@
 									[class.suspected-ai-generated-container]="firstTag?.code === RESULT_TAGS_CODES.AI_SOURCE_MATCH"
 									i18n-aria-label
 									role="list">
-									<mat-chip
+									<mat-chip-option
 										*ngIf="firstTag"
 										class="first-tag"
 										[class.one-tag]="numberOfTags === 1"
@@ -220,9 +220,9 @@
 										i18n-aria-label
 										(click)="handleClick()">
 										{{ firstTag.title | decodeUri }}
-									</mat-chip>
+									</mat-chip-option>
 
-									<mat-chip
+									<mat-chip-option
 										*ngIf="numberOfTags > 1"
 										class="plus-chip"
 										(click)="handleClick()"
@@ -231,7 +231,7 @@
 										aria-label="Opens view of the selected result agianst the submitted text"
 										i18n-aria-label>
 										{{ '+' + (numberOfTags - 1) }}
-									</mat-chip>
+									</mat-chip-option>
 								</div>
 							</div>
 						</ng-container>
@@ -296,10 +296,10 @@
 				<ng-container *ngIf="!showLoader; else showItemBodySkeleton">
 					<div *ngIf="previewResult?.url" class="item-url-container">
 						<ng-container *ngIf="copyMessage; else showItemURL">
-							<mat-chip class="copied-url-chip">
+							<mat-chip-option class="copied-url-chip">
 								<mat-icon fontSet="material-icons-round">done</mat-icon>
 								<div class="copy-message" i18n>{{ copyMessage }}</div>
-							</mat-chip>
+							</mat-chip-option>
 						</ng-container>
 
 						<ng-template #showItemURL>

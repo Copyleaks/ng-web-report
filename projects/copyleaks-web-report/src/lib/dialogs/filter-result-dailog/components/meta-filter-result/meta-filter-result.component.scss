@@ -38,6 +38,7 @@
 			font-weight: 500;
 			&:focus-within:not(:hover) {
 				::ng-deep {
+					/* TODO(mdc-migration): The following rule targets internal classes of checkbox that may no longer apply for the MDC version. */
 					.mat-checkbox-ripple {
 						display: unset !important;
 					}
@@ -45,30 +46,39 @@
 			}
 		}
 	}
-
+	/* TODO(mdc-migration): The following rule targets internal classes of slider that may no longer apply for the MDC version. */
 	.mat-slider-container {
 		width: 95%;
 		height: 24px;
 		inset-inline-start: 10px;
 		padding: 0px;
 	}
-	::ng-deep .mat-slider.mat-slider-horizontal {
+	/* TODO(mdc-migration): The following rule targets internal classes of slider that may no longer apply for the MDC version. */
+	/* TODO(mdc-migration): The following rule targets internal classes of slider that may no longer apply for the MDC version. */
+	::ng-deep .mat-mdc-slider.mat-slider-horizontal {
+		/* TODO(mdc-migration): The following rule targets internal classes of slider that may no longer apply for the MDC version. */
+		/* TODO(mdc-migration): The following rule targets internal classes of slider that may no longer apply for the MDC version. */
 		.mat-slider-wrapper {
 			inset-inline-start: 0px;
 			inset-inline-end: 0px;
 			top: 12px;
+			/* TODO(mdc-migration): The following rule targets internal classes of slider that may no longer apply for the MDC version. */
 			.mat-slider-thumb-container .mat-slider-thumb {
 				background-color: $color-primary;
 				border: 0;
 			}
 		}
+		/* TODO(mdc-migration): The following rule targets internal classes of slider that may no longer apply for the MDC version. */
+		/* TODO(mdc-migration): The following rule targets internal classes of slider that may no longer apply for the MDC version. */
 		.mat-slider-track-wrapper {
 			height: 4px;
 			border-radius: 10px;
+			/* TODO(mdc-migration): The following rule targets internal classes of slider that may no longer apply for the MDC version. */
 			.mat-slider-track-background {
 				background-color: $color-container-background;
 				height: 4px;
 			}
+			/* TODO(mdc-migration): The following rule targets internal classes of slider that may no longer apply for the MDC version. */
 			.mat-slider-track-fill {
 				background-color: $color-primary;
 				height: 4px;

@@ -106,6 +106,7 @@
 				}
 
 				::ng-deep {
+					/* TODO(mdc-migration): The following rule targets internal classes of button that may no longer apply for the MDC version. */
 					.mat-button-wrapper {
 						line-height: normal !important;
 					}
@@ -388,7 +389,7 @@
 	.navigate-mobie-button-contaienr {
 		padding-bottom: 16px;
 		height: 42px;
-
+		/* TODO(mdc-migration): The following rule targets internal classes of chips that may no longer apply for the MDC version. */
 		.mat-chip-navigate {
 			font-size: 12px;
 			font-weight: 700;
@@ -818,7 +819,7 @@
 	}
 }
 
-::ng-deep .mat-tooltip.tooltip-contanier {
+::ng-deep .mat-mdc-tooltip.tooltip-contanier {
 	font-size: 16px !important;
 	font-weight: 500 !important;
 	color: $color-white !important;

@@ -115,20 +115,20 @@
 		text-decoration-line: underline;
 	}
 
-	.mat-dialog-content,
-	.mat-dialog-title,
-	.mat-dialog-actions {
+	.mat-mdc-dialog-content,
+	.mat-mdc-dialog-title,
+	.mat-mdc-dialog-actions {
 		margin: 0px !important;
 		padding: 0px !important;
 	}
 
-	.mat-dialog-content {
+	.mat-mdc-dialog-content {
 		display: flex;
 		flex-direction: column;
 		gap: 8px;
 	}
 
-	.mat-dialog-actions {
+	.mat-mdc-dialog-actions {
 		min-height: auto !important;
 	}
 }

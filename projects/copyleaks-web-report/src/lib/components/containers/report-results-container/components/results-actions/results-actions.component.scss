@@ -163,7 +163,7 @@
 	}
 }
 
-::ng-deep .filter-result-dailog .mat-dialog-container {
+::ng-deep .filter-result-dailog .mat-mdc-dialog-container {
 	background-color: $color-white !important;
 	padding: 16px 6px 16px 16px !important;
 	border-radius: 10px !important;
@@ -238,6 +238,7 @@ mat-icon {
 	gap: 4px;
 }
 
+/* TODO(mdc-migration): The following rule targets internal classes of chips that may no longer apply for the MDC version. */
 mat-chip {
 	cursor: pointer;
 }
@@ -268,7 +269,10 @@ cr-spinner {
 }
 
 ::ng-deep .input-search-container {
+	/* TODO(mdc-migration): The following rule targets internal classes of form-field that may no longer apply for the MDC version. */
+	/* TODO(mdc-migration): The following rule targets internal classes of form-field that may no longer apply for the MDC version. */
 	.mat-form-field-wrapper {
+		/* TODO(mdc-migration): The following rule targets internal classes of form-field that may no longer apply for the MDC version. */
 		.mat-form-field-flex {
 			border-radius: 30px !important;
 			padding: 0px 4px 0px 3px;

@@ -20,11 +20,11 @@ import { trigger, state, transition, animate, style } from '@angular/animations'
 import { ReportNgTemplatesService } from '../../../../../services/report-ng-templates.service';
 import { untilDestroy } from '../../../../../utils/until-destroy';
 import { ReportDataService } from '../../../../../services/report-data.service';
-import { MatLegacyDialog as MatDialog } from '@angular/material/legacy-dialog';
+import { MatDialog } from '@angular/material/dialog';
 import { RemoveResultConfirmationDialogComponent } from '../../../../../dialogs/remove-result-confirmation-dialog/remove-result-confirmation-dialog.component';
 import { IRemoveResultConfirmationDialogData } from '../../../../../dialogs/remove-result-confirmation-dialog/models/remove-result-confirmation-dialog.models';
 import { ReportMatchHighlightService } from '../../../../../services/report-match-highlight.service';
-import { MatLegacyMenuTrigger as MatMenuTrigger } from '@angular/material/legacy-menu';
+import { MatMenuTrigger } from '@angular/material/menu';
 import { DatePipe } from '@angular/common';
 import { RESULT_TAGS_CODES } from '../../../../../constants/report-result-tags.constants';
 

@@ -147,7 +147,7 @@
 									max-width: 100%;
 								}
 							}
-
+							/* TODO(mdc-migration): The following rule targets internal classes of chips that may no longer apply for the MDC version. */
 							mat-chip {
 								pointer-events: none;
 							}
@@ -330,10 +330,10 @@
 ::ng-deep .result-item-menu-list {
 	box-shadow: 2px 2px 4px 0px rgba(0, 0, 0, 0.25) !important;
 	border-radius: 10px;
-	.mat-menu-content {
+	.mat-mdc-menu-content {
 		align-items: flex-start !important;
 		background-color: $color-white !important;
-		.mat-menu-item {
+		.mat-mdc-menu-item {
 			background-color: $color-white !important;
 			height: 24px;
 			margin: 8px 0px;
@@ -346,6 +346,7 @@
 			&:focus {
 				background-color: $color-container-background !important;
 			}
+			/* TODO(mdc-migration): The following rule targets internal classes of menu that may no longer apply for the MDC version. */
 			.mat-menu-item-icon {
 				opacity: 0.4;
 				color: $color-medium-dark;
@@ -354,6 +355,7 @@
 				height: $icon-size !important;
 				font-size: $icon-size !important;
 			}
+			/* TODO(mdc-migration): The following rule targets internal classes of menu that may no longer apply for the MDC version. */
 			.mat-menu-item-text {
 				display: flex;
 				align-items: center;

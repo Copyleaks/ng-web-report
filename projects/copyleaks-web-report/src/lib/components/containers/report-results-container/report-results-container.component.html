@@ -132,13 +132,13 @@
 			fxLayout="row"
 			fxLayoutAlign="start center"
 			fxLayoutGap="8px">
-			<mat-chip
+			<mat-chip-option
 				*ngIf="displayedResultsLength > 5 && currentViewedIndex > 2"
 				role="button"
 				(click)="scrollToIndex(0)"
 				class="mat-chip-navigate">
 				{{ currentViewedIndex < displayedResultsLength - 3 ? currentViewedIndex - 2 : displayedResultsLength - 5 }}
-			</mat-chip>
+			</mat-chip-option>
 			<button
 				class="navigate-mobie-button"
 				aria-label="This is a result navigation button."
@@ -184,13 +184,13 @@
 				}"
 				(click)="onDotNavigate(enumNavigateMobileButton.FifthButton)"></button>
 
-			<mat-chip
+			<mat-chip-option
 				*ngIf="displayedResultsLength > 5 && currentViewedIndex < displayedResultsLength - 3"
 				role="button"
 				(click)="scrollToIndex(displayedResultsLength - 1)"
 				class="mat-chip-navigate">
 				{{ currentViewedIndex > 2 ? displayedResultsLength - currentViewedIndex - 3 : displayedResultsLength - 5 }}
-			</mat-chip>
+			</mat-chip-option>
 		</div>
 	</div>
 	<ng-container *ngIf="showLoadingView">

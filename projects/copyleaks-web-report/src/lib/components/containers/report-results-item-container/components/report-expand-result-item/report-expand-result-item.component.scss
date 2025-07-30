@@ -142,6 +142,7 @@
 				}
 
 				::ng-deep {
+					/* TODO(mdc-migration): The following rule targets internal classes of button that may no longer apply for the MDC version. */
 					.mat-button-wrapper {
 						display: flex;
 						align-items: center;
@@ -158,17 +159,24 @@
 				border-radius: 16px;
 			}
 		}
+		/* TODO(mdc-migration): The following rule targets internal classes of chips that may no longer apply for the MDC version. */
+		/* TODO(mdc-migration): The following rule targets internal classes of chips that may no longer apply for the MDC version. */
+		/* TODO(mdc-migration): The following rule targets internal classes of chips that may no longer apply for the MDC version. */
 		.mat-chip-list-container {
+			/* TODO(mdc-migration): The following rule targets internal classes of chips that may no longer apply for the MDC version. */
+			/* TODO(mdc-migration): The following rule targets internal classes of chips that may no longer apply for the MDC version. */
 			mat-chip-list {
 				box-sizing: border-box;
 				width: 100%;
 				padding: 4px;
 				::ng-deep {
+					/* TODO(mdc-migration): The following rule targets internal classes of chips that may no longer apply for the MDC version. */
 					.mat-chip-list-wrapper {
 						gap: 4px !important;
 						flex-direction: row-reverse;
 					}
 				}
+				/* TODO(mdc-migration): The following rule targets internal classes of chips that may no longer apply for the MDC version. */
 				mat-chip {
 					color: $color-container-background;
 					min-height: 22px;

@@ -33,6 +33,7 @@
 		align-items: center;
 		justify-content: flex-start;
 		gap: 4px;
+		/* TODO(mdc-migration): The following rule targets internal classes of chips that may no longer apply for the MDC version. */
 		mat-chip {
 			background-color: $color-error;
 			color: $color-white;
@@ -103,7 +104,7 @@
 			font-size: 16px;
 			color: $color-dialog-background;
 		}
-
+		/* TODO(mdc-migration): The following rule targets internal classes of chips that may no longer apply for the MDC version. */
 		mat-chip {
 			background-color: $color-error;
 			color: $color-white;

@@ -146,7 +146,7 @@
 		flex-direction: row;
 		gap: 10px;
 		flex-wrap: wrap;
-
+		/* TODO(mdc-migration): The following rule targets internal classes of chips that may no longer apply for the MDC version. */
 		mat-chip {
 			width: fit-content !important;
 			border-radius: 16px !important;

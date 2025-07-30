@@ -54,13 +54,13 @@
 				</mat-icon>
 			</ng-template>
 		</button>
-		<mat-chip-list role="listbox" aria-label="List of all the results tags" i18n-aria-label>
+		<mat-chip-listbox role="listbox" aria-label="List of all the results tags" i18n-aria-label>
 			<ng-container *ngFor="let tag of selectedList; let idx = index">
-				<mat-chip class="selected-tag-mat-chip" *ngIf="idx < 2">
+				<mat-chip-option class="selected-tag-mat-chip" *ngIf="idx < 2">
 					{{ tag | decodeUri }}
-				</mat-chip>
+				</mat-chip-option>
 			</ng-container>
-		</mat-chip-list>
+		</mat-chip-listbox>
 		<div class="total-select-tags" *ngIf="selectedList.length > 2">
 			<span>+{{ selectedList.length - 2 }}</span>
 		</div>

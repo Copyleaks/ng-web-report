@@ -14,7 +14,7 @@ import { IResultTag } from '../../../../../models/report-data.models';
 import { untilDestroy } from '../../../../../utils/until-destroy';
 import { RESULT_TAGS_CODES } from '../../../../../constants/report-result-tags.constants';
 import { ReportDataService } from '../../../../../services/report-data.service';
-import { MatChip } from '@angular/material/chips';
+import { MatLegacyChip as MatChip } from '@angular/material/legacy-chips';
 
 @Component({
 	selector: 'cr-report-expand-result-item',

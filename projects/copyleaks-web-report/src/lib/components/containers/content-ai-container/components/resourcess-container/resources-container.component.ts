@@ -1,6 +1,6 @@
 import { Component, Input, OnInit, ViewChild } from '@angular/core';
 import { IResources } from './models/resources-container.models';
-import { MatTooltip } from '@angular/material/tooltip';
+import { MatLegacyTooltip as MatTooltip } from '@angular/material/legacy-tooltip';
 import { ReportAIResultsService } from '../../../../../services/report-ai-results.service';
 
 @Component({

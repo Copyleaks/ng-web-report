@@ -1,5 +1,5 @@
 import { Component, EventEmitter, HostBinding, Input, OnInit, Output } from '@angular/core';
-import { MatDialog } from '@angular/material/dialog';
+import { MatLegacyDialog as MatDialog } from '@angular/material/legacy-dialog';
 import { FilterCorrectionsDialogComponent } from '../../../dialogs/filter-corrections-dialog/filter-corrections-dialog.component';
 import { IFilterCorrectionsDialogData } from '../../../dialogs/filter-corrections-dialog/models/filter-corrections-dialog.models';
 import { ReportDataService } from '../../../services/report-data.service';

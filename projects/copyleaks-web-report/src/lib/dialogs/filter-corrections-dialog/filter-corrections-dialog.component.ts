@@ -1,5 +1,5 @@
 import { Component, Inject, OnDestroy, OnInit } from '@angular/core';
-import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
+import { MAT_LEGACY_DIALOG_DATA as MAT_DIALOG_DATA, MatLegacyDialogRef as MatDialogRef } from '@angular/material/legacy-dialog';
 import { IFilterCorrectionsDialogData } from './models/filter-corrections-dialog.models';
 import { EFilterCorrectionsDialogView } from './enums/filter-corrections-dialog.enums';
 import { IWritingFeedbackCorrectionViewModel } from '../../models/report-data.models';

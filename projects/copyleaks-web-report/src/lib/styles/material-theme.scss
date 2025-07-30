@@ -2,15 +2,7 @@
 @import './website-colors.styles.scss';
 @import './cls-mat-components-overrides/cls-mat-tooltip-overrides.scss';
 
-// 1. Core styles
-// TODO(v15): As of v15 mat.legacy-core no longer includes default typography styles.
-//  The following line adds:
-//    1. Default typography styles for all components
-//    2. Styles for typography hierarchy classes (e.g. .mat-headline-1)
-//  If you specify typography styles for the components you use elsewhere, you should delete this line.
-//  If you don't need the default component typographies but still want the hierarchy styles,
-//  you can delete this line and instead use:
-//    `@include mat.legacy-typography-hierarchy(mat.define-legacy-typography-config());`
+// 1. Core styles (typography + density)
 @include mat.all-legacy-component-typographies();
 @include mat.legacy-core();
 
@@ -19,9 +11,9 @@ $copyleaks-primary: mat.define-palette($copyleaks-primary-palette);
 $copyleaks-accent: mat.define-palette($copyleaks-primary-palette);
 $copyleaks-warn: mat.define-palette($copyleaks-warn-palette);
 
-// 3. Typography (fixed quoting!)
+// 3. Typography config
 $copyleaks-typography: mat.define-legacy-typography-config(
-	$font-family: '"haboro-soft", "Almarai", sans-serif',
+	$font-family: '"haboro-soft", Almarai, sans-serif',
 );
 
 // 4. Theme object
@@ -36,11 +28,15 @@ $copyleaks-theme: mat.define-light-theme(
 	)
 );
 
-// 5. Include component styles + typography
-@include mat.all-legacy-component-themes($copyleaks-theme);
+// 5. **Only** include color styles (no duplicate typography)
+@include mat.all-legacy-component-colors($copyleaks-theme);
+
+// 6. Emit your custom typography hierarchy **once**
 @include mat.all-legacy-component-typographies($copyleaks-typography);
 
-// 6. Icon override
-.mat-icon:not([fontSet]) :not(.material-icons-outlined) :not(.material-icons-sharp) :not(.material-icons-two-tone) {
+// 7. Icon override
+.mat-icon:not([fontSet]) :not(.material-icons-outlined),
+.mat-icon:not([fontSet]) :not(.material-icons-sharp),
+.mat-icon:not([fontSet]) :not(.material-icons-two-tone) {
 	font-family: 'Material Icons Round' !important;
 }

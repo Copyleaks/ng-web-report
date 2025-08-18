@@ -2,57 +2,94 @@
 
 :host {
 	::ng-deep {
-		/* TODO(mdc-migration): The following rule targets internal classes of chips that may no longer apply for the MDC version. */
-		/* TODO(mdc-migration): The following rule targets internal classes of chips that may no longer apply for the MDC version. */
-		mat-chip {
-			display: flex;
-			align-items: center;
-			justify-content: center;
-			height: fit-content;
+		.mat-mdc-chip,
+		.mat-mdc-basic-chip {
+			display: flex !important;
+			align-items: center !important;
+			justify-content: center !important;
+			height: fit-content !important;
 			background-color: $color-dark-blue !important;
 			color: $color-container-background !important;
-			font-weight: 500;
-			font-size: 14px;
-			padding: 2px 8px;
-			border-radius: 16px;
-			margin: 0px !important;
-			border: 1px solid $color-container-background;
+			font-weight: 500 !important;
+			font-size: 14px !important;
+			padding: 2px 8px !important;
+			border-radius: 16px !important;
+			margin: 0 !important;
+			border: 1px solid $color-container-background !important;
 			min-height: auto !important;
 			line-height: normal !important;
-			/* TODO(mdc-migration): The following rule targets internal classes of chips that may no longer apply for the MDC version. */
-			.mat-chip-ripple {
-				display: none;
-			}
 
-			mat-icon {
-				margin-inline-start: 4px;
+			.mdc-evolution-chip__text-label,
+			.mat-mdc-chip-action-label {
+				color: $color-container-background !important;
+				font-weight: 500 !important;
+				font-size: 14px !important;
 			}
 		}
-		/* TODO(mdc-migration): The following rule targets internal classes of chips that may no longer apply for the MDC version. */
+
+		.mdc-evolution-chip__action {
+			display: flex;
+			width: 100%;
+		}
+		.mdc-evolution-chip__cell {
+			display: flex;
+		}
+
+		.mat-mdc-chip .mdc-chip__ripple {
+			display: none !important;
+		}
+		.mdc-evolution-chip__graphic,
+		.mat-mdc-chip-graphic {
+			display: none !important;
+		}
+
+		.mat-mdc-chip mat-icon {
+			margin-inline-start: 4px !important;
+		}
+
 		.mat-chip-list-wrapper {
-			margin-inline-start: 0px !important;
+			margin-inline-start: 0 !important;
+		}
+
+		button {
+			padding: 0px !important;
 		}
 
 		.plus-chip {
-			border-radius: 16px !important;
-			border: 1px solid $color-primary !important;
-			color: $color-primary !important;
-			background: $color-white !important;
 			display: flex !important;
-			padding: 2px 3px !important;
 			align-items: center !important;
 			gap: 10px !important;
+			padding: 2px 3px !important;
+			border: 1px solid $color-primary !important;
+			border-radius: 16px !important;
+			background: $color-white !important;
+			color: $color-primary !important;
 			font-size: 14px !important;
-			font-style: normal !important;
 			font-weight: 500 !important;
 			line-height: normal !important;
+			font-style: normal !important;
 			box-sizing: border-box;
+
+			.mdc-evolution-chip__text-label,
+			.mat-mdc-chip-action-label {
+				color: $color-primary !important;
+				font-size: 14px !important;
+				font-weight: 500 !important;
+				line-height: normal !important;
+				font-style: normal !important;
+			}
 		}
 
 		.ai-source-match {
 			background: $color-light-ai-detected-text !important;
 			color: $color-ai-tab !important;
 			font-weight: 800 !important;
+
+			.mdc-evolution-chip__text-label,
+			.mat-mdc-chip-action-label {
+				color: $color-ai-tab !important;
+				font-weight: 800 !important;
+			}
 		}
 	}
 }

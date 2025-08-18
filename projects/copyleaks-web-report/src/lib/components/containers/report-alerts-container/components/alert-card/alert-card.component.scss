@@ -27,6 +27,7 @@
 			padding: 4px;
 			width: fit-content;
 			/* TODO(mdc-migration): The following rule targets internal classes of chips that may no longer apply for the MDC version. */
+			/* TODO(mdc-migration): The following rule targets internal classes of chips that may no longer apply for the MDC version. */
 			.mat-chip-severity {
 				background-color: $color-error;
 				color: $color-white;

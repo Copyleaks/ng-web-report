@@ -1,49 +1,41 @@
 @import '../website-colors.styles.scss';
 
 :host {
-	::ng-deep {
-		/* TODO(mdc-migration): The following rule targets internal classes of checkbox that may no longer apply for the MDC version. */
-		.mat-checkbox-frame,
-		.mat-option-pseudo-checkbox {
-			border-color: $color-medium-dark !important;
-		}
-		/* TODO(mdc-migration): The following rule targets internal classes of checkbox that may no longer apply for the MDC version. */
-		.mat-checkbox-frame,
-		.mat-checkbox-background {
-			border-radius: 3px !important;
-		}
-		/* TODO(mdc-migration): The following rule targets internal classes of checkbox that may no longer apply for the MDC version. */
-		.mat-checkbox-checked .mat-checkbox-background {
-			background-color: $color-primary !important;
-		}
+  ::ng-deep {
+    .mat-mdc-checkbox .mdc-checkbox__background,
+    .mat-mdc-option-pseudo-checkbox .mdc-checkbox__background {
+      border-color: $color-medium-dark !important;
+      border-radius: 3px !important;
+    }
 
-		.mat-pseudo-checkbox-checked {
-			border-color: $color-primary !important;
-		}
-		/* TODO(mdc-migration): The following rule targets internal classes of checkbox that may no longer apply for the MDC version. */
-		.mat-checkbox-inner-container {
-			margin-inline-end: 10px;
-		}
-		/* TODO(mdc-migration): The following rule targets internal classes of checkbox that may no longer apply for the MDC version. */
-		.mat-checkbox-label {
-			font-size: 14px;
-			color: $color-black;
-			font-weight: 500;
-			line-height: normal !important;
-			font-family: haboro-soft, Almarai, sans-serif !important;
-		}
-		/* TODO(mdc-migration): The following rule targets internal classes of checkbox that may no longer apply for the MDC version. */
-		.mat-checkbox-layout {
-			white-space: normal !important;
-		}
-		/* TODO(mdc-migration): The following rule targets internal classes of checkbox that may no longer apply for the MDC version. */
-		.mat-checkbox-disabled {
-			opacity: 0.5 !important;
-			pointer-events: none !important;
-		}
-		/* TODO(mdc-migration): The following rule targets internal classes of checkbox that may no longer apply for the MDC version. */
-		.mat-checkbox-ripple {
-			display: none !important;
-		}
-	}
+    .mat-mdc-checkbox.mat-mdc-checkbox-checked .mdc-checkbox__background {
+      background-color: $color-primary !important;
+    }
+
+    .mat-mdc-pseudo-checkbox-checked {
+      border-color: $color-primary !important;
+    }
+
+    .mat-mdc-checkbox {
+      margin-inline-end: 10px !important;
+    }
+
+    .mat-mdc-checkbox-label {
+      font-size: 14px !important;
+      color: $color-black !important;
+      font-weight: 500 !important;
+      line-height: normal !important;
+      font-family: 'haboro-soft', Almarai, sans-serif !important;
+      white-space: normal !important;
+    }
+
+    .mat-mdc-checkbox.mat-mdc-checkbox-disabled {
+      opacity: 0.5 !important;
+      pointer-events: none !important;
+    }
+
+    .mat-mdc-checkbox .mdc-checkbox__ripple {
+      display: none !important;
+    }
+  }
 }

@@ -8,6 +8,7 @@
 			font-weight: 500;
 			font-size: 16px !important;
 			/* TODO(mdc-migration): The following rule targets internal classes of select that may no longer apply for the MDC version. */
+			/* TODO(mdc-migration): The following rule targets internal classes of select that may no longer apply for the MDC version. */
 			.mat-select-arrow {
 				border-radius: 10px;
 				border-inline-start: 4px solid transparent;
@@ -16,9 +17,11 @@
 			}
 		}
 		/* TODO(mdc-migration): The following rule targets internal classes of select that may no longer apply for the MDC version. */
+		/* TODO(mdc-migration): The following rule targets internal classes of select that may no longer apply for the MDC version. */
 		.mat-select-value-text {
 			color: $color-dark-blue;
 		}
+		/* TODO(mdc-migration): The following rule targets internal classes of select that may no longer apply for the MDC version. */
 		/* TODO(mdc-migration): The following rule targets internal classes of select that may no longer apply for the MDC version. */
 		.mat-form-field-appearance-fill .mat-select-arrow-wrapper,
 		.mat-form-field-appearance-outline .mat-select-arrow-wrapper {
@@ -34,7 +37,7 @@
 		box-shadow: 2px 2px 4px 0px #00000040 !important;
 	}
 
-	.mat-mdc-option.mat-selected:not(.mat-option-disabled),
+	.mat-mdc-option.mat-selected:not(.mat-mdc-option-disabled),
 	.mat-option:not(.mat-option-disabled) :hover,
 	.mat-option.mat-active,
 	.mat-option:hover:not(.mat-option-disabled),
@@ -46,17 +49,21 @@
 		}
 	}
 	/* TODO(mdc-migration): The following rule targets internal classes of option that may no longer apply for the MDC version. */
+	/* TODO(mdc-migration): The following rule targets internal classes of option that may no longer apply for the MDC version. */
 	.mat-mdc-option.mat-selected:not(.mat-option-disabled) {
 		color: $color-primary;
 	}
+	/* TODO(mdc-migration): The following rule targets internal classes of option that may no longer apply for the MDC version. */
 	/* TODO(mdc-migration): The following rule targets internal classes of option that may no longer apply for the MDC version. */
 	.mat-mdc-option:not(.mat-option-disabled, .mat-selected) {
 		color: $color-medium-dark !important;
 	}
 	/* TODO(mdc-migration): The following rule targets internal classes of option that may no longer apply for the MDC version. */
+	/* TODO(mdc-migration): The following rule targets internal classes of option that may no longer apply for the MDC version. */
 	.mat-selected:not(.mat-option-disabled) {
 		font-weight: 500 !important;
 	}
+	/* TODO(mdc-migration): The following rule targets internal classes of slide-toggle that may no longer apply for the MDC version. */
 	/* TODO(mdc-migration): The following rule targets internal classes of slide-toggle that may no longer apply for the MDC version. */
 	.mat-slide-toggle-content {
 		color: $color-medium-dark !important;
@@ -68,10 +75,12 @@
 		line-height: normal !important;
 	}
 	/* TODO(mdc-migration): The following rule targets internal classes of checkbox that may no longer apply for the MDC version. */
+	/* TODO(mdc-migration): The following rule targets internal classes of checkbox that may no longer apply for the MDC version. */
 	.mat-checkbox-frame,
 	.mat-option-pseudo-checkbox {
 		border-color: $color-medium-dark !important;
 	}
+	/* TODO(mdc-migration): The following rule targets internal classes of checkbox that may no longer apply for the MDC version. */
 	/* TODO(mdc-migration): The following rule targets internal classes of checkbox that may no longer apply for the MDC version. */
 	.mat-checkbox-frame,
 	.mat-checkbox-background {
@@ -83,9 +92,11 @@
 		background-color: $color-primary !important;
 	}
 	/* TODO(mdc-migration): The following rule targets internal classes of checkbox that may no longer apply for the MDC version. */
+	/* TODO(mdc-migration): The following rule targets internal classes of checkbox that may no longer apply for the MDC version. */
 	.mat-checkbox-inner-container {
 		margin-inline-end: 10px;
 	}
+	/* TODO(mdc-migration): The following rule targets internal classes of checkbox that may no longer apply for the MDC version. */
 	/* TODO(mdc-migration): The following rule targets internal classes of checkbox that may no longer apply for the MDC version. */
 	.mat-checkbox-label {
 		font-size: 14px;
@@ -93,6 +104,7 @@
 		font-weight: 600;
 		line-height: normal !important;
 	}
+	/* TODO(mdc-migration): The following rule targets internal classes of checkbox that may no longer apply for the MDC version. */
 	/* TODO(mdc-migration): The following rule targets internal classes of checkbox that may no longer apply for the MDC version. */
 	.mat-checkbox-layout {
 		white-space: normal !important;

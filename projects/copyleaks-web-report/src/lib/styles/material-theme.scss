@@ -2,12 +2,7 @@
 @import './website-colors.styles.scss';
 @import './cls-mat-components-overrides/cls-mat-tooltip-overrides.scss';
 
-// 1. Core styles (typography + density)
-/* TODO(mdc-migration): Remove all-legacy-component-typographies once all legacy components are migrated*/
-@include mat.all-component-typographies();
-@include mat.all-component-typographies();
-/* TODO(mdc-migration): Remove legacy-core once all legacy components are migrated*/
-@include mat.core();
+// 1. Core styles (typography + density defaults)
 @include mat.core();
 
 // 2. Palettes
@@ -17,7 +12,7 @@ $copyleaks-warn: mat.define-palette($copyleaks-warn-palette);
 
 // 3. Typography config
 $copyleaks-typography: mat.define-typography-config(
-	$font-family: '"haboro-soft", Almarai, sans-serif',
+	$font-family: '"haboro-soft", "Almarai", sans-serif',
 );
 
 // 4. Theme object
@@ -32,15 +27,16 @@ $copyleaks-theme: mat.define-light-theme(
 	)
 );
 
-// 5. **Only** include color styles (no duplicate typography)
-/* TODO(mdc-migration): Remove all-legacy-component-colors once all legacy components are migrated*/
-@include mat.all-component-colors($copyleaks-theme);
+// 5. Base theme styles (only needed once, now passing your theme)
+@include mat.all-component-bases($copyleaks-theme);
+
+// 6. Theme colors
 @include mat.all-component-colors($copyleaks-theme);
 
-// 6. Emit your custom typography hierarchy **once**
+// 7. Custom typography hierarchy
 @include mat.all-component-typographies($copyleaks-typography);
 
-// 7. Icon override
+// 8. Icon override
 .mat-icon:not([fontSet]) :not(.material-icons-outlined),
 .mat-icon:not([fontSet]) :not(.material-icons-sharp),
 .mat-icon:not([fontSet]) :not(.material-icons-two-tone) {

@@ -200,6 +200,7 @@
 			border: 0px;
 		}
 		/* TODO(mdc-migration): The following rule targets internal classes of chips that may no longer apply for the MDC version. */
+		/* TODO(mdc-migration): The following rule targets internal classes of chips that may no longer apply for the MDC version. */
 		.mat-chip-navigate {
 			font-size: 12px;
 			font-weight: 500;
@@ -258,11 +259,14 @@
 	line-height: unset;
 	height: unset;
 	border-radius: unset;
+	padding: 0px;
+	display: flex;
 	mat-icon {
 		line-height: 16px !important;
 	}
 
 	::ng-deep {
+		/* TODO(mdc-migration): The following rule targets internal classes of button that may no longer apply for the MDC version. */
 		/* TODO(mdc-migration): The following rule targets internal classes of button that may no longer apply for the MDC version. */
 		.mat-button-wrapper {
 			margin-top: 1px;

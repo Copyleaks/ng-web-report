@@ -346,7 +346,6 @@ export class ReportResultsItemComponent implements OnInit, OnChanges, OnDestroy 
 
 	deleteResult() {
 		this._matDialog.open(RemoveResultConfirmationDialogComponent, {
-			maxWidth: '95%',
 			minWidth: this.isMobile ? '95%' : '',
 			width: this.isMobile ? '' : '670px',
 			panelClass: 'filter-result-dailog',

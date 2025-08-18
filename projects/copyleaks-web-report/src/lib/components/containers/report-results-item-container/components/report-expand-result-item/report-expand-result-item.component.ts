@@ -198,25 +198,17 @@ export class ReportExpandResultItemComponent implements OnInit, OnChanges {
 		const aiSourceMatchTag = this.resultItem?.resultPreview?.tags?.find(
 			tag => tag.code === RESULT_TAGS_CODES.AI_SOURCE_MATCH
 		);
-		if (this.reportViewSvc.reportViewMode.platformType === EPlatformType.APP) {
-			if (aiSourceMatchTag) {
-				this.isAiSourceResult = true;
-				if (aiSourceMatchTag.title != 'AI Source Match') {
-					aiSourceMatchTag.title = $localize`AI Source Match`;
-					aiSourceMatchTag.description = $localize`AI Source Match blends plagiarism and AI detection to identify reused or repurposed AI-generated content from other sources.`;
-				}
-				this.resultItem.resultPreview.tags = [
-					aiSourceMatchTag,
-					...this.resultItem.resultPreview.tags.filter(tag => tag.code !== RESULT_TAGS_CODES.AI_SOURCE_MATCH),
-				];
-			} else this.isAiSourceResult = false;
-		} else {
-			// remove the ai-source-match tag from the tags list if the platform is not APP
-			this.resultItem.resultPreview.tags = this.resultItem.resultPreview.tags.filter(
-				tag => tag.code !== RESULT_TAGS_CODES.AI_SOURCE_MATCH
-			);
-			this.isAiSourceResult = false;
-		}
+		if (aiSourceMatchTag) {
+			this.isAiSourceResult = true;
+			if (aiSourceMatchTag.title != 'AI Source Match') {
+				aiSourceMatchTag.title = $localize`AI Source Match`;
+				aiSourceMatchTag.description = $localize`AI Source Match blends plagiarism and AI detection to identify reused or repurposed AI-generated content from other sources.`;
+			}
+			this.resultItem.resultPreview.tags = [
+				aiSourceMatchTag,
+				...this.resultItem.resultPreview.tags.filter(tag => tag.code !== RESULT_TAGS_CODES.AI_SOURCE_MATCH),
+			];
+		} else this.isAiSourceResult = false;
 	}
 
 	clickBack() {

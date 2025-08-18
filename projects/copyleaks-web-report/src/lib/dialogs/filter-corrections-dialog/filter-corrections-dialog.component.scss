@@ -156,9 +156,11 @@
 								color: $color-black;
 							}
 							/* TODO(mdc-migration): The following rule targets internal classes of checkbox that may no longer apply for the MDC version. */
+							/* TODO(mdc-migration): The following rule targets internal classes of checkbox that may no longer apply for the MDC version. */
 							.mat-checkbox-inner-container {
 								margin-inline-end: 8px !important;
 							}
+							/* TODO(mdc-migration): The following rule targets internal classes of checkbox that may no longer apply for the MDC version. */
 							/* TODO(mdc-migration): The following rule targets internal classes of checkbox that may no longer apply for the MDC version. */
 							.mat-checkbox-label {
 								display: flex;
@@ -169,6 +171,7 @@
 						}
 						&:focus-within:not(:hover) {
 							::ng-deep {
+								/* TODO(mdc-migration): The following rule targets internal classes of checkbox that may no longer apply for the MDC version. */
 								/* TODO(mdc-migration): The following rule targets internal classes of checkbox that may no longer apply for the MDC version. */
 								.mat-checkbox-ripple {
 									display: unset !important;
@@ -292,6 +295,7 @@
 
 	::ng-deep {
 		/* TODO(mdc-migration): The following rule targets internal classes of form-field that may no longer apply for the MDC version. */
+		/* TODO(mdc-migration): The following rule targets internal classes of form-field that may no longer apply for the MDC version. */
 		.mat-form-field-wrapper {
 			padding-bottom: 8px !important;
 		}
@@ -355,6 +359,8 @@
 	border-radius: unset;
 	line-height: unset;
 	padding: 0;
+	display: flex;
+
 	&:focus-visible {
 		outline: 2px solid black !important;
 	}

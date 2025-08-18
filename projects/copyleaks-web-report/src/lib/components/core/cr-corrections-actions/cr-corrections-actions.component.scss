@@ -1,6 +1,7 @@
 @import '../../../styles/styles.scss';
 @import '../../../styles/website-colors.styles.scss';
 @import '../../../styles/cls-mat-components-overrides/cls-mat-chip-overrides.scss';
+@import '../../../styles/cls-mat-components-overrides/cls-mat-buttons-overrides.scss';
 @import '../../../styles/cls-accessibility-overrides/cls-accessibility-overrides.scss';
 
 :host {
@@ -38,6 +39,7 @@
 		width: unset;
 		height: unset;
 		line-height: unset;
+		padding: 0px;
 		.filter-icon {
 			color: $color-dark-blue;
 			cursor: pointer;
@@ -58,6 +60,7 @@
 			color: $color-primary;
 		}
 	}
+	/* TODO(mdc-migration): The following rule targets internal classes of chips that may no longer apply for the MDC version. */
 	/* TODO(mdc-migration): The following rule targets internal classes of chips that may no longer apply for the MDC version. */
 	mat-chip {
 		cursor: pointer;

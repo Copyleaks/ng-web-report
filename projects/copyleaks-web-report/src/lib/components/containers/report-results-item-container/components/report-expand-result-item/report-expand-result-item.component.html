@@ -193,8 +193,10 @@
 								i18n-aria-label>
 								<ng-container *ngIf="copyMessage; else showItemURL">
 									<mat-chip-option class="copied-url-chip">
-										<mat-icon fontSet="material-icons-round">done</mat-icon>
-										<div class="copy-message" i18n>{{ copyMessage }}</div>
+										<div class="copied-url-chip-content-container">
+											<mat-icon fontSet="material-icons-round">done</mat-icon>
+											<div class="copy-message" i18n>{{ copyMessage }}</div>
+										</div>
 									</mat-chip-option>
 								</ng-container>
 								<ng-template #showItemURL>

@@ -1,6 +1,7 @@
 @use '@angular/material' as mat;
 @import './website-colors.styles.scss';
 @import './cls-mat-components-overrides/cls-mat-tooltip-overrides.scss';
+@import './cls-mat-components-overrides/cls-mat-dialog-overrides.scss';
 
 // 1. Core styles (typography + density defaults)
 @include mat.core();

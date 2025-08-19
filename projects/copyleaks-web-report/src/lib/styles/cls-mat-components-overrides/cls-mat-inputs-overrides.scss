@@ -167,5 +167,28 @@
 		::ng-deep .mat-form-field-label {
 			color: $color-black-opacity-60 !important;
 		}
+
+		.mat-mdc-form-field:hover .mat-mdc-form-field-focus-overlay {
+			opacity: 0 !important;
+		}
+
+		.mat-mdc-form-field .mat-mdc-form-field-focus-overlay {
+			background-color: transparent !important;
+		}
+
+		.mat-mdc-text-field-wrapper:hover {
+			background-color: inherit !important;
+		}
+
+		.mat-mdc-form-field .mat-mdc-form-field-focus-overlay {
+			background-color: transparent !important;
+		}
+
+		.mdc-floating-label--float-above {
+			top: 11px !important;
+			mat-label {
+				color: $color-black !important;
+			}
+		}
 	}
 }

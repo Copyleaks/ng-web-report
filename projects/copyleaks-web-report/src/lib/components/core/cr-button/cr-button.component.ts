@@ -113,7 +113,7 @@ export class CrButtonComponent implements OnInit {
 	 * @Input
 	 */
 	@Input() padding: string;
-	/*
+	/**
 	 * Indicates where the icon will be position relative to the text
 	 * @Input
 	 */

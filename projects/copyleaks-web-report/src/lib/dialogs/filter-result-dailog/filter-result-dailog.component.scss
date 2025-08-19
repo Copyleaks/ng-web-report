@@ -351,9 +351,7 @@ cr-excluded-results-dailog {
 	gap: 4px;
 	align-items: center;
 	justify-content: flex-start;
-	/* TODO(mdc-migration): The following rule targets internal classes of chips that may no longer apply for the MDC version. */
-	/* TODO(mdc-migration): The following rule targets internal classes of chips that may no longer apply for the MDC version. */
-	mat-chip {
+	mat-chip-option {
 		font-size: 14px !important;
 		font-style: normal !important;
 		font-weight: 500 !important;

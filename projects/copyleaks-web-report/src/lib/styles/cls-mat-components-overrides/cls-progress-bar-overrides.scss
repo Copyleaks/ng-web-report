@@ -7,20 +7,24 @@
 			border: 1px solid $color-effect-dialog-background;
 			border-radius: 10px;
 		}
-		/* TODO(mdc-migration): The following rule targets internal classes of progress-bar that may no longer apply for the MDC version. */
-		/* TODO(mdc-migration): The following rule targets internal classes of progress-bar that may no longer apply for the MDC version. */
-		.mat-progress-bar-fill::after {
+		.mdc-linear-progress__bar-inner {
 			background-color: $color-primary-v2 !important;
+			border-radius: 10px;
 		}
-		/* TODO(mdc-migration): The following rule targets internal classes of progress-bar that may no longer apply for the MDC version. */
-		/* TODO(mdc-migration): The following rule targets internal classes of progress-bar that may no longer apply for the MDC version. */
-		.mat-progress-bar-background {
-			fill: $color-white !important;
-		}
-		/* TODO(mdc-migration): The following rule targets internal classes of progress-bar that may no longer apply for the MDC version. */
-		/* TODO(mdc-migration): The following rule targets internal classes of progress-bar that may no longer apply for the MDC version. */
-		.mat-progress-bar-buffer {
+		.mdc-linear-progress__buffer {
 			background-color: $color-white !important;
+		}
+		.mdc-linear-progress__track {
+			background-color: $color-white !important;
+			border-radius: 10px;
+		}
+		.mdc-linear-progress__buffer-bar {
+			background-color: $color-white !important;
+		}
+		.mdc-linear-progress__bar,
+		.mdc-linear-progress__bar-inner {
+			height: 6px !important;
+			border-top-style: hidden !important;
 		}
 	}
 }

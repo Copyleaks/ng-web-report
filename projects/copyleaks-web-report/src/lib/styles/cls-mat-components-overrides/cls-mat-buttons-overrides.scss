@@ -21,6 +21,16 @@
 		.mat-mdc-raised-button:not(.mat-mdc-button-disabled):active:not([class*='mat-elevation-z']) {
 			box-shadow: none !important;
 		}
+		.mat-mdc-raised-button,
+		.mat-mdc-button,
+		.mat-mdc-unelevated-button {
+			letter-spacing: normal;
+		}
+
+		.mat-mdc-unelevated-button {
+			border: none !important;
+		}
+
 		.mat-mdc-unelevated-button.mat-mdc-button-disabled {
 			background: none !important;
 		}
@@ -28,6 +38,12 @@
 		.mat-mdc-button-touch-target {
 			width: auto !important;
 			height: auto !important;
+		}
+
+		.mat-mdc-unelevated-button.mat-mdc-button-disabled {
+			.mdc-button__label {
+				color: #00000042 !important;
+			}
 		}
 	}
 }

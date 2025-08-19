@@ -143,9 +143,8 @@
 				}
 
 				::ng-deep {
-					/* TODO(mdc-migration): The following rule targets internal classes of button that may no longer apply for the MDC version. */
-					/* TODO(mdc-migration): The following rule targets internal classes of button that may no longer apply for the MDC version. */
-					.mat-button-wrapper {
+					.mat-button-wrapper,
+					.mdc-button__label {
 						display: flex;
 						align-items: center;
 						justify-content: center;
@@ -204,8 +203,14 @@
 
 				.mat-mdc-standard-chip.ai-source-match {
 					background: $color-light-ai-detected-text !important;
-					color: $color-ai-tab !important;
-					font-weight: 800 !important;
+
+					::ng-deep {
+						.mdc-evolution-chip__text-label,
+						.mat-mdc-chip-action-label {
+							color: $color-ai-tab !important;
+							font-weight: 800 !important;
+						}
+					}
 				}
 			}
 			.mat-mdc-chip-list {
@@ -267,6 +272,11 @@
 	transform: translateY(-10px); /* Initial position for the animation */
 	animation: fadeInSlideDown 0.3s ease-out forwards; /* Animation */
 	::ng-deep {
+		.copied-url-chip-content-container {
+			display: flex;
+			gap: 4px !important;
+			align-items: center !important;
+		}
 		.copy-message {
 			overflow: hidden !important;
 			color: $color-message-positive !important;

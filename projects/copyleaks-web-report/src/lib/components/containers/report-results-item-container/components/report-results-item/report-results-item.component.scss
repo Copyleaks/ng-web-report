@@ -152,6 +152,7 @@
 										white-space: nowrap !important;
 										overflow: hidden !important;
 										text-overflow: ellipsis !important;
+										color: $color-white;
 									}
 								}
 							}
@@ -239,6 +240,11 @@
 					transform: translateY(-10px); /* Initial position for the animation */
 					animation: fadeInSlideDown 0.3s ease-out forwards; /* Animation */
 					::ng-deep {
+						.copied-url-chip-content-container {
+							display: flex;
+							gap: 4px !important;
+							align-items: center !important;
+						}
 						.copy-message {
 							overflow: hidden !important;
 							color: $color-message-positive !important;
@@ -350,13 +356,13 @@
 			align-items: center;
 			width: 100%;
 			box-sizing: border-box;
+			min-height: auto !important;
 			&:hover,
 			&:focus {
 				background-color: $color-container-background !important;
 			}
-			/* TODO(mdc-migration): The following rule targets internal classes of menu that may no longer apply for the MDC version. */
-			/* TODO(mdc-migration): The following rule targets internal classes of menu that may no longer apply for the MDC version. */
-			.mat-menu-item-icon {
+			.mat-menu-item-icon,
+			.mdc-menu-item__graphic {
 				opacity: 0.4;
 				color: $color-medium-dark;
 				$icon-size: 18px;
@@ -364,9 +370,8 @@
 				height: $icon-size !important;
 				font-size: $icon-size !important;
 			}
-			/* TODO(mdc-migration): The following rule targets internal classes of menu that may no longer apply for the MDC version. */
-			/* TODO(mdc-migration): The following rule targets internal classes of menu that may no longer apply for the MDC version. */
-			.mat-menu-item-text {
+			.mat-menu-item-text,
+			.mdc-menu-item__text {
 				display: flex;
 				align-items: center;
 				height: 100%;

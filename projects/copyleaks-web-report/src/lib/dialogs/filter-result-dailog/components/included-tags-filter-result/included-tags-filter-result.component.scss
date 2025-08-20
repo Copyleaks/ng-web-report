@@ -2,6 +2,34 @@
 @import '../../../../styles/cls-mat-components-overrides/cls-scroll-bar-overrides.scss';
 @import '../../../../styles/cls-mat-components-overrides/cls-mat-inputs-overrides.scss';
 
+:host {
+	::ng-deep {
+		.mat-mdc-icon-button .mat-mdc-button-touch-target {
+			width: 18px !important;
+			height: 18px !important;
+		}
+
+		.mat-form-field-appearance-fill .mat-mdc-text-field-wrapper {
+			padding: 0px !important;
+		}
+
+		.mat-form-field-appearance-fill .mat-mdc-form-field-flex {
+			padding: 4px 8px !important;
+		}
+
+		.search-icon {
+			background: $color-white !important;
+			border-radius: 50% !important;
+			display: flex !important;
+			align-items: center !important;
+
+			&:hover {
+				color: $color-black;
+			}
+		}
+	}
+}
+
 .contaienr {
 	mat-form-field.with-label {
 		width: 100%;
@@ -25,12 +53,6 @@
 			background-color: $color-white;
 			margin-inline-end: 8px;
 			cursor: pointer;
-			&:hover {
-				background-color: $color-primary;
-				mat-icon {
-					color: $color-white;
-				}
-			}
 			mat-icon {
 				background-color: transparent;
 				color: $color-black;
@@ -38,13 +60,14 @@
 				width: 24px;
 				height: 24px;
 				padding: 4px;
-				line-height: unset;
+				line-height: normal;
 			}
 
 			.clear-icon-button {
 				width: 32px !important;
 				height: 32px !important;
-				line-height: unset;
+				line-height: normal;
+				padding: 0px !important;
 				&:focus,
 				&:hover {
 					background-color: $color-primary;
@@ -52,9 +75,17 @@
 						color: $color-white !important;
 					}
 					::ng-deep {
-						/* TODO(mdc-migration): The following rule targets internal classes of button that may no longer apply for the MDC version. */
-						/* TODO(mdc-migration): The following rule targets internal classes of button that may no longer apply for the MDC version. */
-						.mat-button-focus-overlay {
+						.mat-button-focus-overlay,
+						.mat-mdc-button-ripple,
+						.mat-mdc-icon-button-ripple {
+							background-color: transparent !important;
+						}
+
+						.mat-mdc-icon-button:focus-visible .mat-mdc-button-persistent-ripple {
+							opacity: 0;
+						}
+
+						.mat-mdc-icon-button .mat-mdc-button-ripple {
 							background-color: transparent;
 						}
 					}
@@ -62,17 +93,17 @@
 			}
 		}
 	}
-	/* TODO(mdc-migration): The following rule targets internal classes of chips that may no longer apply for the MDC version. */
-	/* TODO(mdc-migration): The following rule targets internal classes of chips that may no longer apply for the MDC version. */
 	.mat-chip-container {
 		width: 100%;
 		height: 23px;
+
 		.arrow-drop-button {
 			display: flex;
 			align-items: center;
 			justify-content: center;
 			border: 0;
 			background-color: $color-white;
+			padding: 0px !important;
 			cursor: pointer;
 			width: 18px;
 			height: 18px;
@@ -84,20 +115,26 @@
 			}
 		}
 		.selected-tag-mat-chip {
-			display: flex;
-			align-items: baseline;
-			justify-content: center;
-			min-height: 24px;
-			padding: 2px 8px;
-			background-color: $color-dark-blue;
-			color: $color-container-background;
-			font-size: 14px;
-			font-weight: 500;
-			white-space: nowrap;
-			overflow: hidden;
-			text-overflow: ellipsis;
-			max-width: 110px;
-			display: block;
+			display: flex !important;
+			align-items: baseline !important;
+			justify-content: center !important;
+			padding: 2px 8px !important;
+			background-color: $color-dark-blue !important;
+			max-width: 110px !important;
+			display: block !important;
+			box-sizing: border-box !important;
+			::ng-deep {
+				.mdc-evolution-chip__text-label,
+				.mat-mdc-chip-action-label {
+					color: $color-container-background !important;
+					font-size: 14px !important;
+					font-weight: 500 !important;
+					white-space: nowrap !important;
+					overflow: hidden !important;
+					text-overflow: ellipsis !important;
+					display: block !important;
+				}
+			}
 		}
 		.total-select-tags {
 			width: 23px;
@@ -125,6 +162,8 @@
 		width: 100%;
 		max-height: 240px;
 		overflow-y: auto;
+		gap: 8px !important;
+
 		.tag-list {
 			width: 100%;
 			height: 32px;
@@ -135,15 +174,7 @@
 			:focus-within {
 				background-color: $color-container-background;
 			}
-			/* TODO(mdc-migration): The following rule targets internal classes of checkbox that may no longer apply for the MDC version. */
-			/* TODO(mdc-migration): The following rule targets internal classes of checkbox that may no longer apply for the MDC version. */
-			/* TODO(mdc-migration): The following rule targets internal classes of checkbox that may no longer apply for the MDC version. */
-			/* TODO(mdc-migration): The following rule targets internal classes of checkbox that may no longer apply for the MDC version. */
-			/* TODO(mdc-migration): The following rule targets internal classes of checkbox that may no longer apply for the MDC version. */
-			/* TODO(mdc-migration): The following rule targets internal classes of checkbox that may no longer apply for the MDC version. */
-			/* TODO(mdc-migration): The following rule targets internal classes of checkbox that may no longer apply for the MDC version. */
-			/* TODO(mdc-migration): The following rule targets internal classes of checkbox that may no longer apply for the MDC version. */
-			.mat-checkbox-tag {
+			mat-checkbox-tag {
 				display: flex;
 				align-items: center;
 				justify-content: flex-start;
@@ -152,57 +183,49 @@
 				height: 32px;
 				font-size: 14px;
 				font-weight: 500;
-				/* TODO(mdc-migration): The following rule targets internal classes of checkbox that may no longer apply for the MDC version. */
-				/* TODO(mdc-migration): The following rule targets internal classes of checkbox that may no longer apply for the MDC version. */
-				/* TODO(mdc-migration): The following rule targets internal classes of checkbox that may no longer apply for the MDC version. */
-				/* TODO(mdc-migration): The following rule targets internal classes of checkbox that may no longer apply for the MDC version. */
-				/* TODO(mdc-migration): The following rule targets internal classes of checkbox that may no longer apply for the MDC version. */
-				/* TODO(mdc-migration): The following rule targets internal classes of checkbox that may no longer apply for the MDC version. */
-				::ng-deep .mat-checkbox-layout {
-					width: 100%;
-					display: flex;
-					justify-content: flex-start;
-					align-items: center;
-					/* TODO(mdc-migration): The following rule targets internal classes of checkbox that may no longer apply for the MDC version. */
-					/* TODO(mdc-migration): The following rule targets internal classes of checkbox that may no longer apply for the MDC version. */
-					/* TODO(mdc-migration): The following rule targets internal classes of checkbox that may no longer apply for the MDC version. */
-					/* TODO(mdc-migration): The following rule targets internal classes of checkbox that may no longer apply for the MDC version. */
-					.mat-checkbox-inner-container {
-						margin: 0 4px 0 0;
-						/* TODO(mdc-migration): The following rule targets internal classes of checkbox that may no longer apply for the MDC version. */
-						/* TODO(mdc-migration): The following rule targets internal classes of checkbox that may no longer apply for the MDC version. */
-						.mat-checkbox-frame {
-							border-color: $color-medium-dark;
+
+				::ng-deep {
+					.mat-checkbox-layout,
+					.mdc-form-field {
+						width: 100%;
+						display: flex;
+						justify-content: flex-start;
+						align-items: center;
+
+						.mat-checkbox-inner-container,
+						.mdc-checkbox {
+							margin: 0 4px 0 0;
+
+							.mat-checkbox-frame,
+							.mdc-checkbox__background {
+								border-color: $color-medium-dark;
+							}
 						}
 					}
-				}
-				/* TODO(mdc-migration): The following rule targets internal classes of checkbox that may no longer apply for the MDC version. */
-				/* TODO(mdc-migration): The following rule targets internal classes of checkbox that may no longer apply for the MDC version. */
-				::ng-deep .mat-checkbox-label {
-					max-width: 100%;
-					white-space: nowrap;
-					overflow: hidden;
-					text-overflow: ellipsis;
-					display: block;
+
+					.mat-checkbox-label,
+					.mdc-form-field label,
+					.mat-mdc-checkbox-label {
+						max-width: 100%;
+						white-space: nowrap;
+						overflow: hidden;
+						text-overflow: ellipsis;
+						display: block;
+					}
 				}
 			}
 		}
 	}
-	/* TODO(mdc-migration): The following rule targets internal classes of chips that may no longer apply for the MDC version. */
-	/* TODO(mdc-migration): The following rule targets internal classes of chips that may no longer apply for the MDC version. */
-	/* TODO(mdc-migration): The following rule targets internal classes of chips that may no longer apply for the MDC version. */
-	/* TODO(mdc-migration): The following rule targets internal classes of chips that may no longer apply for the MDC version. */
-	mat-chip-list {
+	mat-chip-list,
+	mat-mdc-chip-set {
 		::ng-deep {
-			/* TODO(mdc-migration): The following rule targets internal classes of chips that may no longer apply for the MDC version. */
-			/* TODO(mdc-migration): The following rule targets internal classes of chips that may no longer apply for the MDC version. */
-			.mat-chip-list-wrapper {
+			.mat-chip-list-wrapper,
+			.mat-mdc-chip-set-wrapper {
 				gap: 4px !important;
 				flex-wrap: nowrap;
 			}
 		}
 	}
-
 	::ng-deep {
 		::-webkit-scrollbar-track {
 			background: $color-container-background !important;

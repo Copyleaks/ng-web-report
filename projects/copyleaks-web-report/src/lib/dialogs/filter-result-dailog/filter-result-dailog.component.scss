@@ -15,9 +15,9 @@
 		::ng-deep {
 			.include-results-checkbox {
 				::ng-deep {
-					/* TODO(mdc-migration): The following rule targets internal classes of checkbox that may no longer apply for the MDC version. */
-					/* TODO(mdc-migration): The following rule targets internal classes of checkbox that may no longer apply for the MDC version. */
-					.mat-checkbox-label {
+					.mat-checkbox-label,
+					.mdc-form-field label,
+					.mat-mdc-checkbox-label {
 						display: flex;
 						align-items: center;
 					}
@@ -27,9 +27,9 @@
 			.tag-list {
 				direction: rtl;
 				::ng-deep {
-					/* TODO(mdc-migration): The following rule targets internal classes of checkbox that may no longer apply for the MDC version. */
-					/* TODO(mdc-migration): The following rule targets internal classes of checkbox that may no longer apply for the MDC version. */
-					.mat-checkbox-inner-container {
+					.mat-checkbox-inner-container,
+					.mdc-checkbox,
+					.mat-mdc-checkbox .mdc-checkbox {
 						margin: 0 0 0 4px !important;
 					}
 				}
@@ -57,7 +57,6 @@
 			gap: 8px !important;
 		}
 
-		/* Hide default toggle icon */
 		.mat-expansion-panel-header .mat-expansion-indicator::after {
 			border: none;
 			content: '';

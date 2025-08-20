@@ -34,13 +34,14 @@
 			</div>
 
 			<button
-				mat-icon-button
+				mat-button
 				class="clear-filter-btn clear-filter-button-text icon-button"
 				aria-label="Reset filters"
 				i18n-aria-label
+				[disableRipple]="true"
 				(click)="onClearFilter()">
 				<mat-icon class="clear-filter-button-icon">refresh</mat-icon>
-				<span i18n>Clear filter</span>
+				<span class="clear-filter-button-text" i18n>Clear filter</span>
 			</button>
 		</div>
 
@@ -274,7 +275,7 @@
 
 		<div mat-dialog-actions class="include-all-container">
 			<button
-				mat-icon-button
+				mat-button
 				class="icon-button include-all-btn"
 				aria-label="Includes or excludes previously excluded results"
 				i18n-aria-label

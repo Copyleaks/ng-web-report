@@ -2,17 +2,14 @@
 
 :host {
 	::ng-deep {
-		// Track/bar background for unchecked state
 		.mat-mdc-slide-toggle .mdc-switch:not(.mdc-switch--checked) .mdc-switch__track {
 			background: $color-dialog-background !important;
 		}
 
-		// Track/bar background for checked state
 		.mat-mdc-slide-toggle .mdc-switch.mdc-switch--checked .mdc-switch__track {
 			background: rgba($color-primary, 0.5) !important;
 		}
 
-		// Thumb/handle for unchecked state
 		.mat-mdc-slide-toggle .mdc-switch:not(.mdc-switch--checked) .mdc-switch__handle {
 			background-color: $color-medium-dark !important;
 		}
@@ -21,12 +18,10 @@
 			box-shadow: 0px 1px 2px 0px #00000045 !important;
 		}
 
-		// Thumb/handle for checked state
 		.mat-mdc-slide-toggle .mdc-switch.mdc-switch--checked .mdc-switch__handle {
 			background-color: $color-primary !important;
 		}
 
-		// Text wrapping behavior
 		.mat-mdc-slide-toggle {
 			white-space: pre-wrap;
 		}
@@ -37,34 +32,20 @@
 			text-overflow: ellipsis;
 		}
 
-		// Remove ripple effects
-		.mat-mdc-slide-toggle .mdc-switch__ripple {
-			display: none !important;
-		}
-
-		// Remove focus ring
-		.mat-mdc-slide-toggle .mdc-switch:focus-within {
-			outline: none !important;
-		}
-
-		// Remove any state layers
 		.mat-mdc-slide-toggle .mdc-switch__handle::before,
 		.mat-mdc-slide-toggle .mdc-switch__handle::after {
 			display: none !important;
 		}
 
-		// Remove check/minus icons
 		.mat-mdc-slide-toggle .mdc-switch__icons {
 			display: none !important;
 		}
 
-		// Additional selector to ensure all icon variants are hidden
 		.mat-mdc-slide-toggle .mdc-switch__handle .mdc-switch__icons,
 		.mat-mdc-slide-toggle .mdc-switch__handle-track .mdc-switch__icons {
 			display: none !important;
 		}
 
-		// Target specific icon elements if they exist
 		.mat-mdc-slide-toggle .mdc-switch__icon--on,
 		.mat-mdc-slide-toggle .mdc-switch__icon--off {
 			display: none !important;

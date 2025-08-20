@@ -2,6 +2,9 @@
 
 :host {
 	::ng-deep {
+		mat-checkbox {
+			display: flex !important;
+		}
 		.mdc-checkbox,
 		.mdc-checkbox__background {
 			height: 15px !important;
@@ -62,6 +65,11 @@
 
 		.mdc-checkbox__background .mdc-checkbox__checkmark {
 			color: white !important;
+		}
+
+		.mat-mdc-checkbox-touch-target {
+			height: 15px !important;
+			width: 15px !important;
 		}
 	}
 }

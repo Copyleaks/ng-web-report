@@ -144,5 +144,14 @@
 		background-color: $color-white !important;
 		padding: 16px !important;
 		border-radius: 10px !important;
+
+		.mat-mdc-dialog-surface {
+			box-shadow: none !important;
+			overflow-y: hidden !important;
+		}
+		.mdc-dialog__container {
+			width: 100% !important;
+			min-width: 100% !important;
+		}
 	}
 }

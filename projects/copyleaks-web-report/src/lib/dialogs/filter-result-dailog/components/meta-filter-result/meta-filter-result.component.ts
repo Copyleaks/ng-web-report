@@ -111,6 +111,11 @@ export class MetaFilterResultComponent implements OnInit {
 	}
 
 	onSliderChange(event: any) {
-		this.wordLimitTotalWordFc.setValue(Number(event.value));
+		// Check if the slider is at or near its maximum position (within one step)
+		if (event.value >= this.maxWordLimit - 10 && event.value < this.maxWordLimit) {
+			this.wordLimitTotalWordFc.setValue(Number(this.maxWordLimit));
+		} else {
+			this.wordLimitTotalWordFc.setValue(Number(event.value));
+		}
 	}
 }

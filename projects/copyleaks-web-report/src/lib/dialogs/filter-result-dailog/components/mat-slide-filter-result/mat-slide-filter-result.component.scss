@@ -1,5 +1,5 @@
 @import '../../../../styles/website-colors.styles.scss';
-@import '../../../../styles/cls-mat-components-overrides//cls-mat-slide-toggle-overrides.scss';
+@import '../../../../styles/cls-mat-components-overrides/cls-mat-slide-toggle-overrides.scss';
 
 :host {
 	width: 100%;
@@ -17,16 +17,12 @@
 		font-size: 12px;
 		font-weight: 700;
 	}
-	/* TODO(mdc-migration): The following rule targets internal classes of slide-toggle that may no longer apply for the MDC version. */
-	/* TODO(mdc-migration): The following rule targets internal classes of slide-toggle that may no longer apply for the MDC version. */
-	/* TODO(mdc-migration): The following rule targets internal classes of slide-toggle that may no longer apply for the MDC version. */
-	/* TODO(mdc-migration): The following rule targets internal classes of slide-toggle that may no longer apply for the MDC version. */
 	mat-slide-toggle {
 		&:focus-within:not(:hover) {
 			::ng-deep {
-				/* TODO(mdc-migration): The following rule targets internal classes of slide-toggle that may no longer apply for the MDC version. */
-				/* TODO(mdc-migration): The following rule targets internal classes of slide-toggle that may no longer apply for the MDC version. */
-				.mat-slide-toggle-ripple {
+				.mat-slide-toggle-ripple,
+				.mdc-switch__ripple,
+				.mat-mdc-slide-toggle .mdc-switch__ripple {
 					display: unset !important;
 				}
 			}

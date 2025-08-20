@@ -92,7 +92,7 @@ export class CrCorrectionsActionsComponent implements OnInit {
 		if (!event || event.key === 'Enter') {
 			this._matDialog.open(FilterCorrectionsDialogComponent, {
 				maxWidth: '95%',
-				width: '1050px',
+				width: '1290px',
 				panelClass: 'filter-corrections-dailog',
 				ariaLabel: $localize`Report Corrections Filter Options`,
 				autoFocus: false,

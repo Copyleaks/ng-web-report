@@ -35,6 +35,11 @@
 			color: $color-white;
 		}
 
+		.mdc-evolution-chip__text-label {
+			display: flex;
+			align-items: center;
+		}
+
 		.mdc-evolution-chip__action {
 			display: flex;
 			width: 100%;

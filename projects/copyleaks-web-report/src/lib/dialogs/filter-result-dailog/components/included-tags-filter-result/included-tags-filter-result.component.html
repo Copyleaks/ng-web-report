@@ -35,6 +35,7 @@
 		fxLayoutGap="4px">
 		<button
 			*ngIf="allTagItem && allTagItem.length > 0"
+			mat-icon-button
 			class="arrow-drop-button"
 			(click)="showMoreMenu = !showMoreMenu"
 			[matTooltip]="showMoreMenu ? COLLAPSE_TOOLTIP : EXPEND_TOOLTIP"

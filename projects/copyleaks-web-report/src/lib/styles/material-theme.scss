@@ -7,17 +7,17 @@
 @include mat.core();
 
 // 2. Palettes
-$copyleaks-primary: mat.define-palette($copyleaks-primary-palette);
-$copyleaks-accent: mat.define-palette($copyleaks-primary-palette);
-$copyleaks-warn: mat.define-palette($copyleaks-warn-palette);
+$copyleaks-primary: mat.m2-define-palette($copyleaks-primary-palette);
+$copyleaks-accent: mat.m2-define-palette($copyleaks-primary-palette);
+$copyleaks-warn: mat.m2-define-palette($copyleaks-warn-palette);
 
 // 3. Typography config
-$copyleaks-typography: mat.define-typography-config(
+$copyleaks-typography: mat.m2-define-typography-config(
 	$font-family: '"haboro-soft", "Almarai", sans-serif',
 );
 
 // 4. Theme object
-$copyleaks-theme: mat.define-light-theme(
+$copyleaks-theme: mat.m2-define-light-theme(
 	(
 		color: (
 			primary: $copyleaks-primary,

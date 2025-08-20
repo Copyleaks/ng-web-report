@@ -11,7 +11,8 @@ import * as helpers from '../utils/highlight-helpers';
 import { untilDestroy } from '../utils/until-destroy';
 
 @Directive({
-	selector: '[crSuspectTextHelper]',
+    selector: '[crSuspectTextHelper]',
+    standalone: false
 })
 export class SuspectTextHelperDirective implements AfterContentInit, OnDestroy {
 	@Input() public host: { currentPage: number };

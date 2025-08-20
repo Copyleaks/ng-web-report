@@ -10,7 +10,8 @@ import { findRespectiveStart } from '../utils/report-match-helpers';
 import { untilDestroy } from '../utils/until-destroy';
 
 @Directive({
-	selector: '[crSuspectHtmlHelper]',
+    selector: '[crSuspectHtmlHelper]',
+    standalone: false
 })
 export class SuspectHtmlHelperComponent implements OnInit, OnDestroy {
 	constructor(

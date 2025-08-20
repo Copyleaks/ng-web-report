@@ -27,9 +27,10 @@ import {
 import { ReportViewService } from '../../../services/report-view.service';
 
 @Component({
-	selector: 'cr-categories-analysis-panel',
-	templateUrl: './cr-categories-analysis-panel.component.html',
-	styleUrls: ['./cr-categories-analysis-panel.component.scss'],
+    selector: 'cr-categories-analysis-panel',
+    templateUrl: './cr-categories-analysis-panel.component.html',
+    styleUrls: ['./cr-categories-analysis-panel.component.scss'],
+    standalone: false
 })
 export class CrCategoriesAnalysisTypePanelComponent implements OnInit, OnChanges {
 	@HostBinding('style.display')

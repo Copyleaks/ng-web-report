@@ -9,9 +9,10 @@ import { ReportMatchHighlightService } from '../../../services/report-match-high
 import { IWritingFeedbackTypeStatistics } from '../../../models/report-statistics.models';
 
 @Component({
-	selector: 'cr-corrections-actions',
-	templateUrl: './cr-corrections-actions.component.html',
-	styleUrls: ['./cr-corrections-actions.component.scss'],
+    selector: 'cr-corrections-actions',
+    templateUrl: './cr-corrections-actions.component.html',
+    styleUrls: ['./cr-corrections-actions.component.scss'],
+    standalone: false
 })
 export class CrCorrectionsActionsComponent implements OnInit {
 	/**

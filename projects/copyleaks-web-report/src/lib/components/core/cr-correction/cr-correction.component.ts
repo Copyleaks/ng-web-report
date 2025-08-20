@@ -10,15 +10,16 @@ import { ReportMatchHighlightService } from '../../../services/report-match-high
 import { ReportViewService } from '../../../services/report-view.service';
 
 @Component({
-	selector: 'cr-correction',
-	templateUrl: './cr-correction.component.html',
-	styleUrls: ['./cr-correction.component.scss'],
-	animations: [
-		trigger('fadeIn', [
-			state('void', style({ opacity: 0 })),
-			transition(':enter', [animate('0.5s ease-in', style({ opacity: 1 }))]),
-		]),
-	],
+    selector: 'cr-correction',
+    templateUrl: './cr-correction.component.html',
+    styleUrls: ['./cr-correction.component.scss'],
+    animations: [
+        trigger('fadeIn', [
+            state('void', style({ opacity: 0 })),
+            transition(':enter', [animate('0.5s ease-in', style({ opacity: 1 }))]),
+        ]),
+    ],
+    standalone: false
 })
 /**
  * Represents the correction component used for displaying and interacting with a writing feedback correction.

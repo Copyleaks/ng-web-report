@@ -4,9 +4,10 @@ import { ReportViewService } from '../../../services/report-view.service';
 import { untilDestroy } from '../../../utils/until-destroy';
 
 @Component({
-	selector: 'copyleaks-report-alerts-container',
-	templateUrl: './report-alerts-container.component.html',
-	styleUrls: ['./report-alerts-container.component.scss'],
+    selector: 'copyleaks-report-alerts-container',
+    templateUrl: './report-alerts-container.component.html',
+    styleUrls: ['./report-alerts-container.component.scss'],
+    standalone: false
 })
 export class ReportAlertsContainerComponent implements OnInit {
 	@HostBinding('style.display')

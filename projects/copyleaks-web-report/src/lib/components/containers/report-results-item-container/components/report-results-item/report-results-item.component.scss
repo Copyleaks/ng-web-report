@@ -149,6 +149,7 @@
 								::ng-deep {
 									.mdc-evolution-chip__text-label,
 									.mat-mdc-chip-action-label {
+										display: block !important;
 										white-space: nowrap !important;
 										overflow: hidden !important;
 										text-overflow: ellipsis !important;

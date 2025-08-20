@@ -9,6 +9,15 @@
 		.mdc-checkbox__background {
 			height: 15px !important;
 			width: 15px !important;
+			padding: 0px !important;
+			margin: 0px !important;
+			top: 0px !important;
+			left: 0px !important;
+
+			input {
+				height: 15px !important;
+				width: 15px !important;
+			}
 		}
 		.mat-mdc-checkbox .mdc-checkbox__background,
 		.mat-mdc-option-pseudo-checkbox .mdc-checkbox__background,

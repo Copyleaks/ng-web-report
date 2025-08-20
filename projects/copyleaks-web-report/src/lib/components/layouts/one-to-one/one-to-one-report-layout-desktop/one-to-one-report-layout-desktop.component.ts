@@ -11,9 +11,10 @@ import { EReportMode } from '../../../../enums/copyleaks-web-report.enums';
 import { ReportErrorsService } from '../../../../services/report-errors.service';
 
 @Component({
-	selector: 'copyleaks-one-to-one-report-layout-desktop',
-	templateUrl: './one-to-one-report-layout-desktop.component.html',
-	styleUrls: ['./one-to-one-report-layout-desktop.component.scss'],
+    selector: 'copyleaks-one-to-one-report-layout-desktop',
+    templateUrl: './one-to-one-report-layout-desktop.component.html',
+    styleUrls: ['./one-to-one-report-layout-desktop.component.scss'],
+    standalone: false
 })
 export class OneToOneReportLayoutDesktopComponent
 	extends OneToOneReportLayoutBaseComponent

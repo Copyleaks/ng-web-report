@@ -12,9 +12,10 @@ import { getCorrectionCategoryDescription, getCorrectionCategoryTitle } from '..
 import { IWritingFeedbackTypeStatistics } from '../../models/report-statistics.models';
 
 @Component({
-	selector: 'cr-filter-corrections-dialog',
-	templateUrl: './filter-corrections-dialog.component.html',
-	styleUrls: ['./filter-corrections-dialog.component.scss'],
+    selector: 'cr-filter-corrections-dialog',
+    templateUrl: './filter-corrections-dialog.component.html',
+    styleUrls: ['./filter-corrections-dialog.component.scss'],
+    standalone: false
 })
 export class FilterCorrectionsDialogComponent implements OnInit, OnDestroy {
 	isMobile: boolean;

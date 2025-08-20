@@ -29,15 +29,16 @@ import { IWritingFeedbackTypeStatistics } from '../../../models/report-statistic
 import { ReportViewService } from '../../../services/report-view.service';
 
 @Component({
-	selector: 'copyleaks-report-corrections-container',
-	templateUrl: './report-corrections-container.component.html',
-	styleUrls: ['./report-corrections-container.component.scss'],
-	animations: [
-		trigger('fadeIn', [
-			state('void', style({ opacity: 0 })),
-			transition(':enter', [animate('0.5s ease-in', style({ opacity: 1 }))]),
-		]),
-	],
+    selector: 'copyleaks-report-corrections-container',
+    templateUrl: './report-corrections-container.component.html',
+    styleUrls: ['./report-corrections-container.component.scss'],
+    animations: [
+        trigger('fadeIn', [
+            state('void', style({ opacity: 0 })),
+            transition(':enter', [animate('0.5s ease-in', style({ opacity: 1 }))]),
+        ]),
+    ],
+    standalone: false
 })
 export class ReportCorrectionsContainerComponent implements OnInit, OnDestroy, OnChanges, AfterViewInit {
 	@ViewChild(CdkVirtualScrollViewport, { static: false }) viewport: CdkVirtualScrollViewport;

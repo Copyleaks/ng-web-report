@@ -19,9 +19,10 @@ import { ReportMatchHighlightService } from '../../../../services/report-match-h
 import { untilDestroy } from '../../../../utils/until-destroy';
 
 @Component({
-	selector: 'cr-excluded-results-dailog',
-	templateUrl: './excluded-results-dailog.component.html',
-	styleUrls: ['./excluded-results-dailog.component.scss'],
+    selector: 'cr-excluded-results-dailog',
+    templateUrl: './excluded-results-dailog.component.html',
+    styleUrls: ['./excluded-results-dailog.component.scss'],
+    standalone: false
 })
 export class ExcludedResultsDailogComponent implements OnInit, AfterViewInit {
 	/**

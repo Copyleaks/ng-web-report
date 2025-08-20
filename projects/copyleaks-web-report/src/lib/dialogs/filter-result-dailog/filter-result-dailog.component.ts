@@ -19,26 +19,24 @@ import { PercentPipe } from '@angular/common';
 import { RESULT_TAGS_CODES } from '../../constants/report-result-tags.constants';
 
 @Component({
-	selector: 'cr-filter-result-dailog',
-	templateUrl: './filter-result-dailog.component.html',
-	styleUrls: ['./filter-result-dailog.component.scss'],
-	animations: [
-		trigger('errorAnimation', [
-			transition(':enter', [
-				animate(
-					'0.5s ease-in',
-					keyframes([
-						style({ transform: 'translateY(-10px)', offset: 0.1 }),
-						style({ transform: 'translateY(0px)', offset: 0.2 }),
-						style({ transform: 'translateY(-10px)', offset: 0.3 }),
-						style({ transform: 'translateY(0px)', offset: 0.4 }),
-						style({ transform: 'translateY(-10px)', offset: 0.5 }),
-						style({ transform: 'translateY(0px)', offset: 1.0 }),
-					])
-				),
-			]),
-		]),
-	],
+    selector: 'cr-filter-result-dailog',
+    templateUrl: './filter-result-dailog.component.html',
+    styleUrls: ['./filter-result-dailog.component.scss'],
+    animations: [
+        trigger('errorAnimation', [
+            transition(':enter', [
+                animate('0.5s ease-in', keyframes([
+                    style({ transform: 'translateY(-10px)', offset: 0.1 }),
+                    style({ transform: 'translateY(0px)', offset: 0.2 }),
+                    style({ transform: 'translateY(-10px)', offset: 0.3 }),
+                    style({ transform: 'translateY(0px)', offset: 0.4 }),
+                    style({ transform: 'translateY(-10px)', offset: 0.5 }),
+                    style({ transform: 'translateY(0px)', offset: 1.0 }),
+                ])),
+            ]),
+        ]),
+    ],
+    standalone: false
 })
 export class FilterResultDailogComponent implements OnInit {
 	allTagItem: ITagItem[] = [];

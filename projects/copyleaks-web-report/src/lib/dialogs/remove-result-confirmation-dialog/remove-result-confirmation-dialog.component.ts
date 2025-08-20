@@ -3,9 +3,10 @@ import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
 import { IRemoveResultConfirmationDialogData } from './models/remove-result-confirmation-dialog.models';
 
 @Component({
-	selector: 'cr-remove-result-confirmation-dialog',
-	templateUrl: './remove-result-confirmation-dialog.component.html',
-	styleUrls: ['./remove-result-confirmation-dialog.component.scss'],
+    selector: 'cr-remove-result-confirmation-dialog',
+    templateUrl: './remove-result-confirmation-dialog.component.html',
+    styleUrls: ['./remove-result-confirmation-dialog.component.scss'],
+    standalone: false
 })
 export class RemoveResultConfirmationDialogComponent implements OnInit {
 	deleting: boolean = false;

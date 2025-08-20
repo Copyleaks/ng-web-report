@@ -17,9 +17,10 @@ import { ReportDataService } from '../../../../../services/report-data.service';
 import { MatChip } from '@angular/material/chips';
 
 @Component({
-	selector: 'cr-report-expand-result-item',
-	templateUrl: './report-expand-result-item.component.html',
-	styleUrls: ['./report-expand-result-item.component.scss'],
+    selector: 'cr-report-expand-result-item',
+    templateUrl: './report-expand-result-item.component.html',
+    styleUrls: ['./report-expand-result-item.component.scss'],
+    standalone: false
 })
 export class ReportExpandResultItemComponent implements OnInit, OnChanges {
 	/**

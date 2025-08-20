@@ -12,9 +12,10 @@ import { ReportErrorsService } from '../../../../services/report-errors.service'
 import { MatTooltip } from '@angular/material/tooltip';
 
 @Component({
-	selector: 'copyleaks-one-to-many-report-layout-mobile',
-	templateUrl: './one-to-many-report-layout-mobile.component.html',
-	styleUrls: ['./one-to-many-report-layout-mobile.component.scss'],
+    selector: 'copyleaks-one-to-many-report-layout-mobile',
+    templateUrl: './one-to-many-report-layout-mobile.component.html',
+    styleUrls: ['./one-to-many-report-layout-mobile.component.scss'],
+    standalone: false
 })
 export class OneToManyReportLayoutMobileComponent
 	extends OneToManyReportLayoutBaseComponent

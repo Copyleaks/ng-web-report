@@ -10,9 +10,10 @@ import { ReportRealtimeResultsService } from '../../../../services/report-realti
 import { ReportErrorsService } from '../../../../services/report-errors.service';
 
 @Component({
-	selector: 'copyleaks-only-ai-report-layout-desktop',
-	templateUrl: './only-ai-report-layout-desktop.component.html',
-	styleUrls: ['./only-ai-report-layout-desktop.component.scss'],
+    selector: 'copyleaks-only-ai-report-layout-desktop',
+    templateUrl: './only-ai-report-layout-desktop.component.html',
+    styleUrls: ['./only-ai-report-layout-desktop.component.scss'],
+    standalone: false
 })
 export class OnlyAiReportLayoutDesktopComponent
 	extends OneToManyReportLayoutBaseComponent

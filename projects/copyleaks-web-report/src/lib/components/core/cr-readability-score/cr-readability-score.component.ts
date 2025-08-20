@@ -3,9 +3,10 @@ import { IReadabilityScore, IWritingFeedbackStatistics } from '../../../models/r
 import { EReadabilityLevel } from '../../../enums/copyleaks-web-report.enums';
 
 @Component({
-	selector: 'cr-readability-score',
-	templateUrl: './cr-readability-score.component.html',
-	styleUrls: ['./cr-readability-score.component.scss'],
+    selector: 'cr-readability-score',
+    templateUrl: './cr-readability-score.component.html',
+    styleUrls: ['./cr-readability-score.component.scss'],
+    standalone: false
 })
 export class CrReadabilityScoreComponent implements OnInit, OnChanges {
 	@HostBinding('style.display')

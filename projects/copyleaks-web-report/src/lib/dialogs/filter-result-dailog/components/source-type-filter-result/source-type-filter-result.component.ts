@@ -9,9 +9,10 @@ import { untilDestroy } from '../../../../utils/until-destroy';
 import { ReportDataService } from '../../../../services/report-data.service';
 
 @Component({
-	selector: 'cr-source-type-filter-result',
-	templateUrl: './source-type-filter-result.component.html',
-	styleUrls: ['./source-type-filter-result.component.scss'],
+    selector: 'cr-source-type-filter-result',
+    templateUrl: './source-type-filter-result.component.html',
+    styleUrls: ['./source-type-filter-result.component.scss'],
+    standalone: false
 })
 export class SourceTypeFilterResultComponent implements OnInit, OnDestroy {
 	/**

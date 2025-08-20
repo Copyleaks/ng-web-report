@@ -5,9 +5,10 @@ import { ReportViewService } from '../../../services/report-view.service';
 import { ReportDataService } from '../../../services/report-data.service';
 
 @Component({
-	selector: 'cr-ai-source-match-entry',
-	templateUrl: './cr-ai-source-match-entry.component.html',
-	styleUrls: ['./cr-ai-source-match-entry.component.scss'],
+    selector: 'cr-ai-source-match-entry',
+    templateUrl: './cr-ai-source-match-entry.component.html',
+    styleUrls: ['./cr-ai-source-match-entry.component.scss'],
+    standalone: false
 })
 export class CrAiSourceMatchEntryComponent implements OnInit {
 	/**

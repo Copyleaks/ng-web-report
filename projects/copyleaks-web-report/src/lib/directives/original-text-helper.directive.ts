@@ -11,7 +11,8 @@ import { IWritingFeedbackCorrectionViewModel } from '../models/report-data.model
 import { PageEvent } from '../components/core/cr-paginator/models/cr-paginator.models';
 
 @Directive({
-	selector: '[crOriginalTextHelper]',
+    selector: '[crOriginalTextHelper]',
+    standalone: false
 })
 export class OriginalTextHelperDirective implements AfterContentInit, OnDestroy {
 	@Input() public host: {

@@ -7,9 +7,10 @@ import { ReportViewService } from '../../../../../services/report-view.service';
 import { untilDestroy } from '../../../../../utils/until-destroy';
 
 @Component({
-	selector: 'cr-alert-card',
-	templateUrl: './alert-card.component.html',
-	styleUrls: ['./alert-card.component.scss'],
+    selector: 'cr-alert-card',
+    templateUrl: './alert-card.component.html',
+    styleUrls: ['./alert-card.component.scss'],
+    standalone: false
 })
 export class AlertCardComponent implements OnInit, OnDestroy {
 	@Input() alert: ICompleteResultNotificationAlert;

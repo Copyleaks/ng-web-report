@@ -5,9 +5,10 @@ import { ReportViewService } from '../../../services/report-view.service';
 import { untilDestroy } from '../../../utils/until-destroy';
 
 @Component({
-	selector: 'cr-assessment-tool-tab-score-panel',
-	templateUrl: './cr-assessment-tool-tab-score-panel.component.html',
-	styleUrls: ['./cr-assessment-tool-tab-score-panel.component.scss'],
+    selector: 'cr-assessment-tool-tab-score-panel',
+    templateUrl: './cr-assessment-tool-tab-score-panel.component.html',
+    styleUrls: ['./cr-assessment-tool-tab-score-panel.component.scss'],
+    standalone: false
 })
 export class CrAssessmentToolTabScorePanelComponent implements OnInit, OnChanges {
 	/**

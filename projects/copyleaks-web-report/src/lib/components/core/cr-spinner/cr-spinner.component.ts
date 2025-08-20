@@ -1,9 +1,10 @@
 import { Component, Input, OnInit } from '@angular/core';
 
 @Component({
-	selector: 'cr-spinner',
-	templateUrl: './cr-spinner.component.html',
-	styleUrls: ['./cr-spinner.component.scss'],
+    selector: 'cr-spinner',
+    templateUrl: './cr-spinner.component.html',
+    styleUrls: ['./cr-spinner.component.scss'],
+    standalone: false
 })
 export class CrSpinnerComponent implements OnInit {
 	/**

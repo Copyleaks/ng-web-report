@@ -33,9 +33,10 @@ import { IMatchesCategoryStatistics, IMatchesTypeStatistics } from '../../../mod
 import { RESULT_TAGS_CODES } from '../../../constants/report-result-tags.constants';
 
 @Component({
-	selector: 'copyleaks-report-results-container',
-	templateUrl: './report-results-container.component.html',
-	styleUrls: ['./report-results-container.component.scss'],
+    selector: 'copyleaks-report-results-container',
+    templateUrl: './report-results-container.component.html',
+    styleUrls: ['./report-results-container.component.scss'],
+    standalone: false
 })
 export class ReportResultsContainerComponent implements OnInit, OnChanges {
 	@HostBinding('style.display')

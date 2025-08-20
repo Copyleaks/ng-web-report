@@ -1,9 +1,10 @@
 import { Component, Input, OnInit } from '@angular/core';
 
 @Component({
-	selector: 'copyleaks-ai-percentage',
-	templateUrl: './ai-percentage.component.html',
-	styleUrls: ['./ai-percentage.component.scss'],
+    selector: 'copyleaks-ai-percentage',
+    templateUrl: './ai-percentage.component.html',
+    styleUrls: ['./ai-percentage.component.scss'],
+    standalone: false
 })
 export class AiPercentageComponent implements OnInit {
 	/**

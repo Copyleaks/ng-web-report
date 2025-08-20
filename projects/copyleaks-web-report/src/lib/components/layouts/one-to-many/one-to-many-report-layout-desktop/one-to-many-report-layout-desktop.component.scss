@@ -1,4 +1,4 @@
-@use '../../../../styles/containers.styles.scss';
+@use '../../../../styles/containers.styles.scss' as containers;
 @use '../../../../styles/website-colors.styles.scss' as *;
 
 :host {
@@ -37,7 +37,7 @@
 	gap: 8px;
 	height: 100%;
 	box-sizing: border-box;
-	@include cls-report-container-close-btn;
+	@include containers.cls-report-container-close-btn;
 
 	.results-alerts-container {
 		display: flex;
@@ -115,7 +115,7 @@
 	gap: 8px;
 	height: 100%;
 	box-sizing: border-box;
-	@include cls-report-container-close-btn;
+	@include containers.cls-report-container-close-btn;
 
 	.results-alerts-container {
 		display: flex;

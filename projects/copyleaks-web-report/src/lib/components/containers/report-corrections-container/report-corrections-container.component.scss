@@ -1,4 +1,4 @@
-@use '../../../styles/containers.styles.scss';
+@use '../../../styles/containers.styles.scss' as containers;
 @use '../../../styles/styles.scss';
 @use '../../../styles/website-colors.styles.scss' as *;
 @use '../../../styles/cls-mat-components-overrides/cls-progress-bar-overrides.scss';
@@ -166,6 +166,7 @@
 				font-style: normal;
 				font-weight: 400;
 				line-height: normal;
+				overflow-wrap: anywhere;
 			}
 		}
 	}

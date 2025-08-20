@@ -1,5 +1,5 @@
 @use '../../../styles/website-colors.styles.scss' as *;
-@use '../../../styles/containers.styles.scss';
+@use '../../../styles/containers.styles.scss' as containers;
 
 :host {
 	display: flex;
@@ -129,6 +129,7 @@
 				font-style: normal;
 				font-weight: 400;
 				line-height: normal;
+				overflow-wrap: anywhere;
 			}
 		}
 	}

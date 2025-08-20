@@ -1,3 +1,5 @@
+@use '../website-colors.styles.scss' as *;
+
 ::ng-deep {
 	.mat-mdc-tooltip.web-report-mat-tooltip .mdc-tooltip__surface {
 		font-size: 14px !important;

@@ -1,4 +1,4 @@
-@use '../../../../styles/containers.styles.scss';
+@use '../../../../styles/containers.styles.scss' as containers;
 @use '../../../../styles/website-colors.styles.scss' as *;
 
 :host {
@@ -61,7 +61,7 @@
 	}
 
 	.alerts-container {
-		@include cls-report-container-lvl-2;
+		@include containers.cls-report-container-lvl-2;
 	}
 
 	.powered-by-copyleaks-container {

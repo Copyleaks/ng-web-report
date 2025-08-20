@@ -3,10 +3,10 @@
 	"extends": "../../tsconfig.json",
 	"compilerOptions": {
 		"outDir": "../../out-tsc/lib",
-    "declarationMap": true,
+		"declarationMap": true,
 		"declaration": true,
 		"inlineSources": true,
-		"types": ["jest", "node"],
+		"types": ["@angular/localize", "jest", "node"],
 		"lib": ["dom", "es2019"]
 	},
 	"angularCompilerOptions": {

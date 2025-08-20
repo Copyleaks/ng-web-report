@@ -1,6 +1,6 @@
-@import '../../../styles/styles.scss';
-@import '../../../styles/website-colors.styles.scss';
-@import '../../../styles/cls-mat-components-overrides/cls-mat-expansion-panel-overrides.scss';
+@use '../../../styles/styles.scss';
+@use '../../../styles/website-colors.styles.scss' as *;
+@use '../../../styles/cls-mat-components-overrides/cls-mat-expansion-panel-overrides.scss';
 
 :host {
 	display: flex;

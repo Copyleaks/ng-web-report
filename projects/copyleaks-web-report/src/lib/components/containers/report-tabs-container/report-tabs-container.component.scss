@@ -1,7 +1,7 @@
-@import '../../../styles/containers.styles.scss';
-@import '../../../styles/styles.scss';
-@import '../../../styles/website-colors.styles.scss';
-@import '../../../styles/cls-mat-components-overrides/cls-progress-bar-overrides.scss';
+@use '../../../styles/containers.styles.scss';
+@use '../../../styles/styles.scss';
+@use '../../../styles/website-colors.styles.scss' as *;
+@use '../../../styles/cls-mat-components-overrides/cls-progress-bar-overrides.scss';
 
 :host {
 	display: flex;

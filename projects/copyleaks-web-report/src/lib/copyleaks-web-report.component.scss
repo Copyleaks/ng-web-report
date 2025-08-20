@@ -1,8 +1,8 @@
-@import './styles/material-theme.scss';
-@import './styles/website-colors.styles.scss';
-@import './styles/styles.scss';
-@import './styles/cls-mat-components-overrides/cls-mat-menu-overrides.scss';
-@import './styles/cls-mat-components-overrides/cls-scroll-bar-overrides.scss';
+@use './styles/material-theme.scss';
+@use './styles/website-colors.styles.scss' as *;
+@use './styles/styles.scss';
+@use './styles/cls-mat-components-overrides/cls-mat-menu-overrides.scss';
+@use './styles/cls-mat-components-overrides/cls-scroll-bar-overrides.scss';
 
 :host {
 	display: flex;

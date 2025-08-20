@@ -1,4 +1,4 @@
-@import '../../../../../styles/website-colors.styles.scss';
+@use '../../../../../styles/website-colors.styles.scss' as *;
 
 .author-alert-card-container {
 	width: 100%;

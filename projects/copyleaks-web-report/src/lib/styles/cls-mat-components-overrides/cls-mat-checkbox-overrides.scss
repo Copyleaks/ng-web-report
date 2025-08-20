@@ -1,4 +1,4 @@
-@import '../website-colors.styles.scss';
+@use '../website-colors.styles.scss' as *;
 
 :host {
 	::ng-deep {

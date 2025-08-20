@@ -1,7 +1,7 @@
-@import './website-colors.styles.scss';
+@use './website-colors.styles.scss' as *;
 @import url('https://fonts.googleapis.com/css?family=Material+Icons|Material+Icons+Outlined|Material+Icons+Two+Tone|Material+Icons+Round|Material+Icons+Sharp');
-@import './fonts/haboro-soft-fonts.scss';
-@import './fonts/almarai-fonts.scss';
+@use './fonts/haboro-soft-fonts.scss';
+@use './fonts/almarai-fonts.scss';
 
 .cls-report-container-lvl-1 {
 	background-color: #dce8fc;

@@ -1,10 +1,10 @@
-@import '../../styles/website-colors.styles.scss';
-@import '../../styles/styles.scss';
-@import '../../styles/cls-mat-components-overrides//cls-mat-slide-toggle-overrides.scss';
-@import '../../styles/cls-mat-components-overrides/cls-scroll-bar-overrides.scss';
-@import '../../styles/cls-mat-components-overrides/cls-mat-chip-overrides.scss';
-@import '../../styles/cls-mat-components-overrides/cls-mat-checkbox-overrides.scss';
-@import '../../styles/cls-mat-components-overrides/cls-mat-expansion-panel-overrides.scss';
+@use '../../styles/website-colors.styles.scss' as *;
+@use '../../styles/styles.scss';
+@use '../../styles/cls-mat-components-overrides//cls-mat-slide-toggle-overrides.scss';
+@use '../../styles/cls-mat-components-overrides/cls-scroll-bar-overrides.scss';
+@use '../../styles/cls-mat-components-overrides/cls-mat-chip-overrides.scss';
+@use '../../styles/cls-mat-components-overrides/cls-mat-checkbox-overrides.scss';
+@use '../../styles/cls-mat-components-overrides/cls-mat-expansion-panel-overrides.scss';
 
 :host {
 	display: flex;

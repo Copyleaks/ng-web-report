@@ -1,5 +1,5 @@
-@import '../../../../styles/website-colors.styles.scss';
-@import '../../../../styles/cls-mat-components-overrides/cls-mat-checkbox-overrides.scss';
+@use '../../../../styles/website-colors.styles.scss' as *;
+@use '../../../../styles/cls-mat-components-overrides/cls-mat-checkbox-overrides.scss';
 
 .results-container {
 	width: 100%;

@@ -1,8 +1,9 @@
-@import '../../../styles/containers.styles.scss';
-@import '../../../styles/styles.scss';
-@import '../../../styles/website-colors.styles.scss';
-@import '../../../styles/cls-mat-components-overrides/cls-mat-buttons-overrides.scss';
-@import '../../../styles/cls-accessibility-overrides/cls-accessibility-overrides.scss';
+@use '../../../styles/containers.styles.scss';
+@use '../../../styles/styles.scss';
+@use '../../../styles/website-colors.styles.scss' as *;
+@use '../../../styles/cls-mat-components-overrides/cls-mat-buttons-overrides.scss';
+@use '../../../styles/cls-accessibility-overrides/cls-accessibility-overrides.scss';
+@use 'sass:color';
 
 :host {
 	height: 100%;
@@ -308,7 +309,7 @@
 					background-color: #3f9af566 !important;
 
 					&:hover {
-						background-color: lighten(#3f9af566, 10%) !important;
+						background-color: color.adjust(#3f9af566, $lightness: 10%) !important;
 					}
 				}
 			}
@@ -323,7 +324,7 @@
 				background-color: $color-match-selected;
 
 				&:hover {
-					background-color: lighten($color-match-selected, 10%);
+					background-color: color.adjust($color-match-selected, $lightness: 10%);
 				}
 			}
 		}

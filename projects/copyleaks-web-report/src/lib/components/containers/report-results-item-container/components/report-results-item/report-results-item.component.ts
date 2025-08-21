@@ -29,16 +29,16 @@ import { DatePipe } from '@angular/common';
 import { RESULT_TAGS_CODES } from '../../../../../constants/report-result-tags.constants';
 
 @Component({
-    selector: 'cr-report-results-item',
-    templateUrl: './report-results-item.component.html',
-    styleUrls: ['./report-results-item.component.scss'],
-    animations: [
-        trigger('fadeIn', [
-            state('void', style({ opacity: 0 })),
-            transition(':enter', [animate('0.5s ease-in', style({ opacity: 1 }))]),
-        ]),
-    ],
-    standalone: false
+	selector: 'cr-report-results-item',
+	templateUrl: './report-results-item.component.html',
+	styleUrls: ['./report-results-item.component.scss'],
+	animations: [
+		trigger('fadeIn', [
+			state('void', style({ opacity: 0 })),
+			transition(':enter', [animate('0.5s ease-in', style({ opacity: 1 }))]),
+		]),
+	],
+	standalone: false,
 })
 export class ReportResultsItemComponent implements OnInit, OnChanges, OnDestroy {
 	@ViewChild(MatMenuTrigger) public resultItemMenuTrigger: MatMenuTrigger;

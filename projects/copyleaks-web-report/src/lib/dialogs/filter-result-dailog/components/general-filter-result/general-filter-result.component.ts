@@ -3,10 +3,10 @@ import { EFilterResultForm } from '../../models/filter-result-dailog.enum';
 import { FilterResultDailogService } from '../../services/filter-result-dailog.service';
 
 @Component({
-    selector: 'cr-general-filter-result',
-    templateUrl: './general-filter-result.component.html',
-    styleUrls: ['./general-filter-result.component.scss'],
-    standalone: false
+	selector: 'cr-general-filter-result',
+	templateUrl: './general-filter-result.component.html',
+	styleUrls: ['./general-filter-result.component.scss'],
+	standalone: false,
 })
 export class GeneralFilterResultComponent implements OnInit {
 	/**

@@ -18,16 +18,16 @@ import { ReportDataService } from '../../../services/report-data.service';
 import { trigger, state, transition, animate, style } from '@angular/animations';
 
 @Component({
-    selector: 'copyleaks-report-tabs-container',
-    templateUrl: './report-tabs-container.component.html',
-    styleUrls: ['./report-tabs-container.component.scss'],
-    animations: [
-        trigger('fadeIn', [
-            state('void', style({ opacity: 0 })),
-            transition(':enter', [animate('0.5s ease-in', style({ opacity: 1 }))]),
-        ]),
-    ],
-    standalone: false
+	selector: 'copyleaks-report-tabs-container',
+	templateUrl: './report-tabs-container.component.html',
+	styleUrls: ['./report-tabs-container.component.scss'],
+	animations: [
+		trigger('fadeIn', [
+			state('void', style({ opacity: 0 })),
+			transition(':enter', [animate('0.5s ease-in', style({ opacity: 1 }))]),
+		]),
+	],
+	standalone: false,
 })
 export class ReportTabsContainerComponent implements OnInit, OnDestroy, OnChanges {
 	/**

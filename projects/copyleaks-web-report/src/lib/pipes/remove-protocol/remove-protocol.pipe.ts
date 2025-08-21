@@ -1,8 +1,8 @@
 import { Pipe, PipeTransform } from '@angular/core';
 
 @Pipe({
-    name: 'removeProtocol',
-    standalone: false
+	name: 'removeProtocol',
+	standalone: false,
 })
 export class RemoveProtocolPipe implements PipeTransform {
 	transform(url: string): string {

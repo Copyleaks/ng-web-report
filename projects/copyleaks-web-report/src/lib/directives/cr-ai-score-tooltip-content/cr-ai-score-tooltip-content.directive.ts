@@ -4,8 +4,8 @@ import { CrAIScoreTooltipContentComponent } from './cr-ai-score-tooltip-content.
 import { ComponentPortal } from '@angular/cdk/portal';
 
 @Directive({
-    selector: '[crAIScoreTooltipContent]',
-    standalone: false
+	selector: '[crAIScoreTooltipContent]',
+	standalone: false,
 })
 export class CrAIScoreTooltipContentDirective {
 	private _overlayRef: OverlayRef;

@@ -38,20 +38,20 @@ import { IResourceStartExplainableAIVideo } from './models/report-ai-results.mod
 import { ReportAIResultsService } from './services/report-ai-results.service';
 
 @Component({
-    selector: 'copyleaks-web-report',
-    templateUrl: './copyleaks-web-report.component.html',
-    styleUrls: ['./copyleaks-web-report.component.scss'],
-    providers: [
-        ReportErrorsService,
-        ReportViewService,
-        ReportDataService,
-        ReportNgTemplatesService,
-        ReportMatchesService,
-        ReportMatchHighlightService,
-        ReportStatisticsService,
-        ReportAIResultsService,
-    ],
-    standalone: false
+	selector: 'copyleaks-web-report',
+	templateUrl: './copyleaks-web-report.component.html',
+	styleUrls: ['./copyleaks-web-report.component.scss'],
+	providers: [
+		ReportErrorsService,
+		ReportViewService,
+		ReportDataService,
+		ReportNgTemplatesService,
+		ReportMatchesService,
+		ReportMatchHighlightService,
+		ReportStatisticsService,
+		ReportAIResultsService,
+	],
+	standalone: false,
 })
 export class CopyleaksWebReportComponent implements OnInit, OnDestroy {
 	@ViewChild('customActionsTemplate', { static: true }) customActionsTemplate: TemplateRef<any>;

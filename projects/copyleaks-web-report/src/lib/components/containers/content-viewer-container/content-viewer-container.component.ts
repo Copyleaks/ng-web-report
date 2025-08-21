@@ -48,16 +48,16 @@ import * as rangyclassapplier from 'rangy/lib/rangy-classapplier';
 import { ALERTS } from '../../../constants/report-alerts.constants';
 
 @Component({
-    selector: 'copyleaks-content-viewer-container',
-    templateUrl: './content-viewer-container.component.html',
-    styleUrls: ['./content-viewer-container.component.scss'],
-    animations: [
-        trigger('fadeIn', [
-            state('void', style({ opacity: 0 })),
-            transition(':enter', [animate('0.5s ease-in', style({ opacity: 1 }))]),
-        ]),
-    ],
-    standalone: false
+	selector: 'copyleaks-content-viewer-container',
+	templateUrl: './content-viewer-container.component.html',
+	styleUrls: ['./content-viewer-container.component.scss'],
+	animations: [
+		trigger('fadeIn', [
+			state('void', style({ opacity: 0 })),
+			transition(':enter', [animate('0.5s ease-in', style({ opacity: 1 }))]),
+		]),
+	],
+	standalone: false,
 })
 export class ContentViewerContainerComponent implements OnInit, AfterViewInit, OnChanges {
 	@HostBinding('style.flex-grow')

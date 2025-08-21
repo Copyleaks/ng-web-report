@@ -7,10 +7,10 @@ import { untilDestroy } from '../../../../utils/until-destroy';
 import { Observable } from 'rxjs';
 
 @Component({
-    selector: 'cr-included-tags-filter-result',
-    templateUrl: './included-tags-filter-result.component.html',
-    styleUrls: ['./included-tags-filter-result.component.scss'],
-    standalone: false
+	selector: 'cr-included-tags-filter-result',
+	templateUrl: './included-tags-filter-result.component.html',
+	styleUrls: ['./included-tags-filter-result.component.scss'],
+	standalone: false,
 })
 export class IncludedTagsFilterResultComponent implements OnInit, OnChanges {
 	/**

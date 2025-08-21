@@ -10,10 +10,10 @@ import { ReportRealtimeResultsService } from '../../../../services/report-realti
 import { ReportErrorsService } from '../../../../services/report-errors.service';
 
 @Component({
-    selector: 'copyleaks-only-ai-report-layout-mobile',
-    templateUrl: './only-ai-report-layout-mobile.component.html',
-    styleUrls: ['./only-ai-report-layout-mobile.component.scss'],
-    standalone: false
+	selector: 'copyleaks-only-ai-report-layout-mobile',
+	templateUrl: './only-ai-report-layout-mobile.component.html',
+	styleUrls: ['./only-ai-report-layout-mobile.component.scss'],
+	standalone: false,
 })
 export class OnlyAiReportLayoutMobileComponent extends OneToManyReportLayoutBaseComponent implements OnInit, OnDestroy {
 	@Input() companyLogo: string = null;

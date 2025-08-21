@@ -3,10 +3,10 @@ import { EFilterResultForm } from '../../models/filter-result-dailog.enum';
 import { FilterResultDailogService } from '../../services/filter-result-dailog.service';
 
 @Component({
-    selector: 'cr-match-type-filter-result',
-    templateUrl: './match-type-filter-result.component.html',
-    styleUrls: ['./match-type-filter-result.component.scss'],
-    standalone: false
+	selector: 'cr-match-type-filter-result',
+	templateUrl: './match-type-filter-result.component.html',
+	styleUrls: ['./match-type-filter-result.component.scss'],
+	standalone: false,
 })
 export class MatchTypeFilterResultComponent implements OnInit {
 	/**

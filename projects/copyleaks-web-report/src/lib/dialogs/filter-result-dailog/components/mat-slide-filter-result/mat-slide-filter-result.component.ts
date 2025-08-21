@@ -3,17 +3,17 @@ import { ControlValueAccessor, NG_VALUE_ACCESSOR } from '@angular/forms';
 import { MatSlideToggleChange } from '@angular/material/slide-toggle';
 
 @Component({
-    selector: 'cr-mat-slide-filter-result',
-    templateUrl: './mat-slide-filter-result.component.html',
-    styleUrls: ['./mat-slide-filter-result.component.scss'],
-    providers: [
-        {
-            provide: NG_VALUE_ACCESSOR,
-            useExisting: forwardRef(() => MatSlideFilterResultComponent),
-            multi: true,
-        },
-    ],
-    standalone: false
+	selector: 'cr-mat-slide-filter-result',
+	templateUrl: './mat-slide-filter-result.component.html',
+	styleUrls: ['./mat-slide-filter-result.component.scss'],
+	providers: [
+		{
+			provide: NG_VALUE_ACCESSOR,
+			useExisting: forwardRef(() => MatSlideFilterResultComponent),
+			multi: true,
+		},
+	],
+	standalone: false,
 })
 export class MatSlideFilterResultComponent implements OnInit, ControlValueAccessor {
 	/**
@@ -68,8 +68,8 @@ export class MatSlideFilterResultComponent implements OnInit, ControlValueAccess
 }
 
 @Component({
-    selector: 'mat-slide-logo',
-    template: '<ng-content></ng-content>',
-    standalone: false
+	selector: 'mat-slide-logo',
+	template: '<ng-content></ng-content>',
+	standalone: false,
 })
 export class MatSlideLogoFilterResultComponent {}

@@ -15,8 +15,8 @@ import { EReportScoreTooltipPosition, EResponsiveLayoutType } from '../../enums/
 import { ReportViewService } from '../../services/report-view.service';
 
 @Directive({
-    selector: '[crReportScoreTooltip]',
-    standalone: false
+	selector: '[crReportScoreTooltip]',
+	standalone: false,
 })
 export class ReportScoreTooltipDirective implements OnDestroy {
 	@Input() crReportScoreTooltip: IReportScoreTooltipModel | null = null;

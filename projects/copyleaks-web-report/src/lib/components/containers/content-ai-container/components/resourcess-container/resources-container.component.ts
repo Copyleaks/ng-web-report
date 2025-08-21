@@ -4,10 +4,10 @@ import { MatTooltip } from '@angular/material/tooltip';
 import { ReportAIResultsService } from '../../../../../services/report-ai-results.service';
 
 @Component({
-    selector: 'copyleaks-resources-container',
-    templateUrl: './resources-container.component.html',
-    styleUrls: ['./resources-container.component.scss'],
-    standalone: false
+	selector: 'copyleaks-resources-container',
+	templateUrl: './resources-container.component.html',
+	styleUrls: ['./resources-container.component.scss'],
+	standalone: false,
 })
 export class ResourcesContainerComponent implements OnInit {
 	/**

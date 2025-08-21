@@ -6,7 +6,7 @@
 		"declarationMap": true,
 		"declaration": true,
 		"inlineSources": true,
-		"types": ["@angular/localize", "jest", "node"],
+		"types": ["@angular/localize"],
 		"lib": ["dom", "es2019"]
 	},
 	"angularCompilerOptions": {

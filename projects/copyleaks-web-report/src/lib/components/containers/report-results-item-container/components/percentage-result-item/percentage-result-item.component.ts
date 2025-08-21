@@ -8,10 +8,10 @@ import { untilDestroy } from '../../../../../utils/until-destroy';
 import { EReportScoreTooltipPosition } from '../../../../../enums/copyleaks-web-report.enums';
 
 @Component({
-    selector: 'cr-percentage-result-item',
-    templateUrl: './percentage-result-item.component.html',
-    styleUrls: ['./percentage-result-item.component.scss'],
-    standalone: false
+	selector: 'cr-percentage-result-item',
+	templateUrl: './percentage-result-item.component.html',
+	styleUrls: ['./percentage-result-item.component.scss'],
+	standalone: false,
 })
 export class PercentageResultItemComponent implements OnInit, OnChanges {
 	/**

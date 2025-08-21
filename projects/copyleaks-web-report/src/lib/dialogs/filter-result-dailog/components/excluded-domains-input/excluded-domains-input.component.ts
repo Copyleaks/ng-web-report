@@ -4,25 +4,28 @@ import { FilterResultDailogService } from '../../services/filter-result-dailog.s
 import { trigger, transition, animate, keyframes, style } from '@angular/animations';
 
 @Component({
-    selector: 'cr-excluded-domains-input',
-    templateUrl: './excluded-domains-input.component.html',
-    styleUrls: ['./excluded-domains-input.component.scss'],
-    animations: [
-        trigger('fadeIn', [transition(':enter', [style({ opacity: 0 }), animate('0.5s', style({ opacity: 1 }))])]),
-        trigger('errorAnimation', [
-            transition(':enter', [
-                animate('0.5s ease-in', keyframes([
-                    style({ transform: 'translateY(-10px)', offset: 0.1 }),
-                    style({ transform: 'translateY(0px)', offset: 0.2 }),
-                    style({ transform: 'translateY(-10px)', offset: 0.3 }),
-                    style({ transform: 'translateY(0px)', offset: 0.4 }),
-                    style({ transform: 'translateY(-10px)', offset: 0.5 }),
-                    style({ transform: 'translateY(0px)', offset: 1.0 }),
-                ])),
-            ]),
-        ]),
-    ],
-    standalone: false
+	selector: 'cr-excluded-domains-input',
+	templateUrl: './excluded-domains-input.component.html',
+	styleUrls: ['./excluded-domains-input.component.scss'],
+	animations: [
+		trigger('fadeIn', [transition(':enter', [style({ opacity: 0 }), animate('0.5s', style({ opacity: 1 }))])]),
+		trigger('errorAnimation', [
+			transition(':enter', [
+				animate(
+					'0.5s ease-in',
+					keyframes([
+						style({ transform: 'translateY(-10px)', offset: 0.1 }),
+						style({ transform: 'translateY(0px)', offset: 0.2 }),
+						style({ transform: 'translateY(-10px)', offset: 0.3 }),
+						style({ transform: 'translateY(0px)', offset: 0.4 }),
+						style({ transform: 'translateY(-10px)', offset: 0.5 }),
+						style({ transform: 'translateY(0px)', offset: 1.0 }),
+					])
+				),
+			]),
+		]),
+	],
+	standalone: false,
 })
 export class ExcludedDomainsInputComponent implements OnInit {
 	addDomainControl = new UntypedFormControl('');

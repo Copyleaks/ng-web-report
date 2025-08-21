@@ -3,10 +3,10 @@ import { ReportViewService } from '../../../../../services/report-view.service';
 import { untilDestroy } from '../../../../../utils/until-destroy';
 
 @Component({
-    selector: 'cr-custom-tab-item',
-    templateUrl: './cr-custom-tab-item.component.html',
-    styleUrls: ['./cr-custom-tab-item.component.scss'],
-    standalone: false
+	selector: 'cr-custom-tab-item',
+	templateUrl: './cr-custom-tab-item.component.html',
+	styleUrls: ['./cr-custom-tab-item.component.scss'],
+	standalone: false,
 })
 export class CrCustomTabItemComponent implements OnInit {
 	@ViewChild('tabTemplateTitle', { static: true }) tabTemplateTitle: TemplateRef<any>;
@@ -78,12 +78,12 @@ export class CrCustomTabItemComponent implements OnInit {
 }
 
 @Component({
-    selector: 'cr-custom-tab-item-title',
-    template: `
+	selector: 'cr-custom-tab-item-title',
+	template: `
 		<ng-content></ng-content>
 	`,
-    styleUrls: ['./cr-custom-tab-item.component.scss'],
-    standalone: false
+	styleUrls: ['./cr-custom-tab-item.component.scss'],
+	standalone: false,
 })
 export class CrCustomTabItemTitleComponent implements OnInit {
 	constructor() {}
@@ -92,12 +92,12 @@ export class CrCustomTabItemTitleComponent implements OnInit {
 }
 
 @Component({
-    selector: 'cr-custom-tab-item-content',
-    template: `
+	selector: 'cr-custom-tab-item-content',
+	template: `
 		<ng-content></ng-content>
 	`,
-    styleUrls: ['./cr-custom-tab-item.component.scss'],
-    standalone: false
+	styleUrls: ['./cr-custom-tab-item.component.scss'],
+	standalone: false,
 })
 export class CrCustomTabItemContentComponent implements OnInit {
 	constructor() {}
@@ -106,12 +106,12 @@ export class CrCustomTabItemContentComponent implements OnInit {
 }
 
 @Component({
-    selector: 'cr-custom-tab-item-result-section-content',
-    template: `
+	selector: 'cr-custom-tab-item-result-section-content',
+	template: `
 		<ng-content></ng-content>
 	`,
-    styleUrls: ['./cr-custom-tab-item.component.scss'],
-    standalone: false
+	styleUrls: ['./cr-custom-tab-item.component.scss'],
+	standalone: false,
 })
 export class CrCustomTabItemResultSectionComponent implements OnInit {
 	constructor() {}

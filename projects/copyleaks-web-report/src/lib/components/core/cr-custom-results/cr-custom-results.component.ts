@@ -17,10 +17,10 @@ import { IResultsActions } from '../../containers/report-results-container/compo
 import { ECustomResultsReportView } from './models/cr-custom-results.enums';
 
 @Component({
-    selector: 'cr-custom-results',
-    templateUrl: './cr-custom-results.component.html',
-    styleUrls: ['./cr-custom-results.component.scss'],
-    standalone: false
+	selector: 'cr-custom-results',
+	templateUrl: './cr-custom-results.component.html',
+	styleUrls: ['./cr-custom-results.component.scss'],
+	standalone: false,
 })
 export class CrCustomResultsComponent implements OnInit, OnChanges, AfterViewInit, OnDestroy {
 	@Input() reportView: ECustomResultsReportView = ECustomResultsReportView.Partial;

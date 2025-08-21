@@ -19,7 +19,9 @@
 				<ng-container *ngIf="showMatChipList && matChipList && matChipList.length > 0">
 					<mat-chip-listbox class="my-chip-list" role="listbox">
 						<div fxLayout="row" fxLayoutGap="8px">
-							<mat-chip-option class="mat-chip-severity" *ngFor="let item of matChipList">{{ item | decodeUri }}</mat-chip-option>
+							<mat-chip-option class="mat-chip-severity" *ngFor="let item of matChipList">
+								{{ item | decodeUri }}
+							</mat-chip-option>
 						</div>
 					</mat-chip-listbox>
 				</ng-container>

@@ -5,10 +5,10 @@ import { ClsButtonColor } from './models/cr-button.models';
  * Class representing a new design for the Copyleaks Button.
  */
 @Component({
-    selector: 'cr-button',
-    templateUrl: './cr-button.component.html',
-    styleUrls: ['./cr-button.component.scss'],
-    standalone: false
+	selector: 'cr-button',
+	templateUrl: './cr-button.component.html',
+	styleUrls: ['./cr-button.component.scss'],
+	standalone: false,
 })
 export class CrButtonComponent implements OnInit {
 	/**

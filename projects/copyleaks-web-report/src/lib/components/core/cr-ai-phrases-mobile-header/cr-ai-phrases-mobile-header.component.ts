@@ -5,10 +5,10 @@ import { ReportViewService } from '../../../services/report-view.service';
 import { ReportDataService } from '../../../services/report-data.service';
 
 @Component({
-    selector: 'cr-ai-phrases-mobile-header',
-    templateUrl: './cr-ai-phrases-mobile-header.component.html',
-    styleUrls: ['./cr-ai-phrases-mobile-header.component.scss'],
-    standalone: false
+	selector: 'cr-ai-phrases-mobile-header',
+	templateUrl: './cr-ai-phrases-mobile-header.component.html',
+	styleUrls: ['./cr-ai-phrases-mobile-header.component.scss'],
+	standalone: false,
 })
 export class CrAiPhrasesMobileHeaderComponent implements OnInit, OnChanges {
 	/**

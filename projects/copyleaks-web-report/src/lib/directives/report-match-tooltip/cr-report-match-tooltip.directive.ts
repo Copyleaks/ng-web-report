@@ -5,8 +5,8 @@ import { CrReportMatchTooltipContentComponent } from './cr-report-match-tooltip-
 import { MatchType } from '../../models/report-matches.models';
 
 @Directive({
-    selector: '[crReportMatchTooltip]',
-    standalone: false
+	selector: '[crReportMatchTooltip]',
+	standalone: false,
 })
 export class CrReportMatchTooltipDirective {
 	/**

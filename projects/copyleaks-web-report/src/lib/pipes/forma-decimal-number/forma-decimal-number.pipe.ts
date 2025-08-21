@@ -1,8 +1,8 @@
 import { Pipe, PipeTransform } from '@angular/core';
 
 @Pipe({
-    name: 'formaDecimalNumber',
-    standalone: false
+	name: 'formaDecimalNumber',
+	standalone: false,
 })
 export class FormaDecimalNumberPipe implements PipeTransform {
 	transform(value: number): string {

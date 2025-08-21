@@ -12,8 +12,8 @@ import * as helpers from '../utils/highlight-helpers';
 import { untilDestroy } from '../utils/until-destroy';
 
 @Directive({
-    selector: '[crSourceTextHelper]',
-    standalone: false
+	selector: '[crSourceTextHelper]',
+	standalone: false,
 })
 export class SourceTextHelperDirective implements AfterContentInit, OnDestroy {
 	@ContentChildren(CrTextMatchComponent)

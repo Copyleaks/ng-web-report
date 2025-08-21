@@ -13,10 +13,10 @@ import { ReportNgTemplatesService } from '../../../services/report-ng-templates.
 import { untilDestroy } from '../../../utils/until-destroy';
 
 @Component({
-    selector: 'copyleaks-report-actions-container',
-    templateUrl: './report-actions-container.component.html',
-    styleUrls: ['./report-actions-container.component.scss'],
-    standalone: false
+	selector: 'copyleaks-report-actions-container',
+	templateUrl: './report-actions-container.component.html',
+	styleUrls: ['./report-actions-container.component.scss'],
+	standalone: false,
 })
 export class ReportActionsContainerComponent implements OnInit, AfterViewInit, OnDestroy {
 	@HostBinding('style.display')

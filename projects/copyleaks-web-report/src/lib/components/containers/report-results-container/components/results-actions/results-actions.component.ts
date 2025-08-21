@@ -22,10 +22,10 @@ import { ReportMatchHighlightService } from '../../../../../services/report-matc
 import { untilDestroy } from '../../../../../utils/until-destroy';
 
 @Component({
-    selector: 'cr-results-actions',
-    templateUrl: './results-actions.component.html',
-    styleUrls: ['./results-actions.component.scss'],
-    standalone: false
+	selector: 'cr-results-actions',
+	templateUrl: './results-actions.component.html',
+	styleUrls: ['./results-actions.component.scss'],
+	standalone: false,
 })
 export class ResultsActionsComponent implements OnInit, OnChanges, OnDestroy {
 	@ViewChild('searchInput') searchInput: ElementRef;

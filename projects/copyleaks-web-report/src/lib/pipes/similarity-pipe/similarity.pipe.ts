@@ -2,8 +2,8 @@ import { PercentPipe } from '@angular/common';
 import { Pipe, PipeTransform } from '@angular/core';
 
 @Pipe({
-    name: 'similarity',
-    standalone: false
+	name: 'similarity',
+	standalone: false,
 })
 export class SimilarityPipe implements PipeTransform {
 	constructor(private _percentPipe: PercentPipe) {}

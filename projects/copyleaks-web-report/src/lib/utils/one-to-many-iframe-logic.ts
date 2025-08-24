@@ -498,38 +498,110 @@ function ready() {
 		return contentHTML;
 	}
 
-	function modifyTooltipsStyles(match?: Element, tooltipClass: string = 'tooltip-match-content-container') {
-		const tooltip = match.querySelector(tooltipClass) as HTMLElement;
+	function modifyTooltipsStyles(match: Element) {
+		const tooltip = match.querySelector('.tooltip-match-content-container') as HTMLElement;
 
-		if (tooltip instanceof HTMLElement) {
-			let tooltipRect = tooltip.getBoundingClientRect();
-			let tooltipWidth = tooltipRect.width;
+		if (!tooltip) return;
 
-			let iframeWidth: number;
-			if (isPdf) {
-				let pageContainer = document.querySelector('#page-container') as HTMLElement;
-				iframeWidth = pageContainer.clientWidth;
-			} else iframeWidth = window.innerWidth;
+		// Get viewport dimensions
+		let viewportWidth: number;
+		let viewportHeight: number;
 
-			let matchRect = match.getBoundingClientRect();
+		if (isPdf) {
+			const pageContainer = document.querySelector('#page-container') as HTMLElement;
+			viewportWidth = pageContainer ? pageContainer.clientWidth : window.innerWidth;
+			viewportHeight = pageContainer ? pageContainer.clientHeight : window.innerHeight;
+		} else {
+			viewportWidth = window.innerWidth;
+			viewportHeight = window.innerHeight;
+		}
 
-			// Move tooltip to the right side if it exceeds the iframe left boundary
-			if (matchRect.left + tooltipWidth > iframeWidth) {
-				tooltip.style.transform = `translate(-100%, 0) scale(${1 / (currentZoom * pdfZoom)})`;
-				tooltip.style.transformOrigin = `calc(100% + ${matchRect.width + 10}px) -50%`;
-				tooltip.classList.add('right-arrow');
+		// Reset any previous modifications and set default arrow
+		tooltip.style.left = '50%';
+		tooltip.style.right = 'auto';
+		tooltip.style.bottom = '160%';
+		tooltip.style.top = 'auto';
+		tooltip.style.transform = `translate(-50%, 0) scale(${1 / (currentZoom * pdfZoom)})`;
+		tooltip.classList.remove('right-arrow', 'left-arrow', 'top-arrow', 'bottom-arrow');
+		tooltip.classList.add('top-arrow'); // Default arrow pointing down
+
+		// Get current positions after reset
+		const tooltipRect = tooltip.getBoundingClientRect();
+
+		// Calculate tooltip edges
+		const tooltipLeft = tooltipRect.left;
+		const tooltipRight = tooltipRect.right;
+		const tooltipTop = tooltipRect.top;
+
+		let needsRepositioning = false;
+
+		// Check horizontal overflow
+		if (tooltipRight > viewportWidth) {
+			// Tooltip overflows right - position to the left of match
+			tooltip.style.left = 'auto';
+			tooltip.style.right = '100%';
+			tooltip.style.transform = `translateX(-10px) scale(${1 / (currentZoom * pdfZoom)})`;
+			tooltip.classList.remove('top-arrow');
+			tooltip.classList.add('right-arrow');
+			needsRepositioning = true;
+		} else if (tooltipLeft < 0) {
+			// Tooltip overflows left - position to the right of match
+			tooltip.style.left = '100%';
+			tooltip.style.transform = `translateX(10px) scale(${1 / (currentZoom * pdfZoom)})`;
+			tooltip.classList.remove('top-arrow');
+			tooltip.classList.add('left-arrow');
+			needsRepositioning = true;
+		}
+
+		// Check vertical overflow
+		if (tooltipTop < 0) {
+			// Tooltip overflows top - position below match
+			tooltip.style.bottom = 'auto';
+			tooltip.style.top = '100%';
+			tooltip.classList.remove('top-arrow', 'right-arrow', 'left-arrow');
+			tooltip.classList.add('bottom-arrow');
+
+			// Adjust transform for horizontal positioning if needed
+			if (needsRepositioning) {
+				if (tooltip.classList.contains('right-arrow')) {
+					tooltip.classList.add('right-arrow');
+					tooltip.style.transform = `translateX(-10px) translateY(10px) scale(${1 / (currentZoom * pdfZoom)})`;
+				} else if (tooltip.classList.contains('left-arrow')) {
+					tooltip.classList.add('left-arrow');
+					tooltip.style.transform = `translateX(10px) translateY(10px) scale(${1 / (currentZoom * pdfZoom)})`;
+				}
+			} else {
+				tooltip.style.transform = `translate(-50%, 10px) scale(${1 / (currentZoom * pdfZoom)})`;
 			}
-			// Move tooltip to the left side if it exceeds the iframe left boundary
-			else if (matchRect.right - tooltipWidth < 0) {
-				tooltip.style.transform = `translate(0, 0) scale(${1 / (currentZoom * pdfZoom)})`; // Move tooltip to the right side of the match
-				tooltip.style.transformOrigin = `-${matchRect.width + 10}px -50%`;
-				tooltip.classList.add('left-arrow');
+			needsRepositioning = true;
+		}
+
+		// Final check after repositioning
+		if (needsRepositioning) {
+			const finalRect = tooltip.getBoundingClientRect();
+
+			// Emergency fallback - constrain to viewport if still overflowing
+			if (finalRect.left < 5) {
+				tooltip.style.left = '5px';
+				tooltip.style.right = 'auto';
+				tooltip.style.transform = `translateX(0) scale(${1 / (currentZoom * pdfZoom)})`;
 			}
 
-			// if (matchRect.top - tooltipHeight < 0) {
-			// 	tooltip.style.transform = `translate(-50%, 100%) scale(${1 / (currentZoom * pdfZoom)})`; // Move tooltip under the match
-			// 	tooltip.style.transformOrigin = `0 -${2 * matchRect.height}px`;
-			// }
+			if (finalRect.right > viewportWidth - 5) {
+				tooltip.style.right = '5px';
+				tooltip.style.left = 'auto';
+				tooltip.style.transform = `translateX(0) scale(${1 / (currentZoom * pdfZoom)})`;
+			}
+
+			if (finalRect.top < 5) {
+				tooltip.style.top = '5px';
+				tooltip.style.bottom = 'auto';
+			}
+
+			if (finalRect.bottom > viewportHeight - 5) {
+				tooltip.style.bottom = '5px';
+				tooltip.style.top = 'auto';
+			}
 		}
 	}
 

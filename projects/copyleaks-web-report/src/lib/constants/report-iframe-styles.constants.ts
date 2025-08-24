@@ -222,6 +222,64 @@ span[match][on] {
 	background-color: #00e2a2 !important;
 }
 
+span[match] .tooltip-match-content-container.bottom-arrow::after {
+    content: '';
+    position: absolute;
+    bottom: 100% !important;
+    top: auto !important;
+    left: 50% !important;
+    right: auto !important;
+    margin: 0px !important;
+    margin-inline-start: -5px !important;
+    border-width: 7px;
+    border-style: solid;
+    border-color: transparent transparent #112960 transparent;
+}
+
+span[match] .tooltip-match-content-container.top-arrow::after,
+span[match] .tooltip-match-content-container::after {
+    content: '';
+    position: absolute;
+    top: 100% !important;
+    bottom: auto !important;
+    left: 50% !important;
+    right: auto !important;
+    margin: 0px !important;
+    margin-inline-start: -5px !important;
+    border-width: 7px;
+    border-style: solid;
+    border-color: #112960 transparent transparent transparent;
+}
+
+span[match] .tooltip-match-content-container.right-arrow::after {
+    content: '';
+    position: absolute;
+    top: 50% !important;
+    bottom: auto !important;
+    left: 100% !important;
+    right: auto !important;
+    margin: 0px !important;
+    margin-top: -5px !important;
+    margin-inline-start: 0px !important;
+    border-width: 7px;
+    border-style: solid;
+    border-color: transparent transparent transparent #112960;
+}
+
+span[match] .tooltip-match-content-container.left-arrow::after {
+    content: '';
+    position: absolute;
+    top: 50% !important;
+    bottom: auto !important;
+    right: 100% !important;
+    left: auto !important;
+    margin: 0px !important;
+    margin-top: -5px !important;
+    margin-inline-start: 0px !important;
+    border-width: 7px;
+    border-style: solid;
+    border-color: transparent #112960 transparent transparent;
+}
 span[match] .tooltip-match-content-container {
 	min-width: 120px;
 	max-width: 300px !important;

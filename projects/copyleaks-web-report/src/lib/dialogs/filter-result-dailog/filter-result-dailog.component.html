@@ -68,7 +68,7 @@
 									class="sources-type-container"></cr-source-type-filter-result>
 							</ng-container>
 						</section>
-						<mat-divider></mat-divider>
+						<mat-divider aria-hidden="true"></mat-divider>
 
 						<!-- results meta -->
 						<section class="section-container" fxLayout="column" fxLayoutGap="16px">
@@ -82,7 +82,7 @@
 						</section>
 					</div>
 
-					<mat-divider [vertical]="!isMobile" class="vertical-divider"></mat-divider>
+					<mat-divider [vertical]="!isMobile" class="vertical-divider" aria-hidden="true"></mat-divider>
 
 					<div class="right-side-conatier" [class.mobile]="isMobile" fxLayout="column" fxLayoutGap="16px">
 						<!-- match type -->
@@ -101,7 +101,7 @@
 								[paraphrasedTotal]="totalParaphrased"
 								class="match-type-filter-container"></cr-match-type-filter-result>
 						</section>
-						<mat-divider></mat-divider>
+						<mat-divider aria-hidden="true"></mat-divider>
 						<section class="exclude-domains-container" fxLayout="column" fxLayoutGap="16px">
 							<div class="body-title-container">
 								<span class="body-title included-tags-container" i18n>
@@ -115,7 +115,7 @@
 						</section>
 					</div>
 
-					<mat-divider [vertical]="!isMobile" class="vertical-divider"></mat-divider>
+					<mat-divider [vertical]="!isMobile" class="vertical-divider" aria-hidden="true"></mat-divider>
 
 					<div class="right-side-conatier" [class.mobile]="isMobile" fxLayout="column" fxLayoutGap="16px">
 						<!--General filters-->
@@ -126,7 +126,7 @@
 								[totalAlerts]="totalAlerts"
 								[totalSameAuthor]="totalSameAuthor"></cr-general-filter-result>
 						</section>
-						<mat-divider></mat-divider>
+						<mat-divider aria-hidden="true"></mat-divider>
 						<!-- Included Tags -->
 						<section
 							class="included-tags-container"

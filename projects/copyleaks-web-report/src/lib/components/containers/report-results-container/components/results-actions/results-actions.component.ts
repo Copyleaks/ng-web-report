@@ -115,8 +115,8 @@ export class ResultsActionsComponent implements OnInit, OnChanges, OnDestroy {
 
 	showFilterDialog(showExcludedDailog: boolean = false) {
 		this._matDialog.open(FilterResultDailogComponent, {
-			minWidth: this.isMobile ? '95%' : '',
-			width: this.isMobile ? '' : '1010px',
+			minWidth: this.isMobile ? '100%' : '',
+			width: this.isMobile ? '100%' : '1010px',
 			panelClass: 'filter-result-dailog',
 			ariaLabel: $localize`Report Filter Options`,
 			autoFocus: false,

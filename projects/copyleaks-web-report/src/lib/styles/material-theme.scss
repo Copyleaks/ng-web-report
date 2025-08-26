@@ -2,6 +2,7 @@
 @use './website-colors.styles.scss' as *;
 @use './cls-mat-components-overrides/cls-mat-tooltip-overrides.scss';
 @use './cls-mat-components-overrides/cls-mat-dialog-overrides.scss';
+@use './cls-accessibility-overrides/cls-accessibility-overrides.scss';
 
 // 1. Core styles (typography + density defaults)
 @include mat.elevation-classes();

@@ -116,11 +116,13 @@
 			width: unset;
 			height: unset;
 			border-radius: unset;
+			min-width: unset;
 
 			cursor: pointer;
 			.clear-filter-button-icon {
 				$icon-size: 24px;
 				width: $icon-size;
+				min-width: $icon-size;
 				height: $icon-size;
 				font-size: $icon-size;
 				line-height: 20px;
@@ -229,10 +231,24 @@
 			font-size: 16px !important;
 			font-weight: 500;
 			font-family: haboro-soft, sans-serif !important;
+			white-space: nowrap;
 		}
 		.apply-filters-button {
 			font-size: 18px !important;
 			font-weight: 700 !important;
+		}
+	}
+
+	.apply-and-discard-button-contaier.is-mobile {
+		::ng-deep {
+			a {
+				border: none !important;
+				background: transparent !important;
+				color: $color-primary !important;
+			}
+			.mat-mdc-button-base.mat-primary {
+				border: none !important;
+			}
 		}
 	}
 

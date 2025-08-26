@@ -22,7 +22,7 @@
 				</span>
 				<div class="chips-stats-container" *ngIf="!!resultsActions.totalFiltered || !!resultsActions?.totalExcluded">
 					<ng-container *ngIf="!!resultsActions?.totalExcluded">
-						<mat-chip-option
+						<mat-basic-chip
 							tabIndex="0"
 							class="total-excluded"
 							role="button"
@@ -32,14 +32,14 @@
 							(click)="!!resultsActions.totalExcluded ? (data.showExcludedDailog = !data.showExcludedDailog) : ''">
 							{{ resultsActions.totalExcluded }}
 							<ng-container i18n>excluded</ng-container>
-						</mat-chip-option>
+						</mat-basic-chip>
 					</ng-container>
 
 					<ng-container *ngIf="!!resultsActions.totalFiltered">
-						<mat-chip-option class="total-filtered" role="contentinfo">
+						<mat-basic-chip class="total-filtered" role="contentinfo">
 							{{ resultsActions.totalFiltered }}
 							<ng-container i18n>filtered</ng-container>
-						</mat-chip-option>
+						</mat-basic-chip>
 					</ng-container>
 				</div>
 			</div>
@@ -296,6 +296,7 @@
 		<div
 			mat-dialog-actions
 			class="apply-and-discard-button-contaier"
+			[class.is-mobile]="isMobile"
 			[style.padding-top]="isMobile ? '16px !important' : ''">
 			<cr-button
 				[outlined]="true"

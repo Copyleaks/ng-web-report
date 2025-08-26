@@ -101,6 +101,10 @@
 			}
 		}
 
+		.mat-expansion-panel-content-wrapper {
+			overflow-y: auto;
+		}
+
 		/* Hide default toggle icon */
 		.mat-expansion-panel-header .mat-expansion-indicator::after {
 			border: none;

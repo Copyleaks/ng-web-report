@@ -2,6 +2,10 @@
 
 :host {
 	::ng-deep {
+		.mat-mdc-slide-toggle {
+			display: flex;
+		}
+
 		.mat-mdc-slide-toggle .mdc-switch:not(.mdc-switch--checked) .mdc-switch__track {
 			background: $color-dialog-background !important;
 		}

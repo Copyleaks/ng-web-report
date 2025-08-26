@@ -177,6 +177,13 @@
 				min-width: unset;
 				padding: 0;
 				display: flex;
+
+				::ng-deep {
+					.mat-mdc-button-touch-target {
+						width: 24px;
+						height: 24px;
+					}
+				}
 			}
 			.item-menu,
 			.exclude-result {

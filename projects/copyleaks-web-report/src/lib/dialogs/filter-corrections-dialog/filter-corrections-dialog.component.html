@@ -212,7 +212,7 @@
 			</form>
 		</div>
 
-		<div mat-dialog-actions class="apply-and-discard-button-contaier">
+		<div mat-dialog-actions class="apply-and-discard-button-contaier" [class.is-mobile]="isMobile">
 			<cr-button
 				[outlined]="true"
 				[padding]="isMobile ? '3px 17px' : '3px 24px'"

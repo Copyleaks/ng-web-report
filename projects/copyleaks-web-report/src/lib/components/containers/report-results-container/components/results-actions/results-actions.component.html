@@ -107,25 +107,25 @@
 		class="chips-container"
 		[dir]="docDirection">
 		<ng-container *ngIf="resultsActions?.totalExcluded">
-			<mat-chip-option
+			<mat-basic-chip
 				(click)="showFilterDialog(true)"
 				(keyup.enter)="showFilterDialog(true)"
 				role="button"
-				aria-label="View ecxluded results"
+				aria-label="View excluded results"
 				i18n-aria-label
-				tabIndex="0">
+				tabindex="0">
 				{{ resultsActions?.totalExcluded }}
 				<ng-container i18n>excluded</ng-container>
-			</mat-chip-option>
+			</mat-basic-chip>
 		</ng-container>
 
 		<ng-container *ngIf="resultsActions?.totalFiltered">
-			<mat-chip-option
+			<mat-basic-chip
 				class="filter-chip"
 				[class.disabled]="loadingResults"
 				(click)="showFilterDialog()"
 				(keyup.enter)="showFilterDialog()"
-				tabIndex="0"
+				tabindex="0"
 				role="button"
 				aria-label="View results filter dialog"
 				i18n-aria-label>
@@ -153,7 +153,7 @@
 				<ng-template #loadingResultsViewRef>
 					<cr-spinner size="14px"></cr-spinner>
 				</ng-template>
-			</mat-chip-option>
+			</mat-basic-chip>
 		</ng-container>
 	</div>
 </ng-container>

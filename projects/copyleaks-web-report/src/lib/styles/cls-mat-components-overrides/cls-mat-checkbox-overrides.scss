@@ -2,6 +2,11 @@
 
 :host {
 	::ng-deep {
+		.mat-mdc-checkbox .mdc-checkbox__native-control:focus-visible ~ .mdc-checkbox__background {
+			outline: 2px solid black !important;
+			outline-offset: 1px !important;
+		}
+
 		mat-checkbox {
 			display: flex !important;
 		}

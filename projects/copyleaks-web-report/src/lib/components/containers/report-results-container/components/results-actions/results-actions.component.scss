@@ -251,8 +251,15 @@ mat-icon {
 	gap: 4px;
 }
 
-mat-chip-option {
+mat-basic-chip {
 	cursor: pointer;
+
+	::ng-deep {
+		.mdc-evolution-chip__text-label,
+		.mat-mdc-chip-action-label {
+			cursor: pointer;
+		}
+	}
 }
 
 cr-spinner {

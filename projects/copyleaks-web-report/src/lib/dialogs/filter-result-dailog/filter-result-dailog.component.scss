@@ -63,6 +63,16 @@
 			content: '';
 		}
 
+		mat-basic-chip {
+			cursor: pointer;
+			::ng-deep {
+				.mdc-evolution-chip__text-label,
+				.mat-mdc-chip-action-label {
+					cursor: pointer;
+				}
+			}
+		}
+
 		.mat-expansion-indicator {
 			display: none !important;
 		}

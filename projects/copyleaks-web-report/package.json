@@ -32,7 +32,7 @@
     "@angular/common": "^19.2.14",
     "@angular/core": "^19.2.14",
     "@angular/localize": "^19.2.14",
-    "@angular/material": "^18.2.14",
+    "@angular/material": "^19.2.19",
     "ngx-flexible-layout": "^19.0.0",
     "scroll-into-view-if-needed": "^2.2.28",
     "ngx-skeleton-loader": "^6.0.0",

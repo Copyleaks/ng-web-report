@@ -7,7 +7,10 @@ import { ITagItem } from './components/included-tags-filter-result/models/includ
 import { EFilterResultForm, EFilterResultSection, IFilterResultDailogData } from './models/filter-result-dailog.enum';
 import { UntypedFormGroup } from '@angular/forms';
 import { untilDestroy } from '../../utils/until-destroy';
-import { MAT_LEGACY_DIALOG_DATA as MAT_DIALOG_DATA, MatLegacyDialogRef as MatDialogRef } from '@angular/material/legacy-dialog';
+import {
+	MAT_LEGACY_DIALOG_DATA as MAT_DIALOG_DATA,
+	MatLegacyDialogRef as MatDialogRef,
+} from '@angular/material/legacy-dialog';
 import { combineLatest } from 'rxjs';
 import { ALERTS } from '../../constants/report-alerts.constants';
 import { ICompleteResults } from '../../models/report-data.models';

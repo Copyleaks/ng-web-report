@@ -1,5 +1,5 @@
-@import '../../../styles/website-colors.styles.scss';
-@import '../../../styles/cls-accessibility-overrides/cls-accessibility-overrides.scss';
+@use '../../../styles/website-colors.styles.scss' as *;
+@use '../../../styles/cls-accessibility-overrides/cls-accessibility-overrides.scss';
 
 :host {
 	background-color: $color-white;
@@ -32,6 +32,9 @@
 	width: 20px !important;
 	height: 20px !important;
 	line-height: normal !important;
+	padding: 0px !important;
+	display: flex !important;
+	border: none !important;
 	mat-icon {
 		font-size: 20px;
 		width: 20px;

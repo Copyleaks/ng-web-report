@@ -40,6 +40,7 @@ import { ReportStatistics } from '../../../../../models/report-statistics.models
 	selector: 'copyleaks-explainable-ai-result-container',
 	templateUrl: './explainable-ai-result-container.component.html',
 	styleUrls: ['./explainable-ai-result-container.component.scss'],
+	standalone: false,
 })
 export class ExplainableAIResultContainerComponent implements OnInit, OnChanges, AfterViewInit, OnDestroy {
 	@ViewChild('aiPhrasesMobileViewScrollContainer') aiPhrasesMobileViewScrollContainer!: ElementRef;

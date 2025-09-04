@@ -16,6 +16,7 @@ import { untilDestroy } from '../../../utils/until-destroy';
 	selector: 'copyleaks-report-actions-container',
 	templateUrl: './report-actions-container.component.html',
 	styleUrls: ['./report-actions-container.component.scss'],
+	standalone: false,
 })
 export class ReportActionsContainerComponent implements OnInit, AfterViewInit, OnDestroy {
 	@HostBinding('style.display')

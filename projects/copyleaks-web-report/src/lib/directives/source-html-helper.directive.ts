@@ -11,6 +11,7 @@ import { untilDestroy } from '../utils/until-destroy';
 
 @Directive({
 	selector: '[crSourceHtmlHelper]',
+	standalone: false,
 })
 export class SourceHtmlHelperComponent implements OnInit, OnDestroy {
 	constructor(

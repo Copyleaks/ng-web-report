@@ -6,6 +6,7 @@ import { FilterResultDailogService } from '../../services/filter-result-dailog.s
 	selector: 'cr-match-type-filter-result',
 	templateUrl: './match-type-filter-result.component.html',
 	styleUrls: ['./match-type-filter-result.component.scss'],
+	standalone: false,
 })
 export class MatchTypeFilterResultComponent implements OnInit {
 	/**

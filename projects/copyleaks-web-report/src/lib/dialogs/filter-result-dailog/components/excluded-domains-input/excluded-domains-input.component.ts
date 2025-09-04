@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { FormControl } from '@angular/forms';
+import { UntypedFormControl } from '@angular/forms';
 import { FilterResultDailogService } from '../../services/filter-result-dailog.service';
 import { trigger, transition, animate, keyframes, style } from '@angular/animations';
 
@@ -9,7 +9,6 @@ import { trigger, transition, animate, keyframes, style } from '@angular/animati
 	styleUrls: ['./excluded-domains-input.component.scss'],
 	animations: [
 		trigger('fadeIn', [transition(':enter', [style({ opacity: 0 }), animate('0.5s', style({ opacity: 1 }))])]),
-
 		trigger('errorAnimation', [
 			transition(':enter', [
 				animate(
@@ -26,10 +25,11 @@ import { trigger, transition, animate, keyframes, style } from '@angular/animati
 			]),
 		]),
 	],
+	standalone: false,
 })
 export class ExcludedDomainsInputComponent implements OnInit {
-	addDomainControl = new FormControl('');
-	excludedDomainsForm: FormControl;
+	addDomainControl = new UntypedFormControl('');
+	excludedDomainsForm: UntypedFormControl;
 	errorMessage: string;
 
 	get excludedDomainsFormValue() {

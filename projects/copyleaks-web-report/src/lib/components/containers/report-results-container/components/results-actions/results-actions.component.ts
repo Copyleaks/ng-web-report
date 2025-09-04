@@ -12,7 +12,7 @@ import {
 	ElementRef,
 } from '@angular/core';
 import { IResultsActions } from './models/results-actions.models';
-import { FormControl } from '@angular/forms';
+import { UntypedFormControl } from '@angular/forms';
 import { MatDialog } from '@angular/material/dialog';
 import { FilterResultDailogComponent } from '../../../../../dialogs/filter-result-dailog/filter-result-dailog.component';
 import { ReportDataService } from '../../../../../services/report-data.service';
@@ -25,6 +25,7 @@ import { untilDestroy } from '../../../../../utils/until-destroy';
 	selector: 'cr-results-actions',
 	templateUrl: './results-actions.component.html',
 	styleUrls: ['./results-actions.component.scss'],
+	standalone: false,
 })
 export class ResultsActionsComponent implements OnInit, OnChanges, OnDestroy {
 	@ViewChild('searchInput') searchInput: ElementRef;
@@ -57,7 +58,7 @@ export class ResultsActionsComponent implements OnInit, OnChanges, OnDestroy {
 	@Output() onSearch = new EventEmitter<string>();
 	@Output() onExpandToggle = new EventEmitter<boolean>();
 
-	searchFc = new FormControl('');
+	searchFc = new UntypedFormControl('');
 	showSearchFiled: boolean = false;
 	loadingResults: boolean;
 	docDirection: 'ltr' | 'rtl';
@@ -114,9 +115,8 @@ export class ResultsActionsComponent implements OnInit, OnChanges, OnDestroy {
 
 	showFilterDialog(showExcludedDailog: boolean = false) {
 		this._matDialog.open(FilterResultDailogComponent, {
-			maxWidth: '95%',
-			minWidth: this.isMobile ? '95%' : '',
-			width: this.isMobile ? '' : '1010px',
+			minWidth: this.isMobile ? '100%' : '',
+			width: this.isMobile ? '100%' : '1010px',
 			panelClass: 'filter-result-dailog',
 			ariaLabel: $localize`Report Filter Options`,
 			autoFocus: false,

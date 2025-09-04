@@ -1,4 +1,4 @@
-@import '../../../../../styles/website-colors.styles.scss';
+@use '../../../../../styles/website-colors.styles.scss' as *;
 
 .ai-percentage-container {
 	border-radius: 10px;
@@ -66,7 +66,7 @@
 			width: fit-content;
 			display: flex;
 			height: fit-content !important;
-			::ng-deep .loader {
+			::ng-deep .skeleton-loader {
 				height: 18px !important;
 				margin-bottom: 0px !important;
 				border-radius: 10px !important;
@@ -95,20 +95,22 @@
 			padding: 8px 10px 4px 10px;
 			.percentage-score-loader {
 				width: 100%;
-				::ng-deep .loader {
+				::ng-deep .skeleton-loader {
 					height: 20px !important;
 				}
 			}
 		}
 	}
 }
-::ng-deep .mat-tooltip.tooltip-contanier {
-	font-size: 16px !important;
-	font-weight: 500 !important;
-	color: $color-white !important;
-	background-color: $color-black !important;
-	border-radius: 10px !important;
-	padding: 14px !important;
-	font-family: haboro-soft, sans-serif !important;
-	white-space: pre-line !important;
+::ng-deep {
+	.mat-mdc-tooltip.tooltip-container .mdc-tooltip__surface {
+		font-size: 16px !important;
+		font-weight: 500 !important;
+		color: $color-white !important;
+		background-color: $color-black !important;
+		border-radius: 10px !important;
+		padding: 14px !important;
+		font-family: 'haboro-soft', sans-serif !important;
+		white-space: pre-line !important;
+	}
 }

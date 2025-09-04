@@ -12,6 +12,7 @@ import { ReportDataService } from '../../../services/report-data.service';
 	selector: 'copyleaks-content-ai-container',
 	templateUrl: './content-ai-container.component.html',
 	styleUrls: ['./content-ai-container.component.scss'],
+	standalone: false,
 })
 export class ContentAiContainerComponent implements OnInit, OnChanges {
 	/**

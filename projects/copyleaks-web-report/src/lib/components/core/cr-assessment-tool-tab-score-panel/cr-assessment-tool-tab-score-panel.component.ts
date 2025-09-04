@@ -8,6 +8,7 @@ import { untilDestroy } from '../../../utils/until-destroy';
 	selector: 'cr-assessment-tool-tab-score-panel',
 	templateUrl: './cr-assessment-tool-tab-score-panel.component.html',
 	styleUrls: ['./cr-assessment-tool-tab-score-panel.component.scss'],
+	standalone: false,
 })
 export class CrAssessmentToolTabScorePanelComponent implements OnInit, OnChanges {
 	/**

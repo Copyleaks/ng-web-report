@@ -8,6 +8,10 @@
 	padding: 0 !important;
 }
 
-.cdk-keyboard-focused {
-	outline: 2px solid black;
+:host {
+	::ng-deep {
+		.cdk-keyboard-focused {
+			outline: 2px solid black !important;
+		}
+	}
 }

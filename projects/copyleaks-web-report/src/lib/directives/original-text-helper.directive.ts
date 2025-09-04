@@ -12,6 +12,7 @@ import { PageEvent } from '../components/core/cr-paginator/models/cr-paginator.m
 
 @Directive({
 	selector: '[crOriginalTextHelper]',
+	standalone: false,
 })
 export class OriginalTextHelperDirective implements AfterContentInit, OnDestroy {
 	@Input() public host: {

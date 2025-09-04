@@ -7,6 +7,7 @@ import { ReportAIResultsService } from '../../../../../services/report-ai-result
 	selector: 'copyleaks-resources-container',
 	templateUrl: './resources-container.component.html',
 	styleUrls: ['./resources-container.component.scss'],
+	standalone: false,
 })
 export class ResourcesContainerComponent implements OnInit {
 	/**

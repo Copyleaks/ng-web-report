@@ -10,6 +10,7 @@ import { untilDestroy } from '../../../../../utils/until-destroy';
 	selector: 'cr-alert-card',
 	templateUrl: './alert-card.component.html',
 	styleUrls: ['./alert-card.component.scss'],
+	standalone: false,
 })
 export class AlertCardComponent implements OnInit, OnDestroy {
 	@Input() alert: ICompleteResultNotificationAlert;

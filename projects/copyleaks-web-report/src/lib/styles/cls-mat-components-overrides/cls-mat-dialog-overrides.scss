@@ -1,0 +1,9 @@
+::ng-deep {
+	.mat-mdc-dialog-container .mdc-dialog__content {
+		letter-spacing: normal !important;
+	}
+
+	.mdc-dialog__title::before {
+		display: none !important;
+	}
+}

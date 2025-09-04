@@ -6,6 +6,7 @@ import { IRemoveResultConfirmationDialogData } from './models/remove-result-conf
 	selector: 'cr-remove-result-confirmation-dialog',
 	templateUrl: './remove-result-confirmation-dialog.component.html',
 	styleUrls: ['./remove-result-confirmation-dialog.component.scss'],
+	standalone: false,
 })
 export class RemoveResultConfirmationDialogComponent implements OnInit {
 	deleting: boolean = false;

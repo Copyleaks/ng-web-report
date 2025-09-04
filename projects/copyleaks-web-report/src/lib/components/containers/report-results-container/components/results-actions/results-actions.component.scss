@@ -1,8 +1,9 @@
-@import '../../../../../styles/website-colors.styles.scss';
-@import '../../../../../styles/cls-mat-components-overrides/cls-mat-chip-overrides.scss';
-@import '../../../../../styles/styles.scss';
-@import '../../../../../styles/cls-mat-components-overrides/cls-mat-inputs-overrides.scss';
-@import '../../../../../styles/cls-accessibility-overrides/cls-accessibility-overrides.scss';
+@use '../../../../../styles/website-colors.styles.scss' as *;
+@use '../../../../../styles/cls-mat-components-overrides/cls-mat-chip-overrides.scss';
+@use '../../../../../styles/styles.scss';
+@use '../../../../../styles/cls-mat-components-overrides/cls-mat-inputs-overrides.scss';
+@use '../../../../../styles/cls-mat-components-overrides/cls-mat-buttons-overrides.scss';
+@use '../../../../../styles/cls-accessibility-overrides/cls-accessibility-overrides.scss';
 
 :host {
 	display: flex;
@@ -38,7 +39,7 @@
 	width: fit-content;
 	display: flex;
 	height: fit-content !important;
-	::ng-deep .loader {
+	::ng-deep .skeleton-loader {
 		height: 19px !important;
 		margin-bottom: 0px !important;
 		border-radius: 10px !important;
@@ -54,7 +55,7 @@
 	justify-content: space-between;
 	align-items: center;
 	.search-input-loader {
-		::ng-deep .loader {
+		::ng-deep .skeleton-loader {
 			height: 13px !important;
 		}
 	}
@@ -65,7 +66,7 @@
 		gap: 8px;
 
 		.circle {
-			::ng-deep .loader {
+			::ng-deep .skeleton-loader {
 				width: 24px !important;
 				height: 24px !important;
 				border-radius: 50% !important;
@@ -109,46 +110,49 @@
 .input-search-container {
 	width: 100%;
 
-	mat-icon {
-		color: $color-black;
-		cursor: pointer;
-	}
-	.search-button {
-		display: flex;
-		align-items: center;
-		justify-content: center;
-		background-color: $color-white;
-		border-radius: 50%;
-		height: 24px;
-		width: 24px;
-		padding: 0;
-		border: 0;
+	::ng-deep {
 		mat-icon {
+			color: $color-black;
+			cursor: pointer;
+			line-height: normal !important;
+		}
+		.search-button {
+			display: flex;
+			align-items: center;
+			justify-content: center;
 			background-color: $color-white;
 			border-radius: 50%;
+			height: 24px;
+			width: 24px;
+			padding: 0;
+			border: 0;
+			mat-icon {
+				background-color: $color-white;
+				border-radius: 50%;
+			}
 		}
-	}
-	input {
-		width: 100%;
-		border: 0px;
-		outline: 0px;
-		background-color: $color-container-background;
-		font-size: 16px;
-	}
+		input {
+			width: 100%;
+			border: 0px;
+			outline: 0px;
+			background-color: $color-container-background;
+			font-size: 16px;
+		}
 
-	.clear-button {
-		width: 24px !important;
-		height: 24px !important;
-		mat-icon {
+		.clear-button {
 			width: 24px !important;
 			height: 24px !important;
-			font-size: 24px !important;
+			mat-icon {
+				width: 24px !important;
+				height: 24px !important;
+				font-size: 24px !important;
+			}
 		}
-	}
-	.clear-button:focus,
-	.clear-button:hover {
-		mat-icon {
-			color: $color-primary;
+		.clear-button:focus,
+		.clear-button:hover {
+			mat-icon {
+				color: $color-primary;
+			}
 		}
 	}
 }
@@ -163,10 +167,18 @@
 	}
 }
 
-::ng-deep .filter-result-dailog .mat-dialog-container {
+::ng-deep .filter-result-dailog .mat-mdc-dialog-container {
+	display: flex;
 	background-color: $color-white !important;
 	padding: 16px 6px 16px 16px !important;
 	border-radius: 10px !important;
+
+	.mat-mdc-dialog-surface {
+		box-shadow: none !important;
+	}
+	.mdc-dialog__container {
+		width: 100% !important;
+	}
 }
 
 mat-icon:hover {
@@ -194,7 +206,7 @@ mat-icon {
 	margin-inline-end: 8px !important;
 	background-color: $color-white;
 	border-radius: 50%;
-	padding: 4px;
+	padding: 6px !important;
 	cursor: auto !important;
 	width: 24px !important;
 	height: 24px !important;
@@ -207,12 +219,13 @@ mat-icon {
 }
 
 .clear-icon {
-	background-color: transparent !important;
+	background-color: $color-container-background !important;
 	color: $color-black;
 }
 
 .search-input {
 	margin: 0px !important;
+	background-color: $color-container-background !important;
 }
 
 .diselect-match-icon {
@@ -238,8 +251,15 @@ mat-icon {
 	gap: 4px;
 }
 
-mat-chip {
+mat-basic-chip {
 	cursor: pointer;
+
+	::ng-deep {
+		.mdc-evolution-chip__text-label,
+		.mat-mdc-chip-action-label {
+			cursor: pointer;
+		}
+	}
 }
 
 cr-spinner {
@@ -256,10 +276,13 @@ cr-spinner {
 }
 
 .icon-button {
-	width: unset;
-	height: unset;
+	width: 24px !important;
+	height: 24px !important;
 	line-height: unset;
 	min-width: unset;
+	padding: 0px;
+	display: flex;
+
 	&:focus {
 		mat-icon {
 			color: $color-primary;
@@ -268,10 +291,11 @@ cr-spinner {
 }
 
 ::ng-deep .input-search-container {
-	.mat-form-field-wrapper {
-		.mat-form-field-flex {
+	.mat-mdc-text-field-wrapper {
+		border-radius: 30px !important;
+		.mat-mdc-form-field-flex {
+			padding: 0 4px 0 3px !important;
 			border-radius: 30px !important;
-			padding: 0px 4px 0px 3px;
 		}
 	}
 }

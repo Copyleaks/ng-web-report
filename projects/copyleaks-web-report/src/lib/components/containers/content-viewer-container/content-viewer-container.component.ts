@@ -57,6 +57,7 @@ import { ALERTS } from '../../../constants/report-alerts.constants';
 			transition(':enter', [animate('0.5s ease-in', style({ opacity: 1 }))]),
 		]),
 	],
+	standalone: false,
 })
 export class ContentViewerContainerComponent implements OnInit, AfterViewInit, OnChanges {
 	@HostBinding('style.flex-grow')

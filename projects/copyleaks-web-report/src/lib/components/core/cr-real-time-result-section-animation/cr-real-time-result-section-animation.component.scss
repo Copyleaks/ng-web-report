@@ -1,4 +1,4 @@
-@import '../../../styles/website-colors.styles.scss';
+@use '../../../styles/website-colors.styles.scss' as *;
 
 :host {
 	display: flex;
@@ -75,7 +75,7 @@
 		width: fit-content;
 		display: flex;
 		height: fit-content !important;
-		::ng-deep .loader {
+		::ng-deep .skeleton-loader {
 			height: 18px !important;
 			margin-bottom: 0px !important;
 			border-radius: 10px !important;
@@ -86,7 +86,7 @@
 	.circle {
 		width: 32px !important;
 		height: 32px !important;
-		::ng-deep .loader {
+		::ng-deep .skeleton-loader {
 			border-radius: 50% !important;
 			width: 32px !important;
 			height: 32px !important;

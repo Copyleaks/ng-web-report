@@ -7,6 +7,7 @@ import { CrCustomTabItemComponent } from './components/cr-custom-tab-item/cr-cus
 	selector: 'cr-custom-tabs',
 	templateUrl: './cr-custom-tabs.component.html',
 	styleUrls: ['./cr-custom-tabs.component.scss'],
+	standalone: false,
 })
 export class CrCustomTabsComponent implements OnInit {
 	@ContentChildren(CrCustomTabItemComponent) tabItems: QueryList<CrCustomTabItemComponent>;

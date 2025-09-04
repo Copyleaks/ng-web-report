@@ -267,8 +267,6 @@ export abstract class OneToManyReportLayoutBaseComponent extends ReportLayoutBas
 									if (match.html != null && match.html != undefined) this.isAiHtmlViewAvailable = true;
 								});
 							});
-						} else {
-							this.isAiHtmlViewAvailable = false;
 						}
 						if (!this.isAiHtmlViewAvailable) {
 							this.isHtmlView = false;
@@ -349,6 +347,11 @@ export abstract class OneToManyReportLayoutBaseComponent extends ReportLayoutBas
 					this.matchSvc.showOmittedWords$.next(true);
 					this.isPartitalScan = true;
 					this.showOmittedWords = true;
+				}
+
+				this.isAiHtmlViewAvailable = this.reportCrawledVersion?.html?.value != null;
+				if (!this.isAiHtmlViewAvailable) {
+					this.isHtmlView = false;
 				}
 			}
 		});

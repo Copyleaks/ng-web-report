@@ -265,7 +265,7 @@
 					(keyup.enter)="selectTap(EReportViewType.WritingFeedbackTabView)">
 					<ng-container *ngIf="!isMobile; else mobileViewRef">
 						<div class="bar-title-container">
-							<span id="WritingFeedback-view-text" class="bar-title" web-report-title-font i18n>Writing Assistant</span>
+							<span id="WritingFeedback-view-text" class="bar-title" web-report-title-font i18n>Grammar Check</span>
 							<span class="bar-score" web-report-title-font>
 								<ng-container *ngIf="showWritingFeedbackIssues; else pctRef" i18n>
 									{{ hideWritingFeedbackTap && showDisabledProducts ? 'N/A' : totalWritingFeedbackIssues }}
@@ -563,7 +563,7 @@
 					</svg>
 				</div>
 				<div class="tab-title-container">
-					<span class="title" i18n>Writing Assist.</span>
+					<span class="title" i18n>Grammar Check</span>
 					<div class="score-container">
 						<span class="score">
 							<ng-container *ngIf="!showLoadingView; else loadingViewRef">

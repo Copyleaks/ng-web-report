@@ -676,11 +676,5 @@ export class ExplainableAIResultContainerComponent implements OnInit, OnChanges,
 	ngOnDestroy(): void {
 		this.unsubscribe$.next();
 		this.unsubscribe$.complete();
-
-		this.reportMatchesSvc.showAIPhrases$.next(false);
-		this.reportViewSvc.reportViewMode$.next({
-			...this.reportViewSvc.reportViewMode,
-			showAIPhrases: false,
-		});
 	}
 }

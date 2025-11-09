@@ -250,7 +250,9 @@ export abstract class OneToManyReportLayoutBaseComponent extends ReportLayoutBas
 						// Filter "AI Source Match" results by checking their alert code
 
 						this.aiSourceMatchResults = this.scanResultsView?.filter(
-							result => !!result?.resultPreview?.tags?.find(t => t.code === RESULT_TAGS_CODES.AI_SOURCE_MATCH)
+							result =>
+								!!result?.resultPreview?.tags?.find(t => t.code === RESULT_TAGS_CODES.AI_SOURCE_MATCH) &&
+								!!result.resultDetails
 						);
 					}
 

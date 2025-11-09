@@ -8,6 +8,7 @@ import { ReportDataService } from '../../../services/report-data.service';
 	selector: 'cr-ai-source-match-entry',
 	templateUrl: './cr-ai-source-match-entry.component.html',
 	styleUrls: ['./cr-ai-source-match-entry.component.scss'],
+	standalone: false,
 })
 export class CrAiSourceMatchEntryComponent implements OnInit {
 	/**

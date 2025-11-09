@@ -9,7 +9,7 @@
 					aria-label="This is a list of tags the are associated with the given corrections"
 					i18n-aria-label
 					role="list">
-					<mat-chip
+					<mat-chip-option
 						*ngIf="totalFilteredCorrections > 0"
 						class="filtered-chip"
 						role="listitem"
@@ -17,8 +17,8 @@
 						i18n-aria-label
 						i18n>
 						{{ totalFilteredCorrections }} filtered
-					</mat-chip>
-					<mat-chip
+					</mat-chip-option>
+					<mat-chip-option
 						*ngIf="totalExcludedCorrections > 0"
 						class="excluded-chip"
 						(click)="viewExcludedDialog()"
@@ -29,18 +29,19 @@
 						i18n-aria-label
 						i18n>
 						{{ totalExcludedCorrections }} excluded
-					</mat-chip>
+					</mat-chip-option>
 				</div>
 			</div>
 
 			<button
-				mat-icon-button
+				mat-button
 				class="clear-filter-btn clear-filter-button-text icon-button"
 				aria-label="Reset filters"
 				i18n-aria-label
+				[disableRipple]="true"
 				(click)="onClearFilter()">
 				<mat-icon class="clear-filter-button-icon">refresh</mat-icon>
-				<span i18n>Clear filter</span>
+				<span class="clear-filter-button-text" i18n>Clear filter</span>
 			</button>
 		</div>
 
@@ -211,7 +212,7 @@
 			</form>
 		</div>
 
-		<div mat-dialog-actions class="apply-and-discard-button-contaier">
+		<div mat-dialog-actions class="apply-and-discard-button-contaier" [class.is-mobile]="isMobile">
 			<cr-button
 				[outlined]="true"
 				[padding]="isMobile ? '3px 17px' : '3px 24px'"
@@ -274,7 +275,7 @@
 
 		<div mat-dialog-actions class="include-all-container">
 			<button
-				mat-icon-button
+				mat-button
 				class="icon-button include-all-btn"
 				aria-label="Includes or excludes previously excluded results"
 				i18n-aria-label

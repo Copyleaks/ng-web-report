@@ -6,6 +6,7 @@ import { Component, Input, OnInit } from '@angular/core';
 	templateUrl: './cr-ai-score-tooltip-content.component.html',
 	styleUrls: ['./cr-ai-score-tooltip-content.component.scss'],
 	animations: [trigger('fade', [state('void', style({ opacity: 0 })), transition('void <=> *', animate(300))])],
+	standalone: false,
 })
 export class CrAIScoreTooltipContentComponent implements OnInit {
 	@Input() tooltipText: string = '';

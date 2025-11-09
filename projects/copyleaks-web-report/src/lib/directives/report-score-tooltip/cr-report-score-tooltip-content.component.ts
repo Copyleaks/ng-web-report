@@ -9,6 +9,7 @@ import { ReportViewService } from '../../services/report-view.service';
 	templateUrl: './cr-report-score-tooltip-content.component.html',
 	styleUrls: ['./cr-report-score-tooltip-content.component.scss'],
 	animations: [trigger('fade', [state('void', style({ opacity: 0 })), transition('void <=> *', animate(300))])],
+	standalone: false,
 })
 export class CrReportScoreTooltipContentComponent implements OnInit {
 	@Input() scoreStats: IReportScoreTooltipModel | null = null;

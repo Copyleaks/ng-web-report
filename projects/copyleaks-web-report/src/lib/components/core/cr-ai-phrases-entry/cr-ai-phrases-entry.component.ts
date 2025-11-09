@@ -5,6 +5,7 @@ import { ReportViewService } from '../../../services/report-view.service';
 	selector: 'cr-ai-phrases-entry',
 	templateUrl: './cr-ai-phrases-entry.component.html',
 	styleUrls: ['./cr-ai-phrases-entry.component.scss'],
+	standalone: false,
 })
 export class CrAiPhrasesEntryComponent implements OnInit {
 	/**

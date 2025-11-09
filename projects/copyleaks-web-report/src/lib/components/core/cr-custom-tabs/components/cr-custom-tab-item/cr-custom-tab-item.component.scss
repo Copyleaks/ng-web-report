@@ -1,4 +1,4 @@
-@import '../../../../../styles/cls-accessibility-overrides/cls-accessibility-overrides.scss';
+@use '../../../../../styles/cls-accessibility-overrides/cls-accessibility-overrides.scss';
 .custom-tab {
 	::ng-deep cr-custom-tab-item-title {
 		width: 100%;

@@ -40,6 +40,7 @@ import { ReportStatistics } from '../../../../../models/report-statistics.models
 	selector: 'copyleaks-explainable-ai-result-container',
 	templateUrl: './explainable-ai-result-container.component.html',
 	styleUrls: ['./explainable-ai-result-container.component.scss'],
+	standalone: false,
 })
 export class ExplainableAIResultContainerComponent implements OnInit, OnChanges, AfterViewInit, OnDestroy {
 	@ViewChild('aiPhrasesMobileViewScrollContainer') aiPhrasesMobileViewScrollContainer!: ElementRef;
@@ -675,11 +676,5 @@ export class ExplainableAIResultContainerComponent implements OnInit, OnChanges,
 	ngOnDestroy(): void {
 		this.unsubscribe$.next();
 		this.unsubscribe$.complete();
-
-		this.reportMatchesSvc.showAIPhrases$.next(false);
-		this.reportViewSvc.reportViewMode$.next({
-			...this.reportViewSvc.reportViewMode,
-			showAIPhrases: false,
-		});
 	}
 }

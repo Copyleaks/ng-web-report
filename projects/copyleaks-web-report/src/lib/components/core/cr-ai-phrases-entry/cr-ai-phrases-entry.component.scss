@@ -1,4 +1,4 @@
-@import '../../../styles/website-colors.styles.scss';
+@use '../../../styles/website-colors.styles.scss' as *;
 
 :host {
 	display: flex;
@@ -71,8 +71,8 @@
 					margin-inline-end: 10px;
 					margin-inline-start: 0px !important;
 				}
-
-				.mat-button-wrapper {
+				.mat-button-wrapper,
+				.mdc-button__label {
 					direction: ltr;
 				}
 			}
@@ -265,6 +265,19 @@ cr-button {
 		.cls-button-text {
 			text-decoration: none !important;
 		}
+
+		a {
+			height: auto;
+		}
+
+		.mat-mdc-button-base.mat-primary {
+			border: none !important;
+		}
+
+		.mat-mdc-unelevated-button:not(:disabled) {
+			color: $color-primary !important;
+			background-color: transparent !important  ;
+		}
 	}
 }
 
@@ -326,7 +339,7 @@ cr-button {
 	display: flex;
 	height: fit-content !important;
 	::ng-deep {
-		.loader {
+		::ng-deep .skeleton-loader {
 			height: 18px !important;
 			margin-bottom: 0px !important;
 			border-radius: 10px !important;
@@ -337,7 +350,7 @@ cr-button {
 }
 
 .skeleton.circle {
-	::ng-deep .loader {
+	::ng-deep .skeleton-loader {
 		width: 24px !important;
 		height: 24px !important;
 		margin: 0px !important;
@@ -346,14 +359,14 @@ cr-button {
 }
 
 .skeleton.circle.small {
-	::ng-deep .loader {
+	::ng-deep .skeleton-loader {
 		width: 18px !important;
 		height: 18px !important;
 	}
 }
 
 .skeleton.bar {
-	::ng-deep .loader {
+	::ng-deep .skeleton-loader {
 		height: 8px !important;
 	}
 }

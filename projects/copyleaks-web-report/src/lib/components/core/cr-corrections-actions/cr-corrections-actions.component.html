@@ -9,7 +9,7 @@
 			</ng-template>
 		</span>
 		<div *ngIf="totalIgnoredWritingFeedbackIssues || totalFilteredWritingFeedbackIssues" class="stats-chips-container">
-			<mat-chip
+			<mat-basic-chip
 				*ngIf="totalIgnoredWritingFeedbackIssues"
 				(click)="openFilterDialog(true)"
 				(keyup.enter)="openFilterDialog(true, $event)"
@@ -19,8 +19,8 @@
 				[tabIndex]="0">
 				{{ totalIgnoredWritingFeedbackIssues }}
 				<ng-container i18n>excluded</ng-container>
-			</mat-chip>
-			<mat-chip
+			</mat-basic-chip>
+			<mat-basic-chip
 				*ngIf="totalFilteredWritingFeedbackIssues"
 				class="filter-chip"
 				(click)="openFilterDialog()"
@@ -48,7 +48,7 @@
 					i18n-matTooltip>
 					highlight_off
 				</mat-icon>
-			</mat-chip>
+			</mat-basic-chip>
 		</div>
 	</div>
 

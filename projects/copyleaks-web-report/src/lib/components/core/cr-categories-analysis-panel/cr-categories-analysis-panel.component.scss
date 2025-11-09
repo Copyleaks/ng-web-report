@@ -1,7 +1,7 @@
-@import '../../../styles/styles.scss';
-@import '../../../styles/website-colors.styles.scss';
-@import '../../../styles/cls-mat-components-overrides/cls-mat-expansion-panel-overrides.scss';
-@import '../../../styles/cls-mat-components-overrides/cls-mat-chip-overrides.scss';
+@use '../../../styles/styles.scss';
+@use '../../../styles/website-colors.styles.scss' as *;
+@use '../../../styles/cls-mat-components-overrides/cls-mat-expansion-panel-overrides.scss';
+@use '../../../styles/cls-mat-components-overrides/cls-mat-chip-overrides.scss';
 
 :host {
 	display: flex;
@@ -146,21 +146,27 @@
 		flex-direction: row;
 		gap: 10px;
 		flex-wrap: wrap;
-
-		mat-chip {
+		mat-basic-chip {
 			width: fit-content !important;
 			border-radius: 16px !important;
-			text-transform: capitalize;
 			cursor: pointer;
 			border: 1px solid $grayed-out-disabled !important;
 			background: $color-main-gray !important;
 			box-shadow: 0px 0px 2px 0px rgba(11, 22, 62, 0.08), 0px 0px 10px 0px rgba(11, 22, 62, 0.04) !important;
-			color: $color-dark-blue !important;
-			font-size: 12px !important;
-			font-style: normal !important;
-			font-weight: 500 !important;
-			line-height: normal !important;
 			padding: 3px 8px !important;
+
+			::ng-deep {
+				.mdc-evolution-chip__text-label,
+				.mat-mdc-chip-action-label {
+					text-transform: capitalize;
+					font-size: 12px !important;
+					font-style: normal !important;
+					font-weight: 500 !important;
+					line-height: normal !important;
+					color: $color-dark-blue !important;
+					cursor: pointer;
+				}
+			}
 		}
 	}
 
@@ -217,5 +223,16 @@
 		font-style: normal !important;
 		font-weight: 700 !important;
 		line-height: normal !important;
+
+		::ng-deep {
+			.mdc-evolution-chip__text-label,
+			.mat-mdc-chip-action-label {
+				color: $color-primary !important;
+				font-size: 12px !important;
+				font-style: normal !important;
+				font-weight: 700 !important;
+				line-height: normal !important;
+			}
+		}
 	}
 }

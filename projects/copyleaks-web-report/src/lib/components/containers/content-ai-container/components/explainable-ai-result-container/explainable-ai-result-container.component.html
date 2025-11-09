@@ -227,7 +227,7 @@
 				fxLayout="row"
 				fxLayoutAlign="center center"
 				fxLayoutGap="8px">
-				<mat-chip
+				<mat-chip-option
 					*ngIf="explainItemResults.length > 5 && currentViewedIndex > 2"
 					role="button"
 					(click)="scrollToIndex(0)"
@@ -235,7 +235,7 @@
 					{{
 						currentViewedIndex < explainItemResults.length - 3 ? currentViewedIndex - 2 : explainItemResults.length - 5
 					}}
-				</mat-chip>
+				</mat-chip-option>
 
 				<button
 					class="navigate-mobie-button"
@@ -258,7 +258,7 @@
 					[class.navigate-mobie-button-select]="navigateMobileButton == enumNavigateMobileButton.FifthButton"
 					(click)="onAIPhrasesViewDotNavigate(enumNavigateMobileButton.FifthButton)"></button>
 
-				<mat-chip
+				<mat-chip-option
 					*ngIf="explainItemResults.length > 5 && currentViewedIndex < explainItemResults.length - 3"
 					role="button"
 					(click)="scrollToIndex(explainItemResults.length - 1)"
@@ -266,7 +266,7 @@
 					{{
 						currentViewedIndex > 2 ? explainItemResults.length - currentViewedIndex - 3 : explainItemResults.length - 5
 					}}
-				</mat-chip>
+				</mat-chip-option>
 			</div>
 		</ng-container>
 		<ng-template #loadingState>

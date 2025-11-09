@@ -1,18 +1,18 @@
 import { Injectable } from '@angular/core';
 import { EWritingFeedbackCategories } from '../../../enums/copyleaks-web-report.enums';
-import { FormBuilder, FormControl, FormGroup } from '@angular/forms';
+import { UntypedFormBuilder, UntypedFormControl, UntypedFormGroup } from '@angular/forms';
 import { getSelectedCategoryStats } from '../../../utils/enums-helpers';
 import { IWritingFeedbackTypeStatistics } from '../../../models/report-statistics.models';
 
 @Injectable()
 export class FilterCorrectionsDialogService {
-	private _filterCorrectionsForm: FormGroup;
+	private _filterCorrectionsForm: UntypedFormGroup;
 
-	get filterCorrectionsForm(): FormGroup {
+	get filterCorrectionsForm(): UntypedFormGroup {
 		return this._filterCorrectionsForm;
 	}
 
-	constructor(private _formBuilder: FormBuilder) {}
+	constructor(private _formBuilder: UntypedFormBuilder) {}
 
 	public initForm(
 		hiddenCategories: EWritingFeedbackCategories[],
@@ -26,7 +26,7 @@ export class FilterCorrectionsDialogService {
 				const categoryStat = getSelectedCategoryStats(Number(EWritingFeedbackCategories[key]), writingFeedbackStats);
 				const isDisabled: boolean = !categoryStat || categoryStat.totalIssues === 0;
 
-				const control = new FormControl({ value: !isHidden, disabled: isDisabled });
+				const control = new UntypedFormControl({ value: !isHidden, disabled: isDisabled });
 				acc[key] = control;
 				return acc;
 			}, {});

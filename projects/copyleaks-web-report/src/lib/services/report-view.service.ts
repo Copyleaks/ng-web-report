@@ -1,7 +1,12 @@
 import { Injectable, TemplateRef } from '@angular/core';
 import { BehaviorSubject } from 'rxjs';
 import { ResultDetailItem } from '../models/report-matches.models';
-import { IReportResponsiveMode, IReportViewEvent } from '../models/report-view.models';
+import {
+	IReportResponsiveMode,
+	IReportViewEvent,
+	IScrollPositionState,
+	IScrollPositionStateMap,
+} from '../models/report-view.models';
 
 @Injectable()
 export class ReportViewService {
@@ -84,10 +89,72 @@ export class ReportViewService {
 	public get documentDirection() {
 		return this._documentDirection$.value;
 	}
+	private _scrollPositionStates$ = new BehaviorSubject<IScrollPositionStateMap>({});
+	/** Subject for maintaining scroll position states across different views. */
+	public get scrollPositionStates$() {
+		return this._scrollPositionStates$;
+	}
+	/** Getter for scroll position states. */
+	public get scrollPositionStates() {
+		return this._scrollPositionStates$.value;
+	}
 	private observer: MutationObserver;
 
 	constructor() {
 		this._observeDocumentDirection();
+	}
+
+	/**
+	 * Save scroll position for a specific view configuration.
+	 * @param state The scroll position state to save
+	 */
+	public saveScrollPosition(state: IScrollPositionState): void {
+		const key = this._getScrollStateKey(state.tab, state.origin, state.isHtmlView);
+		const currentStates = { ...this.scrollPositionStates };
+		currentStates[key] = state; // state still contains the page property
+		this._scrollPositionStates$.next(currentStates);
+		console.log(`Saved scroll state: ${key}`, state);
+	}
+
+	/**
+	 * Get scroll position for a specific view configuration.
+	 * @param tab The tab type
+	 * @param origin The report origin
+	 * @param isHtmlView Whether HTML view is active
+	 * @returns The saved scroll position state, or null if not found
+	 */
+	public getScrollPosition(
+		tab: 'matched-text' | 'ai-content' | 'writing-assistant' | 'custom',
+		origin: 'source' | 'original' | 'suspect',
+		isHtmlView: boolean
+	): IScrollPositionState | null {
+		const key = this._getScrollStateKey(tab, origin, isHtmlView);
+		const state = this.scrollPositionStates[key] || null;
+		if (state) {
+			console.log(`Found scroll state: ${key}`, state);
+		} else {
+			console.log(`No scroll state found for: ${key}`);
+		}
+		return state;
+	}
+
+	/**
+	 * Clear all saved scroll positions.
+	 */
+	public clearScrollPositions(): void {
+		this._scrollPositionStates$.next({});
+	}
+
+	/**
+	 * Generate a unique key for scroll position state (without page number).
+	 * @private
+	 */
+	private _getScrollStateKey(
+		tab: 'matched-text' | 'ai-content' | 'writing-assistant' | 'custom',
+		origin: 'source' | 'original' | 'suspect',
+		isHtmlView: boolean
+	): string {
+		return `${tab}_${origin}_${isHtmlView}`;
 	}
 
 	/**

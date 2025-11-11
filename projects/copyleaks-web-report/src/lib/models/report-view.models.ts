@@ -74,3 +74,34 @@ export interface IPercentageModel {
 	/** Indicates whether this percentage is enabled or disabled. */
 	disabled: boolean;
 }
+
+/**
+ * Represents the scroll position state for a specific view configuration.
+ */
+export interface IScrollPositionState {
+	/** The tab type */
+	tab: 'matched-text' | 'ai-content' | 'writing-assistant' | 'custom';
+
+	/** The report origin (source/original/suspect) */
+	origin: 'source' | 'original' | 'suspect';
+
+	/** The current page number */
+	page: number;
+
+	/** Whether HTML view is active */
+	isHtmlView: boolean;
+
+	/** Vertical scroll position */
+	scrollTop: number;
+
+	/** Horizontal scroll position */
+	scrollLeft: number;
+}
+
+/**
+ * Map of scroll positions keyed by unique view identifier.
+ * Key format: "tab_origin_page_isHtmlView"
+ */
+export interface IScrollPositionStateMap {
+	[key: string]: IScrollPositionState;
+}

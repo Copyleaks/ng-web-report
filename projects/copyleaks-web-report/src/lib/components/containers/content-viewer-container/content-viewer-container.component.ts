@@ -15,8 +15,8 @@ import {
 	TemplateRef,
 	ViewChild,
 } from '@angular/core';
-import { PostMessageEvent, ZoomEvent } from '../../../models/report-iframe-events.models';
-import { IReportViewEvent } from '../../../models/report-view.models';
+import { PostMessageEvent, ScrollPositionEvent, ZoomEvent } from '../../../models/report-iframe-events.models';
+import { IReportViewEvent, IScrollPositionState } from '../../../models/report-view.models';
 import {
 	Match,
 	MatchType,
@@ -77,6 +77,18 @@ export class ContentViewerContainerComponent implements OnInit, AfterViewInit, O
 	onFrameMessage(event: MessageEvent) {
 		const { source, data } = event;
 		if (source !== this.iFrameWindow) {
+			return;
+		}
+
+		// Handle scroll position updates from iframe
+		if (data.type === 'scrollPosition') {
+			if (this._ignoreScrollUpdates || this._isRestoringScroll) {
+				return;
+			}
+
+			const scrollEvent = data as ScrollPositionEvent;
+			this._scrollPosition.top = scrollEvent.scrollTop;
+			this._scrollPosition.left = scrollEvent.scrollLeft;
 			return;
 		}
 		this.iFrameMessageEvent.emit(data as PostMessageEvent);
@@ -438,6 +450,12 @@ export class ContentViewerContainerComponent implements OnInit, AfterViewInit, O
 
 	private _zoomIn: boolean;
 
+	private _scrollPosition: { top: number; left: number } = { top: 0, left: 0 };
+	private _ignoreScrollUpdates = false;
+	private _isRestoringScroll = false;
+	private _currentTab: 'matched-text' | 'ai-content' | 'writing-assistant' | 'custom' = 'matched-text';
+	private _pendingScrollRestore: { scrollTop: number; scrollLeft: number } | null = null;
+
 	constructor(
 		private _renderer: Renderer2,
 		private _cdr: ChangeDetectorRef,
@@ -483,6 +501,13 @@ export class ContentViewerContainerComponent implements OnInit, AfterViewInit, O
 					this.iFrameWindow = this.contentIFrame?.nativeElement?.contentWindow;
 					this.iframeLoaded = true;
 					this.showLoadingView = false;
+
+					// // // Restore scroll position if we have a pending restoration
+					if (this._isRestoringScroll && this._pendingScrollRestore) {
+						setTimeout(() => {
+							this._restoreScrollPosition();
+						}, 100);
+					}
 				}
 			},
 			false
@@ -542,6 +567,43 @@ export class ContentViewerContainerComponent implements OnInit, AfterViewInit, O
 	}
 
 	ngOnChanges(changes: SimpleChanges): void {
+		// Detect tab changes and save/restore scroll position
+		if ('isAIView' in changes || 'viewMode' in changes || 'contentHtmlMatches' in changes) {
+			const previousTab = this._currentTab;
+			const newTab = this._getCurrentTab();
+
+			if (previousTab !== newTab) {
+				let previousIsHtmlView = null;
+				let previousPage = this.currentPage;
+
+				// Save with the PREVIOUS isHtmlView value
+				if ('isHtmlView' in changes) {
+					previousIsHtmlView = changes['isHtmlView'].previousValue;
+				} else {
+					previousIsHtmlView = this.isHtmlView;
+				}
+				// Check if currentPage changed along with tab change
+				if ('currentPage' in changes) {
+					previousPage = changes['currentPage'].previousValue;
+				}
+
+				this._saveScrollPosition(previousTab, previousIsHtmlView, previousPage);
+				this._currentTab = newTab;
+				this._prepareForReload();
+				this._queueScrollRestore();
+			} else {
+				// Tab didn't change but inputs changed, just update current tab
+				this._currentTab = newTab;
+			}
+		}
+
+		// Detect view mode changes (HTML vs Text) - handle separately from tab changes
+		if ('isHtmlView' in changes && !changes['isHtmlView']?.firstChange) {
+			// Prepare for restoration with NEW isHtmlView value
+			this._prepareForReload();
+			this._queueScrollRestore();
+		}
+
 		if (
 			(('contentTextMatches' in changes && changes['contentTextMatches'].currentValue != undefined) ||
 				('customViewMatchesData' in changes && changes['customViewMatchesData'].currentValue != undefined)) &&
@@ -646,6 +708,9 @@ export class ContentViewerContainerComponent implements OnInit, AfterViewInit, O
 	}
 
 	onViewChange() {
+		const currentIsHtmlView = this.isHtmlView;
+		this._saveScrollPosition(this._currentTab, currentIsHtmlView);
+
 		if (!this.iframeLoaded) this.showLoadingView = true;
 		if (this.viewSvc.reportViewMode.alertCode === ALERTS.SUSPECTED_AI_TEXT_DETECTED) {
 			this._highlightService.aiInsightsSelectedResults?.forEach(result => {
@@ -739,6 +804,193 @@ export class ContentViewerContainerComponent implements OnInit, AfterViewInit, O
 					this.highlightCustomMatchText(customMatch);
 				});
 			});
+	}
+
+	private _getCurrentTab(): 'matched-text' | 'ai-content' | 'writing-assistant' | 'custom' {
+		const selectedCustomTabId = this.viewSvc.reportViewMode$.value.selectedCustomTabId;
+		if (selectedCustomTabId) return 'custom';
+		return this.isAIView ? 'ai-content' : this.viewMode == 'writing-feedback' ? 'writing-assistant' : 'matched-text';
+	}
+
+	/**
+	 * Prepare for content reload (view change, page change, tab change)
+	 */
+	private _prepareForReload(): void {
+		this._ignoreScrollUpdates = true;
+		this._isRestoringScroll = true;
+	}
+
+	/**
+	 * Queue scroll restoration - will be executed when iframe loads
+	 */
+	private _queueScrollRestore(): void {
+		const savedState = this.viewSvc.getScrollPosition(this._currentTab, this.reportOrigin, this.isHtmlView);
+
+		if (savedState) {
+			this._pendingScrollRestore = {
+				scrollTop: savedState.scrollTop,
+				scrollLeft: savedState.scrollLeft,
+			};
+
+			// Store the saved page for text view restoration
+			if (!this.isHtmlView) {
+				this._pendingScrollRestore['page'] = savedState.page;
+			}
+
+			// For wrapper scroll, restore immediately
+			if (this._isWrapperScroll()) {
+				setTimeout(() => {
+					this._restoreScrollPosition();
+				}, 0);
+			}
+			// For iframe view, restoration will happen when iframeLoaded becomes true
+		} else {
+			this._clearRestorationFlags();
+		}
+	}
+
+	/**
+	 * Save current scroll position to sessionStorage
+	 */
+	private _saveScrollPosition(
+		tab?: 'matched-text' | 'ai-content' | 'writing-assistant' | 'custom',
+		isHtmlView?: boolean,
+		page?: number
+	): void {
+		let scrollTop = 0;
+		let scrollLeft = 0;
+		const currentTab = tab || this._currentTab;
+		const currentIsHtmlView = isHtmlView !== undefined ? isHtmlView : this.isHtmlView;
+		const currentPage = page !== undefined ? page : this.currentPage;
+
+		// Check if we should use wrapper scroll or iframe scroll
+		if (this._isWrapperScroll(currentIsHtmlView)) {
+			// Wrapper container scroll (writing-feedback, ai-content, or text view)
+			let wrapperContainer = document
+				.querySelector('.content-container')
+				?.querySelector('.content-container') as HTMLElement;
+			if (!wrapperContainer) {
+				wrapperContainer = document.querySelector('.content-container') as HTMLElement;
+			}
+			if (wrapperContainer) {
+				scrollTop = wrapperContainer.scrollTop;
+				scrollLeft = wrapperContainer.scrollLeft;
+			}
+		} else {
+			// HTML/PDF iframe view - use tracked position from postMessage
+			scrollTop = this._scrollPosition.top;
+			scrollLeft = this._scrollPosition.left;
+		}
+		// Save to service using the interface
+		const state: IScrollPositionState = {
+			tab: currentTab,
+			origin: this.reportOrigin,
+			page: currentPage,
+			isHtmlView: currentIsHtmlView,
+			scrollTop,
+			scrollLeft,
+		};
+
+		this.viewSvc.saveScrollPosition(state);
+		console.log(`✓ Saved scroll for tab=${currentTab}, page=${currentPage}, isHtml=${currentIsHtmlView}:`, {
+			scrollTop,
+			scrollLeft,
+		});
+	}
+
+	/**
+	 * Restore scroll position from pending data
+	 */
+	private _restoreScrollPosition(): void {
+		if (!this._pendingScrollRestore) {
+			this._clearRestorationFlags();
+			return;
+		}
+
+		const { scrollTop, scrollLeft } = this._pendingScrollRestore;
+
+		// Check if we should use wrapper scroll or iframe scroll
+		if (this._isWrapperScroll()) {
+			// Text view - check if we need to change page first
+			const savedPage = this._pendingScrollRestore['page'];
+
+			if (savedPage && savedPage !== this.currentPage) {
+				// Emit event to change to the saved page
+				if (this.reportOrigin === 'original' || this.reportOrigin === 'source') {
+					this.viewChangeEvent.emit({
+						...this.viewSvc.reportViewMode,
+						sourcePageIndex: savedPage,
+					});
+				} else {
+					this.viewChangeEvent.emit({
+						...this.viewSvc.reportViewMode,
+						suspectPageIndex: savedPage,
+					});
+				}
+			}
+			// Wrapper container scroll (writing-feedback, ai-content, or text view)
+			let wrapperContainer = document
+				.querySelector('.content-container')
+				?.querySelector('.content-container') as HTMLElement;
+
+			if (!wrapperContainer) {
+				wrapperContainer = document.querySelector('.content-container') as HTMLElement;
+			}
+
+			if (wrapperContainer) {
+				wrapperContainer.scrollTop = scrollTop;
+				wrapperContainer.scrollLeft = scrollLeft;
+			}
+			this._pendingScrollRestore = null;
+			this._clearRestorationFlags();
+		} else if (this.isHtmlView && this.iframeLoaded) {
+			// HTML/PDF iframe view - send postMessage
+			const iframe = this.contentIFrame?.nativeElement;
+			if (iframe?.contentWindow) {
+				// Update tracked position immediately
+				this._scrollPosition = { top: scrollTop, left: scrollLeft };
+
+				iframe.contentWindow.postMessage(
+					{
+						type: 'setScroll',
+						scrollTop: scrollTop,
+						scrollLeft: scrollLeft,
+					},
+					'*'
+				);
+
+				// Clear restoration flags (to handle any scroll events from setting position)
+				setTimeout(() => {
+					this._pendingScrollRestore = null;
+					this._clearRestorationFlags();
+				}, 100);
+			} else {
+				this._clearRestorationFlags();
+			}
+		}
+	}
+
+	/**
+	 * Clear restoration flags
+	 */
+	private _clearRestorationFlags(): void {
+		this._ignoreScrollUpdates = false;
+		this._isRestoringScroll = false;
+	}
+
+	/**
+	 * Check if scroll should be on wrapper container (not iframe)
+	 */
+	private _isWrapperScroll(isHtmlView?: boolean): boolean {
+		const htmlView = isHtmlView !== undefined ? isHtmlView : this.isHtmlView;
+
+		// If it's HTML view, scroll is in the iframe (for all tabs)
+		if (htmlView && this.hasHtml) {
+			return false;
+		}
+
+		// Otherwise, scroll is on the wrapper container (text view for all tabs)
+		return true;
 	}
 
 	/**

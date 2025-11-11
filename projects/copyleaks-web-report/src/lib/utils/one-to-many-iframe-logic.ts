@@ -83,6 +83,25 @@ function ready() {
 			elem.addEventListener('mouseenter', onMatchHover);
 			elem.addEventListener('mouseleave', onMatchHover);
 		});
+
+		// Setup scroll tracking with debounce
+		let scrollTimeout: any;
+		const handleScroll = () => {
+			clearTimeout(scrollTimeout);
+			scrollTimeout = setTimeout(() => {
+				sendScrollPosition();
+			}, 300);
+		};
+
+		// Attach scroll listener to the appropriate element
+		if (isPdf) {
+			const pageContainer = document.getElementById('page-container');
+			if (pageContainer) {
+				pageContainer.addEventListener('scroll', handleScroll);
+			}
+		} else {
+			window.addEventListener('scroll', handleScroll);
+		}
 	}
 
 	/**
@@ -126,6 +145,12 @@ function ready() {
 				break;
 			case 'correction-select':
 				handelCorrectionSelect(event);
+				break;
+			case 'setScroll':
+				handleSetScroll(event);
+				break;
+			case 'getScroll':
+				handleGetScroll();
 				break;
 			default:
 		}
@@ -367,6 +392,74 @@ function ready() {
 		} else {
 			elem?.classList?.toggle('hover');
 		}
+	}
+	/**
+	 * Get the current scroll position from the appropriate element
+	 */
+	function getScrollPosition() {
+		let scrollTop = 0;
+		let scrollLeft = 0;
+
+		if (isPdf) {
+			const pageContainer = document.getElementById('page-container');
+			if (pageContainer) {
+				scrollTop = pageContainer.scrollTop;
+				scrollLeft = pageContainer.scrollLeft;
+			}
+		} else {
+			scrollTop = window.scrollY || document.documentElement.scrollTop || document.body.scrollTop;
+			scrollLeft = window.scrollX || document.documentElement.scrollLeft || document.body.scrollLeft;
+		}
+
+		return { scrollTop, scrollLeft };
+	}
+
+	/**
+	 * Set scroll position on the appropriate element
+	 */
+	function setScrollPosition(scrollTop: number, scrollLeft: number) {
+		if (isPdf) {
+			const pageContainer = document.getElementById('page-container');
+			if (pageContainer) {
+				pageContainer.scrollTop = scrollTop;
+				pageContainer.scrollLeft = scrollLeft;
+			}
+		} else {
+			window.scrollTo(scrollLeft, scrollTop);
+			// Fallback for older browsers
+			document.documentElement.scrollTop = scrollTop;
+			document.body.scrollTop = scrollTop;
+			document.documentElement.scrollLeft = scrollLeft;
+			document.body.scrollLeft = scrollLeft;
+		}
+	}
+
+	/**
+	 * Handle setScroll message from parent
+	 */
+	function handleSetScroll(event: any) {
+		const { scrollTop, scrollLeft } = event;
+		setScrollPosition(scrollTop, scrollLeft);
+	}
+
+	/**
+	 * Handle getScroll message from parent
+	 */
+	function handleGetScroll() {
+		sendScrollPosition();
+	}
+
+	/**
+	 * Send current scroll position to parent
+	 */
+	function sendScrollPosition() {
+		const { scrollTop, scrollLeft } = getScrollPosition();
+
+		messageParent({
+			type: 'scrollPosition',
+			scrollTop: scrollTop,
+			scrollLeft: scrollLeft,
+		});
 	}
 
 	function zoomIn() {

@@ -16,7 +16,7 @@ import {
 	ViewChild,
 } from '@angular/core';
 import { PostMessageEvent, ScrollPositionEvent, ZoomEvent } from '../../../models/report-iframe-events.models';
-import { IReportViewEvent, IScrollPositionState } from '../../../models/report-view.models';
+import { EReportViewTab, IReportViewEvent, IScrollPositionState } from '../../../models/report-view.models';
 import {
 	Match,
 	MatchType,
@@ -87,8 +87,7 @@ export class ContentViewerContainerComponent implements OnInit, AfterViewInit, O
 			}
 
 			const scrollEvent = data as ScrollPositionEvent;
-			this._scrollPosition.top = scrollEvent.scrollTop;
-			this._scrollPosition.left = scrollEvent.scrollLeft;
+			this.viewSvc.setIframeScrollPosition(scrollEvent.scrollTop, scrollEvent.scrollLeft);
 			return;
 		}
 		this.iFrameMessageEvent.emit(data as PostMessageEvent);
@@ -450,10 +449,8 @@ export class ContentViewerContainerComponent implements OnInit, AfterViewInit, O
 
 	private _zoomIn: boolean;
 
-	private _scrollPosition: { top: number; left: number } = { top: 0, left: 0 };
 	private _ignoreScrollUpdates = false;
 	private _isRestoringScroll = false;
-	private _currentTab: 'matched-text' | 'ai-content' | 'writing-assistant' | 'custom' = 'matched-text';
 	private _pendingScrollRestore: { scrollTop: number; scrollLeft: number } | null = null;
 
 	constructor(
@@ -569,7 +566,7 @@ export class ContentViewerContainerComponent implements OnInit, AfterViewInit, O
 	ngOnChanges(changes: SimpleChanges): void {
 		// Detect tab changes and save/restore scroll position
 		if ('isAIView' in changes || 'viewMode' in changes || 'contentHtmlMatches' in changes) {
-			const previousTab = this._currentTab;
+			const previousTab = this.viewSvc.currentViewTab;
 			const newTab = this._getCurrentTab();
 
 			if (previousTab !== newTab) {
@@ -588,12 +585,9 @@ export class ContentViewerContainerComponent implements OnInit, AfterViewInit, O
 				}
 
 				this._saveScrollPosition(previousTab, previousIsHtmlView, previousPage);
-				this._currentTab = newTab;
+				this.viewSvc.setCurrentViewTab(newTab);
 				this._prepareForReload();
 				this._queueScrollRestore();
-			} else {
-				// Tab didn't change but inputs changed, just update current tab
-				this._currentTab = newTab;
 			}
 		}
 
@@ -602,6 +596,17 @@ export class ContentViewerContainerComponent implements OnInit, AfterViewInit, O
 			// Prepare for restoration with NEW isHtmlView value
 			this._prepareForReload();
 			this._queueScrollRestore();
+		}
+
+		// Detect page changes (when page finishes loading after restoration request)
+		if ('currentPage' in changes && !changes['currentPage']?.firstChange) {
+			// If we have a pending scroll restore and the page just changed, restore scroll now
+			if (this._pendingScrollRestore && this._isRestoringScroll) {
+				const savedPage = this._pendingScrollRestore['page'];
+				if (savedPage && savedPage === this.currentPage) {
+					this._restoreScrollPosition();
+				}
+			}
 		}
 
 		if (
@@ -709,7 +714,7 @@ export class ContentViewerContainerComponent implements OnInit, AfterViewInit, O
 
 	onViewChange() {
 		const currentIsHtmlView = this.isHtmlView;
-		this._saveScrollPosition(this._currentTab, currentIsHtmlView);
+		this._saveScrollPosition(this.viewSvc.currentViewTab, currentIsHtmlView);
 
 		if (!this.iframeLoaded) this.showLoadingView = true;
 		if (this.viewSvc.reportViewMode.alertCode === ALERTS.SUSPECTED_AI_TEXT_DETECTED) {
@@ -806,10 +811,14 @@ export class ContentViewerContainerComponent implements OnInit, AfterViewInit, O
 			});
 	}
 
-	private _getCurrentTab(): 'matched-text' | 'ai-content' | 'writing-assistant' | 'custom' {
+	private _getCurrentTab(): EReportViewTab {
 		const selectedCustomTabId = this.viewSvc.reportViewMode$.value.selectedCustomTabId;
-		if (selectedCustomTabId) return 'custom';
-		return this.isAIView ? 'ai-content' : this.viewMode == 'writing-feedback' ? 'writing-assistant' : 'matched-text';
+		if (selectedCustomTabId) return EReportViewTab.Custom;
+		return this.isAIView
+			? EReportViewTab.AIContent
+			: this.viewMode == 'writing-feedback'
+			? EReportViewTab.WritingAssistant
+			: EReportViewTab.MatchedText;
 	}
 
 	/**
@@ -824,7 +833,7 @@ export class ContentViewerContainerComponent implements OnInit, AfterViewInit, O
 	 * Queue scroll restoration - will be executed when iframe loads
 	 */
 	private _queueScrollRestore(): void {
-		const savedState = this.viewSvc.getScrollPosition(this._currentTab, this.reportOrigin, this.isHtmlView);
+		const savedState = this.viewSvc.getScrollPosition(this.viewSvc.currentViewTab, this.isHtmlView);
 
 		if (savedState) {
 			this._pendingScrollRestore = {
@@ -852,14 +861,10 @@ export class ContentViewerContainerComponent implements OnInit, AfterViewInit, O
 	/**
 	 * Save current scroll position to sessionStorage
 	 */
-	private _saveScrollPosition(
-		tab?: 'matched-text' | 'ai-content' | 'writing-assistant' | 'custom',
-		isHtmlView?: boolean,
-		page?: number
-	): void {
+	private _saveScrollPosition(tab?: EReportViewTab, isHtmlView?: boolean, page?: number): void {
 		let scrollTop = 0;
 		let scrollLeft = 0;
-		const currentTab = tab || this._currentTab;
+		const currentTab = tab || this.viewSvc.currentViewTab;
 		const currentIsHtmlView = isHtmlView !== undefined ? isHtmlView : this.isHtmlView;
 		const currentPage = page !== undefined ? page : this.currentPage;
 
@@ -877,9 +882,10 @@ export class ContentViewerContainerComponent implements OnInit, AfterViewInit, O
 				scrollLeft = wrapperContainer.scrollLeft;
 			}
 		} else {
-			// HTML/PDF iframe view - use tracked position from postMessage
-			scrollTop = this._scrollPosition.top;
-			scrollLeft = this._scrollPosition.left;
+			// HTML/PDF iframe view - use tracked position from service
+			const iframeScroll = this.viewSvc.iframeScrollPosition;
+			scrollTop = iframeScroll.top;
+			scrollLeft = iframeScroll.left;
 		}
 		// Save to service using the interface
 		const state: IScrollPositionState = {
@@ -892,10 +898,6 @@ export class ContentViewerContainerComponent implements OnInit, AfterViewInit, O
 		};
 
 		this.viewSvc.saveScrollPosition(state);
-		console.log(`✓ Saved scroll for tab=${currentTab}, page=${currentPage}, isHtml=${currentIsHtmlView}:`, {
-			scrollTop,
-			scrollLeft,
-		});
 	}
 
 	/**
@@ -927,7 +929,9 @@ export class ContentViewerContainerComponent implements OnInit, AfterViewInit, O
 						suspectPageIndex: savedPage,
 					});
 				}
+				return;
 			}
+
 			// Wrapper container scroll (writing-feedback, ai-content, or text view)
 			let wrapperContainer = document
 				.querySelector('.content-container')
@@ -947,8 +951,8 @@ export class ContentViewerContainerComponent implements OnInit, AfterViewInit, O
 			// HTML/PDF iframe view - send postMessage
 			const iframe = this.contentIFrame?.nativeElement;
 			if (iframe?.contentWindow) {
-				// Update tracked position immediately
-				this._scrollPosition = { top: scrollTop, left: scrollLeft };
+				// Update service with the position we're restoring to
+				this.viewSvc.setIframeScrollPosition(scrollTop, scrollLeft);
 
 				iframe.contentWindow.postMessage(
 					{

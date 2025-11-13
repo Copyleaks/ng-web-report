@@ -29,6 +29,13 @@ export interface IReportViewQueryParams {
 	showAIPhrases?: string;
 }
 
+export enum EReportViewTab {
+	MatchedText = 'matched-text',
+	AIContent = 'ai-content',
+	WritingAssistant = 'writing-assistant',
+	Custom = 'custom',
+}
+
 export interface IReportResponsiveMode {
 	mode: EResponsiveLayoutType;
 }
@@ -80,7 +87,7 @@ export interface IPercentageModel {
  */
 export interface IScrollPositionState {
 	/** The tab type */
-	tab: 'matched-text' | 'ai-content' | 'writing-assistant' | 'custom';
+	tab: EReportViewTab;
 
 	/** The report origin (source/original/suspect) */
 	origin: 'source' | 'original' | 'suspect';

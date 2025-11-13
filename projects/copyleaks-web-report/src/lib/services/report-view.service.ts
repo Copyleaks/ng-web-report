@@ -2,6 +2,7 @@ import { Injectable, TemplateRef } from '@angular/core';
 import { BehaviorSubject } from 'rxjs';
 import { ResultDetailItem } from '../models/report-matches.models';
 import {
+	EReportViewTab,
 	IReportResponsiveMode,
 	IReportViewEvent,
 	IScrollPositionState,
@@ -98,6 +99,11 @@ export class ReportViewService {
 	public get scrollPositionStates() {
 		return this._scrollPositionStates$.value;
 	}
+
+	private _currentViewTab$ = new BehaviorSubject<EReportViewTab>(EReportViewTab.MatchedText);
+
+	private _iframeScrollPosition$ = new BehaviorSubject<{ top: number; left: number }>({ top: 0, left: 0 });
+
 	private observer: MutationObserver;
 
 	constructor() {
@@ -109,11 +115,10 @@ export class ReportViewService {
 	 * @param state The scroll position state to save
 	 */
 	public saveScrollPosition(state: IScrollPositionState): void {
-		const key = this._getScrollStateKey(state.tab, state.origin, state.isHtmlView);
+		const key = this._getScrollStateKey(state.tab, state.isHtmlView);
 		const currentStates = { ...this.scrollPositionStates };
-		currentStates[key] = state; // state still contains the page property
+		currentStates[key] = state;
 		this._scrollPositionStates$.next(currentStates);
-		console.log(`Saved scroll state: ${key}`, state);
 	}
 
 	/**
@@ -123,18 +128,9 @@ export class ReportViewService {
 	 * @param isHtmlView Whether HTML view is active
 	 * @returns The saved scroll position state, or null if not found
 	 */
-	public getScrollPosition(
-		tab: 'matched-text' | 'ai-content' | 'writing-assistant' | 'custom',
-		origin: 'source' | 'original' | 'suspect',
-		isHtmlView: boolean
-	): IScrollPositionState | null {
-		const key = this._getScrollStateKey(tab, origin, isHtmlView);
+	public getScrollPosition(tab: EReportViewTab, isHtmlView: boolean): IScrollPositionState | null {
+		const key = this._getScrollStateKey(tab, isHtmlView);
 		const state = this.scrollPositionStates[key] || null;
-		if (state) {
-			console.log(`Found scroll state: ${key}`, state);
-		} else {
-			console.log(`No scroll state found for: ${key}`);
-		}
 		return state;
 	}
 
@@ -149,12 +145,8 @@ export class ReportViewService {
 	 * Generate a unique key for scroll position state (without page number).
 	 * @private
 	 */
-	private _getScrollStateKey(
-		tab: 'matched-text' | 'ai-content' | 'writing-assistant' | 'custom',
-		origin: 'source' | 'original' | 'suspect',
-		isHtmlView: boolean
-	): string {
-		return `${tab}_${origin}_${isHtmlView}`;
+	private _getScrollStateKey(tab: EReportViewTab, isHtmlView: boolean): string {
+		return `${tab}_${isHtmlView}`;
 	}
 
 	/**
@@ -170,6 +162,54 @@ export class ReportViewService {
 		});
 	}
 
+	/**
+	 * Observable for the current active tab
+	 */
+	public get currentViewTab$() {
+		return this._currentViewTab$.asObservable();
+	}
+
+	/**
+	 * Get the current active tab
+	 */
+	public get currentViewTab() {
+		return this._currentViewTab$.value;
+	}
+
+	/**
+	 * Set the current active tab
+	 */
+	public setCurrentViewTab(tab: EReportViewTab) {
+		this._currentViewTab$.next(tab);
+	}
+
+	/**
+	 * Observable for iframe scroll position
+	 */
+	public get iframeScrollPosition$() {
+		return this._iframeScrollPosition$.asObservable();
+	}
+
+	/**
+	 * Get the current iframe scroll position
+	 */
+	public get iframeScrollPosition() {
+		return this._iframeScrollPosition$.value;
+	}
+
+	/**
+	 * Update the iframe scroll position
+	 */
+	public setIframeScrollPosition(top: number, left: number) {
+		this._iframeScrollPosition$.next({ top, left });
+	}
+
+	/**
+	 * Clear the iframe scroll position
+	 */
+	public clearIframeScrollPosition() {
+		this._iframeScrollPosition$.next({ top: 0, left: 0 });
+	}
 	/**
 	 * Get the document direction (ltr/rtl).
 	 * @returns The document direction (ltr/rtl).

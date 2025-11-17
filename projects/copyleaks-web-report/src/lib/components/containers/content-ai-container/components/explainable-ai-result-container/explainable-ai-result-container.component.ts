@@ -644,6 +644,18 @@ export class ExplainableAIResultContainerComponent implements OnInit, OnChanges,
 	 * @returns void
 	 */
 	private _calculateAiSourceMatchResultsStats() {
+		// filter out results that are excluded or filtered in this._reportDataSvc.scanResultsPreviews
+		this.aiSourceMatchResults = this.aiSourceMatchResults.filter(
+			result =>
+				(this._reportDataSvc.scanResultsPreviews?.filters?.execludedResultIds?.length
+					? this._reportDataSvc.scanResultsPreviews?.filters?.execludedResultIds?.indexOf(result.resultPreview.id) ===
+					  -1
+					: true) &&
+				(this._reportDataSvc.scanResultsPreviews?.filters?.filteredResultIds?.length
+					? this._reportDataSvc.scanResultsPreviews?.filters?.filteredResultIds?.indexOf(result.resultPreview.id) === -1
+					: true)
+		);
+
 		this.aiSourceMatchResultsStats = helpers.calculateStatistics(
 			this._reportDataSvc.scanResultsPreviews,
 			this.aiSourceMatchResults?.map(amr => amr.resultDetails),

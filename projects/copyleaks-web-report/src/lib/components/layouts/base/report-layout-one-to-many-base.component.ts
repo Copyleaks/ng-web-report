@@ -251,7 +251,9 @@ export abstract class OneToManyReportLayoutBaseComponent extends ReportLayoutBas
 						// Filter "AI Source Match" results by checking their alert code
 
 						this.aiSourceMatchResults = this.scanResultsView?.filter(
-							result => !!result?.resultPreview?.tags?.find(t => t.code === RESULT_TAGS_CODES.AI_SOURCE_MATCH)
+							result =>
+								!!result?.resultPreview?.tags?.find(t => t.code === RESULT_TAGS_CODES.AI_SOURCE_MATCH) &&
+								!!result.resultDetails
 						);
 					}
 
@@ -268,8 +270,6 @@ export abstract class OneToManyReportLayoutBaseComponent extends ReportLayoutBas
 									if (match.html != null && match.html != undefined) this.isAiHtmlViewAvailable = true;
 								});
 							});
-						} else {
-							this.isAiHtmlViewAvailable = false;
 						}
 						if (!this.isAiHtmlViewAvailable) {
 							this.isHtmlView = false;
@@ -350,6 +350,11 @@ export abstract class OneToManyReportLayoutBaseComponent extends ReportLayoutBas
 					this.matchSvc.showOmittedWords$.next(true);
 					this.isPartitalScan = true;
 					this.showOmittedWords = true;
+				}
+
+				this.isAiHtmlViewAvailable = this.reportCrawledVersion?.html?.value != null;
+				if (!this.isAiHtmlViewAvailable) {
+					this.isHtmlView = false;
 				}
 			}
 		});

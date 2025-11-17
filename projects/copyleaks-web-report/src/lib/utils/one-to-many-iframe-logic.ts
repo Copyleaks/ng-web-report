@@ -632,6 +632,29 @@ function ready() {
 
 		return false;
 	}
+
+	// Add this function at the end of the ready() function, just before the closing brace
+	function notifyParentReady() {
+		// Wait for all resources to load
+		window.addEventListener('load', function () {
+			// Wait for next animation frame to ensure rendering is complete
+			requestAnimationFrame(function () {
+				requestAnimationFrame(function () {
+					// Send ready message to parent
+					const { scrollTop, scrollLeft } = getScrollPosition();
+					messageParent({
+						type: 'iframeReady',
+						scrollHeight: document.body.scrollHeight,
+						scrollTop: scrollTop,
+						scrollLeft: scrollLeft,
+					});
+				});
+			});
+		});
+	}
+
+	// Call it at the end of ready() function
+	notifyParentReady();
 }
 
 export default `(${onDocumentReady.toString()})(${ready.toString()})`;

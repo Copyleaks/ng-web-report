@@ -41,7 +41,7 @@ import { COPYLEAKS_REPORT_IFRAME_STYLES } from '../../../constants/report-iframe
 
 import oneToManyIframeJsScript from '../../../utils/one-to-many-iframe-logic';
 import oneToOneIframeJsScript from '../../../utils/one-to-one-iframe-logic';
-import { filter } from 'rxjs/operators';
+import { filter, take } from 'rxjs/operators';
 import * as rangy from 'rangy';
 import * as rangyclassapplier from 'rangy/lib/rangy-classapplier';
 
@@ -77,6 +77,16 @@ export class ContentViewerContainerComponent implements OnInit, AfterViewInit, O
 	onFrameMessage(event: MessageEvent) {
 		const { source, data } = event;
 		if (source !== this.iFrameWindow) {
+			return;
+		}
+
+		if (data.type === 'iframeReady') {
+			console.log('Iframe ready event received:', data);
+			if (this._iframeReadyResolver) {
+				clearTimeout(this._iframeReadyTimeout);
+				this._iframeReadyResolver();
+				this._iframeReadyResolver = null;
+			}
 			return;
 		}
 
@@ -452,6 +462,8 @@ export class ContentViewerContainerComponent implements OnInit, AfterViewInit, O
 	private _ignoreScrollUpdates = false;
 	private _isRestoringScroll = false;
 	private _pendingScrollRestore: { scrollTop: number; scrollLeft: number } | null = null;
+	private _iframeReadyTimeout: any;
+	private _iframeReadyResolver: ((value: void) => void) | null = null;
 
 	constructor(
 		private _renderer: Renderer2,
@@ -498,12 +510,13 @@ export class ContentViewerContainerComponent implements OnInit, AfterViewInit, O
 					this.iFrameWindow = this.contentIFrame?.nativeElement?.contentWindow;
 					this.iframeLoaded = true;
 					this.showLoadingView = false;
-
-					// // // Restore scroll position if we have a pending restoration
+					console.log('iFrame loaded');
+					// // Restore scroll position if we have a pending restoration
 					if (this._isRestoringScroll && this._pendingScrollRestore) {
-						setTimeout(() => {
+						this._waitForIframeReady().then(() => {
+							console.log('Iframe is ready, restoring scroll position');
 							this._restoreScrollPosition();
-						}, 100);
+						});
 					}
 				}
 			},
@@ -564,10 +577,21 @@ export class ContentViewerContainerComponent implements OnInit, AfterViewInit, O
 	}
 
 	ngOnChanges(changes: SimpleChanges): void {
+		// debugger;
 		// Detect tab changes and save/restore scroll position
 		if ('isAIView' in changes || 'viewMode' in changes || 'contentHtmlMatches' in changes) {
 			const previousTab = this.viewSvc.currentViewTab;
 			const newTab = this._getCurrentTab();
+			console.log('Previous Tab:', previousTab, 'New Tab:', newTab);
+			console.log(
+				'previous custom tab id:',
+				this.viewSvc.previousCustomTabId,
+				'current custom tab id:',
+				this.viewSvc.currentCustomTabId
+			);
+
+			let previousIsHtmlView = null;
+			let previousPage = this.currentPage;
 
 			if (previousTab !== newTab) {
 				let previousIsHtmlView = null;
@@ -583,11 +607,53 @@ export class ContentViewerContainerComponent implements OnInit, AfterViewInit, O
 				if ('currentPage' in changes) {
 					previousPage = changes['currentPage'].previousValue;
 				}
-
-				this._saveScrollPosition(previousTab, previousIsHtmlView, previousPage);
+				if (this.viewSvc.previousCustomTabId !== 'ai-overview') {
+					this._saveScrollPosition(previousTab, previousIsHtmlView, previousPage);
+				}
 				this.viewSvc.setCurrentViewTab(newTab);
-				this._prepareForReload();
-				this._queueScrollRestore();
+				if (this.viewSvc.currentCustomTabId !== 'ai-overview') {
+					console.log('Restoring scroll for tab:', newTab);
+					this._prepareForReload();
+					this._queueScrollRestore();
+				}
+			} else if (previousTab === EReportViewTab.Custom && newTab === EReportViewTab.Custom) {
+				if ('isHtmlView' in changes) {
+					console.log('isHtmlView changed within Custom tab');
+				}
+				// Save with the PREVIOUS isHtmlView value
+				if ('isHtmlView' in changes) {
+					previousIsHtmlView = changes['isHtmlView']?.previousValue;
+					if (previousIsHtmlView === undefined || previousIsHtmlView === null) {
+						previousIsHtmlView = changes['isHtmlView']?.currentValue ? false : true;
+					}
+				} else {
+					previousIsHtmlView = this.isHtmlView;
+				}
+				// Check if currentPage changed along with tab change
+				if ('currentPage' in changes) {
+					previousPage = changes['currentPage'].previousValue;
+				}
+				this.viewSvc.counter$.pipe(take(1)).subscribe(counterValue => {
+					if (counterValue === 0) {
+						if (this.viewSvc.previousCustomTabId === 'grading-feedback') {
+							this._saveScrollPosition(previousTab, previousIsHtmlView, previousPage);
+						}
+						this.viewSvc.setCurrentViewTab(newTab);
+						if (this.viewSvc.currentCustomTabId === 'grading-feedback') {
+							console.log('Restoring scroll for tab:', newTab);
+							this._prepareForReload();
+							this._queueScrollRestore();
+						}
+						if (
+							this.viewSvc.previousCustomTabId == 'grading-feedback' &&
+							this.viewSvc.currentCustomTabId == 'ai-overview'
+						) {
+							this.viewSvc.incrementCounter();
+						}
+					} else {
+						this.viewSvc.resetCounter();
+					}
+				});
 			}
 		}
 
@@ -713,6 +779,7 @@ export class ContentViewerContainerComponent implements OnInit, AfterViewInit, O
 	}
 
 	onViewChange() {
+		// debugger;
 		const currentIsHtmlView = this.isHtmlView;
 		this._saveScrollPosition(this.viewSvc.currentViewTab, currentIsHtmlView);
 
@@ -749,6 +816,20 @@ export class ContentViewerContainerComponent implements OnInit, AfterViewInit, O
 		this._highlightService.clear();
 		this._highlightService.clearAllMatchs();
 		this._cdr.detectChanges();
+	}
+
+	private _waitForIframeReady(): Promise<void> {
+		return new Promise(resolve => {
+			// Store the resolver so we can call it when we receive the message
+			this._iframeReadyResolver = resolve;
+
+			// Set a timeout in case the message never arrives (fallback)
+			this._iframeReadyTimeout = setTimeout(() => {
+				console.log('Iframe ready timeout - proceeding anyway');
+				this._iframeReadyResolver = null;
+				resolve();
+			}, 2000); // 2 second timeout
+		});
 	}
 
 	changeContentDirection(direction: ReportContentDirectionMode) {
@@ -880,12 +961,14 @@ export class ContentViewerContainerComponent implements OnInit, AfterViewInit, O
 			if (wrapperContainer) {
 				scrollTop = wrapperContainer.scrollTop;
 				scrollLeft = wrapperContainer.scrollLeft;
+				console.log('Saving scroll position from wrapper container', scrollTop, scrollLeft);
 			}
 		} else {
 			// HTML/PDF iframe view - use tracked position from service
 			const iframeScroll = this.viewSvc.iframeScrollPosition;
 			scrollTop = iframeScroll.top;
 			scrollLeft = iframeScroll.left;
+			console.log('Saving scroll position from iframe', scrollTop, scrollLeft);
 		}
 		// Save to service using the interface
 		const state: IScrollPositionState = {
@@ -944,6 +1027,7 @@ export class ContentViewerContainerComponent implements OnInit, AfterViewInit, O
 			if (wrapperContainer) {
 				wrapperContainer.scrollTop = scrollTop;
 				wrapperContainer.scrollLeft = scrollLeft;
+				console.log('Restoring scroll position in wrapper container', scrollTop, scrollLeft);
 			}
 			this._pendingScrollRestore = null;
 			this._clearRestorationFlags();
@@ -951,6 +1035,7 @@ export class ContentViewerContainerComponent implements OnInit, AfterViewInit, O
 			// HTML/PDF iframe view - send postMessage
 			const iframe = this.contentIFrame?.nativeElement;
 			if (iframe?.contentWindow) {
+				console.log('Restoring scroll position in iframeeee', scrollTop, scrollLeft);
 				// Update service with the position we're restoring to
 				this.viewSvc.setIframeScrollPosition(scrollTop, scrollLeft);
 

@@ -12,7 +12,8 @@ export type PostMessageEvent =
 	| MatchGroupSelectEvent
 	| ScrollPositionEvent
 	| SetScrollEvent
-	| GetScrollEvent;
+	| GetScrollEvent
+	| IframeReadyEvent;
 
 /** base type of post message event */
 interface BasePostMessageEvent {
@@ -102,4 +103,15 @@ export interface SetScrollEvent extends BasePostMessageEvent {
 /** Event type indicating a request to get current scroll position from iframe */
 export interface GetScrollEvent extends BasePostMessageEvent {
 	type: 'getScroll';
+}
+
+/** Event type indicating iframe content is fully loaded and ready */
+export interface IframeReadyEvent extends BasePostMessageEvent {
+	type: 'iframeReady';
+	/** the scroll height of the iframe content */
+	scrollHeight: number;
+	/** current scroll top position */
+	scrollTop: number;
+	/** current scroll left position */
+	scrollLeft: number;
 }

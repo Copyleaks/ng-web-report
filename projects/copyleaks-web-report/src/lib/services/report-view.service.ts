@@ -8,6 +8,7 @@ import {
 	IScrollPositionState,
 	IScrollPositionStateMap,
 } from '../models/report-view.models';
+import { distinctUntilChanged, map } from 'rxjs/operators';
 
 @Injectable()
 export class ReportViewService {
@@ -101,6 +102,9 @@ export class ReportViewService {
 	}
 
 	private _currentViewTab$ = new BehaviorSubject<EReportViewTab>(EReportViewTab.MatchedText);
+	private _previousCustomTabId: string | undefined = undefined;
+	private _currentCustomTabId: string | undefined = undefined;
+	private _counter$ = new BehaviorSubject<number>(0);
 
 	private _iframeScrollPosition$ = new BehaviorSubject<{ top: number; left: number }>({ top: 0, left: 0 });
 
@@ -108,8 +112,57 @@ export class ReportViewService {
 
 	constructor() {
 		this._observeDocumentDirection();
+		// Track custom tab ID changes
+		this._reportViewMode$
+			.pipe(
+				map(mode => mode.selectedCustomTabId),
+				distinctUntilChanged()
+			)
+			.subscribe(newCustomTabId => {
+				if (this._currentCustomTabId !== newCustomTabId) {
+					this._previousCustomTabId = this._currentCustomTabId;
+					this._currentCustomTabId = newCustomTabId;
+				}
+			});
 	}
 
+	public get counter$() {
+		return this._counter$.asObservable();
+	}
+
+	public incrementCounter(): void {
+		this._counter$.next(this._counter$.value + 1);
+	}
+
+	public resetCounter(): void {
+		this._counter$.next(0);
+	}
+
+	/**
+	 * Check if we just switched between two different custom tabs
+	 */
+	public isCustomTabChange(): boolean {
+		return (
+			this._previousCustomTabId !== undefined &&
+			this._currentCustomTabId !== undefined &&
+			this._previousCustomTabId !== this._currentCustomTabId
+		);
+	}
+
+	public get currentCustomTabId(): string | undefined {
+		return this._currentCustomTabId;
+	}
+
+	get previousCustomTabId(): string | undefined {
+		return this._previousCustomTabId;
+	}
+
+	/**
+	 * Clear the custom tab change flag
+	 */
+	public clearCustomTabChangeFlag(): void {
+		this._previousCustomTabId = this._currentCustomTabId;
+	}
 	/**
 	 * Save scroll position for a specific view configuration.
 	 * @param state The scroll position state to save

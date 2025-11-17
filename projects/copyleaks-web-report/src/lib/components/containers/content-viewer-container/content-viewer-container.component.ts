@@ -14,10 +14,13 @@ import {
 	SimpleChanges,
 	TemplateRef,
 	ViewChild,
+	ViewRef,
 } from '@angular/core';
 import { PostMessageEvent, ZoomEvent } from '../../../models/report-iframe-events.models';
 import { IReportViewEvent } from '../../../models/report-view.models';
 import {
+	IManualExclusionRange,
+	ManualSegmentInfo,
 	Match,
 	MatchType,
 	ReportOrigin,
@@ -46,6 +49,8 @@ import * as rangy from 'rangy';
 import * as rangyclassapplier from 'rangy/lib/rangy-classapplier';
 
 import { ALERTS } from '../../../constants/report-alerts.constants';
+import { ReportMatchesService } from '../../../services/report-matches.service';
+import { ReportDataService } from '../../../services/report-data.service';
 
 @Component({
 	selector: 'copyleaks-content-viewer-container',
@@ -428,6 +433,7 @@ export class ContentViewerContainerComponent implements OnInit, AfterViewInit, O
 	MULTISELECT_IS_ON = $localize`Can't navigate between matches when multiple matches are selected`;
 	MULTISELECT_IS_OF_NEXT = $localize`Go to next match`;
 	MULTISELECT_IS_OF_PREV = $localize`Go to previous match`;
+	MANUAL_EXCLUSION_TOOLTIP = $localize`Manually exclude selected text`;
 
 	iconPosition = { top: 0, left: 0 };
 	iconVisible = false;
@@ -438,12 +444,36 @@ export class ContentViewerContainerComponent implements OnInit, AfterViewInit, O
 
 	private _zoomIn: boolean;
 
+	manualExcludeButton: { visible: boolean; top: number; left: number } = { visible: false, top: 0, left: 0 };
+	readonly manualExcludeButtonLabel: string = $localize`Exclude`;
+
+	manualSegmentsForView: ManualSegmentInfo[] = [];
+	private _manualSegmentsCache = new Map<number, ManualSegmentInfo[]>();
+
+	private _pendingManualExclusion: IManualExclusionRange | null = null;
+	private _manualListenersBound = false;
+	private _manualExclusionHost: HTMLElement | null = null;
+	private readonly _manualExcludeButtonWidth = 160;
+	private readonly _manualExcludeButtonHeight = 40;
+
+	private _handleManualSelectionChange = () => this._evaluateManualSelection();
+	private _handleManualMouseUp = (event: MouseEvent) => {
+		setTimeout(() => this._evaluateManualSelection(event), 0);
+	};
+	private _handleManualScroll = () => {
+		if (this.manualExcludeButton.visible) {
+			this._hideManualExcludeButton();
+		}
+	};
+
 	constructor(
 		private _renderer: Renderer2,
 		private _cdr: ChangeDetectorRef,
 		private _highlightService: ReportMatchHighlightService,
 		public viewSvc: ReportViewService,
-		private _el: ElementRef
+		private _el: ElementRef,
+		private _matchesService: ReportMatchesService,
+		private _dataService: ReportDataService
 	) {}
 
 	ngOnInit(): void {
@@ -539,9 +569,26 @@ export class ContentViewerContainerComponent implements OnInit, AfterViewInit, O
 					});
 				}, 1000);
 		}
+
+		this._refreshManualExclusionBinding();
 	}
 
 	ngOnChanges(changes: SimpleChanges): void {
+		if (
+			'isHtmlView' in changes ||
+			'viewMode' in changes ||
+			'reportOrigin' in changes ||
+			'isAIView' in changes ||
+			'contentTextMatches' in changes
+		) {
+			this._hideManualExcludeButton();
+			this._scheduleManualExclusionBindingRefresh();
+		}
+
+		if ('contentTextMatches' in changes || 'pages' in changes || 'scanSource' in changes) {
+			this._invalidateManualSegments();
+		}
+
 		if (
 			(('contentTextMatches' in changes && changes['contentTextMatches'].currentValue != undefined) ||
 				('customViewMatchesData' in changes && changes['customViewMatchesData'].currentValue != undefined)) &&
@@ -556,7 +603,6 @@ export class ContentViewerContainerComponent implements OnInit, AfterViewInit, O
 			this.iframeLoaded = false;
 
 		if (this.allowCustomViewAddBtn && 'customViewMatchesData' in changes) {
-			// Apply existing customMatches on page load
 			if (this.customViewMatchesData)
 				setTimeout(() => {
 					this.customViewMatchesData[this.currentPage - 1].forEach(customMatch => {
@@ -643,9 +689,12 @@ export class ContentViewerContainerComponent implements OnInit, AfterViewInit, O
 		if ('submittedDocumentName' in changes && this.submittedDocumentName) {
 			this.submittedDocumentName = decodeURIComponent(this.submittedDocumentName);
 		}
+
+		this._updateManualSegmentsForCurrentPage();
 	}
 
 	onViewChange() {
+		this._hideManualExcludeButton();
 		if (!this.iframeLoaded) this.showLoadingView = true;
 		if (this.viewSvc.reportViewMode.alertCode === ALERTS.SUSPECTED_AI_TEXT_DETECTED) {
 			this._highlightService.aiInsightsSelectedResults?.forEach(result => {
@@ -687,11 +736,8 @@ export class ContentViewerContainerComponent implements OnInit, AfterViewInit, O
 		this._cdr.detectChanges();
 	}
 
-	/**
-	 * updates the font size of the suspect text.
-	 * @param amount a decimal number between 0.5 and 4
-	 */
 	zoomOut(amount: number = TEXT_FONT_SIZE_UNIT) {
+		this._hideManualExcludeButton();
 		if (this.isHtmlView && this.hasHtml) {
 			this._zoomIn = false;
 			this._adjustZoom();
@@ -700,11 +746,8 @@ export class ContentViewerContainerComponent implements OnInit, AfterViewInit, O
 		this._cdr.detectChanges();
 	}
 
-	/**
-	 * updates the font size of the suspect text.
-	 * @param amount a decimal number between 0.5 and 4
-	 */
 	zoomIn(amount: number = TEXT_FONT_SIZE_UNIT) {
+		this._hideManualExcludeButton();
 		if (this.isHtmlView && this.hasHtml) {
 			this._zoomIn = true;
 			this._adjustZoom();
@@ -716,7 +759,10 @@ export class ContentViewerContainerComponent implements OnInit, AfterViewInit, O
 	onPaginationEvent(event: PageEvent) {
 		if (!event) return;
 
+		this._hideManualExcludeButton();
 		this.currentPage = event.pageIndex;
+
+		this._updateManualSegmentsForCurrentPage();
 
 		if (this.reportOrigin === 'original' || this.reportOrigin === 'source')
 			this.viewChangeEvent.emit({
@@ -729,7 +775,6 @@ export class ContentViewerContainerComponent implements OnInit, AfterViewInit, O
 				suspectPageIndex: this.currentPage,
 			});
 
-		// Apply existing customMatches on page load
 		if (this.allowCustomViewAddBtn && this.customViewMatchesData)
 			setTimeout(() => {
 				this.customMatchesWithEventListenersIds = [];
@@ -740,6 +785,16 @@ export class ContentViewerContainerComponent implements OnInit, AfterViewInit, O
 				});
 			});
 	}
+
+	private _handleScroll = (event: WheelEvent): void => {
+		this._hideManualExcludeButton();
+		if (event && event.ctrlKey && (!this.isHtmlView || !this.hasHtml)) {
+			event.preventDefault();
+			// Check if the scroll is up or down & update the zoom property accordingly
+			if (event.deltaY < 0) this.zoomIn();
+			else if (event.deltaY > 0) this.zoomOut();
+		}
+	};
 
 	/**
 	 * Jump to next match click handler.
@@ -754,6 +809,7 @@ export class ContentViewerContainerComponent implements OnInit, AfterViewInit, O
 	}
 
 	toggleOmittedWordsView() {
+		this._hideManualExcludeButton();
 		this.onShowOmittedWords.emit(!this.showOmittedWords);
 	}
 
@@ -763,19 +819,6 @@ export class ContentViewerContainerComponent implements OnInit, AfterViewInit, O
 			'*'
 		);
 	}
-
-	/**
-	 * Handels the Ctrl key and scroll events, by updating the content zoom view accordingly only for text view
-	 * @param event The wheel event
-	 */
-	private _handleScroll = (event: WheelEvent): void => {
-		if (event && event.ctrlKey && (!this.isHtmlView || !this.hasHtml)) {
-			event.preventDefault();
-			// Check if the scroll is up or down & update the zoom property accordingly
-			if (event.deltaY < 0) this.zoomIn();
-			else if (event.deltaY > 0) this.zoomOut();
-		}
-	};
 
 	/**
 	 * Render list of matches in the iframe's HTML
@@ -1137,8 +1180,365 @@ export class ContentViewerContainerComponent implements OnInit, AfterViewInit, O
 		return document?.documentElement?.getAttribute('dir') === 'rtl' ? 'rtl' : 'ltr';
 	}
 
+	applyManualExclusion(): void {
+		if (!this._pendingManualExclusion) {
+			return;
+		}
+		const current = this._matchesService.manualTextExclusions ?? [];
+		const alreadyExists = current.some(
+			range => range.start === this._pendingManualExclusion.start && range.end === this._pendingManualExclusion.end
+		);
+		if (!alreadyExists) {
+			this._matchesService.setManualTextExclusions([...current, { ...this._pendingManualExclusion }]);
+			this._dataService.scanResultsDetails$.next(
+				this._dataService.scanResultsDetails.map(result => {
+					return {
+						...result,
+						result: {
+							...result.result,
+							statistics: {
+								...result.result.statistics,
+								identical: 0,
+								minorChanges: 0,
+								relatedMeaning: 0,
+							},
+						},
+					};
+				})
+			);
+		}
+		this._hideManualExcludeButton();
+		window.getSelection()?.removeAllRanges();
+		this._invalidateManualSegments();
+	}
+
+	onManualExcludeMouseDown(event: MouseEvent): void {
+		event.preventDefault();
+		event.stopPropagation();
+	}
+
+	private _scheduleManualExclusionBindingRefresh(): void {
+		const viewRef = this._cdr as ViewRef;
+		if (viewRef?.destroyed) {
+			return;
+		}
+		Promise.resolve().then(() => this._refreshManualExclusionBinding());
+	}
+
+	private _refreshManualExclusionBinding(): void {
+		const viewRef = this._cdr as ViewRef;
+		if (viewRef?.destroyed) {
+			return;
+		}
+
+		if (!this._isManualExclusionEnabled()) {
+			this._unbindManualExclusionListeners();
+			return;
+		}
+
+		const host = this.contentText?.nativeElement as HTMLElement | undefined;
+		if (!host) {
+			this._unbindManualExclusionListeners();
+			return;
+		}
+
+		if (this._manualExclusionHost && this._manualExclusionHost !== host) {
+			this._unbindManualExclusionListeners();
+		}
+
+		if (!this._manualListenersBound) {
+			this._bindManualExclusionListeners();
+		}
+	}
+
+	private _bindManualExclusionListeners(): void {
+		const host = this.contentText?.nativeElement as HTMLElement | undefined;
+		if (!host) {
+			return;
+		}
+		host.addEventListener('mouseup', this._handleManualMouseUp);
+		host.addEventListener('scroll', this._handleManualScroll);
+		document.addEventListener('selectionchange', this._handleManualSelectionChange);
+		this._manualExclusionHost = host;
+		this._manualListenersBound = true;
+	}
+
+	private _unbindManualExclusionListeners(): void {
+		if (this._manualExclusionHost) {
+			this._manualExclusionHost.removeEventListener('mouseup', this._handleManualMouseUp);
+			this._manualExclusionHost.removeEventListener('scroll', this._handleManualScroll);
+		}
+		document.removeEventListener('selectionchange', this._handleManualSelectionChange);
+		this._manualExclusionHost = null;
+		this._manualListenersBound = false;
+	}
+
+	private _isManualExclusionEnabled(): boolean {
+		return this.viewMode === 'one-to-many' && this.reportOrigin === 'original' && !this.isHtmlView && !this.isAIView;
+	}
+
+	private _evaluateManualSelection(_?: MouseEvent): void {
+		if (!this._isManualExclusionEnabled() || !this.scanSource?.text?.value) {
+			this._hideManualExcludeButton();
+			return;
+		}
+
+		const host = (this._manualExclusionHost ?? this.contentText?.nativeElement) as HTMLElement | null;
+		if (!host) {
+			this._hideManualExcludeButton();
+			return;
+		}
+
+		const selection = window.getSelection();
+		if (!selection || selection.rangeCount === 0) {
+			this._hideManualExcludeButton();
+			return;
+		}
+
+		const range = selection.getRangeAt(0);
+		if (range.collapsed || !host.contains(range.commonAncestorContainer)) {
+			this._hideManualExcludeButton();
+			return;
+		}
+
+		const pageIndex = Math.max(this.currentPage - 1, 0);
+		const pageStarts = this.pages ?? [];
+		const pageStart = pageStarts?.[pageIndex] ?? 0;
+		const documentLength = this.scanSource?.text?.value?.length ?? 0;
+		const nextPageStart = pageStarts?.[pageIndex + 1] ?? documentLength;
+		const segments = this.manualSegmentsForView;
+
+		if (!segments.length) {
+			this._hideManualExcludeButton();
+			return;
+		}
+
+		const startBoundary = this._resolveBoundary(range.startContainer, range.startOffset, segments);
+		const endBoundary = this._resolveBoundary(range.endContainer, range.endOffset, segments);
+
+		if (startBoundary == null || endBoundary == null) {
+			this._hideManualExcludeButton();
+			return;
+		}
+
+		const absoluteStart = Math.max(pageStart, Math.min(startBoundary, endBoundary));
+		const absoluteEnd = Math.min(nextPageStart, Math.max(startBoundary, endBoundary));
+
+		if (absoluteEnd <= absoluteStart) {
+			this._hideManualExcludeButton();
+			return;
+		}
+
+		const pageMatches = this.contentTextMatches?.[pageIndex] ?? [];
+		const overlappingIds = new Set<string>();
+		let hasOverlap = false;
+
+		for (const partial of pageMatches) {
+			const match = partial?.match;
+			if (!this._isManualMatchEligible(match)) continue;
+			if (match.end <= absoluteStart || match.start >= absoluteEnd) continue;
+			hasOverlap = true;
+			match.ids?.forEach(id => overlappingIds.add(id));
+		}
+
+		if (!hasOverlap) {
+			this._hideManualExcludeButton();
+			return;
+		}
+
+		const rangePayload: IManualExclusionRange = {
+			start: absoluteStart,
+			end: absoluteEnd,
+			tooltip: this.manualExcludeButtonLabel,
+			id: this._createManualExclusionId(),
+		};
+
+		if (overlappingIds.size) {
+			rangePayload.ids = Array.from(overlappingIds);
+		}
+
+		this._pendingManualExclusion = rangePayload;
+
+		const containerRect = host.getBoundingClientRect();
+		const selectionRect = range.getBoundingClientRect();
+		const scrollTop = host.scrollTop ?? 0;
+		const scrollLeft = host.scrollLeft ?? 0;
+
+		let top = selectionRect.bottom - containerRect.top + scrollTop + 8;
+		let left =
+			(selectionRect.left + selectionRect.right) / 2 -
+			containerRect.left -
+			this._manualExcludeButtonWidth / 2 +
+			scrollLeft;
+
+		const maxTop = Math.max(host.scrollHeight - this._manualExcludeButtonHeight, 0);
+		const maxLeft = Math.max(host.scrollWidth - this._manualExcludeButtonWidth, 0);
+
+		top = Math.max(0, Math.min(top, maxTop));
+		left = Math.max(0, Math.min(left, maxLeft));
+
+		this.manualExcludeButton = {
+			visible: true,
+			top,
+			left,
+		};
+
+		this._detectChangesSafely();
+	}
+
+	private _findSegmentElement(node: Node): HTMLElement | null {
+		let current: Node | null = node;
+		while (current) {
+			if (current instanceof HTMLElement && current.hasAttribute('data-manual-index')) {
+				return current;
+			}
+			current = current.parentNode;
+		}
+		return null;
+	}
+
+	private _resolveBoundary(node: Node, offset: number, segments: ManualSegmentInfo[]): number | null {
+		const element = this._findSegmentElement(node);
+		if (!element) {
+			return null;
+		}
+		const indexAttr = element.getAttribute('data-manual-index');
+		if (indexAttr == null) {
+			return null;
+		}
+		const segmentIndex = Number(indexAttr);
+		if (!Number.isFinite(segmentIndex)) {
+			return null;
+		}
+		const segment = segments[segmentIndex];
+		if (!segment) {
+			return null;
+		}
+		const offsetWithinSegment = this._calculateOffsetWithinElement(element, node, offset);
+		return Math.min(segment.start + offsetWithinSegment, segment.end);
+	}
+
+	private _calculateOffsetWithinElement(element: HTMLElement, boundaryNode: Node, boundaryOffset: number): number {
+		if (boundaryNode.nodeType === Node.TEXT_NODE) {
+			const textNode = boundaryNode as Text;
+			const clampedOffset = Math.max(0, Math.min(boundaryOffset, textNode.textContent?.length ?? 0));
+			let total = 0;
+			const walker = document.createTreeWalker(element, NodeFilter.SHOW_TEXT);
+			while (walker.nextNode()) {
+				const current = walker.currentNode as Text;
+				if (current === textNode) {
+					return total + clampedOffset;
+				}
+				total += current.textContent?.length ?? 0;
+			}
+			return total;
+		}
+
+		let total = 0;
+		const limit = Math.max(0, Math.min(boundaryOffset, element.childNodes.length));
+		for (let i = 0; i < limit; i++) {
+			total += this._nodeTextLength(element.childNodes.item(i));
+		}
+		return total;
+	}
+
+	private _nodeTextLength(node: Node): number {
+		if (!node) {
+			return 0;
+		}
+		if (node.nodeType === Node.TEXT_NODE) {
+			return (node.textContent ?? '').length;
+		}
+		let length = 0;
+		for (let i = 0; i < node.childNodes.length; i++) {
+			length += this._nodeTextLength(node.childNodes.item(i));
+		}
+		return length;
+	}
+
+	private _isManualMatchEligible(match: Match | undefined): boolean {
+		if (!match) return false;
+		if (match.type === MatchType.none) return false;
+		if (match.type === MatchType.excluded) return false;
+		return true;
+	}
+
+	private _hideManualExcludeButton(): void {
+		if (this.manualExcludeButton.visible || this._pendingManualExclusion) {
+			this.manualExcludeButton = { visible: false, top: 0, left: 0 };
+			this._pendingManualExclusion = null;
+			this._detectChangesSafely();
+		}
+	}
+
+	private _detectChangesSafely(): void {
+		const viewRef = this._cdr as ViewRef;
+		if (viewRef && !viewRef.destroyed) {
+			viewRef.detectChanges();
+		}
+	}
+
+	private _createManualExclusionId(): string {
+		return `manual-${Date.now()}-${Math.random().toString(36).slice(2, 8)}`;
+	}
+
+	private _invalidateManualSegments(): void {
+		this._manualSegmentsCache.clear();
+		this._updateManualSegmentsForCurrentPage();
+	}
+
+	private _updateManualSegmentsForCurrentPage(): void {
+		const pageIndex = Math.max(this.currentPage - 1, 0);
+		const segments = this._getManualSegmentsForPage(pageIndex);
+		this.manualSegmentsForView = segments;
+	}
+
+	private _getManualSegmentsForPage(pageIndex: number): ManualSegmentInfo[] {
+		if (pageIndex < 0) {
+			return [];
+		}
+		if (!this._manualSegmentsCache.has(pageIndex)) {
+			this._manualSegmentsCache.set(pageIndex, this._buildManualSegmentsForPage(pageIndex));
+		}
+		return this._manualSegmentsCache.get(pageIndex) ?? [];
+	}
+
+	private _buildManualSegmentsForPage(pageIndex: number): ManualSegmentInfo[] {
+		const pageMatches = this.contentTextMatches?.[pageIndex] ?? [];
+		if (!pageMatches.length) {
+			return [];
+		}
+
+		const pageStarts = this.pages ?? [];
+		const pageStart = pageStarts?.[pageIndex] ?? 0;
+		const documentLength = this.scanSource?.text?.value?.length ?? 0;
+		const nextPageStart = pageStarts?.[pageIndex + 1] ?? documentLength;
+
+		const segments: ManualSegmentInfo[] = [];
+		let cursor = pageStart;
+
+		for (const partial of pageMatches) {
+			const content = partial?.content ?? '';
+			const start = cursor;
+			const end = Math.min(start + content.length, nextPageStart);
+			cursor = end;
+			segments.push({
+				start,
+				end,
+				match: partial?.match ?? null,
+			});
+		}
+
+		return segments;
+	}
+
 	ngOnDestroy(): void {
 		this.docDirObserver?.disconnect();
 		this.contentTextChangesObserver?.disconnect();
+
+		this._unbindManualExclusionListeners();
+		this._hideManualExcludeButton();
+		this._manualSegmentsCache.clear();
+		this.manualSegmentsForView = [];
 	}
 }

@@ -54,6 +54,57 @@
 		}
 	}
 
+	.manual-exclude-button {
+		position: absolute;
+		color: $color-black;
+		font-size: 0.75rem;
+		cursor: pointer;
+		user-select: none;
+		z-index: 5;
+		font-size: 14px;
+		display: flex;
+		padding: 2px 2px 2px 4px;
+		align-items: center;
+		gap: 4px;
+		border-radius: 32px;
+		border: 1px solid $color-white;
+		background: $color-main-gray;
+		box-shadow: 2px 2px 4px 0 rgba(0, 0, 0, 0.25);
+		transition: all 0.1s ease-in-out;
+		font-family: haboro-soft, Almarai, sans-serif !important;
+		span {
+			height: 24px;
+			display: flex;
+			align-items: center;
+			justify-content: center;
+		}
+	}
+
+	.manual-exclude-button mat-icon {
+		font-size: 18px;
+		width: 18px;
+		height: 18px;
+		line-height: 18px;
+		color: rgba(11, 22, 62, 0.6);
+		font-style: normal;
+		font-weight: 400;
+		line-height: normal;
+		transition: all 0.1s ease-in-out;
+	}
+
+	.manual-exclude-button:hover {
+		color: $color-primary;
+		background: $color-white;
+		mat-icon {
+			color: $color-primary;
+		}
+	}
+
+	.manual-exclude-button:focus-visible {
+		outline: 2px solid $color-primary;
+		outline-offset: 2px;
+	}
+
 	.submitted-doc-name-container {
 		display: flex;
 		align-items: center;
@@ -293,6 +344,28 @@
 				transition: 0.2s;
 				&:hover {
 					background-color: $color-match-selected;
+				}
+			}
+
+			&.cr-m-7 {
+				background-color: transparent;
+				border-bottom: 2px solid $color-primary !important;
+				transition: 0.2s background-color;
+				font-style: normal !important;
+				opacity: 1 !important;
+				color: $color-black !important;
+				cursor: pointer;
+				border-radius: 2px;
+				position: relative !important;
+				&:hover,
+				&.selected {
+					background-color: $color-match-selected;
+					border: none !important;
+					border-bottom: none !important;
+				}
+
+				&.cr-highlight {
+					border: none !important;
 				}
 			}
 

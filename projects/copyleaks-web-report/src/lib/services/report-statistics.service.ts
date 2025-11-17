@@ -30,8 +30,11 @@ export class ReportStatisticsService implements OnDestroy {
 			filterOptions$,
 			writingFeedback$,
 			excludedCorrections$,
+			manuallyExcludedResultsIds$,
 		} = this._reportDataSvc;
 		const { selectedResult$, reportViewMode$ } = this._reportViewSvc;
+
+		// const { manualTextExclusions$ } = this._reportMatchesSvc;
 
 		combineLatest([
 			scanResultsPreviews$.pipe(distinctUntilChanged()),
@@ -62,52 +65,70 @@ export class ReportStatisticsService implements OnDestroy {
 			filterOptions$.pipe(distinctUntilChanged()),
 			writingFeedback$.pipe(distinctUntilChanged()),
 			excludedCorrections$.pipe(distinctUntilChanged()),
+			manuallyExcludedResultsIds$.pipe(distinctUntilChanged()),
 		])
 			.pipe(
 				untilDestroy(this),
 				filter(
-					([, , viewModeData, excludedResultsIds, filterOptions, ,]: [
+					([, , viewModeData, excludedResultsIds, filterOptions, , , manuallyExcludedResultsIds]: [
 						ICompleteResults,
 						ResultDetailItem[],
 						IReportViewEvent,
 						string[],
 						ICopyleaksReportOptions,
 						IWritingFeedback,
-						IExcludedCorrection[]
+						IExcludedCorrection[],
+						string[]
 					]) =>
 						(viewModeData?.viewMode === 'one-to-many' ||
 							viewModeData?.viewMode === 'only-ai' ||
 							viewModeData?.viewMode === 'writing-feedback') &&
 						excludedResultsIds != undefined &&
-						filterOptions != undefined
+						filterOptions != undefined &&
+						manuallyExcludedResultsIds != undefined
 				)
 			)
-			.subscribe(([completeResult, , , excludedResultsIds, filterOptions, writingFeedback, excludedCorrections]) => {
-				if (completeResult && filterOptions && excludedResultsIds) {
-					const isRealtimeInitView =
-						this._reportDataSvc.isRealTimeView &&
-						!this._reportDataSvc.isFilterOn &&
-						(!this._reportDataSvc.excludedResultsIds || this._reportDataSvc.excludedResultsIds.length === 0);
+			.subscribe(
+				([
+					completeResult,
+					,
+					,
+					excludedResultsIds,
+					filterOptions,
+					writingFeedback,
+					excludedCorrections,
+					manuallyExcludedResultsIds,
+				]) => {
+					if (completeResult && filterOptions && excludedResultsIds && manuallyExcludedResultsIds) {
+						const isRealtimeInitView =
+							this._reportDataSvc.isRealTimeView &&
+							!this._reportDataSvc.isFilterOn &&
+							(!this._reportDataSvc.excludedResultsIds || this._reportDataSvc.excludedResultsIds.length === 0);
 
-					const filteredResults = this._reportDataSvc.filterResults(filterOptions, excludedResultsIds);
-					let filteredCorrections: IWritingFeedbackScanScource;
-					if (writingFeedback) {
-						filteredCorrections = this._reportDataSvc.filterCorrections(
-							JSON.parse(JSON.stringify(writingFeedback?.corrections)),
+						const filteredResults = this._reportDataSvc.filterResults(
 							filterOptions,
-							excludedCorrections
+							excludedResultsIds,
+							manuallyExcludedResultsIds
+						);
+						let filteredCorrections: IWritingFeedbackScanScource;
+						if (writingFeedback) {
+							filteredCorrections = this._reportDataSvc.filterCorrections(
+								JSON.parse(JSON.stringify(writingFeedback?.corrections)),
+								filterOptions,
+								excludedCorrections
+							);
+						}
+						if (isRealtimeInitView && this._reportDataSvc.totalCompleteResults != filteredResults.length) return;
+						this.retreieveOneToManyStatistics(
+							completeResult,
+							filteredResults,
+							filterOptions,
+							filteredCorrections,
+							writingFeedback
 						);
 					}
-					if (isRealtimeInitView && this._reportDataSvc.totalCompleteResults != filteredResults.length) return;
-					this.retreieveOneToManyStatistics(
-						completeResult,
-						filteredResults,
-						filterOptions,
-						filteredCorrections,
-						writingFeedback
-					);
 				}
-			});
+			);
 	}
 
 	/**

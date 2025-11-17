@@ -189,6 +189,24 @@ export class ReportDataService {
 
 	//#endregion
 
+	//#region Manually Excluded Results IDs
+
+	private _manuallyExcludedResultsIds$ = new BehaviorSubject<string[] | undefined>(undefined);
+	/**
+	 * Observable stream for IDs of results manually excluded from the report.
+	 */
+	public get manuallyExcludedResultsIds$() {
+		return this._manuallyExcludedResultsIds$;
+	}
+	/**
+	 * Current value of the manually excluded result IDs.
+	 */
+	public get manuallyExcludedResultsIds() {
+		return this._manuallyExcludedResultsIds$.value;
+	}
+
+	//#endregion
+
 	//#region Selected Category Result IDs
 
 	private _selectedCategoryResultsIds$ = new BehaviorSubject<string[] | undefined>(undefined);
@@ -309,124 +327,134 @@ export class ReportDataService {
 			this.scanResultsDetails$.pipe(distinctUntilChanged()),
 			this.excludedCorrections$.pipe(distinctUntilChanged()),
 			this.writingFeedback$.pipe(distinctUntilChanged()),
+			this.manuallyExcludedResultsIds$.pipe(distinctUntilChanged()),
 		])
 			.pipe(
 				untilDestroy(this),
 				filter(
-					([options, excludedResultsIds, , excludedCorrections]) =>
-						options !== undefined && excludedResultsIds !== undefined && excludedCorrections !== undefined
+					([options, excludedResultsIds, , excludedCorrections, , manuallyExcludedResultsIds]) =>
+						options !== undefined &&
+						excludedResultsIds !== undefined &&
+						excludedCorrections !== undefined &&
+						manuallyExcludedResultsIds !== undefined
 				)
 			)
-			.subscribe(([options, excludedResultsIds, , excludedCorrections, writingFeedback]) => {
-				if (
-					!this.scanResultsPreviews ||
-					this.scanResultsPreviews === undefined ||
-					!this.scanResultsDetails ||
-					!this.scanResultsDetails === undefined ||
-					!options ||
-					!excludedResultsIds ||
-					!excludedCorrections ||
-					this._viewSvc.progress$.value !== 100 ||
-					(this.totalCompleteResults <= 100 &&
-						this.scanResultsDetails.length != this.totalCompleteResults &&
-						this.isRealTimeView) ||
-					(this.isWritingFeedbackEnabled() && writingFeedback === undefined)
-				)
-					return;
-
-				const filteredResults = this.filterResults(options, excludedResultsIds);
-				let filteredCorrections: IWritingFeedbackScanScource;
-				if (writingFeedback) {
-					filteredCorrections = this.filterCorrections(
-						JSON.parse(JSON.stringify(writingFeedback?.corrections)),
-						this.filterOptions,
-						this.excludedCorrections
-					);
-				}
-
-				const stats: ReportStatistics = this._getReportStats(
-					filteredResults,
-					this.scanResultsPreviews,
-					filteredCorrections,
-					writingFeedback
-				);
-				const filteredOutResultsIds = [
-					...(this.scanResultsPreviews$.value?.results.internet ?? []),
-					...(this.scanResultsPreviews$.value?.results.batch ?? []),
-					...(this.scanResultsPreviews$.value?.results.database ?? []),
-					...(this.scanResultsPreviews$.value?.results.repositories ?? []),
-				]
-					.filter(
-						result => !filteredResults.find(r => result.id === r.id) && !excludedResultsIds.find(id => result.id === id)
+			.subscribe(
+				([options, excludedResultsIds, , excludedCorrections, writingFeedback, manuallyExcludedResultsIds]) => {
+					if (
+						!this.scanResultsPreviews ||
+						this.scanResultsPreviews === undefined ||
+						!this.scanResultsDetails ||
+						!this.scanResultsDetails === undefined ||
+						!options ||
+						!excludedResultsIds ||
+						!excludedCorrections ||
+						this._viewSvc.progress$.value !== 100 ||
+						(this.totalCompleteResults <= 100 &&
+							this.scanResultsDetails.length != this.totalCompleteResults &&
+							this.isRealTimeView) ||
+						(this.isWritingFeedbackEnabled() && writingFeedback === undefined)
 					)
-					.map(result => result.id);
+						return;
 
-				// Load all the viewed results
-				if (
-					!this.isRealTimeView ||
-					(this.isRealTimeView &&
-						this.totalCompleteResults > 100 &&
-						this.scanResultsDetails.length != this.totalCompleteResults &&
-						!options.showTop100Results)
-				)
-					this.loadViewedResultsDetails();
+					const filteredResults = this.filterResults(options, excludedResultsIds);
+					let filteredCorrections: IWritingFeedbackScanScource;
+					if (writingFeedback) {
+						filteredCorrections = this.filterCorrections(
+							JSON.parse(JSON.stringify(writingFeedback?.corrections)),
+							this.filterOptions,
+							this.excludedCorrections
+						);
+					}
 
-				this._scanResultsPreviews$.next({
-					...this.scanResultsPreviews,
-					results: {
-						...this.scanResultsPreviews.results,
-						score: {
-							identicalWords: stats.identical,
-							minorChangedWords: stats.minorChanges,
-							relatedMeaningWords: stats.relatedMeaning,
-							aggregatedScore: this.isPlagiarismEnabled() ? stats.aggregatedScore ?? 0 : null,
-							writingFeedbackOverallIssues: this.isWritingFeedbackEnabled() ? stats.writingFeedbackOverallIssues : null,
-							writingFeedbackOverallScore: this.isWritingFeedbackEnabled() ? stats.writingFeedbackOverallScore : null,
-						},
-					},
-					filters: {
-						isFilterEnabled: this.isFilterOn || excludedResultsIds?.length > 0,
-						general: {
-							alerts: options?.showAlerts ?? true,
-							authorSubmissions: options?.showSameAuthorSubmissions ?? true,
-							topResult: options?.showTop100Results ?? true,
-						},
-						includedTags: options?.includedTags,
-						matchType: {
-							identicalText: options?.showIdentical ?? true,
-							minorChanges: options?.showMinorChanges ?? true,
-							paraphrased: options?.showRelated ?? true,
-						},
-						resultsMetaData: {
-							publicationDate: {
-								publicationEnabled: !!options?.publicationDate,
-								resultsWithNoDates: options?.includeResultsWithoutDate ?? true,
-								startDate: options?.publicationDate,
+					const stats: ReportStatistics = this._getReportStats(
+						filteredResults,
+						this.scanResultsPreviews,
+						filteredCorrections,
+						writingFeedback
+					);
+					const filteredOutResultsIds = [
+						...(this.scanResultsPreviews$.value?.results.internet ?? []),
+						...(this.scanResultsPreviews$.value?.results.batch ?? []),
+						...(this.scanResultsPreviews$.value?.results.database ?? []),
+						...(this.scanResultsPreviews$.value?.results.repositories ?? []),
+					]
+						.filter(
+							result =>
+								!filteredResults.find(r => result.id === r.id) && !excludedResultsIds.find(id => result.id === id)
+						)
+						.map(result => result.id);
+
+					// Load all the viewed results
+					if (
+						!this.isRealTimeView ||
+						(this.isRealTimeView &&
+							this.totalCompleteResults > 100 &&
+							this.scanResultsDetails.length != this.totalCompleteResults &&
+							!options.showTop100Results)
+					)
+						this.loadViewedResultsDetails();
+
+					this._scanResultsPreviews$.next({
+						...this.scanResultsPreviews,
+						results: {
+							...this.scanResultsPreviews.results,
+							score: {
+								identicalWords: stats.identical,
+								minorChangedWords: stats.minorChanges,
+								relatedMeaningWords: stats.relatedMeaning,
+								aggregatedScore: this.isPlagiarismEnabled() ? stats.aggregatedScore ?? 0 : null,
+								writingFeedbackOverallIssues: this.isWritingFeedbackEnabled()
+									? stats.writingFeedbackOverallIssues
+									: null,
+								writingFeedbackOverallScore: this.isWritingFeedbackEnabled() ? stats.writingFeedbackOverallScore : null,
 							},
-							wordLimit: {
-								wordLimitEnabled: !!options?.wordLimit,
-								totalWordLimit: options?.wordLimit,
+						},
+						filters: {
+							isFilterEnabled: this.isFilterOn || excludedResultsIds?.length > 0,
+							general: {
+								alerts: options?.showAlerts ?? true,
+								authorSubmissions: options?.showSameAuthorSubmissions ?? true,
+								topResult: options?.showTop100Results ?? true,
 							},
+							includedTags: options?.includedTags,
+							matchType: {
+								identicalText: options?.showIdentical ?? true,
+								minorChanges: options?.showMinorChanges ?? true,
+								paraphrased: options?.showRelated ?? true,
+							},
+							resultsMetaData: {
+								publicationDate: {
+									publicationEnabled: !!options?.publicationDate,
+									resultsWithNoDates: options?.includeResultsWithoutDate ?? true,
+									startDate: options?.publicationDate,
+								},
+								wordLimit: {
+									wordLimitEnabled: !!options?.wordLimit,
+									totalWordLimit: options?.wordLimit,
+								},
+							},
+							sourceType: {
+								batch: options?.showBatchResults ?? true,
+								internalDatabase: options?.showYourResults || options?.showOthersResults,
+								yourResults: options?.showYourResults ?? true,
+								othersResults: options?.showOthersResults ?? true,
+								internet: options?.showInternetResults ?? true,
+								repositories: options?.hiddenRepositories ?? [],
+								aiSourceMatch: options?.showAISourceMatch ?? true,
+							},
+							execludedResultIds: excludedResultsIds ?? [],
+							manuallyExcludedResultIds: manuallyExcludedResultsIds ?? [],
+							filteredResultIds: filteredOutResultsIds ?? [],
+							writingFeedback: {
+								hiddenCategories: options.writingFeedback.hiddenCategories ?? [],
+								excludedCorrections: excludedCorrections,
+							},
+							excludedDomains: options?.excludedDomains ?? [],
 						},
-						sourceType: {
-							batch: options?.showBatchResults ?? true,
-							internalDatabase: options?.showYourResults || options?.showOthersResults,
-							yourResults: options?.showYourResults ?? true,
-							othersResults: options?.showOthersResults ?? true,
-							internet: options?.showInternetResults ?? true,
-							repositories: options?.hiddenRepositories ?? [],
-							aiSourceMatch: options?.showAISourceMatch ?? true,
-						},
-						execludedResultIds: excludedResultsIds ?? [],
-						filteredResultIds: filteredOutResultsIds ?? [],
-						writingFeedback: {
-							hiddenCategories: options.writingFeedback.hiddenCategories ?? [],
-							excludedCorrections: excludedCorrections,
-						},
-						excludedDomains: options?.excludedDomains ?? [],
-					},
-				});
-			});
+					});
+				}
+			);
 	}
 
 	/**
@@ -634,7 +662,11 @@ export class ReportDataService {
 
 		this._loadingMoreResults$.next(true);
 
-		let resultsIds = this.filterPreviewedResults(this.filterOptions, this.excludedResultsIds);
+		let resultsIds = this.filterPreviewedResults(
+			this.filterOptions,
+			this.excludedResultsIds,
+			this.manuallyExcludedResultsIds
+		);
 		resultsIds = resultsIds.filter(id => !this._scanResultsDetails$.value?.find(r => r.id === id));
 
 		// But the results ids in a list of batches (10 each)
@@ -702,7 +734,11 @@ export class ReportDataService {
 		}
 	}
 
-	public filterResults(settings?: ICopyleaksReportOptions, excludedResultsIds?: string[]): ResultDetailItem[] {
+	public filterResults(
+		settings?: ICopyleaksReportOptions,
+		excludedResultsIds?: string[],
+		manuallyExcludedResultsIds?: string[]
+	): ResultDetailItem[] {
 		if (!this.scanResultsDetails || !this.scanResultsPreviews || !settings || !excludedResultsIds) return [];
 
 		let completeResults = [
@@ -712,7 +748,12 @@ export class ReportDataService {
 			...(this.scanResultsPreviews$.value?.results.repositories ?? []),
 		];
 
-		let filteredResultsIds = this._getFilteredResultsIds(settings, completeResults, excludedResultsIds);
+		let filteredResultsIds = this._getFilteredResultsIds(
+			settings,
+			completeResults,
+			excludedResultsIds,
+			manuallyExcludedResultsIds
+		);
 
 		// check if a match hiding will make one of the results score zero, if so filter theses results out
 		let resultsUpdateStatistics = this.scanResultsDetails
@@ -782,7 +823,11 @@ export class ReportDataService {
 		});
 	}
 
-	public filterPreviewedResults(settings: ICopyleaksReportOptions, excludedResultsIds: string[]): string[] {
+	public filterPreviewedResults(
+		settings: ICopyleaksReportOptions,
+		excludedResultsIds: string[],
+		manuallyExcludedResultsIds: string[]
+	): string[] {
 		if (!this.scanResultsPreviews || !settings || !excludedResultsIds) return [];
 
 		let completeResults = [
@@ -792,7 +837,12 @@ export class ReportDataService {
 			...(this.scanResultsPreviews$.value?.results.repositories ?? []),
 		];
 
-		let filteredResultsIds = this._getFilteredResultsIds(settings, completeResults, excludedResultsIds);
+		let filteredResultsIds = this._getFilteredResultsIds(
+			settings,
+			completeResults,
+			excludedResultsIds,
+			manuallyExcludedResultsIds
+		);
 
 		return filteredResultsIds;
 	}
@@ -1148,6 +1198,8 @@ export class ReportDataService {
 		// Load the excluded corrections
 		this._excludedCorrections$.next(completeResultsRes.filters?.writingFeedback?.excludedCorrections ?? []);
 
+		this._manuallyExcludedResultsIds$.next(completeResultsRes.filters?.manuallyExcludedResultIds ?? []);
+
 		// Load the filter options from the complete results response
 		this._filterOptions$.next({
 			showIdentical:
@@ -1224,7 +1276,11 @@ export class ReportDataService {
 			excludedDomains: completeResultsRes.filters?.excludedDomains ?? [],
 		});
 
-		const filteredResults = this.filterResults(this.filterOptions, this.excludedResultsIds);
+		const filteredResults = this.filterResults(
+			this.filterOptions,
+			this.excludedResultsIds,
+			this.manuallyExcludedResultsIds
+		);
 		let filteredCorrections: IWritingFeedbackScanScource;
 		if (this.writingFeedback) {
 			filteredCorrections = this.filterCorrections(
@@ -1286,6 +1342,7 @@ export class ReportDataService {
 					aiSourceMatch: this.filterOptions?.showAISourceMatch ?? true,
 				},
 				execludedResultIds: this.excludedResultsIds ?? [],
+				manuallyExcludedResultIds: this.manuallyExcludedResultsIds ?? [],
 				filteredResultIds: [],
 				excludedDomains: this.filterOptions?.excludedDomains ?? [],
 			},
@@ -1411,13 +1468,14 @@ export class ReportDataService {
 	private _getFilteredResultsIds(
 		settings: ICopyleaksReportOptions,
 		completeResults: (IInternetResultPreview | IDatabaseResultPreview | IRepositoryResultPreview)[],
-		excludedResultsIds: string[]
+		excludedResultsIds: string[],
+		manuallyExcludedResultsIds: string[]
 	) {
 		if (settings.showTop100Results !== undefined && settings.showTop100Results === true)
 			completeResults = completeResults.sort((a, b) => b.matchedWords - a.matchedWords).slice(0, 100);
 
 		let filteredResultsIds: string[] = completeResults
-			.filter(r => !excludedResultsIds.find(id => id === r.id))
+			.filter(r => !excludedResultsIds.find(id => id === r.id) && !manuallyExcludedResultsIds?.find(id => id === r.id))
 			.map(result => result.id);
 
 		if (filteredResultsIds && filteredResultsIds.length === 0) return [];

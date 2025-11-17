@@ -2,7 +2,7 @@ import { AfterContentInit, ContentChildren, Directive, EventEmitter, Input, OnDe
 import { Subject } from 'rxjs';
 import { distinctUntilChanged, filter, take, takeUntil, withLatestFrom } from 'rxjs/operators';
 import { CrTextMatchComponent } from '../components/core/cr-text-match/cr-text-match.component';
-import { Range, SlicedMatch, TextMatchHighlightEvent } from '../models/report-matches.models';
+import { MatchType, Range, SlicedMatch, TextMatchHighlightEvent } from '../models/report-matches.models';
 import { ReportMatchHighlightService } from '../services/report-match-highlight.service';
 import { ReportViewService } from '../services/report-view.service';
 import * as helpers from '../utils/highlight-helpers';
@@ -330,6 +330,7 @@ export class OriginalTextHelperDirective implements AfterContentInit, OnDestroy 
 				takeUntil(this.unsubscribe$)
 			)
 			.subscribe(([textMatchClickEvent, ,]) => {
+				debugger;
 				if (
 					this.lastSelectedOriginalTextMatch === textMatchClickEvent ||
 					(this.lastSelectedOriginalTextMatch &&
@@ -338,6 +339,24 @@ export class OriginalTextHelperDirective implements AfterContentInit, OnDestroy 
 					this.lastSelectedOriginalTextMatch = null;
 					return;
 				}
+
+				if (
+					(this.lastSelectedOriginalTextMatch === textMatchClickEvent ||
+						this.lastSelectedOriginalTextMatch?.elem?.match === textMatchClickEvent?.elem?.match ||
+						this.lastSelectedOriginalTextMatch?.elem?.match?.txtGid === textMatchClickEvent?.elem?.match?.txtGid) &&
+					textMatchClickEvent?.elem?.match?.type === MatchType.manualExclusion
+				) {
+					this.lastSelectedOriginalTextMatch = null;
+					setTimeout(() => {
+						const components = this.children?.toArray();
+						components?.forEach(component => {
+							if (component && component?.match?.txtGid === textMatchClickEvent?.elem?.match?.txtGid)
+								component.focused = false;
+						});
+					});
+					return;
+				}
+
 				this.lastSelectedOriginalTextMatch = textMatchClickEvent;
 				if (!textMatchClickEvent) return;
 
@@ -358,6 +377,29 @@ export class OriginalTextHelperDirective implements AfterContentInit, OnDestroy 
 								component.focused = false;
 						});
 					});
+
+				if (textMatchClickEvent?.elem?.match?.type === MatchType.manualExclusion) {
+					this._highlightService.clearAllMatchs();
+					setTimeout(() => {
+						const components = this.children?.toArray();
+						components?.forEach(component => {
+							if (
+								component &&
+								!!component?.match?.txtGid &&
+								component?.match?.txtGid === textMatchClickEvent?.elem?.match?.txtGid
+							)
+								component.focused = true;
+							else component.focused = false;
+						});
+					});
+				} else {
+					setTimeout(() => {
+						const components = this.children?.toArray();
+						components?.forEach(component => {
+							if (component && component?.match?.type === MatchType.manualExclusion) component.focused = false;
+						});
+					});
+				}
 			});
 
 		reportViewMode$

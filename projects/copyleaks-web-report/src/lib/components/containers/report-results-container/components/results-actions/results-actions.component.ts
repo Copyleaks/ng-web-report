@@ -20,6 +20,7 @@ import { IFilterResultDailogData } from '../../../../../dialogs/filter-result-da
 import { ReportViewService } from '../../../../../services/report-view.service';
 import { ReportMatchHighlightService } from '../../../../../services/report-match-highlight.service';
 import { untilDestroy } from '../../../../../utils/until-destroy';
+import { ReportMatchesService } from '../../../../../services/report-matches.service';
 
 @Component({
 	selector: 'cr-results-actions',
@@ -67,7 +68,8 @@ export class ResultsActionsComponent implements OnInit, OnChanges, OnDestroy {
 		private _matDialog: MatDialog,
 		private _reportDataSvc: ReportDataService,
 		private _reportViewSvc: ReportViewService,
-		private _highlightService: ReportMatchHighlightService
+		private _highlightService: ReportMatchHighlightService,
+		private _matchesService: ReportMatchesService
 	) {}
 
 	ngOnInit(): void {
@@ -136,6 +138,12 @@ export class ResultsActionsComponent implements OnInit, OnChanges, OnDestroy {
 
 	clearFilter() {
 		this._reportDataSvc.clearFilter();
+	}
+
+	clearManuallyExcluded() {
+		this._matchesService.setManualTextExclusions([]);
+		this._matchesService.setManualHtmlExclusions([]);
+		this._reportDataSvc.manuallyExcludedResultsIds$.next([]);
 	}
 
 	ngOnDestroy() {}

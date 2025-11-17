@@ -84,7 +84,7 @@
 		<ng-template #highlightedResultsView>
 			<div class="tootal-results-container">
 				<span class="tootal-results" web-report-title-font>
-					<ng-container i18n>Highlighted Results&nbsp;</ng-container>
+					<ng-container i18n>Selected Results&nbsp;</ng-container>
 					<span *ngIf="!hideTotal">({{ resultsActions?.selectedResults }})</span>
 				</span>
 			</div>
@@ -103,7 +103,7 @@
 	</div>
 
 	<div
-		*ngIf="resultsActions?.totalExcluded || resultsActions?.totalFiltered"
+		*ngIf="resultsActions?.totalExcluded || resultsActions?.totalFiltered || resultsActions?.totalManuallyExcluded"
 		class="chips-container"
 		[dir]="docDirection">
 		<ng-container *ngIf="resultsActions?.totalExcluded">
@@ -115,7 +115,7 @@
 				i18n-aria-label
 				tabindex="0">
 				{{ resultsActions?.totalExcluded }}
-				<ng-container i18n>excluded</ng-container>
+				<ng-container i18n>Excluded</ng-container>
 			</mat-basic-chip>
 		</ng-container>
 
@@ -131,7 +131,7 @@
 				i18n-aria-label>
 				<span>
 					{{ resultsActions?.totalFiltered }}
-					<ng-container i18n>filtered</ng-container>
+					<ng-container i18n>Filtered</ng-container>
 				</span>
 				<ng-container *ngIf="!loadingResults; else loadingResultsViewRef">
 					<mat-icon
@@ -153,6 +153,36 @@
 				<ng-template #loadingResultsViewRef>
 					<cr-spinner size="14px"></cr-spinner>
 				</ng-template>
+			</mat-basic-chip>
+		</ng-container>
+
+		<ng-container *ngIf="resultsActions?.totalManuallyExcluded">
+			<mat-basic-chip
+				class="filter-chip"
+				[class.disabled]="loadingResults"
+				tabindex="0"
+				role="button"
+				aria-label="View results filter dialog"
+				i18n-aria-label>
+				<span>
+					{{ resultsActions?.totalManuallyExcluded }}
+					<ng-container i18n>Manually excluded</ng-container>
+				</span>
+				<mat-icon
+					tabIndex="0"
+					class="clear-filter-icon"
+					fontSet="material-icons-round"
+					(click)="$event.stopPropagation(); clearManuallyExcluded()"
+					(keyup.enter)="clearManuallyExcluded()"
+					matTooltip="Clear Manually Excluded"
+					aria-hidden="false"
+					matTooltipClass="web-report-mat-tooltip"
+					role="button"
+					aria-label="Clear all manually excluded results"
+					i18n-aria-label
+					i18n-matTooltip>
+					highlight_off
+				</mat-icon>
 			</mat-basic-chip>
 		</ng-container>
 	</div>

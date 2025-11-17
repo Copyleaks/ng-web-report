@@ -6,6 +6,10 @@ import {
 	ContentKey,
 	EndpointKind,
 	EProportionType,
+	IManualExclusionRange,
+	IManualExclusionSummary,
+	ManualAwareMatch,
+	ManualExclusionResult,
 	Match,
 	MatchEndpoint,
 	MatchType,
@@ -17,12 +21,13 @@ import {
 	Comparison,
 	ICompleteResultNotificationAlert,
 	IScanSource,
+	IStatistics,
 	IWritingFeedbackScanScource,
 } from '../models/report-data.models';
 
 import { ICopyleaksReportOptions } from '../models/report-options.models';
 import { EExcludeReason, EMatchClassification } from '../enums/copyleaks-web-report.enums';
-import { EXCLUDE_MESSAGE } from '../constants/report-exclude.constants';
+import { EXCLUDE_MESSAGE, MANUAL_EXCLUDE_TOOLTIP } from '../constants/report-exclude.constants';
 
 /** A reduce function to extrace `MatchEndpoint`s */
 const extractMatchEndpoints = (acc: MatchEndpoint[], curr: Match): MatchEndpoint[] => {
@@ -33,6 +38,7 @@ const extractMatchEndpoints = (acc: MatchEndpoint[], curr: Match): MatchEndpoint
 		ids: [...(curr.ids ?? [])],
 		gid: curr.gid,
 		reason: curr.reason,
+		txtGid: curr.txtGid,
 	});
 	acc.push({
 		index: curr.end,
@@ -41,6 +47,7 @@ const extractMatchEndpoints = (acc: MatchEndpoint[], curr: Match): MatchEndpoint
 		ids: [...(curr.ids ?? [])],
 		gid: curr.gid,
 		reason: curr.reason,
+		txtGid: curr.txtGid,
 	});
 	return acc;
 };
@@ -126,9 +133,9 @@ const mergeMatchesInNest = (matches: Match[]): Match[] => {
 
 	const subMatches: Match[] = [];
 	const idMap: { [key: string]: number } = {};
-	const types: number[] = [0, 0, 0, 0, 0, 0, 0];
+	const types: number[] = [0, 0, 0, 0, 0, 0, 0, 0];
 	let start: number | undefined = undefined;
-	for (const { index, type, ids, kind, gid, reason } of endpoints) {
+	for (const { index, type, ids, kind, gid, reason, txtGid } of endpoints) {
 		if (kind === EndpointKind.start) {
 			if (start) {
 				if (index !== start) {
@@ -141,6 +148,7 @@ const mergeMatchesInNest = (matches: Match[]): Match[] => {
 						type: types.findIndex(x => x > 0),
 						ids: participatingIds,
 						gid,
+						txtGid,
 						reason,
 						writingFeedbackType:
 							uniqueMatches.find(um => um.start === start && um.type === MatchType.writingFeedback)
@@ -164,6 +172,7 @@ const mergeMatchesInNest = (matches: Match[]): Match[] => {
 					type: types.findIndex(x => x > 0),
 					ids: participatingIds,
 					gid,
+					txtGid,
 					reason,
 					writingFeedbackType:
 						uniqueMatches.find(um => um.start === start && um.type === MatchType.writingFeedback)
@@ -212,6 +221,282 @@ export const mergeMatches = (matches: Match[]): Match[] => {
 		}
 	}, []);
 	return merged;
+};
+
+export const sanitizeManualExclusionRanges = (ranges: IManualExclusionRange[]): IManualExclusionRange[] => {
+	if (!ranges?.length) {
+		return [];
+	}
+	return ranges
+		.filter(
+			range => range != null && Number.isFinite(range.start) && Number.isFinite(range.end) && range.end !== range.start
+		)
+		.map(range => {
+			const start = Math.min(range.start, range.end);
+			const end = Math.max(range.start, range.end);
+			return {
+				...range,
+				start,
+				end,
+				ids: range.ids?.slice(),
+			};
+		})
+		.sort((a, b) => a.start - b.start || a.end - b.end);
+};
+
+export const shouldApplyManualRangeToMatch = (match: Match, range: IManualExclusionRange): boolean => {
+	if (!range) {
+		return false;
+	}
+	if (match.end <= range.start || match.start >= range.end) {
+		return false;
+	}
+	if (match.type === MatchType.none || match.type === MatchType.excluded) {
+		return false;
+	}
+	if (range.ids?.length) {
+		const matchIds = match.ids ?? [];
+		return range.ids.some(id => matchIds.includes(id));
+	}
+	return true;
+};
+
+export const createManualExcludedSegment = (
+	match: Match,
+	start: number,
+	end: number,
+	range: IManualExclusionRange
+): ManualAwareMatch => {
+	const manualSegment: ManualAwareMatch = {
+		...match,
+		start,
+		end,
+		ids: range.ids?.length ? range.ids.slice() : match.ids ? [...match.ids] : [],
+		type: MatchType.manualExclusion,
+		reason: undefined,
+	};
+	manualSegment.userExcluded = true;
+	manualSegment.userExcludedTooltip = range.tooltip ?? MANUAL_EXCLUDE_TOOLTIP;
+	manualSegment.originalMatchType = (match as ManualAwareMatch).originalMatchType ?? match.type;
+	if (range.id) {
+		manualSegment.userExclusionId = range.id;
+		manualSegment.txtGid = range.id;
+	} else if ((match as ManualAwareMatch).userExclusionId) {
+		manualSegment.userExclusionId = (match as ManualAwareMatch).userExclusionId;
+		manualSegment.txtGid = (match as ManualAwareMatch).userExclusionId;
+	}
+	if (range.metadata) {
+		manualSegment.metadata = { ...range.metadata };
+	}
+	return manualSegment;
+};
+
+export const splitMatchByManualRanges = (
+	match: Match,
+	ranges: IManualExclusionRange[],
+	manualSegments: ManualAwareMatch[]
+): Match[] => {
+	const applicableRanges = ranges.filter(range => shouldApplyManualRangeToMatch(match, range));
+	if (!applicableRanges.length) {
+		return [match];
+	}
+	const sortedRanges = [...applicableRanges].sort((a, b) => a.start - b.start || a.end - b.end);
+	const segments: Match[] = [];
+	let cursor = match.start;
+
+	for (const range of sortedRanges) {
+		if (cursor >= match.end) {
+			break;
+		}
+		const segmentStart = Math.max(range.start, match.start);
+		const segmentEnd = Math.min(range.end, match.end);
+
+		if (segmentEnd <= segmentStart) {
+			continue;
+		}
+		if (cursor < segmentStart) {
+			segments.push({
+				...match,
+				start: cursor,
+				end: segmentStart,
+			});
+		}
+
+		const manualSegment = createManualExcludedSegment(match, segmentStart, segmentEnd, range);
+		segments.push(manualSegment);
+		manualSegments.push(manualSegment);
+
+		cursor = Math.max(cursor, segmentEnd);
+	}
+
+	if (cursor < match.end) {
+		segments.push({
+			...match,
+			start: cursor,
+			end: match.end,
+		});
+	}
+
+	return segments;
+};
+
+export const applyManualExclusionRanges = (
+	matches: Match[],
+	manualRanges: IManualExclusionRange[]
+): ManualExclusionResult => {
+	if (!matches?.length) {
+		return { matches: [], manualSegments: [] };
+	}
+	const normalizedRanges = sanitizeManualExclusionRanges(manualRanges);
+	if (!normalizedRanges.length) {
+		return { matches, manualSegments: [] };
+	}
+
+	const manualSegments: ManualAwareMatch[] = [];
+	const expandedMatches: Match[] = [];
+
+	for (const match of matches) {
+		const segments = splitMatchByManualRanges(match, normalizedRanges, manualSegments);
+		expandedMatches.push(...segments);
+	}
+
+	if (!manualSegments.length) {
+		return { matches, manualSegments: [] };
+	}
+
+	return { matches: expandedMatches, manualSegments };
+};
+
+export const isUserExcludedMatch = (match: Match): match is ManualAwareMatch =>
+	Boolean((match as ManualAwareMatch).userExcluded);
+
+export const summarizeManualExclusions = (matches: Match[]): IManualExclusionSummary => {
+	if (!matches?.length) {
+		return {
+			hasManualExclusions: false,
+			fullyExcludedResultIds: [],
+			partiallyExcludedResultIds: [],
+		};
+	}
+
+	const stats = new Map<string, { manual: number; total: number }>();
+	let hasManual = false;
+
+	for (const match of matches) {
+		if (!match.ids?.length) {
+			continue;
+		}
+		const manual = isUserExcludedMatch(match);
+		const contributesToTotal = manual || (match.type !== MatchType.none && match.type !== MatchType.excluded);
+		if (!contributesToTotal) {
+			continue;
+		}
+		if (manual) {
+			hasManual = true;
+		}
+
+		for (const id of match.ids) {
+			const entry = stats.get(id) ?? { manual: 0, total: 0 };
+			entry.total += 1;
+			if (manual) {
+				entry.manual += 1;
+			}
+			stats.set(id, entry);
+		}
+	}
+
+	const fullyExcluded: string[] = [];
+	const partiallyExcluded: string[] = [];
+
+	for (const [id, { manual, total }] of stats.entries()) {
+		if (manual === 0) {
+			continue;
+		}
+		if (manual >= total) {
+			fullyExcluded.push(id);
+		} else {
+			partiallyExcluded.push(id);
+		}
+	}
+
+	return {
+		hasManualExclusions: hasManual,
+		fullyExcludedResultIds: fullyExcluded,
+		partiallyExcludedResultIds: partiallyExcluded,
+	};
+};
+
+const createEmptyStatistics = (): IStatistics => ({
+	identical: 0,
+	minorChanges: 0,
+	relatedMeaning: 0,
+});
+
+export const updateResultStatisticsFromMatches = (
+	results: ResultDetailItem | ResultDetailItem[],
+	matches: Match[]
+): void => {
+	const items = Array.isArray(results) ? results : [results];
+	if (!items.length) {
+		return;
+	}
+
+	const statsByResult = new Map<string | number, IStatistics>();
+
+	for (const match of matches ?? []) {
+		if (!match?.ids?.length) {
+			continue;
+		}
+
+		let statKey: keyof IStatistics | undefined;
+		switch (match.type) {
+			case MatchType.identical:
+				statKey = 'identical';
+				break;
+			case MatchType.minorChanges:
+				statKey = 'minorChanges';
+				break;
+			case MatchType.relatedMeaning:
+				statKey = 'relatedMeaning';
+				break;
+			default:
+				break;
+		}
+
+		if (!statKey) {
+			continue;
+		}
+
+		const length = Math.max(0, (match.end ?? 0) - (match.start ?? 0));
+		if (!length) {
+			continue;
+		}
+
+		for (const id of match.ids) {
+			const key = id as unknown as string | number;
+			const current = statsByResult.get(key);
+			if (current) {
+				current[statKey] += length;
+			} else {
+				const fresh = createEmptyStatistics();
+				fresh[statKey] = length;
+				statsByResult.set(key, fresh);
+			}
+		}
+	}
+
+	for (const item of items) {
+		const itemId = item?.id as unknown as string | number;
+		const aggregated = statsByResult.get(itemId);
+		if (!item?.result) {
+			continue;
+		}
+		item.result.statistics = {
+			identical: aggregated?.identical ?? 0,
+			minorChanges: aggregated?.minorChanges ?? 0,
+			relatedMeaning: aggregated?.relatedMeaning ?? 0,
+		};
+	}
 };
 
 /**
@@ -413,9 +698,10 @@ export const processSourceText = (
 	results: ResultDetailItem | ResultDetailItem[],
 	settings: ICopyleaksReportOptions,
 	source: IScanSource,
-	text: boolean = true
-) => {
-	const items = Array.isArray(results) ? results : [results]; // Type guard
+	text: boolean = true,
+	manualExclusions: IManualExclusionRange[] = []
+): { matches: SlicedMatch[][]; summary: IManualExclusionSummary } => {
+	const items = Array.isArray(results) ? results : [results];
 	const identical = settings.showIdentical
 		? items.reduce((acc: Match[], res) => acc.concat((text ? sourceTextIdentical : sourceHtmlIdentical)(res)), [])
 		: [];
@@ -428,10 +714,17 @@ export const processSourceText = (
 				[]
 		  )
 		: [];
+
+	const matchesBeforeManual = [...identical, ...minor, ...related];
+	const { matches: matchesWithManual } = applyManualExclusionRanges(matchesBeforeManual, manualExclusions);
+	const summary = summarizeManualExclusions(matchesWithManual);
+	updateResultStatisticsFromMatches(items, matchesWithManual);
+
 	const excluded = sourceTextExcluded(source);
-	const grouped = mergeMatches([...identical, ...minor, ...related, ...excluded]);
+	const grouped = mergeMatches([...matchesWithManual, ...excluded]);
 	const filled = fillMissingGaps(grouped, source.text.value.length);
-	return paginateMatches(source.text.value, source.text.pages.startPosition, filled);
+
+	return { matches: paginateMatches(source.text.value, source.text.pages.startPosition, filled), summary };
 };
 
 /**
@@ -735,12 +1028,13 @@ export const processSuspectText = (
 export const processSourceHtml = (
 	results: ResultDetailItem | ResultDetailItem[],
 	options: ICopyleaksReportOptions,
-	source: IScanSource
+	source: IScanSource,
+	manualExclusions: IManualExclusionRange[] = []
 ) => {
 	if (!source || !source.html) {
 		return null;
 	}
-	const items = Array.isArray(results) ? results : [results]; // Type guard
+	const items = Array.isArray(results) ? results : [results];
 	const identical = options.showIdentical
 		? items.reduce((acc: Match[], res) => acc.concat(sourceHtmlIdentical(res)), [])
 		: [];
@@ -750,10 +1044,13 @@ export const processSourceHtml = (
 	const related = options.showRelated
 		? items.reduce((acc: Match[], res) => acc.concat(sourceHtmlRelatedMeaning(res)), [])
 		: [];
+
+	const matchesBeforeManual = [...identical, ...minor, ...related];
+	const { matches: matchesWithManual } = applyManualExclusionRanges(matchesBeforeManual, manualExclusions);
+
 	const excluded = sourceHtmlExcluded(source);
-	const grouped = mergeMatches([...identical, ...minor, ...related, ...excluded]);
-	const final = fillMissingGaps(grouped, source.html?.value?.length);
-	return final;
+	const grouped = mergeMatches([...matchesWithManual, ...excluded]);
+	return fillMissingGaps(grouped, source.html?.value?.length);
 };
 
 /**
@@ -816,24 +1113,36 @@ export const getRenderedMatches = (matches: Match[] | null, originalHtml: string
 			stringBuilder.push(originalHtml?.substring(lastIndex, curr.start));
 		}
 
-		let slice = originalHtml?.substring(curr.start, curr.end);
+		const manualAwareMatch = curr as ManualAwareMatch;
+		const isUserExcluded = Boolean(manualAwareMatch.userExcluded);
+		const manualTooltip = manualAwareMatch.userExcludedTooltip ?? MANUAL_EXCLUDE_TOOLTIP;
+		const backendTooltip = curr.reason !== undefined && curr.reason !== null ? EXCLUDE_MESSAGE[curr.reason] : undefined;
+
+		const slice = originalHtml?.substring(curr.start, curr.end);
 		switch (curr.type) {
 			case MatchType.excluded:
-				const reason = curr.reason != undefined && curr.reason != null ? EXCLUDE_MESSAGE[curr.reason] : null;
-				if (curr.reason === EExcludeReason.PartialScan) {
+				if (isUserExcluded) {
+					const originalType = manualAwareMatch.originalMatchType ?? MatchType.none;
+					const exclusionIdAttr = manualAwareMatch.userExclusionId
+						? ` data-user-exclusion-id="${manualAwareMatch.userExclusionId}"`
+						: '';
+					const gidAttr =
+						manualAwareMatch.gid !== undefined && manualAwareMatch.gid !== null
+							? ` data-gid="${manualAwareMatch.gid}"`
+							: '';
+					stringBuilder.push(
+						`<span exclude class="copyleaks-custom-tooltip-trigger" data-user-excluded="true" data-original-type="${originalType}" data-tooltip="${manualTooltip}"${exclusionIdAttr}${gidAttr}>${slice}<div class="copyleaks-custom-tooltip">${manualTooltip}</div></span>`
+					);
+				} else if (curr.reason === EExcludeReason.PartialScan) {
+					const reason = backendTooltip ?? 'UnKnown';
 					stringBuilder.push(
 						`<span exclude-partial-scan data-type="${curr.type}" data-index="${i}" title="${reason}">${slice}</span>`
 					);
 				} else {
-					if (reason) {
-						stringBuilder.push(
-							`<span exclude class="copyleaks-custom-tooltip-trigger" data-tooltip="${reason}">${slice}<div class="copyleaks-custom-tooltip">${reason}</div></span>`
-						);
-					} else {
-						stringBuilder.push(
-							`<span exclude class="copyleaks-custom-tooltip-trigger" data-tooltip="UnKnown">${slice}<div class="copyleaks-custom-tooltip">UnKnown</div></span>`
-						);
-					}
+					const tooltip = backendTooltip ?? 'UnKnown';
+					stringBuilder.push(
+						`<span exclude class="copyleaks-custom-tooltip-trigger" data-tooltip="${tooltip}">${slice}<div class="copyleaks-custom-tooltip">${tooltip}</div></span>`
+					);
 				}
 				break;
 			case MatchType.none:

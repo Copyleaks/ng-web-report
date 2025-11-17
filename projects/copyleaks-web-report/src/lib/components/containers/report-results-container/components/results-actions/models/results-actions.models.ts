@@ -3,4 +3,5 @@ export interface IResultsActions {
 	selectedResults: number;
 	totalExcluded: number;
 	totalFiltered: number;
+	totalManuallyExcluded: number;
 }

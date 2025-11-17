@@ -304,14 +304,28 @@
 				[host]="this"
 				text-container>
 				<ng-container *ngIf="contentTextMatches; else clean">
-					<ng-container *ngFor="let partial of contentTextMatches[currentPage - 1]">
-						<span tabindex="0" *ngIf="partial.match.type === MatchType.none">{{ partial.content }}</span>
-						<!--  -->
+					<ng-container *ngFor="let partial of contentTextMatches[currentPage - 1]; let idx = index">
+						<span
+							tabindex="0"
+							*ngIf="partial.match.type === MatchType.none"
+							[attr.data-manual-index]="idx"
+							[attr.data-src-start]="manualSegmentsForView?.[idx]?.start"
+							[attr.data-src-end]="manualSegmentsForView?.[idx]?.end"
+							[attr.data-txt-gid]="manualSegmentsForView?.[idx]?.match?.txtGid">
+							{{ partial.content }}
+						</span>
+
 						<span
 							tabindex="0"
 							*ngIf="partial.match.type !== MatchType.none && partial.match.type !== MatchType.excluded"
+							[attr.data-manual-index]="idx"
+							[attr.data-src-start]="manualSegmentsForView?.[idx]?.start"
+							[attr.data-src-end]="manualSegmentsForView?.[idx]?.end"
+							[attr.data-txt-gid]="manualSegmentsForView?.[idx]?.match?.txtGid"
 							[cr-match]="partial.match"
 							origin="original"
+							[matTooltip]="partial.match.type === MatchType.manualExclusion ? MANUAL_EXCLUSION_TOOLTIP : ''"
+							matTooltipClass="web-report-mat-tooltip"
 							[crReportMatchTooltip]="
 								partial.match.type === MatchType.writingFeedback && reportResponsive !== EResponsiveLayoutType.Mobile
 									? {
@@ -323,10 +337,14 @@
 							[crReportMatchTooltipType]="partial.match.type">
 							{{ partial.content }}
 						</span>
-						<!--  -->
+
 						<i
 							tabindex="0"
 							*ngIf="partial.match.type === MatchType.excluded && partial.match.reason != 8"
+							[attr.data-manual-index]="idx"
+							[attr.data-src-start]="manualSegmentsForView?.[idx]?.start"
+							[attr.data-src-end]="manualSegmentsForView?.[idx]?.end"
+							[attr.data-txt-gid]="manualSegmentsForView?.[idx]?.match?.txtGid"
 							exclude-match
 							[matTooltip]="
 								partial.match.reason != undefined && partial.match.reason != null
@@ -336,10 +354,14 @@
 							matTooltipClass="web-report-mat-tooltip">
 							{{ partial.content }}
 						</i>
-						<!--  -->
+
 						<span
 							tabindex="0"
 							*ngIf="partial.match.type === MatchType.excluded && partial.match.reason == 8"
+							[attr.data-manual-index]="idx"
+							[attr.data-src-start]="manualSegmentsForView?.[idx]?.start"
+							[attr.data-src-end]="manualSegmentsForView?.[idx]?.end"
+							[attr.data-txt-gid]="manualSegmentsForView?.[idx]?.match?.txtGid"
 							exclude-partial-scan
 							[matTooltip]="
 								partial.match.reason != undefined && partial.match.reason != null
@@ -354,6 +376,21 @@
 				<ng-template #clean>
 					{{ scanSource && (scanSource.text.value | slice : pages[currentPage - 1] : pages[currentPage]) }}
 				</ng-template>
+
+				<button
+					type="button"
+					class="manual-exclude-button"
+					*ngIf="manualExcludeButton.visible"
+					[ngStyle]="{
+						top: manualExcludeButton.top + 'px',
+						left: manualExcludeButton.left + 'px'
+					}"
+					(mousedown)="onManualExcludeMouseDown($event)"
+					(click)="applyManualExclusion()">
+					<mat-icon fontSet="material-icons-round">visibility_off</mat-icon>
+					<span>{{ manualExcludeButtonLabel }}</span>
+				</button>
+
 				<div
 					*ngIf="isExportedComponent"
 					id="highlight-icon"

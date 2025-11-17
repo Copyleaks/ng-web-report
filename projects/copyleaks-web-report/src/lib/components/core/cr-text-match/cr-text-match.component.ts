@@ -78,6 +78,38 @@ export class CrTextMatchComponent implements AfterContentInit {
 		}
 	}
 
+	@HostListener('mouseenter')
+	public hoverIn(): void {
+		if (this.match.type !== MatchType.manualExclusion) {
+			return;
+		}
+		setTimeout(() => {
+			// find all html elements with the same group id and add hover class
+			const groupId = this.match.txtGid;
+			const elements = document.querySelectorAll(`[data-txt-gid="${groupId}"]`);
+
+			elements.forEach(el => {
+				el.classList.add('selected');
+			});
+		});
+	}
+
+	@HostListener('mouseleave')
+	public hoverOut(): void {
+		if (this.match.type !== MatchType.manualExclusion) {
+			return;
+		}
+
+		setTimeout(() => {
+			// find all html elements with the same group id and remove hover class
+			const groupId = this.match.txtGid;
+			const elements = document.querySelectorAll(`[data-txt-gid="${groupId}"]`);
+			elements.forEach(el => {
+				el.classList.remove('selected');
+			});
+		});
+	}
+
 	/**
 	 * Life-cycle method
 	 * Add a class to the native element that represents the match type

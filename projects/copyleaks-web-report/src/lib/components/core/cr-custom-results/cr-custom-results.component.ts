@@ -30,6 +30,7 @@ export class CrCustomResultsComponent implements OnInit, OnChanges, AfterViewIni
 		totalExcluded: 0,
 		totalFiltered: 0,
 		selectedResults: 0,
+		totalManuallyExcluded: 0,
 	};
 	responsiveMode: EResponsiveLayoutType;
 

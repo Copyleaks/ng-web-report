@@ -183,8 +183,16 @@ export class ReportResultsContainerComponent implements OnInit, OnChanges {
 					this._updateMatchesResultsStats();
 					if (this.selectedCategoryResults?.length === 0) this._setSelectedCategoryRef(null);
 				}
-				if (this.reportDataSvc.filterOptions && this.reportDataSvc.excludedResultsIds)
-					this._filterResults(this.reportDataSvc.filterOptions, this.reportDataSvc.excludedResultsIds);
+				if (
+					this.reportDataSvc.filterOptions &&
+					this.reportDataSvc.excludedResultsIds &&
+					this.reportDataSvc.excludedResultsIds
+				)
+					this._filterResults(
+						this.reportDataSvc.filterOptions,
+						this.reportDataSvc.excludedResultsIds,
+						this.reportDataSvc.manuallyExcludedResultsIds
+					);
 			});
 		}
 		if (changes['showLoadingView']?.currentValue == false) {
@@ -242,18 +250,27 @@ export class ReportResultsContainerComponent implements OnInit, OnChanges {
 	}
 
 	private _handelFilterUpdates() {
-		if (this.reportDataSvc.filterOptions && this.reportDataSvc.excludedResultsIds)
-			this._filterResults(this.reportDataSvc.filterOptions, this.reportDataSvc.excludedResultsIds);
+		if (
+			this.reportDataSvc.filterOptions &&
+			this.reportDataSvc.excludedResultsIds &&
+			this.reportDataSvc.manuallyExcludedResultsIds
+		)
+			this._filterResults(
+				this.reportDataSvc.filterOptions,
+				this.reportDataSvc.excludedResultsIds,
+				this.reportDataSvc.manuallyExcludedResultsIds
+			);
 
 		combineLatest([
 			this.reportDataSvc.filterOptions$.pipe(distinctUntilChanged()),
 			this.reportDataSvc.excludedResultsIds$.pipe(distinctUntilChanged()),
+			this.reportDataSvc.manuallyExcludedResultsIds$.pipe(distinctUntilChanged()),
 		])
 			.pipe(untilDestroy(this))
-			.subscribe(([filterOptions, excludedResultsIds]) => {
+			.subscribe(([filterOptions, excludedResultsIds, manuallyExcludedResultsIds]) => {
 				if (this.showLoadingView || !filterOptions || !excludedResultsIds) return;
 				this.filterIndicatorOn = this.reportDataSvc.isFilterOn;
-				this._filterResults(filterOptions, excludedResultsIds);
+				this._filterResults(filterOptions, excludedResultsIds, manuallyExcludedResultsIds);
 			});
 	}
 
@@ -287,7 +304,11 @@ export class ReportResultsContainerComponent implements OnInit, OnChanges {
 		this.searchedValue = value;
 
 		if (this.reportDataSvc.filterOptions && this.reportDataSvc.excludedResultsIds)
-			this._filterResults(this.reportDataSvc.filterOptions, this.reportDataSvc.excludedResultsIds);
+			this._filterResults(
+				this.reportDataSvc.filterOptions,
+				this.reportDataSvc.excludedResultsIds,
+				this.reportDataSvc.manuallyExcludedResultsIds
+			);
 
 		if (!value || value === '') {
 			return;
@@ -435,10 +456,18 @@ export class ReportResultsContainerComponent implements OnInit, OnChanges {
 		this.reportDataSvc.excludedResultsIds$.next(Array.from(excludedResutsIds));
 	}
 
-	private _filterResults(filterOptions: ICopyleaksReportOptions, excludedResultsIds: string[]) {
+	private _filterResults(
+		filterOptions: ICopyleaksReportOptions,
+		excludedResultsIds: string[],
+		manuallyExcludedResultsIds: string[]
+	) {
 		this.excludedResultsIds = excludedResultsIds;
 
-		const filteredResults = this.reportDataSvc.filterResults(filterOptions, excludedResultsIds);
+		const filteredResults = this.reportDataSvc.filterResults(
+			filterOptions,
+			excludedResultsIds,
+			manuallyExcludedResultsIds
+		);
 
 		this.displayedResults = this.allResults
 			.filter(result => !!filteredResults.find(r => r.id === result.resultPreview?.id))
@@ -466,11 +495,19 @@ export class ReportResultsContainerComponent implements OnInit, OnChanges {
 			...this.resultsActions,
 			totalExcluded: excludedResultsIds?.length,
 			totalFiltered:
-				this.reportDataSvc.totalCompleteResults - filteredResults.length <= 0
+				this.reportDataSvc.totalCompleteResults - filteredResults.length - manuallyExcludedResultsIds.length <= 0
 					? 0
-					: this.reportDataSvc.totalCompleteResults - filteredResults.length - excludedResultsIds?.length,
+					: this.reportDataSvc.totalCompleteResults -
+					  filteredResults.length -
+					  excludedResultsIds?.length -
+					  manuallyExcludedResultsIds.length,
 			totalResults: this.reportDataSvc.totalCompleteResults,
+			totalManuallyExcluded:
+				manuallyExcludedResultsIds?.length - (excludedResultsIds?.length || 0) > 0
+					? manuallyExcludedResultsIds?.length - (excludedResultsIds?.length || 0)
+					: 0,
 		};
+		console.log(this.resultsActions);
 
 		this.filterIsOn = filteredResults.length !== this.reportDataSvc.scanResultsDetails?.length;
 		if (!filterOptions.showIdentical || !filterOptions.showMinorChanges || !filterOptions.showRelated)

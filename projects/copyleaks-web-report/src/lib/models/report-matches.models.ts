@@ -31,6 +31,8 @@ export interface Match extends Range {
 	ids?: string[];
 	/** associated group id - relevant to **html** content */
 	gid?: number;
+	/** associated group id - relevant to **text** content */
+	txtGid?: string;
 	/** associated exclude reason - relevant to **excluded** match type */
 	reason?: EExcludeReason;
 	/** associated writing feedback type - relevant to **WritingFeedback** match type */
@@ -55,6 +57,7 @@ export enum MatchType {
 	aiText = 4,
 	aiExplain = 6,
 	none = 5,
+	manualExclusion = 7,
 
 	// custom
 	suspectedCharacterReplacement = 100,
@@ -90,6 +93,7 @@ export interface MatchEndpoint extends Endpoint {
 	type: MatchType;
 	ids?: string[];
 	gid?: number;
+	txtGid?: string;
 	reason?: EExcludeReason;
 }
 /** possible key options for results origin */
@@ -237,3 +241,43 @@ export interface HtmlMatchClickEvent {
 	isSource: boolean;
 	broadcast: boolean;
 }
+
+/**
+ * Represents a manual exclusion range applied by the user.
+ */
+export interface IManualExclusionRange {
+	start: number;
+	end: number;
+	ids?: string[];
+	tooltip?: string;
+	id?: string;
+	metadata?: Record<string, unknown>;
+}
+
+export interface ManualSegmentInfo {
+	start: number;
+	end: number;
+	match: Match | null;
+}
+
+/**
+ * Summarizes manual exclusions for reporting UI decisions.
+ */
+export interface IManualExclusionSummary {
+	hasManualExclusions: boolean;
+	fullyExcludedResultIds: string[];
+	partiallyExcludedResultIds: string[];
+}
+
+export interface ManualExclusionResult {
+	matches: Match[];
+	manualSegments: Match[];
+}
+
+export type ManualAwareMatch = Match & {
+	userExcluded?: boolean;
+	userExcludedTooltip?: string;
+	originalMatchType?: MatchType;
+	userExclusionId?: string;
+	metadata?: Record<string, unknown>;
+};

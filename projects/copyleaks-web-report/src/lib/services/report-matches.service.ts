@@ -1,5 +1,5 @@
 import { Injectable, OnDestroy } from '@angular/core';
-import { BehaviorSubject, combineLatest } from 'rxjs';
+import { BehaviorSubject, combineLatest, Observable } from 'rxjs';
 import { distinctUntilChanged, filter } from 'rxjs/operators';
 import { ALERTS } from '../constants/report-alerts.constants';
 import {
@@ -8,7 +8,7 @@ import {
 	IWritingFeedback,
 	IWritingFeedbackCorrectionViewModel,
 } from '../models/report-data.models';
-import { Match, ResultDetailItem, SlicedMatch } from '../models/report-matches.models';
+import { IManualExclusionRange, Match, ResultDetailItem, SlicedMatch } from '../models/report-matches.models';
 import { ICopyleaksReportOptions } from '../models/report-options.models';
 import { IReportViewEvent } from '../models/report-view.models';
 import * as helpers from '../utils/report-match-helpers';
@@ -92,6 +92,28 @@ export class ReportMatchesService implements OnDestroy {
 		return this._aiPhrases$.value;
 	}
 
+	private _manualTextExclusions$ = new BehaviorSubject<IManualExclusionRange[]>([]);
+	public get manualTextExclusions$(): Observable<IManualExclusionRange[]> {
+		return this._manualTextExclusions$.asObservable();
+	}
+	public get manualTextExclusions(): IManualExclusionRange[] {
+		return this._manualTextExclusions$.value;
+	}
+	public setManualTextExclusions(ranges: IManualExclusionRange[]): void {
+		this._manualTextExclusions$.next(ranges ?? []);
+	}
+
+	private _manualHtmlExclusions$ = new BehaviorSubject<IManualExclusionRange[]>([]);
+	public get manualHtmlExclusions$(): Observable<IManualExclusionRange[]> {
+		return this._manualHtmlExclusions$.asObservable();
+	}
+	public get manualHtmlExclusions(): IManualExclusionRange[] {
+		return this._manualHtmlExclusions$.value;
+	}
+	public setManualHtmlExclusions(ranges: IManualExclusionRange[]): void {
+		this._manualHtmlExclusions$.next(ranges ?? []);
+	}
+
 	constructor(private _reportDataSvc: ReportDataService, private _reportViewSvc: ReportViewService) {
 		this._initOneToManyMatchesHandler();
 		this._initOneToOneMatchesHandler();
@@ -109,6 +131,8 @@ export class ReportMatchesService implements OnDestroy {
 			this._reportDataSvc.excludedResultsIds$.pipe(distinctUntilChanged()),
 			this.showOmittedWords$.pipe(distinctUntilChanged()),
 			this._reportDataSvc.selectedCategoryResultsIds$.pipe(distinctUntilChanged()),
+			this.manualTextExclusions$.pipe(distinctUntilChanged()),
+			this.manualHtmlExclusions$.pipe(distinctUntilChanged()),
 		])
 			.pipe(
 				untilDestroy(this),
@@ -121,7 +145,9 @@ export class ReportMatchesService implements OnDestroy {
 						ICopyleaksReportOptions,
 						string[],
 						boolean,
-						string[]
+						string[],
+						IManualExclusionRange[],
+						IManualExclusionRange[]
 					]) =>
 						scanSource != undefined && viewMode != null && viewMode.viewMode === 'one-to-many' && selectedAlert === null
 				)
@@ -136,6 +162,8 @@ export class ReportMatchesService implements OnDestroy {
 					excludedResultsIds,
 					showOmittedWords,
 					selectedCategoryResultsIds,
+					manualTextExclusions,
+					manualHtmlExclusions,
 				]: [
 					IScanSource,
 					ResultDetailItem[],
@@ -144,7 +172,9 @@ export class ReportMatchesService implements OnDestroy {
 					ICopyleaksReportOptions,
 					string[],
 					boolean,
-					string[]
+					string[],
+					IManualExclusionRange[],
+					IManualExclusionRange[]
 				]) => {
 					let modifiedScanSource = scanSource ? JSON.parse(JSON.stringify(scanSource)) : null;
 					if (!showOmittedWords && modifiedScanSource) {
@@ -185,7 +215,8 @@ export class ReportMatchesService implements OnDestroy {
 							isRealtimeInitView ? undefined : filterOptions,
 							excludedResultsIds,
 							modifiedScanSource,
-							selectedCategoryResultsIds
+							selectedCategoryResultsIds,
+							manualHtmlExclusions
 						);
 					} else {
 						this._processOneToManyMatchesText(
@@ -193,7 +224,8 @@ export class ReportMatchesService implements OnDestroy {
 							isRealtimeInitView ? undefined : filterOptions,
 							excludedResultsIds,
 							modifiedScanSource,
-							selectedCategoryResultsIds
+							selectedCategoryResultsIds,
+							manualTextExclusions
 						);
 					}
 				}
@@ -355,23 +387,32 @@ export class ReportMatchesService implements OnDestroy {
 		settings: ICopyleaksReportOptions | undefined,
 		excludedResultsIds: string[],
 		source: IScanSource,
-		selectedCategoryResultsIds: string[] = []
-	) {
-		if (settings) results = this._reportDataSvc.filterResults(settings, excludedResultsIds);
-		if (results && selectedCategoryResultsIds.length > 0)
-			results = results.filter(result => selectedCategoryResultsIds.includes(result.id));
+		selectedCategoryResultsIds: string[] = [],
+		manualExclusions: IManualExclusionRange[] = []
+	): void {
+		let filteredResults = results ?? [];
 
-		const html = helpers.processSourceHtml(
-			results ?? [],
+		if (settings) {
+			filteredResults = this._reportDataSvc.filterResults(settings, excludedResultsIds, []);
+		}
+
+		if (filteredResults && selectedCategoryResultsIds.length > 0) {
+			filteredResults = filteredResults.filter(result => selectedCategoryResultsIds.includes(result.id));
+		}
+
+		const matches = helpers.processSourceHtml(
+			filteredResults,
 			settings ?? {
 				showIdentical: true,
 				showRelated: true,
 				showMinorChanges: true,
 			},
-			source
+			source,
+			manualExclusions
 		);
-		if (html) {
-			this._originalHtmlMatches.next(html);
+
+		if (matches) {
+			this._originalHtmlMatches.next(matches);
 		}
 	}
 
@@ -387,23 +428,51 @@ export class ReportMatchesService implements OnDestroy {
 		settings: ICopyleaksReportOptions | undefined,
 		excludedResultsIds: string[],
 		source: IScanSource,
-		selectedCategoryResultsIds: string[] = []
-	) {
-		if (settings) results = this._reportDataSvc.filterResults(settings, excludedResultsIds);
-		if (results && selectedCategoryResultsIds.length > 0)
-			results = results.filter(result => selectedCategoryResultsIds.includes(result.id));
+		selectedCategoryResultsIds: string[] = [],
+		manualExclusions: IManualExclusionRange[] = []
+	): void {
+		let filteredResults = results ?? [];
 
-		const text = helpers.processSourceText(
-			results ?? [],
+		if (settings) {
+			filteredResults = this._reportDataSvc.filterResults(settings, excludedResultsIds);
+		}
+
+		if (filteredResults && selectedCategoryResultsIds.length > 0) {
+			filteredResults = filteredResults.filter(result => selectedCategoryResultsIds.includes(result.id));
+		}
+
+		const { matches, summary } = helpers.processSourceText(
+			filteredResults,
 			settings ?? {
 				showIdentical: true,
 				showRelated: true,
 				showMinorChanges: true,
 			},
-			source
+			source,
+			true,
+			manualExclusions
 		);
-		if (text) {
-			this._originalTextMatches.next(text);
+
+		if (matches) {
+			this._originalTextMatches.next(matches);
+		}
+
+		if (manualExclusions && manualExclusions.length > 0 && summary) {
+			this._reportDataSvc.scanResultsDetails.forEach(result => {
+				const modifiedResult = filteredResults.find(r => r.id === result.id);
+				if (!modifiedResult) return;
+				if (result.result?.statistics)
+					result.result.statistics = {
+						identical: modifiedResult.result?.statistics?.identical ?? 0,
+						minorChanges: modifiedResult.result?.statistics?.minorChanges ?? 0,
+						relatedMeaning: modifiedResult.result?.statistics?.relatedMeaning ?? 0,
+					};
+			});
+		}
+
+		if (summary && summary.fullyExcludedResultIds.length > 0) {
+			// Update the manually excluded results ids in the report data service & no duplicate ids
+			this._reportDataSvc.manuallyExcludedResultsIds$.next([...summary.fullyExcludedResultIds]);
 		}
 	}
 
@@ -423,7 +492,7 @@ export class ReportMatchesService implements OnDestroy {
 		// Case where source has html but suspect doesnt
 		if (source.html && source.html.value && !(item.result?.html && item.result.html.value)) {
 			// Create the report left side (the source document) text matches
-			this._sourceTextMatches.next(helpers.processSourceText(item, settings, source));
+			this._sourceTextMatches.next(helpers.processSourceText(item, settings, source)?.matches);
 
 			// Create the report left side (the source document) html matches
 			this._sourceHtmlMatches.next(helpers.processSourceHtml(item, settings, source));
@@ -434,7 +503,7 @@ export class ReportMatchesService implements OnDestroy {
 		// Case where suspect has html but source doesnt
 		else if (!(source.html && source.html.value) && item.result?.html && item.result.html.value) {
 			// Create the report left side (the source document) text matches
-			this._sourceTextMatches.next(helpers.processSourceText(item, settings, source, !viewMode.isHtmlView));
+			this._sourceTextMatches.next(helpers.processSourceText(item, settings, source, !viewMode.isHtmlView)?.matches);
 
 			// Create the report right side (the result/suspect document) text matches
 			this._suspectTextMatches.next(helpers.processSuspectText(item, settings));
@@ -445,7 +514,7 @@ export class ReportMatchesService implements OnDestroy {
 		// Case where both source and suspect have html & text views
 		else {
 			// Create the report left side (the source document) text and html matches
-			this._sourceTextMatches.next(helpers.processSourceText(item, settings, source));
+			this._sourceTextMatches.next(helpers.processSourceText(item, settings, source)?.matches);
 			this._sourceHtmlMatches.next(helpers.processSourceHtml(item, settings, source));
 
 			// Create the report right side (the result/suspect document) text and html matches
@@ -506,7 +575,7 @@ export class ReportMatchesService implements OnDestroy {
 					showMinorChanges: true,
 				},
 				source
-			);
+			)?.matches;
 		if (text) this._originalTextMatches.next(text);
 
 		// update the html view with zero results

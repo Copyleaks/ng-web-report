@@ -3,7 +3,7 @@ import { BehaviorSubject, Subject } from 'rxjs';
 import { filter, map, withLatestFrom } from 'rxjs/operators';
 import { CrTextMatchComponent } from '../components/core/cr-text-match/cr-text-match.component';
 import { ContentMode, ViewMode } from '../models/report-config.models';
-import { HtmlMatchClickEvent, Match, TextMatchHighlightEvent } from '../models/report-matches.models';
+import { HtmlMatchClickEvent, Match, MatchType, TextMatchHighlightEvent } from '../models/report-matches.models';
 import * as helpers from '../utils/highlight-helpers';
 import { untilDestroy } from '../utils/until-destroy';
 import { ReportViewService } from './report-view.service';
@@ -182,6 +182,7 @@ export class ReportMatchHighlightService implements OnDestroy {
 		multiSelect: boolean = false,
 		showResults: boolean = true
 	) {
+		if (next?.match.type === MatchType.manualExclusion) return;
 		// check if the shift key is pressed (multi selection)
 		if (multiSelect) {
 			if (!next) {

@@ -84,6 +84,9 @@ export enum EExcludeReason {
 	TableOfContent = 6,
 	CodeComments = 7,
 	PartialScan = 8,
+
+	/* Custom */
+	ManualExclusion = 100,
 }
 
 /** Enum representing the status of a scan */

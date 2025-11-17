@@ -15,3 +15,5 @@ export const EXCLUDE_MESSAGE: { [key: string]: string } = {
 	10: $localize`Omitted: Title`,
 	11: $localize`Omitted: Matches exclusion template`,
 };
+
+export const MANUAL_EXCLUDE_TOOLTIP = $localize`Excluded by you`;

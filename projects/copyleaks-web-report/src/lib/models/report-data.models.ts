@@ -134,6 +134,7 @@ export interface IResultPreviews {
  */
 export interface ICompleteResultsFilters {
 	execludedResultIds?: string[];
+	manuallyExcludedResultIds?: string[];
 	filteredResultIds?: string[];
 	general?: IGeneralFilters;
 	sourceType?: ISourceTypeFilters;

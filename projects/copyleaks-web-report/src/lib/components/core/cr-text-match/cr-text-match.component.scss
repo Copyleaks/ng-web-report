@@ -1,4 +1,5 @@
-@import '../../../styles/website-colors.styles.scss';
+@use '../../../styles/website-colors.styles.scss' as *;
+@use 'sass:color';
 
 :host {
 	cursor: pointer;
@@ -21,7 +22,7 @@ span[class*='cr-m-'] {
 		background-color: $color-plagiarism-minor-changes;
 
 		&:hover {
-			background-color: lighten($color-plagiarism-minor-changes, 5%);
+			background-color: color.adjust($color-plagiarism-minor-changes, $lightness: 5%);
 		}
 	}
 

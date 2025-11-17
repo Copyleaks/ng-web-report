@@ -19,6 +19,7 @@ import { ReportViewService } from '../../../services/report-view.service';
 			transition(':enter', [animate('0.5s ease-in', style({ opacity: 1 }))]),
 		]),
 	],
+	standalone: false,
 })
 /**
  * Represents the correction component used for displaying and interacting with a writing feedback correction.

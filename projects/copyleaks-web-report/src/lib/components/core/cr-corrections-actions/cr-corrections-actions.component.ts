@@ -12,6 +12,7 @@ import { IWritingFeedbackTypeStatistics } from '../../../models/report-statistic
 	selector: 'cr-corrections-actions',
 	templateUrl: './cr-corrections-actions.component.html',
 	styleUrls: ['./cr-corrections-actions.component.scss'],
+	standalone: false,
 })
 export class CrCorrectionsActionsComponent implements OnInit {
 	/**
@@ -91,8 +92,9 @@ export class CrCorrectionsActionsComponent implements OnInit {
 	openFilterDialog(excludedView: boolean = false, event?: KeyboardEvent): void {
 		if (!event || event.key === 'Enter') {
 			this._matDialog.open(FilterCorrectionsDialogComponent, {
-				maxWidth: '95%',
-				width: '1050px',
+				maxWidth: this.isMobile ? '100%' : '',
+				minWidth: this.isMobile ? '100%' : '',
+				width: '1290px',
 				panelClass: 'filter-corrections-dailog',
 				ariaLabel: $localize`Report Corrections Filter Options`,
 				autoFocus: false,

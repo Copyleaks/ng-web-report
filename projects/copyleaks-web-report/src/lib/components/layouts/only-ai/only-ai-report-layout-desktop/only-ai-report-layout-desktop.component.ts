@@ -13,6 +13,7 @@ import { ReportErrorsService } from '../../../../services/report-errors.service'
 	selector: 'copyleaks-only-ai-report-layout-desktop',
 	templateUrl: './only-ai-report-layout-desktop.component.html',
 	styleUrls: ['./only-ai-report-layout-desktop.component.scss'],
+	standalone: false,
 })
 export class OnlyAiReportLayoutDesktopComponent
 	extends OneToManyReportLayoutBaseComponent

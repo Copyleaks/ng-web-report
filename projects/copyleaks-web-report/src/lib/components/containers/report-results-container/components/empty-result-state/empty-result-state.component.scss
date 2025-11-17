@@ -1,5 +1,5 @@
-@import '../../../../../styles/website-colors.styles.scss';
-@import '../../../../../styles/styles.scss';
+@use '../../../../../styles/website-colors.styles.scss' as *;
+@use '../../../../../styles/styles.scss';
 
 .empty-result-state-container {
 	width: 100%;

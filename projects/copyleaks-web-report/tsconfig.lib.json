@@ -4,10 +4,9 @@
 	"compilerOptions": {
 		"outDir": "../../out-tsc/lib",
 		"declarationMap": true,
-		"target": "es2015",
 		"declaration": true,
 		"inlineSources": true,
-		"types": ["jest", "node"],
+		"types": ["@angular/localize"],
 		"lib": ["dom", "es2019"]
 	},
 	"angularCompilerOptions": {

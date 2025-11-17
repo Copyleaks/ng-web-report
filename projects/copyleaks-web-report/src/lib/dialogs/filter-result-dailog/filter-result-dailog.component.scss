@@ -1,10 +1,11 @@
-@import '../../styles/website-colors.styles.scss';
-@import '../../styles/styles.scss';
-@import '../../styles/cls-mat-components-overrides//cls-mat-slide-toggle-overrides.scss';
-@import '../../styles/cls-mat-components-overrides/cls-scroll-bar-overrides.scss';
-@import '../../styles/cls-mat-components-overrides/cls-mat-chip-overrides.scss';
-@import '../../styles/cls-mat-components-overrides/cls-mat-checkbox-overrides.scss';
-@import '../../styles/cls-mat-components-overrides/cls-mat-expansion-panel-overrides.scss';
+@use '../../styles/website-colors.styles.scss' as *;
+@use '../../styles/styles.scss';
+@use '../../styles/cls-mat-components-overrides//cls-mat-slide-toggle-overrides.scss';
+@use '../../styles/cls-mat-components-overrides/cls-scroll-bar-overrides.scss';
+@use '../../styles/cls-mat-components-overrides/cls-mat-chip-overrides.scss';
+@use '../../styles/cls-mat-components-overrides/cls-mat-checkbox-overrides.scss';
+@use '../../styles/cls-mat-components-overrides/cls-mat-expansion-panel-overrides.scss';
+@use '../../styles/cls-accessibility-overrides/cls-accessibility-overrides.scss';
 
 :host {
 	display: flex;
@@ -15,7 +16,9 @@
 		::ng-deep {
 			.include-results-checkbox {
 				::ng-deep {
-					.mat-checkbox-label {
+					.mat-checkbox-label,
+					.mdc-form-field label,
+					.mat-mdc-checkbox-label {
 						display: flex;
 						align-items: center;
 					}
@@ -25,7 +28,9 @@
 			.tag-list {
 				direction: rtl;
 				::ng-deep {
-					.mat-checkbox-inner-container {
+					.mat-checkbox-inner-container,
+					.mdc-checkbox,
+					.mat-mdc-checkbox .mdc-checkbox {
 						margin: 0 0 0 4px !important;
 					}
 				}
@@ -53,10 +58,19 @@
 			gap: 8px !important;
 		}
 
-		/* Hide default toggle icon */
 		.mat-expansion-panel-header .mat-expansion-indicator::after {
 			border: none;
 			content: '';
+		}
+
+		mat-basic-chip {
+			cursor: pointer;
+			::ng-deep {
+				.mdc-evolution-chip__text-label,
+				.mat-mdc-chip-action-label {
+					cursor: pointer;
+				}
+			}
 		}
 
 		.mat-expansion-indicator {
@@ -267,10 +281,24 @@
 		font-size: 16px !important;
 		font-weight: 500;
 		font-family: haboro-soft, sans-serif !important;
+		white-space: nowrap;
 	}
 	.apply-filters-button {
 		font-size: 18px !important;
 		font-weight: 700 !important;
+	}
+}
+
+.apply-and-discard-button-contaier.is-mobile {
+	::ng-deep {
+		a {
+			border: none !important;
+			background: transparent !important;
+			color: $color-primary !important;
+		}
+		.mat-mdc-button-base.mat-primary {
+			border: none !important;
+		}
 	}
 }
 
@@ -289,19 +317,23 @@
 	justify-content: flex-start;
 }
 
-.mat-dialog-content {
+.mat-mdc-dialog-content {
 	margin: 0px !important;
 	padding: 32px 0px !important;
 	padding-inline-end: 10px !important;
 }
 
-.mat-dialog-title {
+.mat-mdc-dialog-title {
 	margin: 0px !important;
 	padding: 0px !important;
 	padding-inline-end: 10px !important;
 }
 
-.mat-dialog-content.mobile-body-top-container {
+.mdc-dialog__title::before {
+	display: none !important;
+}
+
+.mat-mdc-dialog-content.mobile-body-top-container {
 	padding: 16px 10px 0px 0px !important;
 }
 
@@ -343,7 +375,7 @@ cr-excluded-results-dailog {
 	gap: 4px;
 	align-items: center;
 	justify-content: flex-start;
-	mat-chip {
+	mat-chip-option {
 		font-size: 14px !important;
 		font-style: normal !important;
 		font-weight: 500 !important;

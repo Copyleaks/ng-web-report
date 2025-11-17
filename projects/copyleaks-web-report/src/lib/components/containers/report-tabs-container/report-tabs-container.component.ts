@@ -27,6 +27,7 @@ import { trigger, state, transition, animate, style } from '@angular/animations'
 			transition(':enter', [animate('0.5s ease-in', style({ opacity: 1 }))]),
 		]),
 	],
+	standalone: false,
 })
 export class ReportTabsContainerComponent implements OnInit, OnDestroy, OnChanges {
 	/**

@@ -83,7 +83,7 @@
 			fxLayout="row"
 			fxLayoutAlign="start center"
 			fxLayoutGap="8px">
-			<mat-chip
+			<mat-chip-option
 				*ngIf="(displayedScanCorrectionsView?.length ?? 0) > 5 && currentViewedIndex > 2"
 				role="button"
 				(click)="scrollToIndex(0)"
@@ -93,7 +93,7 @@
 						? currentViewedIndex - 2
 						: (displayedScanCorrectionsView?.length ?? 0) - 5
 				}}
-			</mat-chip>
+			</mat-chip-option>
 			<button
 				class="navigate-mobie-button"
 				aria-label="This is a result navigation button."
@@ -139,7 +139,7 @@
 				}"
 				(click)="onDotNavigate(enumNavigateMobileButton.FifthButton)"></button>
 
-			<mat-chip
+			<mat-chip-option
 				*ngIf="
 					(displayedScanCorrectionsView?.length ?? 0) > 5 &&
 					currentViewedIndex < (displayedScanCorrectionsView?.length ?? 0) - 3
@@ -152,7 +152,7 @@
 						? (displayedScanCorrectionsView?.length ?? 0) - currentViewedIndex - 3
 						: (displayedScanCorrectionsView?.length ?? 0) - 5
 				}}
-			</mat-chip>
+			</mat-chip-option>
 		</div>
 	</ng-container>
 

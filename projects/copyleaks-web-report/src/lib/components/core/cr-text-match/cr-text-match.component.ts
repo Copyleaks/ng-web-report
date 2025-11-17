@@ -10,6 +10,7 @@ import { ReportViewService } from '../../../services/report-view.service';
 	selector: 'span[cr-match]',
 	styleUrls: ['./cr-text-match.component.scss'],
 	template: '<ng-content></ng-content>',
+	standalone: false,
 })
 export class CrTextMatchComponent implements AfterContentInit {
 	constructor(

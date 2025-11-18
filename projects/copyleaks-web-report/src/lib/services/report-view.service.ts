@@ -105,6 +105,7 @@ export class ReportViewService {
 	private _previousCustomTabId: string | undefined = undefined;
 	private _currentCustomTabId: string | undefined = undefined;
 	private _counter$ = new BehaviorSubject<number>(0);
+	private _previousIsHtmlView: boolean | null = null;
 
 	private _iframeScrollPosition$ = new BehaviorSubject<{ top: number; left: number }>({ top: 0, left: 0 });
 
@@ -136,6 +137,14 @@ export class ReportViewService {
 
 	public resetCounter(): void {
 		this._counter$.next(0);
+	}
+
+	public get previousIsHtmlView(): boolean | null {
+		return this._previousIsHtmlView;
+	}
+
+	public setPreviousIsHtmlView(isHtmlView: boolean | null): void {
+		this._previousIsHtmlView = isHtmlView;
 	}
 
 	/**

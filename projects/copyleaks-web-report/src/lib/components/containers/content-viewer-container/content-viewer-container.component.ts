@@ -594,21 +594,29 @@ export class ContentViewerContainerComponent implements OnInit, AfterViewInit, O
 			let previousPage = this.currentPage;
 
 			if (previousTab !== newTab) {
-				let previousIsHtmlView = null;
-				let previousPage = this.currentPage;
-
-				// Save with the PREVIOUS isHtmlView value
-				if ('isHtmlView' in changes) {
-					previousIsHtmlView = changes['isHtmlView'].previousValue;
+				debugger;
+				if (
+					this.viewSvc.currentCustomTabId !== 'grading-feedback' ||
+					this.viewSvc.previousCustomTabId === 'grading-feedback'
+				) {
+					// Save with the PREVIOUS isHtmlView value
+					if ('isHtmlView' in changes) {
+						previousIsHtmlView = changes['isHtmlView'].previousValue;
+					} else {
+						previousIsHtmlView = this.isHtmlView;
+					}
 				} else {
-					previousIsHtmlView = this.isHtmlView;
+					previousIsHtmlView =
+						this.viewSvc.previousIsHtmlView !== null ? this.viewSvc.previousIsHtmlView : this.isHtmlView;
 				}
+
 				// Check if currentPage changed along with tab change
 				if ('currentPage' in changes) {
 					previousPage = changes['currentPage'].previousValue;
 				}
 				if (this.viewSvc.previousCustomTabId !== 'ai-overview') {
 					this._saveScrollPosition(previousTab, previousIsHtmlView, previousPage);
+					this.viewSvc.setPreviousIsHtmlView(null);
 				}
 				this.viewSvc.setCurrentViewTab(newTab);
 				if (this.viewSvc.currentCustomTabId !== 'ai-overview') {
@@ -622,10 +630,8 @@ export class ContentViewerContainerComponent implements OnInit, AfterViewInit, O
 				}
 				// Save with the PREVIOUS isHtmlView value
 				if ('isHtmlView' in changes) {
-					previousIsHtmlView = changes['isHtmlView']?.previousValue;
-					if (previousIsHtmlView === undefined || previousIsHtmlView === null) {
-						previousIsHtmlView = changes['isHtmlView']?.currentValue ? false : true;
-					}
+					previousIsHtmlView =
+						this.viewSvc.previousIsHtmlView !== null ? this.viewSvc.previousIsHtmlView : this.isHtmlView;
 				} else {
 					previousIsHtmlView = this.isHtmlView;
 				}
@@ -634,9 +640,15 @@ export class ContentViewerContainerComponent implements OnInit, AfterViewInit, O
 					previousPage = changes['currentPage'].previousValue;
 				}
 				this.viewSvc.counter$.pipe(take(1)).subscribe(counterValue => {
+					let incrementCounter = false;
 					if (counterValue === 0) {
 						if (this.viewSvc.previousCustomTabId === 'grading-feedback') {
 							this._saveScrollPosition(previousTab, previousIsHtmlView, previousPage);
+							incrementCounter =
+								this.viewSvc.previousCustomTabId == 'grading-feedback' &&
+								this.viewSvc.currentCustomTabId == 'ai-overview' &&
+								this.viewSvc.previousIsHtmlView !== false;
+							this.viewSvc.setPreviousIsHtmlView(null);
 						}
 						this.viewSvc.setCurrentViewTab(newTab);
 						if (this.viewSvc.currentCustomTabId === 'grading-feedback') {
@@ -644,10 +656,7 @@ export class ContentViewerContainerComponent implements OnInit, AfterViewInit, O
 							this._prepareForReload();
 							this._queueScrollRestore();
 						}
-						if (
-							this.viewSvc.previousCustomTabId == 'grading-feedback' &&
-							this.viewSvc.currentCustomTabId == 'ai-overview'
-						) {
+						if (incrementCounter) {
 							this.viewSvc.incrementCounter();
 						}
 					} else {
@@ -779,8 +788,9 @@ export class ContentViewerContainerComponent implements OnInit, AfterViewInit, O
 	}
 
 	onViewChange() {
-		// debugger;
 		const currentIsHtmlView = this.isHtmlView;
+		const previousIsHtmlView = this.isHtmlView ? false : true;
+		this.viewSvc.setPreviousIsHtmlView(previousIsHtmlView);
 		this._saveScrollPosition(this.viewSvc.currentViewTab, currentIsHtmlView);
 
 		if (!this.iframeLoaded) this.showLoadingView = true;

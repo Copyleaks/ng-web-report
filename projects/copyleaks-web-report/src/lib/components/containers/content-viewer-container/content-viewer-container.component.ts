@@ -41,7 +41,7 @@ import { COPYLEAKS_REPORT_IFRAME_STYLES } from '../../../constants/report-iframe
 
 import oneToManyIframeJsScript from '../../../utils/one-to-many-iframe-logic';
 import oneToOneIframeJsScript from '../../../utils/one-to-one-iframe-logic';
-import { filter, take } from 'rxjs/operators';
+import { filter } from 'rxjs/operators';
 import * as rangy from 'rangy';
 import * as rangyclassapplier from 'rangy/lib/rangy-classapplier';
 
@@ -81,7 +81,6 @@ export class ContentViewerContainerComponent implements OnInit, AfterViewInit, O
 		}
 
 		if (data.type === 'iframeReady') {
-			console.log('Iframe ready event received:', data);
 			if (this._iframeReadyResolver) {
 				clearTimeout(this._iframeReadyTimeout);
 				this._iframeReadyResolver();
@@ -461,7 +460,7 @@ export class ContentViewerContainerComponent implements OnInit, AfterViewInit, O
 
 	private _ignoreScrollUpdates = false;
 	private _isRestoringScroll = false;
-	private _pendingScrollRestore: { scrollTop: number; scrollLeft: number } | null = null;
+	private _pendingScrollRestore: { scrollTop: number; scrollLeft: number; page?: number } | null = null;
 	private _iframeReadyTimeout: any;
 	private _iframeReadyResolver: ((value: void) => void) | null = null;
 
@@ -476,6 +475,17 @@ export class ContentViewerContainerComponent implements OnInit, AfterViewInit, O
 	ngOnInit(): void {
 		if (this.flexGrow !== undefined && this.flexGrow !== null) this.flexGrowProp = this.flexGrow;
 
+		const currentTab = this._getCurrentTab();
+		const customTabId = this.viewSvc.reportViewMode$.value.selectedCustomTabId;
+		this.viewSvc.setCurrentViewTab(currentTab);
+		// Handle initial load for custom tab in text view
+		if (!this.isHtmlView && currentTab === EReportViewTab.Custom) {
+			this._prepareForReload();
+			this._queueScrollRestore(currentTab, customTabId);
+			setTimeout(() => {
+				this._restoreScrollPosition();
+			}, 100);
+		}
 		if (!this.isExportedComponent) {
 			this.viewSvc.selectedCustomTabContent$.pipe(untilDestroy(this)).subscribe(content => {
 				if (this.viewMode !== 'one-to-one') this.customTabContent = content;
@@ -510,14 +520,14 @@ export class ContentViewerContainerComponent implements OnInit, AfterViewInit, O
 					this.iFrameWindow = this.contentIFrame?.nativeElement?.contentWindow;
 					this.iframeLoaded = true;
 					this.showLoadingView = false;
-					console.log('iFrame loaded');
-					// // Restore scroll position if we have a pending restoration
-					if (this._isRestoringScroll && this._pendingScrollRestore) {
-						this._waitForIframeReady().then(() => {
-							console.log('Iframe is ready, restoring scroll position');
-							this._restoreScrollPosition();
-						});
-					}
+					const currentTab = this._getCurrentTab();
+					const customTabId = this.viewSvc.reportViewMode$.value.selectedCustomTabId;
+					// Handle iframe scroll restoration
+					this._waitForIframeReady().then(() => {
+						this._prepareForReload();
+						this._queueScrollRestore(currentTab, customTabId);
+						this._restoreScrollPosition();
+					});
 				}
 			},
 			false
@@ -577,110 +587,100 @@ export class ContentViewerContainerComponent implements OnInit, AfterViewInit, O
 	}
 
 	ngOnChanges(changes: SimpleChanges): void {
-		// debugger;
 		// Detect tab changes and save/restore scroll position
-		if ('isAIView' in changes || 'viewMode' in changes || 'contentHtmlMatches' in changes) {
+		let isHandlingTabSwitch = false;
+		if (
+			'isAIView' in changes ||
+			'viewMode' in changes ||
+			'contentHtmlMatches' in changes ||
+			'contentTextMatches' in changes
+		) {
 			const previousTab = this.viewSvc.currentViewTab;
 			const newTab = this._getCurrentTab();
-			console.log('Previous Tab:', previousTab, 'New Tab:', newTab);
-			console.log(
-				'previous custom tab id:',
-				this.viewSvc.previousCustomTabId,
-				'current custom tab id:',
-				this.viewSvc.currentCustomTabId
-			);
+			const previousCustomTabId = this.viewSvc.previousCustomTabId;
+			const currentCustomTabId = this.viewSvc.currentCustomTabId;
 
-			let previousIsHtmlView = null;
-			let previousPage = this.currentPage;
+			const isSwitchingBetweenSharedTabs =
+				previousTab !== EReportViewTab.Custom && newTab !== EReportViewTab.Custom && previousTab !== newTab;
 
-			if (previousTab !== newTab) {
-				debugger;
-				if (
-					this.viewSvc.currentCustomTabId !== 'grading-feedback' ||
-					this.viewSvc.previousCustomTabId === 'grading-feedback'
-				) {
-					// Save with the PREVIOUS isHtmlView value
-					if ('isHtmlView' in changes) {
-						previousIsHtmlView = changes['isHtmlView'].previousValue;
-					} else {
-						previousIsHtmlView = this.isHtmlView;
-					}
-				} else {
-					previousIsHtmlView =
-						this.viewSvc.previousIsHtmlView !== null ? this.viewSvc.previousIsHtmlView : this.isHtmlView;
+			const isSwitchingToCustomTab = previousTab !== EReportViewTab.Custom && newTab === EReportViewTab.Custom;
+
+			const isSwitchingFromCustomTab = previousTab === EReportViewTab.Custom && newTab !== EReportViewTab.Custom;
+
+			if (newTab === EReportViewTab.Custom && currentCustomTabId === 'ai-overview') {
+				this.viewSvc.clearScrollPositions();
+			}
+
+			// Handle save/restore for shared instance tabs switching between each other
+			if (isSwitchingBetweenSharedTabs) {
+				isHandlingTabSwitch = true;
+				let previousIsHtmlView = this.isHtmlView;
+				if ('isHtmlView' in changes && !changes['isHtmlView'].firstChange) {
+					previousIsHtmlView = changes['isHtmlView'].previousValue;
 				}
-
-				// Check if currentPage changed along with tab change
-				if ('currentPage' in changes) {
+				let previousPage = this.currentPage;
+				if ('currentPage' in changes && !changes['currentPage'].firstChange) {
 					previousPage = changes['currentPage'].previousValue;
 				}
-				if (this.viewSvc.previousCustomTabId !== 'ai-overview') {
-					this._saveScrollPosition(previousTab, previousIsHtmlView, previousPage);
-					this.viewSvc.setPreviousIsHtmlView(null);
+
+				this._saveScrollPosition(previousTab, undefined, previousIsHtmlView, previousPage);
+
+				this._prepareForReload();
+				this._queueScrollRestore(newTab);
+				if (!this.isHtmlView) {
+					// For text view, restore after DOM updates
+					setTimeout(() => {
+						this._restoreScrollPosition();
+					}, 100);
 				}
 				this.viewSvc.setCurrentViewTab(newTab);
-				if (this.viewSvc.currentCustomTabId !== 'ai-overview') {
-					console.log('Restoring scroll for tab:', newTab);
-					this._prepareForReload();
-					this._queueScrollRestore();
-				}
-			} else if (previousTab === EReportViewTab.Custom && newTab === EReportViewTab.Custom) {
-				if ('isHtmlView' in changes) {
-					console.log('isHtmlView changed within Custom tab');
-				}
-				// Save with the PREVIOUS isHtmlView value
-				if ('isHtmlView' in changes) {
-					previousIsHtmlView =
-						this.viewSvc.previousIsHtmlView !== null ? this.viewSvc.previousIsHtmlView : this.isHtmlView;
-				} else {
-					previousIsHtmlView = this.isHtmlView;
-				}
-				// Check if currentPage changed along with tab change
-				if ('currentPage' in changes) {
+			} else if (isSwitchingToCustomTab && currentCustomTabId !== 'ai-overview') {
+				isHandlingTabSwitch = true;
+				let previousIsHtmlView = this.viewSvc.currentIsHtmlView;
+				let previousPage = this.currentPage;
+				if ('currentPage' in changes && !changes['currentPage'].firstChange) {
 					previousPage = changes['currentPage'].previousValue;
 				}
-				this.viewSvc.counter$.pipe(take(1)).subscribe(counterValue => {
-					let incrementCounter = false;
-					if (counterValue === 0) {
-						if (this.viewSvc.previousCustomTabId === 'grading-feedback') {
-							this._saveScrollPosition(previousTab, previousIsHtmlView, previousPage);
-							incrementCounter =
-								this.viewSvc.previousCustomTabId == 'grading-feedback' &&
-								this.viewSvc.currentCustomTabId == 'ai-overview' &&
-								this.viewSvc.previousIsHtmlView !== false;
-							this.viewSvc.setPreviousIsHtmlView(null);
-						}
-						this.viewSvc.setCurrentViewTab(newTab);
-						if (this.viewSvc.currentCustomTabId === 'grading-feedback') {
-							console.log('Restoring scroll for tab:', newTab);
-							this._prepareForReload();
-							this._queueScrollRestore();
-						}
-						if (incrementCounter) {
-							this.viewSvc.incrementCounter();
-						}
-					} else {
-						this.viewSvc.resetCounter();
-					}
-				});
+				this._saveScrollPosition(previousTab, undefined, previousIsHtmlView, previousPage);
+				this.viewSvc.setCurrentViewTab(newTab);
+			} else if (isSwitchingFromCustomTab && previousCustomTabId !== 'ai-overview') {
+				isHandlingTabSwitch = true;
+				this._prepareForReload();
+				this._queueScrollRestore(newTab, currentCustomTabId);
+				// For text view, restore after DOM updates
+				if (!this.isHtmlView) {
+					setTimeout(() => {
+						this._restoreScrollPosition();
+					}, 100);
+				}
+				this.viewSvc.setCurrentViewTab(newTab);
+			} else {
+				this.viewSvc.setCurrentViewTab(newTab);
 			}
 		}
 
-		// Detect view mode changes (HTML vs Text) - handle separately from tab changes
-		if ('isHtmlView' in changes && !changes['isHtmlView']?.firstChange) {
-			// Prepare for restoration with NEW isHtmlView value
-			this._prepareForReload();
-			this._queueScrollRestore();
-		}
-
-		// Detect page changes (when page finishes loading after restoration request)
-		if ('currentPage' in changes && !changes['currentPage']?.firstChange) {
-			// If we have a pending scroll restore and the page just changed, restore scroll now
+		// Handle page changes (text view only)
+		if ('currentPage' in changes && !changes['currentPage']?.firstChange && !isHandlingTabSwitch) {
 			if (this._pendingScrollRestore && this._isRestoringScroll) {
-				const savedPage = this._pendingScrollRestore['page'];
+				const savedPage = this._pendingScrollRestore.page;
 				if (savedPage && savedPage === this.currentPage) {
 					this._restoreScrollPosition();
 				}
+			}
+		}
+
+		if ('isHtmlView' in changes && !changes['isHtmlView'].firstChange) {
+			const currentTab = this._getCurrentTab();
+			const customTabId = this.viewSvc.reportViewMode$.value.selectedCustomTabId;
+
+			this._prepareForReload();
+			this._queueScrollRestore(currentTab, customTabId);
+
+			// For text view, restore immediately after DOM updates
+			if (!this.isHtmlView) {
+				setTimeout(() => {
+					this._restoreScrollPosition();
+				}, 100);
 			}
 		}
 
@@ -788,10 +788,9 @@ export class ContentViewerContainerComponent implements OnInit, AfterViewInit, O
 	}
 
 	onViewChange() {
-		const currentIsHtmlView = this.isHtmlView;
-		const previousIsHtmlView = this.isHtmlView ? false : true;
-		this.viewSvc.setPreviousIsHtmlView(previousIsHtmlView);
-		this._saveScrollPosition(this.viewSvc.currentViewTab, currentIsHtmlView);
+		const currentTab = this._getCurrentTab();
+		const customTabId = this.viewSvc.reportViewMode$.value.selectedCustomTabId;
+		this._saveScrollPosition(currentTab, customTabId, this.isHtmlView, this.currentPage);
 
 		if (!this.iframeLoaded) this.showLoadingView = true;
 		if (this.viewSvc.reportViewMode.alertCode === ALERTS.SUSPECTED_AI_TEXT_DETECTED) {
@@ -826,20 +825,6 @@ export class ContentViewerContainerComponent implements OnInit, AfterViewInit, O
 		this._highlightService.clear();
 		this._highlightService.clearAllMatchs();
 		this._cdr.detectChanges();
-	}
-
-	private _waitForIframeReady(): Promise<void> {
-		return new Promise(resolve => {
-			// Store the resolver so we can call it when we receive the message
-			this._iframeReadyResolver = resolve;
-
-			// Set a timeout in case the message never arrives (fallback)
-			this._iframeReadyTimeout = setTimeout(() => {
-				console.log('Iframe ready timeout - proceeding anyway');
-				this._iframeReadyResolver = null;
-				resolve();
-			}, 2000); // 2 second timeout
-		});
 	}
 
 	changeContentDirection(direction: ReportContentDirectionMode) {
@@ -921,10 +906,10 @@ export class ContentViewerContainerComponent implements OnInit, AfterViewInit, O
 	}
 
 	/**
-	 * Queue scroll restoration - will be executed when iframe loads
+	 * Queue scroll restoration
 	 */
-	private _queueScrollRestore(): void {
-		const savedState = this.viewSvc.getScrollPosition(this.viewSvc.currentViewTab, this.isHtmlView);
+	private _queueScrollRestore(tab: EReportViewTab, customTabId?: string): void {
+		const savedState = this.viewSvc.getScrollPosition(tab, this.isHtmlView, customTabId);
 
 		if (savedState) {
 			this._pendingScrollRestore = {
@@ -934,34 +919,32 @@ export class ContentViewerContainerComponent implements OnInit, AfterViewInit, O
 
 			// Store the saved page for text view restoration
 			if (!this.isHtmlView) {
-				this._pendingScrollRestore['page'] = savedState.page;
+				this._pendingScrollRestore.page = savedState.page;
 			}
 
-			// For wrapper scroll, restore immediately
+			// For wrapper scroll (text view or custom tabs), restore immediately
 			if (this._isWrapperScroll()) {
 				setTimeout(() => {
 					this._restoreScrollPosition();
 				}, 0);
 			}
-			// For iframe view, restoration will happen when iframeLoaded becomes true
+			// For iframe view, restoration will happen when iframe is ready
 		} else {
 			this._clearRestorationFlags();
 		}
 	}
 
 	/**
-	 * Save current scroll position to sessionStorage
+	 * Save current scroll position
 	 */
-	private _saveScrollPosition(tab?: EReportViewTab, isHtmlView?: boolean, page?: number): void {
+	private _saveScrollPosition(tab: EReportViewTab, customTabId?: string, isHtmlView?: boolean, page?: number): void {
 		let scrollTop = 0;
 		let scrollLeft = 0;
-		const currentTab = tab || this.viewSvc.currentViewTab;
-		const currentIsHtmlView = isHtmlView !== undefined ? isHtmlView : this.isHtmlView;
-		const currentPage = page !== undefined ? page : this.currentPage;
 
-		// Check if we should use wrapper scroll or iframe scroll
+		const currentIsHtmlView = isHtmlView !== undefined ? isHtmlView : this.isHtmlView;
+
 		if (this._isWrapperScroll(currentIsHtmlView)) {
-			// Wrapper container scroll (writing-feedback, ai-content, or text view)
+			// Wrapper container scroll (text view)
 			let wrapperContainer = document
 				.querySelector('.content-container')
 				?.querySelector('.content-container') as HTMLElement;
@@ -971,23 +954,22 @@ export class ContentViewerContainerComponent implements OnInit, AfterViewInit, O
 			if (wrapperContainer) {
 				scrollTop = wrapperContainer.scrollTop;
 				scrollLeft = wrapperContainer.scrollLeft;
-				console.log('Saving scroll position from wrapper container', scrollTop, scrollLeft);
 			}
 		} else {
 			// HTML/PDF iframe view - use tracked position from service
 			const iframeScroll = this.viewSvc.iframeScrollPosition;
 			scrollTop = iframeScroll.top;
 			scrollLeft = iframeScroll.left;
-			console.log('Saving scroll position from iframe', scrollTop, scrollLeft);
 		}
-		// Save to service using the interface
+
 		const state: IScrollPositionState = {
-			tab: currentTab,
+			tab: tab,
 			origin: this.reportOrigin,
-			page: currentPage,
+			page: page !== undefined ? page : this.currentPage,
 			isHtmlView: currentIsHtmlView,
 			scrollTop,
 			scrollLeft,
+			customTabId: tab === EReportViewTab.Custom ? customTabId : undefined,
 		};
 
 		this.viewSvc.saveScrollPosition(state);
@@ -1002,30 +984,26 @@ export class ContentViewerContainerComponent implements OnInit, AfterViewInit, O
 			return;
 		}
 
-		const { scrollTop, scrollLeft } = this._pendingScrollRestore;
+		const { scrollTop, scrollLeft, page } = this._pendingScrollRestore;
 
-		// Check if we should use wrapper scroll or iframe scroll
 		if (this._isWrapperScroll()) {
-			// Text view - check if we need to change page first
-			const savedPage = this._pendingScrollRestore['page'];
-
-			if (savedPage && savedPage !== this.currentPage) {
+			if (page && page !== this.currentPage && !this.isHtmlView) {
 				// Emit event to change to the saved page
 				if (this.reportOrigin === 'original' || this.reportOrigin === 'source') {
 					this.viewChangeEvent.emit({
 						...this.viewSvc.reportViewMode,
-						sourcePageIndex: savedPage,
+						sourcePageIndex: page,
 					});
 				} else {
 					this.viewChangeEvent.emit({
 						...this.viewSvc.reportViewMode,
-						suspectPageIndex: savedPage,
+						suspectPageIndex: page,
 					});
 				}
 				return;
 			}
 
-			// Wrapper container scroll (writing-feedback, ai-content, or text view)
+			// Wrapper container scroll
 			let wrapperContainer = document
 				.querySelector('.content-container')
 				?.querySelector('.content-container') as HTMLElement;
@@ -1037,16 +1015,12 @@ export class ContentViewerContainerComponent implements OnInit, AfterViewInit, O
 			if (wrapperContainer) {
 				wrapperContainer.scrollTop = scrollTop;
 				wrapperContainer.scrollLeft = scrollLeft;
-				console.log('Restoring scroll position in wrapper container', scrollTop, scrollLeft);
 			}
 			this._pendingScrollRestore = null;
 			this._clearRestorationFlags();
 		} else if (this.isHtmlView && this.iframeLoaded) {
-			// HTML/PDF iframe view - send postMessage
 			const iframe = this.contentIFrame?.nativeElement;
 			if (iframe?.contentWindow) {
-				console.log('Restoring scroll position in iframeeee', scrollTop, scrollLeft);
-				// Update service with the position we're restoring to
 				this.viewSvc.setIframeScrollPosition(scrollTop, scrollLeft);
 
 				iframe.contentWindow.postMessage(
@@ -1058,7 +1032,6 @@ export class ContentViewerContainerComponent implements OnInit, AfterViewInit, O
 					'*'
 				);
 
-				// Clear restoration flags (to handle any scroll events from setting position)
 				setTimeout(() => {
 					this._pendingScrollRestore = null;
 					this._clearRestorationFlags();
@@ -1083,13 +1056,23 @@ export class ContentViewerContainerComponent implements OnInit, AfterViewInit, O
 	private _isWrapperScroll(isHtmlView?: boolean): boolean {
 		const htmlView = isHtmlView !== undefined ? isHtmlView : this.isHtmlView;
 
-		// If it's HTML view, scroll is in the iframe (for all tabs)
 		if (htmlView && this.hasHtml) {
 			return false;
 		}
-
-		// Otherwise, scroll is on the wrapper container (text view for all tabs)
 		return true;
+	}
+
+	private _waitForIframeReady(): Promise<void> {
+		return new Promise(resolve => {
+			// Store the resolver so we can call it when we receive the message
+			this._iframeReadyResolver = resolve;
+
+			// Set a timeout in case the message never arrives (fallback)
+			this._iframeReadyTimeout = setTimeout(() => {
+				this._iframeReadyResolver = null;
+				resolve();
+			}, 2000); // 2 second timeout
+		});
 	}
 
 	/**
@@ -1489,6 +1472,17 @@ export class ContentViewerContainerComponent implements OnInit, AfterViewInit, O
 	}
 
 	ngOnDestroy(): void {
+		if (this._iframeReadyTimeout) {
+			clearTimeout(this._iframeReadyTimeout);
+		}
+		const currentTab = this.viewSvc.currentViewTab;
+		const customTabId = this.viewSvc.previousCustomTabId;
+
+		// Save scroll position on destroy for custom tabs (except AI Overview)
+		if (currentTab === EReportViewTab.Custom && customTabId && customTabId !== 'ai-overview') {
+			this._saveScrollPosition(currentTab, customTabId);
+		}
+
 		this.docDirObserver?.disconnect();
 		this.contentTextChangesObserver?.disconnect();
 	}

@@ -103,6 +103,9 @@ export interface IScrollPositionState {
 
 	/** Horizontal scroll position */
 	scrollLeft: number;
+
+	/** The custom tab ID (for Custom tab type only) */
+	customTabId?: string;
 }
 
 /**

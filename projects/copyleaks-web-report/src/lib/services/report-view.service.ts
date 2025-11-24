@@ -102,12 +102,14 @@ export class ReportViewService {
 	}
 
 	private _currentViewTab$ = new BehaviorSubject<EReportViewTab>(EReportViewTab.MatchedText);
+
 	private _previousCustomTabId: string | undefined = undefined;
 	private _currentCustomTabId: string | undefined = undefined;
-	private _counter$ = new BehaviorSubject<number>(0);
-	private _previousIsHtmlView: boolean | null = null;
 
 	private _iframeScrollPosition$ = new BehaviorSubject<{ top: number; left: number }>({ top: 0, left: 0 });
+
+	private _previousIsHtmlView: boolean = false;
+	private _currentIsHtmlView: boolean = false;
 
 	private observer: MutationObserver;
 
@@ -125,75 +127,67 @@ export class ReportViewService {
 					this._currentCustomTabId = newCustomTabId;
 				}
 			});
-	}
 
-	public get counter$() {
-		return this._counter$.asObservable();
-	}
-
-	public incrementCounter(): void {
-		this._counter$.next(this._counter$.value + 1);
-	}
-
-	public resetCounter(): void {
-		this._counter$.next(0);
-	}
-
-	public get previousIsHtmlView(): boolean | null {
-		return this._previousIsHtmlView;
-	}
-
-	public setPreviousIsHtmlView(isHtmlView: boolean | null): void {
-		this._previousIsHtmlView = isHtmlView;
-	}
-
-	/**
-	 * Check if we just switched between two different custom tabs
-	 */
-	public isCustomTabChange(): boolean {
-		return (
-			this._previousCustomTabId !== undefined &&
-			this._currentCustomTabId !== undefined &&
-			this._previousCustomTabId !== this._currentCustomTabId
-		);
+		this._reportViewMode$
+			.pipe(
+				map(mode => mode.isHtmlView),
+				distinctUntilChanged()
+			)
+			.subscribe(newIsHtmlView => {
+				if (this._currentIsHtmlView !== newIsHtmlView) {
+					this._previousIsHtmlView = this._currentIsHtmlView;
+					this._currentIsHtmlView = newIsHtmlView;
+				}
+			});
 	}
 
 	public get currentCustomTabId(): string | undefined {
 		return this._currentCustomTabId;
 	}
 
-	get previousCustomTabId(): string | undefined {
+	public get previousCustomTabId(): string | undefined {
 		return this._previousCustomTabId;
 	}
 
 	/**
-	 * Clear the custom tab change flag
+	 * Get the previous isHtmlView state (before the last change)
 	 */
-	public clearCustomTabChangeFlag(): void {
-		this._previousCustomTabId = this._currentCustomTabId;
+	public get previousIsHtmlView(): boolean {
+		return this._previousIsHtmlView;
 	}
+
 	/**
-	 * Save scroll position for a specific view configuration.
+	 * Get the current isHtmlView state
+	 */
+	public get currentIsHtmlView(): boolean {
+		return this._currentIsHtmlView;
+	}
+
+	/**
+	 * Save scroll position for a specific tab.
 	 * @param state The scroll position state to save
 	 */
 	public saveScrollPosition(state: IScrollPositionState): void {
-		const key = this._getScrollStateKey(state.tab, state.isHtmlView);
+		const key = this._getScrollStateKey(state.tab, state.isHtmlView, state.customTabId);
 		const currentStates = { ...this.scrollPositionStates };
 		currentStates[key] = state;
 		this._scrollPositionStates$.next(currentStates);
 	}
 
 	/**
-	 * Get scroll position for a specific view configuration.
+	 * Get scroll position for a specific tab.
 	 * @param tab The tab type
-	 * @param origin The report origin
 	 * @param isHtmlView Whether HTML view is active
+	 * @param customTabId The custom tab ID (for Custom tab type only)
 	 * @returns The saved scroll position state, or null if not found
 	 */
-	public getScrollPosition(tab: EReportViewTab, isHtmlView: boolean): IScrollPositionState | null {
-		const key = this._getScrollStateKey(tab, isHtmlView);
-		const state = this.scrollPositionStates[key] || null;
-		return state;
+	public getScrollPosition(
+		tab: EReportViewTab,
+		isHtmlView: boolean,
+		customTabId?: string
+	): IScrollPositionState | null {
+		const key = this._getScrollStateKey(tab, isHtmlView, customTabId);
+		return this.scrollPositionStates[key] || null;
 	}
 
 	/**
@@ -204,10 +198,13 @@ export class ReportViewService {
 	}
 
 	/**
-	 * Generate a unique key for scroll position state (without page number).
+	 * Generate a unique key for scroll position state.
 	 * @private
 	 */
-	private _getScrollStateKey(tab: EReportViewTab, isHtmlView: boolean): string {
+	private _getScrollStateKey(tab: EReportViewTab, isHtmlView: boolean, customTabId?: string): string {
+		if (tab === EReportViewTab.Custom && customTabId) {
+			return `${tab}_${isHtmlView}_${customTabId}`;
+		}
 		return `${tab}_${isHtmlView}`;
 	}
 

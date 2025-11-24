@@ -29,6 +29,13 @@ export interface IReportViewQueryParams {
 	showAIPhrases?: string;
 }
 
+export enum EReportViewTab {
+	MatchedText = 'matched-text',
+	AIContent = 'ai-content',
+	WritingAssistant = 'writing-assistant',
+	Custom = 'custom',
+}
+
 export interface IReportResponsiveMode {
 	mode: EResponsiveLayoutType;
 }
@@ -73,4 +80,38 @@ export interface IPercentageModel {
 
 	/** Indicates whether this percentage is enabled or disabled. */
 	disabled: boolean;
+}
+
+/**
+ * Represents the scroll position state for a specific view configuration.
+ */
+export interface IScrollPositionState {
+	/** The tab type */
+	tab: EReportViewTab;
+
+	/** The report origin (source/original/suspect) */
+	origin: 'source' | 'original' | 'suspect';
+
+	/** The current page number */
+	page: number;
+
+	/** Whether HTML view is active */
+	isHtmlView: boolean;
+
+	/** Vertical scroll position */
+	scrollTop: number;
+
+	/** Horizontal scroll position */
+	scrollLeft: number;
+
+	/** The custom tab ID (for Custom tab type only) */
+	customTabId?: string;
+}
+
+/**
+ * Map of scroll positions keyed by unique view identifier.
+ * Key format: "tab_origin_page_isHtmlView"
+ */
+export interface IScrollPositionStateMap {
+	[key: string]: IScrollPositionState;
 }

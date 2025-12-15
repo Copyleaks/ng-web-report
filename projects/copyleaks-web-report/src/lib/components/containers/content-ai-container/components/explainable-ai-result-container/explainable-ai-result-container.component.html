@@ -83,6 +83,19 @@
 							</defs>
 						</svg>
 						<span class="title" i18n>AI Phrases</span>
+
+						<button
+							class="icon-button"
+							mat-icon-button
+							matTooltip="Filter AI Phrases Results"
+							matTooltipClass="web-report-mat-tooltip"
+							i18n-matTooltip
+							aria-label="Filter AI Phrases Results"
+							aria-haspopup="dialog"
+							(click)="showFilterDialog()"
+							i18n-aria-label>
+							<mat-icon class="filter-search-icon" fontSet="material-icons-round">filter_list</mat-icon>
+						</button>
 					</div>
 					<!-- Description and Grade-Bar -->
 					<div *ngIf="!emptyView && !lockedResults && !isMobile" fxLayout="column" fxLayoutGap="16px">

@@ -35,6 +35,8 @@ import * as helpers from '../../../../../utils/report-statistics-helpers';
 import { ReportDataService } from '../../../../../services/report-data.service';
 import { EPlatformType } from '../../../../../enums/copyleaks-web-report.enums';
 import { ReportStatistics } from '../../../../../models/report-statistics.models';
+import { MatDialog } from '@angular/material/dialog';
+import { FilterAiPhrasesDialogComponent } from '../../../../../dialogs/filter-ai-phrases-dialog/filter-ai-phrases-dialog.component';
 
 @Component({
 	selector: 'copyleaks-explainable-ai-result-container',
@@ -158,7 +160,11 @@ export class ExplainableAIResultContainerComponent implements OnInit, OnChanges,
 	// Subject for destroying all the subscriptions in the main library component
 	private unsubscribe$ = new Subject();
 
-	constructor(public reportViewSvc: ReportViewService, private _reportDataSvc: ReportDataService) {}
+	constructor(
+		public reportViewSvc: ReportViewService,
+		private _reportDataSvc: ReportDataService,
+		private _matDialog: MatDialog
+	) {}
 	ngOnChanges(changes: SimpleChanges): void {
 		if (changes['isLoading']?.currentValue == false) {
 			{
@@ -683,6 +689,31 @@ export class ExplainableAIResultContainerComponent implements OnInit, OnChanges,
 				: this.aiSourceMatchResultsStats.relatedMeaning /
 				  (this.aiSourceMatchResultsStats.total - this.aiSourceMatchResultsStats.omittedWords);
 		this.aiSourceMatchResultsTotal = this.aiSourceMatchResults?.length ?? 0;
+	}
+
+	showFilterDialog() {
+		// Extract proportion values, filtering out invalid values (<=0 or -1)
+		const proportions = this.explainItemResults.map(item => item.proportion).filter(p => p > 0 && p !== -1);
+
+		// Calculate min and max proportions
+		const minProportion = proportions.length > 0 ? Math.min(...proportions) : 0;
+		const maxProportion = proportions.length > 0 ? Math.max(...proportions) : 100;
+		const totalCount = this.explainItemResults.length;
+
+		this._matDialog.open(FilterAiPhrasesDialogComponent, {
+			minWidth: this.isMobile ? '100%' : '',
+			width: this.isMobile ? '100%' : '451px',
+			panelClass: 'filter-ai-phrases-dialog',
+			ariaLabel: $localize`Report Filter Options`,
+			autoFocus: false,
+			data: {
+				reportDataSvc: this._reportDataSvc,
+				reportViewSvc: this.reportViewSvc,
+				minProportion: minProportion,
+				maxProportion: maxProportion,
+				totalCount: totalCount,
+			},
+		});
 	}
 
 	ngOnDestroy(): void {

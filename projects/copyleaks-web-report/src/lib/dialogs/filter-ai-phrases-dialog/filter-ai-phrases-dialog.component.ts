@@ -35,8 +35,9 @@ export class FilterAiPhrasesDialogComponent implements OnInit {
 		this.minValue = data.minProportion ?? 0;
 		this.maxValue = data.maxProportion ?? 100;
 		this.totalCount = data.totalCount ?? 0;
-		this.filteredCount = this.totalCount;
-		this.selectedValue = this.minValue;
+		this.filteredCount = data.filteredCount ?? this.totalCount;
+		// Use current filter value if provided, otherwise use minimum
+		this.selectedValue = data.currentFilter ?? this.minValue;
 	}
 	ngOnInit() {
 		this.data.reportViewSvc?.reportResponsiveMode$.pipe(untilDestroy(this)).subscribe(view => {
@@ -66,8 +67,12 @@ export class FilterAiPhrasesDialogComponent implements OnInit {
 	}
 
 	onSaveChanges() {
-		// TODO: Implement save changes logic
-		// this.data.reportDataSvc.filterOptions$.next(this.getFilterCurrentData());
+		// Update filter options with new minAIProportion value
+		const currentOptions = this.data.reportDataSvc.filterOptions ?? {};
+		this.data.reportDataSvc.filterOptions$.next({
+			...currentOptions,
+			minAIProportion: this.selectedValue,
+		});
 
 		this._dialogRef.close();
 	}

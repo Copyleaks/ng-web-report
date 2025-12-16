@@ -7,4 +7,6 @@ export interface IFilterAiPhrasesDialogData {
 	minProportion?: number;
 	maxProportion?: number;
 	totalCount?: number;
+	filteredCount?: number;
+	currentFilter?: number;
 }

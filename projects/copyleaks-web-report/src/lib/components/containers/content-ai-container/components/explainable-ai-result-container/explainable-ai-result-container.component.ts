@@ -106,6 +106,11 @@ export class ExplainableAIResultContainerComponent implements OnInit, OnChanges,
 	@Input() showAIPhrases: boolean;
 
 	/**
+	 * @Input {number} The minimum AI proportion
+	 */
+	@Input() minAIProportion: number;
+
+	/**
 	 * @Output {boolean} Event emitted when the user clears the selected result
 	 */
 	@Output() clearSelectResultEvent = new EventEmitter<boolean>();
@@ -157,6 +162,11 @@ export class ExplainableAIResultContainerComponent implements OnInit, OnChanges,
 	aiSourceMatchResultsParaphrasedScore: number = 0;
 	aiSourceMatchResultsTotal: number = 0;
 
+	minAIFreq: number = 0;
+	maxAIFreq: number = 100;
+	totalAIResultCount: number = this.explainItemResults.length;
+	filteredAIResultCount: number = 0;
+
 	// Subject for destroying all the subscriptions in the main library component
 	private unsubscribe$ = new Subject();
 
@@ -178,6 +188,11 @@ export class ExplainableAIResultContainerComponent implements OnInit, OnChanges,
 
 		if (changes['aiSourceMatchResults']?.currentValue && changes['aiSourceMatchResults']?.currentValue.length > 0) {
 			this._calculateAiSourceMatchResultsStats();
+		}
+
+		if (changes['minAIProportion']?.currentValue !== undefined) {
+			this.updateResult = false;
+			this._initResults();
 		}
 	}
 
@@ -526,6 +541,7 @@ export class ExplainableAIResultContainerComponent implements OnInit, OnChanges,
 	 * Mapping the result to AIExplainResultItem
 	 */
 	private _mapingtoResultItem() {
+		this.explainResults = [];
 		this.explainableAIResults.explain.patterns.statistics.proportion.forEach((item, index) => {
 			const wordStart = this.explainableAIResults?.explain?.patterns?.text?.chars.starts[index];
 			const wordEnd = this.explainableAIResults?.explain?.patterns?.text?.chars.lengths[index] + wordStart;
@@ -551,6 +567,14 @@ export class ExplainableAIResultContainerComponent implements OnInit, OnChanges,
 			return b.proportion - a.proportion;
 		});
 		this.explainItemResults = [...this.explainResults];
+		const proportions = this.explainItemResults.map(item => item.proportion).filter(p => p > 0 && p !== -1);
+		this.minAIFreq = proportions.length > 0 ? Math.min(...proportions) : 0;
+		this.maxAIFreq = proportions.length > 0 ? Math.max(...proportions) : 100;
+		this.totalAIResultCount = this.explainItemResults.length;
+		if (this.minAIProportion !== undefined) {
+			this.explainItemResults = this.explainItemResults.filter(item => item.proportion >= this.minAIProportion);
+			this.filteredAIResultCount = this.explainItemResults.length;
+		}
 	}
 
 	/**
@@ -693,12 +717,6 @@ export class ExplainableAIResultContainerComponent implements OnInit, OnChanges,
 
 	showFilterDialog() {
 		// Extract proportion values, filtering out invalid values (<=0 or -1)
-		const proportions = this.explainItemResults.map(item => item.proportion).filter(p => p > 0 && p !== -1);
-
-		// Calculate min and max proportions
-		const minProportion = proportions.length > 0 ? Math.min(...proportions) : 0;
-		const maxProportion = proportions.length > 0 ? Math.max(...proportions) : 100;
-		const totalCount = this.explainItemResults.length;
 
 		this._matDialog.open(FilterAiPhrasesDialogComponent, {
 			minWidth: this.isMobile ? '100%' : '',
@@ -709,9 +727,11 @@ export class ExplainableAIResultContainerComponent implements OnInit, OnChanges,
 			data: {
 				reportDataSvc: this._reportDataSvc,
 				reportViewSvc: this.reportViewSvc,
-				minProportion: minProportion,
-				maxProportion: maxProportion,
-				totalCount: totalCount,
+				minProportion: this.minAIFreq,
+				maxProportion: this.maxAIFreq,
+				totalCount: this.totalAIResultCount,
+				filteredCount: this.filteredAIResultCount,
+				currentFilter: this.minAIProportion ?? this.minAIFreq,
 			},
 		});
 	}

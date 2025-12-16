@@ -66,6 +66,11 @@ export class ContentAiContainerComponent implements OnInit, OnChanges {
 	@Input() showAIPhrases: boolean;
 
 	/**
+	 * @Input {number} The minimum AI proportion
+	 */
+	@Input() minAIProportion: number;
+
+	/**
 	 * {number} The AI percentage result
 	 */
 	aiPercentageResult: number = 0;

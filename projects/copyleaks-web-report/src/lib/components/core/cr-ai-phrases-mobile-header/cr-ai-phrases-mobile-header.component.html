@@ -17,7 +17,7 @@
 		<div
 			class="ai-phrases"
 			[ngClass]="{
-				'justify-left': !isAiSourceMatchEnabled() && reportViewSvc?.reportViewMode?.hideAISourceMatchUpgrade
+				'justify-center': !isAiSourceMatchEnabled() && reportViewSvc?.reportViewMode?.hideAISourceMatchUpgrade
 			}">
 			<svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
 				<rect x="0.5" y="0.5" width="23" height="23" rx="11.5" fill="#EBF3F5" />
@@ -51,10 +51,21 @@
 					</linearGradient>
 				</defs>
 			</svg>
-			<span class="title" i18n>AI Phrases</span>
+			<span class="title" i18n>AI Phrases ({{ explainItemResults?.length ?? 0 }})</span>
 		</div>
-
-		<div class="total-phrases">Phrases ({{ explainItemResults?.length ?? 0 }})</div>
+		<button
+			class="icon-button"
+			mat-icon-button
+			style="margin-left: auto"
+			matTooltip="Filter AI Phrases Results"
+			matTooltipClass="web-report-mat-tooltip"
+			i18n-matTooltip
+			aria-label="Filter AI Phrases Results"
+			aria-haspopup="dialog"
+			(click)="showFilterDialog()"
+			i18n-aria-label>
+			<mat-icon class="filter-search-icon" fontSet="material-icons-round">filter_list</mat-icon>
+		</button>
 	</div>
 
 	<div class="ai-bar-container">

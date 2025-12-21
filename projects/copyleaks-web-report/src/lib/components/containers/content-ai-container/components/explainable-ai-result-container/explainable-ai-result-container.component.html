@@ -82,11 +82,12 @@
 								</linearGradient>
 							</defs>
 						</svg>
-						<span class="title" i18n>AI Phrases</span>
+						<span class="title" i18n>AI Phrases ({{ explainItemResults?.length ?? 0 }})</span>
 
 						<button
 							class="icon-button"
 							mat-icon-button
+							style="margin-left: auto"
 							matTooltip="Filter AI Phrases Results"
 							matTooltipClass="web-report-mat-tooltip"
 							i18n-matTooltip
@@ -145,8 +146,6 @@
 						<span i18n>Ratio</span>
 					</div>
 					<span class="phrase" i18n>Phrase</span>
-
-					<span class="total-phrases" i18n>Phrases ({{ explainItemResults?.length ?? 0 }})</span>
 				</div>
 			</div>
 			<div

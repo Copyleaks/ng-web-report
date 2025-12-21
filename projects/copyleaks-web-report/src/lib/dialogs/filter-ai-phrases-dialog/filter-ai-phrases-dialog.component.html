@@ -29,7 +29,7 @@
 		<section class="ai-phrases-section" fxLayout="column">
 			<div class="section-header" fxLayout="row" fxLayoutAlign="start center" fxLayoutGap="8px">
 				<span class="section-title" web-report-title-font i18n>AI Phrases</span>
-				<span class="section-count">({{ filteredCount }}/{{ totalCount }})</span>
+				<span class="section-count" *ngIf="filteredCount !== totalCount">({{ filteredCount }}/{{ totalCount }})</span>
 			</div>
 			<p class="section-description" i18n>Set the threshold for how often phrases appear in AI versus human writing.</p>
 		</section>

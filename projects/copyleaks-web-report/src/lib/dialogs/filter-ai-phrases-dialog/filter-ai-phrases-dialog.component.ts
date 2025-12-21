@@ -1,4 +1,4 @@
-import { Component, Inject, OnInit, Output, EventEmitter, ViewEncapsulation } from '@angular/core';
+import { Component, Inject, OnInit, Output, EventEmitter } from '@angular/core';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { untilDestroy } from '../../utils/until-destroy';
 import { EResponsiveLayoutType } from '../../enums/copyleaks-web-report.enums';
@@ -9,7 +9,6 @@ import { IFilterAiPhrasesDialogData } from './models/filter-ai-phrases-dialog.mo
 	templateUrl: './filter-ai-phrases-dialog.component.html',
 	styleUrls: ['./filter-ai-phrases-dialog.component.scss'],
 	standalone: false,
-	encapsulation: ViewEncapsulation.None,
 })
 export class FilterAiPhrasesDialogComponent implements OnInit {
 	isMobile: boolean = false;

@@ -623,7 +623,9 @@ export abstract class OneToManyReportLayoutBaseComponent extends ReportLayoutBas
 			if (!phrases) return;
 			let slicedMatch: SlicedMatch[] = [];
 			phrases?.forEach(result => {
-				const explainText = result.filter(re => re.match.type === MatchType.aiExplain);
+				const explainText = result.filter(
+					re => re.match.type === MatchType.aiExplain || re.match.type === MatchType.aiText
+				);
 				if (explainText.length > 0) {
 					slicedMatch.push(...explainText);
 				}

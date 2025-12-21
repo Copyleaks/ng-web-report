@@ -190,7 +190,7 @@ export class ExplainableAIResultContainerComponent implements OnInit, OnChanges,
 			this._calculateAiSourceMatchResultsStats();
 		}
 
-		if (changes['minAIProportion']?.currentValue !== undefined) {
+		if (changes['minAIProportion']) {
 			this.updateResult = false;
 			this._initResults();
 		}
@@ -487,6 +487,7 @@ export class ExplainableAIResultContainerComponent implements OnInit, OnChanges,
 			this._updateTooltipText();
 			if (this.explainableAIResults?.explain && this.explainableAIResults?.slicedMatch.length > 0) {
 				this.title = $localize`AI Insights`;
+				this.emptyView = false;
 				this._mapingtoResultItem();
 				this._updateProportionRange();
 			} else if (!this.lockedResults) {
@@ -567,14 +568,18 @@ export class ExplainableAIResultContainerComponent implements OnInit, OnChanges,
 			return b.proportion - a.proportion;
 		});
 		this.explainItemResults = [...this.explainResults];
-		const proportions = this.explainItemResults.map(item => item.proportion).filter(p => p > 0 && p !== -1);
+
+		// Calculate min/max from ALL results (before filtering) to ensure dialog slider range stays consistent
+		const proportions = this.explainResults.map(item => item.proportion).filter(p => p > 0 && p !== -1);
 		this.minAIFreq = proportions.length > 0 ? Math.min(...proportions) : 0;
 		this.maxAIFreq = proportions.length > 0 ? Math.max(...proportions) : 100;
-		this.totalAIResultCount = this.explainItemResults.length;
-		if (this.minAIProportion !== undefined) {
+		this.totalAIResultCount = this.explainResults.length;
+
+		// Apply filter if minAIProportion is set
+		if (this.minAIProportion !== undefined)
 			this.explainItemResults = this.explainItemResults.filter(item => item.proportion >= this.minAIProportion);
-			this.filteredAIResultCount = this.explainItemResults.length;
-		}
+
+		this.filteredAIResultCount = this.explainItemResults.length;
 	}
 
 	/**

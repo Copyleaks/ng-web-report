@@ -35,7 +35,6 @@ export class FilterAiPhrasesDialogComponent implements OnInit {
 		this.maxValue = data.maxProportion ?? 100;
 		this.totalCount = data.totalCount ?? 0;
 		this.filteredCount = data.filteredCount ?? this.totalCount;
-		// Use current filter value if provided, otherwise use minimum
 		this.selectedValue = data.currentFilter ?? this.minValue;
 	}
 	ngOnInit() {
@@ -49,15 +48,12 @@ export class FilterAiPhrasesDialogComponent implements OnInit {
 	}
 
 	onSliderChange(change: number) {
-		// Update filtered count based on slider value
 		this.selectedValue = change;
 		this.onChange.emit(change);
 	}
 
 	onClearFilter() {
-		// Reset slider to minimum value
 		this.selectedValue = this.minValue;
-		// Reset filtered count to show all results
 		this.filteredCount = this.totalCount;
 	}
 

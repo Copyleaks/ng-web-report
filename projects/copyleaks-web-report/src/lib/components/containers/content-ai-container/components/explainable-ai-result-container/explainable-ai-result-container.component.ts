@@ -721,8 +721,6 @@ export class ExplainableAIResultContainerComponent implements OnInit, OnChanges,
 	}
 
 	showFilterDialog() {
-		// Extract proportion values, filtering out invalid values (<=0 or -1)
-
 		this._matDialog.open(FilterAiPhrasesDialogComponent, {
 			minWidth: this.isMobile ? '100%' : '',
 			width: this.isMobile ? '100%' : '451px',

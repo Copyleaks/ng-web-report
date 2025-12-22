@@ -55,6 +55,7 @@
 		</div>
 		<button
 			class="icon-button"
+			[disabled]="this.totalAIResultCount > 0 ? false : true"
 			mat-icon-button
 			style="margin-left: auto"
 			matTooltip="Filter AI Phrases Results"

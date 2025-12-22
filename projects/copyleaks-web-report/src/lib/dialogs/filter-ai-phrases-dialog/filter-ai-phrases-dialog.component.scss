@@ -4,7 +4,6 @@
 @use '../../styles/cls-mat-components-overrides/cls-mat-expansion-panel-overrides.scss';
 @use '../../styles/cls-accessibility-overrides/cls-accessibility-overrides.scss';
 
-
 .ai-phrases-section {
 	.section-header {
 		.section-title {
@@ -130,6 +129,7 @@
 }
 
 .apply-and-discard-button-contaier.is-mobile {
+	flex-wrap: wrap;
 	::ng-deep {
 		a {
 			border: none !important;

@@ -86,7 +86,8 @@
 
 						<button
 							class="icon-button"
-							[disabled]="this.totalAIResultCount > 0 ? false : true"
+							[disabled]="totalAIResultCount > 0 ? false : true"
+							[class.is-on]="filteredAIResultCount != totalAIResultCount"
 							mat-icon-button
 							style="margin-left: auto"
 							matTooltip="Filter AI Phrases Results"

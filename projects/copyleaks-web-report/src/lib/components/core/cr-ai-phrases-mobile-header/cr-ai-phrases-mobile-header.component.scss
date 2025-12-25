@@ -260,4 +260,12 @@
 			height: 8px !important;
 		}
 	}
+
+	.icon-button.is-on {
+		::ng-deep {
+			mat-icon {
+				color: $color-primary !important;
+			}
+		}
+	}
 }

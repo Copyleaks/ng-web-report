@@ -33,6 +33,14 @@
 		}
 	}
 
+	.icon-button.is-on {
+		::ng-deep {
+			mat-icon {
+				color: $color-primary !important;
+			}
+		}
+	}
+
 	.divider {
 		width: 447px;
 		height: 1px;

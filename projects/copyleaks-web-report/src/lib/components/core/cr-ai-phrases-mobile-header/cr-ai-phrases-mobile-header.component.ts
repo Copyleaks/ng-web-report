@@ -5,6 +5,7 @@ import { ReportViewService } from '../../../services/report-view.service';
 import { ReportDataService } from '../../../services/report-data.service';
 import { FilterAiPhrasesDialogComponent } from '../../../dialogs/filter-ai-phrases-dialog/filter-ai-phrases-dialog.component';
 import { MatDialog } from '@angular/material/dialog';
+import { IFilterAiPhrasesDialogData } from '../../../dialogs/filter-ai-phrases-dialog/models/filter-ai-phrases-dialog.models';
 
 @Component({
 	selector: 'cr-ai-phrases-mobile-header',
@@ -231,7 +232,7 @@ export class CrAiPhrasesMobileHeaderComponent implements OnInit, OnChanges {
 				totalCount: this.totalAIResultCount,
 				filteredCount: this.filteredAIResultCount,
 				currentFilter: this.minAIProportion ?? this.minAIFreq,
-			},
+			} as IFilterAiPhrasesDialogData,
 		});
 	}
 }

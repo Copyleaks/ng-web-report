@@ -37,6 +37,7 @@ import { EPlatformType } from '../../../../../enums/copyleaks-web-report.enums';
 import { ReportStatistics } from '../../../../../models/report-statistics.models';
 import { MatDialog } from '@angular/material/dialog';
 import { FilterAiPhrasesDialogComponent } from '../../../../../dialogs/filter-ai-phrases-dialog/filter-ai-phrases-dialog.component';
+import { IFilterAiPhrasesDialogData } from '../../../../../dialogs/filter-ai-phrases-dialog/models/filter-ai-phrases-dialog.models';
 
 @Component({
 	selector: 'copyleaks-explainable-ai-result-container',
@@ -735,7 +736,7 @@ export class ExplainableAIResultContainerComponent implements OnInit, OnChanges,
 				totalCount: this.totalAIResultCount,
 				filteredCount: this.filteredAIResultCount,
 				currentFilter: this.minAIProportion ?? this.minAIFreq,
-			},
+			} as IFilterAiPhrasesDialogData,
 		});
 	}
 

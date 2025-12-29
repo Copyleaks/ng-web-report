@@ -150,7 +150,9 @@ export class CrAiPhrasesMobileHeaderComponent implements OnInit, OnChanges {
 	 * Update the bar score
 	 */
 	private _updateProportionRange(): void {
-		this.proportions = this.explainResults?.map(result => result.proportion) ?? [];
+		if (this.filteredAIResultCount != this.totalAIResultCount)
+			this.proportions = this.explainItemResults?.map(result => result.proportion) ?? [];
+		else this.proportions = this.explainResults?.map(result => result.proportion) ?? [];
 		const proportionsFiltered = this.proportions.filter(p => p > 0);
 		this.minProportion = Number(Math.min(...proportionsFiltered).toFixed(0));
 		this.maxProportion = Number(Math.max(...proportionsFiltered).toFixed(0));
@@ -166,8 +168,14 @@ export class CrAiPhrasesMobileHeaderComponent implements OnInit, OnChanges {
 	 * @returns Number
 	 */
 	private _getGradePercentByPropoType(type: EProportionType): number {
-		const grade =
-			(this.explainResults?.filter(result => result.proportionType == type)?.length / this.proportions.length) * 100;
+		let grade = 0;
+		if (this.filteredAIResultCount != this.totalAIResultCount)
+			grade =
+				(this.explainItemResults?.filter(result => result.proportionType == type)?.length / this.proportions.length) *
+				100;
+		else
+			grade =
+				(this.explainResults?.filter(result => result.proportionType == type)?.length / this.proportions.length) * 100;
 		return Number(grade.toFixed(0));
 	}
 

@@ -1225,9 +1225,6 @@ export class ReportDataService {
 				hiddenCategories: completeResultsRes.filters?.writingFeedback?.hiddenCategories ?? [],
 			},
 			excludedDomains: completeResultsRes.filters?.excludedDomains ?? [],
-			...(completeResultsRes.filters?.aiPhrases?.minProportion != null && {
-				minAIProportion: completeResultsRes.filters.aiPhrases.minProportion,
-			}),
 			minAIProportion: completeResultsRes.filters?.aiPhrases?.minProportion ?? 0,
 		});
 

@@ -12,6 +12,7 @@
 		justify-content: center;
 		align-self: stretch;
 		gap: 8px;
+		position: relative;
 
 		.ai-phrases {
 			display: flex;
@@ -27,8 +28,11 @@
 				line-height: normal;
 			}
 		}
-		.justify-left {
-			justify-content: flex-start !important;
+		.justify-center {
+			flex: none !important;
+			position: absolute !important;
+			left: 50% !important;
+			transform: translateX(-50%) !important;
 		}
 
 		.total-phrases {
@@ -254,6 +258,14 @@
 	.skeleton.bar {
 		::ng-deep .skeleton-loader {
 			height: 8px !important;
+		}
+	}
+
+	.icon-button.is-on {
+		::ng-deep {
+			mat-icon {
+				color: $color-primary !important;
+			}
 		}
 	}
 }

@@ -33,6 +33,14 @@
 		}
 	}
 
+	.icon-button.is-on {
+		::ng-deep {
+			mat-icon {
+				color: $color-primary !important;
+			}
+		}
+	}
+
 	.divider {
 		width: 447px;
 		height: 1px;
@@ -882,5 +890,20 @@
 			font-size: 18px;
 			gap: 10px;
 		}
+	}
+}
+
+::ng-deep .filter-ai-phrases-dialog .mat-mdc-dialog-container {
+	display: flex;
+	background-color: $color-white !important;
+	padding: 16px !important;
+	border-radius: 10px !important;
+	gap: 16px !important;
+
+	.mat-mdc-dialog-surface {
+		box-shadow: none !important;
+	}
+	.mdc-dialog__container {
+		width: 100% !important;
 	}
 }

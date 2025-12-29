@@ -82,7 +82,23 @@
 								</linearGradient>
 							</defs>
 						</svg>
-						<span class="title" i18n>AI Phrases</span>
+						<span class="title" i18n>AI Phrases ({{ explainItemResults?.length ?? 0 }})</span>
+
+						<button
+							class="icon-button"
+							[disabled]="totalAIResultCount > 0 ? false : true"
+							[class.is-on]="filteredAIResultCount != totalAIResultCount"
+							mat-icon-button
+							style="margin-left: auto"
+							matTooltip="Filter AI Phrases Results"
+							matTooltipClass="web-report-mat-tooltip"
+							i18n-matTooltip
+							aria-label="Filter AI Phrases Results"
+							aria-haspopup="dialog"
+							(click)="showFilterDialog()"
+							i18n-aria-label>
+							<mat-icon class="filter-search-icon" fontSet="material-icons-round">filter_list</mat-icon>
+						</button>
 					</div>
 					<!-- Description and Grade-Bar -->
 					<div *ngIf="!emptyView && !lockedResults && !isMobile" fxLayout="column" fxLayoutGap="16px">
@@ -132,8 +148,6 @@
 						<span i18n>Ratio</span>
 					</div>
 					<span class="phrase" i18n>Phrase</span>
-
-					<span class="total-phrases" i18n>Phrases ({{ explainItemResults?.length ?? 0 }})</span>
 				</div>
 			</div>
 			<div

@@ -424,6 +424,9 @@ export class ReportDataService {
 							excludedCorrections: excludedCorrections,
 						},
 						excludedDomains: options?.excludedDomains ?? [],
+						aiPhrases: {
+							minProportion: options?.minAIProportion,
+						},
 					},
 				});
 			});
@@ -1222,6 +1225,7 @@ export class ReportDataService {
 				hiddenCategories: completeResultsRes.filters?.writingFeedback?.hiddenCategories ?? [],
 			},
 			excludedDomains: completeResultsRes.filters?.excludedDomains ?? [],
+			minAIProportion: completeResultsRes.filters?.aiPhrases?.minProportion ?? 0,
 		});
 
 		const filteredResults = this.filterResults(this.filterOptions, this.excludedResultsIds);
@@ -1288,6 +1292,9 @@ export class ReportDataService {
 				execludedResultIds: this.excludedResultsIds ?? [],
 				filteredResultIds: [],
 				excludedDomains: this.filterOptions?.excludedDomains ?? [],
+				aiPhrases: {
+					minProportion: this.filterOptions?.minAIProportion ?? null,
+				},
 			},
 		});
 

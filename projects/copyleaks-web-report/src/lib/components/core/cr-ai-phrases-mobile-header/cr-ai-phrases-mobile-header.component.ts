@@ -3,6 +3,9 @@ import { ReportMatchesService } from '../../../services/report-matches.service';
 import { AIExplainResultItem, EProportionType, ExplainableAIResults } from '../../../models/report-matches.models';
 import { ReportViewService } from '../../../services/report-view.service';
 import { ReportDataService } from '../../../services/report-data.service';
+import { FilterAiPhrasesDialogComponent } from '../../../dialogs/filter-ai-phrases-dialog/filter-ai-phrases-dialog.component';
+import { MatDialog } from '@angular/material/dialog';
+import { IFilterAiPhrasesDialogData } from '../../../dialogs/filter-ai-phrases-dialog/models/filter-ai-phrases-dialog.models';
 
 @Component({
 	selector: 'cr-ai-phrases-mobile-header',
@@ -46,6 +49,11 @@ export class CrAiPhrasesMobileHeaderComponent implements OnInit, OnChanges {
 	 */
 	@Input() explainableAIResults: ExplainableAIResults;
 
+	/**
+	 * @Input {number} The minimum AI proportion
+	 */
+	@Input() minAIProportion: number;
+
 	explainResults: AIExplainResultItem[] = [];
 	explainItemResults: AIExplainResultItem[] = [];
 
@@ -67,16 +75,27 @@ export class CrAiPhrasesMobileHeaderComponent implements OnInit, OnChanges {
 	resultTooltipText: string;
 	updateResult: boolean = false;
 
+	minAIFreq: number = 0;
+	maxAIFreq: number = 100;
+	totalAIResultCount: number = 0;
+	filteredAIResultCount: number = 0;
+
 	constructor(
 		private _reportMatchesSvc: ReportMatchesService,
 		public reportViewSvc: ReportViewService,
-		private _reportDataSvc: ReportDataService
+		private _reportDataSvc: ReportDataService,
+		private _matDialog: MatDialog
 	) {}
 
 	ngOnInit(): void {}
 
 	ngOnChanges(changes: SimpleChanges): void {
 		if (changes['isLoading']?.currentValue == false) {
+			this._initResults();
+		}
+
+		if (changes['minAIProportion']) {
+			this.updateResult = false;
 			this._initResults();
 		}
 	}
@@ -131,7 +150,9 @@ export class CrAiPhrasesMobileHeaderComponent implements OnInit, OnChanges {
 	 * Update the bar score
 	 */
 	private _updateProportionRange(): void {
-		this.proportions = this.explainResults?.map(result => result.proportion) ?? [];
+		if (this.filteredAIResultCount != this.totalAIResultCount)
+			this.proportions = this.explainItemResults?.map(result => result.proportion) ?? [];
+		else this.proportions = this.explainResults?.map(result => result.proportion) ?? [];
 		const proportionsFiltered = this.proportions.filter(p => p > 0);
 		this.minProportion = Number(Math.min(...proportionsFiltered).toFixed(0));
 		this.maxProportion = Number(Math.max(...proportionsFiltered).toFixed(0));
@@ -147,8 +168,14 @@ export class CrAiPhrasesMobileHeaderComponent implements OnInit, OnChanges {
 	 * @returns Number
 	 */
 	private _getGradePercentByPropoType(type: EProportionType): number {
-		const grade =
-			(this.explainResults?.filter(result => result.proportionType == type)?.length / this.proportions.length) * 100;
+		let grade = 0;
+		if (this.filteredAIResultCount != this.totalAIResultCount)
+			grade =
+				(this.explainItemResults?.filter(result => result.proportionType == type)?.length / this.proportions.length) *
+				100;
+		else
+			grade =
+				(this.explainResults?.filter(result => result.proportionType == type)?.length / this.proportions.length) * 100;
 		return Number(grade.toFixed(0));
 	}
 
@@ -156,6 +183,7 @@ export class CrAiPhrasesMobileHeaderComponent implements OnInit, OnChanges {
 	 * Mapping the result to AIExplainResultItem
 	 */
 	private _mapingtoResultItem() {
+		this.explainResults = [];
 		this.explainableAIResults.explain.patterns.statistics.proportion.forEach((item, index) => {
 			const wordStart = this.explainableAIResults?.explain?.patterns?.text?.chars.starts[index];
 			const wordEnd = this.explainableAIResults?.explain?.patterns?.text?.chars.lengths[index] + wordStart;
@@ -181,5 +209,38 @@ export class CrAiPhrasesMobileHeaderComponent implements OnInit, OnChanges {
 			return b.proportion - a.proportion;
 		});
 		this.explainItemResults = [...this.explainResults];
+
+		// Calculate min/max from ALL results (before filtering) to ensure dialog slider range stays consistent
+		const proportions = this.explainResults.map(item => item.proportion).filter(p => p > 0 && p !== -1);
+		this.minAIFreq = proportions.length > 0 ? Math.min(...proportions) : 0;
+		this.maxAIFreq = proportions.length > 0 ? Math.max(...proportions) : 100;
+		this.totalAIResultCount = this.explainResults.length;
+
+		// Apply filter if minAIProportion is set
+		if (this.minAIProportion !== undefined)
+			this.explainItemResults = this.explainItemResults.filter(item => item.proportion >= this.minAIProportion);
+
+		this.filteredAIResultCount = this.explainItemResults.length;
+	}
+
+	showFilterDialog() {
+		// Extract proportion values, filtering out invalid values (<=0 or -1)
+
+		this._matDialog.open(FilterAiPhrasesDialogComponent, {
+			minWidth: '100%',
+			width: '100%',
+			panelClass: 'filter-ai-phrases-dialog',
+			ariaLabel: $localize`Report Filter Options`,
+			autoFocus: false,
+			data: {
+				reportDataSvc: this._reportDataSvc,
+				reportViewSvc: this.reportViewSvc,
+				minProportion: this.minAIFreq,
+				maxProportion: this.maxAIFreq,
+				totalCount: this.totalAIResultCount,
+				filteredCount: this.filteredAIResultCount,
+				currentFilter: this.minAIProportion ?? this.minAIFreq,
+			} as IFilterAiPhrasesDialogData,
+		});
 	}
 }

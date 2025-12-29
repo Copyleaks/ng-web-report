@@ -475,8 +475,8 @@ export class ReportMatchesService implements OnDestroy {
 		if (selectedAlert) {
 			switch (selectedAlertCode) {
 				case ALERTS.SUSPECTED_AI_TEXT_DETECTED:
-					text = helpers.processAIInsightsTextMatches(source, selectedAlert, showAIPhrases);
-					html = helpers.processAIInsightsHTMLMatches(source, selectedAlert, showAIPhrases);
+					text = helpers.processAIInsightsTextMatches(source, selectedAlert, showAIPhrases, settings.minAIProportion);
+					html = helpers.processAIInsightsHTMLMatches(source, selectedAlert, showAIPhrases, settings.minAIProportion);
 
 					// We need the AI phrases for the AI insights view stats, so we need to store them in a separate variable
 					// Fetch the AI phrases only if they are not already fetched

@@ -65,6 +65,7 @@ import { MetaFilterResultComponent } from './dialogs/filter-result-dailog/compon
 import { SourceTypeFilterResultComponent } from './dialogs/filter-result-dailog/components/source-type-filter-result/source-type-filter-result.component';
 import { FilterResultDailogComponent } from './dialogs/filter-result-dailog/filter-result-dailog.component';
 import { FilterResultDailogService } from './dialogs/filter-result-dailog/services/filter-result-dailog.service';
+import { FilterAiPhrasesDialogComponent } from './dialogs/filter-ai-phrases-dialog/filter-ai-phrases-dialog.component';
 import { OriginalHtmlHelperComponent } from './directives/original-html-helper.directive';
 import { OriginalTextHelperDirective } from './directives/original-text-helper.directive';
 import { CrReportScoreTooltipModule } from './directives/report-score-tooltip/cr-report-score-tooltip-content.module';
@@ -157,6 +158,7 @@ import { CrRealTimeResultSectionAnimationComponent } from './components/core/cr-
 		OnlyAiReportLayoutDesktopComponent,
 		OnlyAiReportLayoutMobileComponent,
 		FilterResultDailogComponent,
+		FilterAiPhrasesDialogComponent,
 		RemoveResultConfirmationDialogComponent,
 		SourceTypeFilterResultComponent,
 		MatchTypeFilterResultComponent,

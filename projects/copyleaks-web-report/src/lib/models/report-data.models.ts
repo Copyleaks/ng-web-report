@@ -141,6 +141,7 @@ export interface ICompleteResultsFilters {
 	resultsMetaData?: IResultsMetaDataFilters;
 	includedTags?: string[];
 	writingFeedback?: IWritingFeedbackFilter;
+	aiPhrases?: IAIPhrasesProportionFilter;
 	excludedDomains?: string[];
 	isFilterEnabled?: boolean;
 }
@@ -186,6 +187,10 @@ export interface IPublicationDateFilter {
 export interface IWritingFeedbackFilter {
 	hiddenCategories?: EWritingFeedbackCategories[];
 	excludedCorrections?: IExcludedCorrection[];
+}
+
+export interface IAIPhrasesProportionFilter {
+	minProportion?: number;
 }
 
 export interface IExcludedCorrection {

@@ -35,6 +35,9 @@ import * as helpers from '../../../../../utils/report-statistics-helpers';
 import { ReportDataService } from '../../../../../services/report-data.service';
 import { EPlatformType } from '../../../../../enums/copyleaks-web-report.enums';
 import { ReportStatistics } from '../../../../../models/report-statistics.models';
+import { MatDialog } from '@angular/material/dialog';
+import { FilterAiPhrasesDialogComponent } from '../../../../../dialogs/filter-ai-phrases-dialog/filter-ai-phrases-dialog.component';
+import { IFilterAiPhrasesDialogData } from '../../../../../dialogs/filter-ai-phrases-dialog/models/filter-ai-phrases-dialog.models';
 
 @Component({
 	selector: 'copyleaks-explainable-ai-result-container',
@@ -104,6 +107,11 @@ export class ExplainableAIResultContainerComponent implements OnInit, OnChanges,
 	@Input() showAIPhrases: boolean;
 
 	/**
+	 * @Input {number} The minimum AI proportion
+	 */
+	@Input() minAIProportion: number;
+
+	/**
 	 * @Output {boolean} Event emitted when the user clears the selected result
 	 */
 	@Output() clearSelectResultEvent = new EventEmitter<boolean>();
@@ -155,10 +163,19 @@ export class ExplainableAIResultContainerComponent implements OnInit, OnChanges,
 	aiSourceMatchResultsParaphrasedScore: number = 0;
 	aiSourceMatchResultsTotal: number = 0;
 
+	minAIFreq: number = 0;
+	maxAIFreq: number = 100;
+	totalAIResultCount: number = 0;
+	filteredAIResultCount: number = 0;
+
 	// Subject for destroying all the subscriptions in the main library component
 	private unsubscribe$ = new Subject();
 
-	constructor(public reportViewSvc: ReportViewService, private _reportDataSvc: ReportDataService) {}
+	constructor(
+		public reportViewSvc: ReportViewService,
+		private _reportDataSvc: ReportDataService,
+		private _matDialog: MatDialog
+	) {}
 	ngOnChanges(changes: SimpleChanges): void {
 		if (changes['isLoading']?.currentValue == false) {
 			{
@@ -172,6 +189,11 @@ export class ExplainableAIResultContainerComponent implements OnInit, OnChanges,
 
 		if (changes['aiSourceMatchResults']?.currentValue && changes['aiSourceMatchResults']?.currentValue.length > 0) {
 			this._calculateAiSourceMatchResultsStats();
+		}
+
+		if (changes['minAIProportion']) {
+			this.updateResult = false;
+			this._initResults();
 		}
 	}
 
@@ -466,6 +488,7 @@ export class ExplainableAIResultContainerComponent implements OnInit, OnChanges,
 			this._updateTooltipText();
 			if (this.explainableAIResults?.explain && this.explainableAIResults?.slicedMatch.length > 0) {
 				this.title = $localize`AI Insights`;
+				this.emptyView = false;
 				this._mapingtoResultItem();
 				this._updateProportionRange();
 			} else if (!this.lockedResults) {
@@ -495,7 +518,10 @@ export class ExplainableAIResultContainerComponent implements OnInit, OnChanges,
 	 * Update the bar score
 	 */
 	private _updateProportionRange(): void {
-		this.proportions = this.explainResults?.map(result => result.proportion) ?? [];
+		if (this.filteredAIResultCount != this.totalAIResultCount)
+			this.proportions = this.explainItemResults?.map(result => result.proportion) ?? [];
+		else this.proportions = this.explainResults?.map(result => result.proportion) ?? [];
+
 		const proportionsFiltered = this.proportions.filter(p => p > 0);
 		this.minProportion = Number(Math.min(...proportionsFiltered).toFixed(0));
 		this.maxProportion = Number(Math.max(...proportionsFiltered).toFixed(0));
@@ -511,8 +537,14 @@ export class ExplainableAIResultContainerComponent implements OnInit, OnChanges,
 	 * @returns Number
 	 */
 	private _getGradePercentByPropoType(type: EProportionType): number {
-		const grade =
-			(this.explainResults?.filter(result => result.proportionType == type)?.length / this.proportions.length) * 100;
+		let grade = 0;
+		if (this.filteredAIResultCount != this.totalAIResultCount)
+			grade =
+				(this.explainItemResults?.filter(result => result.proportionType == type)?.length / this.proportions.length) *
+				100;
+		else
+			grade =
+				(this.explainResults?.filter(result => result.proportionType == type)?.length / this.proportions.length) * 100;
 		return Number(grade.toFixed(0));
 	}
 
@@ -520,6 +552,7 @@ export class ExplainableAIResultContainerComponent implements OnInit, OnChanges,
 	 * Mapping the result to AIExplainResultItem
 	 */
 	private _mapingtoResultItem() {
+		this.explainResults = [];
 		this.explainableAIResults.explain.patterns.statistics.proportion.forEach((item, index) => {
 			const wordStart = this.explainableAIResults?.explain?.patterns?.text?.chars.starts[index];
 			const wordEnd = this.explainableAIResults?.explain?.patterns?.text?.chars.lengths[index] + wordStart;
@@ -545,6 +578,18 @@ export class ExplainableAIResultContainerComponent implements OnInit, OnChanges,
 			return b.proportion - a.proportion;
 		});
 		this.explainItemResults = [...this.explainResults];
+
+		// Calculate min/max from ALL results (before filtering) to ensure dialog slider range stays consistent
+		const proportions = this.explainResults.map(item => item.proportion).filter(p => p > 0 && p !== -1);
+		this.minAIFreq = proportions.length > 0 ? Math.min(...proportions) : 0;
+		this.maxAIFreq = proportions.length > 0 ? Math.max(...proportions) : 100;
+		this.totalAIResultCount = this.explainResults.length;
+
+		// Apply filter if minAIProportion is set
+		if (this.minAIProportion !== undefined)
+			this.explainItemResults = this.explainItemResults.filter(item => item.proportion >= this.minAIProportion);
+
+		this.filteredAIResultCount = this.explainItemResults.length;
 	}
 
 	/**
@@ -683,6 +728,25 @@ export class ExplainableAIResultContainerComponent implements OnInit, OnChanges,
 				: this.aiSourceMatchResultsStats.relatedMeaning /
 				  (this.aiSourceMatchResultsStats.total - this.aiSourceMatchResultsStats.omittedWords);
 		this.aiSourceMatchResultsTotal = this.aiSourceMatchResults?.length ?? 0;
+	}
+
+	showFilterDialog() {
+		this._matDialog.open(FilterAiPhrasesDialogComponent, {
+			minWidth: this.isMobile ? '100%' : '',
+			width: this.isMobile ? '100%' : '451px',
+			panelClass: 'filter-ai-phrases-dialog',
+			ariaLabel: $localize`Report Filter Options`,
+			autoFocus: false,
+			data: {
+				reportDataSvc: this._reportDataSvc,
+				reportViewSvc: this.reportViewSvc,
+				minProportion: this.minAIFreq,
+				maxProportion: this.maxAIFreq,
+				totalCount: this.totalAIResultCount,
+				filteredCount: this.filteredAIResultCount,
+				currentFilter: this.minAIProportion ?? this.minAIFreq,
+			} as IFilterAiPhrasesDialogData,
+		});
 	}
 
 	ngOnDestroy(): void {

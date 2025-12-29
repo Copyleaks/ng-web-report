@@ -1073,7 +1073,7 @@ export class ReportDataService {
 	private _handleProgressErrorResponse(progress: IAPIProgress, endpointsConfig: IClsReportEndpointConfigModel) {
 		this._viewSvc.progress$.next(100);
 		const errorMessage = ERROR_MESSAGES[progress.errorCode] || $localize`Scan failed`;
-		throw {
+		const httpError = {
 			status: 500,
 			statusText: errorMessage,
 			url: endpointsConfig.progress.url,
@@ -1081,6 +1081,9 @@ export class ReportDataService {
 			error: new Error(errorMessage),
 			message: errorMessage,
 		} as HttpErrorResponse;
+
+		// Handle the error through the error service instead of throwing
+		this._reportErrorsSvc.handleHttpError(httpError, 'initReportData - Scan Error');
 	}
 
 	private async _checkScanProgress(progress: IAPIProgress) {

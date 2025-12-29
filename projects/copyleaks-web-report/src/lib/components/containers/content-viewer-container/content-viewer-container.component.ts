@@ -15,8 +15,8 @@ import {
 	TemplateRef,
 	ViewChild,
 } from '@angular/core';
-import { PostMessageEvent, ZoomEvent } from '../../../models/report-iframe-events.models';
-import { IReportViewEvent } from '../../../models/report-view.models';
+import { PostMessageEvent, ScrollPositionEvent, ZoomEvent } from '../../../models/report-iframe-events.models';
+import { EReportViewTab, IReportViewEvent, IScrollPositionState } from '../../../models/report-view.models';
 import {
 	Match,
 	MatchType,
@@ -77,6 +77,26 @@ export class ContentViewerContainerComponent implements OnInit, AfterViewInit, O
 	onFrameMessage(event: MessageEvent) {
 		const { source, data } = event;
 		if (source !== this.iFrameWindow) {
+			return;
+		}
+
+		if (data.type === 'iframeReady') {
+			if (this._iframeReadyResolver) {
+				clearTimeout(this._iframeReadyTimeout);
+				this._iframeReadyResolver();
+				this._iframeReadyResolver = null;
+			}
+			return;
+		}
+
+		// Handle scroll position updates from iframe
+		if (data.type === 'scrollPosition') {
+			if (this._ignoreScrollUpdates || this._isRestoringScroll) {
+				return;
+			}
+
+			const scrollEvent = data as ScrollPositionEvent;
+			this.viewSvc.setIframeScrollPosition(scrollEvent.scrollTop, scrollEvent.scrollLeft);
 			return;
 		}
 		this.iFrameMessageEvent.emit(data as PostMessageEvent);
@@ -438,6 +458,12 @@ export class ContentViewerContainerComponent implements OnInit, AfterViewInit, O
 
 	private _zoomIn: boolean;
 
+	private _ignoreScrollUpdates = false;
+	private _isRestoringScroll = false;
+	private _pendingScrollRestore: { scrollTop: number; scrollLeft: number; page?: number } | null = null;
+	private _iframeReadyTimeout: any;
+	private _iframeReadyResolver: ((value: void) => void) | null = null;
+
 	constructor(
 		private _renderer: Renderer2,
 		private _cdr: ChangeDetectorRef,
@@ -449,6 +475,17 @@ export class ContentViewerContainerComponent implements OnInit, AfterViewInit, O
 	ngOnInit(): void {
 		if (this.flexGrow !== undefined && this.flexGrow !== null) this.flexGrowProp = this.flexGrow;
 
+		const currentTab = this._getCurrentTab();
+		const customTabId = this.viewSvc.reportViewMode$.value.selectedCustomTabId;
+		this.viewSvc.setCurrentViewTab(currentTab);
+		// Handle initial load for custom tab in text view
+		if (!this.isHtmlView && currentTab === EReportViewTab.Custom) {
+			this._prepareForReload();
+			this._queueScrollRestore(currentTab, customTabId);
+			setTimeout(() => {
+				this._restoreScrollPosition();
+			}, 100);
+		}
 		if (!this.isExportedComponent) {
 			this.viewSvc.selectedCustomTabContent$.pipe(untilDestroy(this)).subscribe(content => {
 				if (this.viewMode !== 'one-to-one') this.customTabContent = content;
@@ -483,6 +520,14 @@ export class ContentViewerContainerComponent implements OnInit, AfterViewInit, O
 					this.iFrameWindow = this.contentIFrame?.nativeElement?.contentWindow;
 					this.iframeLoaded = true;
 					this.showLoadingView = false;
+					const currentTab = this._getCurrentTab();
+					const customTabId = this.viewSvc.reportViewMode$.value.selectedCustomTabId;
+					// Handle iframe scroll restoration
+					this._waitForIframeReady().then(() => {
+						this._prepareForReload();
+						this._queueScrollRestore(currentTab, customTabId);
+						this._restoreScrollPosition();
+					});
 				}
 			},
 			false
@@ -542,6 +587,103 @@ export class ContentViewerContainerComponent implements OnInit, AfterViewInit, O
 	}
 
 	ngOnChanges(changes: SimpleChanges): void {
+		// Detect tab changes and save/restore scroll position
+		let isHandlingTabSwitch = false;
+		if (
+			'isAIView' in changes ||
+			'viewMode' in changes ||
+			'contentHtmlMatches' in changes ||
+			'contentTextMatches' in changes
+		) {
+			const previousTab = this.viewSvc.currentViewTab;
+			const newTab = this._getCurrentTab();
+			const previousCustomTabId = this.viewSvc.previousCustomTabId;
+			const currentCustomTabId = this.viewSvc.currentCustomTabId;
+
+			const isSwitchingBetweenSharedTabs =
+				previousTab !== EReportViewTab.Custom && newTab !== EReportViewTab.Custom && previousTab !== newTab;
+
+			const isSwitchingToCustomTab = previousTab !== EReportViewTab.Custom && newTab === EReportViewTab.Custom;
+
+			const isSwitchingFromCustomTab = previousTab === EReportViewTab.Custom && newTab !== EReportViewTab.Custom;
+
+			if (newTab === EReportViewTab.Custom && currentCustomTabId === 'ai-overview') {
+				this.viewSvc.clearScrollPositions();
+			}
+
+			// Handle save/restore for shared instance tabs switching between each other
+			if (isSwitchingBetweenSharedTabs) {
+				isHandlingTabSwitch = true;
+				let previousIsHtmlView = this.isHtmlView;
+				if ('isHtmlView' in changes && !changes['isHtmlView'].firstChange) {
+					previousIsHtmlView = changes['isHtmlView'].previousValue;
+				}
+				let previousPage = this.currentPage;
+				if ('currentPage' in changes && !changes['currentPage'].firstChange) {
+					previousPage = changes['currentPage'].previousValue;
+				}
+
+				this._saveScrollPosition(previousTab, undefined, previousIsHtmlView, previousPage);
+
+				this._prepareForReload();
+				this._queueScrollRestore(newTab);
+				if (!this.isHtmlView) {
+					// For text view, restore after DOM updates
+					setTimeout(() => {
+						this._restoreScrollPosition();
+					}, 100);
+				}
+				this.viewSvc.setCurrentViewTab(newTab);
+			} else if (isSwitchingToCustomTab && currentCustomTabId !== 'ai-overview') {
+				isHandlingTabSwitch = true;
+				let previousIsHtmlView = this.viewSvc.currentIsHtmlView;
+				let previousPage = this.currentPage;
+				if ('currentPage' in changes && !changes['currentPage'].firstChange) {
+					previousPage = changes['currentPage'].previousValue;
+				}
+				this._saveScrollPosition(previousTab, undefined, previousIsHtmlView, previousPage);
+				this.viewSvc.setCurrentViewTab(newTab);
+			} else if (isSwitchingFromCustomTab && previousCustomTabId !== 'ai-overview') {
+				isHandlingTabSwitch = true;
+				this._prepareForReload();
+				this._queueScrollRestore(newTab, currentCustomTabId);
+				// For text view, restore after DOM updates
+				if (!this.isHtmlView) {
+					setTimeout(() => {
+						this._restoreScrollPosition();
+					}, 100);
+				}
+				this.viewSvc.setCurrentViewTab(newTab);
+			} else {
+				this.viewSvc.setCurrentViewTab(newTab);
+			}
+		}
+
+		// Handle page changes (text view only)
+		if ('currentPage' in changes && !changes['currentPage']?.firstChange && !isHandlingTabSwitch) {
+			if (this._pendingScrollRestore && this._isRestoringScroll) {
+				const savedPage = this._pendingScrollRestore.page;
+				if (savedPage && savedPage === this.currentPage) {
+					this._restoreScrollPosition();
+				}
+			}
+		}
+
+		if ('isHtmlView' in changes && !changes['isHtmlView'].firstChange) {
+			const currentTab = this._getCurrentTab();
+			const customTabId = this.viewSvc.reportViewMode$.value.selectedCustomTabId;
+
+			this._prepareForReload();
+			this._queueScrollRestore(currentTab, customTabId);
+
+			// For text view, restore immediately after DOM updates
+			if (!this.isHtmlView) {
+				setTimeout(() => {
+					this._restoreScrollPosition();
+				}, 100);
+			}
+		}
+
 		if (
 			(('contentTextMatches' in changes && changes['contentTextMatches'].currentValue != undefined) ||
 				('customViewMatchesData' in changes && changes['customViewMatchesData'].currentValue != undefined)) &&
@@ -646,6 +788,10 @@ export class ContentViewerContainerComponent implements OnInit, AfterViewInit, O
 	}
 
 	onViewChange() {
+		const currentTab = this._getCurrentTab();
+		const customTabId = this.viewSvc.reportViewMode$.value.selectedCustomTabId;
+		this._saveScrollPosition(currentTab, customTabId, this.isHtmlView, this.currentPage);
+
 		if (!this.iframeLoaded) this.showLoadingView = true;
 		if (this.viewSvc.reportViewMode.alertCode === ALERTS.SUSPECTED_AI_TEXT_DETECTED) {
 			this._highlightService.aiInsightsSelectedResults?.forEach(result => {
@@ -739,6 +885,194 @@ export class ContentViewerContainerComponent implements OnInit, AfterViewInit, O
 					this.highlightCustomMatchText(customMatch);
 				});
 			});
+	}
+
+	private _getCurrentTab(): EReportViewTab {
+		const selectedCustomTabId = this.viewSvc.reportViewMode$.value.selectedCustomTabId;
+		if (selectedCustomTabId) return EReportViewTab.Custom;
+		return this.isAIView
+			? EReportViewTab.AIContent
+			: this.viewMode == 'writing-feedback'
+			? EReportViewTab.WritingAssistant
+			: EReportViewTab.MatchedText;
+	}
+
+	/**
+	 * Prepare for content reload (view change, page change, tab change)
+	 */
+	private _prepareForReload(): void {
+		this._ignoreScrollUpdates = true;
+		this._isRestoringScroll = true;
+	}
+
+	/**
+	 * Queue scroll restoration
+	 */
+	private _queueScrollRestore(tab: EReportViewTab, customTabId?: string): void {
+		const savedState = this.viewSvc.getScrollPosition(tab, this.isHtmlView, customTabId);
+
+		if (savedState) {
+			this._pendingScrollRestore = {
+				scrollTop: savedState.scrollTop,
+				scrollLeft: savedState.scrollLeft,
+			};
+
+			// Store the saved page for text view restoration
+			if (!this.isHtmlView) {
+				this._pendingScrollRestore.page = savedState.page;
+			}
+
+			// For wrapper scroll (text view or custom tabs), restore immediately
+			if (this._isWrapperScroll()) {
+				setTimeout(() => {
+					this._restoreScrollPosition();
+				}, 0);
+			}
+			// For iframe view, restoration will happen when iframe is ready
+		} else {
+			this._clearRestorationFlags();
+		}
+	}
+
+	/**
+	 * Save current scroll position
+	 */
+	private _saveScrollPosition(tab: EReportViewTab, customTabId?: string, isHtmlView?: boolean, page?: number): void {
+		let scrollTop = 0;
+		let scrollLeft = 0;
+
+		const currentIsHtmlView = isHtmlView !== undefined ? isHtmlView : this.isHtmlView;
+
+		if (this._isWrapperScroll(currentIsHtmlView)) {
+			// Wrapper container scroll (text view)
+			let wrapperContainer = document
+				.querySelector('.content-container')
+				?.querySelector('.content-container') as HTMLElement;
+			if (!wrapperContainer) {
+				wrapperContainer = document.querySelector('.content-container') as HTMLElement;
+			}
+			if (wrapperContainer) {
+				scrollTop = wrapperContainer.scrollTop;
+				scrollLeft = wrapperContainer.scrollLeft;
+			}
+		} else {
+			// HTML/PDF iframe view - use tracked position from service
+			const iframeScroll = this.viewSvc.iframeScrollPosition;
+			scrollTop = iframeScroll.top;
+			scrollLeft = iframeScroll.left;
+		}
+
+		const state: IScrollPositionState = {
+			tab: tab,
+			origin: this.reportOrigin,
+			page: page !== undefined ? page : this.currentPage,
+			isHtmlView: currentIsHtmlView,
+			scrollTop,
+			scrollLeft,
+			customTabId: tab === EReportViewTab.Custom ? customTabId : undefined,
+		};
+
+		this.viewSvc.saveScrollPosition(state);
+	}
+
+	/**
+	 * Restore scroll position from pending data
+	 */
+	private _restoreScrollPosition(): void {
+		if (!this._pendingScrollRestore) {
+			this._clearRestorationFlags();
+			return;
+		}
+
+		const { scrollTop, scrollLeft, page } = this._pendingScrollRestore;
+
+		if (this._isWrapperScroll()) {
+			if (page && page !== this.currentPage && !this.isHtmlView) {
+				// Emit event to change to the saved page
+				if (this.reportOrigin === 'original' || this.reportOrigin === 'source') {
+					this.viewChangeEvent.emit({
+						...this.viewSvc.reportViewMode,
+						sourcePageIndex: page,
+					});
+				} else {
+					this.viewChangeEvent.emit({
+						...this.viewSvc.reportViewMode,
+						suspectPageIndex: page,
+					});
+				}
+				return;
+			}
+
+			// Wrapper container scroll
+			let wrapperContainer = document
+				.querySelector('.content-container')
+				?.querySelector('.content-container') as HTMLElement;
+
+			if (!wrapperContainer) {
+				wrapperContainer = document.querySelector('.content-container') as HTMLElement;
+			}
+
+			if (wrapperContainer) {
+				wrapperContainer.scrollTop = scrollTop;
+				wrapperContainer.scrollLeft = scrollLeft;
+			}
+			this._pendingScrollRestore = null;
+			this._clearRestorationFlags();
+		} else if (this.isHtmlView && this.iframeLoaded) {
+			const iframe = this.contentIFrame?.nativeElement;
+			if (iframe?.contentWindow) {
+				this.viewSvc.setIframeScrollPosition(scrollTop, scrollLeft);
+
+				iframe.contentWindow.postMessage(
+					{
+						type: 'setScroll',
+						scrollTop: scrollTop,
+						scrollLeft: scrollLeft,
+					},
+					'*'
+				);
+
+				setTimeout(() => {
+					this._pendingScrollRestore = null;
+					this._clearRestorationFlags();
+				}, 100);
+			} else {
+				this._clearRestorationFlags();
+			}
+		}
+	}
+
+	/**
+	 * Clear restoration flags
+	 */
+	private _clearRestorationFlags(): void {
+		this._ignoreScrollUpdates = false;
+		this._isRestoringScroll = false;
+	}
+
+	/**
+	 * Check if scroll should be on wrapper container (not iframe)
+	 */
+	private _isWrapperScroll(isHtmlView?: boolean): boolean {
+		const htmlView = isHtmlView !== undefined ? isHtmlView : this.isHtmlView;
+
+		if (htmlView && this.hasHtml) {
+			return false;
+		}
+		return true;
+	}
+
+	private _waitForIframeReady(): Promise<void> {
+		return new Promise(resolve => {
+			// Store the resolver so we can call it when we receive the message
+			this._iframeReadyResolver = resolve;
+
+			// Set a timeout in case the message never arrives (fallback)
+			this._iframeReadyTimeout = setTimeout(() => {
+				this._iframeReadyResolver = null;
+				resolve();
+			}, 2000); // 2 second timeout
+		});
 	}
 
 	/**
@@ -1138,6 +1472,17 @@ export class ContentViewerContainerComponent implements OnInit, AfterViewInit, O
 	}
 
 	ngOnDestroy(): void {
+		if (this._iframeReadyTimeout) {
+			clearTimeout(this._iframeReadyTimeout);
+		}
+		const currentTab = this.viewSvc.currentViewTab;
+		const customTabId = this.viewSvc.previousCustomTabId;
+
+		// Save scroll position on destroy for custom tabs (except AI Overview)
+		if (currentTab === EReportViewTab.Custom && customTabId && customTabId !== 'ai-overview') {
+			this._saveScrollPosition(currentTab, customTabId);
+		}
+
 		this.docDirObserver?.disconnect();
 		this.contentTextChangesObserver?.disconnect();
 	}

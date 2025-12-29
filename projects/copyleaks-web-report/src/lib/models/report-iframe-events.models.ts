@@ -9,7 +9,11 @@ export type PostMessageEvent =
 	| MultiMatchSelectEvent
 	| CorrectionSelectEvent
 	| MatchesRefreshEvent
-	| MatchGroupSelectEvent;
+	| MatchGroupSelectEvent
+	| ScrollPositionEvent
+	| SetScrollEvent
+	| GetScrollEvent
+	| IframeReadyEvent;
 
 /** base type of post message event */
 interface BasePostMessageEvent {
@@ -76,4 +80,38 @@ export interface CorrectionSelectEvent extends BasePostMessageEvent {
 	type: 'correction-select';
 	/** the index of the match that was selected */
 	gid: number;
+}
+
+/** Event type indicating scroll position update from iframe */
+export interface ScrollPositionEvent extends BasePostMessageEvent {
+	type: 'scrollPosition';
+	/** the scroll top position */
+	scrollTop: number;
+	/** the scroll left position */
+	scrollLeft: number;
+}
+
+/** Event type indicating a request to set scroll position in iframe */
+export interface SetScrollEvent extends BasePostMessageEvent {
+	type: 'setScroll';
+	/** the scroll top position to set */
+	scrollTop: number;
+	/** the scroll left position to set */
+	scrollLeft: number;
+}
+
+/** Event type indicating a request to get current scroll position from iframe */
+export interface GetScrollEvent extends BasePostMessageEvent {
+	type: 'getScroll';
+}
+
+/** Event type indicating iframe content is fully loaded and ready */
+export interface IframeReadyEvent extends BasePostMessageEvent {
+	type: 'iframeReady';
+	/** the scroll height of the iframe content */
+	scrollHeight: number;
+	/** current scroll top position */
+	scrollTop: number;
+	/** current scroll left position */
+	scrollLeft: number;
 }

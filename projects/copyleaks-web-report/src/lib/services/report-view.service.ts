@@ -1,7 +1,14 @@
 import { Injectable, TemplateRef } from '@angular/core';
 import { BehaviorSubject } from 'rxjs';
 import { ResultDetailItem } from '../models/report-matches.models';
-import { IReportResponsiveMode, IReportViewEvent } from '../models/report-view.models';
+import {
+	EReportViewTab,
+	IReportResponsiveMode,
+	IReportViewEvent,
+	IScrollPositionState,
+	IScrollPositionStateMap,
+} from '../models/report-view.models';
+import { distinctUntilChanged, map } from 'rxjs/operators';
 
 @Injectable()
 export class ReportViewService {
@@ -84,10 +91,121 @@ export class ReportViewService {
 	public get documentDirection() {
 		return this._documentDirection$.value;
 	}
+	private _scrollPositionStates$ = new BehaviorSubject<IScrollPositionStateMap>({});
+	/** Subject for maintaining scroll position states across different views. */
+	public get scrollPositionStates$() {
+		return this._scrollPositionStates$;
+	}
+	/** Getter for scroll position states. */
+	public get scrollPositionStates() {
+		return this._scrollPositionStates$.value;
+	}
+
+	private _currentViewTab$ = new BehaviorSubject<EReportViewTab>(EReportViewTab.MatchedText);
+
+	private _previousCustomTabId: string | undefined = undefined;
+	private _currentCustomTabId: string | undefined = undefined;
+
+	private _iframeScrollPosition$ = new BehaviorSubject<{ top: number; left: number }>({ top: 0, left: 0 });
+
+	private _previousIsHtmlView: boolean = false;
+	private _currentIsHtmlView: boolean = false;
+
 	private observer: MutationObserver;
 
 	constructor() {
 		this._observeDocumentDirection();
+		// Track custom tab ID changes
+		this._reportViewMode$
+			.pipe(
+				map(mode => mode.selectedCustomTabId),
+				distinctUntilChanged()
+			)
+			.subscribe(newCustomTabId => {
+				if (this._currentCustomTabId !== newCustomTabId) {
+					this._previousCustomTabId = this._currentCustomTabId;
+					this._currentCustomTabId = newCustomTabId;
+				}
+			});
+
+		this._reportViewMode$
+			.pipe(
+				map(mode => mode.isHtmlView),
+				distinctUntilChanged()
+			)
+			.subscribe(newIsHtmlView => {
+				if (this._currentIsHtmlView !== newIsHtmlView) {
+					this._previousIsHtmlView = this._currentIsHtmlView;
+					this._currentIsHtmlView = newIsHtmlView;
+				}
+			});
+	}
+
+	public get currentCustomTabId(): string | undefined {
+		return this._currentCustomTabId;
+	}
+
+	public get previousCustomTabId(): string | undefined {
+		return this._previousCustomTabId;
+	}
+
+	/**
+	 * Get the previous isHtmlView state (before the last change)
+	 */
+	public get previousIsHtmlView(): boolean {
+		return this._previousIsHtmlView;
+	}
+
+	/**
+	 * Get the current isHtmlView state
+	 */
+	public get currentIsHtmlView(): boolean {
+		return this._currentIsHtmlView;
+	}
+
+	/**
+	 * Save scroll position for a specific tab.
+	 * @param state The scroll position state to save
+	 */
+	public saveScrollPosition(state: IScrollPositionState): void {
+		const key = this._getScrollStateKey(state.tab, state.isHtmlView, state.customTabId);
+		const currentStates = { ...this.scrollPositionStates };
+		currentStates[key] = state;
+		this._scrollPositionStates$.next(currentStates);
+	}
+
+	/**
+	 * Get scroll position for a specific tab.
+	 * @param tab The tab type
+	 * @param isHtmlView Whether HTML view is active
+	 * @param customTabId The custom tab ID (for Custom tab type only)
+	 * @returns The saved scroll position state, or null if not found
+	 */
+	public getScrollPosition(
+		tab: EReportViewTab,
+		isHtmlView: boolean,
+		customTabId?: string
+	): IScrollPositionState | null {
+		const key = this._getScrollStateKey(tab, isHtmlView, customTabId);
+		return this.scrollPositionStates[key] || null;
+	}
+
+	/**
+	 * Clear all saved scroll positions.
+	 */
+	public clearScrollPositions(): void {
+		this._scrollPositionStates$.next({});
+	}
+
+	/**
+	 * Generate a unique key for scroll position state.
+	 * @private
+	 */
+	private _getScrollStateKey(tab: EReportViewTab, isHtmlView: boolean, customTabId?: string): string {
+		if (tab === EReportViewTab.Custom && customTabId) {
+			return `${tab}_${isHtmlView}_${customTabId}`;
+		}
+		return `${tab}_${isHtmlView}`;
 	}
 
 	/**
@@ -103,6 +221,54 @@ export class ReportViewService {
 		});
 	}
 
+	/**
+	 * Observable for the current active tab
+	 */
+	public get currentViewTab$() {
+		return this._currentViewTab$.asObservable();
+	}
+
+	/**
+	 * Get the current active tab
+	 */
+	public get currentViewTab() {
+		return this._currentViewTab$.value;
+	}
+
+	/**
+	 * Set the current active tab
+	 */
+	public setCurrentViewTab(tab: EReportViewTab) {
+		this._currentViewTab$.next(tab);
+	}
+
+	/**
+	 * Observable for iframe scroll position
+	 */
+	public get iframeScrollPosition$() {
+		return this._iframeScrollPosition$.asObservable();
+	}
+
+	/**
+	 * Get the current iframe scroll position
+	 */
+	public get iframeScrollPosition() {
+		return this._iframeScrollPosition$.value;
+	}
+
+	/**
+	 * Update the iframe scroll position
+	 */
+	public setIframeScrollPosition(top: number, left: number) {
+		this._iframeScrollPosition$.next({ top, left });
+	}
+
+	/**
+	 * Clear the iframe scroll position
+	 */
+	public clearIframeScrollPosition() {
+		this._iframeScrollPosition$.next({ top: 0, left: 0 });
+	}
 	/**
 	 * Get the document direction (ltr/rtl).
 	 * @returns The document direction (ltr/rtl).

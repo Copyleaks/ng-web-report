@@ -1228,6 +1228,7 @@ export class ReportDataService {
 			...(completeResultsRes.filters?.aiPhrases?.minProportion != null && {
 				minAIProportion: completeResultsRes.filters.aiPhrases.minProportion,
 			}),
+			minAIProportion: completeResultsRes.filters?.aiPhrases?.minProportion ?? 0,
 		});
 
 		const filteredResults = this.filterResults(this.filterOptions, this.excludedResultsIds);

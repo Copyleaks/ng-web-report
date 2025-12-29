@@ -47,9 +47,9 @@ export class FilterAiPhrasesDialogComponent implements OnInit {
 		});
 	}
 
-	onSliderChange(change: number) {
-		this.selectedValue = change;
-		this.onChange.emit(change);
+	onSliderChange(change: number | string) {
+		this.selectedValue = +change;
+		this.onChange.emit(+change);
 	}
 
 	onClearFilter() {

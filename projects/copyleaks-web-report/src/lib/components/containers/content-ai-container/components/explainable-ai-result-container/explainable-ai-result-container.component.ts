@@ -165,7 +165,7 @@ export class ExplainableAIResultContainerComponent implements OnInit, OnChanges,
 
 	minAIFreq: number = 0;
 	maxAIFreq: number = 100;
-	totalAIResultCount: number = this.explainItemResults.length;
+	totalAIResultCount: number = 0;
 	filteredAIResultCount: number = 0;
 
 	// Subject for destroying all the subscriptions in the main library component

@@ -77,7 +77,7 @@ export class CrAiPhrasesMobileHeaderComponent implements OnInit, OnChanges {
 
 	minAIFreq: number = 0;
 	maxAIFreq: number = 100;
-	totalAIResultCount: number = this.explainItemResults.length;
+	totalAIResultCount: number = 0;
 	filteredAIResultCount: number = 0;
 
 	constructor(

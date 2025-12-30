@@ -4,6 +4,7 @@ import { Component, Input, OnInit } from '@angular/core';
 	selector: 'copyleaks-ai-percentage',
 	templateUrl: './ai-percentage.component.html',
 	styleUrls: ['./ai-percentage.component.scss'],
+	standalone: false,
 })
 export class AiPercentageComponent implements OnInit {
 	/**

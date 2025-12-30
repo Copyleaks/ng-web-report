@@ -20,6 +20,7 @@ import { ECustomResultsReportView } from './models/cr-custom-results.enums';
 	selector: 'cr-custom-results',
 	templateUrl: './cr-custom-results.component.html',
 	styleUrls: ['./cr-custom-results.component.scss'],
+	standalone: false,
 })
 export class CrCustomResultsComponent implements OnInit, OnChanges, AfterViewInit, OnDestroy {
 	@Input() reportView: ECustomResultsReportView = ECustomResultsReportView.Partial;

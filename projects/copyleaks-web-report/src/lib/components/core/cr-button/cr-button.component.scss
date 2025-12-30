@@ -1,5 +1,6 @@
-@import '../../../styles/cls-mat-components-overrides/cls-mat-buttons-overrides.scss';
-@import '../../../styles/cls-accessibility-overrides/cls-accessibility-overrides.scss';
+@use '../../../styles/website-colors.styles.scss' as *;
+@use '../../../styles/cls-mat-components-overrides/cls-mat-buttons-overrides.scss';
+@use '../../../styles/cls-accessibility-overrides/cls-accessibility-overrides.scss';
 
 @mixin cls-button-design-v2-shadow {
 	box-shadow: 2px 2px 4px rgba(0, 0, 0, 0.15), -2px -2px 8px rgba(255, 255, 255, 0.25) !important;
@@ -20,6 +21,7 @@
 	font-size: 16px;
 	align-self: stretch;
 	box-shadow: none;
+	transition: background-color 0.3s ease;
 }
 
 @mixin cls-button-outline-design-v2($color) {
@@ -34,6 +36,7 @@
 	border: 3px solid $color;
 	align-self: stretch;
 	box-shadow: none;
+	transition: background-color 0.3s ease;
 }
 
 @mixin cls-link-button-design-v2($color) {
@@ -48,6 +51,7 @@
 	background: transparent;
 	border: none !important;
 	align-self: stretch;
+	transition: background-color 0.3s ease;
 }
 
 @mixin cls-icon-button-design-v2($color) {
@@ -65,6 +69,7 @@
 	border: none !important;
 	align-self: stretch;
 	box-shadow: none;
+	transition: background-color 0.3s ease;
 	mat-icon {
 		color: $color-white !important;
 	}

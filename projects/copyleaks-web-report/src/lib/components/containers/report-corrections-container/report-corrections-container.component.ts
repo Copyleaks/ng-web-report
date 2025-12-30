@@ -38,6 +38,7 @@ import { ReportViewService } from '../../../services/report-view.service';
 			transition(':enter', [animate('0.5s ease-in', style({ opacity: 1 }))]),
 		]),
 	],
+	standalone: false,
 })
 export class ReportCorrectionsContainerComponent implements OnInit, OnDestroy, OnChanges, AfterViewInit {
 	@ViewChild(CdkVirtualScrollViewport, { static: false }) viewport: CdkVirtualScrollViewport;

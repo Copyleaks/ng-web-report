@@ -1,5 +1,5 @@
 /** User messages for text exclusion cases */
-import '@angular/localize/init';
+/// <reference types="@angular/localize" />
 
 export const EXCLUDE_MESSAGE: { [key: string]: string } = {
 	1: $localize`Omitted: Quotation`,

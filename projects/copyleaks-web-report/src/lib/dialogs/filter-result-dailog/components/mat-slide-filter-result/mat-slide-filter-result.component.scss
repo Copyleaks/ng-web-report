@@ -1,5 +1,5 @@
-@import '../../../../styles/website-colors.styles.scss';
-@import '../../../../styles/cls-mat-components-overrides//cls-mat-slide-toggle-overrides.scss';
+@use '../../../../styles/website-colors.styles.scss' as *;
+@use '../../../../styles/cls-mat-components-overrides/cls-mat-slide-toggle-overrides.scss';
 
 :host {
 	width: 100%;
@@ -20,7 +20,9 @@
 	mat-slide-toggle {
 		&:focus-within:not(:hover) {
 			::ng-deep {
-				.mat-slide-toggle-ripple {
+				.mat-slide-toggle-ripple,
+				.mdc-switch__ripple,
+				.mat-mdc-slide-toggle .mdc-switch__ripple {
 					display: unset !important;
 				}
 			}

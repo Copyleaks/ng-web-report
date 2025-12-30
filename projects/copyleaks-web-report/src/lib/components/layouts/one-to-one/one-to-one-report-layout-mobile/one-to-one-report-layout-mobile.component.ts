@@ -14,6 +14,7 @@ import { ReportErrorsService } from '../../../../services/report-errors.service'
 	selector: 'copyleaks-one-to-one-report-layout-mobile',
 	templateUrl: './one-to-one-report-layout-mobile.component.html',
 	styleUrls: ['./one-to-one-report-layout-mobile.component.scss'],
+	standalone: false,
 })
 export class OneToOneReportLayoutMobileComponent
 	extends OneToOneReportLayoutBaseComponent

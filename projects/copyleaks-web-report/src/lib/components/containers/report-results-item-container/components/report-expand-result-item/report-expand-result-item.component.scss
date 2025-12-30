@@ -1,5 +1,6 @@
-@import '../../../../../styles/website-colors.styles.scss';
-@import '../../../../../styles/cls-mat-components-overrides/cls-mat-chip-overrides.scss';
+@use '../../../../../styles/website-colors.styles.scss' as *;
+@use '../../../../../styles/cls-mat-components-overrides/cls-mat-chip-overrides.scss';
+@use '../../../../../styles/cls-mat-components-overrides/cls-mat-buttons-overrides.scss';
 
 [dir='rtl'] {
 	::ng-deep {
@@ -142,7 +143,8 @@
 				}
 
 				::ng-deep {
-					.mat-button-wrapper {
+					.mat-button-wrapper,
+					.mdc-button__label {
 						display: flex;
 						align-items: center;
 						justify-content: center;
@@ -159,40 +161,62 @@
 			}
 		}
 		.mat-chip-list-container {
-			mat-chip-list {
-				box-sizing: border-box;
-				width: 100%;
-				padding: 4px;
-				::ng-deep {
-					.mat-chip-list-wrapper {
-						gap: 4px !important;
-						flex-direction: row-reverse;
-					}
+			::ng-deep {
+				.mdc-evolution-chip-set__chips {
+					gap: 4px !important;
+					flex-direction: row-reverse !important;
+					margin: 0px !important;
+					margin-left: 0px !important;
 				}
-				mat-chip {
-					color: $color-container-background;
+				.mdc-evolution-chip-set .mdc-evolution-chip-set__chips {
+					margin: 0px !important;
+					margin-left: 0px !important;
+				}
+				.mat-mdc-standard-chip {
 					min-height: 22px;
 					font-weight: 500;
 					font-size: 14px;
 					padding: 2px 8px;
 					border-radius: 16px;
-					margin: 0px;
+					margin: 0;
 					max-width: 100%;
 					white-space: nowrap;
 					overflow: hidden;
 					text-overflow: ellipsis;
 					display: block;
 					line-height: normal !important;
-					border-radius: 16px;
 					background: rgba(43, 149, 255, 0.2) !important;
 					color: #2b95ff !important;
 
-					&.ai-source-match {
-						background: $color-light-ai-detected-text !important;
-						color: $color-ai-tab !important;
-						font-weight: 800 !important;
+					.mdc-evolution-chip__text-label,
+					.mat-mdc-chip-action-label {
+						font-weight: 500;
+						font-size: 14px;
+						color: #2b95ff !important;
+						line-height: normal !important;
+						white-space: nowrap;
+						overflow: hidden;
+						text-overflow: ellipsis;
+						display: block;
 					}
 				}
+
+				.mat-mdc-standard-chip.ai-source-match {
+					background: $color-light-ai-detected-text !important;
+
+					::ng-deep {
+						.mdc-evolution-chip__text-label,
+						.mat-mdc-chip-action-label {
+							color: $color-ai-tab !important;
+							font-weight: 800 !important;
+						}
+					}
+				}
+			}
+			.mat-mdc-chip-list {
+				box-sizing: border-box;
+				width: 100%;
+				padding: 4px;
 			}
 		}
 	}
@@ -218,6 +242,7 @@
 	border: none !important;
 	height: 18px !important;
 	width: 18px !important;
+	min-width: 18px !important;
 	cursor: pointer;
 	font-size: 18px !important;
 }
@@ -226,7 +251,7 @@
 	width: fit-content;
 	display: flex;
 	height: fit-content !important;
-	::ng-deep .loader {
+	::ng-deep .skeleton-loader {
 		height: 16px !important;
 		margin-bottom: 0px !important;
 		border-radius: 10px !important;
@@ -248,6 +273,11 @@
 	transform: translateY(-10px); /* Initial position for the animation */
 	animation: fadeInSlideDown 0.3s ease-out forwards; /* Animation */
 	::ng-deep {
+		.copied-url-chip-content-container {
+			display: flex;
+			gap: 4px !important;
+			align-items: center !important;
+		}
 		.copy-message {
 			overflow: hidden !important;
 			color: $color-message-positive !important;
@@ -282,7 +312,7 @@
 		gap: 10px;
 		.back-btn {
 			width: 15%;
-			::ng-deep .loader {
+			::ng-deep .skeleton-loader {
 				height: 22px !important;
 			}
 		}
@@ -294,7 +324,7 @@
 			justify-content: flex-start;
 			gap: 8px;
 			.result-icon-loader {
-				::ng-deep .loader {
+				::ng-deep .skeleton-loader {
 					border-radius: 50% !important;
 					width: 32px !important;
 					height: 32px !important;
@@ -305,7 +335,7 @@
 				flex-direction: column;
 				gap: 4px;
 				.icon-loader {
-					::ng-deep .loader {
+					::ng-deep .skeleton-loader {
 						border-radius: 50% !important;
 						width: 16px !important;
 						height: 16px !important;
@@ -333,7 +363,7 @@
 			gap: 4px;
 			.skeleton {
 				width: 15%;
-				::ng-deep .loader {
+				::ng-deep .skeleton-loader {
 					height: 22px !important;
 				}
 			}
@@ -344,7 +374,7 @@
 		gap: 4px;
 		.title-loader {
 			width: 30%;
-			::ng-deep .loader {
+			::ng-deep .skeleton-loader {
 				height: 16px !important;
 			}
 		}
@@ -358,7 +388,7 @@
 
 			.skeleton:first-child {
 				width: 30%;
-				::ng-deep .loader {
+				::ng-deep .skeleton-loader {
 					height: 16px !important;
 				}
 			}
@@ -370,7 +400,7 @@
 				gap: 16px;
 				.skeleton {
 					width: 32px !important;
-					::ng-deep .loader {
+					::ng-deep .skeleton-loader {
 						height: 16px !important;
 					}
 				}
@@ -384,14 +414,14 @@
 				flex-grow: 1;
 				.skeleton {
 					width: 30%;
-					::ng-deep .loader {
+					::ng-deep .skeleton-loader {
 						height: 16px !important;
 					}
 				}
 
 				.skeleton:first-child {
 					width: 16px !important;
-					::ng-deep .loader {
+					::ng-deep .skeleton-loader {
 						width: 16px !important;
 						height: 16px !important;
 						border-radius: 50% !important;

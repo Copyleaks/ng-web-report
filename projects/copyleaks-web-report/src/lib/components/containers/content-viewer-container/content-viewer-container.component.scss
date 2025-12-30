@@ -1,7 +1,9 @@
-@import '../../../styles/containers.styles.scss';
-@import '../../../styles/styles.scss';
-@import '../../../styles/website-colors.styles.scss';
-@import '../../../styles/cls-accessibility-overrides/cls-accessibility-overrides.scss';
+@use '../../../styles/containers.styles.scss' as containers;
+@use '../../../styles/styles.scss';
+@use '../../../styles/website-colors.styles.scss' as *;
+@use '../../../styles/cls-mat-components-overrides/cls-mat-buttons-overrides.scss';
+@use '../../../styles/cls-accessibility-overrides/cls-accessibility-overrides.scss';
+@use 'sass:color';
 
 :host {
 	height: 100%;
@@ -312,7 +314,7 @@
 					background-color: #3f9af566 !important;
 
 					&:hover {
-						background-color: lighten(#3f9af566, 10%) !important;
+						background-color: color.adjust(#3f9af566, $lightness: 10%) !important;
 					}
 				}
 			}
@@ -327,7 +329,7 @@
 				background-color: $color-match-selected;
 
 				&:hover {
-					background-color: lighten($color-match-selected, 10%);
+					background-color: color.adjust($color-match-selected, $lightness: 10%);
 				}
 			}
 		}
@@ -367,6 +369,7 @@
 			width: unset;
 			height: unset;
 			line-height: unset;
+			padding: 0px;
 			&:focus {
 				mat-icon {
 					color: $color-primary;
@@ -379,7 +382,7 @@
 		width: fit-content;
 		display: flex;
 		height: fit-content !important;
-		::ng-deep .loader {
+		::ng-deep .skeleton-loader {
 			height: 19px !important;
 			margin-bottom: 0px !important;
 			border-radius: 10px !important;
@@ -389,7 +392,7 @@
 	}
 
 	.circle {
-		::ng-deep .loader {
+		::ng-deep .skeleton-loader {
 			border-radius: 50% !important;
 			width: 16px !important;
 			height: 16px !important;

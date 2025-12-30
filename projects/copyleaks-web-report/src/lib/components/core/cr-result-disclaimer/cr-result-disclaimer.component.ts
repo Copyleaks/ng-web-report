@@ -4,6 +4,7 @@ import { Component, EventEmitter, OnInit, Output } from '@angular/core';
 	selector: 'cr-result-disclaimer',
 	templateUrl: './cr-result-disclaimer.component.html',
 	styleUrls: ['./cr-result-disclaimer.component.scss'],
+	standalone: false,
 })
 export class CrResultDisclaimerComponent implements OnInit {
 	@Output() onCloseDisclaimer: EventEmitter<any> = new EventEmitter<any>();
@@ -23,6 +24,7 @@ export class CrResultDisclaimerComponent implements OnInit {
 		<ng-content></ng-content>
 	`,
 	styleUrls: [],
+	standalone: false,
 })
 export class CrResultDisclaimerTitleComponent implements OnInit {
 	constructor() {}
@@ -36,6 +38,7 @@ export class CrResultDisclaimerTitleComponent implements OnInit {
 		<ng-content></ng-content>
 	`,
 	styleUrls: [],
+	standalone: false,
 })
 export class CrResultDisclaimerDescriptionComponent implements OnInit {
 	constructor() {}

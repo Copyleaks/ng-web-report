@@ -1,4 +1,4 @@
-@import '../../../../../styles/website-colors.styles.scss';
+@use '../../../../../styles/website-colors.styles.scss' as *;
 .resourcess-container {
 	.expansion-panel {
 		border-radius: 10px;
@@ -76,7 +76,7 @@
 			align-items: center;
 			width: 40%;
 			height: 24px !important;
-			::ng-deep .loader {
+			::ng-deep .skeleton-loader {
 				height: 18px !important;
 				margin-bottom: 0px !important;
 				border-radius: 10px !important;
@@ -152,7 +152,7 @@
 	}
 }
 
-::ng-deep .mat-tooltip.resourcess-mat-tooltip {
+::ng-deep .mat-mdc-tooltip.resourcess-mat-tooltip {
 	position: relative !important;
 	font-size: 15px !important;
 	font-weight: 500 !important;
@@ -162,4 +162,12 @@
 	padding: 14px !important;
 	font-family: haboro-soft, sans-serif !important;
 	white-space: pre-line !important;
+
+	.mdc-tooltip__surface {
+		background-color: $color-black !important;
+		padding: 0px !important;
+		font-size: 15px !important;
+		font-weight: 500 !important;
+		font-family: haboro-soft, sans-serif !important;
+	}
 }

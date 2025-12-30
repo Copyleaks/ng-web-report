@@ -11,6 +11,7 @@ import { EReportScoreTooltipPosition } from '../../../../../enums/copyleaks-web-
 	selector: 'cr-percentage-result-item',
 	templateUrl: './percentage-result-item.component.html',
 	styleUrls: ['./percentage-result-item.component.scss'],
+	standalone: false,
 })
 export class PercentageResultItemComponent implements OnInit, OnChanges {
 	/**

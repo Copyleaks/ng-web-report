@@ -6,6 +6,7 @@ import { FilterResultDailogService } from '../../services/filter-result-dailog.s
 	selector: 'cr-general-filter-result',
 	templateUrl: './general-filter-result.component.html',
 	styleUrls: ['./general-filter-result.component.scss'],
+	standalone: false,
 })
 export class GeneralFilterResultComponent implements OnInit {
 	/**

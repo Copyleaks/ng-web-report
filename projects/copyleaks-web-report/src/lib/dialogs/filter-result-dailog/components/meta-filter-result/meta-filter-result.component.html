@@ -15,16 +15,21 @@
 			[disabled]="minWordLimit === maxWordLimit"></cr-mat-slide-filter-result>
 		<ng-container *ngIf="getEnabledValue(eFilterResultForm.fcWordLimitEnabled)">
 			<mat-slider
-				showTickMarks
+				[disableRipple]="true"
 				class="mat-slider-container"
-				[formControlName]="eFilterResultForm.fcWordLimitTotalWordlimt"
 				aria-label="'This is a slider for the result filter word limit."
 				i18n-aria-label
 				[min]="minWordLimit"
 				[max]="maxWordLimit"
 				[disabled]="minWordLimit === maxWordLimit"
 				[step]="10"
-				(input)="onSliderChange($event)"></mat-slider>
+				#ngSlider>
+				<input
+					matSliderThumb
+					[formControlName]="eFilterResultForm.fcWordLimitTotalWordlimt"
+					(input)="onSliderChange({ source: ngSliderThumb, parent: ngSlider, value: ngSliderThumb.value })"
+					#ngSliderThumb="matSliderThumb" />
+			</mat-slider>
 			<span class="limit-result">
 				{{ wordLimitTotalWord }} / {{ maxWordLimit }}
 				<ng-container i18n>WORDS</ng-container>
@@ -46,15 +51,19 @@
 				(ngModelChange)="onPublicationEnabledChange($event)"></cr-mat-slide-filter-result>
 			<ng-container *ngIf="getEnabledValue(eFilterResultForm.fcPublicationEnabled) && !!publicationDates?.length">
 				<mat-slider
-					invert
-					class="mat-slider-container"
+					class="mat-slider-container invert"
 					aria-label="'This is a slider for the result publication date selection."
 					i18n-aria-label
-					[value]="valueSliderDate"
 					[disabled]="publicationDates.length < 2"
-					(change)="changeSliderDate($event)"
 					[min]="0"
-					[max]="maxSliderDates"></mat-slider>
+					[max]="maxSliderDates"
+					#ngSlider>
+					<input
+						matSliderThumb
+						[value]="valueSliderDate"
+						(input)="changeSliderDate({ source: ngSliderThumb, parent: ngSlider, value: ngSliderThumb.value })"
+						#ngSliderThumb="matSliderThumb" />
+				</mat-slider>
 				<div class="date-container" fxLayout="row" fxLayoutAlign="start center" fxLayoutGap="4px">
 					<span class="start-from" i18n>Starting from:</span>
 					<span class="publication-date">{{ publicationDateValue }}</span>
@@ -66,7 +75,6 @@
 			class="include-results-checkbox"
 			i18n-aria-label
 			aria-label="Include or exclude results with no date"
-			aria-live="assertive"
 			i18n>
 			Include results with no date
 			<span *ngIf="totalResultsWithoutDate > 0" class="total-stat">({{ totalResultsWithoutDate }})</span>

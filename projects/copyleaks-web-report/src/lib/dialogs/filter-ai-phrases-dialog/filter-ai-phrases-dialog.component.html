@@ -1,0 +1,70 @@
+<div
+	role="dialog"
+	aria-modal="true"
+	aria-labelledby="dialog-title"
+	aria-describedby="dialog-description"
+	fxLayout="column"
+	fxLayoutGap="16px">
+	<!-- Title Container -->
+	<div class="header-container">
+		<div class="title-container" fxLayout="row" fxLayoutAlign="space-between center" fxLayoutGap="4px">
+			<span web-report-title-font i18n>AI Detection Filters</span>
+			<button
+				(click)="onClearFilter()"
+				class="clear-button"
+				fxLayout="row"
+				fxLayoutAlign="start center"
+				fxLayoutGap="4px"
+				aria-label="Clears filters selection"
+				i18n-aria-label>
+				<mat-icon>refresh</mat-icon>
+				<span i18n>Clear filter</span>
+			</button>
+		</div>
+	</div>
+
+	<!-- AI Phrases Section with Slider -->
+	<div class="body-container" fxLayout="column" [dir]="docDirection">
+		<!-- AI Phrases Section -->
+		<section class="ai-phrases-section" fxLayout="column">
+			<div class="section-header" fxLayout="row" fxLayoutAlign="start center" fxLayoutGap="8px">
+				<span class="section-title" web-report-title-font i18n>AI Phrases</span>
+				<span class="section-count" *ngIf="filteredCount !== totalCount">({{ filteredCount }}/{{ totalCount }})</span>
+			</div>
+			<p class="section-description" i18n>Set the threshold for how often phrases appear in AI versus human writing.</p>
+		</section>
+
+		<!-- Slider Section -->
+		<section class="slider-section" fxLayout="column">
+			<!-- Slider -->
+			<div class="slider-container" fxLayout="row" fxLayoutAlign="start center">
+				<span class="min-value-label">{{ minValue }}x</span>
+				<mat-slider class="ai-phrases-slider" [min]="minValue" [max]="maxValue" [step]="stepValue" color="primary">
+					<input matSliderThumb [value]="selectedValue" (input)="onSliderChange($event.target.value)" />
+				</mat-slider>
+				<span class="max-value-label">{{ maxValue }}x</span>
+			</div>
+
+			<!-- Selected value display -->
+			<div class="selected-value-container">
+				<span class="selected-value-text" i18n>{{ selectedValue }}X MINIMUM</span>
+			</div>
+		</section>
+	</div>
+
+	<!-- Action Buttons Container -->
+	<div class="apply-and-discard-button-contaier" [class.is-mobile]="isMobile">
+		<cr-button
+			[outlined]="true"
+			[padding]="isMobile ? '3px 17px' : '3px 24px'"
+			(click)="$event.stopPropagation(); $event.preventDefault(); onDiscardChanges()"
+			[width]="isMobile ? '151px' : '161px'"
+			[isLink]="isMobile"
+			color="primary">
+			<span class="discard-changes-button" i18n>Discard changes</span>
+		</cr-button>
+		<cr-button (click)="onSaveChanges()" [width]="isMobile ? '161px' : '220px'" padding="3px 24px" color="primary">
+			<span class="apply-filters-button" i18n>Apply filters</span>
+		</cr-button>
+	</div>
+</div>

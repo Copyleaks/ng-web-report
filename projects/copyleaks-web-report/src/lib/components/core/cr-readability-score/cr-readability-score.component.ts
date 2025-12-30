@@ -6,6 +6,7 @@ import { EReadabilityLevel } from '../../../enums/copyleaks-web-report.enums';
 	selector: 'cr-readability-score',
 	templateUrl: './cr-readability-score.component.html',
 	styleUrls: ['./cr-readability-score.component.scss'],
+	standalone: false,
 })
 export class CrReadabilityScoreComponent implements OnInit, OnChanges {
 	@HostBinding('style.display')

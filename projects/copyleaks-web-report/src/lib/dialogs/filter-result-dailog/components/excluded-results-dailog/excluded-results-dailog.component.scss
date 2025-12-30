@@ -1,16 +1,51 @@
-@import '../../../../styles/website-colors.styles.scss';
-@import '../../../../styles/styles.scss';
-@import '../../../../styles/cls-mat-components-overrides/cls-scroll-bar-overrides.scss';
-@import '../../../../styles/cls-mat-components-overrides/cls-mat-inputs-overrides.scss';
-@import '../../../../styles/cls-accessibility-overrides/cls-accessibility-overrides.scss';
+@use '../../../../styles/website-colors.styles.scss' as *;
+@use '../../../../styles/styles.scss';
+@use '../../../../styles/cls-mat-components-overrides/cls-scroll-bar-overrides.scss';
+@use '../../../../styles/cls-mat-components-overrides/cls-mat-inputs-overrides.scss';
+@use '../../../../styles/cls-accessibility-overrides/cls-accessibility-overrides.scss';
 
 :host {
 	background-color: $color-white;
 	display: flex;
 	flex-direction: column;
 	gap: 8px;
+
+	::ng-deep {
+		.mat-mdc-button-touch-target {
+			height: 20px !important;
+			width: 20px !important;
+		}
+
+		.mat-form-field-appearance-fill .mat-mdc-text-field-wrapper {
+			padding: 0px !important;
+		}
+
+		.mat-form-field-appearance-fill .mat-mdc-form-field-flex {
+			padding: 4px 8px !important;
+		}
+
+		.search-input-icon-container {
+			background: $color-white !important;
+			border-radius: 50% !important;
+			display: flex !important;
+			align-items: center !important;
+
+			mat-icon {
+				font-size: 24px !important;
+				width: 24px !important;
+				height: 24px !important;
+				padding: 2px !important;
+				line-height: normal !important;
+			}
+		}
+	}
+
 	.header-container {
 		width: 100%;
+		display: flex;
+		flex-direction: row;
+		align-items: center;
+		justify-content: space-between;
 		.header {
 			color: $color-dark-blue;
 			font-size: 14px;
@@ -21,9 +56,20 @@
 			font-size: 12px;
 			font-weight: 700;
 		}
+
+		.dialog-close-button {
+			height: 20px !important;
+			width: 20px !important;
+			padding: 0px !important ;
+		}
 		.close-icon {
 			cursor: pointer;
 			color: rgba(17, 41, 96, 0.4);
+			font-size: 20px;
+			height: 20px !important;
+			width: 20px !important;
+			line-height: normal !important;
+			display: flex !important;
 		}
 	}
 
@@ -115,20 +161,20 @@
 		text-decoration-line: underline;
 	}
 
-	.mat-dialog-content,
-	.mat-dialog-title,
-	.mat-dialog-actions {
+	.mat-mdc-dialog-content,
+	.mat-mdc-dialog-title,
+	.mat-mdc-dialog-actions {
 		margin: 0px !important;
 		padding: 0px !important;
 	}
 
-	.mat-dialog-content {
+	.mat-mdc-dialog-content {
 		display: flex;
 		flex-direction: column;
 		gap: 8px;
 	}
 
-	.mat-dialog-actions {
+	.mat-mdc-dialog-actions {
 		min-height: auto !important;
 	}
 }

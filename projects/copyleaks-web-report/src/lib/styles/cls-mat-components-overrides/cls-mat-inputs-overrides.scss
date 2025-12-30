@@ -1,185 +1,158 @@
-@import '../website-colors.styles.scss';
+@use '../website-colors.styles.scss' as *;
 
 :host {
 	::ng-deep {
-		.mat-form-field {
+		.mat-mdc-form-field {
 			font-size: 16px !important;
 			line-height: normal !important;
-			.mat-form-field-infix {
-				border-top: none;
-			}
-
-			.mat-form-field-flex {
-				background-color: $color-white !important;
-				border: 1px solid transparent;
-				border-radius: 10px !important;
-				transition: 0.4s;
-			}
-
-			.mat-form-field-underline {
-				display: none;
-			}
-
-			.mat-icon-button .mat-button-wrapper > * {
-				line-height: normal;
-				font-size: 20px;
-				width: 20px;
-				height: 20px;
-				color: $color-black;
-			}
-
-			.mat-icon-button.mat-button-disabled .mat-button-wrapper > * {
-				color: rgba(0, 0, 0, 0.26);
-			}
-
-			.mat-icon-button .mat-button-wrapper:hover {
-				* {
-					color: $color-primary !important;
-				}
-			}
-
-			.mat-icon-button {
-				width: 20px !important;
-				height: 20px !important;
-				line-height: normal !important;
-			}
-
-			.mat-error {
-				font-weight: 600;
+			input {
+				background-color: $color-container-background !important;
 			}
 		}
 
-		.mat-form-field-appearance-fill .mat-form-field-flex {
+		.mat-mdc-form-field .mat-mdc-form-field-infix {
+			border-top: none !important;
+			min-height: auto !important;
+			padding-top: 0px !important;
+			padding-bottom: 0px !important;
+		}
+
+		.mat-mdc-form-field .mat-mdc-form-field-flex {
+			background-color: $color-white !important;
+			border: 1px solid transparent !important;
+			border-radius: 10px !important;
+			transition: 0.4s !important;
+			display: flex;
+			align-items: center;
+		}
+
+		.mat-mdc-form-field .mat-mdc-form-field-underline {
+			display: none !important;
+		}
+
+		.mdc-floating-label {
+			top: 50% !important;
+		}
+
+		.mat-mdc-icon-button .mat-button-wrapper > * {
+			line-height: normal !important;
+			font-size: 20px !important;
+			width: 20px !important;
+			height: 20px !important;
+			color: $color-black !important;
+		}
+
+		.mat-mdc-icon-button.mat-button-disabled .mat-button-wrapper > * {
+			color: rgba(0, 0, 0, 0.26) !important;
+		}
+
+		.mat-mdc-icon-button .mat-button-wrapper:hover * {
+			color: $color-primary !important;
+		}
+
+		.mat-mdc-icon-button {
+			width: 20px !important;
+			height: 20px !important;
+			line-height: normal !important;
+		}
+
+		.mat-mdc-form-field-error {
+			font-weight: 600 !important;
+		}
+
+		.mat-mdc-form-field.mat-focused .mat-mdc-form-field-flex {
+			border: 1px solid $color-primary !important;
+		}
+
+		.mat-mdc-form-field.mat-form-field-invalid .mat-mdc-form-field-flex {
+			margin-bottom: 1em !important;
+			border: 1px solid $color-error !important;
+		}
+		.mat-mdc-text-field-wrapper,
+		.mdc-text-field--filled .mdc-text-field__input {
 			background-color: $color-container-background !important;
 		}
 
-		.mat-form-field-appearance-fill .mat-form-field-infix {
-			padding: 0 0 0.75em 0 !important;
-		}
-
-		// focus mode border
-		.mat-form-field.mat-focused {
-			.mat-form-field-flex {
-				border: 1px solid $color-primary !important;
-			}
-		}
-
-		.mat-form-field-appearance-outline .mat-form-field-flex,
-		.mat-form-field-appearance-fill .mat-form-field-flex {
+		input.mat-mdc-input-element {
 			margin-top: 0 !important;
 		}
 
-		.mat-form-field-appearance-fill .mat-form-field-flex {
-			padding-top: 0px !important;
+		.mat-mdc-input-element {
+			line-height: normal !important;
 		}
 
-		.mat-form-field.mat-form-field-invalid {
-			margin-bottom: 1em;
-			.mat-form-field-flex {
-				border: 1px solid $color-error !important;
-			}
+		.mat-form-field-appearance-fill .mat-mdc-form-field-flex {
+			background-color: $color-container-background !important;
+			padding: 0 0 0.75em 0 !important;
 		}
 
-		.mat-form-field-appearance-fill .mat-form-field-fill {
+		.mdc-line-ripple {
+			display: none !important;
+		}
+
+		.mat-form-field-appearance-outline .mat-mdc-form-field-flex,
+		.mat-form-field-appearance-fill .mat-mdc-form-field-flex {
+			margin-top: 0 !important;
+			padding-top: 0 !important;
+		}
+
+		.mat-form-field-appearance-outline .mat-mdc-form-field-outline {
+			color: transparent !important;
+			background: transparent !important;
+			border-radius: 10px !important;
+		}
+
+		.mat-form-field-appearance-fill .mat-mdc-form-field-fill {
 			color: transparent !important;
 			background: $color-error !important;
 			border-radius: 10px !important;
 		}
 
-		.mat-form-field-appearance-outline .mat-form-field-outline {
-			color: transparent !important;
-			border-radius: 10px !important;
-			background: transparent !important;
-		}
-
-		.mat-form-field-appearance-outline .mat-form-field-infix,
-		.mat-form-field-appearance-fill .mat-form-field-infix {
-			padding: 0.75em 0 0.75em 0 !important;
-		}
-
-		.mat-form-field-appearance-outline .mat-form-field-prefix,
-		.mat-form-field-appearance-outline .mat-form-field-suffix,
-		.mat-form-field-appearance-fill .mat-form-field-prefix,
-		.mat-form-field-appearance-fill .mat-form-field-suffix {
-			top: 0 !important;
-		}
-
-		.mat-form-field-appearance-outline .mat-form-field-suffix,
-		.mat-form-field-appearance-outline .mat-form-field-prefix,
-		.mat-form-field-appearance-fill .mat-form-field-suffix,
-		.mat-form-field-appearance-fill .mat-form-field-prefix {
-			align-self: center !important;
-		}
-
-		.mat-form-field:not(.mat-form-field-appearance-legacy) .mat-form-field-prefix .mat-icon,
-		.mat-form-field:not(.mat-form-field-appearance-legacy) .mat-form-field-suffix .mat-icon {
-			font-size: 20px;
-			width: 20px;
-			height: 20px;
-			background-color: $color-white;
-			color: $color-black;
-			border-radius: 50%;
-			padding: 6px;
+		.mat-mdc-form-field-prefix .mat-icon,
+		.mat-mdc-form-field-suffix .mat-icon {
+			font-size: 20px !important;
+			width: 20px !important;
+			height: 20px !important;
+			background-color: $color-white !important;
+			color: $color-black !important;
+			border-radius: 50% !important;
+			padding: 6px !important;
 			border: 1px solid transparent !important;
 		}
 
-		.mat-form-field-flex {
-			align-items: flex-start;
-		}
-
-		.mat-form-field-appearance-outline .mat-form-field-wrapper,
-		.mat-form-field-appearance-fill .mat-form-field-wrapper {
-			margin: 0 !important;
-		}
-
-		.mat-form-field-infix {
-			display: flex !important;
-			justify-content: flex-start !important;
-		}
-
-		.mat-input-element,
-		.mat-form-field-prefix,
-		.mat-form-field-suffix {
+		.mat-mdc-form-field-prefix,
+		.mat-mdc-form-field-suffix,
+		.mat-mdc-input-element {
 			color: $color-black !important;
 		}
 
-		.mat-form-field-disabled {
+		.mat-mdc-form-field-disabled {
 			opacity: 0.5 !important;
 		}
 
-		.mat-input-element {
-			line-height: normal !important;
+		.mat-input-no-bottom-padding .mat-mdc-form-field-wrapper {
+			padding-bottom: 0 !important;
 		}
 
-		.mat-input-no-bottom-padding {
-			.mat-form-field-wrapper {
-				padding-bottom: 0px !important;
-			}
-		}
-
-		input.mat-input-element {
-			margin-top: 0px;
+		.mat-mdc-form-field-bottom-align {
+			display: none !important;
 		}
 
 		.mat-form-field-subscript-wrapper {
 			margin-top: 4px !important;
 		}
-	}
-}
 
-::ng-deep .mat-form-field.form-field-dialog .mat-form-field-flex {
-	background-color: $color-container-background !important;
-}
+		::ng-deep .mat-mdc-form-field.form-field-dialog .mat-form-field-flex {
+			background-color: $color-container-background !important;
+		}
 
-::ng-deep {
-	mat-form-field.with-label {
-		.mat-form-field-label-wrapper {
+		mat-form-field.with-label .mat-mdc-form-field-label-wrapper {
 			overflow: visible !important;
 		}
-		&.mat-form-field-appearance-outline.mat-form-field-can-float.mat-form-field-should-float .mat-form-field-label,
-		.mat-form-field-appearance-outline.mat-form-field-can-float
-			.mat-input-server:focus
-			+ .mat-form-field-label-wrapper
+
+		mat-form-field.with-label.mat-form-field-appearance-outline.mat-form-field-can-float.mat-form-field-should-float
+			.mat-form-field-label,
+		mat-form-field.with-label.mat-form-field-appearance-fill.mat-form-field-can-float.mat-form-field-should-float
 			.mat-form-field-label {
 			overflow: visible !important;
 			font-weight: 700 !important;
@@ -188,25 +161,40 @@
 			transform: translateY(-0.6em) scale(0.7) !important;
 		}
 
-		&.mat-form-field-appearance-fill .mat-form-field-label {
+		mat-form-field.with-label.mat-form-field-appearance-fill .mat-form-field-label {
 			top: 1.6em !important;
-			margin-top: 0px !important;
+			margin-top: 0 !important;
 		}
 
-		&.mat-form-field-appearance-fill.mat-form-field-can-float.mat-form-field-should-float .mat-form-field-label,
-		.mat-form-field-appearance-fill.mat-form-field-can-float
-			.mat-input-server:focus
-			+ .mat-form-field-label-wrapper
-			.mat-form-field-label {
-			overflow: visible !important;
-			font-weight: 700 !important;
-			line-height: 12.47px !important;
-			color: $color-black !important;
-			transform: translateY(-0.6em) scale(0.7) !important;
+		::ng-deep .mat-form-field-label {
+			color: $color-black-opacity-60 !important;
+		}
+
+		.mat-mdc-form-field:hover .mat-mdc-form-field-focus-overlay {
+			opacity: 0 !important;
+		}
+
+		.mat-mdc-form-field .mat-mdc-form-field-focus-overlay {
+			background-color: transparent !important;
+		}
+
+		.mat-mdc-text-field-wrapper:hover {
+			background-color: inherit !important;
+		}
+
+		.mat-mdc-text-field-wrapper {
+			border-radius: 10px !important;
+		}
+
+		.mat-mdc-form-field .mat-mdc-form-field-focus-overlay {
+			background-color: transparent !important;
+		}
+
+		.mdc-floating-label--float-above {
+			top: 11px !important;
+			mat-label {
+				color: $color-black !important;
+			}
 		}
 	}
-}
-
-::ng-deep .mat-form-field-label {
-	color: $color-black-opacity-60 !important;
 }

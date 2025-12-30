@@ -37,12 +37,12 @@
 									<span *ngIf="matchesStats?.type != EResultPreviewType.AISourceMatchUpgrade" class="percentage" i18n>
 										{{ matchesStats?.totalResultsPct | percent }}
 									</span>
-									<mat-chip
+									<mat-chip-option
 										*ngIf="expanded && matchesStats?.type === EResultPreviewType.AISourceMatch"
 										class="new-chip"
 										i18n>
 										New
-									</mat-chip>
+									</mat-chip-option>
 								</div>
 								<div class="stats-container">
 									<ng-container *ngIf="expanded && matchesStats?.type != EResultPreviewType.AISourceMatchUpgrade">
@@ -60,12 +60,12 @@
 										{{ matchesStats?.totalResults ?? 0 }} Results
 									</span>
 
-									<mat-chip
+									<mat-chip-option
 										*ngIf="!expanded && matchesStats?.type === EResultPreviewType.AISourceMatch"
 										class="new-chip"
 										i18n>
 										New
-									</mat-chip>
+									</mat-chip-option>
 									<ng-container *ngIf="expanded && matchesStats?.type != EResultPreviewType.AISourceMatchUpgrade">
 										<ng-container
 											*ngIf="
@@ -171,7 +171,7 @@
 				<ng-container *ngSwitchCase="EReportViewType.PlagiarismView">
 					<ng-container
 						*ngIf="matchesStats?.type != EResultPreviewType.AISourceMatchUpgrade; else aiSourceMatchUpgradeRef">
-						<mat-chip
+						<mat-basic-chip
 							*ngFor="let stat of matchesStats?.categories"
 							[style.display]="stat?.totalResults === 0 ? 'none' : 'flex'"
 							[tabIndex]="0"
@@ -182,7 +182,7 @@
 							(keyup.enter)="onSelectCategory(stat)"
 							(click)="onSelectCategory(stat)">
 							{{ stat?.type }} ({{ stat?.totalResults }})
-						</mat-chip>
+						</mat-basic-chip>
 					</ng-container>
 
 					<ng-template #aiSourceMatchUpgradeRef>
@@ -193,7 +193,7 @@
 				</ng-container>
 
 				<ng-container *ngSwitchCase="EReportViewType.AIView">
-					<mat-chip
+					<mat-basic-chip
 						*ngFor="let stat of matchesStats?.categories"
 						[style.display]="stat?.totalResults === 0 ? 'none' : 'flex'"
 						role="option"
@@ -204,13 +204,13 @@
 						(keyup.enter)="onSelectCategory(stat)"
 						(click)="onSelectCategory(stat)">
 						{{ stat?.type }} ({{ stat?.totalResults }})
-					</mat-chip>
+					</mat-basic-chip>
 				</ng-container>
 
 				<ng-container *ngSwitchCase="EReportViewType.WritingFeedbackTabView">
-					<mat-chip
+					<mat-basic-chip
 						*ngFor="let stat of writingFeedbackStats?.categories"
-						[style.display]="stat?.totalIssues === 0 ? 'none' : 'flex'"
+						[style.display]="stat?.totalIssues === 0 || !stat?.totalIssues ? 'none' : 'flex'"
 						role="option"
 						aria-label="Category item"
 						i18n-aria-label
@@ -219,7 +219,7 @@
 						(keyup.enter)="onSelectCategory(stat?.type)"
 						(click)="onSelectCategory(stat?.type)">
 						{{ getCorrectionCategoryTitle(stat?.type) }} ({{ stat?.totalIssues }})
-					</mat-chip>
+					</mat-basic-chip>
 				</ng-container>
 				<ng-container *ngSwitchDefault></ng-container>
 			</ng-container>

@@ -7,6 +7,7 @@ import { untilDestroy } from '../../../utils/until-destroy';
 	selector: 'copyleaks-report-alerts-container',
 	templateUrl: './report-alerts-container.component.html',
 	styleUrls: ['./report-alerts-container.component.scss'],
+	standalone: false,
 })
 export class ReportAlertsContainerComponent implements OnInit {
 	@HostBinding('style.display')

@@ -14,11 +14,13 @@ import { IResultTag } from '../../../../../models/report-data.models';
 import { untilDestroy } from '../../../../../utils/until-destroy';
 import { RESULT_TAGS_CODES } from '../../../../../constants/report-result-tags.constants';
 import { ReportDataService } from '../../../../../services/report-data.service';
+import { MatChip } from '@angular/material/chips';
 
 @Component({
 	selector: 'cr-report-expand-result-item',
 	templateUrl: './report-expand-result-item.component.html',
 	styleUrls: ['./report-expand-result-item.component.scss'],
+	standalone: false,
 })
 export class ReportExpandResultItemComponent implements OnInit, OnChanges {
 	/**
@@ -273,11 +275,11 @@ export class ReportExpandResultItemComponent implements OnInit, OnChanges {
 	 * @param chipContent The tag chip content element
 	 * @returns The tooltip text for the tag chip
 	 */
-	getTagChipTooltipText(tag: IResultTag, chipContent: HTMLElement): string {
-		const fullText = chipContent.textContent?.trim() || '';
+	getTagChipTooltipText(tag: IResultTag, chipContent: MatChip): string {
+		const fullText = chipContent._elementRef.nativeElement.textContent?.trim() || '';
 		// Check if the tag text is overflowing and the tag is not 'summary-date' or 'organization' or 'your-file' tags & not empty
 		if (
-			this.isTagChipTextOverflowing(chipContent) &&
+			this.isTagChipTextOverflowing(chipContent._elementRef.nativeElement) &&
 			tag.code !== RESULT_TAGS_CODES.SUMMARY_DATE &&
 			tag.code !== RESULT_TAGS_CODES.YOUR_FILE
 		) {

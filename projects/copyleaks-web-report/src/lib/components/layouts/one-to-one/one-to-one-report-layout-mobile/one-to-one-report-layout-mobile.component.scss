@@ -1,5 +1,5 @@
-@import '../../../../styles/containers.styles.scss';
-@import '../../../../styles/website-colors.styles.scss';
+@use '../../../../styles/containers.styles.scss' as containers;
+@use '../../../../styles/website-colors.styles.scss' as *;
 
 :host {
 	display: flex;
@@ -61,7 +61,7 @@
 	}
 
 	.alerts-container {
-		@include cls-report-container-lvl-2;
+		@include containers.cls-report-container-lvl-2;
 	}
 
 	.powered-by-copyleaks-container {

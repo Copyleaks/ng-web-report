@@ -1,7 +1,6 @@
 /*
  * Public API Surface of copyleaks-web-report
  */
-import '@angular/localize/init';
 
 // Exported models
 export * from './lib/components/core/cr-custom-results/models/cr-custom-results.enums';

@@ -12,6 +12,7 @@ import { ReportDataService } from '../../../services/report-data.service';
 	selector: 'copyleaks-content-ai-container',
 	templateUrl: './content-ai-container.component.html',
 	styleUrls: ['./content-ai-container.component.scss'],
+	standalone: false,
 })
 export class ContentAiContainerComponent implements OnInit, OnChanges {
 	/**
@@ -63,6 +64,11 @@ export class ContentAiContainerComponent implements OnInit, OnChanges {
 	 * @Input {boolean} A flag indicating if the AI phrases are shown
 	 */
 	@Input() showAIPhrases: boolean;
+
+	/**
+	 * @Input {number} The minimum AI proportion
+	 */
+	@Input() minAIProportion: number;
 
 	/**
 	 * {number} The AI percentage result

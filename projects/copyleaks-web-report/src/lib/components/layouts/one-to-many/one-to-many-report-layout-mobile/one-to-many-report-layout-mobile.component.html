@@ -112,6 +112,7 @@
 				[aiScore]="reportStatistics?.aiScore ?? 0"
 				[wordsTotal]="reportStatistics?.total ?? 0"
 				[excludedTotal]="reportStatistics?.omittedWords ?? 0"
+				[minAIProportion]="reportDataSvc.filterOptions?.minAIProportion"
 				[ngStyle]="{
 					'border-radius':
 						!isPlagiarismEnabled() ||
@@ -181,6 +182,7 @@
 			[explainableAIResults]="explainableAI"
 			[showAIPhrases]="showAIPhrases"
 			[hidePlagarismTap]="hidePlagarismTap"
+			[minAIProportion]="reportDataSvc.filterOptions?.minAIProportion"
 			[aiSourceMatchResults]="aiSourceMatchResults"></copyleaks-content-ai-container>
 
 		<copyleaks-report-results-container

@@ -1,19 +1,19 @@
-@import '../website-colors.styles.scss';
+@use '../website-colors.styles.scss' as *;
 
 ::ng-deep {
-	.mat-tooltip.web-report-mat-tooltip {
+	.mat-mdc-tooltip.web-report-mat-tooltip .mdc-tooltip__surface {
 		font-size: 14px !important;
 		font-weight: 500 !important;
 		color: $color-white !important;
 		background-color: $color-medium-dark !important;
 		border-radius: 4px !important;
 		padding: 8px !important;
-		font-family: haboro-soft, sans-serif !important;
+		font-family: 'haboro-soft', sans-serif !important;
 		white-space: pre-line !important;
 	}
 
-	.mat-tooltip.web-report-mat-tooltip.date-tooltip {
-		white-space: pre-line !important;
+	.mat-mdc-tooltip.web-report-mat-tooltip.date-tooltip .mdc-tooltip__surface {
 		max-width: 400px !important;
+		white-space: pre-line !important;
 	}
 }

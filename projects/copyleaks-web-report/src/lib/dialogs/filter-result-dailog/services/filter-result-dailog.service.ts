@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { FormBuilder, FormControl, FormGroup } from '@angular/forms';
+import { UntypedFormBuilder, UntypedFormControl, UntypedFormGroup } from '@angular/forms';
 import { EFilterResultForm } from '../models/filter-result-dailog.enum';
 import { ITagItem } from '../components/included-tags-filter-result/models/included-tags-filter-result.models';
 import { ICompleteResults } from '../../../models/report-data.models';
@@ -7,7 +7,7 @@ import { ISourceRepositoryType } from '../components/source-type-filter-result/m
 
 @Injectable()
 export class FilterResultDailogService {
-	private _filterResultForm: FormGroup;
+	private _filterResultForm: UntypedFormGroup;
 	private _completeResults: ICompleteResults;
 
 	selectedTagItem: ITagItem[] = [];
@@ -17,31 +17,31 @@ export class FilterResultDailogService {
 	}
 
 	get sourceTypeFormGroup() {
-		return this._filterResultForm?.get(EFilterResultForm.fgSourceType) as FormGroup;
+		return this._filterResultForm?.get(EFilterResultForm.fgSourceType) as UntypedFormGroup;
 	}
 
 	get matchTypeFormGroup() {
-		return this._filterResultForm?.get(EFilterResultForm.fgMatchTypes) as FormGroup;
+		return this._filterResultForm?.get(EFilterResultForm.fgMatchTypes) as UntypedFormGroup;
 	}
 
 	get generalFiltersFormGroup() {
-		return this._filterResultForm?.get(EFilterResultForm.fgGeneralFilters) as FormGroup;
+		return this._filterResultForm?.get(EFilterResultForm.fgGeneralFilters) as UntypedFormGroup;
 	}
 
 	get resultsMetaFormGroup() {
-		return this._filterResultForm?.get(EFilterResultForm.fgResultsMeta) as FormGroup;
+		return this._filterResultForm?.get(EFilterResultForm.fgResultsMeta) as UntypedFormGroup;
 	}
 
 	get includedTagsFormControl() {
-		return this._filterResultForm?.get(EFilterResultForm.fcIncludedTags) as FormControl;
+		return this._filterResultForm?.get(EFilterResultForm.fcIncludedTags) as UntypedFormControl;
 	}
 
 	get excludedDomainsFormControl() {
-		return this._filterResultForm?.get(EFilterResultForm.fcExcludedDomains) as FormControl;
+		return this._filterResultForm?.get(EFilterResultForm.fcExcludedDomains) as UntypedFormControl;
 	}
 
 	get repositoriesFormGroup() {
-		return this.sourceTypeFormGroup.get(EFilterResultForm.fgRepositories) as FormGroup;
+		return this.sourceTypeFormGroup.get(EFilterResultForm.fgRepositories) as UntypedFormGroup;
 	}
 
 	get reposIds() {
@@ -70,7 +70,7 @@ export class FilterResultDailogService {
 		return Array.from(reposMap.values());
 	}
 
-	constructor(private _formBuilder: FormBuilder) {}
+	constructor(private _formBuilder: UntypedFormBuilder) {}
 
 	public initForm(completeResults: ICompleteResults) {
 		this._completeResults = completeResults;
@@ -79,37 +79,37 @@ export class FilterResultDailogService {
 
 		this._filterResultForm = this._formBuilder.group({
 			sourceType: this._formBuilder.group({
-				internet: new FormControl(this.getFormControlValue(EFilterResultForm.fcInternet)),
-				internalDatabase: new FormControl(this.getFormControlValue(EFilterResultForm.fcInternalDatabase)),
-				yourResults: new FormControl(this.getFormControlValue(EFilterResultForm.fcYourResults)),
-				othersResults: new FormControl(this.getFormControlValue(EFilterResultForm.fcOthersResults)),
-				batch: new FormControl(this.getFormControlValue(EFilterResultForm.fcBatch)),
-				aiSourceMatch: new FormControl(this.getFormControlValue(EFilterResultForm.fgAISourceMatch)),
+				internet: new UntypedFormControl(this.getFormControlValue(EFilterResultForm.fcInternet)),
+				internalDatabase: new UntypedFormControl(this.getFormControlValue(EFilterResultForm.fcInternalDatabase)),
+				yourResults: new UntypedFormControl(this.getFormControlValue(EFilterResultForm.fcYourResults)),
+				othersResults: new UntypedFormControl(this.getFormControlValue(EFilterResultForm.fcOthersResults)),
+				batch: new UntypedFormControl(this.getFormControlValue(EFilterResultForm.fcBatch)),
+				aiSourceMatch: new UntypedFormControl(this.getFormControlValue(EFilterResultForm.fgAISourceMatch)),
 				repositories: this._formBuilder.group({}),
 			}),
 			resultsMeta: this._formBuilder.group({
 				wordLimit: this._formBuilder.group({
-					wordLimitEnabled: new FormControl(this.getFormControlValue(EFilterResultForm.fcWordLimitEnabled)),
-					totalWordlimt: new FormControl(this.getFormControlValue(EFilterResultForm.fcWordLimitTotalWordlimt)),
+					wordLimitEnabled: new UntypedFormControl(this.getFormControlValue(EFilterResultForm.fcWordLimitEnabled)),
+					totalWordlimt: new UntypedFormControl(this.getFormControlValue(EFilterResultForm.fcWordLimitTotalWordlimt)),
 				}),
 				publicationDate: this._formBuilder.group({
-					publicationEnabled: new FormControl(this.getFormControlValue(EFilterResultForm.fcPublicationEnabled)),
-					startDate: new FormControl(this.getFormControlValue(EFilterResultForm.fcPublicationStartDate)),
-					resultsWithNoDates: new FormControl(this.getFormControlValue(EFilterResultForm.fcResultsWithNoDates)),
+					publicationEnabled: new UntypedFormControl(this.getFormControlValue(EFilterResultForm.fcPublicationEnabled)),
+					startDate: new UntypedFormControl(this.getFormControlValue(EFilterResultForm.fcPublicationStartDate)),
+					resultsWithNoDates: new UntypedFormControl(this.getFormControlValue(EFilterResultForm.fcResultsWithNoDates)),
 				}),
 			}),
 			matchTypes: this._formBuilder.group({
-				identicalText: new FormControl(this.getFormControlValue(EFilterResultForm.fcIdenticalText)),
-				minorChanges: new FormControl(this.getFormControlValue(EFilterResultForm.fcMinorChanges)),
-				paraphrased: new FormControl(this.getFormControlValue(EFilterResultForm.fcParaphrased)),
+				identicalText: new UntypedFormControl(this.getFormControlValue(EFilterResultForm.fcIdenticalText)),
+				minorChanges: new UntypedFormControl(this.getFormControlValue(EFilterResultForm.fcMinorChanges)),
+				paraphrased: new UntypedFormControl(this.getFormControlValue(EFilterResultForm.fcParaphrased)),
 			}),
 			generalFilters: this._formBuilder.group({
-				topResult: new FormControl(this.getFormControlValue(EFilterResultForm.fcTopResult)),
-				alerts: new FormControl(this.getFormControlValue(EFilterResultForm.fcAlerts)),
-				authorSubmissions: new FormControl(this.getFormControlValue(EFilterResultForm.fcAuthorSubmissions)),
+				topResult: new UntypedFormControl(this.getFormControlValue(EFilterResultForm.fcTopResult)),
+				alerts: new UntypedFormControl(this.getFormControlValue(EFilterResultForm.fcAlerts)),
+				authorSubmissions: new UntypedFormControl(this.getFormControlValue(EFilterResultForm.fcAuthorSubmissions)),
 			}),
-			includedTags: new FormControl(this.getFormControlValue(EFilterResultForm.fcIncludedTags)),
-			excludedDomains: new FormControl(this.getFormControlValue(EFilterResultForm.fcExcludedDomains)),
+			includedTags: new UntypedFormControl(this.getFormControlValue(EFilterResultForm.fcIncludedTags)),
+			excludedDomains: new UntypedFormControl(this.getFormControlValue(EFilterResultForm.fcExcludedDomains)),
 		});
 
 		this.addRepositoriesToForm(this.reposIds);
@@ -295,7 +295,7 @@ export class FilterResultDailogService {
 
 			this.repositoriesFormGroup?.addControl(
 				repo.id,
-				new FormControl(
+				new UntypedFormControl(
 					clear
 						? true
 						: !this._completeResults.filters?.sourceType?.repositories

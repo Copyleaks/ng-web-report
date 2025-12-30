@@ -1,6 +1,6 @@
-@import '../../../../styles/website-colors.styles.scss';
-@import '../../../../styles/styles.scss';
-@import '../../../../styles/cls-mat-components-overrides/cls-scroll-bar-overrides.scss';
+@use '../../../../styles/website-colors.styles.scss' as *;
+@use '../../../../styles/styles.scss';
+@use '../../../../styles/cls-mat-components-overrides/cls-scroll-bar-overrides.scss';
 
 :host {
 	height: 100%;
@@ -88,10 +88,13 @@
 				cursor: pointer;
 			}
 		}
-		.mat-checkbox-inner-container {
+		.mat-checkbox-inner-container,
+		.mdc-checkbox,
+		.mat-mdc-checkbox .mdc-checkbox {
 			width: 15px !important;
 			height: 15px !important;
 		}
+
 		mat-checkbox {
 			display: flex;
 		}

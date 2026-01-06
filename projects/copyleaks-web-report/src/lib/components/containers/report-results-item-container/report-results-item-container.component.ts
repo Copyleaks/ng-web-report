@@ -7,6 +7,7 @@ import { ReportDataService } from '../../../services/report-data.service';
 	selector: 'copyleaks-report-results-item-container',
 	templateUrl: './report-results-item-container.component.html',
 	styleUrls: ['./report-results-item-container.component.scss'],
+	standalone: false,
 })
 export class ReportResultsItemContainerComponent implements OnInit, AfterViewInit, OnChanges {
 	@HostBinding('style.display')

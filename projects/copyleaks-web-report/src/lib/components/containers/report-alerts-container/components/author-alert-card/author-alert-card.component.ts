@@ -5,6 +5,7 @@ import { IAuthorAlertCard } from './models/author-alert-card.models';
 	selector: 'cr-author-alert-card',
 	templateUrl: './author-alert-card.component.html',
 	styleUrls: ['./author-alert-card.component.scss'],
+	standalone: false,
 })
 export class AuthorAlertCardComponent implements OnInit {
 	@Input() authorAlert: IAuthorAlertCard;

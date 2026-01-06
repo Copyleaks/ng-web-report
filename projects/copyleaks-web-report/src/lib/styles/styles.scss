@@ -1,4 +1,7 @@
-@import './website-colors.styles.scss';
+@use './website-colors.styles.scss' as *;
+@use './fonts/haboro-soft-fonts.scss';
+@use './fonts/almarai-fonts.scss';
+@use './fonts/google-fonts.css';
 
 .cls-report-container-lvl-1 {
 	background-color: #dce8fc;

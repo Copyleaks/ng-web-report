@@ -14,6 +14,7 @@ import { ReportErrorsService } from '../../../../services/report-errors.service'
 	selector: 'copyleaks-one-to-many-report-layout-desktop',
 	templateUrl: './one-to-many-report-layout-desktop.component.html',
 	styleUrls: ['./one-to-many-report-layout-desktop.component.scss'],
+	standalone: false,
 })
 export class OneToManyReportLayoutDesktopComponent
 	extends OneToManyReportLayoutBaseComponent

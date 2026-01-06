@@ -5,6 +5,7 @@ import { ComponentPortal } from '@angular/cdk/portal';
 
 @Directive({
 	selector: '[crAIScoreTooltipContent]',
+	standalone: false,
 })
 export class CrAIScoreTooltipContentDirective {
 	private _overlayRef: OverlayRef;

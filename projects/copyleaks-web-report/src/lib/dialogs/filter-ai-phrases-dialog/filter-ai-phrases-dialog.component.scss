@@ -1,0 +1,143 @@
+@use '../../styles/website-colors.styles.scss' as *;
+@use '../../styles/styles.scss';
+@use '../../styles/cls-mat-components-overrides/cls-scroll-bar-overrides.scss';
+@use '../../styles/cls-mat-components-overrides/cls-mat-expansion-panel-overrides.scss';
+@use '../../styles/cls-accessibility-overrides/cls-accessibility-overrides.scss';
+
+.ai-phrases-section {
+	.section-header {
+		.section-title {
+			font-size: 16px;
+			font-style: normal;
+			font-weight: 700;
+			line-height: normal;
+			text-transform: capitalize;
+		}
+
+		.section-count {
+			color: $color-black;
+			text-align: justify;
+			font-size: 12px;
+			font-style: normal;
+			font-weight: 700;
+			line-height: normal;
+			text-transform: uppercase;
+		}
+	}
+
+	.section-description {
+		margin: 0;
+		font-size: 14px;
+		font-style: normal;
+		font-weight: 500;
+		line-height: normal;
+		font-family: haboro-soft, sans-serif !important;
+	}
+}
+
+.slider-section {
+	.slider-container {
+		.min-value-label,
+		.max-value-label {
+			text-align: right;
+			font-family: haboro-soft, sans-serif !important;
+			font-size: 12px;
+			font-style: normal;
+			font-weight: 700;
+			line-height: normal;
+		}
+	}
+
+	.ai-phrases-slider {
+		width: 320px;
+		border-radius: 10px;
+		margin-left: 8px;
+		margin-right: 8px;
+	}
+
+	.selected-value-container {
+		margin-top: 12px;
+	}
+
+	.selected-value-text {
+		color: $color-black;
+		font-size: 12px;
+		font-style: normal;
+		font-weight: 700;
+		line-height: normal;
+	}
+}
+
+.header-container {
+	width: 100%;
+	.title-container {
+		width: 100%;
+		span {
+			color: $color-black;
+			font-weight: 700;
+			font-size: 20px;
+		}
+
+		.clear-button {
+			cursor: pointer;
+			border: 0px;
+			outline: none;
+			background-color: $color-white;
+			color: $color-primary;
+			margin-right: 2px;
+			mat-icon {
+				font-size: 24px;
+				width: 24px;
+				height: 24px;
+			}
+			span {
+				white-space: nowrap;
+				color: $color-primary;
+				font-size: 14px;
+				font-weight: 500;
+			}
+			&:focus-visible {
+				outline: 2px solid black;
+			}
+		}
+	}
+}
+
+.apply-and-discard-button-contaier {
+	display: flex;
+	justify-content: flex-end;
+	gap: 16px;
+	padding: 0px !important;
+	padding-inline-end: 10px !important;
+	margin: 0px !important;
+	min-height: auto !important;
+	padding-bottom: 2px !important;
+	button {
+		cursor: pointer;
+		border-radius: 24px 0px 16px 24px;
+	}
+	.discard-changes-button {
+		font-size: 16px !important;
+		font-weight: 500;
+		font-family: haboro-soft, sans-serif !important;
+		white-space: nowrap;
+	}
+	.apply-filters-button {
+		font-size: 18px !important;
+		font-weight: 700 !important;
+	}
+}
+
+.apply-and-discard-button-contaier.is-mobile {
+	flex-wrap: wrap;
+	::ng-deep {
+		a {
+			border: none !important;
+			background: transparent !important;
+			color: $color-primary !important;
+		}
+		.mat-mdc-button-base.mat-primary {
+			border: none !important;
+		}
+	}
+}

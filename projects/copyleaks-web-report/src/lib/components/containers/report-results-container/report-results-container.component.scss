@@ -1,5 +1,5 @@
-@import '../../../styles/website-colors.styles.scss';
-@import '../../../styles/containers.styles.scss';
+@use '../../../styles/website-colors.styles.scss' as *;
+@use '../../../styles/containers.styles.scss' as containers;
 
 :host {
 	display: flex;
@@ -129,6 +129,7 @@
 				font-style: normal;
 				font-weight: 400;
 				line-height: normal;
+				overflow-wrap: anywhere;
 			}
 		}
 	}
@@ -208,17 +209,38 @@
 				background-color: $color-dialog-background;
 				border: 0px;
 			}
-
 			.mat-chip-navigate {
-				font-size: 12px;
-				font-weight: 500;
-				color: $color-white;
 				background-color: $color-dark-blue;
 				padding: 2px 8px !important;
 				height: fit-content !important;
 				min-height: auto !important;
 				line-height: normal !important;
 				border-radius: 16px !important;
+				line-height: normal !important;
+				cursor: pointer;
+
+				::ng-deep {
+					.mdc-evolution-chip__text-label,
+					.mat-mdc-chip-action-label {
+						line-height: normal !important;
+						font-size: 12px;
+						font-weight: 500;
+						color: $color-white;
+					}
+
+					.mdc-evolution-chip__action--primary {
+						padding: 0px !important;
+						margin: 0px !important;
+						display: flex !important;
+					}
+
+					.mdc-evolution-chip__graphic {
+						padding: 0px !important;
+					}
+					.mat-mdc-chip-graphic {
+						display: none !important;
+					}
+				}
 			}
 		}
 

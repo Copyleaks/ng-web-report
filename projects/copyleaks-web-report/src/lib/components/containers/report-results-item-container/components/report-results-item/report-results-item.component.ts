@@ -38,6 +38,7 @@ import { RESULT_TAGS_CODES } from '../../../../../constants/report-result-tags.c
 			transition(':enter', [animate('0.5s ease-in', style({ opacity: 1 }))]),
 		]),
 	],
+	standalone: false,
 })
 export class ReportResultsItemComponent implements OnInit, OnChanges, OnDestroy {
 	@ViewChild(MatMenuTrigger) public resultItemMenuTrigger: MatMenuTrigger;
@@ -346,7 +347,6 @@ export class ReportResultsItemComponent implements OnInit, OnChanges, OnDestroy 
 
 	deleteResult() {
 		this._matDialog.open(RemoveResultConfirmationDialogComponent, {
-			maxWidth: '95%',
 			minWidth: this.isMobile ? '95%' : '',
 			width: this.isMobile ? '' : '670px',
 			panelClass: 'filter-result-dailog',

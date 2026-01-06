@@ -14,6 +14,7 @@ import { Component, OnInit } from '@angular/core';
 			transition(':leave', [animate('200ms ease-in', style({ height: '0', opacity: 0, overflow: 'hidden' }))]),
 		]),
 	],
+	standalone: false,
 })
 export class CrRealTimeResultSectionAnimationComponent implements OnInit {
 	counter: number = 1;

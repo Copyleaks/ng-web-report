@@ -474,7 +474,8 @@ export const processSuspectedCharacterMatches = (
 export const processAIInsightsTextMatches = (
 	source: IScanSource,
 	alertToMatch: ICompleteResultNotificationAlert,
-	showAIPhrases: boolean = false
+	showAIPhrases: boolean = false,
+	minFreq: number = 0
 ): SlicedMatch[][] => {
 	const matches: Match[] = [];
 	let lastExplainIndex = 0;
@@ -484,6 +485,9 @@ export const processAIInsightsTextMatches = (
 	const lengthExplain = explainResult?.patterns?.text?.chars?.starts?.length ?? 0;
 	const proportionArray = explainResult
 		? updateExplainProportionType(explainResult.patterns.statistics.proportion)
+		: [];
+	const proportionArrayFreq = explainResult
+		? explainResult.patterns.statistics.proportion.map(p => (p === -1 ? -1 : Math.round(p)))
 		: [];
 
 	// Process each result and match
@@ -527,8 +531,18 @@ export const processAIInsightsTextMatches = (
 							startMapped = explainStart;
 						}
 
-						// Add the AI insight
-						matches.push(createExplainMatch(mappedMatch, explainStart, explainEnd, proportionArray[lastExplainIndex]));
+						// Add the AI insight - always add it, but change type if below threshold
+						const explainMatchType =
+							proportionArrayFreq[lastExplainIndex] >= minFreq ? MatchType.aiExplain : MatchType.aiText;
+						matches.push(
+							createExplainMatch(
+								mappedMatch,
+								explainStart,
+								explainEnd,
+								proportionArray[lastExplainIndex],
+								explainMatchType
+							)
+						);
 						startMapped = explainEnd + 1;
 
 						lastExplainIndex++;
@@ -566,11 +580,17 @@ const createMatch = (baseMatch: Match, start: number, end: number): Match => ({
 /**
  * Creates an AI explain match segment.
  */
-const createExplainMatch = (baseMatch: Match, start: number, end: number, proportionType: EProportionType): Match => ({
+const createExplainMatch = (
+	baseMatch: Match,
+	start: number,
+	end: number,
+	proportionType: EProportionType,
+	type: MatchType = MatchType.aiExplain
+): Match => ({
 	...baseMatch,
 	start,
 	end,
-	type: MatchType.aiExplain,
+	type,
 	proportionType,
 });
 
@@ -583,7 +603,8 @@ const createExplainMatch = (baseMatch: Match, start: number, end: number, propor
 export const processAIInsightsHTMLMatches = (
 	source: IScanSource,
 	alertToMatch: ICompleteResultNotificationAlert,
-	showAIPhrases: boolean = false
+	showAIPhrases: boolean = false,
+	minFreq: number = 0
 ): Match[] => {
 	const matches: Match[] = [];
 	let lastExplainIndex: number = 0;
@@ -592,6 +613,9 @@ export const processAIInsightsHTMLMatches = (
 	const lengthExplain = explainResult ? explainResult?.patterns?.html?.chars?.starts?.length : 0;
 	const proportionArray = explainResult
 		? updateExplainProportionType(explainResult?.patterns?.statistics?.proportion)
+		: [];
+	const proportionArrayFreq = explainResult
+		? explainResult.patterns.statistics.proportion.map(p => (p === -1 ? -1 : Math.round(p)))
 		: [];
 
 	scanResult?.results?.forEach(result => {
@@ -634,17 +658,19 @@ export const processAIInsightsHTMLMatches = (
 								startMappedMatches = firstExolain;
 								i = i - 1;
 							} else if (startMappedMatches == firstExolain) {
+								const groupId = scanResult?.explain?.patterns?.html?.chars?.groupIds[i];
 								const explainMatch = {
 									start: firstExolain,
 									end: endExolain,
 									type: MatchType.aiExplain,
 									ids: [],
-									gid: scanResult?.explain?.patterns?.html?.chars?.groupIds[i],
+									gid: groupId,
 									classification: match.classification,
 									probability: match.probability,
 									totalWords: match.totalWords,
-									proportionType: proportionArray[scanResult?.explain?.patterns?.html?.chars?.groupIds[i]],
+									proportionType: proportionArray[groupId],
 								} as AIMatch;
+								if (proportionArrayFreq[groupId] < minFreq) explainMatch.type = MatchType.aiText;
 								matches.push(explainMatch);
 								startMappedMatches = endExolain + 1;
 							}

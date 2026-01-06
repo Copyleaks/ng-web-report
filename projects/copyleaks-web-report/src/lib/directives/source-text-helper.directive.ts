@@ -13,6 +13,7 @@ import { untilDestroy } from '../utils/until-destroy';
 
 @Directive({
 	selector: '[crSourceTextHelper]',
+	standalone: false,
 })
 export class SourceTextHelperDirective implements AfterContentInit, OnDestroy {
 	@ContentChildren(CrTextMatchComponent)

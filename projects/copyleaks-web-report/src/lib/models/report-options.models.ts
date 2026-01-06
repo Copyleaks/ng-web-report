@@ -45,6 +45,8 @@ export interface ICopyleaksReportOptions {
 	showYourResults?: boolean;
 	/** */
 	showOthersResults?: boolean;
+
+	minAIProportion?: number;
 }
 
 export interface ICopyleaksReportWritingFeedbackOptions {

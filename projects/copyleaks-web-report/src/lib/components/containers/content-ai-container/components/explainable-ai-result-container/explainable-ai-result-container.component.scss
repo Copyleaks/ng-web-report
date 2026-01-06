@@ -1,4 +1,4 @@
-@import '../../../../../styles/website-colors.styles.scss';
+@use '../../../../../styles/website-colors.styles.scss' as *;
 
 .top-container {
 	width: 100%;
@@ -33,6 +33,14 @@
 		}
 	}
 
+	.icon-button.is-on {
+		::ng-deep {
+			mat-icon {
+				color: $color-primary !important;
+			}
+		}
+	}
+
 	.divider {
 		width: 447px;
 		height: 1px;
@@ -57,6 +65,7 @@
 				display: flex;
 				flex-direction: row;
 				gap: 8px;
+				align-items: center;
 
 				cr-button {
 					::ng-deep {
@@ -106,7 +115,8 @@
 				}
 
 				::ng-deep {
-					.mat-button-wrapper {
+					.mat-button-wrapper,
+					.mdc-button__label {
 						line-height: normal !important;
 					}
 				}
@@ -388,11 +398,7 @@
 	.navigate-mobie-button-contaienr {
 		padding-bottom: 16px;
 		height: 42px;
-
 		.mat-chip-navigate {
-			font-size: 12px;
-			font-weight: 700;
-			color: $color-black;
 			border: 1px solid $grayed-out-disabled;
 			background: rgba(43, 149, 255, 0.2);
 			padding: 2px 8px !important;
@@ -400,6 +406,15 @@
 			min-height: auto !important;
 			line-height: normal !important;
 			border-radius: 16px !important;
+
+			::ng-deep {
+				.mdc-evolution-chip__text-label,
+				.mat-mdc-chip-action-label {
+					font-size: 12px;
+					font-weight: 700;
+					color: $color-black;
+				}
+			}
 		}
 	}
 	.explain-results-mobile-container {
@@ -464,7 +479,7 @@
 			width: fit-content;
 			display: flex;
 			height: fit-content !important;
-			::ng-deep .loader {
+			::ng-deep .skeleton-loader {
 				height: 18px !important;
 				margin-bottom: 0px !important;
 				border-radius: 10px !important;
@@ -473,7 +488,7 @@
 			}
 		}
 		.skeleton-small-height {
-			::ng-deep .loader {
+			::ng-deep .skeleton-loader {
 				height: 15px !important;
 			}
 		}
@@ -515,7 +530,7 @@
 				border-radius: 10px;
 				.proportion-loading {
 					width: 15%;
-					::ng-deep .loader {
+					::ng-deep .skeleton-loader {
 						height: 26px !important;
 					}
 				}
@@ -576,7 +591,7 @@
 				width: 100%;
 				.proportion-loading {
 					width: 15%;
-					::ng-deep .loader {
+					::ng-deep .skeleton-loader {
 						height: 26px !important;
 					}
 				}
@@ -801,7 +816,7 @@
 		width: fit-content;
 		display: flex;
 		height: fit-content !important;
-		::ng-deep .loader {
+		::ng-deep .skeleton-loader {
 			height: 8px !important;
 			margin-bottom: 0px !important;
 			border-radius: 10px !important;
@@ -812,13 +827,13 @@
 }
 
 .skeleton.circle {
-	::ng-deep .loader {
+	::ng-deep .skeleton-loader {
 		width: 18px !important;
 		height: 18px !important;
 	}
 }
 
-::ng-deep .mat-tooltip.tooltip-contanier {
+::ng-deep .mat-mdc-tooltip.tooltip-contanier .mdc-tooltip__surface {
 	font-size: 16px !important;
 	font-weight: 500 !important;
 	color: $color-white !important;
@@ -875,5 +890,20 @@
 			font-size: 18px;
 			gap: 10px;
 		}
+	}
+}
+
+::ng-deep .filter-ai-phrases-dialog .mat-mdc-dialog-container {
+	display: flex;
+	background-color: $color-white !important;
+	padding: 16px !important;
+	border-radius: 10px !important;
+	gap: 16px !important;
+
+	.mat-mdc-dialog-surface {
+		box-shadow: none !important;
+	}
+	.mdc-dialog__container {
+		width: 100% !important;
 	}
 }

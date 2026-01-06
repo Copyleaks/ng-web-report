@@ -1,5 +1,5 @@
-@import '../../../styles/website-colors.styles.scss';
-@import '../../../styles/cls-mat-components-overrides/cls-mat-chip-overrides.scss';
+@use '../../../styles/website-colors.styles.scss' as *;
+@use '../../../styles/cls-mat-components-overrides/cls-mat-chip-overrides.scss';
 
 :host {
 	padding: 8px;
@@ -83,12 +83,7 @@
 			}
 			.correction-type {
 				background: rgba(255, 154, 2, 0.1) !important;
-				color: $color-grammar-dark !important;
-				font-size: 12px !important;
-				font-style: normal !important;
-				font-weight: 500 !important;
-				line-height: normal;
-				text-transform: capitalize;
+
 				width: fit-content !important;
 				border: none !important;
 				cursor: pointer;
@@ -96,6 +91,18 @@
 				&:hover {
 					border: 1px solid $color-grammar-dark;
 					box-shadow: 0px 1px 2px 0px rgba(0, 0, 0, 0.27);
+				}
+
+				::ng-deep {
+					.mdc-evolution-chip__text-label,
+					.mat-mdc-chip-action-label {
+						color: $color-grammar-dark !important;
+						font-size: 12px !important;
+						font-style: normal !important;
+						font-weight: 500 !important;
+						line-height: normal;
+						text-transform: capitalize;
+					}
 				}
 			}
 		}
@@ -159,7 +166,7 @@
 		width: fit-content;
 		display: flex;
 		height: fit-content !important;
-		::ng-deep .loader {
+		::ng-deep .skeleton-loader {
 			height: 19px !important;
 			margin-bottom: 0px !important;
 			border-radius: 10px !important;
@@ -169,13 +176,13 @@
 	}
 
 	.correction-line-loader {
-		::ng-deep .loader {
+		::ng-deep .skeleton-loader {
 			height: 19px !important;
 		}
 	}
 
 	.circle-loader {
-		::ng-deep .loader {
+		::ng-deep .skeleton-loader {
 			width: 19px !important;
 			height: 19px !important;
 			border-radius: 50% !important;
@@ -209,4 +216,48 @@ mat-icon:hover {
 	height: unset;
 	line-height: unset;
 	min-width: unset;
+	padding: 0px;
+	display: flex;
+}
+
+::ng-deep .result-item-menu-list {
+	box-shadow: 2px 2px 4px 0px rgba(0, 0, 0, 0.25) !important;
+	border-radius: 10px;
+	.mat-mdc-menu-content {
+		align-items: flex-start !important;
+		background-color: $color-white !important;
+		.mat-mdc-menu-item {
+			background-color: $color-white !important;
+			height: 24px;
+			margin: 8px 0px;
+			padding: 0px 8px;
+			display: flex;
+			align-items: center;
+			width: 100%;
+			box-sizing: border-box;
+			min-height: auto !important;
+			&:hover,
+			&:focus {
+				background-color: $color-container-background !important;
+			}
+			.mat-menu-item-icon,
+			.mdc-menu-item__graphic {
+				opacity: 0.4;
+				color: $color-medium-dark;
+				$icon-size: 18px;
+				width: $icon-size !important;
+				height: $icon-size !important;
+				font-size: $icon-size !important;
+			}
+			.mat-menu-item-text,
+			.mdc-menu-item__text {
+				display: flex;
+				align-items: center;
+				height: 100%;
+				font-weight: 500;
+				font-size: 14px;
+				color: $color-medium-dark;
+			}
+		}
+	}
 }

@@ -1,5 +1,9 @@
 # Copyleaks Web Report
 
+[![npm version](https://img.shields.io/npm/v/@copyleaks/ng-web-report.svg)](https://www.npmjs.com/package/@copyleaks/ng-web-report)
+[![license](https://img.shields.io/npm/l/@copyleaks/ng-web-report.svg)](https://github.com/Copyleaks/ng-web-report/blob/main/LICENSE)
+[![Angular](https://img.shields.io/badge/angular-19-brightgreen)](https://angular.io/)
+
 <img align="center" src="./images/demo.gif" alt="Web Report Demo" width="600"/>
 <br>
 <br>
@@ -23,21 +27,41 @@ To install, run:
 
 ---
 
-## Angular Version Support
+## 🅰️ Angular Version Support
 
-This module is compatible with **Angular v13**. Ensure your application is using Angular version 13 to avoid compatibility issues.
+| Angular Version | Library Version               | Install Command                                       |
+| --------------- | ----------------------------- | ----------------------------------------------------- |
+| Angular 13      | `1.x.x` (latest: `1.9.99`)    | `npm install @copyleaks/ng-web-report@^1.9.99 --save` |
+| Angular 19      | `2.x.x` (starting at `2.0.0`) | `npm install @copyleaks/ng-web-report@^2.0.0 --save`  |
 
-## Peer Dependencies
+---
 
-The module has several peer dependencies that need to be installed in your project:
+## 📑 Peer Dependencies
 
-- `@angular/localize`: ^13.1.1
-- `@angular/material`: ^13.1.1
-- `@angular/flex-layout`: ^13.0.0-beta.36
-- `scroll-into-view-if-needed`: ^2.2.28
-- `ngx-skeleton-loader`: ^5.0.0
+### For Angular 13 (v1.x.x)
 
-Ensure these dependencies are present in your project to guarantee optimal functionality.
+| Package                      | Version         |
+| ---------------------------- | --------------- |
+| `@angular/common`            | ^13.1.1         |
+| `@angular/core`              | ^13.1.1         |
+| `@angular/localize`          | ^13.1.1         |
+| `@angular/material`          | ^13.1.1         |
+| `@angular/flex-layout`       | ^13.0.0-beta.36 |
+| `scroll-into-view-if-needed` | ^2.2.28         |
+| `ngx-skeleton-loader`        | ^5.0.0          |
+
+### For Angular 19 (v2.x.x)
+
+| Package                      | Version  |
+| ---------------------------- | -------- |
+| `@angular/common`            | ^19.2.14 |
+| `@angular/core`              | ^19.2.14 |
+| `@angular/localize`          | ^19.2.14 |
+| `@angular/material`          | ^19.2.19 |
+| `ngx-flexible-layout`        | ^19.0.0  |
+| `scroll-into-view-if-needed` | ^2.2.28  |
+| `ngx-skeleton-loader`        | ^6.0.0   |
+| `@swimlane/ngx-charts`       | ^22.0.0  |
 
 ---
 

@@ -8,6 +8,7 @@ import { IPaginateData, PageEvent } from './models/cr-paginator.models';
 	selector: 'cr-paginator',
 	templateUrl: './cr-paginator.component.html',
 	styleUrls: ['./cr-paginator.component.scss'],
+	standalone: false,
 })
 export class CrPaginatorComponent implements OnInit {
 	/***

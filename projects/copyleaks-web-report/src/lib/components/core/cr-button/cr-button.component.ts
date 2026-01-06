@@ -1,4 +1,4 @@
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, Input, OnInit, SimpleChanges } from '@angular/core';
 import { ClsButtonColor } from './models/cr-button.models';
 
 /**
@@ -8,6 +8,7 @@ import { ClsButtonColor } from './models/cr-button.models';
 	selector: 'cr-button',
 	templateUrl: './cr-button.component.html',
 	styleUrls: ['./cr-button.component.scss'],
+	standalone: false,
 })
 export class CrButtonComponent implements OnInit {
 	/**
@@ -113,7 +114,7 @@ export class CrButtonComponent implements OnInit {
 	 * @Input
 	 */
 	@Input() padding: string;
-	/*
+	/**
 	 * Indicates where the icon will be position relative to the text
 	 * @Input
 	 */
@@ -194,5 +195,26 @@ export class CrButtonComponent implements OnInit {
 				...this.buttonStyle,
 				padding: this.padding,
 			};
+	}
+
+	ngOnChanges(changes: SimpleChanges): void {
+		if (changes['iconSize']) {
+			this.iconStyle = {
+				'font-size': this.iconSize,
+				width: this.iconSize,
+				height: this.iconSize,
+			};
+		}
+
+		if (changes['width'] || changes['height'] || changes['fontWeight'] || changes['fontSize'] || changes['padding']) {
+			this.buttonStyle = {
+				...this.buttonStyle,
+				width: this.width,
+				height: this.height,
+				'font-weight': this.fontWeight,
+				'font-size': this.fontSize,
+				padding: this.padding,
+			};
+		}
 	}
 }

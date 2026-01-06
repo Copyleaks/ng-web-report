@@ -51,6 +51,7 @@ import { ReportAIResultsService } from './services/report-ai-results.service';
 		ReportStatisticsService,
 		ReportAIResultsService,
 	],
+	standalone: false,
 })
 export class CopyleaksWebReportComponent implements OnInit, OnDestroy {
 	@ViewChild('customActionsTemplate', { static: true }) customActionsTemplate: TemplateRef<any>;

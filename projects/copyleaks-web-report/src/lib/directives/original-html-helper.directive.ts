@@ -15,6 +15,7 @@ import { AIScanResult } from '../models/report-matches.models';
 
 @Directive({
 	selector: '[crOriginalHtmlHelper]',
+	standalone: false,
 })
 export class OriginalHtmlHelperComponent implements OnInit, OnDestroy {
 	/** sets the seamsless attribute to the iframe */

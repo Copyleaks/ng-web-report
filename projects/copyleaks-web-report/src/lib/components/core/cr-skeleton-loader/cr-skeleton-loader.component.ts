@@ -5,6 +5,7 @@ import { trigger, transition, useAnimation } from '@angular/animations';
 	selector: 'cr-skeleton-loader',
 	templateUrl: './cr-skeleton-loader.component.html',
 	styleUrls: ['./cr-skeleton-loader.component.scss'],
+	standalone: false,
 })
 export class SkeletonLoaderComponent {
 	@Input() showLoader = false;

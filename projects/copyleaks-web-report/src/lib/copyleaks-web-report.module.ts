@@ -1,7 +1,7 @@
 import { ScrollingModule } from '@angular/cdk/scrolling';
 import { CommonModule, DatePipe } from '@angular/common';
 import { NgModule } from '@angular/core';
-import { FlexLayoutModule } from '@angular/flex-layout';
+import { FlexLayoutModule } from 'ngx-flexible-layout';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { MatButtonModule } from '@angular/material/button';
 import { MatCheckboxModule } from '@angular/material/checkbox';
@@ -65,6 +65,7 @@ import { MetaFilterResultComponent } from './dialogs/filter-result-dailog/compon
 import { SourceTypeFilterResultComponent } from './dialogs/filter-result-dailog/components/source-type-filter-result/source-type-filter-result.component';
 import { FilterResultDailogComponent } from './dialogs/filter-result-dailog/filter-result-dailog.component';
 import { FilterResultDailogService } from './dialogs/filter-result-dailog/services/filter-result-dailog.service';
+import { FilterAiPhrasesDialogComponent } from './dialogs/filter-ai-phrases-dialog/filter-ai-phrases-dialog.component';
 import { OriginalHtmlHelperComponent } from './directives/original-html-helper.directive';
 import { OriginalTextHelperDirective } from './directives/original-text-helper.directive';
 import { CrReportScoreTooltipModule } from './directives/report-score-tooltip/cr-report-score-tooltip-content.module';
@@ -157,6 +158,7 @@ import { CrRealTimeResultSectionAnimationComponent } from './components/core/cr-
 		OnlyAiReportLayoutDesktopComponent,
 		OnlyAiReportLayoutMobileComponent,
 		FilterResultDailogComponent,
+		FilterAiPhrasesDialogComponent,
 		RemoveResultConfirmationDialogComponent,
 		SourceTypeFilterResultComponent,
 		MatchTypeFilterResultComponent,

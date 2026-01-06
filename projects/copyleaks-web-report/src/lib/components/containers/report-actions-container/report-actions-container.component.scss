@@ -1,5 +1,5 @@
-@import '../../../styles/containers.styles.scss';
-@import '../../../styles/website-colors.styles.scss';
+@use '../../../styles/containers.styles.scss' as containers;
+@use '../../../styles/website-colors.styles.scss' as *;
 
 :host {
 	display: flex;
@@ -31,7 +31,7 @@
 		width: fit-content;
 		display: flex;
 		height: fit-content !important;
-		::ng-deep .loader {
+		::ng-deep .skeleton-loader {
 			height: 19px !important;
 			margin-bottom: 0px !important;
 			border-radius: 10px !important;
@@ -41,7 +41,7 @@
 
 		&.first {
 			width: 141px !important;
-			::ng-deep .loader {
+			::ng-deep .skeleton-loader {
 				width: 141px !important;
 				height: 30px !important;
 				border-radius: 30px !important;
@@ -52,7 +52,7 @@
 	.circle {
 		width: 24px !important;
 		height: 24px !important;
-		::ng-deep .loader {
+		::ng-deep .skeleton-loader {
 			border-radius: 50% !important;
 			width: 24px !important;
 			height: 24px !important;

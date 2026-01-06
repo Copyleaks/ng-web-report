@@ -13,6 +13,7 @@ import { MatSlideToggleChange } from '@angular/material/slide-toggle';
 			multi: true,
 		},
 	],
+	standalone: false,
 })
 export class MatSlideFilterResultComponent implements OnInit, ControlValueAccessor {
 	/**
@@ -69,5 +70,6 @@ export class MatSlideFilterResultComponent implements OnInit, ControlValueAccess
 @Component({
 	selector: 'mat-slide-logo',
 	template: '<ng-content></ng-content>',
+	standalone: false,
 })
 export class MatSlideLogoFilterResultComponent {}

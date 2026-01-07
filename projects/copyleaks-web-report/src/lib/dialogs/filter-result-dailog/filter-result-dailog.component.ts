@@ -574,6 +574,7 @@ export class FilterResultDailogComponent implements OnInit {
 				hiddenCategories: this.data.reportDataSvc.filterOptions.writingFeedback?.hiddenCategories ?? [],
 			},
 			excludedDomains: this._filterResultsSvc.excludedDomainsFormControl?.value ?? [],
+			minAIProportion: this.data?.reportDataSvc?.filterOptions?.minAIProportion,
 		} as ICopyleaksReportOptions;
 	}
 

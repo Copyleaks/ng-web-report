@@ -53,6 +53,24 @@
 		border-radius: 10px;
 		margin-left: 8px;
 		margin-right: 8px;
+		--mdc-slider-active-track-color: #{$color-main-gray};
+		--mdc-slider-inactive-track-color: #{$color-primary};
+		--mdc-slider-active-track-height: 4px;
+		--mdc-slider-inactive-track-height: 4px;
+		::ng-deep {
+			.mdc-slider__track {
+				height: 4px !important;
+			}
+
+			.mdc-slider__track--active_fill {
+				border-color: $color-main-gray !important;
+			}
+
+			.mdc-slider__track--inactive {
+				background-color: $color-primary !important;
+				opacity: 1 !important;
+			}
+		}
 	}
 
 	.selected-value-container {

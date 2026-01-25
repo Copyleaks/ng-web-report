@@ -67,6 +67,10 @@
 				gap: 8px;
 				align-items: center;
 
+				.filter-search-icon {
+					color: $color-dark-blue !important;
+				}
+
 				cr-button {
 					::ng-deep {
 						mat-icon,

@@ -4,6 +4,14 @@
 @use '../../styles/cls-mat-components-overrides/cls-mat-expansion-panel-overrides.scss';
 @use '../../styles/cls-accessibility-overrides/cls-accessibility-overrides.scss';
 
+::ng-deep {
+	.filter-ai-phrases-dialog {
+		.mat-mdc-dialog-surface {
+			overflow: hidden !important;
+		}
+	}
+}
+
 .ai-phrases-section {
 	.section-header {
 		.section-title {

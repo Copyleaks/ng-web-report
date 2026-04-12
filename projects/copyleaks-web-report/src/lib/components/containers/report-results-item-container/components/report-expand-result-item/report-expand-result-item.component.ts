@@ -212,9 +212,7 @@ export class ReportExpandResultItemComponent implements OnInit, OnChanges {
 		} else this.isAiSourceResult = false;
 
 		// Prioritize 'self-match' tag right after 'ai-source-match'
-		const selfMatchTag = this.resultItem?.resultPreview?.tags?.find(
-			tag => tag.code === RESULT_TAGS_CODES.SELF_MATCH
-		);
+		const selfMatchTag = this.resultItem?.resultPreview?.tags?.find(tag => tag.code === RESULT_TAGS_CODES.SELF_MATCH);
 		if (selfMatchTag) {
 			const otherTags = this.resultItem.resultPreview.tags.filter(tag => tag.code !== RESULT_TAGS_CODES.SELF_MATCH);
 			const aiIdx = otherTags.findIndex(tag => tag.code === RESULT_TAGS_CODES.AI_SOURCE_MATCH);

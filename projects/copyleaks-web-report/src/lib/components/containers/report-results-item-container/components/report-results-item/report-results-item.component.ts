@@ -139,9 +139,7 @@ export class ReportResultsItemComponent implements OnInit, OnChanges, OnDestroy 
 
 	get authorName() {
 		// Always show author for self-match results; use 'Anonymous' if author not available
-		const isSelfMatch = this.resultItem?.resultPreview?.tags?.some(
-			tag => tag.code === RESULT_TAGS_CODES.SELF_MATCH
-		);
+		const isSelfMatch = this.resultItem?.resultPreview?.tags?.some(tag => tag.code === RESULT_TAGS_CODES.SELF_MATCH);
 		if (isSelfMatch) {
 			return this.previewResult?.metadata?.author || this.previewResult?.metadata?.submittedBy || $localize`Anonymous`;
 		}
@@ -191,9 +189,7 @@ export class ReportResultsItemComponent implements OnInit, OnChanges, OnDestroy 
 		}
 
 		// Prioritize Self-Match tag
-		const selfMatchTag = this.resultItem?.resultPreview?.tags.find(
-			tag => tag.code === RESULT_TAGS_CODES.SELF_MATCH
-		);
+		const selfMatchTag = this.resultItem?.resultPreview?.tags.find(tag => tag.code === RESULT_TAGS_CODES.SELF_MATCH);
 		if (selfMatchTag) {
 			return selfMatchTag;
 		}

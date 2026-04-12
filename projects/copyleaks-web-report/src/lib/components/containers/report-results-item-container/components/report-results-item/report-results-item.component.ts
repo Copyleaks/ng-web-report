@@ -138,6 +138,14 @@ export class ReportResultsItemComponent implements OnInit, OnChanges, OnDestroy 
 	}
 
 	get authorName() {
+		// Always show author for self-match results; use 'Anonymous' if author not available
+		const isSelfMatch = this.resultItem?.resultPreview?.tags?.some(
+			tag => tag.code === RESULT_TAGS_CODES.SELF_MATCH
+		);
+		if (isSelfMatch) {
+			return this.previewResult?.metadata?.author || this.previewResult?.metadata?.submittedBy || $localize`Anonymous`;
+		}
+
 		if (
 			this.previewResult?.metadata?.author &&
 			!(this.previewResult?.scanId && this.resultItem?.resultPreview?.type === EResultPreviewType.Database)
@@ -180,6 +188,14 @@ export class ReportResultsItemComponent implements OnInit, OnChanges, OnDestroy 
 			aiSourceMatchTag.title = $localize`AI Source Match`;
 			aiSourceMatchTag.description = $localize`AI Source Match blends plagiarism and AI detection to identify reused or repurposed AI-generated content from other sources.`;
 			return aiSourceMatchTag;
+		}
+
+		// Prioritize Self-Match tag
+		const selfMatchTag = this.resultItem?.resultPreview?.tags.find(
+			tag => tag.code === RESULT_TAGS_CODES.SELF_MATCH
+		);
+		if (selfMatchTag) {
+			return selfMatchTag;
 		}
 
 		return this.resultItem.resultPreview.tags[0];
@@ -322,6 +338,19 @@ export class ReportResultsItemComponent implements OnInit, OnChanges, OnDestroy 
 				aiSourceMatchTag,
 				...this.previewResult.tags.filter(tag => tag.code !== RESULT_TAGS_CODES.AI_SOURCE_MATCH),
 			];
+		}
+
+		// Prioritize 'self-match' tag right after 'ai-source-match' (or first if no ai-source-match)
+		const selfMatchTag = this.previewResult?.tags?.find(tag => tag.code === RESULT_TAGS_CODES.SELF_MATCH);
+		if (selfMatchTag) {
+			const otherTags = this.previewResult.tags.filter(tag => tag.code !== RESULT_TAGS_CODES.SELF_MATCH);
+			const aiIdx = otherTags.findIndex(tag => tag.code === RESULT_TAGS_CODES.AI_SOURCE_MATCH);
+			if (aiIdx >= 0) {
+				otherTags.splice(aiIdx + 1, 0, selfMatchTag);
+			} else {
+				otherTags.unshift(selfMatchTag);
+			}
+			this.previewResult.tags = otherTags;
 		}
 	}
 

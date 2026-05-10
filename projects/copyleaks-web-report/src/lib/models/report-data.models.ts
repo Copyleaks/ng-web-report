@@ -127,6 +127,18 @@ export interface IResultPreviews {
 	batch: IBatchResultPreview[];
 	repositories?: IRepositoryResultPreview[];
 	score: IScore;
+	selfMatchExcluded?: ISelfMatchExcludedResults;
+}
+
+/**
+ * Results automatically excluded because they were submitted by the same student
+ * in another assignment within the same course.
+ */
+export interface ISelfMatchExcludedResults {
+	internet: IInternetResultPreview[];
+	database: IDatabaseResultPreview[];
+	batch: IBatchResultPreview[];
+	repositories?: IRepositoryResultPreview[];
 }
 
 /*

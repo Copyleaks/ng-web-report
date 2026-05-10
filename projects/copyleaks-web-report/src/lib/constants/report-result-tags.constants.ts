@@ -3,4 +3,5 @@ export const RESULT_TAGS_CODES = {
 	ORGANIZATION: 'organization',
 	SUMMARY_DATE: 'summary-date',
 	AI_SOURCE_MATCH: 'ai-source-match',
+	SELF_MATCH: 'self-match',
 };

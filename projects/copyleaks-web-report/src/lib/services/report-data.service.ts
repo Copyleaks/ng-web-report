@@ -1145,8 +1145,49 @@ export class ReportDataService {
 			result.type = EResultPreviewType.Repositroy;
 		});
 
-		// Load the excluded results Ids
-		this._excludedResultsIds$.next(completeResultsRes.filters?.execludedResultIds ?? []);
+		// Process self-match excluded results: tag them, merge into main arrays, and auto-exclude
+		const selfMatchExcludedIds: string[] = [];
+		const selfMatchExcluded = completeResultsRes.results.selfMatchExcluded;
+		if (selfMatchExcluded) {
+			const selfMatchTag = {
+				code: RESULT_TAGS_CODES.SELF_MATCH,
+				title: $localize`Self-Match`,
+				description: $localize`This source was automatically excluded since it was submitted by the same student to another assignment in this course.`,
+			};
+
+			const tagAndCollect = (results: IResultPreviewBase[], type: EResultPreviewType) => {
+				results.forEach(result => {
+					result.type = type;
+					if (!result.tags) result.tags = [];
+					result.tags.unshift(selfMatchTag);
+					selfMatchExcludedIds.push(result.id);
+				});
+			};
+
+			tagAndCollect(selfMatchExcluded.internet ?? [], EResultPreviewType.Internet);
+			tagAndCollect(selfMatchExcluded.database ?? [], EResultPreviewType.Database);
+			tagAndCollect(selfMatchExcluded.batch ?? [], EResultPreviewType.Batch);
+			tagAndCollect(selfMatchExcluded.repositories ?? [], EResultPreviewType.Repositroy);
+
+			// Merge self-match results into main result arrays so they appear in excluded list
+			completeResultsRes.results.internet = [
+				...completeResultsRes.results.internet,
+				...(selfMatchExcluded.internet ?? []),
+			];
+			completeResultsRes.results.database = [
+				...completeResultsRes.results.database,
+				...(selfMatchExcluded.database ?? []),
+			];
+			completeResultsRes.results.batch = [...completeResultsRes.results.batch, ...(selfMatchExcluded.batch ?? [])];
+			completeResultsRes.results.repositories = [
+				...(completeResultsRes.results.repositories ?? []),
+				...(selfMatchExcluded.repositories ?? []),
+			];
+		}
+
+		// Load the excluded results Ids (include self-match excluded IDs)
+		const existingExcludedIds = completeResultsRes.filters?.execludedResultIds ?? [];
+		this._excludedResultsIds$.next([...existingExcludedIds, ...selfMatchExcludedIds]);
 
 		// Load the excluded corrections
 		this._excludedCorrections$.next(completeResultsRes.filters?.writingFeedback?.excludedCorrections ?? []);

@@ -1193,9 +1193,7 @@ export class ReportDataService {
 		// on every refresh.
 		const savedExcludedIds = completeResultsRes.filters?.execludedResultIds;
 		const hasPersistedFilters = savedExcludedIds !== undefined;
-		const mergedExcludedIds = hasPersistedFilters
-			? savedExcludedIds
-			: Array.from(new Set(selfMatchExcludedIds));
+		const mergedExcludedIds = hasPersistedFilters ? savedExcludedIds : Array.from(new Set(selfMatchExcludedIds));
 		this._excludedResultsIds$.next(mergedExcludedIds);
 
 		// Load the excluded corrections

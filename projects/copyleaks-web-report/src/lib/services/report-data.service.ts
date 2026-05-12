@@ -1185,9 +1185,18 @@ export class ReportDataService {
 			];
 		}
 
-		// Load the excluded results Ids (include self-match excluded IDs)
-		const existingExcludedIds = completeResultsRes.filters?.execludedResultIds ?? [];
-		this._excludedResultsIds$.next([...existingExcludedIds, ...selfMatchExcludedIds]);
+		// Load the excluded results Ids.
+		// First-ever load (no persisted filter state) → auto-exclude every self-match result so the
+		// "exclude self match" indicator appears by default. Once the user has saved at least once,
+		// `filters.execludedResultIds` is the source of truth — do NOT re-merge `selfMatchExcludedIds`,
+		// otherwise any self-match result the user explicitly toggled to "include" would be re-excluded
+		// on every refresh.
+		const savedExcludedIds = completeResultsRes.filters?.execludedResultIds;
+		const hasPersistedFilters = savedExcludedIds !== undefined;
+		const mergedExcludedIds = hasPersistedFilters
+			? savedExcludedIds
+			: Array.from(new Set(selfMatchExcludedIds));
+		this._excludedResultsIds$.next(mergedExcludedIds);
 
 		// Load the excluded corrections
 		this._excludedCorrections$.next(completeResultsRes.filters?.writingFeedback?.excludedCorrections ?? []);

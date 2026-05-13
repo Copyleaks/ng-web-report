@@ -87,8 +87,8 @@ endpointConfig: IClsReportEndpointConfigModel = {
 		headers: { Authorization: 'Bearer …' },
 	},
 	completeResults: {
-    url: 'https://api.yoursite.com/scans/{SCAN_ID}/results',
-    headers: { Authorization: 'Bearer …' }
+      url: 'https://api.yoursite.com/scans/{SCAN_ID}/results',
+      headers: { Authorization: 'Bearer …' }
   },
 	result: {
 		url: 'https://api.yoursite.com/scans/{SCAN_ID}/results/{RESULT_ID}',

@@ -86,7 +86,10 @@ endpointConfig: IClsReportEndpointConfigModel = {
 		url: 'https://api.yoursite.com/scans/{SCAN_ID}/crawled-version',
 		headers: { Authorization: 'Bearer …' },
 	},
-	completeResults: { url: 'https://api.yoursite.com/scans/{SCAN_ID}/results', headers: { Authorization: 'Bearer …' } },
+	completeResults: {
+    url: 'https://api.yoursite.com/scans/{SCAN_ID}/results',
+    headers: { Authorization: 'Bearer …' }
+  },
 	result: {
 		url: 'https://api.yoursite.com/scans/{SCAN_ID}/results/{RESULT_ID}',
 		headers: { Authorization: 'Bearer …' },

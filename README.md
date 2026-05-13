@@ -1,6 +1,6 @@
 <div align="center">
 
-<img src="./images/copyleaks_logo.png" alt="Copyleaks" width="220"/>
+<img src="./images/copyleaks_logo_large.png" alt="Copyleaks" width="220"/>
 
 # Copyleaks Web Report for Angular
 
@@ -77,15 +77,20 @@ export class AppModule {}
 <copyleaks-web-report
 	[reportEndpointConfig]="endpointConfig"
 	(onReportRequestError)="handleError($event)"
-	(onCompleteResultUpdate)="handleUpdate($event)">
-</copyleaks-web-report>
+	(onCompleteResultUpdate)="handleUpdate($event)"></copyleaks-web-report>
 ```
 
 ```typescript
 endpointConfig: IClsReportEndpointConfigModel = {
-	crawledVersion:  { url: 'https://api.yoursite.com/scans/{SCAN_ID}/crawled-version', headers: { Authorization: 'Bearer …' } },
-	completeResults: { url: 'https://api.yoursite.com/scans/{SCAN_ID}/results',         headers: { Authorization: 'Bearer …' } },
-	result:          { url: 'https://api.yoursite.com/scans/{SCAN_ID}/results/{RESULT_ID}', headers: { Authorization: 'Bearer …' } },
+	crawledVersion: {
+		url: 'https://api.yoursite.com/scans/{SCAN_ID}/crawled-version',
+		headers: { Authorization: 'Bearer …' },
+	},
+	completeResults: { url: 'https://api.yoursite.com/scans/{SCAN_ID}/results', headers: { Authorization: 'Bearer …' } },
+	result: {
+		url: 'https://api.yoursite.com/scans/{SCAN_ID}/results/{RESULT_ID}',
+		headers: { Authorization: 'Bearer …' },
+	},
 };
 ```
 
@@ -97,16 +102,16 @@ endpointConfig: IClsReportEndpointConfigModel = {
 
 ## 🌟 Features
 
-|   | Feature | What you get |
-|---|---|---|
-| 🎨 | **Flexible Layouts** | One-to-One, One-to-Many, AI-only, and Writing-Feedback — desktop & mobile variants ship out of the box. |
-| 📱 | **Fully Responsive** | Adapts cleanly across desktop, tablet, and mobile breakpoints. |
-| 🔌 | **Pluggable Endpoints** | Bring your own API — just point the component at three URLs. |
-| 🧩 | **Deep Customization** | Inject your own actions, tabs, results, empty states, and locked-result templates. |
-| ⚡ | **Real-Time Streaming** | Push new results into the view as they arrive — perfect for incremental scans. |
-| ♿ | **Accessibility-First** | Designed against WCAG and audited via [VPAT](https://copyleaks.com/accessibility/). |
-| 🛡 | **Robust Error Handling** | Every failed request is surfaced through a single typed event. |
-| 🌍 | **i18n Ready** | Works in any locale via `@angular/localize`. |
+|     | Feature                   | What you get                                                                                            |
+| --- | ------------------------- | ------------------------------------------------------------------------------------------------------- |
+| 🎨  | **Flexible Layouts**      | One-to-One, One-to-Many, AI-only, and Writing-Feedback — desktop & mobile variants ship out of the box. |
+| 📱  | **Fully Responsive**      | Adapts cleanly across desktop, tablet, and mobile breakpoints.                                          |
+| 🔌  | **Pluggable Endpoints**   | Bring your own API — just point the component at three URLs.                                            |
+| 🧩  | **Deep Customization**    | Inject your own actions, tabs, results, empty states, and locked-result templates.                      |
+| ⚡  | **Real-Time Streaming**   | Push new results into the view as they arrive — perfect for incremental scans.                          |
+| ♿  | **Accessibility-First**   | Designed against WCAG and audited via [VPAT](https://copyleaks.com/accessibility/).                     |
+| 🛡   | **Robust Error Handling** | Every failed request is surfaced through a single typed event.                                          |
+| 🌍  | **i18n Ready**            | Works in any locale via `@angular/localize`.                                                            |
 
 <br/>
 
@@ -128,7 +133,7 @@ A complete, production-ready report UI — every piece below is rendered for you
 ### 🤖 AI Content Detection
 
 - **AI phrases highlighting** — every AI-detected sentence is highlighted inline with a confidence indicator.
-- **AI Logic banner** — explains *why* a passage was flagged (the "explainable AI" video / rationale).
+- **AI Logic banner** — explains _why_ a passage was flagged (the "explainable AI" video / rationale).
 - **AI source matches** — when an AI-generated passage matches a known source, it's surfaced as a dedicated match entry.
 - **AI-only layout** — when plagiarism is disabled, the report cleanly renders an AI-focused view.
 - **AI disclaimer** — built-in disclaimer block to set the right expectations with end users.
@@ -161,7 +166,7 @@ A complete, production-ready report UI — every piece below is rendered for you
 
 - **`<cr-actions>`** — your own action bar (download, share, custom workflows).
 - **`<cr-custom-tabs>`** — extra tabs alongside the AI/Plagiarism tabs.
-- **`<cr-custom-results>`** — append to *or* fully replace the results list.
+- **`<cr-custom-results>`** — append to _or_ fully replace the results list.
 - **`<cr-custom-empty-results>`** — branded empty state.
 - **`[lockedResultTemplateRef]`** — fully custom locked-result template (great for upgrade prompts).
 
@@ -178,10 +183,10 @@ A complete, production-ready report UI — every piece below is rendered for you
 
 ## 🅰️ Angular Version Support
 
-| Angular | Library | Install |
-| ------- | ------- | ------- |
-| **19**  | `2.x.x` *(current)* | `npm install @copyleaks/ng-web-report@^2.0.0 --save` |
-| **13**  | `1.x.x` *(maintenance)* | `npm install @copyleaks/ng-web-report@^1.9.99 --save` |
+| Angular | Library                 | Install                                               |
+| ------- | ----------------------- | ----------------------------------------------------- |
+| **19**  | `2.x.x` _(current)_     | `npm install @copyleaks/ng-web-report@^2.0.0 --save`  |
+| **13**  | `1.x.x` _(maintenance)_ | `npm install @copyleaks/ng-web-report@^1.9.99 --save` |
 
 <details>
 <summary><strong>📑 Peer dependencies</strong></summary>
@@ -223,30 +228,30 @@ A complete, production-ready report UI — every piece below is rendered for you
 
 ### Inputs
 
-| Input | Type | Required | Description |
-| ----- | ---- | :------: | ----------- |
-| `reportEndpointConfig` | `IClsReportEndpointConfigModel` | ✅ | Endpoints + headers for fetching report data. |
-| `showDisabledProducts` | `boolean` | — | Show products that are disabled for the scan. Default `false`. |
-| `lockedResultTemplateRef` | `TemplateRef<any>` | — | Custom template for locked results. Falls back to the default view if omitted. |
+| Input                     | Type                            | Required | Description                                                                    |
+| ------------------------- | ------------------------------- | :------: | ------------------------------------------------------------------------------ |
+| `reportEndpointConfig`    | `IClsReportEndpointConfigModel` |    ✅    | Endpoints + headers for fetching report data.                                  |
+| `showDisabledProducts`    | `boolean`                       |    —     | Show products that are disabled for the scan. Default `false`.                 |
+| `lockedResultTemplateRef` | `TemplateRef<any>`              |    —     | Custom template for locked results. Falls back to the default view if omitted. |
 
 ### Outputs
 
-| Output | Payload | When it fires |
-| ------ | ------- | ------------- |
-| `onReportRequestError` | `ReportHttpRequestErrorModel` | Any HTTP request the component made failed. |
-| `onCompleteResultUpdate` | `ICompleteResults` | Complete results were fetched, **or** the filter options changed. |
+| Output                   | Payload                       | When it fires                                                     |
+| ------------------------ | ----------------------------- | ----------------------------------------------------------------- |
+| `onReportRequestError`   | `ReportHttpRequestErrorModel` | Any HTTP request the component made failed.                       |
+| `onCompleteResultUpdate` | `ICompleteResults`            | Complete results were fetched, **or** the filter options changed. |
 
 ### Query parameters the component reads & writes
 
 The report keeps its state in the URL so deep links Just Work™.
 
-| Param | Type | Purpose |
-| ----- | ---- | ------- |
-| `contentMode` | `'text' \| 'html'` | Switches content view (if that mode is available). |
-| `sourcePage` / `suspectPage` | `number` | Page number in text-view pagination (1-indexed). |
-| `suspectId` | `string` | The selected matching result. |
-| `alertCode` | `string` | The currently open alert. |
-| `viewMode`, `selectedCustomTabId`, `selectedResultsCategory`, `showAIPhrases` | various | Preserve UI state across reloads. |
+| Param                                                                         | Type               | Purpose                                            |
+| ----------------------------------------------------------------------------- | ------------------ | -------------------------------------------------- |
+| `contentMode`                                                                 | `'text' \| 'html'` | Switches content view (if that mode is available). |
+| `sourcePage` / `suspectPage`                                                  | `number`           | Page number in text-view pagination (1-indexed).   |
+| `suspectId`                                                                   | `string`           | The selected matching result.                      |
+| `alertCode`                                                                   | `string`           | The currently open alert.                          |
+| `viewMode`, `selectedCustomTabId`, `selectedResultsCategory`, `showAIPhrases` | various            | Preserve UI state across reloads.                  |
 
 <br/>
 
@@ -258,18 +263,18 @@ The report keeps its state in the URL so deep links Just Work™.
 
 ### `IClsReportEndpointConfigModel`
 
-| Field | Description |
-| ----- | ----------- |
-| `crawledVersion` | Endpoint for the crawled version of the scanned content. |
-| `completeResults` | Endpoint for the full scan results. |
-| `result` | Per-result endpoint. **Must include the `{RESULT_ID}` placeholder.** |
-| `progress` *(optional)* | Enables the real-time view. See [Real-Time Results ↓](#-real-time-results). |
+| Field                   | Description                                                                 |
+| ----------------------- | --------------------------------------------------------------------------- |
+| `crawledVersion`        | Endpoint for the crawled version of the scanned content.                    |
+| `completeResults`       | Endpoint for the full scan results.                                         |
+| `result`                | Per-result endpoint. **Must include the `{RESULT_ID}` placeholder.**        |
+| `progress` _(optional)_ | Enables the real-time view. See [Real-Time Results ↓](#-real-time-results). |
 
 ### `IEndpointDetails`
 
-| Field | Type | |
-| ----- | ---- | -- |
-| `url` | `string` | The API endpoint URL. |
+| Field     | Type                     |                                |
+| --------- | ------------------------ | ------------------------------ |
+| `url`     | `string`                 | The API endpoint URL.          |
 | `headers` | `Record<string, string>` | Headers sent on every request. |
 
 ### Full example
@@ -283,9 +288,9 @@ const headers = {
 };
 
 const reportEndpointConfig: IClsReportEndpointConfigModel = {
-	crawledVersion:  { url: 'https://api.yourservice.com/crawled-version',     headers },
-	completeResults: { url: 'https://api.yourservice.com/complete-results',    headers },
-	result:          { url: 'https://api.yourservice.com/result/{RESULT_ID}',  headers },
+	crawledVersion: { url: 'https://api.yourservice.com/crawled-version', headers },
+	completeResults: { url: 'https://api.yourservice.com/complete-results', headers },
+	result: { url: 'https://api.yourservice.com/result/{RESULT_ID}', headers },
 };
 ```
 
@@ -362,10 +367,10 @@ Add as many custom tabs as you like. The `[flexGrow]` input controls the tab's w
 
 Use the `[reportView]` input to control whether your content **appends to** or **replaces** the standard results.
 
-| Mode | Behavior |
-| ---- | -------- |
-| `ECustomResultsReportView.Partial` (`0`) | Renders **beneath** the default results. |
-| `ECustomResultsReportView.Full` (`1`) | **Replaces** the default results entirely. |
+| Mode                                     | Behavior                                   |
+| ---------------------------------------- | ------------------------------------------ |
+| `ECustomResultsReportView.Partial` (`0`) | Renders **beneath** the default results.   |
+| `ECustomResultsReportView.Full` (`1`)    | **Replaces** the default results entirely. |
 
 ```html
 <copyleaks-web-report ...>
@@ -409,10 +414,7 @@ Useful for paywalls, upgrade prompts, or permission gates. Omit the input to use
 	<app-upgrade-card [result]="result"></app-upgrade-card>
 </ng-template>
 
-<copyleaks-web-report
-	...
-	[lockedResultTemplateRef]="lockedResultTemplateRef">
-</copyleaks-web-report>
+<copyleaks-web-report ... [lockedResultTemplateRef]="lockedResultTemplateRef"></copyleaks-web-report>
 ```
 
 </details>
@@ -430,7 +432,9 @@ For incremental scans, push new results into the live view as they arrive.
 ```typescript
 import { ReportRealtimeResultsService, ResultPreview } from '@copyleaks/ng-web-report';
 
-@Component({ /* … */ })
+@Component({
+	/* … */
+})
 export class YourComponent {
 	constructor(private realtime: ReportRealtimeResultsService) {}
 
@@ -458,13 +462,13 @@ Copyleaks Web Report is built with accessibility as a first-class concern — ke
 
 ## 💬 Resources & Support
 
-|   | Resource | Link |
-|---|----------|------|
-| 📘 | **API Documentation** — endpoints, auth, payload shapes | [docs.copyleaks.com](https://docs.copyleaks.com/) |
-| 🛟 | **Help Center** — how the report is interpreted, end-user guides, FAQs | [help.copyleaks.com](https://help.copyleaks.com/) |
-| 🐛 | **Bug reports & feature requests** | [GitHub Issues](https://github.com/Copyleaks/ng-web-report/issues) |
-| 📦 | **npm package** | [@copyleaks/ng-web-report](https://www.npmjs.com/package/@copyleaks/ng-web-report) |
-| 🌐 | **Copyleaks product site** | [copyleaks.com](https://copyleaks.com) |
+|     | Resource                                                               | Link                                                                               |
+| --- | ---------------------------------------------------------------------- | ---------------------------------------------------------------------------------- |
+| 📘  | **API Documentation** — endpoints, auth, payload shapes                | [docs.copyleaks.com](https://docs.copyleaks.com/)                                  |
+| 🛟   | **Help Center** — how the report is interpreted, end-user guides, FAQs | [help.copyleaks.com](https://help.copyleaks.com/)                                  |
+| 🐛  | **Bug reports & feature requests**                                     | [GitHub Issues](https://github.com/Copyleaks/ng-web-report/issues)                 |
+| 📦  | **npm package**                                                        | [@copyleaks/ng-web-report](https://www.npmjs.com/package/@copyleaks/ng-web-report) |
+| 🌐  | **Copyleaks product site**                                             | [copyleaks.com](https://copyleaks.com)                                             |
 
 <br/>
 

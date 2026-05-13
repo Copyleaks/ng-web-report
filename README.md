@@ -1,56 +1,194 @@
-# Copyleaks Web Report
+<div align="center">
 
-[![npm version](https://img.shields.io/npm/v/@copyleaks/ng-web-report.svg)](https://www.npmjs.com/package/@copyleaks/ng-web-report)
-[![license](https://img.shields.io/npm/l/@copyleaks/ng-web-report.svg)](https://github.com/Copyleaks/ng-web-report/blob/main/LICENSE)
-[![Angular](https://img.shields.io/badge/angular-19-brightgreen)](https://angular.io/)
+<img src="./images/copyleaks_logo.png" alt="Copyleaks" width="220"/>
 
-<img align="center" src="./images/demo.gif" alt="Web Report Demo" width="600"/>
-<br>
-<br>
+# Copyleaks Web Report for Angular
 
-**Copyleaks Web Report** is an advanced Angular module designed to integrate plagiarism and AI detection reporting seamlessly. This module, developed by Copyleaks, offers a user-friendly, engaging, and flexible interface for presenting plagiarism and AI content reports; it is designed to showcase the authenticity and uniqueness of submitted files or text.
+### The drop-in plagiarism & AI-detection report your users will love.
 
-## Key Features
+[![npm version](https://img.shields.io/npm/v/@copyleaks/ng-web-report.svg?style=flat-square&color=blue)](https://www.npmjs.com/package/@copyleaks/ng-web-report)
+[![npm downloads](https://img.shields.io/npm/dm/@copyleaks/ng-web-report.svg?style=flat-square&color=brightgreen)](https://www.npmjs.com/package/@copyleaks/ng-web-report)
+[![license](https://img.shields.io/npm/l/@copyleaks/ng-web-report.svg?style=flat-square&color=lightgrey)](https://github.com/Copyleaks/ng-web-report/blob/main/LICENSE)
+[![Angular](https://img.shields.io/badge/angular-19-DD0031?style=flat-square&logo=angular&logoColor=white)](https://angular.io/)
+[![Built by Copyleaks](https://img.shields.io/badge/built%20by-Copyleaks-0066FF?style=flat-square)](https://copyleaks.com)
 
-- **Customizable Layouts**: Various layout options for report display.
-- **Responsive Design**: Adapts to different screen sizes for a consistent user experience.
-- **API Integration**: Configurable endpoints for efficient data retrieval.
-- **Accessibility Focused**: Inclusive design for a wider range of users.
-- **Error Handling**: Effective management of data retrieval errors.
+<br/>
+
+<img src="./images/demo.gif" alt="Web Report Demo" width="720"/>
+
+<br/>
+
+<a href="#-quick-start"><strong>Quick Start</strong></a> ·
+<a href="#-whats-in-the-report"><strong>What's Inside</strong></a> ·
+<a href="#-api-reference"><strong>API</strong></a> ·
+<a href="#-customization"><strong>Customization</strong></a> ·
+<a href="#-real-time-results"><strong>Real-Time</strong></a> ·
+<a href="https://docs.copyleaks.com/" target="_blank"><strong>Docs ↗</strong></a> ·
+<a href="https://help.copyleaks.com/" target="_blank"><strong>Help Center ↗</strong></a>
+
+</div>
+
+<br/>
 
 ---
 
-## Installation
+## ✨ Why Copyleaks Web Report?
 
-To install, run:
-`npm install @copyleaks/ng-web-report --save`
+Stop building a plagiarism/AI report UI from scratch. **`@copyleaks/ng-web-report`** is a battle-tested Angular module that drops into your app and renders a complete, polished, accessible report — backed by the same engine that powers [copyleaks.com](https://copyleaks.com).
+
+Wire up three endpoints. Drop in one component. Ship.
+
+```html
+<copyleaks-web-report [reportEndpointConfig]="endpointConfig"></copyleaks-web-report>
+```
+
+That's it. Everything below is for when you want to go further.
+
+<br/>
+
+---
+
+## 🚀 Quick Start
+
+### 1. Install
+
+```bash
+npm install @copyleaks/ng-web-report --save
+```
+
+> 📦 Pick the right version for your Angular: **Angular 19 → `^2.0.0`** · **Angular 13 → `^1.9.99`** · [full version matrix ↓](#-angular-version-support)
+>
+> 🔑 Don't have API keys yet? Grab them from the [Copyleaks API docs](https://docs.copyleaks.com/).
+
+### 2. Import the module
+
+```typescript
+import { CopyleaksWebReportModule } from '@copyleaks/ng-web-report';
+
+@NgModule({
+	imports: [CopyleaksWebReportModule /* …your other imports */],
+})
+export class AppModule {}
+```
+
+### 3. Render the component
+
+```html
+<copyleaks-web-report
+	[reportEndpointConfig]="endpointConfig"
+	(onReportRequestError)="handleError($event)"
+	(onCompleteResultUpdate)="handleUpdate($event)">
+</copyleaks-web-report>
+```
+
+```typescript
+endpointConfig: IClsReportEndpointConfigModel = {
+	crawledVersion:  { url: 'https://api.yoursite.com/scans/{SCAN_ID}/crawled-version', headers: { Authorization: 'Bearer …' } },
+	completeResults: { url: 'https://api.yoursite.com/scans/{SCAN_ID}/results',         headers: { Authorization: 'Bearer …' } },
+	result:          { url: 'https://api.yoursite.com/scans/{SCAN_ID}/results/{RESULT_ID}', headers: { Authorization: 'Bearer …' } },
+};
+```
+
+**Done.** You now have a full plagiarism + AI report in your app.
+
+<br/>
+
+---
+
+## 🌟 Features
+
+|   | Feature | What you get |
+|---|---|---|
+| 🎨 | **Flexible Layouts** | One-to-One, One-to-Many, AI-only, and Writing-Feedback — desktop & mobile variants ship out of the box. |
+| 📱 | **Fully Responsive** | Adapts cleanly across desktop, tablet, and mobile breakpoints. |
+| 🔌 | **Pluggable Endpoints** | Bring your own API — just point the component at three URLs. |
+| 🧩 | **Deep Customization** | Inject your own actions, tabs, results, empty states, and locked-result templates. |
+| ⚡ | **Real-Time Streaming** | Push new results into the view as they arrive — perfect for incremental scans. |
+| ♿ | **Accessibility-First** | Designed against WCAG and audited via [VPAT](https://copyleaks.com/accessibility/). |
+| 🛡 | **Robust Error Handling** | Every failed request is surfaced through a single typed event. |
+| 🌍 | **i18n Ready** | Works in any locale via `@angular/localize`. |
+
+<br/>
+
+---
+
+## 📊 What's in the Report?
+
+A complete, production-ready report UI — every piece below is rendered for you out of the box.
+
+### 🔍 Plagiarism Detection
+
+- **One-to-Many view** — source document side-by-side with a ranked list of matching results from across the web, your repository, and internal databases.
+- **One-to-One comparison** — full side-by-side compare against a single suspect document with synchronized scrolling and match navigation.
+- **Match highlighting** — color-coded identical / minor-changes / related-meaning matches, in both text and HTML views.
+- **Per-result drill-down** — click any match to jump straight to the matching passage in the suspect, with character-level precision.
+- **Result filtering** — filter by category, exclude self-matches, omit quotes/citations, and more.
+- **Locked & premium results** — built-in support for paywalled / restricted matches with a fully customizable template.
+
+### 🤖 AI Content Detection
+
+- **AI phrases highlighting** — every AI-detected sentence is highlighted inline with a confidence indicator.
+- **AI Logic banner** — explains *why* a passage was flagged (the "explainable AI" video / rationale).
+- **AI source matches** — when an AI-generated passage matches a known source, it's surfaced as a dedicated match entry.
+- **AI-only layout** — when plagiarism is disabled, the report cleanly renders an AI-focused view.
+- **AI disclaimer** — built-in disclaimer block to set the right expectations with end users.
+
+### ✍️ Writing Feedback & Assessment
+
+- **Corrections** — grammar, spelling, and style corrections rendered inline with one-click accept/reject actions.
+- **Readability score** — surfaces readability metrics alongside the content.
+- **Categories analysis panel** — breakdown by category (grammar, spelling, mechanics, etc.) for assessment workflows.
+- **Assessment Tool score panel** — dedicated scoring view for the Assessment Tool report mode.
+
+### 📑 Content Viewer
+
+- **Text & HTML modes** — switch between plain-text and rendered HTML, with the report intelligently disabling modes that aren't available.
+- **Pagination** — page-level navigation for long documents (URL-preserved via `sourcePage` / `suspectPage` query params).
+- **RTL support** — automatic right-to-left layout for Arabic, Hebrew, and other RTL languages.
+
+### ⚡ Real-Time & Performance
+
+- **Real-time results streaming** — push new matches into the live view via `ReportRealtimeResultsService.pushNewResults()`.
+- **Section animations** — newly arriving real-time results are gracefully animated into the list.
+- **Skeleton loaders** — every async section has a polished loading state — no layout shift, no janky spinners.
+
+### 🚨 Alerts & Errors
+
+- **Built-in alerts container** — surfaces suspicious content, sensitive-data, and policy alerts with deep-linkable `alertCode`s.
+- **Typed error events** — every failed API call comes back through a single `onReportRequestError` event with the request context attached.
+
+### 🎛 Custom Slots
+
+- **`<cr-actions>`** — your own action bar (download, share, custom workflows).
+- **`<cr-custom-tabs>`** — extra tabs alongside the AI/Plagiarism tabs.
+- **`<cr-custom-results>`** — append to *or* fully replace the results list.
+- **`<cr-custom-empty-results>`** — branded empty state.
+- **`[lockedResultTemplateRef]`** — fully custom locked-result template (great for upgrade prompts).
+
+### 📱 Layouts & Responsiveness
+
+- **Desktop, tablet, and mobile** variants for every layout — including a dedicated mobile AI-phrases header.
+- Four layout types: **`OneToMany`**, **`OneToOne`**, **`OnlyAi`**, **`WritingFeedback`**.
+
+> 💡 Want a deeper walkthrough of what each section means? See the [Copyleaks Help Center](https://help.copyleaks.com/).
+
+<br/>
 
 ---
 
 ## 🅰️ Angular Version Support
 
-| Angular Version | Library Version               | Install Command                                       |
-| --------------- | ----------------------------- | ----------------------------------------------------- |
-| Angular 13      | `1.x.x` (latest: `1.9.99`)    | `npm install @copyleaks/ng-web-report@^1.9.99 --save` |
-| Angular 19      | `2.x.x` (starting at `2.0.0`) | `npm install @copyleaks/ng-web-report@^2.0.0 --save`  |
+| Angular | Library | Install |
+| ------- | ------- | ------- |
+| **19**  | `2.x.x` *(current)* | `npm install @copyleaks/ng-web-report@^2.0.0 --save` |
+| **13**  | `1.x.x` *(maintenance)* | `npm install @copyleaks/ng-web-report@^1.9.99 --save` |
 
----
+<details>
+<summary><strong>📑 Peer dependencies</strong></summary>
 
-## 📑 Peer Dependencies
+<br/>
 
-### For Angular 13 (v1.x.x)
-
-| Package                      | Version         |
-| ---------------------------- | --------------- |
-| `@angular/common`            | ^13.1.1         |
-| `@angular/core`              | ^13.1.1         |
-| `@angular/localize`          | ^13.1.1         |
-| `@angular/material`          | ^13.1.1         |
-| `@angular/flex-layout`       | ^13.0.0-beta.36 |
-| `scroll-into-view-if-needed` | ^2.2.28         |
-| `ngx-skeleton-loader`        | ^5.0.0          |
-
-### For Angular 19 (v2.x.x)
+**Angular 19 (v2.x)**
 
 | Package                      | Version  |
 | ---------------------------- | -------- |
@@ -59,257 +197,287 @@ To install, run:
 | `@angular/localize`          | ^19.2.14 |
 | `@angular/material`          | ^19.2.19 |
 | `ngx-flexible-layout`        | ^19.0.0  |
-| `scroll-into-view-if-needed` | ^2.2.28  |
 | `ngx-skeleton-loader`        | ^6.0.0   |
 | `@swimlane/ngx-charts`       | ^22.0.0  |
+| `scroll-into-view-if-needed` | ^2.2.28  |
+
+**Angular 13 (v1.x)**
+
+| Package                      | Version         |
+| ---------------------------- | --------------- |
+| `@angular/common`            | ^13.1.1         |
+| `@angular/core`              | ^13.1.1         |
+| `@angular/localize`          | ^13.1.1         |
+| `@angular/material`          | ^13.1.1         |
+| `@angular/flex-layout`       | ^13.0.0-beta.36 |
+| `ngx-skeleton-loader`        | ^5.0.0          |
+| `scroll-into-view-if-needed` | ^2.2.28         |
+
+</details>
+
+<br/>
 
 ---
 
-## Integration
-
-Import the module in your Angular app:
-
-```typescript
-import { CopyleaksWebReportModule } from '@copyleaks/ng-web-report';
-
-@NgModule({
-	imports: [
-		CopyleaksWebReportModule,
-		// other imports
-	],
-})
-export class AppModule {}
-```
-
-## Using the Component
-
-Add the component in your HTML templates:
-
-```html
-<copyleaks-web-report
-	[reportEndpointConfig]="endpointConfig"
-	[showDisabledProducts]="displayDisabledProducts"
-	(onReportRequestError)="handleError($event)"
-	(onCompleteResultUpdate)="handleUpdate($event)"></copyleaks-web-report>
-```
+## 📚 API Reference
 
 ### Inputs
 
-- **`reportEndpointConfig` - Required**: (`IClsReportEndpointConfigModel`) Configures the data endpoints for fetching the report data, including URLs and headers.
-- **`showDisabledProducts` - Optional**: (`boolean`) A flag determining whether to show disabled products in the report interface. The default value is `false`.
+| Input | Type | Required | Description |
+| ----- | ---- | :------: | ----------- |
+| `reportEndpointConfig` | `IClsReportEndpointConfigModel` | ✅ | Endpoints + headers for fetching report data. |
+| `showDisabledProducts` | `boolean` | — | Show products that are disabled for the scan. Default `false`. |
+| `lockedResultTemplateRef` | `TemplateRef<any>` | — | Custom template for locked results. Falls back to the default view if omitted. |
 
 ### Outputs
 
-- **`onReportRequestError`**: (`EventEmitter<ReportHttpRequestErrorModel>`) Emits an event with HTTP request data when any request to update or fetch report data fails, allowing for custom error handling.
-- **`onCompleteResultUpdate`**: (`EventEmitter<ICompleteResults>`) Emits an event when the complete report results data is successfully retrieved and also when there is an update in the filter options (which are part of the complete results model). This ensures users are appropriately informed about the availability of complete results and any changes in the filter dialog data.
+| Output | Payload | When it fires |
+| ------ | ------- | ------------- |
+| `onReportRequestError` | `ReportHttpRequestErrorModel` | Any HTTP request the component made failed. |
+| `onCompleteResultUpdate` | `ICompleteResults` | Complete results were fetched, **or** the filter options changed. |
 
-### Note on Report View Parameters
+### Query parameters the component reads & writes
 
-The Copyleaks Web Report Module interprets several query parameters to tailor the report view:
+The report keeps its state in the URL so deep links Just Work™.
 
-- **`contentMode`** (string): Determines the content view type. It accepts 'text' or 'html', which will only change the content view mode **if the selected mode is available**
-- **`sourcePage`** & **`suspectPage`** (number): Represent the page number in text view pagination, starting from 1.
-- **`suspectId`** (string): The identifier of the selected matching result.
-- **`alertCode`** (string): The code of the selected alert.
+| Param | Type | Purpose |
+| ----- | ---- | ------- |
+| `contentMode` | `'text' \| 'html'` | Switches content view (if that mode is available). |
+| `sourcePage` / `suspectPage` | `number` | Page number in text-view pagination (1-indexed). |
+| `suspectId` | `string` | The selected matching result. |
+| `alertCode` | `string` | The currently open alert. |
+| `viewMode`, `selectedCustomTabId`, `selectedResultsCategory`, `showAIPhrases` | various | Preserve UI state across reloads. |
 
-These parameters allow for the dynamic and contextual presentation of the plagiarism report, adapting to user-specific requirements.
+<br/>
 
 ---
 
-## Configuration and Models
+## 🔧 Configuring Endpoints
 
-### IClsReportEndpointConfigModel
+> 📘 For the full request/response shape of each endpoint, see the [Copyleaks API documentation](https://docs.copyleaks.com/).
 
-This model is used for configuring the API endpoints for the plagiarism report data:
+### `IClsReportEndpointConfigModel`
 
-- **`crawledVersion`**: Endpoint details for fetching the crawled version of scanned content.
-- **`completeResults`**: Endpoint details for fetching complete scanning results.
-- **`result`**: This specifies the endpoint for retrieving individual scan results. It's important to include `{RESULT_ID}` within the endpoint URL, which acts as a placeholder for the unique identifier of each result and ensures that the correct result is fetched based on its specific ID.
+| Field | Description |
+| ----- | ----------- |
+| `crawledVersion` | Endpoint for the crawled version of the scanned content. |
+| `completeResults` | Endpoint for the full scan results. |
+| `result` | Per-result endpoint. **Must include the `{RESULT_ID}` placeholder.** |
+| `progress` *(optional)* | Enables the real-time view. See [Real-Time Results ↓](#-real-time-results). |
 
-#### IEndpointDetails
+### `IEndpointDetails`
 
-A nested interface in `IClsReportEndpointConfigModel` that defines the structure of each endpoint detail object:
+| Field | Type | |
+| ----- | ---- | -- |
+| `url` | `string` | The API endpoint URL. |
+| `headers` | `Record<string, string>` | Headers sent on every request. |
 
-- **`url`**: The URL of the API endpoint.
-- **`headers`**: A dictionary of headers for the API call.
-
-**Example Usage:**
+### Full example
 
 ```typescript
-import { IClsReportEndpointConfigModel, IEndpointDetails } from '@copyleaks/ng-web-report';
+import { IClsReportEndpointConfigModel } from '@copyleaks/ng-web-report';
 
-// Example endpoint details
-const crawledVersionEndpoint: IEndpointDetails = {
-	url: 'https://api.yourservice.com/crawled-version',
-	headers: {
-		Authorization: 'Bearer your-auth-token',
-		'Content-Type': 'application/json',
-	},
+const headers = {
+	Authorization: 'Bearer your-auth-token',
+	'Content-Type': 'application/json',
 };
 
-const completeResultsEndpoint: IEndpointDetails = {
-	url: 'https://api.yourservice.com/complete-results',
-	headers: {
-		Authorization: 'Bearer your-auth-token',
-		'Content-Type': 'application/json',
-	},
-};
-
-const resultEndpoint: IEndpointDetails = {
-	url: 'https://api.yourservice.com/result/{RESULT_ID}',
-	headers: {
-		Authorization: 'Bearer your-auth-token',
-		'Content-Type': 'application/json',
-	},
-};
-
-// Configuring the IClsReportEndpointConfigModel
 const reportEndpointConfig: IClsReportEndpointConfigModel = {
-	crawledVersion: crawledVersionEndpoint,
-	completeResults: completeResultsEndpoint,
-	result: resultEndpoint,
+	crawledVersion:  { url: 'https://api.yourservice.com/crawled-version',     headers },
+	completeResults: { url: 'https://api.yourservice.com/complete-results',    headers },
+	result:          { url: 'https://api.yourservice.com/result/{RESULT_ID}',  headers },
 };
-
-// Use `reportEndpointConfig` in your application where needed
 ```
 
-## Event Handling
+<br/>
 
-Implement the following event handling methods in your Angular component:
+---
+
+## 🛎 Event Handling
 
 ```typescript
 import { ICompleteResults, ReportHttpRequestErrorModel } from '@copyleaks/ng-web-report';
 
-...
-
 handleError(error: ReportHttpRequestErrorModel): void {
-  // Your error handling logic here
+	// Surface a toast, retry, log to Sentry, etc.
 }
 
 handleUpdate(results: ICompleteResults): void {
-  // Your logic for processing report updates here
+	// React to new complete results or filter changes.
 }
 ```
 
+<br/>
+
 ---
 
-## Advanced Usage
+## 🎨 Customization
 
-For advanced users, the Copyleaks Web Report offers extensive customization and control over the plagiarism report presentation and data handling. Here are some advanced techniques:
+The report ships with sensible defaults and **first-class extension points** so you can inject your own UI without forking the library.
 
-### Custom Templates and Content Injection
+<details open>
+<summary><strong><code>&lt;cr-actions&gt;</code> — custom action buttons</strong></summary>
 
-Utilize Angular's powerful templating capabilities to create custom layouts and display components for your plagiarism reports, enhancing the user interface and experience.
+<br/>
 
-- **Adding Custom Actions with `<cr-actions>`**:
-  Inject custom content directly into the Copyleaks report component. Use the `<cr-actions>` tag to insert fully custom report actions (both logic and style) into the report's interface.
+Replace the default action bar with your own buttons, menus, or logic.
 
-  Example Usage:
+```html
+<copyleaks-web-report ...>
+	<cr-actions>
+		<button (click)="download()">Download PDF</button>
+		<button (click)="share()">Share</button>
+	</cr-actions>
+</copyleaks-web-report>
+```
 
-  ```html
-  <copyleaks-web-report ...>
-  	<cr-actions>
-  		<!-- Here, you can insert your custom actions, buttons, or any other interactive elements. -->
-  	</cr-actions>
-  </copyleaks-web-report>
-  ```
+</details>
 
-  This feature allows for a high degree of customization, enabling users to tailor the report actions to their specific needs.
+<details>
+<summary><strong><code>&lt;cr-custom-tabs&gt;</code> — extra tabs alongside AI / Plagiarism</strong></summary>
 
-- **Adding Custom Tabs with `<cr-custom-tabs>`**:
-  Enhance your plagiarism report with additional information and features using custom tabs. The `<cr-custom-tabs>` component allows for the integration of custom tabs alongside the standard AI and plagiarism tabs. Each tab is represented by a `<cr-custom-tab-item>`, which includes a title and content area defined by `<cr-custom-tab-item-title>` and `<cr-custom-tab-item-content>`. This setup lets you present additional, tailored content within the report's interface.
+<br/>
 
-  Example Usage:
+Add as many custom tabs as you like. The `[flexGrow]` input controls the tab's width relative to the others (e.g. `0.3` means it claims 30% of the row).
 
-  ```html
-  <copyleaks-web-report ...>
-  	<cr-custom-tabs>
-  		<cr-custom-tab-item [flexGrow]="0.3">
-  			<cr-custom-tab-item-title>Here the title goes</cr-custom-tab-item-title>
-  			<cr-custom-tab-item-content>Here the content goes</cr-custom-tab-item-content>
-  		</cr-custom-tab-item>
-  	</cr-custom-tabs>
-  </copyleaks-web-report>
-  ```
+```html
+<copyleaks-web-report ...>
+	<cr-custom-tabs>
+		<cr-custom-tab-item [flexGrow]="0.3">
+			<cr-custom-tab-item-title>Insights</cr-custom-tab-item-title>
+			<cr-custom-tab-item-content>
+				<app-insights-panel></app-insights-panel>
+			</cr-custom-tab-item-content>
+		</cr-custom-tab-item>
+	</cr-custom-tabs>
+</copyleaks-web-report>
+```
 
-  The `cr-custom-tab-item` component includes a `flexGrow` input, which sets the `flex-grow` CSS property for the tab. This property determines the tab's width relative to other tabs in the Copyleaks report:
-  **`[flexGrow]`**: A numeric value that defines the proportion of the available space inside the flex container that the tab should take up. For example, setting `[flexGrow]="0.3"` on a custom tab and `0.5` on each of the Plagiarism and AI tabs means the custom tab will take up 30% of the available space.
+</details>
 
-- **Adding Custom Results Section with `<cr-custom-results>`**:
-  The `<cr-custom-results>` component allows extensive customization of the results section in the Copyleaks plagiarism report. Depending on the use case, it can either complement the existing results or replace them entirely.
+<details>
+<summary><strong><code>&lt;cr-custom-results&gt;</code> — augment or replace the results list</strong></summary>
 
-  Example Usage:
+<br/>
 
-  ```html
-  <copyleaks-web-report ...>
-  	<cr-custom-results [reportView]="reportView">
-  		<cr-custom-results-box-content>
-  			<!-- Content for the custom results section goes here -->
-  		</cr-custom-results-box-content>
-  	</cr-custom-results>
-  </copyleaks-web-report>
-  ```
+Use the `[reportView]` input to control whether your content **appends to** or **replaces** the standard results.
 
-  The `reportView` input, tied to the `ECustomResultsReportView` enum, dictates the display mode of the custom results section:
+| Mode | Behavior |
+| ---- | -------- |
+| `ECustomResultsReportView.Partial` (`0`) | Renders **beneath** the default results. |
+| `ECustomResultsReportView.Full` (`1`) | **Replaces** the default results entirely. |
 
-  - **`ECustomResultsReportView.Partial` (value `0`)**: When set to `Partial`, the custom results component appears beneath the standard report results.
-  - **`ECustomResultsReportView.Full` (value `1`)**: When set to `Full`, the custom results component replaces the entire standard results section
+```html
+<copyleaks-web-report ...>
+	<cr-custom-results [reportView]="reportView">
+		<cr-custom-results-box-content>
+			<app-my-results></app-my-results>
+		</cr-custom-results-box-content>
+	</cr-custom-results>
+</copyleaks-web-report>
+```
 
-  The `cr-custom-results-box-content` is used to define the content of the custom results section. Regardless if the `cr-custom-results-box-content` is added, this custom results component is displayed with a background animation, making it visually distinct and engaging.
+</details>
 
-- **Customizing Empty Results with `<cr-custom-empty-results>`**:
-  The `<cr-custom-empty-results>` component is designed to provide a custom view for cases where no results are found in the Copyleaks plagiarism report. This allows for a more tailored user experience, particularly when you want to provide specific information or guidance in the event of an empty result set.
+<details>
+<summary><strong><code>&lt;cr-custom-empty-results&gt;</code> — branded empty state</strong></summary>
 
-  ```html
-  <copyleaks-web-report ...>
-  	<cr-custom-empty-results>
-  		<!-- Custom content for the empty results state goes here -->
-  	</cr-custom-empty-results>
-  </copyleaks-web-report>
-  ```
+<br/>
 
-- **Customizing Locked Results with `lockedResultTemplateRef`**:
-  The `lockedResultTemplateRef` input of the `copyleaks-web-report` component enables the customization of locked result presentations within the plagiarism report. This feature is particularly useful for providing a tailored user experience for results that are not immediately accessible or require specific actions to unlock. Note that the default locked result view will be shown if the template reference isn't passed to the web report component.
+```html
+<copyleaks-web-report ...>
+	<cr-custom-empty-results>
+		<div class="empty">
+			<h3>No matches found 🎉</h3>
+			<p>This document looks original.</p>
+		</div>
+	</cr-custom-empty-results>
+</copyleaks-web-report>
+```
 
-  ##### **Usage**:
+</details>
 
-  The `lockedResultTemplateRef` is a template reference variable you can define in your Angular templates. You can then pass this template to the `copyleaks-web-report` component to customize how locked results are displayed.
+<details>
+<summary><strong><code>[lockedResultTemplateRef]</code> — customize locked results</strong></summary>
 
-  Example Usage:
+<br/>
 
-  ```html
-  <ng-template #lockedResultTemplateRef let-result="result">
-  	<!-- Custom content for locked results goes here -->
-  </ng-template>
+Useful for paywalls, upgrade prompts, or permission gates. Omit the input to use the default locked view.
 
-  <copyleaks-web-report ... [lockedResultTemplateRef]="lockedResultTemplateRef" ...></copyleaks-web-report>
-  ```
+```html
+<ng-template #lockedResultTemplateRef let-result="result">
+	<app-upgrade-card [result]="result"></app-upgrade-card>
+</ng-template>
 
-### Adding Real-Time Results
+<copyleaks-web-report
+	...
+	[lockedResultTemplateRef]="lockedResultTemplateRef">
+</copyleaks-web-report>
+```
 
-The `CopyleaksWebReportModule` includes the `ReportRealtimeResultsService`, a powerful feature that enables the addition of new results to the real-time view of the plagiarism report. This capability benefits applications where plagiarism check results are received incrementally and must be displayed to the user as they arrive**.**
+</details>
 
-##### **Usage**:
+<br/>
 
-The `ReportRealtimeResultsService` is instrumental when you have the real-time view enabled (which is available if the `progress` endpoint is included in your configuration model). It allows for a dynamic and interactive experience by updating the report with new results as they become available.
+---
 
-The key function in this service is `pushNewResults`, which takes an array of `ResultPreview` objects and adds them to the existing results in the real-time view. This function can be used to incrementally update the report, ensuring that the latest results are always displayed.
+## ⚡ Real-Time Results
 
-Example Usage:
+For incremental scans, push new results into the live view as they arrive.
+
+> ℹ️ **Prerequisite:** the real-time view is only enabled when you include the `progress` endpoint in your `reportEndpointConfig`.
 
 ```typescript
 import { ReportRealtimeResultsService, ResultPreview } from '@copyleaks/ng-web-report';
 
-@Component({...})
+@Component({ /* … */ })
 export class YourComponent {
-  constructor(private _realtimeResultsService: ReportRealtimeResultsService) {}
+	constructor(private realtime: ReportRealtimeResultsService) {}
 
-  addNewResults(newResults: ResultPreview[]): void {
-    this._realtimeResultsService.pushNewResults(newResults);
-  }
+	onNewBatch(results: ResultPreview[]): void {
+		this.realtime.pushNewResults(results);
+	}
 }
 ```
 
-## Accessibility
+The component handles ordering, deduping, and rendering for you.
 
-The [VPAT report (PDF)](https://copyleaks.com/accessibility/) can be downloaded from Copyleaks Commitment to Accessibility page
+<br/>
+
+---
+
+## ♿ Accessibility
+
+Copyleaks Web Report is built with accessibility as a first-class concern — keyboard navigation, ARIA semantics, focus management, and high-contrast support are all baked in.
+
+📄 **[Download the VPAT report (PDF)](https://copyleaks.com/accessibility/)** from the Copyleaks Commitment to Accessibility page.
+
+<br/>
+
+---
+
+## 💬 Resources & Support
+
+|   | Resource | Link |
+|---|----------|------|
+| 📘 | **API Documentation** — endpoints, auth, payload shapes | [docs.copyleaks.com](https://docs.copyleaks.com/) |
+| 🛟 | **Help Center** — how the report is interpreted, end-user guides, FAQs | [help.copyleaks.com](https://help.copyleaks.com/) |
+| 🐛 | **Bug reports & feature requests** | [GitHub Issues](https://github.com/Copyleaks/ng-web-report/issues) |
+| 📦 | **npm package** | [@copyleaks/ng-web-report](https://www.npmjs.com/package/@copyleaks/ng-web-report) |
+| 🌐 | **Copyleaks product site** | [copyleaks.com](https://copyleaks.com) |
+
+<br/>
+
+---
+
+## 📄 License
+
+[MIT](https://github.com/Copyleaks/ng-web-report/blob/main/LICENSE) © [Copyleaks](https://copyleaks.com)
+
+<br/>
+
+<div align="center">
+
+Built with ❤️ by the <a href="https://copyleaks.com">Copyleaks</a> team.
+
+</div>

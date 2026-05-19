@@ -96,7 +96,7 @@ export class ReportCorrectionsContainerComponent implements OnInit, OnDestroy, O
 	selectedCategroyTitle: string;
 	selectedCategroyDescription: string;
 	selectedCategroyCorrections: IWritingFeedbackCorrectionViewModel[];
-	emptyCorrectionsMessage: string = $localize`No Grammar corrections were found!`;
+	emptyCorrectionsMessage: string = $localize`No Grammar checker results were found!`;
 	totalIgnoredWritingFeedbackIssues: number = 0;
 	totalSelectedWritingFeedbackIssues: number = 0;
 

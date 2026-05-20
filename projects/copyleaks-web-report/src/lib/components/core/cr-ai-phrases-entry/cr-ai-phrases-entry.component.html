@@ -35,7 +35,7 @@
 					</defs>
 				</svg>
 
-				<span i18n>AI Phrases</span>
+				<h3 class="entry-title" i18n>AI Phrases</h3>
 			</div>
 			<ng-container *ngIf="!aiInsightAlert; else notApplicableRef">
 				<div class="total-results" i18n>
@@ -114,7 +114,7 @@
 
 	<div *ngIf="!totalPhrases && aiPercentageResult > 0" class="empty-state-with-ai-score">
 		<div class="info-icon-container">
-			<mat-icon fontSet="material-icons-round">info_outline</mat-icon>
+			<mat-icon fontSet="material-icons-round" aria-hidden="true">info_outline</mat-icon>
 		</div>
 
 		<span i18n>

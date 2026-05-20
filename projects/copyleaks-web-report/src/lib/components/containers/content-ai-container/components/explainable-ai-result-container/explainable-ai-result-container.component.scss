@@ -207,6 +207,27 @@
 					color: rgba(11, 22, 62, 0.6);
 					cursor: pointer;
 				}
+				.info-icon-btn {
+					background: transparent;
+					border: none;
+					padding: 0;
+					margin: 0;
+					display: inline-flex;
+					align-items: center;
+					justify-content: center;
+					cursor: pointer;
+					line-height: 0;
+					color: inherit;
+					font: inherit;
+					&:focus {
+						outline: none;
+					}
+					&:focus-visible {
+						outline: 2px solid $color-primary;
+						outline-offset: 2px;
+						border-radius: 2px;
+					}
+				}
 				span {
 					color: var(--Black-600, rgba(11, 22, 62, 0.6));
 					font-family: 'haboro-soft' !important;
@@ -342,6 +363,21 @@
 							font-size: 18px;
 							color: rgba(11, 22, 62, 0.6);
 							cursor: pointer;
+						}
+						.info-icon-btn {
+							background: transparent;
+							border: none;
+							padding: 0;
+							display: inline-flex;
+							align-items: center;
+							justify-content: center;
+							cursor: pointer;
+							line-height: 0;
+							&:focus-visible {
+								outline: 2px solid $color-primary;
+								outline-offset: 2px;
+								border-radius: 2px;
+							}
 						}
 					}
 					.ai-count-container,
@@ -719,6 +755,7 @@
 			align-self: stretch;
 
 			.title-text {
+				margin: 0;
 				color: $color-black;
 				font-size: 20px;
 				font-style: normal;
@@ -732,6 +769,28 @@
 				width: 18px;
 				color: rgba(11, 22, 62, 0.6);
 				cursor: pointer;
+			}
+
+			.info-icon-btn {
+				background: transparent;
+				border: none;
+				padding: 0;
+				margin: 0;
+				display: inline-flex;
+				align-items: center;
+				justify-content: center;
+				cursor: pointer;
+				line-height: 0;
+				color: inherit;
+				font: inherit;
+				&:focus {
+					outline: none;
+				}
+				&:focus-visible {
+					outline: 2px solid $color-primary;
+					outline-offset: 2px;
+					border-radius: 2px;
+				}
 			}
 		}
 
@@ -760,7 +819,9 @@
 		align-items: center;
 		gap: 8px;
 
+		.title-text,
 		span {
+			margin: 0;
 			color: $color-black;
 			font-size: 18px;
 			font-style: normal;
@@ -779,6 +840,28 @@
 		font-style: normal;
 		font-weight: 400;
 		line-height: normal;
+	}
+
+	.info-icon-btn {
+		background: transparent;
+		border: none;
+		padding: 0;
+		margin: 0;
+		display: inline-flex;
+		align-items: center;
+		justify-content: center;
+		cursor: pointer;
+		line-height: 0;
+		color: inherit;
+		font: inherit;
+		&:focus {
+			outline: none;
+		}
+		&:focus-visible {
+			outline: 2px solid $color-primary;
+			outline-offset: 2px;
+			border-radius: 2px;
+		}
 	}
 }
 

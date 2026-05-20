@@ -56,23 +56,22 @@
 			</mat-icon>
 		</button>
 		<ng-template #excludedIconRef>
-			<mat-icon
+			<button
+				*ngIf="isMenuAccessible"
 				#menuTrigger="matMenuTrigger"
-				(keydown)="$event.stopPropagation(); $event.preventDefault(); openResultMenu(menuTrigger)"
-				class="options-icon"
-				fontSet="material-icons-round"
-				(click)="$event.stopPropagation(); $event.preventDefault()"
+				type="button"
+				class="options-icon-btn"
 				[matMenuTriggerFor]="menu"
 				matTooltip="More Options"
 				i18n-matTooltip
 				matTooltipClass="web-report-mat-tooltip"
 				aria-label="More Options"
-				role="button"
 				i18n-aria-label
-				[tabIndex]="isMenuAccessible ? 0 : -1"
-				[attr.aria-hidden]="!isMenuAccessible">
-				more_vert
-			</mat-icon>
+				aria-haspopup="menu"
+				(keydown)="$event.stopPropagation(); $event.preventDefault(); openResultMenu(menuTrigger)"
+				(click)="$event.stopPropagation(); $event.preventDefault()">
+				<mat-icon class="options-icon" fontSet="material-icons-round" aria-hidden="true">more_vert</mat-icon>
+			</button>
 		</ng-template>
 	</div>
 	<span *ngIf="!hideDescription" class="correction-type-description" [dir]="docDirection" i18n>

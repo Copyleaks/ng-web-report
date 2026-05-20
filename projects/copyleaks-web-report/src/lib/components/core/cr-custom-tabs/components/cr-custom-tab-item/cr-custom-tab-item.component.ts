@@ -28,6 +28,60 @@ export class CrCustomTabItemComponent implements OnInit {
 
 	constructor(private _reportViewSvc: ReportViewService) {}
 
+	onKeydown(event: KeyboardEvent): void {
+		// WAI-ARIA tabs pattern keyboard support: arrows move between sibling tabs, Home/End jump to ends.
+		// Use event.currentTarget (the rendered <button>) — the cr-custom-tab-item host element lives
+		// inside <cr-custom-tabs> in the parent DOM, NOT inside the tablist (the button is projected
+		// into the tablist via ng-template), so this._el.nativeElement.closest('[role="tablist"]') is null.
+		const key = event.key;
+		if (
+			key !== 'ArrowDown' &&
+			key !== 'ArrowRight' &&
+			key !== 'ArrowUp' &&
+			key !== 'ArrowLeft' &&
+			key !== 'Home' &&
+			key !== 'End' &&
+			key !== 'Enter' &&
+			key !== ' '
+		)
+			return;
+
+		if (key === 'Enter' || key === ' ') {
+			event.preventDefault();
+			this.clickEvent();
+			return;
+		}
+
+		const currentBtn = event.currentTarget as HTMLElement;
+		const tablist = currentBtn.closest('[role="tablist"]') as HTMLElement | null;
+		if (!tablist) return;
+		const tabs = Array.from(tablist.querySelectorAll<HTMLElement>('[role="tab"]:not([disabled])'));
+		if (tabs.length === 0) return;
+		const currentIndex = tabs.indexOf(currentBtn);
+		if (currentIndex === -1) return;
+
+		let nextIndex = currentIndex;
+		switch (key) {
+			case 'ArrowDown':
+			case 'ArrowRight':
+				nextIndex = (currentIndex + 1) % tabs.length;
+				break;
+			case 'ArrowUp':
+			case 'ArrowLeft':
+				nextIndex = (currentIndex - 1 + tabs.length) % tabs.length;
+				break;
+			case 'Home':
+				nextIndex = 0;
+				break;
+			case 'End':
+				nextIndex = tabs.length - 1;
+				break;
+		}
+		event.preventDefault();
+		tabs[nextIndex].focus();
+		tabs[nextIndex].click();
+	}
+
 	ngOnInit(): void {
 		this._reportViewSvc.selectedCustomTabContent$.pipe(untilDestroy(this)).subscribe(content => {
 			this.selected = content === this.tabTemplateContent;

@@ -2,7 +2,7 @@
 	<ng-container *ngIf="!isLoading; else loadingState">
 		<div class="contet-container" fxLayout="column" fxLayoutAlign="start start" fxLayoutGap="8px">
 			<div class="title" fxLayout="row" fxLayoutAlign="space-between center" fxLayoutGap="4px">
-				<span i18n>{aiPercentageResult, select, 0 {No AI Content Found} other {AI Content Found} }</span>
+				<h2 class="title-text" i18n>{aiPercentageResult, select, 0 {No AI Content Found} other {AI Content Found} }</h2>
 				<button
 					type="button"
 					class="info-icon-btn"

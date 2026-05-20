@@ -64,7 +64,9 @@
 				display: flex;
 				align-items: center;
 				gap: 4px;
+				.entry-title,
 				span {
+					margin: 0;
 					color: $color-black;
 					font-size: 16px;
 					font-style: normal;

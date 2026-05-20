@@ -755,6 +755,7 @@
 			align-self: stretch;
 
 			.title-text {
+				margin: 0;
 				color: $color-black;
 				font-size: 20px;
 				font-style: normal;
@@ -818,7 +819,9 @@
 		align-items: center;
 		gap: 8px;
 
+		.title-text,
 		span {
+			margin: 0;
 			color: $color-black;
 			font-size: 18px;
 			font-style: normal;

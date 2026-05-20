@@ -8,7 +8,9 @@
 	.contet-container {
 		.title {
 			width: 100%;
+			.title-text,
 			span {
+				margin: 0;
 				color: $color-black;
 				font-family: 'Almarai' !important;
 				font-size: 18px;

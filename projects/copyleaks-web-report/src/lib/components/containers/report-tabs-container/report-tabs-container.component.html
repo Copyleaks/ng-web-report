@@ -9,11 +9,19 @@
 					</div>
 				</ng-container>
 
+				<div
+					class="web-report-tablist"
+					role="tablist"
+					[attr.aria-orientation]="isMobile ? 'vertical' : 'horizontal'"
+					aria-label="Report sections"
+					i18n-aria-label>
 				<a
 					*ngIf="!hidePlagarismTap || showDisabledProducts"
-					tabindex="0"
-					role="button"
-					aria-describedby="plagiarism-view-text"
+					role="tab"
+					id="wr-tab-matching"
+					[attr.aria-selected]="selectedTap === EReportViewType.PlagiarismView && !hidePlagarismTap"
+					[tabindex]="selectedTap === EReportViewType.PlagiarismView && !hidePlagarismTap ? 0 : -1"
+					(keydown)="onTabKeydown($event)"
 					@fadeIn
 					class="tab-plagiarism"
 					[reportViewService]="reportViewSvc"
@@ -53,8 +61,7 @@
 					[matTooltip]="hidePlagarismTap && showDisabledProducts ? DISABLED : ''"
 					[dir]="docDirection"
 					matTooltipClass="web-report-mat-tooltip"
-					(click)="selectTap(EReportViewType.PlagiarismView)"
-					(keyup.enter)="selectTap(EReportViewType.PlagiarismView)">
+					(click)="selectTap(EReportViewType.PlagiarismView)">
 					<ng-container *ngIf="!isMobile; else mobileViewRef">
 						<div class="bar-title-container">
 							<span id="plagiarism-view-text" class="bar-title" web-report-title-font i18n>Matched Text</span>
@@ -134,10 +141,12 @@
 				<a
 					*ngIf="!hideAiTap || showDisabledProducts"
 					@fadeIn
-					role="button"
-					aria-describedby="AI-view-text"
+					role="tab"
+					id="wr-tab-ai-content"
+					[attr.aria-selected]="selectedTap === EReportViewType.AIView && !hideAiTap"
+					[tabindex]="selectedTap === EReportViewType.AIView && !hideAiTap ? 0 : -1"
+					(keydown)="onTabKeydown($event)"
 					class="tab-ai"
-					tabindex="0"
 					[reportViewService]="reportViewSvc"
 					[crReportScoreTooltip]="
 						hideAiTap && showDisabledProducts
@@ -172,8 +181,7 @@
 					[dir]="docDirection"
 					[matTooltip]="hideAiTap && showDisabledProducts ? DISABLED : ''"
 					matTooltipClass="web-report-mat-tooltip"
-					(click)="selectTap(EReportViewType.AIView)"
-					(keyup.enter)="selectTap(EReportViewType.AIView)">
+					(click)="selectTap(EReportViewType.AIView)">
 					<ng-container *ngIf="!isMobile; else mobileViewRef">
 						<div class="bar-title-container">
 							<span id="AI-view-text" class="bar-title" web-report-title-font i18n>AI Content</span>
@@ -244,9 +252,11 @@
 					*ngIf="(!hideWritingFeedbackTap || showDisabledProducts) && !forceWritingFeedbackTapHide"
 					@fadeIn
 					class="tab-grammar"
-					tabindex="0"
-					role="button"
-					aria-describedby="WritingFeedback-view-text"
+					role="tab"
+					id="wr-tab-grammar-check"
+					[attr.aria-selected]="selectedTap === EReportViewType.WritingFeedbackTabView && !hideWritingFeedbackTap"
+					[tabindex]="selectedTap === EReportViewType.WritingFeedbackTabView && !hideWritingFeedbackTap ? 0 : -1"
+					(keydown)="onTabKeydown($event)"
 					[style.flex-grow]="1"
 					[class.tab-selected]="selectedTap === EReportViewType.WritingFeedbackTabView && !hideWritingFeedbackTap"
 					[class.tab-disabled]="hideWritingFeedbackTap && showDisabledProducts"
@@ -261,8 +271,7 @@
 					[dir]="docDirection"
 					[matTooltip]="hideWritingFeedbackTap && showDisabledProducts ? DISABLED : ''"
 					matTooltipClass="web-report-mat-tooltip"
-					(click)="selectTap(EReportViewType.WritingFeedbackTabView)"
-					(keyup.enter)="selectTap(EReportViewType.WritingFeedbackTabView)">
+					(click)="selectTap(EReportViewType.WritingFeedbackTabView)">
 					<ng-container *ngIf="!isMobile; else mobileViewRef">
 						<div class="bar-title-container">
 							<span id="WritingFeedback-view-text" class="bar-title" web-report-title-font i18n>Grammar Check</span>
@@ -302,6 +311,7 @@
 				<ng-container *ngFor="let ref of customTabsTemplateRef">
 					<ng-container *ngTemplateOutlet="ref"></ng-container>
 				</ng-container>
+				</div>
 			</ng-container>
 
 			<ng-template #loadingViewRef>

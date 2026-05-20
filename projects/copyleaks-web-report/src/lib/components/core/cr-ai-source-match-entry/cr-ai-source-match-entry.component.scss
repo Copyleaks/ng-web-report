@@ -221,6 +221,21 @@
 			color: $color-black-opacity-60;
 			cursor: pointer;
 		}
+		.info-icon-btn {
+			background: transparent;
+			border: none;
+			padding: 0;
+			display: inline-flex;
+			align-items: center;
+			justify-content: center;
+			cursor: pointer;
+			line-height: 0;
+			&:focus-visible {
+				outline: 2px solid $color-primary;
+				outline-offset: 2px;
+				border-radius: 2px;
+			}
+		}
 	}
 
 	.title-loading-container {

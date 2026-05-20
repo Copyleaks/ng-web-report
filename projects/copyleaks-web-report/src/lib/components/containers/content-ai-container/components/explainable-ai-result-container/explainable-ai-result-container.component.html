@@ -13,14 +13,16 @@
 				<div class="desktop-view-ai-logics-title-container">
 					<div class="title-text-container">
 						<div class="title-text" i18n>AI Logic</div>
-						<mat-icon
-							fontSet="material-icons-round"
+						<button
+							type="button"
+							class="info-icon-btn"
+							aria-label="About AI Logic detection"
+							i18n-aria-label
 							matTooltip="AI Logic uses a layered detection approach that applies multiple analysis methods in tandem, providing a highly accurate perspective on how AI may have influenced a piece of text."
 							matTooltipClass="web-report-mat-tooltip tooltip-contanier"
-							tabindex="0"
 							i18n-matTooltip>
-							info_outline
-						</mat-icon>
+							<mat-icon fontSet="material-icons-round" aria-hidden="true">info_outline</mat-icon>
+						</button>
 					</div>
 					<span class="title-text-description" i18n>
 						Shows you the “why” behind AI detection with sources you can see and verify.
@@ -135,16 +137,16 @@
 					fxLayoutAlign="start center"
 					fxLayoutGap="16px">
 					<div class="ratio-contanier" fxLayout="row" fxLayoutAlign="start center" fxLayoutGap="2px">
-						<mat-icon
-							class="info-icon"
-							fontSet="material-icons-outlined"
-							aria-hidden="false"
-							[tabIndex]="0"
+						<button
+							type="button"
+							class="info-icon-btn"
+							aria-label="About the ratio score"
+							i18n-aria-label
 							[matTooltip]="proportionTooltipText"
 							[matTooltipPosition]="'after'"
 							matTooltipClass="web-report-mat-tooltip tooltip-contanier">
-							info
-						</mat-icon>
+							<mat-icon class="info-icon" fontSet="material-icons-outlined" aria-hidden="true">info</mat-icon>
+						</button>
 						<span i18n>Ratio</span>
 					</div>
 					<span class="phrase" i18n>Phrase</span>
@@ -532,15 +534,17 @@
 				<div class="desktop-view-ai-logics-title-container">
 					<div class="title-text-container">
 						<div class="title-text" i18n>AI Logic</div>
-						<mat-icon
+						<button
 							*ngIf="!hidePlagarismTap"
-							fontSet="material-icons-round"
+							type="button"
+							class="info-icon-btn"
+							aria-label="About AI Logic detection"
+							i18n-aria-label
 							matTooltip="AI Logic uses a layered detection approach that applies multiple analysis methods in tandem, providing a highly accurate perspective on how AI may have influenced a piece of text."
 							matTooltipClass="web-report-mat-tooltip tooltip-contanier"
-							tabindex="0"
 							i18n-matTooltip>
-							info_outline
-						</mat-icon>
+							<mat-icon fontSet="material-icons-round" aria-hidden="true">info_outline</mat-icon>
+						</button>
 					</div>
 					<span class="title-text-description" i18n>
 						Shows you the “why” behind AI detection with sources you can see and verify.
@@ -588,14 +592,17 @@
 					<span i18n>AI Logic</span>
 				</div>
 
-				<mat-icon
-					fontSet="material-icons-round"
+				<button
+					type="button"
+					class="info-icon-btn"
+					aria-label="About AI Logic detection"
+					i18n-aria-label
 					matTooltip="Wonder how we spot AI content? Get a glimpse into our validation process."
 					[matTooltipPosition]="'after'"
 					matTooltipClass="web-report-mat-tooltip tooltip-contanier"
 					i18n-matTooltip>
-					info_outline
-				</mat-icon>
+					<mat-icon fontSet="material-icons-round" aria-hidden="true">info_outline</mat-icon>
+				</button>
 			</div>
 
 			<div
@@ -691,18 +698,18 @@
 				<div class="result-container" fxLayout="column" fxLayoutGap="2px">
 					<div class="result-header" fxLayout="row" fxLayoutAlign="space-between center">
 						<span class="title" i18n>How frequently the phrase was found in our dataset :</span>
-						<mat-icon
-							class="info-icon"
-							fontSet="material-icons-outlined"
+						<button
+							type="button"
+							class="info-icon-btn"
+							aria-label="About phrase frequency"
+							i18n-aria-label
 							#tooltipResult="matTooltip"
-							[tabIndex]="0"
 							[matTooltip]="resultTooltipText"
 							[matTooltipPosition]="'before'"
-							(click)="isMobile ? toggleTooltip(tooltipResult) : ''"
-							(keyup.enter)="isMobile ? toggleTooltip(tooltipResult) : ''"
-							matTooltipClass="web-report-mat-tooltip tooltip-contanier">
-							info
-						</mat-icon>
+							matTooltipClass="web-report-mat-tooltip tooltip-contanier"
+							(click)="isMobile ? toggleTooltip(tooltipResult) : ''">
+							<mat-icon class="info-icon" fontSet="material-icons-outlined" aria-hidden="true">info</mat-icon>
+						</button>
 					</div>
 					<div class="ai-count-container" fxLayout="row" fxLayoutAlign="space-between center">
 						<span class="title" i18n>AI Text</span>

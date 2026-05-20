@@ -354,7 +354,13 @@
 	</ng-container>
 	<!-- Assessment Report -->
 	<ng-container *ngSwitchCase="EReportMode.AssessmentTool">
-		<div class="assessment-tool-container" [class.mobile]="isMobile">
+		<div
+			class="assessment-tool-container"
+			[class.mobile]="isMobile"
+			role="tablist"
+			[attr.aria-orientation]="isMobile ? 'horizontal' : 'vertical'"
+			aria-label="Report sections"
+			i18n-aria-label>
 			<ng-container *ngIf="!showLoadingView">
 				<ng-container *ngFor="let ref of customTabsTemplateRef">
 					<ng-container *ngTemplateOutlet="ref"></ng-container>
@@ -364,9 +370,11 @@
 			<a
 				class="matched-text-tab"
 				*ngIf="!hidePlagarismTap || showDisabledProducts || showLoadingView"
-				tabindex="0"
-				role="button"
-				aria-describedby="plagiarism-view-text"
+				role="tab"
+				id="tab-matching"
+				[attr.aria-selected]="selectedTap === EReportViewType.PlagiarismView && !hidePlagarismTap"
+				[tabindex]="selectedTap === EReportViewType.PlagiarismView && !hidePlagarismTap ? 0 : -1"
+				(keydown)="onTabKeydown($event)"
 				@fadeIn
 				[class.tab-selected]="selectedTap === EReportViewType.PlagiarismView && !hidePlagarismTap"
 				[class.at-tab-disabled]="hidePlagarismTap && showDisabledProducts"
@@ -376,8 +384,7 @@
 				[class.mobile]="isMobile"
 				[matTooltip]="hidePlagarismTap && showDisabledProducts ? DISABLED : ''"
 				matTooltipClass="web-report-mat-tooltip"
-				(click)="selectTap(EReportViewType.PlagiarismView)"
-				(keyup.enter)="selectTap(EReportViewType.PlagiarismView)">
+				(click)="selectTap(EReportViewType.PlagiarismView)">
 				<div class="icon-container">
 					<svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 18 18" fill="none">
 						<g clip-path="url(#clip0_4484_12191)">
@@ -426,9 +433,11 @@
 				class="ai-tab"
 				*ngIf="!hideAiTap || showDisabledProducts || showLoadingView"
 				@fadeIn
-				role="button"
-				aria-describedby="AI-view-text"
-				tabindex="0"
+				role="tab"
+				id="tab-ai-content"
+				[attr.aria-selected]="selectedTap === EReportViewType.AIView && !hideAiTap"
+				[tabindex]="selectedTap === EReportViewType.AIView && !hideAiTap ? 0 : -1"
+				(keydown)="onTabKeydown($event)"
 				[dir]="docDirection"
 				[class.tab-selected]="selectedTap === EReportViewType.AIView && !hideAiTap"
 				[class.at-tab-disabled]="hideAiTap && showDisabledProducts"
@@ -440,8 +449,7 @@
 				[class.mobile]="isMobile"
 				[matTooltip]="hideAiTap && showDisabledProducts ? DISABLED : ''"
 				matTooltipClass="web-report-mat-tooltip"
-				(click)="selectTap(EReportViewType.AIView)"
-				(keyup.enter)="selectTap(EReportViewType.AIView)">
+				(click)="selectTap(EReportViewType.AIView)">
 				<div class="icon-container">
 					<svg xmlns="http://www.w3.org/2000/svg" width="22" height="16" viewBox="0 0 22 16" fill="none">
 						<g clip-path="url(#clip0_4484_11317)">
@@ -496,10 +504,12 @@
 				class="writing-assistant-tab"
 				*ngIf="((!hideWritingFeedbackTap || showDisabledProducts) && !forceWritingFeedbackTapHide) || showLoadingView"
 				@fadeIn
-				tabindex="0"
-				role="button"
+				role="tab"
+				id="tab-grammar-check"
+				[attr.aria-selected]="selectedTap === EReportViewType.WritingFeedbackTabView && !hideWritingFeedbackTap"
+				[tabindex]="selectedTap === EReportViewType.WritingFeedbackTabView && !hideWritingFeedbackTap ? 0 : -1"
+				(keydown)="onTabKeydown($event)"
 				[dir]="docDirection"
-				aria-describedby="WritingFeedback-view-text"
 				[class.tab-selected]="selectedTap === EReportViewType.WritingFeedbackTabView && !hideWritingFeedbackTap"
 				[class.at-tab-disabled]="hideWritingFeedbackTap && showDisabledProducts"
 				[class.at-tab-enabled]="!(hideWritingFeedbackTap && showDisabledProducts)"
@@ -514,8 +524,7 @@
 				[class.mobile]="isMobile"
 				[matTooltip]="hideWritingFeedbackTap && showDisabledProducts ? DISABLED : ''"
 				matTooltipClass="web-report-mat-tooltip"
-				(click)="selectTap(EReportViewType.WritingFeedbackTabView)"
-				(keyup.enter)="selectTap(EReportViewType.WritingFeedbackTabView)">
+				(click)="selectTap(EReportViewType.WritingFeedbackTabView)">
 				<div class="icon-container">
 					<svg xmlns="http://www.w3.org/2000/svg" width="20" height="13" viewBox="0 0 20 13" fill="none">
 						<g clip-path="url(#clip0_4484_11335)">

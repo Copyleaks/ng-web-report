@@ -479,7 +479,7 @@ Copyleaks Web Report is built with accessibility as a first-class concern — ke
 
 ## 📄 License
 
-[MIT](https://github.com/Copyleaks/ng-web-report/blob/main/LICENSE) © [Copyleaks](https://copyleaks.com)
+[MIT](LICENSE) © [Copyleaks](https://copyleaks.com)
 
 <br/>
 

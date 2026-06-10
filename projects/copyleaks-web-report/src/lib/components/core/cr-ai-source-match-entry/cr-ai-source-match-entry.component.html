@@ -72,7 +72,7 @@
 						</linearGradient>
 					</defs>
 				</svg>
-				<span i18n>AI Source Match</span>
+				<h3 class="entry-title" i18n>AI Source Match</h3>
 				<mat-chip-option class="new-chip" i18n>New</mat-chip-option>
 			</div>
 			<ng-container *ngIf="aiSourceMatchResultsTotal >= 0; else zeroTotalRef">
@@ -84,15 +84,17 @@
 			<ng-template #zeroTotalRef>
 				<div class="no-results-info-container">
 					<span class="total-results" i18n>No Results Found</span>
-					<mat-icon
-						fontSet="material-icons-round"
-						tabindex="0"
+					<button
+						type="button"
+						class="info-icon-btn"
+						aria-label="About AI Source Match"
+						i18n-aria-label
 						matTooltip="AI Source Match blends plagiarism and AI detection to identify reused or repurposed AI-generated content from other sources."
 						[matTooltipPosition]="'after'"
 						matTooltipClass="web-report-mat-tooltip tooltip-contanier"
 						i18n-matTooltip>
-						info_outline
-					</mat-icon>
+						<mat-icon fontSet="material-icons-round" aria-hidden="true">info_outline</mat-icon>
+					</button>
 				</div>
 			</ng-template>
 		</div>

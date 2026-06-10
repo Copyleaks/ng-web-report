@@ -145,16 +145,16 @@
 				<span *ngIf="selectedView === EReportViewType.WritingFeedbackTabView" class="description" i18n>
 					{{ totalCorrections }} CORRECTIONS
 				</span>
-				<mat-icon
+				<button
 					*ngIf="matchesStats?.type === EResultPreviewType.AISourceMatch"
-					class="info-icon"
-					fontSet="material-icons-round"
-					matTooltipClass="web-report-mat-tooltip"
-					tabindex="0"
+					type="button"
+					class="info-icon-btn"
 					[attr.aria-label]="AI_SOURCE_MATCH_TOOLTIP"
-					[matTooltip]="AI_SOURCE_MATCH_TOOLTIP">
-					info_outline
-				</mat-icon>
+					[matTooltip]="AI_SOURCE_MATCH_TOOLTIP"
+					matTooltipClass="web-report-mat-tooltip"
+					(click)="$event.stopPropagation()">
+					<mat-icon class="info-icon" fontSet="material-icons-round" aria-hidden="true">info_outline</mat-icon>
+				</button>
 				<mat-icon
 					class="hide-alerts-icon"
 					fontSet="material-icons-round"

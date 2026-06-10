@@ -17,6 +17,9 @@ import { ReportMatchHighlightService } from '../../../services/report-match-high
 import { ReportDataService } from '../../../services/report-data.service';
 import { trigger, state, transition, animate, style } from '@angular/animations';
 
+// Per-instance counter so tab element ids are unique when multiple report instances render on one page.
+let nextReportTabsUid = 0;
+
 @Component({
 	selector: 'copyleaks-report-tabs-container',
 	templateUrl: './report-tabs-container.component.html',
@@ -30,6 +33,13 @@ import { trigger, state, transition, animate, style } from '@angular/animations'
 	standalone: false,
 })
 export class ReportTabsContainerComponent implements OnInit, OnDestroy, OnChanges {
+	/**
+	 * @Input {string} Prefix applied to every tab element id so that two report instances embedded on the
+	 * same page don't produce duplicate ids. Defaults to a unique per-instance value; the one-to-many layout
+	 * passes its own `reportTabsUid` so the content panel's `aria-labelledby` resolves to the active tab.
+	 */
+	@Input() idPrefix: string = `cr-tabs-${++nextReportTabsUid}-`;
+
 	/**
 	 * @Input {boolean} Flag indicating whether to show the report AI tab or not.
 	 */
@@ -161,6 +171,59 @@ export class ReportTabsContainerComponent implements OnInit, OnDestroy, OnChange
 		private cdr: ChangeDetectorRef,
 		private _matchSvc: ReportMatchHighlightService
 	) {}
+
+	onTabKeydown(event: KeyboardEvent): void {
+		// WAI-ARIA tabs keyboard pattern (manual activation): arrow keys / Home / End only MOVE focus
+		// between tabs; the panel is switched only on Enter/Space. Manual activation is the recommended
+		// pattern when activating a tab is expensive — here it swaps the whole plagiarism/AI/writing-feedback
+		// view (re-render + data work) — so we must not fire that on every arrow keypress.
+		const key = event.key;
+		if (
+			key !== 'ArrowDown' &&
+			key !== 'ArrowRight' &&
+			key !== 'ArrowUp' &&
+			key !== 'ArrowLeft' &&
+			key !== 'Home' &&
+			key !== 'End' &&
+			key !== 'Enter' &&
+			key !== ' '
+		)
+			return;
+
+		if (key === 'Enter' || key === ' ') {
+			event.preventDefault();
+			(event.target as HTMLElement)?.click();
+			return;
+		}
+
+		const tablist = (event.currentTarget as HTMLElement).closest('[role="tablist"]') as HTMLElement | null;
+		if (!tablist) return;
+		const tabs = Array.from(tablist.querySelectorAll<HTMLElement>('[role="tab"]:not([disabled])'));
+		if (tabs.length === 0) return;
+		const currentIndex = tabs.indexOf(event.currentTarget as HTMLElement);
+		if (currentIndex === -1) return;
+
+		let nextIndex = currentIndex;
+		switch (key) {
+			case 'ArrowDown':
+			case 'ArrowRight':
+				nextIndex = (currentIndex + 1) % tabs.length;
+				break;
+			case 'ArrowUp':
+			case 'ArrowLeft':
+				nextIndex = (currentIndex - 1 + tabs.length) % tabs.length;
+				break;
+			case 'Home':
+				nextIndex = 0;
+				break;
+			case 'End':
+				nextIndex = tabs.length - 1;
+				break;
+		}
+		event.preventDefault();
+		// Focus only — do NOT activate. The user activates the focused tab with Enter/Space.
+		tabs[nextIndex].focus();
+	}
 
 	ngOnInit(): void {
 		this._reportNgTemplatesSvc.reportTemplatesSubject$.pipe(untilDestroy(this)).subscribe(refs => {

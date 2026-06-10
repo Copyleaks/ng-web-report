@@ -1,14 +1,14 @@
 <ng-template #tabTemplateTitle>
 	<button
 		class="custom-tab"
-		[id]="tabId ?? ''"
+		role="tab"
+		[id]="tabId ? 'tab-' + tabId : null"
+		[attr.aria-selected]="selected"
+		[tabindex]="selected ? 0 : -1"
 		(click)="clickEvent()"
-		[tabindex]="0"
-		(keyup.enter)="clickEvent()"
+		(keydown)="onKeydown($event)"
 		[style.flex-grow]="flexGrow"
-		[class.tab-selected]="selected"
-		aria-label="Click to switch to tab"
-		i18n-aria-label>
+		[class.tab-selected]="selected">
 		<ng-content select="cr-custom-tab-item-title"></ng-content>
 	</button>
 </ng-template>

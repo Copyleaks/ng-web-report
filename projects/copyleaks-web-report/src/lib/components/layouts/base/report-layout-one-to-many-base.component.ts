@@ -44,6 +44,8 @@ import * as helpers from '../../../utils/report-match-helpers';
 import { ReportErrorsService } from '../../../services/report-errors.service';
 import { RESULT_TAGS_CODES } from '../../../constants/report-result-tags.constants';
 
+let nextOneToManyReportUid = 0;
+
 export abstract class OneToManyReportLayoutBaseComponent extends ReportLayoutBaseComponent {
 	hideRightSection: boolean = false;
 
@@ -60,6 +62,40 @@ export abstract class OneToManyReportLayoutBaseComponent extends ReportLayoutBas
 	reportStatistics: ReportStatistics | undefined;
 	filterOptions: ICopyleaksReportOptions;
 	selectedTap: EReportViewType = EReportViewType.PlagiarismView;
+	selectedCustomTabId: string | undefined;
+
+	/**
+	 * Unique per-instance prefix for the built-in tab/tabpanel ids. Passed to `copyleaks-report-tabs-container`
+	 * via `[idPrefix]` so the built-in tab ids match what `currentTabId` / `currentTabPanelId` resolve to —
+	 * and so two reports on the same page don't collide. Custom tabs keep their consumer-supplied `tab-<id>`.
+	 */
+	reportTabsUid: string = `cr-otm-${++nextOneToManyReportUid}-`;
+
+	get currentTabId(): string {
+		if (this.selectedCustomTabId) return 'tab-' + this.selectedCustomTabId;
+		switch (this.selectedTap) {
+			case EReportViewType.AIView:
+				return this.reportTabsUid + 'tab-ai-content';
+			case EReportViewType.WritingFeedbackTabView:
+				return this.reportTabsUid + 'tab-grammar-check';
+			case EReportViewType.PlagiarismView:
+			default:
+				return this.reportTabsUid + 'tab-matching';
+		}
+	}
+
+	get currentTabPanelId(): string {
+		if (this.selectedCustomTabId) return 'tabpanel-' + this.selectedCustomTabId;
+		switch (this.selectedTap) {
+			case EReportViewType.AIView:
+				return this.reportTabsUid + 'tabpanel-ai-content';
+			case EReportViewType.WritingFeedbackTabView:
+				return this.reportTabsUid + 'tabpanel-grammar-check';
+			case EReportViewType.PlagiarismView:
+			default:
+				return this.reportTabsUid + 'tabpanel-matching';
+		}
+	}
 
 	scanResultsPreviews: ICompleteResults | undefined;
 	scanResultsDetails: ResultDetailItem[] | undefined;
@@ -178,6 +214,7 @@ export abstract class OneToManyReportLayoutBaseComponent extends ReportLayoutBas
 			this.viewMode = data.viewMode;
 			this.hideAISourceMatchUpgrade = data.hideAISourceMatchUpgrade;
 
+			this.selectedCustomTabId = data.selectedCustomTabId;
 			if (data.viewMode === 'writing-feedback') {
 				this.selectedTap = EReportViewType.WritingFeedbackTabView;
 			} else
@@ -369,7 +406,10 @@ export abstract class OneToManyReportLayoutBaseComponent extends ReportLayoutBas
 		this.reportErrorsSvc.reportHttpRequestError$.pipe(takeUntil(this.unsubscribe$)).subscribe(error => {
 			if (!error) return;
 
-			if (error.method === 'initSync - crawledVersion') {
+			// completeResults failure now gates crawledVersion (it never fires), so we also need
+			// to clear the skeleton here — otherwise the report sits on the loading state forever
+			// instead of showing the error message.
+			if (error.method === 'initSync - crawledVersion' || error.method === 'initSync - completeResults') {
 				this.isLoadingScanContent = false;
 				this.reportMatches = this.contentTextMatches = [];
 

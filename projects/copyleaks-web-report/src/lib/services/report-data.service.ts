@@ -101,7 +101,7 @@ export class ReportDataService {
 
 	//#region Crawled Version
 
-	private _crawledVersion$ = new BehaviorSubject<IScanSource | undefined>(undefined);
+	private _crawledVersion$ = new BehaviorSubject<IScanSource | undefined | null>(undefined);
 	/**
 	 * Observable stream for the crawled source version information.
 	 */
@@ -484,26 +484,9 @@ export class ReportDataService {
 		// first emit the progress as 100, so no real-time view is rendered
 		this._viewSvc.progress$.next(100);
 
-		this._http
-			.get<IScanSource>(endpointsConfig.crawledVersion.url, {
-				headers: this._createHeaders(endpointsConfig.crawledVersion),
-			})
-			.pipe(retryWithDelay(), untilDestroy(this))
-			.subscribe(
-				crawledVersionRes => {
-					this._crawledVersion$.next(crawledVersionRes);
-
-					if (!crawledVersionRes.html?.value && this._viewSvc.reportViewMode.isHtmlView)
-						this._viewSvc.reportViewMode$.next({
-							...this._viewSvc.reportViewMode,
-							isHtmlView: false,
-						});
-				},
-				(error: HttpErrorResponse) => {
-					this._reportErrorsSvc.handleHttpError(error, 'initSync - crawledVersion');
-				}
-			);
-
+		// completeResults gates the rest: if the scan isn't exported yet this request fails,
+		// and we must NOT fan out to crawledVersion / writingFeedback / per-result fetches —
+		// they would all fail the same way and flood the backend.
 		this._http
 			.get<ICompleteResults>(endpointsConfig.completeResults.url, {
 				headers: this._createHeaders(endpointsConfig.completeResults),
@@ -513,6 +496,27 @@ export class ReportDataService {
 				completeResultsRes => {
 					this.completeResultsSnapshot = JSON.parse(JSON.stringify(completeResultsRes));
 					this._scanResultsPreviews$.next(completeResultsRes);
+
+					this._http
+						.get<IScanSource>(endpointsConfig.crawledVersion.url, {
+							headers: this._createHeaders(endpointsConfig.crawledVersion),
+						})
+						.pipe(retryWithDelay(), untilDestroy(this))
+						.subscribe(
+							crawledVersionRes => {
+								this._crawledVersion$.next(crawledVersionRes);
+
+								if (!crawledVersionRes.html?.value && this._viewSvc.reportViewMode.isHtmlView)
+									this._viewSvc.reportViewMode$.next({
+										...this._viewSvc.reportViewMode,
+										isHtmlView: false,
+									});
+							},
+							(error: HttpErrorResponse) => {
+								this._reportErrorsSvc.handleHttpError(error, 'initSync - crawledVersion');
+							}
+						);
+
 					// if the writing feedback endpoint is passed & is enabled in the complete results response then fetch its data
 					if (endpointsConfig.writingFeedback && endpointsConfig.writingFeedback.url && this.isWritingFeedbackEnabled())
 						this._http
@@ -534,6 +538,10 @@ export class ReportDataService {
 				(error: HttpErrorResponse) => {
 					this._reportErrorsSvc.handleHttpError(error, 'initSync - completeResults');
 					this.scanResultsDetails$.next([]);
+					// crawledVersion never fires (gated by completeResults success) — emit null so
+					// downstream subscribers waiting on crawledVersion$ unblock and the UI can move
+					// out of the skeleton-loading state into the error state.
+					this._crawledVersion$.next(null);
 					this.scanResultsPreviews$.next({
 						results: {
 							batch: [],
@@ -1103,6 +1111,11 @@ export class ReportDataService {
 				});
 		} else if (progress.percents === 100) {
 			const completeResults = await this._getReportCompleteResults();
+			// If completeResults didn't resolve (no URL configured, or empty response), stop
+			// here — fetching crawledVersion / writingFeedback against an unexported scan would
+			// just produce parallel failures.
+			if (!completeResults) return;
+
 			this.completeResultsSnapshot = JSON.parse(JSON.stringify(completeResults));
 			this._scanResultsPreviews$.next(completeResults);
 			this._updateCompleteResults(completeResults);

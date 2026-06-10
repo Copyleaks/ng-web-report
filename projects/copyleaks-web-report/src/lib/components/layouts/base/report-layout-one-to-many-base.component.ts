@@ -397,7 +397,10 @@ export abstract class OneToManyReportLayoutBaseComponent extends ReportLayoutBas
 		this.reportErrorsSvc.reportHttpRequestError$.pipe(takeUntil(this.unsubscribe$)).subscribe(error => {
 			if (!error) return;
 
-			if (error.method === 'initSync - crawledVersion') {
+			// completeResults failure now gates crawledVersion (it never fires), so we also need
+			// to clear the skeleton here — otherwise the report sits on the loading state forever
+			// instead of showing the error message.
+			if (error.method === 'initSync - crawledVersion' || error.method === 'initSync - completeResults') {
 				this.isLoadingScanContent = false;
 				this.reportMatches = this.contentTextMatches = [];
 

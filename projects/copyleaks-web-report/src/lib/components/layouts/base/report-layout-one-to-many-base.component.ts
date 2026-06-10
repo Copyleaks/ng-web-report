@@ -44,6 +44,8 @@ import * as helpers from '../../../utils/report-match-helpers';
 import { ReportErrorsService } from '../../../services/report-errors.service';
 import { RESULT_TAGS_CODES } from '../../../constants/report-result-tags.constants';
 
+let nextOneToManyReportUid = 0;
+
 export abstract class OneToManyReportLayoutBaseComponent extends ReportLayoutBaseComponent {
 	hideRightSection: boolean = false;
 
@@ -62,16 +64,23 @@ export abstract class OneToManyReportLayoutBaseComponent extends ReportLayoutBas
 	selectedTap: EReportViewType = EReportViewType.PlagiarismView;
 	selectedCustomTabId: string | undefined;
 
+	/**
+	 * Unique per-instance prefix for the built-in tab/tabpanel ids. Passed to `copyleaks-report-tabs-container`
+	 * via `[idPrefix]` so the built-in tab ids match what `currentTabId` / `currentTabPanelId` resolve to —
+	 * and so two reports on the same page don't collide. Custom tabs keep their consumer-supplied `tab-<id>`.
+	 */
+	reportTabsUid: string = `cr-otm-${++nextOneToManyReportUid}-`;
+
 	get currentTabId(): string {
 		if (this.selectedCustomTabId) return 'tab-' + this.selectedCustomTabId;
 		switch (this.selectedTap) {
 			case EReportViewType.AIView:
-				return 'tab-ai-content';
+				return this.reportTabsUid + 'tab-ai-content';
 			case EReportViewType.WritingFeedbackTabView:
-				return 'tab-grammar-check';
+				return this.reportTabsUid + 'tab-grammar-check';
 			case EReportViewType.PlagiarismView:
 			default:
-				return 'tab-matching';
+				return this.reportTabsUid + 'tab-matching';
 		}
 	}
 
@@ -79,12 +88,12 @@ export abstract class OneToManyReportLayoutBaseComponent extends ReportLayoutBas
 		if (this.selectedCustomTabId) return 'tabpanel-' + this.selectedCustomTabId;
 		switch (this.selectedTap) {
 			case EReportViewType.AIView:
-				return 'tabpanel-ai-content';
+				return this.reportTabsUid + 'tabpanel-ai-content';
 			case EReportViewType.WritingFeedbackTabView:
-				return 'tabpanel-grammar-check';
+				return this.reportTabsUid + 'tabpanel-grammar-check';
 			case EReportViewType.PlagiarismView:
 			default:
-				return 'tabpanel-matching';
+				return this.reportTabsUid + 'tabpanel-matching';
 		}
 	}
 

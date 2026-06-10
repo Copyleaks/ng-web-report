@@ -60,6 +60,7 @@
 						!isAiSourceMatchEnabled() &&
 						hideAISourceMatchUpgrade)
 				"
+				[idPrefix]="reportTabsUid"
 				[reportMode]="reportMode"
 				[hideAiTap]="hideAiTap"
 				[hidePlagarismTap]="hidePlagarismTap"
@@ -234,6 +235,7 @@
 
 	<copyleaks-report-tabs-container
 		*ngIf="reportMode === EReportMode.AssessmentTool"
+		[idPrefix]="reportTabsUid"
 		[reportMode]="reportMode"
 		[hideAiTap]="hideAiTap"
 		[hidePlagarismTap]="hidePlagarismTap"

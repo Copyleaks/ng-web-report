@@ -17,6 +17,9 @@ import { ReportMatchHighlightService } from '../../../services/report-match-high
 import { ReportDataService } from '../../../services/report-data.service';
 import { trigger, state, transition, animate, style } from '@angular/animations';
 
+// Per-instance counter so tab element ids are unique when multiple report instances render on one page.
+let nextReportTabsUid = 0;
+
 @Component({
 	selector: 'copyleaks-report-tabs-container',
 	templateUrl: './report-tabs-container.component.html',
@@ -30,6 +33,13 @@ import { trigger, state, transition, animate, style } from '@angular/animations'
 	standalone: false,
 })
 export class ReportTabsContainerComponent implements OnInit, OnDestroy, OnChanges {
+	/**
+	 * @Input {string} Prefix applied to every tab element id so that two report instances embedded on the
+	 * same page don't produce duplicate ids. Defaults to a unique per-instance value; the one-to-many layout
+	 * passes its own `reportTabsUid` so the content panel's `aria-labelledby` resolves to the active tab.
+	 */
+	@Input() idPrefix: string = `cr-tabs-${++nextReportTabsUid}-`;
+
 	/**
 	 * @Input {boolean} Flag indicating whether to show the report AI tab or not.
 	 */
@@ -163,7 +173,10 @@ export class ReportTabsContainerComponent implements OnInit, OnDestroy, OnChange
 	) {}
 
 	onTabKeydown(event: KeyboardEvent): void {
-		// WAI-ARIA tabs keyboard pattern: arrow keys move between tabs, Home/End jump to ends, Enter/Space activates.
+		// WAI-ARIA tabs keyboard pattern (manual activation): arrow keys / Home / End only MOVE focus
+		// between tabs; the panel is switched only on Enter/Space. Manual activation is the recommended
+		// pattern when activating a tab is expensive — here it swaps the whole plagiarism/AI/writing-feedback
+		// view (re-render + data work) — so we must not fire that on every arrow keypress.
 		const key = event.key;
 		if (
 			key !== 'ArrowDown' &&
@@ -208,8 +221,8 @@ export class ReportTabsContainerComponent implements OnInit, OnDestroy, OnChange
 				break;
 		}
 		event.preventDefault();
+		// Focus only — do NOT activate. The user activates the focused tab with Enter/Space.
 		tabs[nextIndex].focus();
-		tabs[nextIndex].click();
 	}
 
 	ngOnInit(): void {

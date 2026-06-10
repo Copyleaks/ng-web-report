@@ -29,7 +29,9 @@ export class CrCustomTabItemComponent implements OnInit {
 	constructor(private _reportViewSvc: ReportViewService) {}
 
 	onKeydown(event: KeyboardEvent): void {
-		// WAI-ARIA tabs pattern keyboard support: arrows move between sibling tabs, Home/End jump to ends.
+		// WAI-ARIA tabs pattern keyboard support (manual activation): arrows / Home / End only MOVE focus
+		// between sibling tabs; the panel is switched only on Enter/Space (activating a tab swaps the whole
+		// report view, so we must not fire it on every arrow keypress).
 		// Use event.currentTarget (the rendered <button>) — the cr-custom-tab-item host element lives
 		// inside <cr-custom-tabs> in the parent DOM, NOT inside the tablist (the button is projected
 		// into the tablist via ng-template), so this._el.nativeElement.closest('[role="tablist"]') is null.
@@ -78,8 +80,8 @@ export class CrCustomTabItemComponent implements OnInit {
 				break;
 		}
 		event.preventDefault();
+		// Focus only — do NOT activate. The user activates the focused tab with Enter/Space.
 		tabs[nextIndex].focus();
-		tabs[nextIndex].click();
 	}
 
 	ngOnInit(): void {

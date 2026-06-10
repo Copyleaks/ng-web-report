@@ -18,7 +18,7 @@
 				<a
 					*ngIf="!hidePlagarismTap || showDisabledProducts"
 					role="tab"
-					id="wr-tab-matching"
+					[id]="idPrefix + 'tab-matching'"
 					[attr.aria-selected]="selectedTap === EReportViewType.PlagiarismView && !hidePlagarismTap"
 					[tabindex]="selectedTap === EReportViewType.PlagiarismView && !hidePlagarismTap ? 0 : -1"
 					(keydown)="onTabKeydown($event)"
@@ -142,7 +142,7 @@
 					*ngIf="!hideAiTap || showDisabledProducts"
 					@fadeIn
 					role="tab"
-					id="wr-tab-ai-content"
+					[id]="idPrefix + 'tab-ai-content'"
 					[attr.aria-selected]="selectedTap === EReportViewType.AIView && !hideAiTap"
 					[tabindex]="selectedTap === EReportViewType.AIView && !hideAiTap ? 0 : -1"
 					(keydown)="onTabKeydown($event)"
@@ -253,7 +253,7 @@
 					@fadeIn
 					class="tab-grammar"
 					role="tab"
-					id="wr-tab-grammar-check"
+					[id]="idPrefix + 'tab-grammar-check'"
 					[attr.aria-selected]="selectedTap === EReportViewType.WritingFeedbackTabView && !hideWritingFeedbackTap"
 					[tabindex]="selectedTap === EReportViewType.WritingFeedbackTabView && !hideWritingFeedbackTap ? 0 : -1"
 					(keydown)="onTabKeydown($event)"
@@ -381,7 +381,7 @@
 				class="matched-text-tab"
 				*ngIf="!hidePlagarismTap || showDisabledProducts || showLoadingView"
 				role="tab"
-				id="tab-matching"
+				[id]="idPrefix + 'tab-matching'"
 				[attr.aria-selected]="selectedTap === EReportViewType.PlagiarismView && !hidePlagarismTap"
 				[tabindex]="selectedTap === EReportViewType.PlagiarismView && !hidePlagarismTap ? 0 : -1"
 				(keydown)="onTabKeydown($event)"
@@ -444,7 +444,7 @@
 				*ngIf="!hideAiTap || showDisabledProducts || showLoadingView"
 				@fadeIn
 				role="tab"
-				id="tab-ai-content"
+				[id]="idPrefix + 'tab-ai-content'"
 				[attr.aria-selected]="selectedTap === EReportViewType.AIView && !hideAiTap"
 				[tabindex]="selectedTap === EReportViewType.AIView && !hideAiTap ? 0 : -1"
 				(keydown)="onTabKeydown($event)"
@@ -515,7 +515,7 @@
 				*ngIf="((!hideWritingFeedbackTap || showDisabledProducts) && !forceWritingFeedbackTapHide) || showLoadingView"
 				@fadeIn
 				role="tab"
-				id="tab-grammar-check"
+				[id]="idPrefix + 'tab-grammar-check'"
 				[attr.aria-selected]="selectedTap === EReportViewType.WritingFeedbackTabView && !hideWritingFeedbackTap"
 				[tabindex]="selectedTap === EReportViewType.WritingFeedbackTabView && !hideWritingFeedbackTap ? 0 : -1"
 				(keydown)="onTabKeydown($event)"

@@ -1,6 +1,7 @@
 @use '../../../styles/containers.styles.scss' as containers;
 @use '../../../styles/styles.scss';
 @use '../../../styles/website-colors.styles.scss' as *;
+@use '../../../styles/color-pallete.scss' as colors;
 @use '../../../styles/cls-mat-components-overrides/cls-mat-buttons-overrides.scss';
 @use '../../../styles/cls-accessibility-overrides/cls-accessibility-overrides.scss';
 @use 'sass:color';
@@ -116,7 +117,10 @@
 			font-style: normal;
 			color: $color-black;
 			.title {
+				margin: 0;
+				font-size: inherit;
 				font-weight: 700;
+				line-height: inherit;
 			}
 			.number-of-words {
 				font-weight: 500;
@@ -132,7 +136,7 @@
 			$icon-size: 16px;
 
 			mat-icon {
-				color: $color-dialog-background;
+				color: colors.$neutral-400;
 				font-size: $icon-size;
 				width: $icon-size;
 				height: $icon-size;

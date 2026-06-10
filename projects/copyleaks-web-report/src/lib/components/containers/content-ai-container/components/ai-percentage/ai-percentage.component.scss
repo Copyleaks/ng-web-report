@@ -8,7 +8,9 @@
 	.contet-container {
 		.title {
 			width: 100%;
+			.title-text,
 			span {
+				margin: 0;
 				color: $color-black;
 				font-family: 'Almarai' !important;
 				font-size: 18px;
@@ -22,6 +24,21 @@
 				font-size: 18px;
 				color: rgba(11, 22, 62, 0.6);
 				cursor: pointer;
+			}
+			.info-icon-btn {
+				background: transparent;
+				border: none;
+				padding: 0;
+				display: inline-flex;
+				align-items: center;
+				justify-content: center;
+				cursor: pointer;
+				line-height: 0;
+				&:focus-visible {
+					outline: 2px solid $color-primary;
+					outline-offset: 2px;
+					border-radius: 2px;
+				}
 			}
 		}
 		.description {

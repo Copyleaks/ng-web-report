@@ -9,6 +9,14 @@
 	flex-wrap: wrap;
 	position: relative;
 
+	.web-report-tablist {
+		display: flex;
+		flex-direction: row;
+		flex-wrap: wrap;
+		flex-grow: 1;
+		width: 100%;
+	}
+
 	[dir='rtl'] {
 		::ng-deep {
 			.bar,

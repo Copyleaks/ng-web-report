@@ -1,0 +1,84 @@
+// BLUE
+$blue-50: #f3f9ff;
+$blue-75: #e8f2ff;
+$blue-100: #b8d6ff;
+$blue-200: #96c2ff;
+$blue-300: #66a7ff;
+$blue-400: #4895ff;
+$blue-500: #1a7bff; // PRIMARY
+$blue-600: #1870e8;
+$blue-700: #1257b5;
+$blue-800: #0e448c;
+$blue-900: #0b346b;
+$blue-1000: #07254d;
+
+// VIOLET
+$violet-50: #f0e7fb;
+$violet-100: #cfb6f1;
+$violet-200: #b892ea;
+$violet-300: #9860e1;
+$violet-400: #8441db;
+$violet-500: #6512d2;
+$violet-600: #5c10bf;
+$violet-700: #480d95;
+$violet-800: #380a74;
+$violet-900: #2a0858;
+$violet-1000: #1e063e;
+
+// RED
+$red-50: #feeceb;
+$red-100: #fcc5c1;
+$red-200: #faa9a3;
+$red-300: #f88178;
+$red-400: #f6695e;
+$red-500: #f44336;
+$red-600: #de3d31;
+$red-700: #ad3026;
+$red-800: #86251e;
+$red-900: #661c17;
+$Red-1000: #320c0a;
+
+// ORANGE
+$orange-50: #fff5e6;
+$orange-100: #ffe0b1;
+$orange-200: #ffd18b;
+$orange-300: #ffbb55;
+$orange-400: #ffae35;
+$orange-500: #ff9a02;
+$orange-600: #e88c02;
+$orange-700: #b56d01;
+$orange-800: #8c5501;
+$orange-900: #6b4101;
+$orange-1000: #2e1c01;
+
+// GREEN
+$green-50: #e9f6ec;
+$green-100: #bae4c3;
+$green-200: #98d7a6;
+$green-300: #69c57d;
+$green-400: #4cba64;
+$green-500: #1fa93d;
+$green-600: #1c9a38;
+$green-700: #16782b;
+$green-800: #115d22;
+$green-900: #0d471a;
+$green-1000: #05220b;
+
+// NEUTRAL
+$neutral-50: #ffffff;
+$neutral-75: #f7f8f9;
+$neutral-100: #f0f1f2;
+$neutral-200: #bbbec5;
+$neutral-300: #9ca1aa;
+$neutral-400: #898e99;
+$neutral-500: #6b7280;
+$neutral-600: #616874;
+$neutral-700: #4c515b; // BODY TEXT
+$neutral-800: #3b3f46; // HEADER TEXT
+$neutral-900: #2d3036;
+$neutral-1000: #1b1d21;
+
+// SPECIAL
+$banner-bg-info: linear-gradient(to right, $blue-100 0%, $violet-50 100%);
+$banner-bg-warning: linear-gradient(to right, $orange-100 0%, $orange-400 100%); // will be added later
+$banner-bg-danger: linear-gradient(to right, $red-100 0%, $red-500 100%); // will be added later

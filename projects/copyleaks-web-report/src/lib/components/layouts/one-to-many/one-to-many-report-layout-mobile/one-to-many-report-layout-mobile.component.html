@@ -91,18 +91,19 @@
 					<span i18n>AI Logic</span>
 				</div>
 
-				<mat-icon
-					fontSet="material-icons-round"
+				<button
+					type="button"
+					class="info-icon-btn"
+					aria-label="About AI Logic detection"
+					i18n-aria-label
+					#tooltipResult="matTooltip"
 					matTooltip="Wonder how we spot AI content? Get a glimpse into our validation process."
 					[matTooltipPosition]="'before'"
-					#tooltipResult="matTooltip"
-					[tabIndex]="0"
 					matTooltipClass="web-report-mat-tooltip tooltip-contanier"
-					(click)="toggleTooltip(tooltipResult)"
-					(keyup.enter)="toggleTooltip(tooltipResult)"
-					i18n-matTooltip>
-					info_outline
-				</mat-icon>
+					i18n-matTooltip
+					(click)="toggleTooltip(tooltipResult)">
+					<mat-icon fontSet="material-icons-round" aria-hidden="true">info_outline</mat-icon>
+				</button>
 			</div>
 
 			<cr-ai-phrases-mobile-header

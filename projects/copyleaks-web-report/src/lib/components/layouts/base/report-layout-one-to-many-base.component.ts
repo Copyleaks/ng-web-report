@@ -60,6 +60,33 @@ export abstract class OneToManyReportLayoutBaseComponent extends ReportLayoutBas
 	reportStatistics: ReportStatistics | undefined;
 	filterOptions: ICopyleaksReportOptions;
 	selectedTap: EReportViewType = EReportViewType.PlagiarismView;
+	selectedCustomTabId: string | undefined;
+
+	get currentTabId(): string {
+		if (this.selectedCustomTabId) return 'tab-' + this.selectedCustomTabId;
+		switch (this.selectedTap) {
+			case EReportViewType.AIView:
+				return 'tab-ai-content';
+			case EReportViewType.WritingFeedbackTabView:
+				return 'tab-grammar-check';
+			case EReportViewType.PlagiarismView:
+			default:
+				return 'tab-matching';
+		}
+	}
+
+	get currentTabPanelId(): string {
+		if (this.selectedCustomTabId) return 'tabpanel-' + this.selectedCustomTabId;
+		switch (this.selectedTap) {
+			case EReportViewType.AIView:
+				return 'tabpanel-ai-content';
+			case EReportViewType.WritingFeedbackTabView:
+				return 'tabpanel-grammar-check';
+			case EReportViewType.PlagiarismView:
+			default:
+				return 'tabpanel-matching';
+		}
+	}
 
 	scanResultsPreviews: ICompleteResults | undefined;
 	scanResultsDetails: ResultDetailItem[] | undefined;
@@ -178,6 +205,7 @@ export abstract class OneToManyReportLayoutBaseComponent extends ReportLayoutBas
 			this.viewMode = data.viewMode;
 			this.hideAISourceMatchUpgrade = data.hideAISourceMatchUpgrade;
 
+			this.selectedCustomTabId = data.selectedCustomTabId;
 			if (data.viewMode === 'writing-feedback') {
 				this.selectedTap = EReportViewType.WritingFeedbackTabView;
 			} else

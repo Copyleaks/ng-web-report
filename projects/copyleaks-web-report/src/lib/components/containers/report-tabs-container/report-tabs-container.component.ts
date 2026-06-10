@@ -162,6 +162,56 @@ export class ReportTabsContainerComponent implements OnInit, OnDestroy, OnChange
 		private _matchSvc: ReportMatchHighlightService
 	) {}
 
+	onTabKeydown(event: KeyboardEvent): void {
+		// WAI-ARIA tabs keyboard pattern: arrow keys move between tabs, Home/End jump to ends, Enter/Space activates.
+		const key = event.key;
+		if (
+			key !== 'ArrowDown' &&
+			key !== 'ArrowRight' &&
+			key !== 'ArrowUp' &&
+			key !== 'ArrowLeft' &&
+			key !== 'Home' &&
+			key !== 'End' &&
+			key !== 'Enter' &&
+			key !== ' '
+		)
+			return;
+
+		if (key === 'Enter' || key === ' ') {
+			event.preventDefault();
+			(event.target as HTMLElement)?.click();
+			return;
+		}
+
+		const tablist = (event.currentTarget as HTMLElement).closest('[role="tablist"]') as HTMLElement | null;
+		if (!tablist) return;
+		const tabs = Array.from(tablist.querySelectorAll<HTMLElement>('[role="tab"]:not([disabled])'));
+		if (tabs.length === 0) return;
+		const currentIndex = tabs.indexOf(event.currentTarget as HTMLElement);
+		if (currentIndex === -1) return;
+
+		let nextIndex = currentIndex;
+		switch (key) {
+			case 'ArrowDown':
+			case 'ArrowRight':
+				nextIndex = (currentIndex + 1) % tabs.length;
+				break;
+			case 'ArrowUp':
+			case 'ArrowLeft':
+				nextIndex = (currentIndex - 1 + tabs.length) % tabs.length;
+				break;
+			case 'Home':
+				nextIndex = 0;
+				break;
+			case 'End':
+				nextIndex = tabs.length - 1;
+				break;
+		}
+		event.preventDefault();
+		tabs[nextIndex].focus();
+		tabs[nextIndex].click();
+	}
+
 	ngOnInit(): void {
 		this._reportNgTemplatesSvc.reportTemplatesSubject$.pipe(untilDestroy(this)).subscribe(refs => {
 			if (refs?.customTabsTemplates !== undefined && this.customTabsTemplateRef == undefined) {

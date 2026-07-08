@@ -129,6 +129,38 @@
 				}
 			}
 		}
+
+		.options-icon-btn {
+			background: transparent;
+			border: none;
+			padding: 0;
+			margin: 0;
+			display: inline-flex;
+			align-items: center;
+			justify-content: center;
+			cursor: pointer;
+			line-height: 0;
+			.options-icon {
+				$icon-size: 18px;
+				width: $icon-size;
+				height: $icon-size;
+				font-size: $icon-size;
+				color: $color-dark-blue;
+				line-height: normal;
+			}
+			&:hover .options-icon,
+			&:focus-visible .options-icon {
+				color: $color-primary;
+			}
+			&:focus {
+				outline: none;
+			}
+			&:focus-visible {
+				outline: 2px solid $color-primary;
+				outline-offset: 2px;
+				border-radius: 2px;
+			}
+		}
 	}
 
 	.correction-type-description {

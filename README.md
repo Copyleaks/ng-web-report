@@ -8,7 +8,7 @@
 
 [![npm version](https://img.shields.io/npm/v/@copyleaks/ng-web-report.svg?style=flat-square&color=blue)](https://www.npmjs.com/package/@copyleaks/ng-web-report)
 [![npm downloads](https://img.shields.io/npm/dm/@copyleaks/ng-web-report.svg?style=flat-square&color=brightgreen)](https://www.npmjs.com/package/@copyleaks/ng-web-report)
-[![license](https://img.shields.io/npm/l/@copyleaks/ng-web-report.svg?style=flat-square&color=lightgrey)](https://github.com/Copyleaks/ng-web-report/blob/main/LICENSE)
+[![license](https://img.shields.io/npm/l/@copyleaks/ng-web-report.svg?style=flat-square&color=lightgrey)](LICENSE)
 [![Angular](https://img.shields.io/badge/angular-19-DD0031?style=flat-square&logo=angular&logoColor=white)](https://angular.io/)
 [![Built by Copyleaks](https://img.shields.io/badge/built%20by-Copyleaks-0066FF?style=flat-square)](https://copyleaks.com)
 
@@ -479,7 +479,7 @@ Copyleaks Web Report is built with accessibility as a first-class concern — ke
 
 ## 📄 License
 
-[MIT](https://github.com/Copyleaks/ng-web-report/blob/main/LICENSE) © [Copyleaks](https://copyleaks.com)
+[MIT](LICENSE) © [Copyleaks](https://copyleaks.com)
 
 <br/>
 

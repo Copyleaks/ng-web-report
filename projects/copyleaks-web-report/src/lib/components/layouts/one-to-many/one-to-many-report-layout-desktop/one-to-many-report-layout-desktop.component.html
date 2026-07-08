@@ -6,6 +6,7 @@
 	<!-- Report tabs container --->
 	<copyleaks-report-tabs-container
 		*ngIf="reportMode === EReportMode.WebReport"
+		[idPrefix]="reportTabsUid"
 		[reportMode]="reportMode"
 		[hideAiTap]="hideAiTap"
 		[hidePlagarismTap]="hidePlagarismTap"
@@ -88,7 +89,11 @@
 			(!newScanResultsView || newScanResultsView.length === 0) &&
 			!!reportEndpointConfig &&
 			isRealTimeView
-		">
+		"
+		role="tabpanel"
+		[id]="currentTabPanelId"
+		[attr.aria-labelledby]="currentTabId"
+		tabindex="0">
 		<ng-container *ngIf="!selectedCustomTabResultSectionContentTemplate; else customResultSectionRef">
 			<cr-assessment-tool-tab-score-panel
 				*ngIf="reportMode === EReportMode.AssessmentTool && selectedTap !== EReportViewType.WritingFeedbackTabView"
@@ -197,6 +202,7 @@
 <copyleaks-report-tabs-container
 	*ngIf="reportMode === EReportMode.AssessmentTool"
 	class="assessment-tool-tabs"
+	[idPrefix]="reportTabsUid"
 	[reportMode]="reportMode"
 	[hideAiTap]="hideAiTap"
 	[hidePlagarismTap]="hidePlagarismTap"

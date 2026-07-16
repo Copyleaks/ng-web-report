@@ -246,11 +246,12 @@ export class ReportTabsContainerComponent implements OnInit, OnDestroy, OnChange
 
 	ngOnChanges(changes: SimpleChanges): void {
 		if (
-			'showDisabledProducts' in changes ||
-			'hidePlagarismTap' in changes ||
-			'hideAiTap' in changes ||
-			'hideWritingFeedbackTap' in changes ||
-			('showLoadingView' in changes && changes['showLoadingView'].currentValue === false)
+			('showDisabledProducts' in changes ||
+				'hidePlagarismTap' in changes ||
+				'hideAiTap' in changes ||
+				'hideWritingFeedbackTap' in changes ||
+				('showLoadingView' in changes && changes['showLoadingView'].currentValue === false)) &&
+			!this.reportViewSvc.reportViewMode?.selectedCustomTabId
 		) {
 			if (
 				(!this.showLoadingView &&

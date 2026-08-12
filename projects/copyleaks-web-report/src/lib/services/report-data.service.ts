@@ -703,6 +703,13 @@ export class ReportDataService {
 	private _loadingResultChunks: boolean = false;
 
 	/**
+	 * The indices of the results chunks that were already requested, so that none of them is ever requested twice.
+	 * A chunk is marked as requested whatever its response was, since the report reloads its viewed results on every
+	 * results details emission - retrying a chunk from there would loop endlessly.
+	 */
+	private _requestedResultChunksIndices = new Set<number>();
+
+	/**
 	 * The export details of the scan results, as reported by the complete results response.
 	 * Taken from the untouched snapshot, since the previews are re-emitted with recalculated sections.
 	 */
@@ -719,29 +726,36 @@ export class ReportDataService {
 	}
 
 	/**
-	 * Loads all the results of the scan through the `resultsChunk` endpoint, `chunkSize` results per request.
-	 * The already cached results are kept as they are, so calling it more than once - on a filter change,
-	 * for instance - does not fetch anything again.
+	 * Loads the results of the scan through the `resultsChunk` endpoint, `chunkSize` results per request.
+	 * Every chunk is requested exactly once per report, so calling it again - on a filter change, or when the
+	 * results details are emitted - never fetches anything anew.
 	 */
 	private _loadAllResultChunks() {
 		const chunkEndpoint = this._reportEndpointConfig$.value?.resultsChunk;
 		const exportInfo = this._resultsExportInfo;
 		if (!chunkEndpoint?.url || !exportInfo?.resultIds?.length || this._loadingResultChunks) return;
 
-		const cachedResults = this._scanResultsDetails$.value ?? [];
-		const cachedResultsIds = new Set(cachedResults.map(result => result.id));
-		if (exportInfo.resultIds.every(id => cachedResultsIds.has(id))) {
+		const chunkSize = exportInfo.chunkSize > 0 ? exportInfo.chunkSize : exportInfo.resultIds.length;
+		const totalChunks = Math.ceil(exportInfo.resultIds.length / chunkSize);
+
+		const chunksIndicesToRequest: number[] = [];
+		for (let chunkIndex = 0; chunkIndex < totalChunks; chunkIndex++) {
+			if (!this._requestedResultChunksIndices.has(chunkIndex)) chunksIndicesToRequest.push(chunkIndex);
+		}
+
+		if (!chunksIndicesToRequest.length) {
 			this._loadingMoreResults$.next(false);
 			return;
 		}
 
-		const chunkSize = exportInfo.chunkSize > 0 ? exportInfo.chunkSize : exportInfo.resultIds.length;
-		const totalChunks = Math.ceil(exportInfo.resultIds.length / chunkSize);
+		const cachedResults = this._scanResultsDetails$.value ?? [];
+		const cachedResultsIds = new Set(cachedResults.map(result => result.id));
 
 		this._loadingResultChunks = true;
 		this._loadingMoreResults$.next(true);
+		chunksIndicesToRequest.forEach(chunkIndex => this._requestedResultChunksIndices.add(chunkIndex));
 
-		const chunksRequests = Array.from({ length: totalChunks }, (_, chunkIndex) =>
+		const chunksRequests = chunksIndicesToRequest.map(chunkIndex =>
 			this._http
 				.get<IResultsChunkResponse>(chunkEndpoint.url.replace('{CHUNK_INDEX}', chunkIndex.toString()), {
 					headers: this._createHeaders(chunkEndpoint),

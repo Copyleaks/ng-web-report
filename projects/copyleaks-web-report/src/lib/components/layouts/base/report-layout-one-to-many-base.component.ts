@@ -215,14 +215,15 @@ export abstract class OneToManyReportLayoutBaseComponent extends ReportLayoutBas
 			this.hideAISourceMatchUpgrade = data.hideAISourceMatchUpgrade;
 
 			this.selectedCustomTabId = data.selectedCustomTabId;
-			if (data.viewMode === 'writing-feedback') {
+			if (data.selectedCustomTabId) {
+				this.selectedTap = EReportViewType.CustomTabView;
+			} else if (data.viewMode === 'writing-feedback') {
 				this.selectedTap = EReportViewType.WritingFeedbackTabView;
 			} else
-				this.selectedTap = data.selectedCustomTabId
-					? EReportViewType.CustomTabView
-					: data.alertCode === ALERTS.SUSPECTED_AI_TEXT_DETECTED
-					? EReportViewType.AIView
-					: EReportViewType.PlagiarismView;
+				this.selectedTap =
+					data.alertCode === ALERTS.SUSPECTED_AI_TEXT_DETECTED
+						? EReportViewType.AIView
+						: EReportViewType.PlagiarismView;
 
 			if (this.selectedTap != EReportViewType.AIView) {
 				this.highlightSvc.aiInsightsSelectedResults$.next([]);

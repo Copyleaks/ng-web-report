@@ -1104,7 +1104,7 @@ export class ReportDataService {
 			const crawledVersion = await this._getReportCrawledVersion();
 			this._crawledVersion$.next(crawledVersion);
 
-			if (!crawledVersion?.html.value)
+			if (!crawledVersion?.html?.value)
 				this._viewSvc.reportViewMode$.next({
 					...this._viewSvc.reportViewMode,
 					isHtmlView: false,
@@ -1124,7 +1124,7 @@ export class ReportDataService {
 				const crawledVersion = await this._getReportCrawledVersion();
 				this._crawledVersion$.next(crawledVersion);
 
-				if (!crawledVersion?.html.value)
+				if (!crawledVersion?.html?.value)
 					this._viewSvc.reportViewMode$.next({
 						...this._viewSvc.reportViewMode,
 						isHtmlView: false,

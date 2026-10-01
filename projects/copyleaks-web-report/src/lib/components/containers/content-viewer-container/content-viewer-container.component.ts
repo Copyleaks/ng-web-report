@@ -622,9 +622,9 @@ export class ContentViewerContainerComponent implements OnInit, AfterViewInit, O
 			!changes['isMultiSelection']
 		) {
 			setTimeout(() => {
-				// The view may have switched to text while this was pending (e.g. the crawled version has no html).
-				// Without html content the iframe 'load' listener never clears the loading view, so skip.
-				if (!this.isHtmlView || !this.contentHtml) return;
+				// No rendered html (e.g. the crawled version has no html): the iframe 'load' listener only clears
+				// the loading view when there is html content, so showing it here would leave it stuck.
+				if (!this.contentHtml) return;
 				this._renderer.setAttribute(this.contentIFrame?.nativeElement, 'srcdoc', this.contentHtml);
 				this._cdr.detectChanges();
 				this.showLoadingView = true;
@@ -637,7 +637,7 @@ export class ContentViewerContainerComponent implements OnInit, AfterViewInit, O
 			this.isAIView
 		) {
 			setTimeout(() => {
-				if (!this.isHtmlView || !this.contentHtml) return;
+				if (!this.contentHtml) return;
 				this._renderer.setAttribute(this.contentIFrame?.nativeElement, 'srcdoc', this.contentHtml);
 				this._cdr.detectChanges();
 				this.showLoadingView = true;

@@ -98,6 +98,20 @@ export interface ICompleteResults extends IBasicResponse {
 	filters?: ICompleteResultsFilters;
 	notifications?: ICompleteResultNotification;
 	writingFeedback?: ICompleteResultWritingFeedback;
+	resultsExport?: IResultsExportInfo;
+}
+
+/**
+ * Describes how the scan results were exported, when they are available as chunks.
+ * Present only for scans exported as a single combined object; absent for legacy per-result scans.
+ */
+export interface IResultsExportInfo {
+	/** The export version of the scan (currently `2` - a single combined results object). */
+	version: number;
+	/** The maximum amount of results served by a single results chunk. */
+	chunkSize: number;
+	/** The ids of all the exported results, ordered as they are laid out in the chunks. */
+	resultIds: string[];
 }
 
 /**
@@ -350,6 +364,15 @@ export interface IResultTextSection extends IResultBase {
 		startPosition: number[];
 	};
 }
+
+/** Type representing a single result within a results chunk response */
+export interface IResultsChunkItem {
+	id: string;
+	result: IResultDetailResponse;
+}
+
+/** Type representing the response of the `resultsChunk` endpoint - a plain array of results */
+export type IResultsChunkResponse = IResultsChunkItem[];
 
 /** Request model for deleting a specific result */
 export interface IDeleteScanResultModel {

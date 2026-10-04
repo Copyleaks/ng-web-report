@@ -18,6 +18,8 @@ import {
 	IRepositoryResultPreview,
 	IResultDetailResponse,
 	IResultPreviewBase,
+	IResultsChunkResponse,
+	IResultsExportInfo,
 	IScanSource,
 	IWritingFeedback,
 	IWritingFeedbackCorrectionViewModel,
@@ -636,6 +638,12 @@ export class ReportDataService {
 	}
 
 	public loadViewedResultsDetails(firstLoad: boolean = false) {
+		// When the scan results are served in chunks, all of them are fetched at once instead of one by one.
+		if (this._isChunkedMode) {
+			this._loadAllResultChunks();
+			return;
+		}
+
 		const cachedResults = this._scanResultsDetails$.getValue();
 
 		if (cachedResults?.length === this.totalCompleteResults || !this.filterOptions || !this.excludedResultsIds) {
@@ -688,6 +696,100 @@ export class ReportDataService {
 				}
 			});
 	}
+
+	//#region Chunked results loading
+
+	/** Indicates that a chunks fetching round is already in flight, so it is not started twice. */
+	private _loadingResultChunks: boolean = false;
+
+	/**
+	 * The indices of the results chunks that were already requested, so that none of them is ever requested twice.
+	 * A chunk is marked as requested whatever its response was, since the report reloads its viewed results on every
+	 * results details emission - retrying a chunk from there would loop endlessly.
+	 */
+	private _requestedResultChunksIndices = new Set<number>();
+
+	/**
+	 * The export details of the scan results, as reported by the complete results response.
+	 * Taken from the untouched snapshot, since the previews are re-emitted with recalculated sections.
+	 */
+	private get _resultsExportInfo(): IResultsExportInfo | undefined {
+		return this.completeResultsSnapshot?.resultsExport ?? this.scanResultsPreviews?.resultsExport;
+	}
+
+	/**
+	 * Whether the scan results can be loaded in chunks: the host configured a `resultsChunk` endpoint
+	 * and the scan itself was exported as chunks. Otherwise the results are loaded one by one.
+	 */
+	private get _isChunkedMode(): boolean {
+		return !!this._reportEndpointConfig$.value?.resultsChunk?.url && !!this._resultsExportInfo?.resultIds?.length;
+	}
+
+	/**
+	 * Loads the results of the scan through the `resultsChunk` endpoint, `chunkSize` results per request.
+	 * Every chunk is requested exactly once per report, so calling it again - on a filter change, or when the
+	 * results details are emitted - never fetches anything anew.
+	 */
+	private _loadAllResultChunks() {
+		const chunkEndpoint = this._reportEndpointConfig$.value?.resultsChunk;
+		const exportInfo = this._resultsExportInfo;
+		if (!chunkEndpoint?.url || !exportInfo?.resultIds?.length || this._loadingResultChunks) return;
+
+		const chunkSize = exportInfo.chunkSize > 0 ? exportInfo.chunkSize : exportInfo.resultIds.length;
+		const totalChunks = Math.ceil(exportInfo.resultIds.length / chunkSize);
+
+		const chunksIndicesToRequest: number[] = [];
+		for (let chunkIndex = 0; chunkIndex < totalChunks; chunkIndex++) {
+			if (!this._requestedResultChunksIndices.has(chunkIndex)) chunksIndicesToRequest.push(chunkIndex);
+		}
+
+		if (!chunksIndicesToRequest.length) {
+			this._loadingMoreResults$.next(false);
+			return;
+		}
+
+		const cachedResults = this._scanResultsDetails$.value ?? [];
+		const cachedResultsIds = new Set(cachedResults.map(result => result.id));
+
+		this._loadingResultChunks = true;
+		this._loadingMoreResults$.next(true);
+		chunksIndicesToRequest.forEach(chunkIndex => this._requestedResultChunksIndices.add(chunkIndex));
+
+		const chunksRequests = chunksIndicesToRequest.map(chunkIndex =>
+			this._http
+				.get<IResultsChunkResponse>(chunkEndpoint.url.replace('{CHUNK_INDEX}', chunkIndex.toString()), {
+					headers: this._createHeaders(chunkEndpoint),
+				})
+				.pipe(retryWithDelay())
+		);
+
+		forkJoin(chunksRequests)
+			.pipe(untilDestroy(this))
+			.subscribe(
+				(chunks: IResultsChunkResponse[]) => {
+					const loadedResults = [...cachedResults];
+					chunks?.forEach(chunk =>
+						chunk?.forEach(chunkItem => {
+							if (!chunkItem?.id || cachedResultsIds.has(chunkItem.id)) return;
+							cachedResultsIds.add(chunkItem.id);
+							loadedResults.push({ id: chunkItem.id, result: chunkItem.result } as ResultDetailItem);
+						})
+					);
+
+					this._loadingResultChunks = false;
+					this._loadedResultsDetails$ = loadedResults;
+					this._scanResultsDetails$.next(loadedResults);
+					this._loadingMoreResults$.next(false);
+				},
+				(error: HttpErrorResponse) => {
+					this._loadingResultChunks = false;
+					this._loadingMoreResults$.next(false);
+					this._reportErrorsSvc.handleHttpError(error, '_loadAllResultChunks');
+				}
+			);
+	}
+
+	//#endregion
 
 	public async getReportResultAsync(resultId: string, throwError: boolean = false) {
 		if (!this._reportEndpointConfig$?.value?.result) return;

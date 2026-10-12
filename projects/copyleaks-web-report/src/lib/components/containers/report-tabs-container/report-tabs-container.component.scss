@@ -9,12 +9,13 @@
 	flex-wrap: wrap;
 	position: relative;
 
+	// Shares the row with the company logo; a 100% width would wrap it below the logo.
 	.web-report-tablist {
 		display: flex;
 		flex-direction: row;
 		flex-wrap: wrap;
-		flex-grow: 1;
-		width: 100%;
+		flex: 1 1 0;
+		min-width: 0;
 	}
 
 	[dir='rtl'] {

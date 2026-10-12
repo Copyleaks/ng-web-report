@@ -157,7 +157,7 @@ export abstract class OneToOneReportLayoutBaseComponent extends ReportLayoutBase
 						!this.resultItem?.resultPreview?.scanId;
 
 					this.matchSvc.suspectHtmlMatches$.pipe(untilDestroy(this), takeUntil(this.unsubscribe$)).subscribe(data => {
-						if (!resultData?.result?.html.value) return;
+						if (!resultData?.result?.html?.value) return;
 						if (data) {
 							this.suspectHtmlMatches = data;
 						}
@@ -192,7 +192,7 @@ export abstract class OneToOneReportLayoutBaseComponent extends ReportLayoutBase
 				}
 
 				this.matchSvc.suspectHtmlMatches$.pipe(untilDestroy(this), takeUntil(this.unsubscribe$)).subscribe(data => {
-					if (!resultData?.result?.html.value) return;
+					if (!resultData?.result?.html?.value) return;
 					if (data) {
 						this.suspectHtmlMatches = data;
 					}

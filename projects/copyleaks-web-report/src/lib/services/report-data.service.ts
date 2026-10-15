@@ -1,8 +1,8 @@
 import { PercentPipe } from '@angular/common';
 import { HttpClient, HttpErrorResponse, HttpHeaders } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { BehaviorSubject, EMPTY, Subject, combineLatest, forkJoin, from, interval } from 'rxjs';
-import { concatMap, distinctUntilChanged, filter, take, takeUntil } from 'rxjs/operators';
+import { BehaviorSubject, EMPTY, Subject, combineLatest, forkJoin, from, interval, of } from 'rxjs';
+import { catchError, concatMap, distinctUntilChanged, filter, mergeMap, take, takeUntil } from 'rxjs/operators';
 import { IResultItem } from '../components/containers/report-results-item-container/components/models/report-result-item.models';
 import { ALERTS } from '../constants/report-alerts.constants';
 import { EResultPreviewType, EScanStatus } from '../enums/copyleaks-web-report.enums';
@@ -703,11 +703,20 @@ export class ReportDataService {
 	private _loadingResultChunks: boolean = false;
 
 	/**
-	 * The indices of the results chunks that were already requested, so that none of them is ever requested twice.
-	 * A chunk is marked as requested whatever its response was, since the report reloads its viewed results on every
-	 * results details emission - retrying a chunk from there would loop endlessly.
+	 * The indices of the results chunks that were already requested, so that none of them is requested twice.
+	 * A failed chunk is released for one more round at most: the report reloads its viewed results on every
+	 * results details emission, so retrying without a cap would loop endlessly.
 	 */
 	private _requestedResultChunksIndices = new Set<number>();
+
+	/** How many chunks are requested at once - each holds up to `chunkSize` decompressed results on the server. */
+	private readonly _resultChunksConcurrency = 3;
+
+	/** How many rounds a failing chunk is requested in before it is given up on for this report. */
+	private readonly _maxResultChunkRounds = 2;
+
+	/** The number of rounds each failed chunk was requested in. */
+	private _failedResultChunksRounds = new Map<number, number>();
 
 	/**
 	 * The export details of the scan results, as reported by the complete results response.
@@ -726,9 +735,11 @@ export class ReportDataService {
 	}
 
 	/**
-	 * Loads the results of the scan through the `resultsChunk` endpoint, `chunkSize` results per request.
-	 * Every chunk is requested exactly once per report, so calling it again - on a filter change, or when the
-	 * results details are emitted - never fetches anything anew.
+	 * Loads the results of the scan through the `resultsChunk` endpoint, `chunkSize` results per request, a few
+	 * chunks at a time and top results first (chunk 0 holds the highest matches). Each chunk's results are shown as
+	 * soon as it arrives, and a failed chunk does not drop the others: it is requested once more in a second round,
+	 * then given up on. Calling it again - on a filter change, or when the results details are emitted - never
+	 * fetches a chunk that already loaded.
 	 */
 	private _loadAllResultChunks() {
 		const chunkEndpoint = this._reportEndpointConfig$.value?.resultsChunk;
@@ -755,38 +766,63 @@ export class ReportDataService {
 		this._loadingMoreResults$.next(true);
 		chunksIndicesToRequest.forEach(chunkIndex => this._requestedResultChunksIndices.add(chunkIndex));
 
-		const chunksRequests = chunksIndicesToRequest.map(chunkIndex =>
-			this._http
-				.get<IResultsChunkResponse>(chunkEndpoint.url.replace('{CHUNK_INDEX}', chunkIndex.toString()), {
-					headers: this._createHeaders(chunkEndpoint),
-				})
-				.pipe(retryWithDelay())
-		);
+		const loadedResults = [...cachedResults];
+		let processedChunks = 0;
+		let releasedChunks = 0;
+		let givenUpError: HttpErrorResponse | null = null;
 
-		forkJoin(chunksRequests)
-			.pipe(untilDestroy(this))
-			.subscribe(
-				(chunks: IResultsChunkResponse[]) => {
-					const loadedResults = [...cachedResults];
-					chunks?.forEach(chunk =>
-						chunk?.forEach(chunkItem => {
-							if (!chunkItem?.id || cachedResultsIds.has(chunkItem.id)) return;
-							cachedResultsIds.add(chunkItem.id);
-							loadedResults.push({ id: chunkItem.id, result: chunkItem.result } as ResultDetailItem);
-						})
-					);
+		from(chunksIndicesToRequest)
+			.pipe(
+				mergeMap(
+					chunkIndex =>
+						this._http
+							.get<IResultsChunkResponse>(chunkEndpoint.url.replace('{CHUNK_INDEX}', chunkIndex.toString()), {
+								headers: this._createHeaders(chunkEndpoint),
+							})
+							.pipe(
+								retryWithDelay(),
+								catchError((error: HttpErrorResponse) => {
+									const rounds = (this._failedResultChunksRounds.get(chunkIndex) ?? 0) + 1;
+									this._failedResultChunksRounds.set(chunkIndex, rounds);
+									if (rounds < this._maxResultChunkRounds) {
+										this._requestedResultChunksIndices.delete(chunkIndex);
+										releasedChunks++;
+									} else {
+										givenUpError = error;
+									}
+									return of(null);
+								})
+							),
+					this._resultChunksConcurrency
+				),
+				untilDestroy(this)
+			)
+			.subscribe({
+				next: (chunk: IResultsChunkResponse | null) => {
+					processedChunks++;
 
-					this._loadingResultChunks = false;
-					this._loadedResultsDetails$ = loadedResults;
-					this._scanResultsDetails$.next(loadedResults);
-					this._loadingMoreResults$.next(false);
+					let added = false;
+					chunk?.forEach(chunkItem => {
+						if (!chunkItem?.id || cachedResultsIds.has(chunkItem.id)) return;
+						cachedResultsIds.add(chunkItem.id);
+						loadedResults.push({ id: chunkItem.id, result: chunkItem.result } as ResultDetailItem);
+						added = true;
+					});
+
+					if (!added) return;
+					this._loadedResultsDetails$ = [...loadedResults];
+					this._scanResultsDetails$.next(this._loadedResultsDetails$);
 				},
-				(error: HttpErrorResponse) => {
+				complete: () => {
 					this._loadingResultChunks = false;
 					this._loadingMoreResults$.next(false);
-					this._reportErrorsSvc.handleHttpError(error, '_loadAllResultChunks');
-				}
-			);
+
+					if (givenUpError) this._reportErrorsSvc.handleHttpError(givenUpError, '_loadAllResultChunks');
+
+					// The second round for the released chunks - only when the round ran to its end, not on destroy.
+					if (releasedChunks && processedChunks === chunksIndicesToRequest.length) this._loadAllResultChunks();
+				},
+			});
 	}
 
 	//#endregion

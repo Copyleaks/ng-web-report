@@ -46,6 +46,14 @@ export interface IClsReportEndpointConfigModel {
 	result: IEndpointDetails;
 
 	/**
+	 * @property {IEndpointDetails} resultsChunk - Object containing endpoint details for fetching a chunk of scan results
+	 * at once. The url must contain a `{CHUNK_INDEX}` placeholder (mirroring `{RESULT_ID}` of `result`).
+	 * Optional: when it is not configured - or when the complete results response carries no `resultsExport` section -
+	 * the report keeps fetching the results one by one through `result`.
+	 */
+	resultsChunk?: IEndpointDetails;
+
+	/**
 	 * @property {IEndpointDetails} writingFeedback - Object containing endpoint details for fetching writing feedback details.
 	 */
 	writingFeedback?: IEndpointDetails;

@@ -90,11 +90,20 @@ export class CrAiPhrasesMobileHeaderComponent implements OnInit, OnChanges {
 	ngOnInit(): void {}
 
 	ngOnChanges(changes: SimpleChanges): void {
-		if (changes['isLoading']?.currentValue == false) {
+		// Rebuild the results when the AI phrases arrive after the loading finished (e.g. after a page reload)
+		if (changes['explainableAIResults'] && !changes['explainableAIResults'].firstChange && !this.isLoading) {
+			this.updateResult = false;
 			this._initResults();
 		}
 
-		if (changes['minAIProportion']) {
+		if (changes['isLoading']?.currentValue == false) {
+			// Build the results again once the loading finished, the results built while loading were empty
+			this.updateResult = false;
+			this._initResults();
+		}
+
+		// Never build the results while loading, they would latch into the empty view
+		if (changes['minAIProportion'] && !this.isLoading) {
 			this.updateResult = false;
 			this._initResults();
 		}
@@ -121,6 +130,7 @@ export class CrAiPhrasesMobileHeaderComponent implements OnInit, OnChanges {
 			this._updateTooltipText();
 			if (this.explainableAIResults?.explain && this.explainableAIResults?.slicedMatch.length > 0) {
 				this.title = $localize`AI Insights`;
+				this.emptyView = false;
 				this._mapingtoResultItem();
 				this._updateProportionRange();
 			} else if (!this.lockedResults) {

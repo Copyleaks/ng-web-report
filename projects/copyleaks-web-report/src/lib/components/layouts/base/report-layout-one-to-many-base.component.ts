@@ -671,8 +671,9 @@ export abstract class OneToManyReportLayoutBaseComponent extends ReportLayoutBas
 					slicedMatch.push(...explainText);
 				}
 			});
-			if (this.explainableAI.slicedMatch.length === 0) {
-				this.explainableAI.slicedMatch = slicedMatch;
+			if (this.explainableAI.slicedMatch.length === 0 && slicedMatch.length > 0) {
+				// Assign a new object so the AI phrases panels get the change, even if they finished loading before the phrases arrived
+				this.explainableAI = { ...this.explainableAI, slicedMatch };
 			}
 		});
 	}

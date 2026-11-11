@@ -800,6 +800,18 @@ export const processSuspectHtml = (suspect: ResultDetailItem, options: ICopyleak
 };
 
 /**
+ * Escapes a value written into a double-quoted HTML attribute. The writing-feedback texts are the scanned document's
+ * own words (and their correction), so a quote in them must not end the attribute (LMS-9906).
+ */
+const escapeHtmlAttribute = (value: string | null | undefined): string =>
+	// String() keeps what the template literal wrote before for a missing value ("undefined").
+	String(value)
+		.replace(/&/g, '&amp;')
+		.replace(/"/g, '&quot;')
+		.replace(/</g, '&lt;')
+		.replace(/>/g, '&gt;');
+
+/**
  * Render list of matches in the iframe's HTML
  * @param matches the matches to render
  */
@@ -868,7 +880,9 @@ export const getRenderedMatches = (matches: Match[] | null, originalHtml: string
 			default:
 				if (curr.type === MatchType.writingFeedback) {
 					stringBuilder.push(
-						`<span match data-type="${curr.type}" data-index="${i}" data-gid="${curr.gid}" data-correction-text="${curr.correctionText}" data-wrong-text="${curr.wrongText}">${slice}</span>`
+						`<span match data-type="${curr.type}" data-index="${i}" data-gid="${curr.gid}" data-correction-text="${escapeHtmlAttribute(
+							curr.correctionText
+						)}" data-wrong-text="${escapeHtmlAttribute(curr.wrongText)}">${slice}</span>`
 					);
 				} else if (curr.type === MatchType.aiExplain) {
 					stringBuilder.push(

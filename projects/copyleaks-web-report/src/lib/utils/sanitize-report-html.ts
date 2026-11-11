@@ -6,6 +6,8 @@ import DOMPurify, { DOMPurify as DOMPurifyInstance } from 'dompurify';
  */
 const REPORT_MATCH_ATTRIBUTES = ['match', 'exclude', 'exclude-partial-scan'];
 
+const HTML_NAMESPACE = 'http://www.w3.org/1999/xhtml';
+
 let purifier: DOMPurifyInstance | null = null;
 
 /**
@@ -22,6 +24,19 @@ const getPurifier = (): DOMPurifyInstance | null => {
 	instance.addHook('uponSanitizeElement', (node, data) => {
 		if (data.tagName === 'link' && (node as Element).getAttribute?.('rel')?.toLowerCase() !== 'stylesheet') {
 			node.parentNode?.removeChild(node);
+		}
+	});
+
+	// The report's iframe script disables links through `document.links`, which holds only HTML links. A link inside an
+	// SVG is not in it, so a click on one would take the iframe to any page, whose script the report then trusts.
+	instance.addHook('uponSanitizeAttribute', (node, data) => {
+		const element = node as Element;
+		if (
+			(data.attrName === 'href' || data.attrName === 'xlink:href') &&
+			element.localName === 'a' &&
+			element.namespaceURI !== HTML_NAMESPACE
+		) {
+			data.keepAttr = false;
 		}
 	});
 

@@ -486,6 +486,13 @@ function ready() {
 	 * correction, so they are set as text, never parsed as HTML (LMS-9906).
 	 */
 	function appendWritingFeedbackMatchTooltip(container: HTMLElement, wrongText: string, correctionText: string) {
+		// The API sends these texts HTML-encoded (e.g. "doesn&#x27;t"). Decode them once in an inert document, which
+		// runs and loads nothing, so the tooltip shows the words; a decoded tag stays plain text.
+		const decode = (text: string) =>
+			text ? new DOMParser().parseFromString(text, 'text/html').body.textContent ?? '' : text;
+		wrongText = decode(wrongText);
+		correctionText = decode(correctionText);
+
 		const appendSpan = (text: string, className?: string, style?: string) => {
 			const span = document.createElement('span');
 			if (className) span.className = className;

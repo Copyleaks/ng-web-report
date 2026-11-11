@@ -404,15 +404,14 @@ function ready() {
 	function initMatchTooltipEventListeners() {
 		document.querySelectorAll('span[match][data-type="3"]').forEach(match => {
 			match.addEventListener('mouseenter', (_: MouseEvent) => {
-				const tooltipSpanContent = generateWritingFeedbackMatchTooltip(
-					(match as HTMLSpanElement).dataset?.['wrongText'],
-					(match as HTMLSpanElement).dataset?.['correctionText']
-				);
-
 				// create a span element with the class name tooltip-match-content-container and style the color to red
 				const tooltipSpan = document.createElement('span');
 				tooltipSpan.classList.add('tooltip-match-content-container');
-				tooltipSpan.innerHTML = tooltipSpanContent;
+				appendWritingFeedbackMatchTooltip(
+					tooltipSpan,
+					(match as HTMLSpanElement).dataset?.['wrongText'],
+					(match as HTMLSpanElement).dataset?.['correctionText']
+				);
 				tooltipSpan.style.transform = `translate(-50%, 0) scale(${1 / (currentZoom * pdfZoom)})`;
 				tooltipSpan.style.transformOrigin = '50% 100%';
 				match.appendChild(tooltipSpan);
@@ -482,20 +481,26 @@ function ready() {
 		};
 	}
 
-	function generateWritingFeedbackMatchTooltip(wrongText: string, correctionText: string): string {
-		var contentHTML = '';
+	/**
+	 * Builds the writing-feedback tooltip as DOM nodes. The texts are the scanned document's own words and their
+	 * correction, so they are set as text, never parsed as HTML (LMS-9906).
+	 */
+	function appendWritingFeedbackMatchTooltip(container: HTMLElement, wrongText: string, correctionText: string) {
+		const appendSpan = (text: string, className?: string, style?: string) => {
+			const span = document.createElement('span');
+			if (className) span.className = className;
+			if (style) span.setAttribute('style', style);
+			span.textContent = text;
+			container.appendChild(span);
+		};
 
-		if (wrongText !== correctionText) {
-			contentHTML += `<span class="wrong-text">${wrongText}</span>`;
-		}
-		// Adding SVG arrow
+		if (wrongText !== correctionText) appendSpan(wrongText, 'wrong-text');
+
+		// Adding the arrow
 		if (wrongText != correctionText && correctionText)
-			contentHTML += `<span style='font-size:14px !important; line-height: normal !important;'>&#129106;</span>`;
+			appendSpan(String.fromCodePoint(129106), undefined, 'font-size:14px !important; line-height: normal !important;');
 
-		if (correctionText) {
-			contentHTML += `<span class="correction-text">${correctionText}</span>`;
-		}
-		return contentHTML;
+		if (correctionText) appendSpan(correctionText, 'correction-text');
 	}
 
 	function modifyTooltipsStyles(match: Element) {

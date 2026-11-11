@@ -37,6 +37,7 @@ import { EXCLUDE_MESSAGE } from '../../../constants/report-exclude.constants';
 import { IAuthorAlertCard } from '../report-alerts-container/components/author-alert-card/models/author-alert-card.models';
 import { animate, state, style, transition, trigger } from '@angular/animations';
 import * as helpers from '../../../utils/report-match-helpers';
+import { sanitizeReportHtml } from '../../../utils/sanitize-report-html';
 import { COPYLEAKS_REPORT_IFRAME_STYLES } from '../../../constants/report-iframe-styles.constants';
 
 import oneToManyIframeJsScript from '../../../utils/one-to-many-iframe-logic';
@@ -788,7 +789,8 @@ export class ContentViewerContainerComponent implements OnInit, AfterViewInit, O
 	protected _getRenderedMatches(matches: Match[] | null, originalHtml?: string) {
 		if (this.rerendered == true || !matches || !originalHtml) return null;
 
-		const html = helpers.getRenderedMatches(matches, originalHtml);
+		// LMS-9906: the stored HTML is customer content; nothing in it may run next to the report's own script below.
+		const html = sanitizeReportHtml(helpers.getRenderedMatches(matches, originalHtml));
 		if (!html) return null;
 
 		const css = this._renderer.createElement('style') as HTMLStyleElement;

@@ -1,6 +1,6 @@
 {
   "name": "@copyleaks/ng-web-report",
-  "version": "2.1.4",
+  "version": "2.1.6",
   "description": "Copyleaks Web Report is an advanced Angular module designed to integrate plagiarism and AI detection reporting seamlessly. This module, developed by Copyleaks, offers a user-friendly, engaging, and flexible interface for presenting plagiarism and AI content reports; it is designed to showcase the authenticity and uniqueness of submitted files or text.",
   "repository": {
     "type": "git",
@@ -39,6 +39,7 @@
     "@swimlane/ngx-charts": "^22.0.0"
   },
   "dependencies": {
-    "tslib": "^2.3.0"
+    "tslib": "^2.3.0",
+    "dompurify": "3.4.17"
   }
 }

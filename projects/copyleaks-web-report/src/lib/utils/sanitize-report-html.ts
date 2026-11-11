@@ -20,9 +20,18 @@ const getPurifier = (): DOMPurifyInstance | null => {
 	const instance = DOMPurify(window);
 	if (!instance.isSupported) return null;
 
-	// A stylesheet link keeps a crawled page's look; any other link type (preload, prefetch, import...) is removed.
 	instance.addHook('uponSanitizeElement', (node, data) => {
-		if (data.tagName === 'link' && (node as Element).getAttribute?.('rel')?.toLowerCase() !== 'stylesheet') {
+		const element = node as Element;
+		// A stylesheet link keeps a crawled page's look; any other link type (preload, prefetch, import...) is removed.
+		if (data.tagName === 'link' && element.getAttribute?.('rel')?.toLowerCase() !== 'stylesheet') {
+			node.parentNode?.removeChild(node);
+		}
+		// A named meta only describes the document: the report's iframe script finds a PDF by its pdf2htmlEX generator
+		// meta. Any other meta (http-equiv refresh, charset, ...) is removed.
+		if (
+			data.tagName === 'meta' &&
+			(!element.hasAttribute?.('name') || element.hasAttribute('http-equiv') || element.hasAttribute('charset'))
+		) {
 			node.parentNode?.removeChild(node);
 		}
 	});
@@ -64,7 +73,7 @@ export const sanitizeReportHtml = (html: string | null): string | null => {
 
 	return instance.sanitize(html, {
 		WHOLE_DOCUMENT: true,
-		ADD_TAGS: ['link'],
-		ADD_ATTR: REPORT_MATCH_ATTRIBUTES,
+		ADD_TAGS: ['link', 'meta'],
+		ADD_ATTR: [...REPORT_MATCH_ATTRIBUTES, 'content'],
 	}) as string;
 };

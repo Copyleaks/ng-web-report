@@ -801,9 +801,12 @@ export class ReportDataService {
 
 	/**
 	 * Keeps the scan's `resultsExport` section when the host configured `resultsChunk` and the section is valid: version 2,
-	 * a whole positive `chunkSize` and a non-empty list of string ids. Otherwise the results are loaded one by one.
+	 * a whole positive `chunkSize` and a non-empty list of string ids, every one of them listed by the complete results.
+	 * A chunk arrives whole, so a viewer who may see only some of the results (the complete results leave the others
+	 * out, e.g. for a student) loads the listed ones one by one instead. Otherwise the results are loaded one by one.
 	 */
-	private _setResultsExport(resultsExport: IResultsExportInfo | undefined) {
+	private _setResultsExport(completeResults: ICompleteResults | undefined) {
+		const resultsExport = completeResults?.resultsExport;
 		const isValid =
 			!!this._reportEndpointConfig$.value?.resultsChunk?.url &&
 			resultsExport?.version === this._supportedResultsExportVersion &&
@@ -811,7 +814,8 @@ export class ReportDataService {
 			resultsExport.chunkSize > 0 &&
 			Array.isArray(resultsExport.resultIds) &&
 			resultsExport.resultIds.length > 0 &&
-			resultsExport.resultIds.every(id => typeof id === 'string' && id.length > 0);
+			resultsExport.resultIds.every(id => typeof id === 'string' && id.length > 0) &&
+			this._areAllListed(resultsExport.resultIds, completeResults);
 
 		this._resultsExport = isValid ? resultsExport : undefined;
 		this._resultChunkIndexById.clear();
@@ -821,6 +825,24 @@ export class ReportDataService {
 			if (!this._resultChunkIndexById.has(id))
 				this._resultChunkIndexById.set(id, Math.floor(position / resultsExport.chunkSize));
 		});
+	}
+
+	/** Whether every id is listed by the complete results, including the self-match excluded ones. */
+	private _areAllListed(ids: string[], completeResults: ICompleteResults): boolean {
+		const results = completeResults?.results;
+		const listedIds = new Set(
+			[
+				...(results?.internet ?? []),
+				...(results?.database ?? []),
+				...(results?.batch ?? []),
+				...(results?.repositories ?? []),
+				...(results?.selfMatchExcluded?.internet ?? []),
+				...(results?.selfMatchExcluded?.database ?? []),
+				...(results?.selfMatchExcluded?.batch ?? []),
+				...(results?.selfMatchExcluded?.repositories ?? []),
+			].map(result => result?.id)
+		);
+		return ids.every(id => listedIds.has(id));
 	}
 
 	/** Forgets the previous scan's chunks and stops its loading round, so a new scan starts clean. */
@@ -1440,8 +1462,9 @@ export class ReportDataService {
 	private _updateCompleteResults(completeResultsRes?: ICompleteResults) {
 		if (!completeResultsRes) return;
 
-		// LMS-10324: chunk loading needs the host's `resultsChunk` endpoint and a valid `resultsExport` section.
-		this._setResultsExport(completeResultsRes.resultsExport);
+		// LMS-10324: chunk loading needs the host's `resultsChunk` endpoint and a valid `resultsExport` section whose ids
+		// the complete results all list (read before the self-match results are merged below).
+		this._setResultsExport(completeResultsRes);
 
 		completeResultsRes.results.batch.forEach(result => {
 			result.type = EResultPreviewType.Batch;

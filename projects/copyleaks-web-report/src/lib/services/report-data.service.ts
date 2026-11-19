@@ -1358,6 +1358,8 @@ export class ReportDataService {
 		try {
 			let filteredResults = this.filterResults(this.filterOptions, this.excludedResultsIds);
 			filteredResults = filteredResults.filter(result => result.id != resultInfo.resultPreview?.id);
+			// LMS-10324: in chunk mode, as in the legacy path, this score comes from the loaded results only. No LMS report
+			// configures `deleteResult` (checked 19/11/2026); a chunk-mode host that does must load the shown results first.
 			const stats = helpers.calculateStatistics(this.scanResultsPreviews, filteredResults, this.filterOptions);
 
 			// Build the request model & URL

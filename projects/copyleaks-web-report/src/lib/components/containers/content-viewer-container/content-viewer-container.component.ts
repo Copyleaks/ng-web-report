@@ -802,6 +802,9 @@ export class ContentViewerContainerComponent implements OnInit, AfterViewInit, O
 
 		// QA-1804: the srcdoc iframe inherits the host page's CSP. Under a nonce-based script-src, every tag below
 		// must carry the page's nonce or the browser blocks it. Without a nonce the HTML is exactly as before.
+		// The nonce is safe here only because `html` comes out of sanitizeReportHtml (LMS-9906) just above: DOMPurify
+		// re-serialises the stored document, so it cannot end inside an open tag or attribute that would take in the
+		// nonced tags appended below. Keep the two together: never append nonced tags to unsanitised stored HTML.
 		const nonce = this._getCspNonce();
 		const nonceAttribute = nonce ? ` nonce="${nonce}"` : '';
 

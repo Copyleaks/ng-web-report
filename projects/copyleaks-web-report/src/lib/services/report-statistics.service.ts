@@ -198,6 +198,11 @@ export class ReportStatisticsService implements OnDestroy {
 			};
 		}
 
+		// LMS-10324 (chunk mode only): while some of the shown results are loading or could not be loaded, the headline
+		// keeps the server's numbers instead of numbers computed from part of the results.
+		const serverStatistics = this._reportDataSvc.serverStatisticsWhileResultsMissing;
+		if (serverStatistics) stats = { ...stats, ...serverStatistics };
+
 		this._statistics.next(stats);
 	}
 

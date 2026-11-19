@@ -1,11 +1,14 @@
+import { DOCUMENT } from '@angular/common';
 import {
 	AfterViewInit,
 	ChangeDetectorRef,
 	Component,
+	CSP_NONCE,
 	ElementRef,
 	EventEmitter,
 	HostBinding,
 	HostListener,
+	inject,
 	Input,
 	OnChanges,
 	OnInit,
@@ -408,6 +411,10 @@ export class ContentViewerContainerComponent implements OnInit, AfterViewInit, O
 	iframeStyle: string = COPYLEAKS_REPORT_IFRAME_STYLES;
 	iframeJsScript: string;
 
+	/** The host app's CSP nonce, when it provides one (`CSP_NONCE`, or the `ngCspNonce` attribute on its root element). */
+	private readonly _cspNonceToken = inject(CSP_NONCE, { optional: true });
+	private readonly _document = inject(DOCUMENT);
+
 	get pages(): number[] {
 		if (this.scanSource) return this.scanSource && this.scanSource.text.pages.startPosition;
 		if (this.resultData.result) return this.resultData.result?.text.pages.startPosition;
@@ -793,25 +800,51 @@ export class ContentViewerContainerComponent implements OnInit, AfterViewInit, O
 		const html = sanitizeReportHtml(helpers.getRenderedMatches(matches, originalHtml));
 		if (!html) return null;
 
+		// QA-1804: the srcdoc iframe inherits the host page's CSP. Under a nonce-based script-src, every tag below
+		// must carry the page's nonce or the browser blocks it. Without a nonce the HTML is exactly as before.
+		const nonce = this._getCspNonce();
+		const nonceAttribute = nonce ? ` nonce="${nonce}"` : '';
+
 		const css = this._renderer.createElement('style') as HTMLStyleElement;
 		css.textContent = this.iframeStyle;
+		if (nonce) this._renderer.setAttribute(css, 'nonce', nonce);
 		const iframeStyle = css.outerHTML;
 
 		const js = this._renderer.createElement('script') as HTMLScriptElement;
 		js.textContent = this.iframeJsScript;
+		if (nonce) this._renderer.setAttribute(js, 'nonce', nonce);
 		let iframeJsScript = js.outerHTML;
 
 		if (this.customIframeScript) {
 			const customScript = this._renderer.createElement('script') as HTMLScriptElement;
 			customScript.textContent = this.customIframeScript;
+			if (nonce) this._renderer.setAttribute(customScript, 'nonce', nonce);
 			iframeJsScript +=
 				customScript.outerHTML +
-				`<script await src="https://cdnjs.cloudflare.com/ajax/libs/rangy/1.3.0/rangy-core.min.js"></script>
-        <script await src="https://cdnjs.cloudflare.com/ajax/libs/rangy/1.3.0/rangy-classapplier.min.js"></script>
-        <script src="https://cdnjs.cloudflare.com/ajax/libs/crypto-js/4.1.1/crypto-js.min.js"></script> `;
+				`<script${nonceAttribute} await src="https://cdnjs.cloudflare.com/ajax/libs/rangy/1.3.0/rangy-core.min.js"></script>
+        <script${nonceAttribute} await src="https://cdnjs.cloudflare.com/ajax/libs/rangy/1.3.0/rangy-classapplier.min.js"></script>
+        <script${nonceAttribute} src="https://cdnjs.cloudflare.com/ajax/libs/crypto-js/4.1.1/crypto-js.min.js"></script> `;
 		}
 
 		return html + iframeStyle + iframeJsScript;
+	}
+
+	/**
+	 * QA-1804: the nonce of the host page's Content-Security-Policy, or `null` when the page has none.
+	 *
+	 * Angular's `CSP_NONCE` comes first (provided by the app, or read from the `ngCspNonce` attribute of its root element).
+	 * Otherwise the nonce of the page's own scripts is used: a page with a nonce-based script-src must give it to every
+	 * script it loads. The `nonce` property is read, not the attribute, because browsers empty the attribute of an
+	 * element in a page whose CSP came in a header. A value that is not base64/base64url can never match a CSP
+	 * `'nonce-…'` source, so it is ignored (and needs no escaping where it is written into the HTML).
+	 */
+	private _getCspNonce(): string | null {
+		let nonce = this._cspNonceToken;
+		if (!nonce) {
+			const scripts = this._document?.querySelectorAll?.('script[nonce]') ?? [];
+			nonce = (Array.from(scripts) as HTMLScriptElement[]).find(script => !!script.nonce)?.nonce ?? null;
+		}
+		return nonce && /^[A-Za-z0-9+/_=-]+$/.test(nonce) ? nonce : null;
 	}
 
 	addCustomMatchBtnClick(event) {

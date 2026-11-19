@@ -1034,8 +1034,8 @@ export class ReportDataService {
 	}
 
 	/**
-	 * One results chunk. A failed chunk is reported to the host once, under its own method name, and gives no results;
-	 * a malformed one gives no results either. The shown results it held are then loaded one by one.
+	 * One results chunk. A failed chunk is reported to the host once, under its own method name and with its status and
+	 * URL only, and gives no results; a malformed one gives no results either. Its shown results then load one by one.
 	 */
 	private _getResultChunk(chunkIndex: number): Observable<ResultDetailItem[]> {
 		const chunkEndpoint = this._reportEndpointConfig$.value.resultsChunk;
@@ -1052,7 +1052,16 @@ export class ReportDataService {
 					Array.isArray(chunk) ? chunk.map(item => ({ id: item?.id, result: item?.result } as ResultDetailItem)) : []
 				),
 				catchError((error: HttpErrorResponse) => {
-					this._reportErrorsSvc.handleHttpError(error, this._resultChunkErrorMethod);
+					// Status and URL only: a chunk's body is customer content (the text of up to `chunkSize` results) and
+					// must not reach a host's error tracker, e.g. a 2xx body that failed to parse.
+					this._reportErrorsSvc.handleHttpError(
+						new HttpErrorResponse({
+							status: error?.status,
+							statusText: error?.statusText,
+							url: error?.url ?? undefined,
+						}),
+						this._resultChunkErrorMethod
+					);
 					return of([] as ResultDetailItem[]);
 				})
 			);

@@ -177,8 +177,16 @@ export class ExplainableAIResultContainerComponent implements OnInit, OnChanges,
 		private _matDialog: MatDialog
 	) {}
 	ngOnChanges(changes: SimpleChanges): void {
+		// Rebuild the results when the AI phrases arrive after the loading finished (e.g. after a page reload)
+		if (changes['explainableAIResults'] && !changes['explainableAIResults'].firstChange && !this.isLoading) {
+			this.updateResult = false;
+			this._initResults();
+		}
+
 		if (changes['isLoading']?.currentValue == false) {
 			{
+				// Build the results again once the loading finished, the results built while loading were empty
+				this.updateResult = false;
 				this._initResults();
 				if (!this.isAiSourceMatchEnabled() && this.reportViewSvc?.reportViewMode?.hideAISourceMatchUpgrade) {
 					this.reportMatchesSvc.showAIPhrases$.next(true);
@@ -191,7 +199,8 @@ export class ExplainableAIResultContainerComponent implements OnInit, OnChanges,
 			this._calculateAiSourceMatchResultsStats();
 		}
 
-		if (changes['minAIProportion']) {
+		// Never build the results while loading, they would latch into the empty view
+		if (changes['minAIProportion'] && !this.isLoading) {
 			this.updateResult = false;
 			this._initResults();
 		}

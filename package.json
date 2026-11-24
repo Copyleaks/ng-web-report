@@ -58,5 +58,8 @@
   },
 	"publishConfig": {
     "access": "public"
+  },
+  "overrides": {
+    "@babel/core": "7.29.6"
   }
 }

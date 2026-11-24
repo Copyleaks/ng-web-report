@@ -219,7 +219,10 @@ export class CopyleaksWebReportComponent implements OnInit, OnDestroy {
 					this._reportViewSvc.selectedAlert$.next(ALERTS.SUSPECTED_AI_TEXT_DETECTED);
 				}
 
-				if (this._reportDataSvc.scanResultsDetails) this.onCompleteResultUpdate.emit(scanResultsPreviews);
+				// LMS-10324 (chunk mode only): the host is given the complete results once every shown result is loaded, so
+				// it never receives a score computed from part of them (LMS stores the score it receives).
+				if (this._reportDataSvc.scanResultsDetails && !this._reportDataSvc.isHostUpdateDeferred)
+					this.onCompleteResultUpdate.emit(scanResultsPreviews);
 			});
 
 		this._reportDataSvc.crawledVersion$.pipe(takeUntil(this.unsubscribe$)).subscribe(crawledVersion => {

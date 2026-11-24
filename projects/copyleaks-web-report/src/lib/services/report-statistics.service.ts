@@ -198,6 +198,11 @@ export class ReportStatisticsService implements OnDestroy {
 			};
 		}
 
+		// LMS-10324 (chunk mode only): while some of the shown results are loading or could not be loaded, the headline
+		// keeps the last numbers computed from every shown result (the server's before any), never part of them.
+		const standIn = this._reportDataSvc.statisticsWhileResultsMissing;
+		if (standIn) stats = { ...stats, ...standIn };
+
 		this._statistics.next(stats);
 	}
 

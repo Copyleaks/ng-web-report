@@ -1,8 +1,32 @@
 import { PercentPipe } from '@angular/common';
 import { HttpClient, HttpErrorResponse, HttpHeaders } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { BehaviorSubject, EMPTY, Subject, combineLatest, forkJoin, from, interval } from 'rxjs';
-import { concatMap, distinctUntilChanged, filter, take, takeUntil } from 'rxjs/operators';
+import {
+	BehaviorSubject,
+	EMPTY,
+	Observable,
+	Subject,
+	Subscription,
+	asapScheduler,
+	combineLatest,
+	concat,
+	defer,
+	forkJoin,
+	from,
+	interval,
+	of,
+} from 'rxjs';
+import {
+	catchError,
+	concatMap,
+	distinctUntilChanged,
+	filter,
+	map,
+	mergeMap,
+	subscribeOn,
+	take,
+	takeUntil,
+} from 'rxjs/operators';
 import { IResultItem } from '../components/containers/report-results-item-container/components/models/report-result-item.models';
 import { ALERTS } from '../constants/report-alerts.constants';
 import { EResultPreviewType, EScanStatus } from '../enums/copyleaks-web-report.enums';
@@ -18,6 +42,8 @@ import {
 	IRepositoryResultPreview,
 	IResultDetailResponse,
 	IResultPreviewBase,
+	IResultsChunkResponse,
+	IResultsExportInfo,
 	IScanSource,
 	IWritingFeedback,
 	IWritingFeedbackCorrectionViewModel,
@@ -35,6 +61,9 @@ import { ReportStatistics } from '../models/report-statistics.models';
 import { retryWithDelay } from '../utils/retry-with-delay';
 import { ERROR_MESSAGES } from '../constants/report-scan-errors.constants';
 import { RESULT_TAGS_CODES } from '../constants/report-result-tags.constants';
+
+/** The plagiarism numbers of the report's statistics. */
+type PlagiarismStatistics = Pick<ReportStatistics, 'aggregatedScore' | 'identical' | 'minorChanges' | 'relatedMeaning'>;
 
 @Injectable()
 export class ReportDataService {
@@ -444,6 +473,9 @@ export class ReportDataService {
 	public initReportData(endpointsConfig: IClsReportEndpointConfigModel) {
 		if (!endpointsConfig) return;
 
+		// LMS-10324: the host may give the same report a new scan; nothing of the previous scan's chunks carries over.
+		this._resetResultChunks();
+
 		// init the subject values
 		this._reportEndpointConfig$.next(endpointsConfig);
 
@@ -494,6 +526,8 @@ export class ReportDataService {
 			.pipe(retryWithDelay(), untilDestroy(this))
 			.subscribe(
 				completeResultsRes => {
+					// LMS-10324: a host with `resultsChunk` that has since given the report another scan drops this response.
+					if (this._isFromEarlierScan(endpointsConfig)) return;
 					this.completeResultsSnapshot = JSON.parse(JSON.stringify(completeResultsRes));
 					this._scanResultsPreviews$.next(completeResultsRes);
 
@@ -504,6 +538,7 @@ export class ReportDataService {
 						.pipe(retryWithDelay(), untilDestroy(this))
 						.subscribe(
 							crawledVersionRes => {
+								if (this._isFromEarlierScan(endpointsConfig)) return; // LMS-10324
 								this._crawledVersion$.next(crawledVersionRes);
 
 								if (!crawledVersionRes.html?.value && this._viewSvc.reportViewMode.isHtmlView)
@@ -513,6 +548,7 @@ export class ReportDataService {
 									});
 							},
 							(error: HttpErrorResponse) => {
+								if (this._isFromEarlierScan(endpointsConfig)) return; // LMS-10324
 								this._reportErrorsSvc.handleHttpError(error, 'initSync - crawledVersion');
 							}
 						);
@@ -526,16 +562,19 @@ export class ReportDataService {
 							.pipe(retryWithDelay(), untilDestroy(this))
 							.subscribe(
 								writingFeedbackVersionRes => {
+									if (this._isFromEarlierScan(endpointsConfig)) return; // LMS-10324
 									this._writingFeedback$.next(writingFeedbackVersionRes);
 									this._updateCompleteResults(completeResultsRes);
 								},
 								(error: HttpErrorResponse) => {
+									if (this._isFromEarlierScan(endpointsConfig)) return; // LMS-10324
 									this._reportErrorsSvc.handleHttpError(error, 'initSync - writingFeedback');
 								}
 							);
 					else this._updateCompleteResults(completeResultsRes);
 				},
 				(error: HttpErrorResponse) => {
+					if (this._isFromEarlierScan(endpointsConfig)) return; // LMS-10324
 					this._reportErrorsSvc.handleHttpError(error, 'initSync - completeResults');
 					this.scanResultsDetails$.next([]);
 					// crawledVersion never fires (gated by completeResults success) — emit null so
@@ -636,6 +675,13 @@ export class ReportDataService {
 	}
 
 	public loadViewedResultsDetails(firstLoad: boolean = false) {
+		// LMS-10324: a scan exported as chunks (LMS batch export, hosts with a `resultsChunk` endpoint) loads only the
+		// chunks that hold the results being shown. Every other scan and host loads them one by one below, as before.
+		if (this._isChunkedMode) {
+			this._loadViewedResultChunks(firstLoad);
+			return;
+		}
+
 		const cachedResults = this._scanResultsDetails$.getValue();
 
 		if (cachedResults?.length === this.totalCompleteResults || !this.filterOptions || !this.excludedResultsIds) {
@@ -688,6 +734,378 @@ export class ReportDataService {
 				}
 			});
 	}
+
+	//#region Chunked results loading (LMS batch export)
+
+	/** The only `resultsExport` version this report reads: the scan's results laid out in chunks of `chunkSize`. */
+	private readonly _supportedResultsExportVersion = 2;
+
+	/** How many chunks are requested at once - each holds up to `chunkSize` decompressed results on the server. */
+	private readonly _resultChunksConcurrency = 3;
+
+	/** How many results are requested at once when they are loaded one by one (as the legacy path does). */
+	private readonly _resultsBatchSize = 10;
+
+	/**
+	 * The method name a failed chunk is reported under (`onReportRequestError`). Not fatal: the shown results it held are
+	 * loaded one by one afterwards, so a host can tell it from an error that leaves the report without results.
+	 */
+	private readonly _resultChunkErrorMethod = '_getResultChunk';
+
+	/**
+	 * The `resultsExport` section of the current scan. Set only when the host configured `resultsChunk` and the section
+	 * is one this report can read; taken when the complete results arrive and cleared when a new scan is loaded.
+	 */
+	private _resultsExport: IResultsExportInfo | undefined;
+
+	/** The chunk of every exported result id: its position in `resultsExport.resultIds` divided by the chunk size. */
+	private _resultChunkIndexById = new Map<string, number>();
+
+	/** The chunks requested for this scan, loaded or failed. A chunk is never requested twice. */
+	private _requestedResultChunks = new Set<number>();
+
+	/** Results that came with a chunk while the filters hid them; they are shown from here when the filters show them. */
+	private _hiddenChunkResults = new Map<string, ResultDetailItem>();
+
+	/** Results that neither their chunk nor the `result` endpoint could load. They are not requested again for this scan. */
+	private _unavailableResultIds = new Set<string>();
+
+	/** The plagiarism numbers last computed from every shown result of this scan. */
+	private _lastComputedStatistics: PlagiarismStatistics | undefined;
+
+	/** The loading round in flight. One round runs at a time. */
+	private _resultChunksRound: Subscription | undefined;
+
+	/** A load was asked for while a round was in flight, so another round runs when it ends. */
+	private _resultChunksReloadRequested = false;
+
+	/**
+	 * Whether the results of this scan are loaded in chunks (LMS batch export) instead of one by one: the host configured
+	 * `resultsChunk` and the complete results carry a valid `resultsExport` section. Always false for other hosts.
+	 */
+	public get isResultsChunkMode(): boolean {
+		return this._isChunkedMode;
+	}
+
+	private get _isChunkedMode(): boolean {
+		return !!this._resultsExport && !!this._reportEndpointConfig$.value?.resultsChunk?.url;
+	}
+
+	/**
+	 * Chunk mode only: whether the host must not be given the complete results yet - a round is loading, or some of the
+	 * shown results are not loaded (still loading, or they could not be loaded). The host is given them again once every
+	 * shown result is loaded, so it only ever receives a score computed from all of them: never one computed from part of
+	 * them, nor a stand-in after the filters changed (LMS stores the score it receives). Always false for other hosts.
+	 */
+	public get isHostUpdateDeferred(): boolean {
+		return this._isChunkedMode && (this.loadingMoreResults || this._isMissingShownResults());
+	}
+
+	/**
+	 * Chunk mode only: the plagiarism numbers the report shows while some of the results the filters show are not loaded
+	 * (still loading, or they could not be loaded): the last ones computed from every shown result of this scan, or, before
+	 * any were, the server's. Never numbers computed from part of the results. `undefined` when every shown result is
+	 * loaded, when there is nothing to stand in (nothing computed yet and no aggregated score in the complete results),
+	 * and always when the results are loaded one by one, so the statistics of those hosts are computed exactly as before.
+	 */
+	public get statisticsWhileResultsMissing(): PlagiarismStatistics | undefined {
+		if (!this._isChunkedMode || !this._isMissingShownResults()) return undefined;
+		if (this._lastComputedStatistics) return this._lastComputedStatistics;
+
+		const score = this.completeResultsSnapshot?.results?.score;
+		if (!score || (!score.aggregatedScore && this.totalCompleteResults !== 0)) return undefined;
+
+		return {
+			aggregatedScore: (score.aggregatedScore ?? 0) / 100,
+			identical: score.identicalWords ?? 0,
+			minorChanges: score.minorChangedWords ?? 0,
+			relatedMeaning: score.relatedMeaningWords ?? 0,
+		};
+	}
+
+	/** Whether some of the results the filters show are not loaded (still loading, or they could not be loaded). */
+	private _isMissingShownResults(): boolean {
+		if (!this.filterOptions || !this.excludedResultsIds) return false;
+		const loadedIds = new Set((this.scanResultsDetails ?? []).map(result => result?.id));
+		return this.filterPreviewedResults(this.filterOptions, this.excludedResultsIds).some(id => !loadedIds.has(id));
+	}
+
+	/**
+	 * Chunk mode only: keeps the numbers computed from every shown result for the time results are missing, or puts the
+	 * stand-in in place of numbers computed from part of them.
+	 */
+	private _applyChunkModeStatistics(stats: ReportStatistics): ReportStatistics {
+		if (!this._isChunkedMode) return stats;
+
+		if (!this._isMissingShownResults()) {
+			this._lastComputedStatistics = {
+				aggregatedScore: stats.aggregatedScore,
+				identical: stats.identical,
+				minorChanges: stats.minorChanges,
+				relatedMeaning: stats.relatedMeaning,
+			};
+			return stats;
+		}
+
+		const standIn = this.statisticsWhileResultsMissing;
+		return standIn ? { ...stats, ...standIn } : stats;
+	}
+
+	/**
+	 * Keeps the scan's `resultsExport` section when the host configured `resultsChunk` and the section is valid: version 2,
+	 * a whole positive `chunkSize` and a non-empty list of string ids, every one of them listed by the complete results.
+	 * A chunk arrives whole, so a viewer who may see only some of the results (the complete results leave the others
+	 * out, e.g. for a student) loads the listed ones one by one instead. Otherwise the results are loaded one by one.
+	 */
+	private _setResultsExport(completeResults: ICompleteResults | undefined) {
+		const resultsExport = completeResults?.resultsExport;
+		const isValid =
+			!!this._reportEndpointConfig$.value?.resultsChunk?.url &&
+			resultsExport?.version === this._supportedResultsExportVersion &&
+			Number.isInteger(resultsExport.chunkSize) &&
+			resultsExport.chunkSize > 0 &&
+			Array.isArray(resultsExport.resultIds) &&
+			resultsExport.resultIds.length > 0 &&
+			resultsExport.resultIds.every(id => typeof id === 'string' && id.length > 0) &&
+			this._areAllListed(resultsExport.resultIds, completeResults);
+
+		this._resultsExport = isValid ? resultsExport : undefined;
+		this._resultChunkIndexById.clear();
+		if (!isValid) return;
+
+		resultsExport.resultIds.forEach((id, position) => {
+			if (!this._resultChunkIndexById.has(id))
+				this._resultChunkIndexById.set(id, Math.floor(position / resultsExport.chunkSize));
+		});
+	}
+
+	/** Whether every id is listed by the complete results, including the self-match excluded ones. */
+	private _areAllListed(ids: string[], completeResults: ICompleteResults): boolean {
+		const results = completeResults?.results;
+		const listedIds = new Set(
+			[
+				...(results?.internet ?? []),
+				...(results?.database ?? []),
+				...(results?.batch ?? []),
+				...(results?.repositories ?? []),
+				...(results?.selfMatchExcluded?.internet ?? []),
+				...(results?.selfMatchExcluded?.database ?? []),
+				...(results?.selfMatchExcluded?.batch ?? []),
+				...(results?.selfMatchExcluded?.repositories ?? []),
+			].map(result => result?.id)
+		);
+		return ids.every(id => listedIds.has(id));
+	}
+
+	/**
+	 * Whether a response belongs to an earlier scan: the host has since given the report other endpoints. Only for hosts
+	 * that configured `resultsChunk` (their late responses are dropped); other hosts keep the legacy behaviour.
+	 */
+	private _isFromEarlierScan(endpointsConfig: IClsReportEndpointConfigModel): boolean {
+		return !!endpointsConfig?.resultsChunk?.url && endpointsConfig !== this._reportEndpointConfig$.value;
+	}
+
+	/** Forgets the previous scan's chunks and stops its loading round (its requests are aborted), so a new scan starts clean. */
+	private _resetResultChunks() {
+		const hadRoundInFlight = !!this._resultChunksRound;
+		this._resultChunksRound?.unsubscribe();
+		this._resultChunksRound = undefined;
+		this._resultChunksReloadRequested = false;
+		this._requestedResultChunks.clear();
+		this._hiddenChunkResults.clear();
+		this._unavailableResultIds.clear();
+		this._lastComputedStatistics = undefined;
+		this._setResultsExport(undefined);
+		if (hadRoundInFlight) this._loadingMoreResults$.next(false);
+	}
+
+	/**
+	 * Loads the results being shown - the ids the filters show, plus the suspect of a one-to-one view - through the
+	 * chunks that hold them: a few chunks at a time, top matches first, and never a chunk twice. Whatever the chunks do
+	 * not bring (a failed chunk, an id missing from its chunk, an id outside the export) is loaded one by one through the
+	 * `result` endpoint, like the legacy path. The results are emitted once, when the round ends - also when nothing could
+	 * be loaded or the round failed - so the loading state always ends and nothing is computed from part of the results.
+	 */
+	private _loadViewedResultChunks(firstLoad: boolean) {
+		if (!this.filterOptions || !this.excludedResultsIds) {
+			this._loadingMoreResults$.next(false);
+			return;
+		}
+
+		if (this._resultChunksRound) {
+			this._resultChunksReloadRequested = true;
+			return;
+		}
+
+		const loadedIds = new Set((this.scanResultsDetails ?? []).map(result => result?.id));
+		const idsToShow = this._getResultIdsToShow().filter(id => !loadedIds.has(id));
+
+		// Results that came with an earlier chunk need no request.
+		const loadedInRound: ResultDetailItem[] = [];
+		idsToShow.forEach(id => {
+			const hiddenResult = this._hiddenChunkResults.get(id);
+			if (!hiddenResult) return;
+			this._hiddenChunkResults.delete(id);
+			loadedInRound.push(hiddenResult);
+			loadedIds.add(id);
+		});
+
+		const missingIds = new Set(idsToShow.filter(id => !loadedIds.has(id) && !this._unavailableResultIds.has(id)));
+		if (!missingIds.size && !loadedInRound.length && this.scanResultsDetails && !firstLoad) {
+			this._loadingMoreResults$.next(false);
+			return;
+		}
+
+		const chunksToRequest = Array.from(
+			new Set(
+				Array.from(missingIds)
+					.map(id => this._resultChunkIndexById.get(id))
+					.filter((chunkIndex): chunkIndex is number => chunkIndex !== undefined)
+			)
+		)
+			.filter(chunkIndex => !this._requestedResultChunks.has(chunkIndex))
+			.sort((a, b) => a - b);
+		chunksToRequest.forEach(chunkIndex => this._requestedResultChunks.add(chunkIndex));
+
+		const previewedIds = this._getPreviewedResultIds();
+		const addResult = (item: ResultDetailItem) => {
+			// Only results listed by this scan's complete results, never anything else a response may hold.
+			if (!item?.id || !item.result || !previewedIds.has(item.id) || loadedIds.has(item.id)) return;
+			if (missingIds.delete(item.id)) {
+				loadedInRound.push(item);
+				loadedIds.add(item.id);
+			} else this._hiddenChunkResults.set(item.id, item);
+		};
+
+		// The same end for a round that completes and for one that fails, so the loading state always ends.
+		const endRound = () => {
+			this._resultChunksRound = undefined;
+			missingIds.forEach(id => this._unavailableResultIds.add(id));
+			this._loadingMoreResults$.next(false);
+
+			const currentResults = this.scanResultsDetails ?? [];
+			const currentIds = new Set(currentResults.map(result => result?.id));
+			const currentPreviewedIds = this._getPreviewedResultIds();
+			this._scanResultsDetails$.next([
+				...currentResults,
+				...loadedInRound.filter(result => !currentIds.has(result.id) && currentPreviewedIds.has(result.id)),
+			]);
+
+			if (this._resultChunksReloadRequested) {
+				this._resultChunksReloadRequested = false;
+				this._loadViewedResultChunks(false);
+			}
+		};
+
+		this._loadingMoreResults$.next(true);
+		// Always asynchronous: the round may be started by a subscriber of the results it emits. Only HttpClient requests,
+		// so unsubscribing (a new scan, or the report's destruction in ngOnDestroy) aborts them and emits nothing.
+		this._resultChunksRound = concat(
+			from(chunksToRequest).pipe(
+				mergeMap(chunkIndex => this._getResultChunk(chunkIndex), this._resultChunksConcurrency)
+			),
+			// Whatever the chunks did not bring is loaded one by one (the chunks completed before this runs).
+			defer(() => this._getResultsOneByOne(Array.from(missingIds)))
+		)
+			.pipe(subscribeOn(asapScheduler))
+			.subscribe({ next: items => items.forEach(addResult), complete: endRound, error: endRound });
+	}
+
+	/** The ids the filters show, plus the suspect of a one-to-one view (a deep link or a reload) when it is a result of this scan. */
+	private _getResultIdsToShow(): string[] {
+		const ids = this.filterPreviewedResults(this.filterOptions, this.excludedResultsIds);
+		const viewMode = this._viewSvc.reportViewMode;
+		const suspectId = viewMode?.viewMode === 'one-to-one' ? viewMode.suspectId : undefined;
+		if (suspectId && !ids.includes(suspectId) && this._getPreviewedResultIds().has(suspectId)) ids.push(suspectId);
+		return ids;
+	}
+
+	/** The ids of every result listed by the complete results. */
+	private _getPreviewedResultIds(): Set<string> {
+		const results = this.scanResultsPreviews?.results;
+		return new Set(
+			[
+				...(results?.internet ?? []),
+				...(results?.database ?? []),
+				...(results?.batch ?? []),
+				...(results?.repositories ?? []),
+			].map(result => result?.id)
+		);
+	}
+
+	/**
+	 * One results chunk. A failed chunk is reported to the host once, under its own method name and with its status and
+	 * URL only, and gives no results; a malformed one gives no results either. Its shown results then load one by one.
+	 */
+	private _getResultChunk(chunkIndex: number): Observable<ResultDetailItem[]> {
+		const chunkEndpoint = this._reportEndpointConfig$.value.resultsChunk;
+		return this._http
+			.get<IResultsChunkResponse>(
+				chunkEndpoint.url.replace('{CHUNK_INDEX}', () => chunkIndex.toString()),
+				{
+					headers: this._createHeaders(chunkEndpoint),
+				}
+			)
+			.pipe(
+				retryWithDelay(),
+				map(chunk =>
+					Array.isArray(chunk) ? chunk.map(item => ({ id: item?.id, result: item?.result } as ResultDetailItem)) : []
+				),
+				catchError((error: HttpErrorResponse) => {
+					// Status and URL only: a chunk's body is customer content (the text of up to `chunkSize` results) and
+					// must not reach a host's error tracker, e.g. a 2xx body that failed to parse.
+					this._reportErrorsSvc.handleHttpError(
+						new HttpErrorResponse({
+							status: error?.status,
+							statusText: error?.statusText,
+							url: error?.url ?? undefined,
+						}),
+						this._resultChunkErrorMethod
+					);
+					return of([] as ResultDetailItem[]);
+				})
+			);
+	}
+
+	/**
+	 * Results through the `result` endpoint, 10 at a time like the legacy path. A failed one is reported to the host like
+	 * a legacy per-result failure and left out. HttpClient requests, so a cancelled round aborts them: none of their
+	 * results or errors reaches the report after the scan changed.
+	 */
+	private _getResultsOneByOne(ids: string[]): Observable<ResultDetailItem[]> {
+		const resultEndpoint = this._reportEndpointConfig$.value?.result;
+		if (!resultEndpoint?.url) return EMPTY;
+
+		const batches: string[][] = [];
+		for (let i = 0; i < ids.length; i += this._resultsBatchSize) batches.push(ids.slice(i, i + this._resultsBatchSize));
+
+		return from(batches).pipe(
+			concatMap(batch =>
+				forkJoin(
+					batch.map(id =>
+						this._http
+							.get<IResultDetailResponse>(
+								resultEndpoint.url.replace('{RESULT_ID}', () => encodeURIComponent(id)),
+								{
+									headers: this._createHeaders(resultEndpoint),
+								}
+							)
+							.pipe(
+								retryWithDelay(),
+								map(result => ({ id, result } as ResultDetailItem)),
+								catchError((error: HttpErrorResponse) => {
+									this._reportErrorsSvc.handleHttpError(error, 'getReportResultAsync');
+									return of(undefined);
+								})
+							)
+					)
+				)
+			),
+			map(results => results.filter(result => !!result) as ResultDetailItem[])
+		);
+	}
+
+	//#endregion
 
 	public async getReportResultAsync(resultId: string, throwError: boolean = false) {
 		if (!this._reportEndpointConfig$?.value?.result) return;
@@ -949,6 +1367,8 @@ export class ReportDataService {
 		try {
 			let filteredResults = this.filterResults(this.filterOptions, this.excludedResultsIds);
 			filteredResults = filteredResults.filter(result => result.id != resultInfo.resultPreview?.id);
+			// LMS-10324: in chunk mode, as in the legacy path, this score comes from the loaded results only. No LMS report
+			// configures `deleteResult` (checked 19/11/2026); a chunk-mode host that does must load the shown results first.
 			const stats = helpers.calculateStatistics(this.scanResultsPreviews, filteredResults, this.filterOptions);
 
 			// Build the request model & URL
@@ -1144,6 +1564,10 @@ export class ReportDataService {
 
 	private _updateCompleteResults(completeResultsRes?: ICompleteResults) {
 		if (!completeResultsRes) return;
+
+		// LMS-10324: chunk loading needs the host's `resultsChunk` endpoint and a valid `resultsExport` section whose ids
+		// the complete results all list (read before the self-match results are merged below).
+		this._setResultsExport(completeResultsRes);
 
 		completeResultsRes.results.batch.forEach(result => {
 			result.type = EResultPreviewType.Batch;
@@ -1423,7 +1847,9 @@ export class ReportDataService {
 				writingFeedbackOverallIssues: filteredCorrections?.text?.chars?.operationTexts?.length ?? 0,
 			};
 		}
-		return stats;
+
+		// LMS-10324 (chunk mode only): never a score computed from part of the shown results - the host may store it.
+		return this._applyChunkModeStatistics(stats);
 	}
 
 	private _createHeaders(endpointDetails: IEndpointDetails): HttpHeaders {
@@ -1676,5 +2102,9 @@ export class ReportDataService {
 			});
 	}
 
-	ngOnDestroy() {}
+	ngOnDestroy() {
+		// LMS-10324: Angular calls this method of a component-provided service directly, so the chunk round in flight
+		// (and its requests) stops here.
+		this._resultChunksRound?.unsubscribe();
+	}
 }

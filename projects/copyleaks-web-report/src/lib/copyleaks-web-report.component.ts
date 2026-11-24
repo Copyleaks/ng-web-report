@@ -38,7 +38,7 @@ import { IResourceStartExplainableAIVideo } from './models/report-ai-results.mod
 import { ReportAIResultsService } from './services/report-ai-results.service';
 
 @Component({
-	selector: 'copyleaks-web-report',
+	selector: 'copyleaks-web-report-v2',
 	templateUrl: './copyleaks-web-report.component.html',
 	styleUrls: ['./copyleaks-web-report.component.scss'],
 	providers: [

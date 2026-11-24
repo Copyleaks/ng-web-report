@@ -39,7 +39,7 @@ Stop building a plagiarism/AI report UI from scratch. **`@copyleaks/ng-web-repor
 Wire up three endpoints. Drop in one component. Ship.
 
 ```html
-<copyleaks-web-report [reportEndpointConfig]="endpointConfig"></copyleaks-web-report>
+<copyleaks-web-report-v2 [reportEndpointConfig]="endpointConfig"></copyleaks-web-report-v2>
 ```
 
 That's it. Everything below is for when you want to go further.
@@ -74,10 +74,10 @@ export class AppModule {}
 ### 3. Render the component
 
 ```html
-<copyleaks-web-report
+<copyleaks-web-report-v2
 	[reportEndpointConfig]="endpointConfig"
 	(onReportRequestError)="handleError($event)"
-	(onCompleteResultUpdate)="handleUpdate($event)"></copyleaks-web-report>
+	(onCompleteResultUpdate)="handleUpdate($event)"></copyleaks-web-report-v2>
 ```
 
 ```typescript
@@ -331,12 +331,12 @@ The report ships with sensible defaults and **first-class extension points** so 
 Replace the default action bar with your own buttons, menus, or logic.
 
 ```html
-<copyleaks-web-report ...>
+<copyleaks-web-report-v2 ...>
 	<cr-actions>
 		<button (click)="download()">Download PDF</button>
 		<button (click)="share()">Share</button>
 	</cr-actions>
-</copyleaks-web-report>
+</copyleaks-web-report-v2>
 ```
 
 </details>
@@ -349,7 +349,7 @@ Replace the default action bar with your own buttons, menus, or logic.
 Add as many custom tabs as you like. The `[flexGrow]` input controls the tab's width relative to the others (e.g. `0.3` means it claims 30% of the row).
 
 ```html
-<copyleaks-web-report ...>
+<copyleaks-web-report-v2 ...>
 	<cr-custom-tabs>
 		<cr-custom-tab-item [flexGrow]="0.3">
 			<cr-custom-tab-item-title>Insights</cr-custom-tab-item-title>
@@ -358,7 +358,7 @@ Add as many custom tabs as you like. The `[flexGrow]` input controls the tab's w
 			</cr-custom-tab-item-content>
 		</cr-custom-tab-item>
 	</cr-custom-tabs>
-</copyleaks-web-report>
+</copyleaks-web-report-v2>
 ```
 
 </details>
@@ -376,13 +376,13 @@ Use the `[reportView]` input to control whether your content **appends to** or *
 | `ECustomResultsReportView.Full` (`1`)    | **Replaces** the default results entirely. |
 
 ```html
-<copyleaks-web-report ...>
+<copyleaks-web-report-v2 ...>
 	<cr-custom-results [reportView]="reportView">
 		<cr-custom-results-box-content>
 			<app-my-results></app-my-results>
 		</cr-custom-results-box-content>
 	</cr-custom-results>
-</copyleaks-web-report>
+</copyleaks-web-report-v2>
 ```
 
 </details>
@@ -393,14 +393,14 @@ Use the `[reportView]` input to control whether your content **appends to** or *
 <br/>
 
 ```html
-<copyleaks-web-report ...>
+<copyleaks-web-report-v2 ...>
 	<cr-custom-empty-results>
 		<div class="empty">
 			<h3>No matches found 🎉</h3>
 			<p>This document looks original.</p>
 		</div>
 	</cr-custom-empty-results>
-</copyleaks-web-report>
+</copyleaks-web-report-v2>
 ```
 
 </details>
@@ -417,7 +417,7 @@ Useful for paywalls, upgrade prompts, or permission gates. Omit the input to use
 	<app-upgrade-card [result]="result"></app-upgrade-card>
 </ng-template>
 
-<copyleaks-web-report ... [lockedResultTemplateRef]="lockedResultTemplateRef"></copyleaks-web-report>
+<copyleaks-web-report-v2 ... [lockedResultTemplateRef]="lockedResultTemplateRef"></copyleaks-web-report-v2>
 ```
 
 </details>

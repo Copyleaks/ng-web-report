@@ -9,6 +9,7 @@ import { distinctUntilChanged, filter, takeUntil } from 'rxjs/operators';
 import { EExcludeReason, EResponsiveLayoutType, EResultPreviewType } from '../../../enums/copyleaks-web-report.enums';
 import { ICompleteResults, IScanSource } from '../../../models/report-data.models';
 import { PostMessageEvent } from '../../../models/report-iframe-events.models';
+import { IReportViewEvent } from '../../../models/report-view.models';
 import { untilDestroy } from '../../../utils/until-destroy';
 import { ReportLayoutBaseComponent } from './report-layout-base.component';
 import { IResultItem } from '../../containers/report-results-item-container/components/models/report-result-item.models';
@@ -216,6 +217,7 @@ export abstract class OneToOneReportLayoutBaseComponent extends ReportLayoutBase
 						if (!results) return;
 						const foundSuspect = results?.find(result => result.id === data.suspectId);
 						if (foundSuspect) this.reportViewSvc.selectedResult$.next(foundSuspect);
+						else if (this.reportDataSvc.isResultsChunkMode) this._onSuspectNotLoaded(data);
 						else {
 							// if the result is not found, then change the view to one-to-many
 							this.reportViewSvc.reportViewMode$.next({
@@ -273,6 +275,28 @@ export abstract class OneToOneReportLayoutBaseComponent extends ReportLayoutBase
 		this.hideMaskedContentDisclaimer = {
 			flag: false,
 		};
+	}
+
+	/**
+	 * LMS-10324, chunk mode only (LMS batch export). The suspect of a one-to-one deep link or reload is loaded with the
+	 * shown results, so a suspect that is not loaded yet is requested and awaited. Only when no load can bring it (it is
+	 * not a result of this scan, or it could not be loaded) does the report go back to the one-to-many view, with the
+	 * one-to-many values spread last. Spreading the current one-to-one view last re-emitted that same view, which
+	 * subscribed again on every emission and recursed until `RangeError: Maximum call stack size exceeded`.
+	 */
+	private _onSuspectNotLoaded(data: IReportViewEvent) {
+		const currentViewMode = this.reportViewSvc.reportViewMode;
+		// The subscription of an earlier one-to-one view: the report shows something else now.
+		if (currentViewMode?.viewMode !== 'one-to-one' || currentViewMode.suspectId !== data.suspectId) return;
+
+		if (!this.reportDataSvc.loadingMoreResults) this.reportDataSvc.loadViewedResultsDetails();
+		if (this.reportDataSvc.loadingMoreResults) return;
+
+		this.reportViewSvc.reportViewMode$.next({
+			...currentViewMode,
+			viewMode: 'one-to-many',
+			suspectId: undefined,
+		});
 	}
 
 	private _initMaskedContentFlags() {
